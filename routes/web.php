@@ -28,9 +28,10 @@ Route::get('/contrat/{id}', function ($id) {
 });
 
 Route::get('imprimer/contrat/{id}', function ($id) {
-    $data = ['cim'=>ContratIntermediationMedicale::find($id)];
+    $cim = ContratIntermediationMedicale::find($id);
+    $data = ['cim'=>$cim];
     $pdf = PDF::loadView('contrat_version_imprimable',$data);
-    return $pdf->download('invoice.pdf');
+    return $pdf->download("Contrat d'intermediation medicale - ".strtoupper($cim->nomPatient)." ".ucfirst($cim->prenomPatient)." - ".ucfirst($cim->typeSouscription).".pdf");
 });
 
 Route::get('{all}', function () {
