@@ -12,8 +12,8 @@
     <!-- Fonts -->
     <style>
         body{font-size : 1em ;
-            line-heigth : 1.8 ;
-            font-weigth : 500;
+            line-height : 1.8 ;
+            font-weight : 500;
             font-family:’Raleway’;
             letter-spacing : 1.5px;
             color : #828282
