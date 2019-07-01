@@ -1,5 +1,6 @@
 <?php
-
+use Barryvdh\DomPDF\Facade as PDF;
+use App\Models\ContratIntermediationMedicale;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,6 +19,18 @@ header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Autho
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/contrat/{id}', function ($id) {
+
+    $cim= ContratIntermediationMedicale::find($id);
+    return view('contrat',compact('cim'));
+});
+
+Route::get('imprimer/contrat/{id}', function ($id) {
+    $data = ['cim'=>ContratIntermediationMedicale::find($id)];
+    $pdf = PDF::loadView('contrat_version_imprimable',$data);
+    return $pdf->download('invoice.pdf');
 });
 
 Route::get('{all}', function () {
