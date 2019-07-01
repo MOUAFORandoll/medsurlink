@@ -5,31 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <title>Laravel</title>
-
-    <!-- Fonts -->
-    <style>
-        body{font-size : 1em ;
-            line-heigth : 1.8 ;
-            font-weigth : 500;
-            font-family:’Raleway’;
-            letter-spacing : 1.5px;
-            color : #828282
-        }h2 {
-             color: #00ada7;
-             font-weight: 600;
-             text-align : left;
-             font-size : 2em !important;
-         }h3, b {
-              color : #91c01c;
-          }
-        table {
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-    </style>
-
 </head>
 <body>
 <div class="container">

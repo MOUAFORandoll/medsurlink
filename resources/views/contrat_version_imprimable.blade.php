@@ -8,31 +8,6 @@
     {{--    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>--}}
 
     <title>Laravel</title>
-
-    <!-- Fonts -->
-    <style>
-        body{font-size : 1em ;
-            line-heigth : 1.8 ;
-            font-weigth : 500;
-            font-family:’Raleway’;
-            letter-spacing : 1.5px;
-            color : #828282
-        }h2 {
-             color: #00ada7;
-             font-weight: 600;
-             text-align : left;
-             font-size : 2em !important;
-         }h3, b {
-              color : #91c01c;
-          }
-        table {
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-    </style>
-
 </head>
 <body>
 
