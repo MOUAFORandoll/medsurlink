@@ -12,6 +12,11 @@ use App\Models\ContratIntermediationMedicale;
 |
 */
 
+/**-- Headers --**/
+header('Access-Control-Allow-Origin:  *');
+header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
+header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -28,3 +33,9 @@ Route::get('imprimer/contrat/{id}', function ($id) {
     $pdf = PDF::loadView('contrat_version_imprimable',$data);
     return $pdf->download("Contrat d'intermediation medicale - ".strtoupper($cim->nomPatient)." ".ucfirst($cim->prenomPatient)." - ".ucfirst($cim->typeSouscription).".pdf");
 });
+
+Route::get('{all}', function () {
+    return view('dashboard');
+//})->where('all', '^(dashboard).*$');
+})//->middleware('auth','isAdmin')
+    ->where('all', '^admin|admin/|admin/.*,dashboard|dashboard/|dashboard/.*$');
