@@ -1,5 +1,4 @@
 <?php
-use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\ContratIntermediationMedicale;
 /*
 |--------------------------------------------------------------------------
