@@ -525,6 +525,7 @@
                 countries: ['Cameroun', 'Belgique'],
                 towns: ['Douala', 'Irchonwelz'],
                 types: ['Annuelle', 'One shot'],
+                titres: ['M', 'Mme'],
                 nameRules: {
                     required: value => !!value || this.$i18n.t('message.requiredField'),
                 },
