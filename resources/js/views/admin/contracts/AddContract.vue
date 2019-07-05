@@ -519,6 +519,7 @@
                 e1: 0,
                 color: '#00ADA7',
                 bdayMenu: false,
+                dsignMenu: false,
                 countries: ['Cameroun', 'Belgique'],
                 towns: ['Douala', 'Irchonwelz'],
                 types: ['Annuelle', 'One shot'],

@@ -22,23 +22,23 @@ export const apiModel = {
     "Contract" : {
         "List" : {
             "method" : "GET",
-            "url" : "/contracts"
+            "url" : "/cim"
         },
         "Get" : {
             "method" : "GET",
-            "url" : "/contracts/:contract"
+            "url" : "/cim/:contract"
         },
         "Create" : {
             "method" : "POST",
-            "url" : "/contracts"
+            "url" : "/cim"
         },
         "Update" : {
             "method" : "PUT",
-            "url" : "/contracts/:contract"
+            "url" : "/cim/:contract"
         },
         "Delete" : {
             "method" : "DELETE",
-            "url" : "/contracts/:contract"
+            "url" : "/cim/:contract"
         }
     },
 

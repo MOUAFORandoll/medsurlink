@@ -26,7 +26,7 @@ const getters = {
 const actions = {
     getContracts(context, payload) {
         function successCallback(response) {
-            context.commit('getContractsHandler', { contracts: response.data.contracts });
+            context.commit('getContractsHandler', { contracts: response.data.cims });
         }
 
         function errorCallback(error) {
@@ -43,7 +43,7 @@ const actions = {
 
     getContract(context, payload) {
         function successCallback(response) {
-            context.commit('getContractHandler', { contract: response.data.contract });
+            context.commit('getContractHandler', { contract: response.data.cim });
         }
 
         function errorCallback(error) {

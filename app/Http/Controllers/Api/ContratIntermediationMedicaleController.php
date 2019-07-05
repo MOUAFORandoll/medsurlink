@@ -19,8 +19,8 @@ class ContratIntermediationMedicaleController extends Controller
      */
     public function index(Request $request)
     {
-        $offset = $request->query('offset') != null ? $request->query('offset') : 0;
-        $limit = $request->query('limit') != null ? $request->query('limit')  : 10;
+        $offset = $request->query('offset') != null ? (int) $request->query('offset') : 0;
+        $limit = $request->query('limit') != null ? (int) $request->query('limit')  : 10;
 
         if($limit == -1) {
             $cims =   DB::table('contrat_intermediation_medicales')
@@ -30,7 +30,8 @@ class ContratIntermediationMedicaleController extends Controller
                     "villeResidenceSouscripteur as villeS",
                     "telephoneSouscripeur1 as telephoneS1",
                     "telephoneSouscripeur2 as telephoneS2",
-                    "emailSouscripteur as emailS",
+                    "emailSouscripteur1 as emailS1",
+                    "emailSouscripteur2 as emailS2",
                     "typeSouscription as typeSous",
                     "paysSouscription as paysSous",
                     "sexeSouscripteur as sexeS",
