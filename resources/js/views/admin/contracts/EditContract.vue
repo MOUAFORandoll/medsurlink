@@ -579,6 +579,7 @@
                 if (this.$refs.step3.validate()) {
                     // Submit to server
                     let args = {
+                        contract: this.$route.params.contract,
                         nomS: this.mContract.nomS,
                         paysS: this.mContract.paysS,
                         villeS: this.mContract.villeS,

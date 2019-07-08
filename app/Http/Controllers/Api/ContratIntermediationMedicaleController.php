@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ContratIntermediationMedicaleRequest;
 use App\Models\ContratIntermediationMedicale;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class ContratIntermediationMedicaleController extends Controller
 {
@@ -198,6 +197,7 @@ class ContratIntermediationMedicaleController extends Controller
                 "personneContact2 as contact2",
                 "nomContact",
                 "created_at",
+                "id",
                 "deleted_at",
                 "updated_at",
                 "dateSignature",
