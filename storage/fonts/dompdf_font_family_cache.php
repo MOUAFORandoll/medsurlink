@@ -80,4 +80,8 @@
   'nunito' => array(
     'normal' => $fontDir . '\2ee5a7797d02fe4d560048b698835802',
   ),
+  'raleway' => array(
+    'normal' => $fontDir . '\52907352c14be35989189e3da772add9',
+    'italic' => $fontDir . '\c3d616adc5e896f89a19cfc782f49abe',
+  ),
 ) ?>

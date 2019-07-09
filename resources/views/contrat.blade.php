@@ -58,7 +58,7 @@
 
         <p>Le bénéficiaire de ce contrat d’intermédiation médicale est :</p>
         <p>{{$cim->sexeAffilie}}. {{$cim->nomAffilie}} </p>
-        <p>Âge/Date de naissance {{$cim->ageAffilie}}/{{$cim->dateNaissanceAffilie}}</p>
+        <p>Âge/Date de naissance {{$cim->ageAffilie}}/{{\Carbon\Carbon::parse($cim->dateNaissanceAffilie)->format('d/m/Y')}}</p>
         <p>Résidant à :{{$cim->paysResidenceAffilie}} {{$cim->villeResidenceAffilie}}</p>
         <p>Téléphone du contact : {{$cim->personneContact1}}</p>
 
@@ -100,12 +100,15 @@
         <p><strong>Article 5.</strong></p>
         <p> Le présent Contrat est régi par les conditions générales de Medicasure consultables sur le site internet www.medicasure.com</p>
 
-        <p>Fait à {{$cim->lieuEtablissement}}, le {{\Carbon\Carbon::parse($cim->dateSignature)->to()}}, en deux exemplaires originaux pour les deux parties.</p>
+        <p>Fait à {{$cim->lieuEtablissement}}, le {{\Carbon\Carbon::parse($cim->dateSignature)->format('d/m/Y H:i')}}, en deux exemplaires originaux pour les deux parties.</p>
         <p>Chaque partie reconnait avoir reçu au moins un exemplaire.</p>
 
         @if($cim->paysSouscription == 'Cameroun')
-            <img src="/images/signature_kamto.png" width="200px" height="200px">
-<br>
+        <p>Pour <strong>Medsure Sarl,</strong></p>
+
+    <img src="/images/signature_kamto.png" width="200px" height="200px">
+        <br>
+        <br>
             <table>
                 <tr color="black">
                     <td colspan="3">Montant</td>
@@ -133,6 +136,7 @@
 
         <img src="/images/signature_kamto.png" width="200px" height="200px">
     <br>
+    <br>
             <table>
                 <tr>
                     <td>Ordre de Virement</td>
@@ -159,6 +163,7 @@
                 </tr>
             </table>
         @endif
+    <br><br>
     </div>
 </body>
 </html>

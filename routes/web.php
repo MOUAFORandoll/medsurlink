@@ -1,5 +1,7 @@
 <?php
 use App\Models\ContratIntermediationMedicale;
+use Barryvdh\DomPDF\Facade as PDF;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,7 +31,7 @@ Route::get('/contrat/{id}', function ($id) {
 Route::get('imprimer/contrat/{id}', function ($id) {
     $cim = ContratIntermediationMedicale::find($id);
     $data = ['cim'=>$cim];
-    $pdf = SPDF::loadView('contrat_version_imprimable',$data);
+    $pdf = PDF::loadView('contrat_version_imprimable',$data);
     return $pdf->download("Contrat d'intermediation medicale - ".strtoupper($cim->nomPatient)." ".ucfirst($cim->prenomPatient)." - ".ucfirst($cim->typeSouscription).".pdf");
 });
 
