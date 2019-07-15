@@ -40,3 +40,4 @@ Route::get('{all}', function () {
 //})->where('all', '^(dashboard).*$');
 })//->middleware('auth','isAdmin')
     ->where('all', '^admin|admin/|admin/.*,dashboard|dashboard/|dashboard/.*$');
+

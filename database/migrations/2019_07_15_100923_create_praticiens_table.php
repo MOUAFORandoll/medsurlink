@@ -1,0 +1,66 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreatePraticiensTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('praticiens', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('specialite_id');
+            $table->unsignedBigInteger('etablissement_id');
+            $table->enum('civilite',['M.','Mme/Mlle.','Dr.','Pr.']);
+            $table->string('nom');
+            $table->string('prenom')->nullable();
+            $table->string('nationalite');
+            $table->string('quartier')->nullable();
+            $table->integer('code_postal')->nullable();
+            $table->string('ville');
+            $table->string('pays');
+            $table->string('telephone');
+            $table->string('email');
+            $table->string('numero_ordre');
+            $table->softDeletes();
+            $table->timestamps();
+
+            $table->foreign('etablissement_id')
+                ->references('id')
+                ->on('etabissement_exercices')
+                ->onDelete('RESTRICT')
+                ->onUpdate('RESTRICT');
+
+            $table->foreign('specialite_id')
+                ->references('id')
+                ->on('specialites')
+                ->onDelete('RESTRICT')
+                ->onUpdate('RESTRICT');
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('RESTRICT')
+                ->onUpdate('RESTRICT');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('praticiens', function (Blueprint $table) {
+            $table->drop(['profession_id','etablissement_id','specialite_id','user_id']);
+        });
+    }
+}
