@@ -17,7 +17,7 @@ class SpecialiteController extends Controller
      */
     public function index()
     {
-        $specialites = Specialite::all();
+        $specialites = Specialite::with('profession')->get();
         return response()->json(['specialites'=>$specialites]);
     }
 
@@ -52,7 +52,7 @@ class SpecialiteController extends Controller
     public function show($id)
     {
         $this->validatedId($id);
-        $specialite = Specialite::find($id);
+        $specialite = Specialite::with('profession')->find($id);
         return response()->json(['specialite'=>$specialite]);
 
     }
@@ -79,7 +79,7 @@ class SpecialiteController extends Controller
     {
         $this->validatedId($id);
         Specialite::whereId($id)->update($request->validated());
-        $specialite = Specialite::find($id);
+        $specialite = Specialite::with('profession')->find($id);
         return response()->json(['specialite'=>$specialite]);
 
     }
@@ -93,7 +93,7 @@ class SpecialiteController extends Controller
     public function destroy($id)
     {
         $this->validatedId($id);
-        $specialite = Specialite::find($id);
+        $specialite = Specialite::with('profession')->find($id);
         Specialite::destroy($id);
         return response()->json(['specialite'=>$specialite]);
 

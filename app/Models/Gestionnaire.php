@@ -9,7 +9,6 @@ class Gestionnaire extends Model
 {
     use SoftDeletes;
 
-    protected $dates = "date_de_naissance";
 
     protected $fillable = [
         "user_id",

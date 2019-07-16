@@ -17,7 +17,7 @@ class MedecinControleController extends Controller
      */
     public function index()
     {
-        $medecins = MedecinControle::all();
+        $medecins = MedecinControle::with('specialite')->get();
         return response()->json(['medecins'=>$medecins]);
     }
 
@@ -42,7 +42,7 @@ class MedecinControleController extends Controller
         $medecin = MedecinControle::create($request->validated());
 
         //Generation du mot de passe et envoie par mail
-        $user = UserController::generatedUser(fullName($medecin),$medecin->email);
+        $user = UserController::generatedUser(fullName($request),$medecin->email);
         $user->assignRole('Medecin controle');
 
         $medecin->user_id = $user->id;
@@ -61,7 +61,7 @@ class MedecinControleController extends Controller
     public function show($id)
     {
         $this->validatedId($id);
-        $medecin = MedecinControle::find($id);
+        $medecin = MedecinControle::with('specialite')->find($id);
         return response()->json(['medecin'=>$medecin]);
 
     }
@@ -88,7 +88,7 @@ class MedecinControleController extends Controller
     {
         $this->validatedId($id);
         MedecinControle::whereId($id)->update($request->validated());
-        $medecin = MedecinControle::find($id);
+        $medecin = MedecinControle::with('specialite')->find($id);
         return response()->json(['medecin'=>$medecin]);
 
     }
@@ -102,7 +102,7 @@ class MedecinControleController extends Controller
     public function destroy($id)
     {
         $this->validatedId($id);
-        $medecin = MedecinControle::find($id);
+        $medecin = MedecinControle::with('specialite')->find($id);
         MedecinControle::destroy($id);
         return response()->json(['medecin'=>$medecin]);
 

@@ -15,11 +15,12 @@ class CreatePatientsTable extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('souscripteur_id')->nullable();
             $table->string('nom');
             $table->enum('sexe',['M','F']);
             $table->date('date_de_naissance');
-            $table->integer('age');
+            $table->integer('age')->nullable();
             $table->string('nationalite');
             $table->string('ville');
             $table->string('pays');
@@ -32,11 +33,19 @@ class CreatePatientsTable extends Migration
             $table->string('tel_contact')->nullable();
             $table->string('lien_contact')->nullable();
             $table->softDeletes();
+
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('RESTRICT')
                 ->onUpdate('RESTRICT');
+
+            $table->foreign('souscripteur_id')
+                ->references('id')
+                ->on('souscripteurs')
+                ->onDelete('RESTRICT')
+                ->onUpdate('RESTRICT');
+
             $table->timestamps();
         });
     }
@@ -49,7 +58,7 @@ class CreatePatientsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('patients', function (Blueprint $table) {
-            $table->dropForeign('user_id');
+            $table->dropForeign(['user_id','souscripteur_id']);
         });
     }
 }

@@ -34,7 +34,7 @@ class SouscripteurRequest extends FormRequest
             "ville"=>'required|string|min:2',
             "pays"=>'required|string|min:2',
             "telephone"=>'required|string|min:9',
-            "email"=>'required|string|unique:patients',
+            "email"=>'required|string|unique:users,email',
             "quartier"=>'sometimes|nullable|string|min:1',
             "code_postal"=>'sometimes|integer',
         ];

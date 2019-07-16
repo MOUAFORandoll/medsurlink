@@ -17,7 +17,7 @@ class ProfessionController extends Controller
      */
     public function index()
     {
-        $professions = Profession::all();
+        $professions = Profession::with('specialites')->get();
         return response()->json(['professions'=>$professions]);
     }
 
@@ -52,7 +52,7 @@ class ProfessionController extends Controller
     public function show($id)
     {
         $this->validatedId($id);
-        $profession = Profession::find($id);
+        $profession = Profession::with('specialites')->find($id);
         return response()->json(['profession'=>$profession]);
 
     }
@@ -79,7 +79,7 @@ class ProfessionController extends Controller
     {
         $this->validatedId($id);
         Profession::whereId($id)->update($request->validated());
-        $profession = Profession::find($id);
+        $profession = Profession::with('specialites')->find($id);
         return response()->json(['profession'=>$profession]);
     }
 
@@ -92,7 +92,7 @@ class ProfessionController extends Controller
     public function destroy($id)
     {
         $this->validatedId($id);
-        $profession = Profession::find($id);
+        $profession = Profession::with('specialites')->find($id);
         Profession::destroy($id);
         return response()->json(['profession'=>$profession]);
     }

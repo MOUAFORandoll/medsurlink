@@ -42,7 +42,7 @@ class GestionnaireController extends Controller
         $gestionnaire = Gestionnaire::create($request->validated());
 
         //Generation du mot de passe et envoie par mail
-        $user = UserController::generatedUser(fullName($gestionnaire),$gestionnaire->email);
+        $user = UserController::generatedUser(fullName($request),$gestionnaire->email);
         $user->assignRole('Gestionnaire');
 
         $gestionnaire->user_id = $user->id;

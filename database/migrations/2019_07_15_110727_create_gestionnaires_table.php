@@ -15,7 +15,7 @@ class CreateGestionnairesTable extends Migration
     {
         Schema::create('gestionnaires', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->enum('civilite',['M.','Mme/Mlle.','Dr.','Pr.']);
             $table->string('nom');
             $table->string('prenom')->nullable();

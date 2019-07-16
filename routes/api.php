@@ -18,3 +18,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('cim','Api\ContratIntermediationMedicaleController')->only('index','show','store','update','destroy');
+Route::resource('etablissement','Api\EtablissementExerciceController');
+Route::resource('profession','Api\ProfessionController');
+Route::resource('specialite','Api\SpecialiteController');
+Route::resource('praticien','Api\PraticienController');
+Route::post('praticien/add/etablissement','Api\PraticienController@addEtablissement');
+Route::post('praticien/delete/etablissement','Api\PraticienController@removeEtablissement');
+Route::resource('medecinControle','Api\MedecinControleController');
+
+Route::resource('gestionnaire','Api\GestionnaireController');
+Route::resource('souscripteur','Api\SouscripteurController');
+Route::resource('patient','Api\PatientController');

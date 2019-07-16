@@ -14,4 +14,8 @@ class Specialite extends Model
         "description",
         "profession_id"
     ];
+
+    public function profession(){
+        return $this->belongsTo(Profession::class,'profession_id','id');
+    }
 }

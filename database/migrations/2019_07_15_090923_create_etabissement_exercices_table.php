@@ -13,7 +13,7 @@ class CreateEtabissementExercicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('etabissement_exercices', function (Blueprint $table) {
+        Schema::create('etablissement_exercices', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('description')->nullable();
@@ -29,6 +29,6 @@ class CreateEtabissementExercicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('etabissement_exercices');
+        Schema::dropIfExists('etablissement_exercices');
     }
 }

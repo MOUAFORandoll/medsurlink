@@ -17,7 +17,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::all();
+        $patients = Patient::with(['souscripteur'])->get();
         return response()->json(['patients'=>$patients]);
     }
 
@@ -45,7 +45,7 @@ class PatientController extends Controller
         $patient->age = $age;
 
         //Generation du mot de passe et envoie par mail
-        $user = UserController::generatedUser(fullName($patient),$patient->email);
+        $user = UserController::generatedUser(fullName($request),$patient->email);
         $user->assignRole('Medecin controle');
 
         $patient->user_id = $user->id;
@@ -63,7 +63,7 @@ class PatientController extends Controller
     public function show($id)
     {
         $this->validatedId($id);
-        $patient = Patient::find($id);
+        $patient = Patient::with(['souscripteur'])->find($id);
         return response()->json(['patient'=>$patient]);
 
     }
@@ -90,7 +90,7 @@ class PatientController extends Controller
     {
         $this->validatedId($id);
         Patient::whereId($id)->update($request->validated());
-        $patient = Patient::find($id);
+        $patient = Patient::with(['souscripteur'])->find($id);
         $patient->age = evaluateYearOfOld($patient->date_de_naissance);
         return response()->json(['patient'=>$patient]);
 
@@ -105,7 +105,7 @@ class PatientController extends Controller
     public function destroy($id)
     {
         $this->validatedId($id);
-        $patient = Patient::find($id);
+        $patient = Patient::with(['souscripteur'])->find($id);
         Patient::destroy($id);
         return response()->json(['patient'=>$patient]);
     }

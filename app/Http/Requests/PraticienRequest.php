@@ -25,21 +25,20 @@ class PraticienRequest extends FormRequest
     public function rules()
     {
         return [
-            "user_id"=>'sometimes|integer|exists:users,id',
             "specialite_id"=>'required|integer|exists:specialites,id',
-            "profession_id"=>'required|integer|exists:professions,id',
-            "etablissement_id"=>'required|integer|exists:etabissement_exercices,id',
+            "etablissement_id"=>'sometimes|nullable|integer|exists:etablissement_exercices,id',
             "nom"=>'required|string|min:2',
             "civilite"=>["required",Rule::in(['M.','Mme/Mlle.','Dr.','Pr'])],
             "nationalite"=>'required|string|min:4',
             "ville"=>'required|string|min:2',
             "pays"=>'required|string|min:2',
             "telephone"=>'required|string|min:9',
-            "email"=>'required|string|unique:patients',
+            "email"=>'required|string|unique:users,email',
+            "user_id"=>'sometimes|integer|exists:users,id',
             "quartier"=>'sometimes|nullable|string|min:1',
             "prenom"=>'sometimes|nullable|string|min:2',
             "code_postal"=>'sometimes|integer',
-            "date_de_naissance"=>'required|date',
+            "numero_ordre"=>'required|string|min:2',
         ];
     }
 }

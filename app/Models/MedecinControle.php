@@ -9,8 +9,6 @@ class MedecinControle extends Model
 {
     use SoftDeletes;
 
-    protected $dates = "date_de_naissance";
-
     protected $fillable = [
         "user_id",
         "specialite_id",
@@ -26,4 +24,8 @@ class MedecinControle extends Model
         "quartier",
         "code_postal",
     ];
+
+    public function specialite(){
+        return $this->belongsTo(Specialite::class,'specialite_id','id');
+    }
 }

@@ -111,7 +111,7 @@ class UserController extends Controller
     }
 
     public static function generatedUser($name, $email){
-        $validation = Validator::make(compact('email',['email'=>'unique:users,email']));
+        $validation = Validator::make(compact('email'),['email'=>'unique:users,email']);
         if ($validation->fails()){
             return response()->json(['email'=>$validation->errors()],422);
         }
@@ -121,7 +121,7 @@ class UserController extends Controller
             'email'=>$email,
             'password'=>Hash::make($password)
         ]);
-        $mail = new PasswordGenerated($user);
+        $mail = new PasswordGenerated($user,$password);
         Mail::to($user->email)->send($mail);
         return $user;
     }

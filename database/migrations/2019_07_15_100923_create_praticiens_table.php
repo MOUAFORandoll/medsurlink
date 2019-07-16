@@ -15,9 +15,8 @@ class CreatePraticiensTable extends Migration
     {
         Schema::create('praticiens', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('specialite_id');
-            $table->unsignedBigInteger('etablissement_id');
             $table->enum('civilite',['M.','Mme/Mlle.','Dr.','Pr.']);
             $table->string('nom');
             $table->string('prenom')->nullable();
@@ -32,11 +31,6 @@ class CreatePraticiensTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('etablissement_id')
-                ->references('id')
-                ->on('etabissement_exercices')
-                ->onDelete('RESTRICT')
-                ->onUpdate('RESTRICT');
 
             $table->foreign('specialite_id')
                 ->references('id')
@@ -60,7 +54,7 @@ class CreatePraticiensTable extends Migration
     public function down()
     {
         Schema::dropIfExists('praticiens', function (Blueprint $table) {
-            $table->drop(['profession_id','etablissement_id','specialite_id','user_id']);
+            $table->drop(['profession_id','specialite_id','user_id']);
         });
     }
 }

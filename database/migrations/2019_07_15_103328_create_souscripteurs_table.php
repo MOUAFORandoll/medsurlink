@@ -15,11 +15,11 @@ class CreateSouscripteursTable extends Migration
     {
         Schema::create('souscripteurs', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->string('nom');
             $table->enum('sexe',['M','F']);
             $table->date('date_de_naissance');
-            $table->integer('age');
+            $table->integer('age')->nullable();
             $table->string('nationalite');
             $table->string('ville');
             $table->string('pays');

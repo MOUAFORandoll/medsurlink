@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EtablissementExerciceRequest;
-use App\Models\EtabissementExercice;
+use App\Models\EtablissementExercice;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -20,7 +20,7 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtabissementExercice::all();
+        $etablissements =  EtablissementExercice::all();
         return response()->json(['etablissements'=>$etablissements]);
     }
 
@@ -42,7 +42,7 @@ class EtablissementExerciceController extends Controller
      */
     public function store(EtablissementExerciceRequest $request)
     {
-        $etablissement = EtabissementExercice::create($request->validated());
+        $etablissement = EtablissementExercice::create($request->validated());
         return response()->json(['etablissement'=>$etablissement]);
     }
 
@@ -56,7 +56,7 @@ class EtablissementExerciceController extends Controller
     {
         $this->validatedId($id);
 
-        $etablissement = EtabissementExercice::find($id);
+        $etablissement = EtablissementExercice::find($id);
         return response()->json(['etablissement'=>$etablissement]);
 
 
@@ -84,8 +84,8 @@ class EtablissementExerciceController extends Controller
     {
         $this->validatedId($id);
 
-        EtabissementExercice::whereId($id)->update($request->validated());
-        $etablissement = EtabissementExercice::find($id);
+        EtablissementExercice::whereId($id)->update($request->validated());
+        $etablissement = EtablissementExercice::find($id);
         return response()->json(['etablissement'=>$etablissement]);
 
     }
@@ -99,8 +99,8 @@ class EtablissementExerciceController extends Controller
     public function destroy($id)
     {
         $this->validatedId($id);
-        $etablissement = EtabissementExercice::find($id);
-        EtabissementExercice::destroy($id);
+        $etablissement = EtablissementExercice::find($id);
+        EtablissementExercice::destroy($id);
         return response()->json(['etablissement'=>$etablissement]);
     }
 

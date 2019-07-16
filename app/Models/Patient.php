@@ -9,11 +9,11 @@ class Patient extends Model
 {
     use SoftDeletes;
 
-    protected $dates = "date_de_naissance";
 
     protected $fillable = [
         "user_id",
         "nom",
+        "souscripteur_id",
         "prenom",
         "sexe",
         "date_de_naissance",
@@ -29,4 +29,8 @@ class Patient extends Model
         "tel_contact",
         "lien_contact",
     ];
+
+    public function souscripteur(){
+        return $this->belongsTo(Souscripteur::class,'souscripteur_id','id');
+    }
 }

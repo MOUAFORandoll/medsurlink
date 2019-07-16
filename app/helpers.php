@@ -10,8 +10,8 @@ if (!function_exists('evaluateYearOfOld')){
 }
 
 if (!function_exists('fullName')){
-    function fullName($entite){
-        return strtoupper($entite->nom).' '.ucfirst($entite->prenom);
+    function fullName(\Illuminate\Http\Request $request){
+        return strtoupper($request->nom).' '.ucfirst($request->prenom);
     }
 }
 

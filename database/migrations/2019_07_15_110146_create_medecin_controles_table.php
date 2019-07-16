@@ -16,7 +16,7 @@ class CreateMedecinControlesTable extends Migration
         Schema::create('medecin_controles', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('specialite_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->enum('civilite',['M.','Mme/Mlle.','Dr.','Pr.']);
             $table->string('nom');
             $table->string('prenom')->nullable();

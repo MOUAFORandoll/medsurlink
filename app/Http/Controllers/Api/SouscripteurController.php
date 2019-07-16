@@ -44,7 +44,7 @@ class SouscripteurController extends Controller
         $souscripteur->age = $age;
 
         //Generation du mot de passe et envoie par mail
-        $user = UserController::generatedUser(fullName($souscripteur),$souscripteur->email);
+        $user = UserController::generatedUser(fullName($request),$souscripteur->email);
         $user->assignRole('Souscripteur');
 
         $souscripteur->user_id = $user->id;
