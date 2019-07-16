@@ -17,6 +17,10 @@ class RoleTableSeeder extends Seeder
             'Patient',
             'Garant',
             'Partenaire',
+            'Praticien',
+            'Medecin controle',
+            'Gestionnaire',
+            'Souscripteur',
         ];
 
         foreach ($roles as $role) {

@@ -28,4 +28,5 @@ class Praticien extends Model
         "quartier",
         "code_postal",
     ];
+
 }
