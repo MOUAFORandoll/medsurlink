@@ -2,41 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/EtablissementExerciceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/EtablissementExerciceController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/GestionnaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/GestionnaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/MedecinControleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/MedecinControleController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ProfessionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ProfessionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SpecialiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SpecialiteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/GestionnaireRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/GestionnaireRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/MedecinControleRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/MedecinControleRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/PraticienRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/PraticienRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/SouscripteurRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/SouscripteurRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/patientRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/patientRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Mail/Password/PasswordGenerated.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Mail/Password/PasswordGenerated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/EtabissementExercice.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/EtablissementExercice.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Gestionnaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Gestionnaire.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/MedecinControle.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/MedecinControle.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Patient.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Praticien.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Praticien.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Profession.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Profession.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Souscripteur.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Souscripteur.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Specialite.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Specialite.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/helpers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/app.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_090921_create_patients_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_090921_create_patients_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_090923_create_etabissement_exercices_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_090923_create_etabissement_exercices_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_100923_create_praticiens_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_100923_create_praticiens_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_103328_create_souscripteurs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_103328_create_souscripteurs_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_110146_create_medecin_controles_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_110146_create_medecin_controles_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_110727_create_gestionnaires_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_110727_create_gestionnaires_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_103328_create_souscripteurs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_090920_create_souscripteurs_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeds/PermissionTableSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/PermissionTableSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeds/RoleTableSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/RoleTableSeeder.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -80,28 +49,41 @@
     </expand>
     <select />
   </component>
+  <component name="DockManager">
+    <window id="2">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/database/seeds/RoleTableSeeder.php">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="351">
+                    <caret line="93" column="35" selection-start-line="93" selection-start-column="35" selection-end-line="93" selection-end-column="35" />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
+  </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Models/Patient.php">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/database/seeds/PermissionTableSeeder.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
-              <caret line="33" column="76" selection-start-line="33" selection-start-column="76" selection-end-line="33" selection-end-column="76" />
-              <folding>
-                <element signature="e#30#69#0#PHP" expanded="true" />
-              </folding>
+            <state relative-caret-position="351">
+              <caret line="38" selection-start-line="38" selection-end-line="38" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_15_090921_create_patients_table.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="107" column="52" selection-start-line="107" selection-start-column="52" selection-end-line="107" selection-end-column="52" />
-              <folding>
-                <element signature="e#44#81#0#PHP" expanded="true" />
-              </folding>
+            <state relative-caret-position="-9">
+              <caret line="22" column="45" lean-forward="true" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
             </state>
           </provider>
         </entry>
@@ -116,6 +98,8 @@
       <find>255</find>
       <find>age</find>
       <find>,</find>
+      <find>profils sousc</find>
+      <find>Imprimer resultats laboratoire</find>
     </findStrings>
     <replaceStrings>
       <replace>=&gt;$request-&gt;get(''),</replace>
@@ -135,7 +119,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/resources/views/contrat_version_imprimable.blade.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_07_15_101929_create_professions_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_07_15_102444_create_etabissement_exercices_table.php" />
@@ -150,7 +133,6 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/EtablissementExerciceController.php" />
         <option value="$PROJECT_DIR$/composer.json" />
         <option value="$PROJECT_DIR$/app/Http/Requests/UserRequest.php" />
-        <option value="$PROJECT_DIR$/database/seeds/RoleTableSeeder.php" />
         <option value="$PROJECT_DIR$/app/Models/Profession.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ProfessionController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/SpecialiteController.php" />
@@ -186,6 +168,8 @@
         <option value="$PROJECT_DIR$/database/migrations/2019_07_15_090921_create_patients_table.php" />
         <option value="$PROJECT_DIR$/app/Models/Patient.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" />
+        <option value="$PROJECT_DIR$/database/seeds/RoleTableSeeder.php" />
+        <option value="$PROJECT_DIR$/database/seeds/PermissionTableSeeder.php" />
       </list>
     </option>
   </component>
@@ -307,58 +291,6 @@
             <path>
               <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
               <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Http" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Http" type="462c0819:PsiDirectoryNode" />
-              <item name="Controllers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Http" type="462c0819:PsiDirectoryNode" />
-              <item name="Controllers" type="462c0819:PsiDirectoryNode" />
-              <item name="Api" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Http" type="462c0819:PsiDirectoryNode" />
-              <item name="Requests" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Mail" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Mail" type="462c0819:PsiDirectoryNode" />
-              <item name="Password" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
               <item name="database" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -370,12 +302,8 @@
             <path>
               <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
               <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="resources" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
+              <item name="database" type="462c0819:PsiDirectoryNode" />
+              <item name="seeds" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -458,22 +386,21 @@
       <workItem from="1562745202978" duration="3738000" />
       <workItem from="1562916400570" duration="5100000" />
       <workItem from="1563176020049" duration="15378000" />
-      <workItem from="1563262822853" duration="26134000" />
+      <workItem from="1563262822853" duration="26993000" />
+      <workItem from="1563348778131" duration="4451000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="129185000" />
+    <option name="totallyTimeSpent" value="134495000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.60560346" visible="true" weight="0.20196672" />
-      <window_info id="Structure" order="1" sideWeight="0.39439654" side_tool="true" visible="true" weight="0.20196672" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6034483" visible="true" weight="0.20499243" />
+      <window_info id="Structure" order="1" sideWeight="0.39655173" side_tool="true" visible="true" weight="0.20499243" />
       <window_info id="npm" order="2" sideWeight="0.5191083" side_tool="true" weight="0.16414523" />
       <window_info id="Favorites" order="3" side_tool="true" />
-      <window_info anchor="bottom" id="Database Console" weight="0.3289689" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -486,11 +413,12 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.2405892" />
+      <window_info anchor="bottom" id="Database Console" order="12" weight="0.3289689" />
       <window_info anchor="right" x="0" y="0" width="295" height="544" id="Documentation" order="0" side_tool="true" weight="0.32980332" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
-      <window_info anchor="right" id="Database" order="4" visible="true" weight="0.21482602" />
+      <window_info active="true" anchor="right" id="Database" order="4" visible="true" weight="0.21482602" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48089173" visible="true" weight="0.16414523" />
@@ -519,13 +447,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-85">
-          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/User.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="139">
@@ -560,42 +481,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="uml://DATABASE/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.SCHEMA:medicalinkapp">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>DATABASE</ID>
-          <OriginalElement>c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.SCHEMA:medicalinkapp</OriginalElement>
-          <nodes>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.roles</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.migrations</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.users</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.role_has_permissions</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.medecin_controles</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.contrat_intermediation_medicales</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.professions</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.praticiens</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.gestionnaires</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.model_has_roles</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.permissions</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.souscripteurs</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.patients</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.password_resets</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.specialites</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.model_has_permissions</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.etabissement_exercices</node>
-          </nodes>
-          <notes />
-          <edges />
-          <settings layout="Hierarchic Group" zoom="0.27717391304347827" x="983.0" y="634.0" />
-          <SelectedNodes />
-          <Categories>
-            <Category>Key columns</Category>
-            <Category>Columns</Category>
-          </Categories>
-          <SCOPE>All</SCOPE>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Models/EtablissementExercice.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="272">
@@ -613,13 +498,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Mail/Password/Generate.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="9" column="6" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Mail/Password/Generate.php" />
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Auth/RegisterController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
@@ -631,13 +510,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-102">
           <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/seeds/RoleTableSeeder.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="22" column="25" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -909,13 +781,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_15_103328_create_souscripteurs_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="173">
-          <caret line="21" column="45" lean-forward="true" selection-start-line="21" selection-start-column="45" selection-end-line="21" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Models/Souscripteur.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -945,19 +810,58 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_15_090921_create_patients_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="22" column="45" lean-forward="true" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Requests/patientRequest.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="42" column="62" lean-forward="true" selection-start-line="37" selection-start-column="58" selection-end-line="42" selection-end-column="62" />
           <folding>
             <element signature="e#37#80#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="uml://DATABASE/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.SCHEMA:medicalinkapp">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>DATABASE</ID>
+          <OriginalElement>c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.SCHEMA:medicalinkapp</OriginalElement>
+          <nodes>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.roles</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.migrations</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.praticiens</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.users</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.role_has_permissions</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.contrat_intermediation_medicales</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.professions</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.medecin_controles</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.model_has_roles</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.gestionnaires</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.permissions</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.souscripteurs</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.patients</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.password_resets</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.specialites</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.model_has_permissions</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.etabissement_exercices</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.etablissement_exercice_praticien</node>
+          </nodes>
+          <notes />
+          <edges />
+          <settings layout="Hierarchic Group" zoom="0.2961135101789019" x="1285.1114583333333" y="620.8677083333333" />
+          <SelectedNodes />
+          <Categories>
+            <Category>Key columns</Category>
+            <Category>Columns</Category>
+          </Categories>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="107" column="52" selection-start-line="107" selection-start-column="52" selection-end-line="107" selection-end-column="52" />
+          <folding>
+            <element signature="e#44#81#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -972,13 +876,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php">
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_15_090920_create_souscripteurs_table.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="107" column="52" selection-start-line="107" selection-start-column="52" selection-end-line="107" selection-end-column="52" />
-          <folding>
-            <element signature="e#44#81#0#PHP" expanded="true" />
-          </folding>
+        <state relative-caret-position="173">
+          <caret line="21" column="45" lean-forward="true" selection-start-line="21" selection-start-column="45" selection-end-line="21" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_15_090921_create_patients_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-9">
+          <caret line="22" column="45" lean-forward="true" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/seeds/RoleTableSeeder.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="93" column="35" selection-start-line="93" selection-start-column="35" selection-end-line="93" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/seeds/PermissionTableSeeder.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="38" selection-start-line="38" selection-end-line="38" />
         </state>
       </provider>
     </entry>
