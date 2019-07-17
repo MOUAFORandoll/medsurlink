@@ -15,6 +15,16 @@ class PatientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware(['role_or_permission:Admin|Gestionnaire|Patient']);
+        $this->middleware(['role_or_permission:Souscripteur|Praticien|Medecin controle|Consulter profils patient'])->only(['show']);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $patients = Patient::with(['souscripteur'])->get();

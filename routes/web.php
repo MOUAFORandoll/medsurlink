@@ -39,5 +39,9 @@ Route::get('{all}', function () {
     return view('dashboard');
 //})->where('all', '^(dashboard).*$');
 })//->middleware('auth','isAdmin')
-    ->where('all', '^admin|admin/|admin/.*,dashboard|dashboard/|dashboard/.*$');
+->where('all', '^admin|admin/|admin/.*,dashboard|dashboard/|dashboard/.*$');
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

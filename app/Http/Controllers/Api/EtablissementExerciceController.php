@@ -18,6 +18,15 @@ class EtablissementExerciceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware(['role:Admin|Gestionnaire']);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $etablissements =  EtablissementExercice::all();
@@ -109,7 +118,7 @@ class EtablissementExerciceController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:etabissement_exercices,id']);
+        $validation = Validator::make(compact('id'),['id'=>'exists:etablissement_exercices,id']);
         if ($validation->fails()){
             return response()->json(['id'=>$validation->errors()],422);
         }

@@ -14,6 +14,15 @@ class SouscripteurController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware(['role_or_permission:Admin|Gestionnaire|Souscripteur']);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $souscripteurs = Souscripteur::all();

@@ -15,6 +15,16 @@ class SpecialiteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware(['role_or_permission:Admin|Gestionnaire']);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $specialites = Specialite::with('profession')->get();
