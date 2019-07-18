@@ -1,6 +1,6 @@
 <template>
     <nav>
-        <v-toolbar app dark scroll-off-screen class="primary">
+        <v-toolbar app dark class="primary">
             <v-toolbar-side-icon @click="showDrawer = !showDrawer"></v-toolbar-side-icon>
 
             <v-avatar>
