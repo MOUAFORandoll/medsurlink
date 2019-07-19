@@ -141,5 +141,5 @@ export default {
     phone2Contact: 'Affiliation secondary phone number',
     nomContact: 'Contact name',
     montantSouscription: 'Subscription amount',
-    dateSignature: 'Date de la signature',
+    dateSignature: 'Date of signature',
 }

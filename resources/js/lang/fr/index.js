@@ -140,5 +140,6 @@ export default {
     phone1Contact: 'Numéro de téléphone principal du contact',
     phone2Contact: 'Numéro de téléphone secondaire du contact',
     nomContact: 'Nom du contact',
-    dateSignature: 'Signature date',
+    montantSouscription: 'Montant souscription',
+    dateSignature: 'Date de la signature',
 }
