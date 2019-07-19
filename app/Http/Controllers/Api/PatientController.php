@@ -15,16 +15,6 @@ class PatientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    function __construct()
-    {
-        $this->middleware(['role_or_permission:Admin|Gestionnaire|Patient']);
-        $this->middleware(['role_or_permission:Souscripteur|Praticien|Medecin controle|Consulter profils patient'])->only(['show']);
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $patients = Patient::with(['souscripteur'])->get();
@@ -72,7 +62,9 @@ class PatientController extends Controller
      */
     public function show($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $patient = Patient::with(['souscripteur'])->find($id);
         return response()->json(['patient'=>$patient]);
 
@@ -98,7 +90,9 @@ class PatientController extends Controller
      */
     public function update(patientRequest $request, $id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         Patient::whereId($id)->update($request->validated());
         $patient = Patient::with(['souscripteur'])->find($id);
         $patient->age = evaluateYearOfOld($patient->date_de_naissance);
@@ -114,7 +108,9 @@ class PatientController extends Controller
      */
     public function destroy($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $patient = Patient::with(['souscripteur'])->find($id);
         Patient::destroy($id);
         return response()->json(['patient'=>$patient]);
@@ -127,7 +123,8 @@ class PatientController extends Controller
     public function validatedId($id){
         $validation = Validator::make(compact('id'),['id'=>'exists:patients,id']);
         if ($validation->fails()){
-            return response()->json(['id'=>$validation->errors()],422);
+            return response()->json($validation->errors(),422);
         }
+        return null;
     }
 }

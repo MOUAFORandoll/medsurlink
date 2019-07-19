@@ -63,7 +63,9 @@ class EtablissementExerciceController extends Controller
      */
     public function show($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;;
 
         $etablissement = EtablissementExercice::find($id);
         return response()->json(['etablissement'=>$etablissement]);
@@ -91,7 +93,9 @@ class EtablissementExerciceController extends Controller
      */
     public function update(EtablissementExerciceRequest $request, $id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;;
 
         EtablissementExercice::whereId($id)->update($request->validated());
         $etablissement = EtablissementExercice::find($id);
@@ -107,7 +111,9 @@ class EtablissementExerciceController extends Controller
      */
     public function destroy($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;;
         $etablissement = EtablissementExercice::find($id);
         EtablissementExercice::destroy($id);
         return response()->json(['etablissement'=>$etablissement]);
@@ -120,7 +126,8 @@ class EtablissementExerciceController extends Controller
     public function validatedId($id){
         $validation = Validator::make(compact('id'),['id'=>'exists:etablissement_exercices,id']);
         if ($validation->fails()){
-            return response()->json(['id'=>$validation->errors()],422);
+            return response()->json($validation->errors(),422);
         }
+        return null;
     }
 }

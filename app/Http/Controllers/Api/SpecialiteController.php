@@ -61,7 +61,10 @@ class SpecialiteController extends Controller
      */
     public function show($id)
     {
-        $this->validatedId($id);
+        $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
+
         $specialite = Specialite::with('profession')->find($id);
         return response()->json(['specialite'=>$specialite]);
 
@@ -87,7 +90,10 @@ class SpecialiteController extends Controller
      */
     public function update(SpecialiteRequest $request, $id)
     {
-        $this->validatedId($id);
+        $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
+
         Specialite::whereId($id)->update($request->validated());
         $specialite = Specialite::with('profession')->find($id);
         return response()->json(['specialite'=>$specialite]);
@@ -102,7 +108,10 @@ class SpecialiteController extends Controller
      */
     public function destroy($id)
     {
-        $this->validatedId($id);
+        $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
+
         $specialite = Specialite::with('profession')->find($id);
         Specialite::destroy($id);
         return response()->json(['specialite'=>$specialite]);
@@ -116,7 +125,8 @@ class SpecialiteController extends Controller
     public function validatedId($id){
         $validation = Validator::make(compact('id'),['id'=>'exists:specialites,id']);
         if ($validation->fails()){
-            return response()->json(['id'=>$validation->errors()],422);
+            return response()->json($validation->errors(),422);
         }
+        return null;
     }
 }

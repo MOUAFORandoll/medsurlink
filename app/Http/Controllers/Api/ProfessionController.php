@@ -61,7 +61,9 @@ class ProfessionController extends Controller
      */
     public function show($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $profession = Profession::with('specialites')->find($id);
         return response()->json(['profession'=>$profession]);
 
@@ -87,7 +89,9 @@ class ProfessionController extends Controller
      */
     public function update(ProfessionRequest $request, $id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         Profession::whereId($id)->update($request->validated());
         $profession = Profession::with('specialites')->find($id);
         return response()->json(['profession'=>$profession]);
@@ -101,7 +105,9 @@ class ProfessionController extends Controller
      */
     public function destroy($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $profession = Profession::with('specialites')->find($id);
         Profession::destroy($id);
         return response()->json(['profession'=>$profession]);
@@ -114,7 +120,8 @@ class ProfessionController extends Controller
     public function validatedId($id){
         $validation = Validator::make(compact('id'),['id'=>'exists:professions,id']);
         if ($validation->fails()){
-            return response()->json(['id'=>$validation->errors()],422);
+            return response()->json($validation->errors(),422);
         }
+        return null;
     }
 }

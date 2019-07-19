@@ -71,7 +71,9 @@ class SouscripteurController extends Controller
      */
     public function show($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $souscripteur = Souscripteur::find($id);
         return response()->json(['souscripteur'=>$souscripteur]);
 
@@ -97,7 +99,9 @@ class SouscripteurController extends Controller
      */
     public function update(SouscripteurRequest $request, $id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         Souscripteur::whereId($id)->update($request->validated());
 
         //Calcul de l'age du souscripteur
@@ -118,7 +122,9 @@ class SouscripteurController extends Controller
      */
     public function destroy($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $souscripteur = Souscripteur::find($id);
         Souscripteur::destroy($id);
         return response()->json(['souscripteur'=>$souscripteur]);
@@ -132,7 +138,8 @@ class SouscripteurController extends Controller
     public function validatedId($id){
         $validation = Validator::make(compact('id'),['id'=>'exists:souscripteurs,id']);
         if ($validation->fails()){
-            return response()->json(['id'=>$validation->errors()],422);
+            return response()->json($validation->errors(),422);
         }
+        return null;
     }
 }

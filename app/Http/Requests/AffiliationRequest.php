@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+class AffiliationRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            "patient_id"=>"required|integer|exists:patients,id",
+            "nom"=>["required",Rule::in(['One shot','Annuelle'])],
+            "date_debut"=>"required|date",
+            "date_fin"=>"sometimes|nullable|date|after:date_debut",
+        ];
+    }
+}

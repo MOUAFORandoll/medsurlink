@@ -64,7 +64,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $user = User::find($id);
         return response()->json(['user'=>$user]);
     }
@@ -89,7 +91,9 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         User::whereId($id)->update($request->validated());
         $user = User::find($id);
         return response()->json(['user'=>$user]);
@@ -103,7 +107,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $user = User::find($id);
         User::destroy($id);
         return response()->json(['user'=>$user]);
@@ -116,8 +122,9 @@ class UserController extends Controller
     public function validatedId($id){
         $validation = Validator::make(compact('id'),['id'=>'exists:users,id']);
         if ($validation->fails()){
-            return response()->json(['id'=>$validation->errors()],422);
+            return response()->json($validation->errors(),422);
         }
+        return null;
     }
 
     public static function generatedUser($name, $email){

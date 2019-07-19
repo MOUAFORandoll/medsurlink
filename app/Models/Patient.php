@@ -33,4 +33,8 @@ class Patient extends Model
     public function souscripteur(){
         return $this->belongsTo(Souscripteur::class,'souscripteur_id','id');
     }
+
+    public function affiliations(){
+        return $this->hasMany(Affiliation::class,'patient_id','id');
+    }
 }

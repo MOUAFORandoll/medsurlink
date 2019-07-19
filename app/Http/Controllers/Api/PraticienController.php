@@ -72,7 +72,9 @@ class PraticienController extends Controller
      */
     public function show($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $praticien = Praticien::with('etablissements')->find($id);
         return response()->json(['praticien'=>$praticien]);
 
@@ -98,7 +100,9 @@ class PraticienController extends Controller
      */
     public function update(PraticienRequest $request, $id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         Praticien::whereId($id)->update($request->validated());
         $praticien = Praticien::with('etablissements')->find($id);
         return response()->json(['praticien'=>$praticien]);
@@ -113,7 +117,9 @@ class PraticienController extends Controller
      */
     public function destroy($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $praticien = Praticien::with('etablissements')->find($id);
         Praticien::destroy($id);
         return response()->json(['praticien'=>$praticien]);
@@ -127,8 +133,9 @@ class PraticienController extends Controller
     public function validatedId($id){
         $validation = Validator::make(compact('id'),['id'=>'exists:praticiens,id']);
         if ($validation->fails()){
-            return response()->json(['id'=>$validation->errors()],422);
+            return response()->json($validation->errors(),422);
         }
+        return null;
     }
 
     public function addEtablissement(Request $request){
