@@ -15,6 +15,15 @@ class GestionnaireController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware(['role_or_permission:Admin|Gestionnaire']);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $gestionnaires = Gestionnaire::all();
@@ -60,7 +69,9 @@ class GestionnaireController extends Controller
      */
     public function show($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $gestionnaire = Gestionnaire::find($id);
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
@@ -86,7 +97,10 @@ class GestionnaireController extends Controller
      */
     public function update(GestionnaireRequest $request, $id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
+
         Gestionnaire::whereId($id)->update($request->validated());
         $gestionnaire = Gestionnaire::find($id);
         return response()->json(['gestionnaire'=>$gestionnaire]);
@@ -101,7 +115,10 @@ class GestionnaireController extends Controller
      */
     public function destroy($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
+
         $gestionnaire = Gestionnaire::find($id);
         Gestionnaire::destroy($id);
         return response()->json(['gestionnaire'=>$gestionnaire]);
@@ -115,7 +132,8 @@ class GestionnaireController extends Controller
     public function validatedId($id){
         $validation = Validator::make(compact('id'),['id'=>'exists:gestionnaires,id']);
         if ($validation->fails()){
-            return response()->json(['id'=>$validation->errors()],422);
+            return response()->json($validation->errors(),422);
         }
+        return null;
     }
 }

@@ -15,6 +15,16 @@ class MedecinControleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware(['role_or_permission:Admin|Gestionnaire|Medecin controle']);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $medecins = MedecinControle::with('specialite')->get();
@@ -60,7 +70,9 @@ class MedecinControleController extends Controller
      */
     public function show($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $medecin = MedecinControle::with('specialite')->find($id);
         return response()->json(['medecin'=>$medecin]);
 
@@ -86,7 +98,9 @@ class MedecinControleController extends Controller
      */
     public function update(MedecinControleRequest $request, $id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         MedecinControle::whereId($id)->update($request->validated());
         $medecin = MedecinControle::with('specialite')->find($id);
         return response()->json(['medecin'=>$medecin]);
@@ -101,7 +115,9 @@ class MedecinControleController extends Controller
      */
     public function destroy($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;
         $medecin = MedecinControle::with('specialite')->find($id);
         MedecinControle::destroy($id);
         return response()->json(['medecin'=>$medecin]);
@@ -115,7 +131,8 @@ class MedecinControleController extends Controller
     public function validatedId($id){
         $validation = Validator::make(compact('id'),['id'=>'exists:medecin_controles,id']);
         if ($validation->fails()){
-            return response()->json(['id'=>$validation->errors()],422);
+            return response()->json($validation->errors(),422);
         }
+        return null;
     }
 }

@@ -18,6 +18,15 @@ class EtablissementExerciceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware(['role:Admin|Gestionnaire']);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $etablissements =  EtablissementExercice::all();
@@ -54,7 +63,9 @@ class EtablissementExerciceController extends Controller
      */
     public function show($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;;
 
         $etablissement = EtablissementExercice::find($id);
         return response()->json(['etablissement'=>$etablissement]);
@@ -82,7 +93,9 @@ class EtablissementExerciceController extends Controller
      */
     public function update(EtablissementExerciceRequest $request, $id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;;
 
         EtablissementExercice::whereId($id)->update($request->validated());
         $etablissement = EtablissementExercice::find($id);
@@ -98,7 +111,9 @@ class EtablissementExerciceController extends Controller
      */
     public function destroy($id)
     {
-        $this->validatedId($id);
+         $validation = $this->validatedId($id);
+        if(!is_null($validation))
+            return $validation;;
         $etablissement = EtablissementExercice::find($id);
         EtablissementExercice::destroy($id);
         return response()->json(['etablissement'=>$etablissement]);
@@ -109,9 +124,10 @@ class EtablissementExerciceController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:etabissement_exercices,id']);
+        $validation = Validator::make(compact('id'),['id'=>'exists:etablissement_exercices,id']);
         if ($validation->fails()){
-            return response()->json(['id'=>$validation->errors()],422);
+            return response()->json($validation->errors(),422);
         }
+        return null;
     }
 }

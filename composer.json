@@ -17,10 +17,12 @@
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "h4cc/wkhtmltopdf-i386": "0.12.x",
         "laravel/framework": "5.8.*",
+        "laravel/passport": "^7.3",
         "laravel/tinker": "^1.0",
         "spatie/laravel-permission": "^2.37"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.2",
         "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",
