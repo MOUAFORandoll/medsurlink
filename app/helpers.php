@@ -24,4 +24,8 @@ if (!function_exists('validatedId')){
         return null;
     }
 }
-
+if (!function_exists('dateOfToday')){
+    function dateOfToday(){
+        return Carbon::today()->format('Y-m-d');
+    }
+}
