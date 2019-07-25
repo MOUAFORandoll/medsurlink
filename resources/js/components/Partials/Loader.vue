@@ -1,5 +1,5 @@
 <template>
-    <v-dialog
+    <!--v-dialog
             v-model="loader"
             hide-overlay
             persistent
@@ -19,7 +19,7 @@
                 ></v-progress-linear>
             </v-card-text>
         </v-card>
-    </v-dialog>
+    </v-dialog-->
 </template>
 
 <script>

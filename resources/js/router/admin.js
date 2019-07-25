@@ -124,6 +124,7 @@ export default {
                 requiresAuth: false
             }
         },
+
         {
             path: 'profile',
             name: 'profile',

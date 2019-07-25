@@ -5,16 +5,23 @@
         </td>
 
         <td class="text-xs-right">
+            {{ userOffre }}
+        </td>
+
+        <td class="text-xs-right">
             <a :href="'mailto:' + user.email">
                 {{ user.email }}
             </a>
         </td>
+
         <td class="text-xs-right">
             {{ user.telephone }}
         </td>
+
         <td class="text-xs-right">
             {{ user.pays }}
         </td>
+
         <td class="text-xs-right">
             {{ user.created_at }}
         </td>
@@ -112,6 +119,15 @@
         name: "UserTableRow",
 
         props: ["users", "user"],
+
+        computed: {
+            userOffre: function() {
+                if (this.user.offre != null && this.user.offre != "")
+                    return this.$i18n.t('message.offerList.' + this.user.offre);
+
+                return "";
+            }
+        },
 
         data() {
             return {

@@ -1,17 +1,105 @@
 <template>
-    <v-container>
-        <v-data-table
-                v-if="rdvs.length"
-                :items="items"
-                class="elevation-1"
-        >
-            <template slot="items" slot-scope="props">
-                <appointment-table-row :date="props.item.date" :rdvs="props.item.rdvs" :key="props.item.date"></appointment-table-row>
-            </template>
-        </v-data-table>
+    <div class="card border-light">
+        <div class="card-body p-1em">
+            <h3 class="card-title text-center">
+                {{ $tc('message.appointments', 2) }}
+            </h3>
 
-        <template v-else>
-            <v-flex xs12>
+            <div class="card-title">
+                <router-link :to="{ name: 'add-appointment' }">
+                    {{ $t('message.add') }}
+
+                    <i class="fas fa-plus-circle edit-icon"></i>
+                </router-link>
+            </div>
+
+            <template v-if="rows">
+                <b-pagination
+                        v-model="currentPage"
+                        :total-rows="rows"
+                        :per-page="perPage"
+                        class="mb-3"
+                        aria-controls="rdvs-table"
+                ></b-pagination>
+
+                <b-container>
+                    <b-row class="justify-content-sm-center">
+                        <b-col col sm="6">
+                            <b-form-group label-cols-sm="3" :label="$t('message.filter')" class="mb-0">
+                                <b-form-select v-model="sortDesc">
+                                    <option :value="true">{{ $t('message.latest') }}</option>
+
+                                    <option :value="false">{{ $t('message.oldest') }}</option>
+                                </b-form-select>
+                            </b-form-group>
+                        </b-col>
+                    </b-row>
+                </b-container>
+
+                <b-table
+                        id="rdvs-table"
+                        :per-page="perPage"
+                        :current-page="currentPage"
+                        selectable
+                        select-mode="single"
+                        borderless
+                        responsive
+                        striped
+                        hover
+                        :sort-by.sync="sortBy"
+                        :sort-desc.sync="sortDesc"
+                        @row-selected="rowSelected"
+                        :fields="fields"
+                        :items="mRdvs"
+                >
+                    <!-- A virtual composite column for actions -->
+                    <template slot="action" slot-scope="data">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <b-link :to="{ name: 'edit-appointment', params: { appointment: data.item.id } }">
+                                    <i class="fas fa-edit fa-2x edit-icon"></i>
+                                </b-link>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <i v-b-modal="'delete-modal-' + data.item.id" class="fas fa-trash fa-2x delete-icon"></i>
+                            </div>
+                        </div>
+
+                        <b-modal
+                                :id="'delete-modal-' + data.item.id"
+                                size="sm"
+                                header-bg-variant="danger"
+                                header-text-variant="light"
+                                :title="$t('message.delete') + ' ' + $tc('message.appointments', 1)"
+                                hide-footer
+                        >
+                            <div class="d-block text-center">
+                                <h3>{{ $t('message.delete') }} {{ data.item.nom }}?</h3>
+                            </div>
+
+                            <div class="d-block float-right">
+                                <b-button class="secondary" @click="deleteAppointment(data.item.id, data.index)">
+                                    {{ $t('message.delete') }}
+                                </b-button>
+
+                                <b-button class="danger" @click="$bvModal.hide('delete-modal-' + data.item.id)">
+                                    {{ $t('message.cancel') }}
+                                </b-button>
+                            </div>
+                        </b-modal>
+                    </template>
+                </b-table>
+
+                <b-pagination
+                        v-model="currentPage"
+                        :total-rows="rows"
+                        :per-page="perPage"
+                        aria-controls="rdvs-table"
+                ></b-pagination>
+            </template>
+
+            <template v-else>
                 <div class="card">
                     <div class="card-body text-xs-center">
                         <p class="card-text">
@@ -19,209 +107,9 @@
                         </p>
                     </div>
                 </div>
-            </v-flex>
-        </template>
-    </v-container>
-
-    <!--div>
-        <v-layout wrap>
-            <v-flex
-                xs12
-                class="mb-3"
-            >
-                <v-sheet height="500">
-                    <v-calendar
-                        ref="calendar"
-                        v-model="start"
-                        :type="type"
-                        :end="end"
-                        color="primary"
-                        @click:date="dateSelected"
-                        @click:day="daySelected"
-                    >
-                        <template slot="day" slot-scope="{ date }">
-                            <v-menu
-                                    v-model="dialog"
-                                    full-width
-                                    offset-x
-                            >
-                                <template slot="activator" slot-scope="{ on }">
-                                    <div
-                                            v-if="datePicked(date)"
-                                            v-ripple
-                                            class="my-event"
-                                            v-on="on"
-                                    >
-                                        {{ rdvs.length }}
-                                    </div>
-                                </template>
-
-                                <v-card
-                                        color="grey lighten-4"
-                                        min-width="350px"
-                                        flat
-                                >
-                                    <v-toolbar
-                                            color="primary"
-                                            dark
-                                    >
-                                        <v-btn icon>
-                                            <v-icon>edit</v-icon>
-                                        </v-btn>
-                                        <v-toolbar-title>
-                                            {{ events[0].title }}
-                                        </v-toolbar-title>
-                                        <v-spacer></v-spacer>
-                                        <v-btn icon>
-                                            <v-icon>favorite</v-icon>
-                                        </v-btn>
-                                        <v-btn icon>
-                                            <v-icon>more_vert</v-icon>
-                                        </v-btn>
-                                    </v-toolbar>
-                                    <v-card-title primary-title>
-                                        <span>
-                                            events[0].details
-                                        </span>
-                                    </v-card-title>
-                                    <v-card-actions>
-                                        <v-btn
-                                                flat
-                                                color="secondary"
-                                        >
-                                            Cancel
-                                        </v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-menu>
-
-                            <!--template-- v-for="event in eventsMap[date]">
-                                <v-menu
-                                    :key="event.title"
-                                    v-model="event.open"
-                                    full-width
-                                    offset-x
-                                >
-                                    <template slot="activator" slot-scope="{ on }">
-                                        <div
-                                            v-if="!event.time"
-                                            v-ripple
-                                            class="my-event"
-                                            v-on="on"
-                                            v-html="event.title"
-                                        ></div>
-                                    </template>
-                                    <v-card
-                                        color="grey lighten-4"
-                                        min-width="350px"
-                                        flat
-                                    >
-                                        <v-toolbar
-                                            color="primary"
-                                            dark
-                                        >
-                                            <v-btn icon>
-                                                <v-icon>edit</v-icon>
-                                            </v-btn>
-                                            <v-toolbar-title v-html="event.title"></v-toolbar-title>
-                                            <v-spacer></v-spacer>
-                                            <v-btn icon>
-                                                <v-icon>favorite</v-icon>
-                                            </v-btn>
-                                            <v-btn icon>
-                                                <v-icon>more_vert</v-icon>
-                                            </v-btn>
-                                        </v-toolbar>
-                                        <v-card-title primary-title>
-                                            <span v-html="event.details"></span>
-                                        </v-card-title>
-                                        <v-card-actions>
-                                            <v-btn
-                                                flat
-                                                color="secondary"
-                                            >
-                                                Cancel
-                                            </v-btn>
-                                        </v-card-actions>
-                                    </v-card>
-                                </v-menu>
-                            </--template-->
-                        <!--/template>
-
-                    </v-calendar>
-                </v-sheet>
-            </v-flex>
-
-            <v-flex
-                sm4
-                xs12
-                class="text-sm-left text-xs-center"
-            >
-                <v-btn @click="$refs.calendar.prev()">
-                    <v-icon
-                        dark
-                        left
-                    >
-                        keyboard_arrow_left
-                    </v-icon>
-                    Prev
-                </v-btn>
-            </v-flex>
-            <v-flex
-                sm4
-                xs12
-                class="text-xs-center"
-            >
-                <v-select
-                    v-model="type"
-                    :items="typeOptions"
-                    label="Type"
-                ></v-select>
-            </v-flex>
-            <v-flex
-                sm4
-                xs12
-                class="text-sm-right text-xs-center"
-            >
-                <v-btn @click="$refs.calendar.next()">
-                    Next
-                    <v-icon
-                        right
-                        dark
-                    >
-                        keyboard_arrow_right
-                    </v-icon>
-                </v-btn>
-            </v-flex>
-        </v-layout>
-
-        <v-layout row justify-center>
-            <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-                <v-card>
-                    <v-toolbar dark color="primary">
-                        <v-btn icon dark @click="dialog = false">
-                            <v-icon>close</v-icon>
-                        </v-btn>
-                        <v-toolbar-title>Settings</v-toolbar-title>
-                        <v-spacer></v-spacer>
-                        <v-toolbar-items>
-                            <v-btn dark flat @click="dialog = false">Save</v-btn>
-                        </v-toolbar-items>
-                    </v-toolbar>
-                    <v-list three-line subheader>
-                        <v-subheader>Informations du Rendez-Vous</v-subheader>
-<!--//Inserere les informartions concernant le rendez vous ici-->
-                    <!--/v-list>
-                    <v-divider></v-divider>
-                    <v-list three-line subheader>
-                        <v-subheader>Informations Personnelles</v-subheader>
-<!--                       //Inserer les informations personnelles ici-->
-                    <!--/v-list>
-                </v-card>
-            </v-dialog>
-        </v-layout>
-    </div-->
-
+            </template>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -236,6 +124,10 @@
         components: { AppointmentTableRow },
         data () {
             return {
+                perPage: 10,
+                currentPage: 1,
+                sortBy: 'date',
+                sortDesc: true,
                 type: 'month',
                 start: moment(new Date()).format('YYYY-MM-DD HH:mm'),
                 end: '2020-06-10',
@@ -270,10 +162,80 @@
                     }
                 ],
                 dialog: false,
+                fields: [
+                    {
+                        key: 'nom',
+                        label: this.$i18n.t('message.name'),
+                    },
+                    {
+                        key: 'objet',
+                        label: this.$i18n.t('message.subject'),
+                    },
+                    {
+                        key: 'email',
+                        label: this.$i18n.t('message.email'),
+                    },
+                    {
+                        key: 'telephone',
+                        label: this.$i18n.t('message.phoneNumber'),
+                    },
+                    {
+                        key: 'type',
+                        label: this.$i18n.tc('message.types', 1),
+                    },
+                    {
+                        key: 'pays',
+                        label: this.$i18n.tc('message.countries', 1),
+                    },
+                    {
+                        key: 'date1',
+                        label: this.$i18n.tc('message.dates', 1) + ' 1',
+                    },
+                    {
+                        key: 'date2',
+                        label: this.$i18n.tc('message.dates', 1) + ' 2',
+                    },
+                    {
+                        key: 'date',
+                        label: this.$i18n.t('message.createdAt'),
+                        sortable: true
+                    },
+                    {
+                        key: 'action',
+                        label: this.$i18n.tc('message.operations', 1)
+                    }
+                ]
             }
         },
         computed: {
             ...mapGetters(["rdvs"]),
+
+            mRdvs: function() {
+                let rArray = [];
+
+                _.forEach(this.rdvs, function(rdv) {
+                    let r = {};
+
+                    r.id = rdv.id;
+                    r.nom = rdv.nom;
+                    r.objet = rdv.objet;
+                    r.email = rdv.email;
+                    r.telephone = rdv.telephone;
+                    r.type = rdv.style;
+                    r.pays = rdv.pays;
+                    r.date = moment(rdv.created_at).format('DD/MM/YYYY HH:mm');
+                    r.date1 = moment(rdv.date_debut1).format('DD/MM/YYYY HH:mm') + ' - ' + moment(rdv.date_fin1).format('DD/MM/YYYY HH:mm');
+                    r.date2 = rdv.date_debut2 != null && rdv.date_debut2 != '' ? moment(rdv.date_debut2).format('DD/MM/YYYY HH:mm') + ' - ' + moment(rdv.date_fin2).format('DD/MM/YYYY HH:mm') : '';
+
+                    rArray.push(r);
+                });
+
+                return rArray;
+            },
+
+            rows: function() {
+                return this.mRdvs.length;
+            },
 
             items: function() {
                 console.log("RDVs:", this.rdvs);
@@ -354,6 +316,29 @@
                 };
 
                 this.$store.dispatch('getAppointments', { args, errorMessages });
+            },
+
+            rowSelected(items) {
+                this.$router.push({ name: 'edit-appointment', params: { appointment: items[0].id } });
+            },
+
+            deleteAppointment(rdv, index) {
+                let self = this;
+
+                let args = {
+                    rdv: rdv
+                };
+
+                let successMessage = this.$i18n.t('message.appointmentDeleted');
+                let errorMessages = {
+                    generic: this.$i18n.t('message.genericError'),
+                    error: this.$i18n.t('message.error')
+                };
+
+                this.$store.dispatch('deleteAppointment', { args, index, successMessage, errorMessages })
+                    .then(() => {
+                        self.$bvModal.hide('delete-modal-' + rdv);
+                    });
             }
         }
     }

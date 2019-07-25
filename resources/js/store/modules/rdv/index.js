@@ -10,6 +10,9 @@ import AppConfig from '../../../constants/AppConfig';
 const state = {
     rdvs: [],
     rdv: {},
+    rdvForm1: {},
+    rdvForm2: {},
+    rdvSent: null,
     intervale: {}
 };
 
@@ -21,6 +24,18 @@ const getters = {
 
     rdv: state => {
         return state.rdv
+    },
+
+    rdvForm1: state => {
+        return state.rdvForm1
+    },
+
+    rdvForm2: state => {
+        return state.rdvForm2
+    },
+
+    rdvSent: state => {
+        return state.rdvSent
     },
 
     intervale: state => {
@@ -64,6 +79,16 @@ const actions = {
         makeApiRequest(payload.args, apiModel.RDV.Get, localToken, successCallback, errorCallback, payload.errorMessages);
     },
 
+    setAppointmentForm1(context, payload) {
+        console.log("Set form 1 state...");
+        context.commit('setAppointmentForm1Handler', { rdvForm1: payload.form });
+    },
+
+    setAppointmentForm2(context, payload) {
+        console.log("Set form 2 state...");
+        context.commit('setAppointmentForm2Handler', { rdvForm2: payload.form });
+    },
+
     getIntervals(context, payload) {
         function successCallback(response) {
             context.commit('getIntervalsHandler', { intervale: response.data.intervale });
@@ -83,13 +108,17 @@ const actions = {
 
     makeAppointment(context, payload) {
         function successCallback(response) {
-            Vue.notify({
+            context.commit('makeAppointmentHandler', { status: true });
+
+            /*Vue.notify({
                 type: 'success',
                 text: payload.successMessage
-            });
+            });*/
         }
 
         function errorCallback(error) {
+            context.commit('makeAppointmentHandler', { status: false });
+
             Vue.notify({
                 type: 'error',
                 text: payload.errorMessages.error
@@ -151,6 +180,21 @@ const mutations = {
     getAppointmentHandler(state, { rdv }) {
         // Update rdv state
         state.rdv = rdv;
+    },
+
+    setAppointmentForm1Handler(state, { rdvForm1 }) {
+        // Update rdvForm1 state
+        state.rdvForm1 = rdvForm1
+    },
+
+    setAppointmentForm2Handler(state, { rdvForm2 }) {
+        // Update rdvForm2 state
+        state.rdvForm2 = rdvForm2
+    },
+
+    makeAppointmentHandler(state, { status }) {
+        // Update rdvSent state
+        state.rdvSent = status;
     },
 
     getIntervalsHandler(state, { intervale }) {

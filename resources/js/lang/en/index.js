@@ -101,15 +101,14 @@ export default {
     qCountries: 'Choose your countries',
     qTypes: 'Choose the interview type',
     qSubject: 'Subject of the interview',
-    qTime: 'Interview date and time',
+    qTime1: '1st selected interview date and time',
+    qTime2: '2nd selected interview date and time',
     qName: 'Your name',
     qEmail: 'Your email',
     contracts: 'Contract | Contracts',
-    patientGender: 'Select the patient\'s gender:',
-    genderList: {
-        male: 'Male',
-        female: 'Female'
-    },
+    pickAtLeastTwoDates: 'Pick at least two (2) dates',
+    pickOtherTimeSlot: 'Pick another time slot',
+    bookAgain: 'Book another appointment',
     contractMade: 'Contract made successfully',
     contractUpdated: 'Contract updated successfully',
     contractDeleted: 'Contract deleted successfully',
@@ -142,4 +141,13 @@ export default {
     nomContact: 'Contact name',
     montantSouscription: 'Subscription amount',
     dateSignature: 'Date of signature',
+    offres: 'Offer | Offers',
+    offerList: {
+        'one-shot': 'One shot',
+        'annuelle': 'Annual'
+    },
+    permissions: 'Permission | Permissions',
+    filter: 'Filter',
+    latest: 'Most recent',
+    oldest: 'Oldest',
 }

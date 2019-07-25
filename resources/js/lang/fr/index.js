@@ -101,15 +101,14 @@ export default {
     qCountries: 'Selectionner votre pays de résidence',
     qTypes: 'Selectionner le style d\'entretien',
     qSubject: 'Sujet de l\'entretien',
-    qTime: 'Horaire de l\'entretien',
+    qTime1: '1ère plage horaire de l\'entretien',
+    qTime2: '2e plage horaire de l\'entretien',
     qName: 'Votre nom',
     qEmail: 'Votre email',
     contracts: 'Contrat | Contrats',
-    patientGender: 'Choisissez le sexe du patient:',
-    genderList: {
-        male: 'Homme',
-        female: 'Femme'
-    },
+    pickAtLeastTwoDates: 'Choisissez au moins deux (2) plages horaires',
+    pickOtherTimeSlot: 'Choisissez une autre heure',
+    bookAgain: 'Effectuer un autre rendez-vous',
     contractMade: 'Contrat créé avec succès',
     contractUpdated: 'Contrat modifié avec succès',
     contractDeleted: 'Contrat supprimé avec succès',
@@ -140,6 +139,15 @@ export default {
     phone1Contact: 'Numéro de téléphone principal du contact',
     phone2Contact: 'Numéro de téléphone secondaire du contact',
     nomContact: 'Nom du contact',
-    montantSouscription: 'Montant souscription',
+    montantSouscription: 'Montant sousscription',
     dateSignature: 'Date de la signature',
+    offres: 'Offre | Offres',
+    offerList: {
+        'one-shot': 'One shot',
+        'annuelle': 'Annuelle'
+    },
+    permissions: 'Permission | Permissions',
+    filter: 'Filtrer',
+    latest: 'Plus récents',
+    oldest: 'Plus anciens',
 }
