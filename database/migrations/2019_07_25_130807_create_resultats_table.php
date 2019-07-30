@@ -20,7 +20,7 @@ class CreateResultatsTable extends Migration
             $table->enum('type',['Laboratoire','Imagerie']);
             $table->text('description');
             $table->date('date');
-            $table->string('file');
+            $table->string('file')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

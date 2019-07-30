@@ -6,6 +6,7 @@ use App\Http\Requests\ResultatRequest;
 use App\Models\Resultat;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
 class ResultatController extends Controller
 {
@@ -39,17 +40,20 @@ class ResultatController extends Controller
      */
     public function store(ResultatRequest $request)
     {
+
         if($request->hasFile('file')){
             if ($request->file('file')->isValid()) {
-                $path = $request->file->store('Dossier Medicale/'.$request->dossier_medical_id.'Consultation/'.$request->consultation_medecine_generale_id);
+                $resultat = Resultat::create($request->validated());
+
+                $path = $request->file->store('Dossier Medicale/'.$resultat->dossier->numero_dossier.'/Consultation/'.$request->consultation_medecine_generale_id);
+                $file = $path;
+                $resultat->file = $file;
+                $resultat->save();
             }
         }else{
             return response()->json(['file'=>"File required"],422);
         }
-        $file = 'Dossier Medicale/'.$request->dossier_medical_id.'Consultation/'.$request->consultation_medecine_generale_id.'/'.$path;
-        $resultat = Resultat::create($request->validated());
-        $resultat->file = $file;
-        $resultat->save();
+
         return response()->json(['resultat'=>$resultat]);
     }
 
@@ -95,6 +99,15 @@ class ResultatController extends Controller
 
         Resultat::whereId($id)->update($request->validated());
         $resultat = Resultat::with(['dossier','consultation'])->find($id);
+
+        if($request->hasFile('file')){
+            if ($request->file('file')->isValid()) {
+                $path = $request->file->store('Dossier Medicale/'.$resultat->dossier->numero_dossier.'/Consultation/'.$request->consultation_medecine_generale_id);
+                $file = $path;
+                $resultat->file = $file;
+                $resultat->save();
+            }
+        }
         return response()->json(['resultat'=>$resultat]);
     }
 
