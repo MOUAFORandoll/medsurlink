@@ -13,11 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-/**-- Headers --**/
-header('Access-Control-Allow-Origin:  *');
-header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
-header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
-
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
@@ -43,7 +38,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::resource('traitement','Api\TraitementController');
     Route::resource('parametreCommun','Api\ParametreCommunController');
     Route::resource('conclusion','Api\ConclusionController');
-    Route::post('resultat','Api\ResultatController@store');
+    Route::resource('resultat','Api\ResultatController');
     Route::resource('examenClinique','Api\ExamenCliniqueController');
     Route::resource('examenComplementaire','Api\ExamenComplementaireController');
     Route::resource('consultationMedecine','Api\ConsultationMedecineGeneraleController');

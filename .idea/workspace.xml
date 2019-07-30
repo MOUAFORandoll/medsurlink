@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ExamenClinique.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ExamenClinique.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_25_130807_create_resultats_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_25_130807_create_resultats_table.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -49,47 +53,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_30_094929_create_hospitalisations_table.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="26" column="37" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/routes/api.php">
+        <entry file="file://$PROJECT_DIR$/app/Models/Hospitalisation.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="87">
-              <caret line="40" column="56" selection-start-line="40" selection-start-column="56" selection-end-line="40" selection-end-column="56" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ResultatController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="7" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
-              <folding>
-                <element signature="e#44#82#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Requests/ResultatRequest.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="30" column="24" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="24" />
-              <folding>
-                <element signature="e#37#80#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Models/Resultat.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="16" column="13" selection-start-line="16" selection-start-column="9" selection-end-line="16" selection-end-column="13" />
-              <folding>
-                <element signature="e#30#69#0#PHP" expanded="true" />
-              </folding>
+            <state relative-caret-position="170">
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
@@ -103,7 +80,6 @@
       <find>$contrat</find>
       <find>255</find>
       <find>age</find>
-      <find>,</find>
       <find>profils sousc</find>
       <find>Imprimer resultats laboratoire</find>
       <find>$this-&gt;validatedId($id)</find>
@@ -111,6 +87,8 @@
       <find>motif</find>
       <find>exmanensClinique</find>
       <find>allergies</find>
+      <find>,</find>
+      <find>examensClinique</find>
     </findStrings>
     <replaceStrings>
       <replace>=&gt;$request-&gt;get(''),</replace>
@@ -119,6 +97,8 @@
       <replace>=&gt;'',</replace>
       <replace>examensClinique</replace>
       <replace>traitements</replace>
+      <replace>=&gt;&quot;&quot;,</replace>
+      <replace>examensComplementaire</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -129,39 +109,9 @@
       </map>
     </option>
   </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.txt" root0="SKIP_INSPECTION" />
-  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/Models/ConsultationMotifs.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMotifController.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_07_23_151916_create_examen_cliniques_table.php" />
-        <option value="$PROJECT_DIR$/app/Http/Requests/ExamenCliniqueRequest.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenCliniqueController.php" />
-        <option value="$PROJECT_DIR$/app/Models/ConsultationExamenClinique.php" />
-        <option value="$PROJECT_DIR$/app/Models/Motif.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_07_23_155937_create_consultation_examen_cliniques_table.php" />
-        <option value="$PROJECT_DIR$/app/Models/ExamenClinique.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_07_24_074233_create_examen_complementaires_table.php" />
-        <option value="$PROJECT_DIR$/app/Http/Requests/ExamenComplementaireRequest.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenComplementaireController.php" />
-        <option value="$PROJECT_DIR$/app/Models/ConsultationComplementaire.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_07_24_075216_create_consultation_complementaires_table.php" />
-        <option value="$PROJECT_DIR$/app/Models/ExamenComplementaire.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_07_24_082541_create_antecedents_table.php" />
-        <option value="$PROJECT_DIR$/app/Models/Antecedent.php" />
-        <option value="$PROJECT_DIR$/app/Http/Requests/AntecedentRequest.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/AntecedentController.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_07_24_101042_create_allergies_table.php" />
-        <option value="$PROJECT_DIR$/app/Http/Requests/AllergieRequest.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/AllergieController.php" />
-        <option value="$PROJECT_DIR$/app/Models/ConsultationAllergie.php" />
-        <option value="$PROJECT_DIR$/app/Models/Allergie.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenComplentaireController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationAllergieController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenCliniqueController.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_07_24_130500_create_traitements_table.php" />
         <option value="$PROJECT_DIR$/app/Http/Requests/TraitementRequest.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/TraitementController.php" />
@@ -181,11 +131,38 @@
         <option value="$PROJECT_DIR$/app/Models/Conclusion.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConclusionController.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_07_25_104647_create_conclusions_table.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_07_25_130807_create_resultats_table.php" />
         <option value="$PROJECT_DIR$/app/Models/Resultat.php" />
         <option value="$PROJECT_DIR$/app/Http/Requests/ResultatRequest.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatController.php" />
         <option value="$PROJECT_DIR$/routes/api.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_07_25_130807_create_resultats_table.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenatele.php" />
+        <option value="$PROJECT_DIR$/app/Models/ConsultationPrenatele.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_07_26_120941_create_parametre_obstetriques_table.php" />
+        <option value="$PROJECT_DIR$/app/Http/Requests/ParametreObstRequest.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreObstetriqueController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_07_29_125106_create_consult_obst_exam_clins_table.php" />
+        <option value="$PROJECT_DIR$/app/Models/ParametreObstetrique.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_07_29_125535_create_consult_pren_exam_clins_table.php" />
+        <option value="$PROJECT_DIR$/app/Models/ExamenClinique.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_07_29_134459_create_consult_pren_exam_coms_table.php" />
+        <option value="$PROJECT_DIR$/app/Models/ConsultPrenExamCom.php" />
+        <option value="$PROJECT_DIR$/app/Models/ConsultPrenExamClin.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_07_26_095815_create_consultation_obstetriques_table.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_07_26_114204_create_consultation_prenatales_table.php" />
+        <option value="$PROJECT_DIR$/app/Http/Requests/ConsultationObstetriqueRequest.php" />
+        <option value="$PROJECT_DIR$/app/Http/Requests/ConsultationPrenataleRequest.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamClinController.php" />
+        <option value="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" />
+        <option value="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamComController.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_07_30_091543_create_echographies_table.php" />
+        <option value="$PROJECT_DIR$/app/Models/Echographie.php" />
+        <option value="$PROJECT_DIR$/app/Http/Requests/EchographieRequest.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/EchographieController.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_07_30_094929_create_hospitalisations_table.php" />
       </list>
     </option>
   </component>
@@ -314,7 +291,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -375,18 +351,19 @@
             <path>
               <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
               <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="database" type="462c0819:PsiDirectoryNode" />
-              <item name="seeds" type="462c0819:PsiDirectoryNode" />
+              <item name="storage" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
               <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
+              <item name="storage" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -395,18 +372,19 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/Models" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\medicalink-app\app\Http\Controllers\Api" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\medicalink-app\resources\views" />
       <recent name="C:\xampp\htdocs\medicalink-app\database\seeds" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\medicalink-app\app\Models" />
+      <recent name="C:\xampp\htdocs\medicalink-app\app\Http\Controllers\Api" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -475,23 +453,25 @@
       <workItem from="1563874719786" duration="12353000" />
       <workItem from="1563895677565" duration="3256000" />
       <workItem from="1563953398072" duration="24113000" />
-      <workItem from="1564048654388" duration="16102000" />
+      <workItem from="1564048654388" duration="17937000" />
+      <workItem from="1564131881103" duration="15693000" />
+      <workItem from="1564390116164" duration="17790000" />
+      <workItem from="1564476932822" duration="3609000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="244431000" />
+    <option name="totallyTimeSpent" value="283358000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.58056265" visible="true" weight="0.22919819" />
-      <window_info id="Structure" order="1" sideWeight="0.41943735" side_tool="true" visible="true" weight="0.22919819" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.57800514" visible="true" weight="0.27231467" />
+      <window_info id="Structure" order="1" sideWeight="0.4219949" side_tool="true" weight="0.23298033" />
       <window_info id="npm" order="2" sideWeight="0.5191083" side_tool="true" weight="0.16414523" />
       <window_info id="Favorites" order="3" side_tool="true" />
-      <window_info anchor="bottom" id="REST Client" weight="0.5139116" />
-      <window_info anchor="bottom" id="Command Line Tools Console" weight="0.3289689" />
+      <window_info anchor="bottom" id="Inspection Results" weight="0.3289689" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -503,410 +483,21 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.3289689" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.36006546" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.30278233" />
       <window_info anchor="bottom" id="Database Console" order="12" weight="0.3289689" />
+      <window_info anchor="bottom" id="REST Client" order="13" weight="0.5139116" />
+      <window_info anchor="bottom" id="Command Line Tools Console" order="14" weight="0.3289689" />
       <window_info anchor="right" x="0" y="0" width="295" height="544" id="Documentation" order="0" side_tool="true" weight="0.32980332" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="1" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="2" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="3" weight="0.25" />
-      <window_info anchor="right" id="Database" order="4" weight="0.16641453" />
+      <window_info anchor="right" id="Database" order="4" weight="0.22692889" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/ConsultationTraitementRequest.php" />
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenCliniqueController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="51" column="76" selection-start-line="51" selection-start-column="76" selection-end-line="51" selection-end-column="76" />
-          <folding>
-            <element signature="e#44#88#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/ConsultationExamenClinique.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
-          <folding>
-            <element signature="e#30#69#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/ConsultationTraitement.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
-          <folding>
-            <element signature="e#30#69#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/ExamenClinique.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="18" column="5" lean-forward="true" selection-start-line="16" selection-start-column="3" selection-end-line="18" selection-end-column="5" />
-          <folding>
-            <element signature="e#30#69#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/Traitement.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="107" selection-start-line="16" selection-start-column="94" selection-end-line="16" selection-end-column="107" />
-          <folding>
-            <element signature="e#30#69#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenComplentaireController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="262">
-          <caret line="27" column="49" selection-start-line="27" selection-start-column="40" selection-end-line="27" selection-end-column="49" />
-          <folding>
-            <element signature="e#44#88#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/ContratIntermediationMedicale.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-343">
-          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationTraitementController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="9" column="38" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="38" />
-          <folding>
-            <element signature="e#44#88#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="152" column="164" selection-start-line="152" selection-start-column="164" selection-end-line="152" selection-end-column="164" />
-          <folding>
-            <element signature="e#44#93#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_23_155937_create_consultation_examen_cliniques_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="45" column="11" lean-forward="true" selection-start-line="43" selection-start-column="52" selection-end-line="45" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_24_075216_create_consultation_complementaires_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="46" column="11" lean-forward="true" selection-start-line="44" selection-start-column="52" selection-end-line="46" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://c9f0565b-b00c-4876-ad03-cf6bfb0fc40f/schema/medicalinkapp/table/consultation_traitements">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state projectRestartId="eae00c9b-20e0-471e-96b7-fb2846dc6276">
-          <filtering>
-            <filter text="" />
-          </filtering>
-        </state>
-      </provider>
-    </entry>
-    <entry file="uml://DATABASE/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.SCHEMA:medicalinkapp">
-      <provider selected="true" editor-type-id="UmlEditorProvider">
-        <state>
-          <ID>DATABASE</ID>
-          <OriginalElement>c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.SCHEMA:medicalinkapp</OriginalElement>
-          <nodes>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_complementaire</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.oauth_access_tokens</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consult_traitement</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.patients</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.roles</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_allergie</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.oauth_personal_access_clients</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.contrat_intermediation_medicales</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.traitements</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.medecin_controles</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.etablissement_exercices</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_motif</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.etablissement_exercice_praticien</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.role_has_permissions</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.dossier_medicals</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.password_resets</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.users</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.oauth_refresh_tokens</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.model_has_roles</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_clinique</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.oauth_auth_codes</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_examen_clinique</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.motifs</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.professions</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_exam_com</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.examen_cliniques</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_medecine_generales</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.examen_complementaires</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.antecedents</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.model_has_permissions</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_traitements</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.praticiens</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.affiliations</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.specialites</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.oauth_clients</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.migrations</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.permissions</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.gestionnaires</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.allergies</node>
-            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.souscripteurs</node>
-          </nodes>
-          <notes />
-          <edges />
-          <settings layout="Hierarchic Group" zoom="0.9223891535360937" x="415.0" y="2114.0" />
-          <SelectedNodes />
-          <Categories>
-            <Category>Key columns</Category>
-            <Category>Columns</Category>
-          </Categories>
-          <SCOPE>All</SCOPE>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_24_131828_create_consultation_traitements_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="46" column="11" lean-forward="true" selection-start-line="44" selection-start-column="49" selection-end-line="46" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="29" column="33" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="33" />
-          <folding>
-            <element signature="e#30#69#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ContratIntermediationMedicaleController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationAllergieController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="830">
-          <caret line="57" column="5" lean-forward="true" selection-start-line="11" selection-start-column="3" selection-end-line="57" selection-end-column="5" />
-          <folding>
-            <element signature="e#44#68#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/AllergieController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="56" column="31" lean-forward="true" selection-start-line="54" selection-start-column="6" selection-end-line="56" selection-end-column="31" />
-          <folding>
-            <element signature="e#44#82#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/AffiliationController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" selection-start-line="9" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_19_125537_create_motifs_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-32">
-          <caret line="18" column="52" selection-start-line="17" selection-start-column="11" selection-end-line="18" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_24_130500_create_traitements_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="19" column="34" selection-start-line="19" selection-start-column="34" selection-end-line="19" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_24_103326_create_consultation_allergies_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="46" column="11" lean-forward="true" selection-start-line="44" selection-start-column="52" selection-end-line="46" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/AllergieRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="28" column="10" lean-forward="true" selection-start-line="25" selection-start-column="7" selection-end-line="28" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/EtablissementExerciceRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-153">
-          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/MedecinControleRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
-          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/patientRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51">
-          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/TraitementRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="28" column="10" selection-start-line="28" selection-start-column="10" selection-end-line="28" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/ExamenCliniqueRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-153">
-          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/ExamenComplementaireRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
-          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/GestionnaireRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-136">
-          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/AffiliationRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
-          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/ParametreCommunRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="59">
-          <caret line="26" column="109" selection-start-line="26" selection-start-column="47" selection-end-line="26" selection-end-column="109" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/MotifRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="27" column="51" lean-forward="true" selection-start-line="26" selection-start-column="12" selection-end-line="27" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/ParametreCommun.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="25" column="5" lean-forward="true" selection-start-line="23" selection-start-column="3" selection-end-line="25" selection-end-column="5" />
-          <folding>
-            <element signature="e#30#69#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Models/Conclusion.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="19" column="5" selection-start-line="19" selection-start-column="5" selection-end-line="19" selection-end-column="5" />
-          <folding>
-            <element signature="e#30#69#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/seeds/RoleTableSeeder.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1460">
-          <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/GestionnaireController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="748">
-          <caret line="48" column="20" selection-start-line="48" selection-start-column="20" selection-end-line="48" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_19_110315_create_consultation_medecine_generales_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="235">
-          <caret line="41" column="11" lean-forward="true" selection-start-line="39" selection-start-column="62" selection-end-line="41" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConclusionController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="109" lean-forward="true" selection-start-line="109" selection-end-line="109" />
-          <folding>
-            <element signature="e#44#84#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_24_144806_create_parametre_communs_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="269">
-          <caret line="34" column="39" lean-forward="true" selection-start-line="30" selection-start-column="13" selection-end-line="34" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_25_104647_create_conclusions_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="23" column="34" selection-start-line="23" selection-start-column="34" selection-end-line="23" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/ContratIntermediationMedicaleRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -921,10 +512,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ParametreCommunController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="91" column="31" lean-forward="true" selection-start-line="89" selection-start-column="8" selection-end-line="91" selection-end-column="31" />
+          <folding>
+            <element signature="e#44#89#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="das://c9f0565b-b00c-4876-ad03-cf6bfb0fc40f/schema/medicalinkapp/table/consultation_medecine_generales">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state projectRestartId="436e713b-c6cf-44c3-b657-455ee73905ec">
+          <filtering>
+            <filter text="" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.env">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="das://c9f0565b-b00c-4876-ad03-cf6bfb0fc40f/schema/medicalinkapp/table/resultats">
+      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
+        <state projectRestartId="436e713b-c6cf-44c3-b657-455ee73905ec">
+          <filtering>
+            <filter text="" />
+          </filtering>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_25_130807_create_resultats_table.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="206">
-          <caret line="22" column="32" selection-start-line="22" selection-start-column="28" selection-end-line="22" selection-end-column="32" />
+          <caret line="22" column="45" selection-start-line="22" selection-start-column="45" selection-end-line="22" selection-end-column="45" />
         </state>
       </provider>
     </entry>
@@ -938,40 +560,391 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ParametreCommunController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="91" column="31" lean-forward="true" selection-start-line="89" selection-start-column="8" selection-end-line="91" selection-end-column="31" />
-          <folding>
-            <element signature="e#44#89#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ResultatController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="7" selection-start-line="16" selection-start-column="7" selection-end-line="16" selection-end-column="7" />
-          <folding>
-            <element signature="e#44#82#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Requests/ResultatRequest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="30" column="24" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="24" />
+        <state relative-caret-position="-136">
+          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
           <folding>
             <element signature="e#37#80#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="uml://DATABASE/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.SCHEMA:medicalinkapp">
+      <provider selected="true" editor-type-id="UmlEditorProvider">
+        <state>
+          <ID>DATABASE</ID>
+          <OriginalElement>c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.SCHEMA:medicalinkapp</OriginalElement>
+          <nodes>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.dossier_medicals</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_complementaire</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.specialites</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.praticiens</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.oauth_clients</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.parametre_communs</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.traitements</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.roles</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consult_traitement</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_allergie</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.oauth_personal_access_clients</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.contrat_intermediation_medicales</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.oauth_auth_codes</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.model_has_permissions</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.conclusions</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_examen_clinique</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_motif</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.etablissement_exercices</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.etablissement_exercice_praticien</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.role_has_permissions</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.resultats</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.password_resets</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.users</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.oauth_refresh_tokens</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_clinique</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.affiliations</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.motifs</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.professions</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_exam_com</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.examen_cliniques</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_medecine_generales</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.examen_complementaires</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.antecedents</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.oauth_access_tokens</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.medecin_controles</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.model_has_roles</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.patients</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.consultation_traitements</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.migrations</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.permissions</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.gestionnaires</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.allergies</node>
+            <node x="" y="">c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.TABLE:medicalinkapp.souscripteurs</node>
+          </nodes>
+          <notes />
+          <edges />
+          <settings layout="Hierarchic Group" zoom="0.8184256356670149" x="501.0" y="2035.0" />
+          <SelectedNodes />
+          <Categories>
+            <Category>Key columns</Category>
+            <Category>Columns</Category>
+          </Categories>
+          <SCOPE>All</SCOPE>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ResultatController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="71">
+          <caret line="97" column="31" selection-start-line="95" selection-start-column="7" selection-end-line="97" selection-end-column="31" />
+          <folding>
+            <element signature="e#44#82#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_24_144806_create_parametre_communs_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="22" selection-start-line="22" selection-end-line="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Requests/ParametreCommunRequest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="31" column="59" lean-forward="true" selection-start-line="30" selection-start-column="11" selection-end-line="31" selection-end-column="59" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="87">
-          <caret line="40" column="56" selection-start-line="40" selection-start-column="56" selection-end-line="40" selection-end-column="56" />
+        <state relative-caret-position="680">
+          <caret line="40" column="19" selection-start-line="40" selection-start-column="11" selection-end-line="40" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMotifController.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationTraitementController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="9" column="6" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="74" column="31" lean-forward="true" selection-start-line="72" selection-start-column="8" selection-end-line="74" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_29_125106_create_consult_obst_exam_clins_table.php" />
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_23_155937_create_consultation_examen_cliniques_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="45" column="11" lean-forward="true" selection-start-line="43" selection-start-column="52" selection-end-line="45" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/ConsultationExamenComplementaire.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/ExamenClinique.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="21" column="88" lean-forward="true" selection-start-line="21" selection-start-column="88" selection-end-line="21" selection-end-column="88" />
+          <folding>
+            <element signature="e#30#69#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_29_125535_create_consult_pren_exam_clins_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="28" column="47" selection-start-line="28" selection-start-column="29" selection-end-line="28" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/ConsultationExamenClinique.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="14" column="6" lean-forward="true" selection-start-line="9" selection-start-column="3" selection-end-line="14" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/ConsultPrenExamClin.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="27" selection-start-line="13" selection-start-column="27" selection-end-line="13" selection-end-column="27" />
+          <folding>
+            <element signature="e#30#69#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/ConsultPrenExamCom.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="6" selection-start-line="9" selection-start-column="3" selection-end-line="14" selection-end-column="6" />
+          <folding>
+            <element signature="e#30#69#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Requests/ParametreObstRequest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="32" column="62" selection-start-line="32" selection-start-column="62" selection-end-line="32" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="106">
+          <caret line="87" column="42" selection-start-line="87" selection-start-column="42" selection-end-line="87" selection-end-column="42" />
+          <folding>
+            <element signature="e#44#95#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/ParametreObstetrique.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="293">
+          <caret line="22" column="95" selection-start-line="22" selection-start-column="95" selection-end-line="22" selection-end-column="95" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1234">
+          <caret line="83" column="31" lean-forward="true" selection-start-line="81" selection-start-column="8" selection-end-line="83" selection-end-column="31" />
+          <folding>
+            <element signature="e#44#97#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_26_095815_create_consultation_obstetriques_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="191">
+          <caret line="15" column="49" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenCliniqueController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="53" column="5" lean-forward="true" selection-start-line="11" selection-start-column="3" selection-end-line="53" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Requests/ConsultationObstetriqueRequest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="214">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamClinController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="53" column="5" lean-forward="true" selection-start-line="11" selection-start-column="4" selection-end-line="53" selection-end-column="5" />
+          <folding>
+            <element signature="e#44#83#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_24_074233_create_examen_complementaires_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="15" column="46" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_29_134459_create_consult_pren_exam_coms_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/ConsultationObstetrique.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="259">
+          <caret line="22" column="4" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="4" />
+          <folding>
+            <element signature="e#30#69#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/ConsultationPrenatale.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="276">
+          <caret line="30" column="41" selection-start-line="30" selection-start-column="20" selection-end-line="30" selection-end-column="41" />
+          <folding>
+            <element signature="e#23#53#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamComController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="52" column="45" selection-start-line="52" selection-start-column="45" selection-end-line="52" selection-end-column="45" />
+          <folding>
+            <element signature="e#44#81#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_26_120941_create_parametre_obstetriques_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="89">
+          <caret line="15" column="37" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_26_114204_create_consultation_prenatales_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="43" column="11" lean-forward="true" selection-start-line="41" selection-start-column="54" selection-end-line="43" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/Echographie.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="327">
+          <caret line="20" column="22" lean-forward="true" selection-start-line="12" selection-start-column="7" selection-end-line="20" selection-end-column="22" />
+          <folding>
+            <element signature="e#30#69#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Requests/ConsultationPrenataleRequest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="26" selection-start-line="26" selection-end-line="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Requests/EchographieRequest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="123">
+          <caret line="27" column="55" lean-forward="true" selection-start-line="27" selection-start-column="55" selection-end-line="27" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_30_091543_create_echographies_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="55">
+          <caret line="15" column="36" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/ParametreObstetriqueController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="84" column="31" lean-forward="true" selection-start-line="82" selection-start-column="6" selection-end-line="84" selection-end-column="31" />
+          <folding>
+            <element signature="e#44#89#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/EchographieController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-797">
+          <caret line="34" column="5" selection-start-line="34" selection-start-column="5" selection-end-line="34" selection-end-column="5" />
+          <folding>
+            <element signature="e#44#85#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_15_090921_create_patients_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-136">
+          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_19_110315_create_consultation_medecine_generales_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="17" selection-start-line="17" selection-end-line="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_25_104647_create_conclusions_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="26" column="39" lean-forward="true" selection-start-line="22" selection-start-column="12" selection-end-line="26" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_07_30_094929_create_hospitalisations_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="26" column="37" selection-start-line="26" selection-start-column="37" selection-end-line="26" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Models/Hospitalisation.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
         </state>
       </provider>
     </entry>
