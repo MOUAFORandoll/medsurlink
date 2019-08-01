@@ -23,4 +23,20 @@ class Gestionnaire extends Model
         "quartier",
         "code_postal",
     ];
+
+    /**
+     * Get all of the gestionnaire action.
+     */
+    public function auteurs()
+    {
+        return $this->morphMany(Auteur::class, 'auteurable');
+    }
+
+    /**
+     * Get all of the gestionnaire action.
+     */
+    public function operations()
+    {
+        return $this->morphMany(Auteur::class, 'operationable');
+    }
 }

@@ -28,4 +28,10 @@ class MedecinControle extends Model
     public function specialite(){
         return $this->belongsTo(Specialite::class,'specialite_id','id');
     }
+
+    public function auteurs()
+    {
+        return $this->morphMany(Auteur::class, 'auteurable');
+    }
+
 }

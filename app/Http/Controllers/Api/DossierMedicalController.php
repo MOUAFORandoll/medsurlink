@@ -13,15 +13,7 @@ class DossierMedicalController extends Controller
 {
     protected $table = 'dossier_medicals';
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    function __construct()
-    {
-        $this->middleware(['role_or_permission:Admin|Gestionnaire']);
-    }
+
 
     /**
      * Display a listing of the resource.
@@ -55,7 +47,7 @@ class DossierMedicalController extends Controller
         $numero_dossier = $this->randomNumeroDossier();
         $dossier = DossierMedical::create([
            'patient_id'=>$request->get('patient_id'),
-            "date_de_creation"=>Carbon::today()->format('Y-m-d'),
+            "date_de_creation"=>Carbon::now()->format('Y-m-d'),
             "numero_dossier"=>$numero_dossier,
         ]);
 
@@ -119,7 +111,7 @@ class DossierMedicalController extends Controller
     }
 
 
-    public function randomNumeroDossier(){
+    public static function randomNumeroDossier(){
 $resultat = ''.rand(0,100000000);
         while (strlen($resultat)<8){
             $longueur = strlen($resultat);
@@ -141,12 +133,21 @@ $resultat = ''.rand(0,100000000);
         }
 
         while(count(DossierMedical::where('numero_dossier','=',$resultat)->get())>0){
-           $resultat = $this->randomNumeroDossier();
+           $resultat = self::randomNumeroDossier();
        }
 
         return $resultat;
     }
 
+    public static function genererDossier($patientId){
+        $numero_dossier = self::randomNumeroDossier();
+        $dossier = DossierMedical::create([
+            'patient_id'=>$patientId,
+            "date_de_creation"=>Carbon::now()->format('Y-m-d'),
+            "numero_dossier"=>$numero_dossier,
+        ]);
 
+        return response()->json(['dossier'=>$dossier]);
+    }
 
 }

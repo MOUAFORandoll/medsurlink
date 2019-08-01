@@ -15,7 +15,7 @@ class CreateConsultationObstetriquesTable extends Migration
     {
         Schema::create('consultation_obstetriques', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->date('date_creation')->default(Carbon\Carbon::today()->format('Y-m-d'));
+            $table->date('date_creation')->default(Carbon\Carbon::now()->format('Y-m-d'));
             $table->integer('numero_grossesse');
             $table->date('ddr');
             $table->string('serologie')->nullable();

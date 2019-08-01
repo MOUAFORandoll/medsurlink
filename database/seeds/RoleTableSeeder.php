@@ -24,7 +24,10 @@ class RoleTableSeeder extends Seeder
         ];
 
         foreach ($roles as $role) {
-            \Spatie\Permission\Models\Role::create(['name' => $role]);
+            \Spatie\Permission\Models\Role::create([
+                'name' => $role,
+                'guard_name'=>'api'
+            ]);
         }
 
 //        Definition des permissions de l'admin

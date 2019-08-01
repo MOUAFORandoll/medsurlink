@@ -6,6 +6,7 @@ use App\Http\Requests\ConsultationObstetriqueRequest;
 use App\Models\ConsultationObstetrique;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ConsultationObstetriqueController extends Controller
 {
@@ -39,8 +40,20 @@ class ConsultationObstetriqueController extends Controller
      */
     public function store(ConsultationObstetriqueRequest $request)
     {
-        $consultationObstetrique =  ConsultationObstetrique::create($request->validated());
-        return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
+        $user = Auth::user();
+        if($user->hasRole('Praticien')){
+            $praticen = $user->praticien;
+            if ($praticen->specialite->name == "Gynéco-obstétrique"){
+                $consultationObstetrique =  ConsultationObstetrique::create($request->validated());
+                return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
+            }else{
+                return response()->json(['error'=>"Vous ne disposez pas des autorisations pour effectuer cette action"],422);
+            }
+        }elseif($user->hasRole('Admin')){
+            $consultationObstetrique =  ConsultationObstetrique::create($request->validated());
+            return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
+        }
+        dd('Rayaaa');
     }
 
     /**

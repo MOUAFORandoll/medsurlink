@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ParametreObstetrique extends Model
 {
     use SoftDeletes;
-
+    protected $table = "parametre_obs";
     protected $fillable = [
         "consultation_prenatale_id",
         "poids",

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\ConsultationObstetrique;
+use App\Models\ConsultationPrenatale;
 use App\Models\ExamenClinique;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,10 +16,11 @@ class ConsultPrenExamClinController extends Controller
             "examensClinique.*"=>"required|integer|exists:examen_cliniques,id"
         ]);
 
-        $consultation = ConsultationObstetrique::find($request->get('consultation'));
+        $consultation = ConsultationPrenatale::find($request->get('consultation'));
         $consultation->examensClinique()->detach($request->get('examensClinique'));
 
-        $consultation = ConsultationObstetrique::with('examensClinique')->find($request->get('consultation'));
+        $consultation = ConsultationPrenatale::with(['examensClinique','examensComplementaire'])->find($request->get('consultation'));
+
         return response()->json(['consultation'=>$consultation]);
     }
 
@@ -32,7 +34,7 @@ class ConsultPrenExamClinController extends Controller
         $examensClinique = $request->get('examensClinique');
         $examensCliniqueACreer = $request->get('examensCliniqueACreer');
 
-        $consultation = ConsultationObstetrique::find($request->get('consultation'));
+        $consultation = ConsultationPrenatale::find($request->get('consultation'));
 
         if (!is_null($examensCliniqueACreer) or !empty($examensCliniqueACreer)){
             foreach ( $examensCliniqueACreer as $examen)
@@ -49,7 +51,8 @@ class ConsultPrenExamClinController extends Controller
         }
 
 
-        $consultation = ConsultationObstetrique::with('examensClinique')->find($request->get('consultation'));
+        $consultation = ConsultationPrenatale::with(['examensClinique','examensComplementaire'])->find($request->get('consultation'));
+
         return response()->json(['consultation'=>$consultation]);
     }
 }

@@ -44,6 +44,8 @@ class PatientController extends Controller
         $age = evaluateYearOfOld($patient->date_de_naissance);
         $patient->age = $age;
 
+        //Generation du dossier client
+            $dossier = DossierMedicalController::genererDossier($patient->id);
         //Generation du mot de passe et envoie par mail
         $user = UserController::generatedUser(fullName($request),$patient->email);
         $user->assignRole('Medecin controle');
@@ -51,6 +53,7 @@ class PatientController extends Controller
         $patient->user_id = $user->id;
         $patient->save();
 
+        $patient = Patient::with('dossier')->find($patient->id);
         return response()->json(['patient'=>$patient]);
     }
 

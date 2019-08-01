@@ -20,4 +20,8 @@ class Echographie extends Model
         "annexe",
         "description",
     ];
+
+    public function consultation(){
+        return $this->belongsTo(ConsultationObstetrique::class,'consultation_obstetrique_id','id');
+    }
 }

@@ -42,6 +42,7 @@ class EchographieController extends Controller
      */
     public function store(EchographieRequest $request)
     {
+
         $echographie = Echographie::create($request->validated());
         return response()->json(['echographie'=>$echographie]);
     }

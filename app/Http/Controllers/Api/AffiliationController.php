@@ -13,15 +13,7 @@ class AffiliationController extends Controller
 {
     protected $table = 'affiliations';
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    function __construct()
-    {
-        $this->middleware(['role_or_permission:Admin|Gestionnaire']);
-    }
+
 
     /**
      * Display a listing of the resource.
@@ -60,7 +52,7 @@ class AffiliationController extends Controller
             $affiliation = Affiliation::create($request->validated());
             $affiliation->date_fin = $this->evaluerDateFin($affiliation);
             $affiliation->save();
-
+            defineAsAuthor("Affiliation",$affiliation->id,'create');
             return response()->json(['affiliation'=>$affiliation]);
         }
     }
