@@ -32,44 +32,41 @@ if (!function_exists('dateOfToday')) {
 }
 if (!function_exists('defineAsAuthor')){
     function defineAsAuthor($operationable_type,$operationable_id,$action){
-        $auteurable_type = getStatus()->getOriginalContent()['auteurable_type'];
-        $auteurable_id = getStatus()->getOriginalContent()['auteurable_id'];
+        $status = getStatus();
+        $auteurable_type = $status->getOriginalContent()['auteurable_type'];
+        $auteurable_id = $status->getOriginalContent()['auteurable_id'];
         \App\Http\Controllers\Api\AuteurController::store($auteurable_type,$auteurable_id,$operationable_type,$operationable_id,$action);
     }
 }
 if (!function_exists('getStatus')){
-    function getStatus($user = null){
-
-        if (is_null($user)){
-            $user = \Illuminate\Support\Facades\Auth::user();
-        }
+    function getStatus(){
+        $user = \Illuminate\Support\Facades\Auth::user();
         $auteurable_type = $user->getRoleNames()->first();
-        $auteurable_id = getStatusId($auteurable_type)->getOriginalContent()['auteurable_id'];
+        $auteurable_id = getStatusId($auteurable_type,$user)->getOriginalContent()['auteurable_id'];
         return response()->json(['auteurable_type'=>$auteurable_type,'auteurable_id'=>$auteurable_id,]);
     }
 }
 
 if (!function_exists('getStatusId')){
-    function getStatusId($roleName){
+    function getStatusId($roleName,$user){
         if ($roleName == "Praticien"){
-            $user = \Illuminate\Support\Facades\Auth::user();
             return response()->json(['auteurable_id'=>$user->praticien->id]);
         }
-        if ($roleName == "Patient"){
-            $user = \Illuminate\Support\Facades\Auth::user();
+        elseif ($roleName == "Patient"){
             return response()->json(['auteurable_id'=>$user->patient->id]);
         }
-        if ($roleName == "Gestionnaire"){
-            $user = \Illuminate\Support\Facades\Auth::user();
+        elseif ($roleName == "Gestionnaire"){
             return response()->json(['auteurable_id'=>$user->gestionnaire->id]);
         }
-        if ($roleName == "Souscripteur"){
-            $user = \Illuminate\Support\Facades\Auth::user();
+        elseif ($roleName == "Souscripteur"){
             return response()->json(['auteurable_id'=>$user->souscripteur->id]);
         }
-        if ($roleName == "Medecin controle"){
-            $user = \Illuminate\Support\Facades\Auth::user();
+        elseif ($roleName == "Medecin controle"){
             return response()->json(['auteurable_id'=>$user->medecinControle->id]);
+        }
+
+        elseif ($roleName == "Admin"){
+            return response()->json(['auteurable_id'=>0]);
         }
     }
 }
