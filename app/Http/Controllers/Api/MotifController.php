@@ -40,6 +40,8 @@ class MotifController extends Controller
     public function store(MotifRequest $request)
     {
         $motif = Motif::create($request->validated());
+        defineAsAuthor("Motif",$motif->id,'create');
+
         return response()->json(['motif'=>$motif]);
 
     }

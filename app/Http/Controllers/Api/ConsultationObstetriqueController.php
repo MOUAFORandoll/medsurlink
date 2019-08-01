@@ -45,15 +45,17 @@ class ConsultationObstetriqueController extends Controller
             $praticen = $user->praticien;
             if ($praticen->specialite->name == "Gynéco-obstétrique"){
                 $consultationObstetrique =  ConsultationObstetrique::create($request->validated());
+                defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create');
                 return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
             }else{
                 return response()->json(['error'=>"Vous ne disposez pas des autorisations pour effectuer cette action"],422);
             }
         }elseif($user->hasRole('Admin')){
             $consultationObstetrique =  ConsultationObstetrique::create($request->validated());
+            defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create');
             return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
         }
-        dd('Rayaaa');
+
     }
 
     /**

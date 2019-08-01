@@ -44,6 +44,8 @@ class EtablissementExerciceController extends Controller
     public function store(EtablissementExerciceRequest $request)
     {
         $etablissement = EtablissementExercice::create($request->validated());
+        defineAsAuthor("EtablissementExercice",$etablissement->id,'create');
+
         return response()->json(['etablissement'=>$etablissement]);
     }
 

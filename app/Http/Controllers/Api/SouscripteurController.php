@@ -51,6 +51,8 @@ class SouscripteurController extends Controller
         $souscripteur->user_id = $user->id;
         $souscripteur->save();
 
+        defineAsAuthor("Souscripteur",$souscripteur->id,'create');
+
         return response()->json(['souscripteur'=>$souscripteur]);
 
     }

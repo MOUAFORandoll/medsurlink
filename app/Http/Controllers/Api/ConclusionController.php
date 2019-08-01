@@ -41,6 +41,8 @@ class ConclusionController extends Controller
     public function store(ConclusionRequest $request)
     {
         $conclusion = Conclusion::create($request->validated());
+        defineAsAuthor("Conclusion",$conclusion->id,'create');
+
         return response()->json(['conclusion'=>$conclusion]);
 
     }

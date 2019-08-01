@@ -40,6 +40,8 @@ class ExamenComplementaireController extends Controller
     public function store(ExamenComplementaireRequest $request)
     {
         $examenComplementaire = ExamenComplementaire::create($request->validated());
+        defineAsAuthor("ExamenComplementaire",$examenComplementaire->id,'create');
+
         return response()->json(['examenComplementaire'=>$examenComplementaire]);
 
     }

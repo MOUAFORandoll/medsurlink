@@ -42,6 +42,8 @@ class ProfessionController extends Controller
     public function store(ProfessionRequest $request)
     {
         $profession = Profession::create($request->validated());
+        defineAsAuthor("Profession",$profession->id,'create');
+
         return response()->json(['profession'=>$profession]);
     }
 
@@ -84,6 +86,7 @@ class ProfessionController extends Controller
          $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
+
         Profession::whereId($id)->update($request->validated());
         $profession = Profession::with('specialites')->find($id);
         return response()->json(['profession'=>$profession]);

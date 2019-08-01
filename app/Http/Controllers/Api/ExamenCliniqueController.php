@@ -43,6 +43,8 @@ class ExamenCliniqueController extends Controller
 
 
         $examenClinique = ExamenClinique::create($request->validated());
+        defineAsAuthor("ExamenClinique",$examenClinique->id,'create');
+
         return response()->json(['examenClinique'=>$examenClinique]);
 
     }

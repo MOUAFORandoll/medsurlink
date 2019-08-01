@@ -40,6 +40,7 @@ class TraitementController extends Controller
     public function store(TraitementRequest $request)
     {
         $traitement = Traitement::create($request->validated());
+        defineAsAuthor("Traitement",$traitement->id,'create');
         return response()->json(['traitement'=>$traitement]);
     }
 

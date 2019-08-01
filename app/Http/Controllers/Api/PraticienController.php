@@ -51,6 +51,7 @@ class PraticienController extends Controller
 
         $praticien->user_id = $user->id;
         $praticien->save();
+        defineAsAuthor("Praticien",$praticien->id,'create');
 
         return response()->json(['praticien'=>$praticien]);
 

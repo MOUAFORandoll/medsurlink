@@ -48,7 +48,7 @@ class ConsultationExamenCliniqueController extends Controller
                 $consultation->examensClinique()->attach($examensClinique);
         }
 
-
+        defineAsAuthor("ConsultationExamenClinique",$consultation->id,'attach');
         $consultation = ConsultationMedecineGenerale::with('examensClinique')->find($request->get('consultation'));
         return response()->json(['consultation'=>$consultation]);
     }

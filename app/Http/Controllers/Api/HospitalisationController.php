@@ -40,6 +40,8 @@ class HospitalisationController extends Controller
     public function store(HospitalisationRequest $request)
     {
         $hospitalisation = Hospitalisation::create($request->validated());
+        defineAsAuthor("Hospitalisation",$hospitalisation->id,'create');
+
         return response()->json(['hospitalisation'=>$hospitalisation]);
 
     }

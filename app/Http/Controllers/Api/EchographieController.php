@@ -44,6 +44,8 @@ class EchographieController extends Controller
     {
 
         $echographie = Echographie::create($request->validated());
+        defineAsAuthor("Echographie",$echographie->id,'create');
+
         return response()->json(['echographie'=>$echographie]);
     }
 

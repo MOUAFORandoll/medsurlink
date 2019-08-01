@@ -49,6 +49,7 @@ class MedecinControleController extends Controller
 
         $medecin->user_id = $user->id;
         $medecin->save();
+        defineAsAuthor("MedecinControle",$medecin->id,'create');
 
         return response()->json(['medecin'=>$medecin]);
 

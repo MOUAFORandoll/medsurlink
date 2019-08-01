@@ -46,6 +46,7 @@ class ParametreCommunController extends Controller
             $parametreCommun->bmi = $bmi;
             $parametreCommun->save();
         }
+        defineAsAuthor("ParametreCommun",$parametreCommun->id,'create');
         return response()->json(['parametreCommun'=>$parametreCommun]);
 
     }

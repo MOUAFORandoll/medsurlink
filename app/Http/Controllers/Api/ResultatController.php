@@ -49,6 +49,9 @@ class ResultatController extends Controller
                 $file = $path;
                 $resultat->file = $file;
                 $resultat->save();
+
+                defineAsAuthor("Resultat",$resultat->id,'create');
+
             }
         }else{
             return response()->json(['file'=>"File required"],422);

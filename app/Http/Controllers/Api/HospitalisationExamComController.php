@@ -48,6 +48,7 @@ class HospitalisationExamComController extends Controller
             $hospitalisation->examensComplementaire()->attach($examensComplementaire);
         }
 
+        defineAsAuthor("HospitalisationExamCom",$hospitalisation->id,'attach');
 
         $hospitalisation = Hospitalisation::with(['examensClinique','examensComplementaire'])->find($request->get('hospitalisation'));
         return response()->json(['hospitalisation'=>$hospitalisation]);

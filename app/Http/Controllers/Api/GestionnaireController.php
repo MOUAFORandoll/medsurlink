@@ -48,6 +48,7 @@ class GestionnaireController extends Controller
 
         $gestionnaire->user_id = $user->id;
         $gestionnaire->save();
+        defineAsAuthor("Gestionnaire",$gestionnaire->id,'create');
 
         return response()->json(['gestionnaire'=>$gestionnaire]);
 

@@ -53,6 +53,8 @@ class PatientController extends Controller
         $patient->user_id = $user->id;
         $patient->save();
 
+        defineAsAuthor("Patient",$patient->id,'create');
+
         $patient = Patient::with('dossier')->find($patient->id);
         return response()->json(['patient'=>$patient]);
     }
@@ -96,6 +98,7 @@ class PatientController extends Controller
          $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
+
         Patient::whereId($id)->update($request->validated());
         $patient = Patient::with(['souscripteur'])->find($id);
         $patient->age = evaluateYearOfOld($patient->date_de_naissance);

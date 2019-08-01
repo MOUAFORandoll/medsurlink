@@ -49,6 +49,7 @@ class ConsultPrenExamComController extends Controller
             $consultation->examensComplementaire()->attach($examensComplementaire);
         }
 
+        defineAsAuthor("ConsultPrenExamCom",$consultation->id,'attach');
 
         $consultation = ConsultationPrenatale::with(['examensClinique','examensComplementaire'])->find($request->get('consultation'));
         return response()->json(['consultation'=>$consultation]);

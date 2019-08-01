@@ -41,6 +41,8 @@ class ParametreObstetriqueController extends Controller
     public function store(ParametreObstRequest $request)
     {
         $parametreObs = ParametreObstetrique::create($request->validated());
+        defineAsAuthor("ParametreObstetrique",$parametreObs->id,'create');
+
         return response()->json(['parametreObs'=>$parametreObs]);
     }
 

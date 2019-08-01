@@ -40,7 +40,9 @@ class AllergieController extends Controller
      */
     public function store(AllergieRequest $request)
     {
+
         $allergie = Allergie::create($request->validated());
+        defineAsAuthor("Allergie",$allergie->id,'create');
         return response()->json(['allergie'=>$allergie]);
 
     }

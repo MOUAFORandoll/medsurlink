@@ -52,7 +52,7 @@ class ConsultationAllergieController extends Controller
             }
         }
 
-
+        defineAsAuthor("ConsultationAllergie",$consultation->id,'attach');
         $consultation = ConsultationMedecineGenerale::with('examensClinique','examensComplementaire','allergies')->find($request->get('consultation'));
         return response()->json(['consultation'=>$consultation]);
     }

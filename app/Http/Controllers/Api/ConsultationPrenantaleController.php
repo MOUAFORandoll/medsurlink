@@ -45,6 +45,7 @@ class ConsultationPrenantaleController extends Controller
         //Attachement des examens complementaires
 
         //Attcahement des parametres obstetrique
+        defineAsAuthor("ConsultationPrenatale",$consultationPrenatale->id,'create');
 
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }

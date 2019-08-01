@@ -102,6 +102,7 @@ class ConsultationMedecineGeneraleController extends Controller
         }
         $consultation->date_consultation = dateOfToday();
         $consultation->save();
+        defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create');
 
         $consultation = ConsultationMedecineGenerale::with(['motifs','examensClinique','examensComplementaire','allergies','traitements'])->find($consultation->id);
         return response()->json(["consultation"=>$consultation]);
