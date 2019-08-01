@@ -25,8 +25,8 @@ class ConsultationPrenataleRequest extends FormRequest
     {
         return [
             "consultation_obstetrique_id"=>"required|integer|exists:consultation_obstetriques,id",
-            "date_creation"=>"sometimes|nullable|date",
             "type_de_consultation"=>"required|string|min:2",
+            "date_creation"=>"sometimes|nullable|date",
             "plaintes"=>"sometimes|nullable|string|min:2",
             "antecedent_conjoint"=>"sometimes|nullable|string|min:2",
             "recommandations"=>"sometimes|nullable|string|min:2",

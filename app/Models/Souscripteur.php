@@ -25,4 +25,11 @@ class Souscripteur extends Model
         "quartier",
         "code_postal",
     ];
+
+    public function auteurs()
+    {
+        return $this->morphMany(Auteur::class, 'auteurable');
+    }
+
+
 }

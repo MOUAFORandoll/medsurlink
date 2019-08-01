@@ -1,12 +1,8 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\Models\ExamenClinique;
-use App\Models\ExamenComplementaire;
-use App\Models\ParametreObstetrique;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ConsultationPrenatale extends Model
@@ -23,6 +19,10 @@ class ConsultationPrenatale extends Model
 
     public function parametreObstetrique(){
         return $this->hasMany(ParametreObstetrique::class,'consultation_prenatale_id','id');
+    }
+
+    public function consultationObstetrique(){
+        return $this->belongsTo(ConsultationObstetrique::class,'consultation_obstetrique_id','id');
     }
 
     public function examensClinique(){

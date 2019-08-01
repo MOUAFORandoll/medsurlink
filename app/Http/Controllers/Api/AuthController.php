@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -24,7 +25,8 @@ class AuthController extends AccessTokenController
         $user->roles;
         $tokenInfo = collect($tokenInfo);
         $tokenInfo->put('user', $user);
-
+//        $status = getStatus($user);
+//        defineAsAuthor($status->getOriginalContent()['auteurable_type'],$status->getOriginalContent()['auteurable_id'],'Connexion');
         return $tokenInfo;
     }
 }

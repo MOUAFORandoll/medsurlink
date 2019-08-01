@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 class AllergieController extends Controller
 {
     protected  $table = "allergies";
+
     /**
      * Display a listing of the resource.
      *

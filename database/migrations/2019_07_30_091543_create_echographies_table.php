@@ -16,14 +16,14 @@ class CreateEchographiesTable extends Migration
         Schema::create('echographies', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('consultation_obstetrique_id');
-            $table->date('date_creation')->default(\Carbon\Carbon::today()->format('Y-m-d'));
+            $table->date('date_creation')->default(\Carbon\Carbon::now()->format('Y-m-d'));
             $table->string('type');
             $table->date('ddr');
             $table->date('dpa');
-            $table->integer('semaine_amenorrhee');
-            $table->text('biometrie');
-            $table->text('annexe');
-            $table->text('description');
+            $table->integer('semaine_amenorrhee')->nullable();
+            $table->text('biometrie')->nullable();
+            $table->text('annexe')->nullable();
+            $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

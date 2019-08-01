@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\ParametreCommunRequest;
-use App\Http\Requests\ParametreObstRequest;
-use App\Models\ParametreObstetrique;
+use App\Http\Requests\HospitalisationRequest;
+use App\Models\Hospitalisation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ParametreObstetriqueController extends Controller
+class HospitalisationController extends Controller
 {
-    protected $table = "parametre_obs";
+    protected $table = "hospitalisations";
     /**
      * Display a listing of the resource.
      *
@@ -18,8 +17,8 @@ class ParametreObstetriqueController extends Controller
      */
     public function index()
     {
-        $parametresObs = ParametreObstetrique::with(['consultationPrenatale'])->get();
-        return response()->json(['parametresObs'=>$parametresObs]);
+        $hospitalisations = Hospitalisation::with(['dossier'])->get();
+        return response()->json(['hospitalisations'=>$hospitalisations]);
     }
 
     /**
@@ -38,10 +37,11 @@ class ParametreObstetriqueController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ParametreObstRequest $request)
+    public function store(HospitalisationRequest $request)
     {
-        $parametreObs = ParametreObstetrique::create($request->validated());
-        return response()->json(['parametreObs'=>$parametreObs]);
+        $hospitalisation = Hospitalisation::create($request->validated());
+        return response()->json(['hospitalisation'=>$hospitalisation]);
+
     }
 
     /**
@@ -56,9 +56,8 @@ class ParametreObstetriqueController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->find($id);
-        return response()->json(['parametreObs'=>$parametreObs]);
-
+        $hospitalisation = Hospitalisation::with('dossier')->find($id);
+        return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
     /**
@@ -79,15 +78,14 @@ class ParametreObstetriqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ParametreObstRequest $request, $id)
+    public function update(HospitalisationRequest $request, $id)
     {
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
-
-        ParametreObstetrique::whereId($id)->update($request->validated());
-        $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->find($id);
-        return response()->json(['parametreObs'=>$parametreObs]);
+        Hospitalisation::whereId($id)->update($request->validated());
+        $hospitalisation = Hospitalisation::with('dossier')->find($id);
+        return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
     /**
@@ -101,9 +99,8 @@ class ParametreObstetriqueController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
-        $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->find($id);
-        ParametreObstetrique::destroy($id);
-        return response()->json(['parametreObs'=>$parametreObs]);
-
+        $hospitalisation = Hospitalisation::with('dossier')->find($id);
+        Hospitalisation::destroy($id);
+        return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 }

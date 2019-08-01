@@ -21,4 +21,8 @@ class ExamenClinique extends Model
     public function consultationPrenatale(){
         return $this->belongsToMany(ConsultationPrenatale::class,'consult_pren_exam_clin','examen_clinique_id','consultation_prenatale_id');
     }
+
+    public function hospitalisation(){
+        return $this->belongsToMany(Hospitalisation::class,'hospitalisation_exam_clin','examen_clinique_id','hospitalisation_id');
+    }
 }

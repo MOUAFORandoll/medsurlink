@@ -11,15 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class PraticienController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    function __construct()
-    {
-        $this->middleware(['role_or_permission:Admin|Gestionnaire|Praticien']);
-    }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +19,7 @@ class PraticienController extends Controller
      */
     public function index()
     {
-        $praticiens = Praticien::with('etablissements')->get();
+        $praticiens = Praticien::with(['etablissements','specialite'])->get();
         return response()->json(['praticiens'=>$praticiens]);
     }
 

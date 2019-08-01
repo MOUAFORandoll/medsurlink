@@ -16,7 +16,7 @@ class CreateConsultationPrenatalesTable extends Migration
         Schema::create('consultation_prenatales', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('consultation_obstetrique_id');
-            $table->date('date_creation')->default(\Carbon\Carbon::today()->format('Y-m-d'));
+            $table->date('date_creation')->default(\Carbon\Carbon::now()->format('Y-m-d'));
             $table->string('type_de_consultation');
             $table->text('plaintes')->nullable();
             $table->text('antecedent_conjoint')->nullable();

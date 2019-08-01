@@ -25,11 +25,11 @@ class EchographieRequest extends FormRequest
     {
         return [
             "consultation_obstetrique_id"=>"required|integer|exists:consultation_obstetriques,id",
-            "date_creation"=>"sometimes|nullable|date",
             "type"=>"required|string",
             "ddr"=>"required|date",
             "dpa"=>"required|date",
             "semaine_amenorrhee"=>"required|integer",
+            "date_creation"=>"sometimes|nullable|date",
             "biometrie"=>"sometimes|nullable|string",
             "annexe"=>"sometimes|nullable|string",
             "description"=>"sometimes|nullable|string",

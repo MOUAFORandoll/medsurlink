@@ -9,15 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SouscripteurController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    function __construct()
-    {
-        $this->middleware(['role_or_permission:Admin|Gestionnaire|Souscripteur']);
-    }
+
     /**
      * Display a listing of the resource.
      *

@@ -17,4 +17,6 @@ class Profession extends Model
     public function specialites(){
         return $this->hasMany(Specialite::class,'profession_id','id');
     }
+
+
 }

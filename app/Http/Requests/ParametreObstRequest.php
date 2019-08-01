@@ -24,8 +24,8 @@ class ParametreObstRequest extends FormRequest
     public function rules()
     {
         return [
-            "consultation_obstetrique_id"=>"required|exists:consultation_prenatales,id",
-            "poids"=>"sometimes|nullable|numeric",
+            "consultation_prenatale_id"=>"required|exists:consultation_prenatales,id",
+            "poids"=>"sometimes|nullable|integer",
             "ta_systolique"=>"sometimes|nullable|numeric",
             "ta_diastolique"=>"sometimes|nullable|numeric",
             "hauteur_urine"=>"sometimes|nullable|numeric",

@@ -17,7 +17,7 @@ class ConsultationPrenantaleController extends Controller
      */
     public function index()
     {
-        $consultationsPrenatale = ConsultationPrenatale::all();
+        $consultationsPrenatale = ConsultationPrenatale::with('consultationObstetrique')->get();
         return response()->json(['consultationsPrenatale'=>$consultationsPrenatale]);
     }
 
@@ -62,7 +62,7 @@ class ConsultationPrenantaleController extends Controller
             return $validation;
 
 
-        $consultationPrenatale = ConsultationPrenatale::find($id);
+        $consultationPrenatale = ConsultationPrenatale::with('consultationObstetrique')->find($id);
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
 
     }
@@ -98,7 +98,7 @@ class ConsultationPrenantaleController extends Controller
         //Attachement des parametres obstetrique
 
         ConsultationPrenatale::whereId($id)->update($request->validated());
-        $consultationPrenatale = ConsultationPrenatale::find($id);
+        $consultationPrenatale = ConsultationPrenatale::with('consultationObstetrique')->find($id);
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }
 
@@ -120,7 +120,7 @@ class ConsultationPrenantaleController extends Controller
 
         //Attcahement des parametres obstetrique
 
-        $consultationPrenatale = ConsultationPrenatale::find($id);
+        $consultationPrenatale = ConsultationPrenatale::with('consultationObstetrique')->find($id);
         ConsultationPrenatale::destroy($id);
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }

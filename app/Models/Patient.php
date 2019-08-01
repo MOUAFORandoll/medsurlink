@@ -37,4 +37,14 @@ class Patient extends Model
     public function affiliations(){
         return $this->hasMany(Affiliation::class,'patient_id','id');
     }
+    public function dossier(){
+        return $this->hasOne(DossierMedical::class,'patient_id','id');
+    }
+
+    public function auteurs()
+    {
+        return $this->morphMany(Auteur::class, 'auteurable');
+    }
+
+
 }
