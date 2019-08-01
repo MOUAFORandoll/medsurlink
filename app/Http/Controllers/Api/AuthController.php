@@ -22,7 +22,7 @@ class AuthController extends AccessTokenController
         // Then we just add the user to the response before returning it.
         $username = $request->getParsedBody()['username'];
         $user = User::whereEmail($username)->first();
-        $user->roles;
+        $user->getRoleNames();
         $tokenInfo = collect($tokenInfo);
         $tokenInfo->put('user', $user);
 //        $status = getStatus($user);

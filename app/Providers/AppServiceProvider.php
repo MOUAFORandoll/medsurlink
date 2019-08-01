@@ -97,7 +97,6 @@ class AppServiceProvider extends ServiceProvider
             'Souscripteur'=>Souscripteur::class,
             'Specialite'=>Specialite::class,
             'Traitement'=>Traitement::class,
-            'User'=>User::class,
         ]);
     }
 }
