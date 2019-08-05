@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\EmailExistRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -36,7 +37,7 @@ class PatientUpdateRequest extends FormRequest
             "ville"=>'required|string|min:2',
             "pays"=>'required|string|min:2',
             "telephone"=>'required|string|min:9',
-            "email"=>'required|string|unique:users,email,'.$id,
+            "email"=>['required','string',new EmailExistRule($id,'Patient')],
             "quartier"=>'sometimes|nullable|string|min:1',
             "prenom"=>'sometimes|nullable|string|min:2',
             "code_postal"=>'sometimes|integer',

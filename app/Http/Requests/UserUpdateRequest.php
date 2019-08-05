@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\EmailExistRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserUpdateRequest extends FormRequest
@@ -27,7 +28,7 @@ class UserUpdateRequest extends FormRequest
 
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,emails,'.$id],
+            'email' => ['required', 'string', 'email', 'max:255',new EmailExistRule($id,'User')],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }

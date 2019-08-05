@@ -159,3 +159,39 @@ if (!function_exists('getAuthorRole')){
         return $auteur->auteurable_type;
     }
 }
+if (!function_exists('getUser')){
+
+    function getUser($id,$roleName){
+        if ($roleName == "Praticien"){
+            $praticien = \App\Models\Praticien::whereId($id)->first();
+            return response()->json(['user'=>$praticien->user]);
+        }
+        elseif ($roleName == "Patient"){
+            $patient = \App\Models\Patient::whereId($id)->first();
+            return response()->json(['user'=>$patient->user]);
+        }
+        elseif ($roleName == "Gestionnaire"){
+            $gestionnaire = \App\Models\Gestionnaire::whereId($id)->first();
+            return response()->json(['user'=>$gestionnaire->user]);
+        }
+        elseif ($roleName == "Souscripteur"){
+            $souscripteur = \App\Models\Souscripteur::whereId($id)->first();
+            return response()->json(['user'=>$souscripteur->user]);
+        }
+        elseif ($roleName == "Medecin controle"){
+            $medecinControle = \App\Models\MedecinControle::whereId($id)->first();
+            return response()->json(['user'=>$medecinControle->user]);
+        }
+
+        elseif ($roleName == "Admin"){
+            $user = \App\User::find(1);
+            return response()->json(['user'=>$user]);
+        }
+        elseif ($roleName == "User"){
+            $user = \App\User::find($id);
+            return response()->json(['user'=>$user]);
+        }
+    }
+}
+
+
