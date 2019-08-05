@@ -52,6 +52,11 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
 //    Définition des routes accéssible par le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Praticien']], function () {
     Route::resource('praticien','Api\PraticienController')->only('show');
+    Route::put('resultat/{id}/transmettre','Api\ResultatController@transmettre');
+    Route::put('consultationMedecine/{id}/transmettre','Api\ConsultationMedecineGeneraleController@transmettre');
+    Route::put('consultationObstetrique/{id}/transmettre','Api\ConsultationObstetriqueController@transmettre');
+    Route::put('consultationPrenatale/{id}/transmettre','Api\ConsultationPrenantaleController@transmettre');
+
 });
 
 //    Définition des routes accéssible par le souscripteur
@@ -63,7 +68,10 @@ Route::group(['middleware' => ['auth:api','role:Admin|Souscripteur']], function 
 //    Définition des routes accéssible par le medecin controle
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], function () {
     Route::resource('medecinControle','Api\MedecinControleController')->only('show');
-
+    Route::put('resultat/{id}/archiver','Api\ResultatController@archiver');
+    Route::put('consultationMedecine/{id}/archiver','Api\ConsultationMedecineGeneraleController@archiver');
+    Route::put('consultationObstetrique/{id}/archiver','Api\ConsultationObstetriqueController@archiver');
+    Route::put('consultationPrenatale/{id}/archiver','Api\ConsultationPrenantaleController@archiver');
 });
 
 //    Définition des routes accéssible par le patient

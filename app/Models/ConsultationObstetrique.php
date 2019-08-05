@@ -19,6 +19,8 @@ class ConsultationObstetrique extends Model
         "assuetudes",
         "antecassuetudesedent_de_transfusion",
         "facteur_de_risque",
+        'archieved_at',
+        'passed_at',
     ];
 
 }

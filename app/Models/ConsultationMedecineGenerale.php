@@ -10,10 +10,12 @@ class ConsultationMedecineGenerale extends Model
     use SoftDeletes;
 
     protected $fillable = [
-      "dossier_medical_id",
-      "date_consultation",
-      "anamese",
-      "mode_de_vie",
+        "dossier_medical_id",
+        "date_consultation",
+        "anamese",
+        "mode_de_vie",
+        'archieved_at',
+        'passed_at',
     ];
 
     public  function  motifs(){
@@ -34,7 +36,7 @@ class ConsultationMedecineGenerale extends Model
     public  function  allergies(){
         return $this->belongsToMany(Allergie::class,'consultation_allergie','consultation_medecine_generale_id','allergie_id');
     }
-    
+
     public function antecedents(){
         return $this->hasMany(Antecedent::class,'consultation_medecine_generale_id','id');
     }

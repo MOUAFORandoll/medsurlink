@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class SouscripteurRequest extends FormRequest
+class MedecinControleStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,17 +25,18 @@ class SouscripteurRequest extends FormRequest
     public function rules()
     {
         return [
-            "user_id"=>'sometimes|integer|exists:users,id',
+            "specialite_id"=>'required|integer|exists:specialites,id',
             "nom"=>'required|string|min:2',
-            "prenom"=>'sometimes|nullable|string|min:2',
-            "sexe"=>["required",Rule::in(['M','F'])],
-            "date_de_naissance"=>'required|date',
+            "numero_ordre"=>'required|string|min:2',
+            "civilite"=>["required",Rule::in(['M.','Mme/Mlle.','Dr.','Pr.'])],
             "nationalite"=>'required|string|min:4',
             "ville"=>'required|string|min:2',
             "pays"=>'required|string|min:2',
             "telephone"=>'required|string|min:9',
             "email"=>'required|string|unique:users,email',
+            "user_id"=>'sometimes|integer|exists:users,id',
             "quartier"=>'sometimes|nullable|string|min:1',
+            "prenom"=>'sometimes|nullable|string|min:2',
             "code_postal"=>'sometimes|integer',
         ];
     }

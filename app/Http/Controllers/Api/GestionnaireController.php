@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\GestionnaireRequest;
+use App\Http\Requests\GestionnaireStoreRequest;
+use App\Http\Requests\GestionnaireUpdateRequest;
 use App\Models\Gestionnaire;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -38,7 +39,7 @@ class GestionnaireController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(GestionnaireRequest $request)
+    public function store(GestionnaireStoreRequest $request)
     {
         $gestionnaire = Gestionnaire::create($request->validated());
 
@@ -88,7 +89,7 @@ class GestionnaireController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(GestionnaireRequest $request, $id)
+    public function update(GestionnaireUpdateRequest $request, $id)
     {
          $validation = $this->validatedId($id);
         if(!is_null($validation))
@@ -96,6 +97,12 @@ class GestionnaireController extends Controller
 
         Gestionnaire::whereId($id)->update($request->validated());
         $gestionnaire = Gestionnaire::find($id);
+
+        //ajustement de l'email du user
+        $user = $gestionnaire->user;
+        $user->email = $gestionnaire->email;
+        $user->save();
+
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
     }

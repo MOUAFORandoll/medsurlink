@@ -16,6 +16,13 @@ class HospitalisationExamClinController extends Controller
         ]);
 
         $hospitalisation = Hospitalisation::find($request->get('hospitalisation'));
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("HospitalisationExamClin",$hospitalisation->id,"attach");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
+
         $hospitalisation->examensClinique()->detach($request->get('examensClinique'));
 
         $hospitalisation = Hospitalisation::with('examensClinique')->find($request->get('hospitalisation'));

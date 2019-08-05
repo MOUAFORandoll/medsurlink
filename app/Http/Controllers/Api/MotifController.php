@@ -86,6 +86,11 @@ class MotifController extends Controller
         if(!is_null($validation))
             return $validation;
 
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         $motif = Motif::whereId($id)->update($request->validated());
 
         $motif = Motif::find($id);
@@ -103,6 +108,11 @@ class MotifController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
 
         $motif = Motif::find($id);
         Motif::destroy($id);

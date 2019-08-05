@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\ConsultationPrenataleRequest;
 use App\Models\ConsultationPrenatale;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -115,14 +116,57 @@ class ConsultationPrenantaleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        //Attachement des examens clinique
-
-        //Attachement des examens complementaires
-
-        //Attcahement des parametres obstetrique
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationPrenatale",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
 
         $consultationPrenatale = ConsultationPrenatale::with('consultationObstetrique')->find($id);
         ConsultationPrenatale::destroy($id);
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
+    }
+
+    /**
+     * Archieved the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function archiver($id)
+    {
+        $validation = validatedId($id,$this->table);
+        if(!is_null($validation))
+            return $validation;
+
+        $resultat = ConsultationPrenatale::with(['dossier','consultation'])->find($id);
+        if (is_null($resultat->passed_at)){
+            return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
+        }else{
+            $resultat->archieved_at = Carbon::now();
+            $resultat->save();
+            return response()->json(['resultat'=>$resultat]);
+        }
+    }
+
+    /**
+     * Passed the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function transmettre($id)
+    {
+        $validation = validatedId($id,$this->table);
+        if(!is_null($validation))
+            return $validation;
+
+        $resultat = ConsultationPrenatale::with(['dossier','consultation'])->find($id);
+        $resultat->passed_at = Carbon::now();
+        $resultat->save();
+
+        return response()->json(['resultat'=>$resultat]);
+
     }
 }

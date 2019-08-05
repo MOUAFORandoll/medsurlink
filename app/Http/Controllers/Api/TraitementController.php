@@ -85,6 +85,11 @@ class TraitementController extends Controller
         if(!is_null($validation))
             return $validation;
 
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         Traitement::whereId($id)->update($request->validated());
         $traitement = Traitement::find($id);
         return response()->json(['traitement'=>$traitement]);

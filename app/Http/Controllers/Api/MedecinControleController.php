@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\MedecinControleRequest;
+use App\Http\Requests\MedecinControleStoreRequest;
+use App\Http\Requests\MedecinControleUpdateRequest;
 use App\Models\MedecinControle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -39,7 +40,7 @@ class MedecinControleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(MedecinControleRequest $request)
+    public function store(MedecinControleStoreRequest $request)
     {
         $medecin = MedecinControle::create($request->validated());
 
@@ -89,13 +90,18 @@ class MedecinControleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MedecinControleRequest $request, $id)
+    public function update(MedecinControleUpdateRequest $request, $id)
     {
          $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
         MedecinControle::whereId($id)->update($request->validated());
         $medecin = MedecinControle::with('specialite')->find($id);
+
+        //ajustement de l'email du user
+        $user = $medecin->user;
+        $user->email = $medecin->email;
+        $user->save();
         return response()->json(['medecin'=>$medecin]);
 
     }

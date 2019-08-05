@@ -22,6 +22,9 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+        foreach ( $users as $user){
+            $user->roles;
+        }
         return response()->json(['users'=>$users]);
     }
 
@@ -59,6 +62,7 @@ class UserController extends Controller
         if(!is_null($validation))
             return $validation;
         $user = User::find($id);
+        $user->roles;
         return response()->json(['user'=>$user]);
     }
 

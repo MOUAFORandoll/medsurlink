@@ -15,8 +15,13 @@ class ConsultPrenExamClinController extends Controller
             "consultation"=>"required|integer|exists:consultation_obstetriques,id",
             "examensClinique.*"=>"required|integer|exists:examen_cliniques,id"
         ]);
-
         $consultation = ConsultationPrenatale::find($request->get('consultation'));
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultPrenExamClin",$consultation->id,"attach");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         $consultation->examensClinique()->detach($request->get('examensClinique'));
 
         $consultation = ConsultationPrenatale::with(['examensClinique','examensComplementaire'])->find($request->get('consultation'));

@@ -15,6 +15,8 @@ class ConsultationPrenatale extends Model
         "plaintes",
         "antecedent_conjoint",
         "recommandations",
+        'archieved_at',
+        'passed_at',
     ];
 
     public function parametreObstetrique(){

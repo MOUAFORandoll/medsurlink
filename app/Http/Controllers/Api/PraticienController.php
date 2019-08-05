@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PraticienRequest;
+use App\Http\Requests\PraticienStoreRequest;
+use App\Http\Requests\PraticienUpdateRequest;
 use App\Models\EtablissementExercice;
 use App\Models\Praticien;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ class PraticienController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PraticienRequest $request)
+    public function store(PraticienStoreRequest $request)
     {
         //Sauvegarde des informations personnelles
         $praticien = Praticien::create($request->validated());
@@ -91,13 +92,19 @@ class PraticienController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PraticienRequest $request, $id)
+    public function update(PraticienUpdateRequest $request, $id)
     {
          $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
         Praticien::whereId($id)->update($request->validated());
         $praticien = Praticien::with('etablissements')->find($id);
+
+        //ajustement de l'email du user
+        $user = $praticien->user;
+        $user->email = $praticien->email;
+        $user->save();
+
         return response()->json(['praticien'=>$praticien]);
 
     }

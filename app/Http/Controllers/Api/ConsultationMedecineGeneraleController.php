@@ -7,6 +7,7 @@ use App\Models\ConsultationMedecineGenerale;
 use App\Models\ExamenClinique;
 use App\Models\ExamenComplementaire;
 use App\Models\Motif;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -149,9 +150,14 @@ class ConsultationMedecineGeneraleController extends Controller
         if(!is_null($validation))
             return $validation;
 
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         ConsultationMedecineGenerale::whereId($id)->update($request->validated());
 
-        $consultation = ConsultationMedecineGenerale::with(['motifs','examensClinique','examensComplementaire','allergies','traitements'])->find($consultation->id);
+        $consultation = ConsultationMedecineGenerale::with(['motifs','examensClinique','examensComplementaire','allergies','traitements'])->find($id);
         return response()->json(["consultation"=>$consultation]);
     }
 
@@ -166,8 +172,59 @@ class ConsultationMedecineGeneraleController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         $consultation = ConsultationMedecineGenerale::find($id);
         ConsultationMedecineGenerale::destroy($id);
         return response()->json(["consultation"=>$consultation]);
     }
+
+    /**
+     * Archieved the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function archiver($id)
+    {
+        $validation = validatedId($id,$this->table);
+        if(!is_null($validation))
+            return $validation;
+
+        $resultat = ConsultationMedecineGenerale::with(['dossier','consultation'])->find($id);
+        if (is_null($resultat->passed_at)){
+            return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
+        }else{
+            $resultat->archieved_at = Carbon::now();
+            $resultat->save();
+            return response()->json(['resultat'=>$resultat]);
+        }
+    }
+
+    /**
+     * Passed the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function transmettre($id)
+    {
+        $validation = validatedId($id,$this->table);
+        if(!is_null($validation))
+            return $validation;
+
+        $resultat = ConsultationMedecineGenerale::with(['dossier','consultation'])->find($id);
+        $resultat->passed_at = Carbon::now();
+        $resultat->save();
+
+        return response()->json(['resultat'=>$resultat]);
+
+    }
+
 }

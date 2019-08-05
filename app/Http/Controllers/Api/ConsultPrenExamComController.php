@@ -17,6 +17,12 @@ class ConsultPrenExamComController extends Controller
         ]);
 
         $consultation = ConsultationPrenatale::find($request->get('consultation'));
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultPrenExamCom",$consultation->id,"attach");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         $consultation->examensComplementaire()->detach($request->get('examensComplementaire'));
 
         $consultation = ConsultationPrenatale::with(['examensClinique','examensComplementaire'])->find($request->get('consultation'));

@@ -87,6 +87,11 @@ class ProfessionController extends Controller
         if(!is_null($validation))
             return $validation;
 
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Profession",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         Profession::whereId($id)->update($request->validated());
         $profession = Profession::with('specialites')->find($id);
         return response()->json(['profession'=>$profession]);
@@ -103,6 +108,12 @@ class ProfessionController extends Controller
          $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Profession",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         $profession = Profession::with('specialites')->find($id);
         Profession::destroy($id);
         return response()->json(['profession'=>$profession]);

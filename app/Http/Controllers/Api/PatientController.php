@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\patientRequest;
+use App\Http\Requests\patientStoreRequest;
+use App\Http\Requests\PatientUpdateRequest;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -37,7 +38,7 @@ class PatientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(patientRequest $request)
+    public function store(patientStoreRequest $request)
     {
         $patient = Patient::create($request->validated());
         //Calcul de l'age
@@ -93,7 +94,7 @@ class PatientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(patientRequest $request, $id)
+    public function update(PatientUpdateRequest $request, $id)
     {
          $validation = $this->validatedId($id);
         if(!is_null($validation))
@@ -102,6 +103,13 @@ class PatientController extends Controller
         Patient::whereId($id)->update($request->validated());
         $patient = Patient::with(['souscripteur'])->find($id);
         $patient->age = evaluateYearOfOld($patient->date_de_naissance);
+        $patient->save();
+
+        //ajustement de l'email du user
+        $user = $patient->user;
+        $user->email = $patient->email;
+        $user->save();
+
         return response()->json(['patient'=>$patient]);
 
     }

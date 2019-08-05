@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SouscripteurRequest;
+use App\Http\Requests\SouscripteurStoreRequest;
+use App\Http\Requests\SouscripteurUpdateRequest;
 use App\Models\Souscripteur;
 use Illuminate\Support\Facades\Validator;
 
@@ -37,7 +38,7 @@ class SouscripteurController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SouscripteurRequest $request)
+    public function store(SouscripteurStoreRequest $request)
     {
         $souscripteur = Souscripteur::create($request->validated());
         //Calcul de l'age du souscripteur
@@ -91,7 +92,7 @@ class SouscripteurController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(SouscripteurRequest $request, $id)
+    public function update(SouscripteurUpdateRequest $request, $id)
     {
          $validation = $this->validatedId($id);
         if(!is_null($validation))
@@ -101,8 +102,14 @@ class SouscripteurController extends Controller
         //Calcul de l'age du souscripteur
         $souscripteur = Souscripteur::find($id);
         $age = evaluateYearOfOld($souscripteur->date_de_naissance);
+        //ajustement de l'age du souscripteur
         $souscripteur->age = $age;
         $souscripteur->save();
+
+        //ajustement de l'email du user
+        $user = $souscripteur->user;
+        $user->email = $souscripteur->email;
+        $user->save();
 
         return response()->json(['souscripteur'=>$souscripteur]);
 

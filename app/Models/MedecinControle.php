@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -33,5 +34,7 @@ class MedecinControle extends Model
     {
         return $this->morphMany(Auteur::class, 'auteurable');
     }
-
+    public function user(){
+        return $this->belongsTo(User::class,'user_id','id');
+    }
 }

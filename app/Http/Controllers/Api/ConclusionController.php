@@ -87,6 +87,12 @@ class ConclusionController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         Conclusion::whereId($id)->update($request->validated());
         $conclusion = Conclusion::with('consultation')->find($id);
         return response()->json(['conclusion'=>$conclusion]);
