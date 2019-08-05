@@ -2,52 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConclusionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConclusionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamClinController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamClinController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamComController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamComController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationAllergieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationAllergieController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenCliniqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenCliniqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenComplentaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenComplentaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationTraitementController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationTraitementController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/EchographieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/EchographieController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenCliniqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenCliniqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenComplementaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenComplementaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/GestionnaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/GestionnaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationExamClinController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationExamClinController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationExamComController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationExamComController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/MedecinControleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/MedecinControleController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/MotifController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/MotifController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreCommunController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreCommunController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreObstetriqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ProfessionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ProfessionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/TraitementController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/TraitementController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/GestionnaireRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/GestionnaireStoreRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/MedecinControleRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/MedecinControleStoreRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/PraticienRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/PraticienStoreRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/SouscripteurRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/SouscripteurStoreRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/patientRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/patientStoreRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Gestionnaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Gestionnaire.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/MedecinControle.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/MedecinControle.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Patient.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Praticien.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Praticien.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Resultat.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Resultat.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Souscripteur.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Souscripteur.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/UserRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/UserStoreRequest.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/helpers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -93,47 +50,47 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="94" column="52" selection-start-line="94" selection-start-column="52" selection-end-line="94" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="77">
-              <caret line="96" column="47" selection-start-line="96" selection-start-column="47" selection-end-line="96" selection-end-column="47" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/GestionnaireController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="139">
-              <caret line="91" column="52" selection-start-line="91" selection-start-column="52" selection-end-line="91" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/MedecinControleController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="139">
-              <caret line="92" column="55" selection-start-line="92" selection-start-column="55" selection-end-line="92" selection-end-column="55" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php">
+        <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="94" column="49" selection-start-line="94" selection-start-column="49" selection-end-line="94" selection-end-column="49" />
+            <state relative-caret-position="230">
+              <caret line="97" column="22" selection-start-line="97" selection-start-column="22" selection-end-line="97" selection-end-column="22" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/helpers.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="128">
+              <caret line="133" column="38" selection-start-line="133" selection-start-column="38" selection-end-line="133" selection-end-column="138" />
+              <folding>
+                <element signature="e#194#399#0#PHP" />
+                <element signature="e#596#769#0#PHP" />
+                <element signature="e#955#1255#0#PHP" />
+                <element signature="e#1338#1465#0#PHP" />
+                <element signature="e#1720#2166#0#PHP" />
+                <element signature="e#2167#2746#0#PHP" />
+                <element signature="e#5712#6058#0#PHP" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Requests/UserUpdateRequest.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="357">
+              <caret line="30" column="21" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/Http/Requests/UserStoreRequest.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="247">
+              <caret line="28" column="71" lean-forward="true" selection-start-line="26" selection-start-column="12" selection-end-line="28" selection-end-column="71" />
             </state>
           </provider>
         </entry>
@@ -170,6 +127,8 @@
       <find>Praticien</find>
       <find>resultat</find>
       <find>GETrOLE</find>
+      <find>getRol</find>
+      <find>getStat</find>
     </findStrings>
     <replaceStrings>
       <replace>=&gt;$request-&gt;get(''),</replace>
@@ -196,9 +155,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/Mail/Password/PasswordGenerated.php" />
         <option value="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationAllergieController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConclusionController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenCliniqueController.php" />
@@ -230,7 +187,6 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" />
         <option value="$PROJECT_DIR$/routes/api.php" />
-        <option value="$PROJECT_DIR$/app/helpers.php" />
         <option value="$PROJECT_DIR$/app/Rules/EmailsNotExistsRule.php" />
         <option value="$PROJECT_DIR$/app/Http/Requests/SouscripteurUpdateRequest.php" />
         <option value="$PROJECT_DIR$/app/Models/Souscripteur.php" />
@@ -247,6 +203,9 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/MedecinControleController.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" />
+        <option value="$PROJECT_DIR$/app/Http/Requests/UserUpdateRequest.php" />
+        <option value="$PROJECT_DIR$/app/helpers.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" />
       </list>
     </option>
   </component>
@@ -404,27 +363,6 @@
             <path>
               <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
               <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Http" type="462c0819:PsiDirectoryNode" />
-              <item name="Controllers" type="462c0819:PsiDirectoryNode" />
-              <item name="Api" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Http" type="462c0819:PsiDirectoryNode" />
-              <item name="Requests" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
-              <item name="app" type="462c0819:PsiDirectoryNode" />
-              <item name="Models" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="medicalink-app" type="b2602c69:ProjectViewProjectNode" />
-              <item name="medicalink-app" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -530,19 +468,19 @@
       <workItem from="1564646353178" duration="20085000" />
       <workItem from="1564673027093" duration="2552000" />
       <workItem from="1564734843827" duration="19241000" />
-      <workItem from="1564994044931" duration="13100000" />
+      <workItem from="1564994044931" duration="14167000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="370593000" />
+    <option name="totallyTimeSpent" value="371660000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5612903" visible="true" weight="0.2322239" />
-      <window_info active="true" id="Structure" order="1" sideWeight="0.43870968" side_tool="true" visible="true" weight="0.2322239" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5612903" visible="true" weight="0.2322239" />
+      <window_info id="Structure" order="1" sideWeight="0.43870968" side_tool="true" weight="0.2322239" />
       <window_info id="npm" order="2" sideWeight="0.5191083" side_tool="true" weight="0.16414523" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -572,27 +510,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="115" selection-start-line="115" selection-end-line="115" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationExamClinController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="24" lean-forward="true" selection-start-line="18" selection-end-line="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationExamComController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="22" column="9" lean-forward="true" selection-start-line="19" selection-start-column="8" selection-end-line="22" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/MotifController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -824,13 +741,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/helpers.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="130" column="17" lean-forward="true" selection-start-line="130" selection-start-column="17" selection-end-line="130" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Rules/EmailsNotExistsRule.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
@@ -886,26 +796,6 @@
     <entry file="file://$PROJECT_DIR$/app/Http/Requests/MedecinControleUpdateRequest.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="202">
-          <caret line="37" column="57" selection-start-line="37" selection-start-column="57" selection-end-line="37" selection-end-column="57" />
-          <folding>
-            <element signature="e#37#80#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/SouscripteurUpdateRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="32">
-          <caret line="26" selection-start-line="26" selection-end-line="27" />
-          <folding>
-            <element signature="e#37#80#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Requests/PraticienUpdateRequest.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
           <caret line="37" column="57" selection-start-line="37" selection-start-column="57" selection-end-line="37" selection-end-column="57" />
           <folding>
             <element signature="e#37#80#0#PHP" expanded="true" />
@@ -1021,7 +911,64 @@
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="241">
-          <caret line="94" column="49" selection-start-line="94" selection-start-column="49" selection-end-line="94" selection-end-column="49" />
+          <caret line="94" column="39" lean-forward="true" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Requests/PraticienUpdateRequest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-289">
+          <caret line="7" column="6" selection-start-line="7" selection-start-column="6" selection-end-line="7" selection-end-column="6" />
+          <folding>
+            <element signature="e#37#80#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Requests/UserStoreRequest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="28" column="71" lean-forward="true" selection-start-line="26" selection-start-column="12" selection-end-line="28" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Requests/SouscripteurUpdateRequest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="134">
+          <caret line="26" selection-start-line="26" selection-end-line="27" />
+          <folding>
+            <element signature="e#37#80#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/helpers.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="133" column="38" selection-start-line="133" selection-start-column="38" selection-end-line="133" selection-end-column="138" />
+          <folding>
+            <element signature="e#194#399#0#PHP" />
+            <element signature="e#596#769#0#PHP" />
+            <element signature="e#955#1255#0#PHP" />
+            <element signature="e#1338#1465#0#PHP" />
+            <element signature="e#1720#2166#0#PHP" />
+            <element signature="e#2167#2746#0#PHP" />
+            <element signature="e#5712#6058#0#PHP" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Requests/UserUpdateRequest.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="30" column="21" selection-start-line="30" selection-start-column="13" selection-end-line="30" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="97" column="22" selection-start-line="97" selection-start-column="22" selection-end-line="97" selection-end-column="22" />
         </state>
       </provider>
     </entry>

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Mail\Password\PasswordGenerated;
 use App\User;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(UserStoreRequest $request)
     {
         $user = User::create($request->validated());
         return response()->json(['user'=>$user]);
@@ -58,7 +59,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
         $user = User::find($id);
@@ -84,13 +85,22 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
-        User::whereId($id)->update($request->validated());
+
         $user = User::find($id);
+        $user->name = $request->validated()['name'];
+        $user->email = $request->validated()['email'];
+        $user->password = Hash::make($request->validated()['password']);
+        $user->save();
+
+        $userRole = ((getStatusUserRole($user->getRoleNames()->first(),$user))->getOriginalContent()['auteurable_user']);
+        $userRole->email  = $user->email;
+        $userRole->save();
+
         return response()->json(['user'=>$user]);
     }
 
@@ -102,7 +112,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
         $user = User::find($id);

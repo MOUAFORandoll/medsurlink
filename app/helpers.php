@@ -67,11 +67,12 @@ if (!function_exists('defineAsAuthor')){
         \App\Http\Controllers\Api\AuteurController::store($auteurable_type,$auteurable_id,$operationable_type,$operationable_id,$action);
     }
 }
+/**
+ * Fonction qui retourne le role de l'utilisateur courant ainsi que son id dans la table ou il a ce rôle là
+ * @return \Illuminate\Http\JsonResponse
+ */
 if (!function_exists('getStatus')){
-    /**
-     * Fonction qui retourne le role de l'utilisateur courant ainsi que son id dans la table ou il a ce rôle là
-     * @return \Illuminate\Http\JsonResponse
-     */
+
     function getStatus(){
         $user = \Illuminate\Support\Facades\Auth::user();
         $auteurable_type = $user->getRoleNames()->first();
