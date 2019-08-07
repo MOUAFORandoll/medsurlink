@@ -125,6 +125,8 @@ class AffiliationController extends Controller
             return $validation;
 
         $affiliation = Affiliation::with(['patient'])->find($id);
+//        dd(Carbon::parse($affiliation->date_fin)->diffInDays(Carbon::now()));
+//        if(Carbon::parse($affiliation->date_fin)->diffInDays(Carbon::now()))
         Affiliation::destroy($id);
         return response()->json(['affiliation'=>$affiliation]);
     }
@@ -142,11 +144,13 @@ class AffiliationController extends Controller
     public function dejaAffilie(Request $request){
 
         $date_debut = Carbon::parse($request->date_debut)->year;
+        //Ici on determine si le patient a deja une affiliation pour cette année
         $affiliation =  Affiliation::where('patient_id','=',$request->patient_id)->where('nom','=','Annuelle')->WhereYear('date_debut',$date_debut)->get();
         if (count($affiliation)>0) {
             return "Le patient dispose déjà d'une affiliation pour cette année";
         }
         elseif ($request->nom == "One shot"){
+//            On determine si le patient a deja une affiliation oneshot a ce jour
             $date_debut = $request->date_debut;
             $affiliation =  Affiliation::where('patient_id','=',$request->patient_id)->where('nom','=','One shot')->whereDate('date_debut',$date_debut)->get();
             if (count($affiliation)>0){

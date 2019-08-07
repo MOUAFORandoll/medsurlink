@@ -13,4 +13,8 @@ class EtablissementExercice extends Model
         "name",
         "description"
     ];
+
+    public function praticiens(){
+        return $this->belongsToMany(Praticien::class,'etablissement_exercice_praticien','etablissement_id','praticien_id');
+    }
 }

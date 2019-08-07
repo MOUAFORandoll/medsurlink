@@ -115,6 +115,9 @@ class ProfessionController extends Controller
         }
 
         $profession = Profession::with('specialites')->find($id);
+        if($profession->specialites->count() > 0) {
+            return response()->json(['error'=>"Cet élément est lié à un autre (spécialité), Vous devez supprimer tous les elements auquel il est lié"],422);
+        }
         Profession::destroy($id);
         return response()->json(['profession'=>$profession]);
     }

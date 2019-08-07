@@ -21,7 +21,7 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::all();
+        $etablissements =  EtablissementExercice::with('praticiens')->get();
         return response()->json(['etablissements'=>$etablissements]);
     }
 
@@ -46,6 +46,9 @@ class EtablissementExerciceController extends Controller
         $etablissement = EtablissementExercice::create($request->validated());
         defineAsAuthor("EtablissementExercice",$etablissement->id,'create');
 
+        if($etablissement->praticiens->count() > 0) {
+            return response()->json(['error'=>"Cet élément est lié à un autre, Vous devez supprimer tous les elements auquel il est lié"],422);
+        }
         return response()->json(['etablissement'=>$etablissement]);
     }
 
@@ -109,6 +112,9 @@ class EtablissementExerciceController extends Controller
         if(!is_null($validation))
             return $validation;;
         $etablissement = EtablissementExercice::find($id);
+        if($etablissement->praticiens->count() > 0) {
+            return response()->json(['error'=>"Cet élément est lié à un autre (praticien), Vous devez supprimer tous les elements auquel il est lié"],422);
+        }
         EtablissementExercice::destroy($id);
         return response()->json(['etablissement'=>$etablissement]);
     }
