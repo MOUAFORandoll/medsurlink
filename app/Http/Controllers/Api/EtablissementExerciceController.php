@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EtablissementExerciceRequest;
 use App\Models\EtablissementExercice;
 use Illuminate\Support\Facades\Validator;
+use Netpok\Database\Support\DeleteRestrictionException;
 
 /**
  * Class EtablissementExerciceController
@@ -21,7 +22,7 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::with('praticiens')->get();
+        $etablissements =  EtablissementExercice::with(['praticiens'])->get();
         return response()->json(['etablissements'=>$etablissements]);
     }
 
@@ -64,7 +65,7 @@ class EtablissementExerciceController extends Controller
         if(!is_null($validation))
             return $validation;;
 
-        $etablissement = EtablissementExercice::find($id);
+        $etablissement = EtablissementExercice::with(['praticiens'])->find($id);
         return response()->json(['etablissement'=>$etablissement]);
 
 
@@ -95,7 +96,7 @@ class EtablissementExerciceController extends Controller
             return $validation;;
 
         EtablissementExercice::whereId($id)->update($request->validated());
-        $etablissement = EtablissementExercice::find($id);
+        $etablissement = EtablissementExercice::with(['praticiens'])->find($id);
         return response()->json(['etablissement'=>$etablissement]);
 
     }
@@ -111,12 +112,15 @@ class EtablissementExerciceController extends Controller
          $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;;
-        $etablissement = EtablissementExercice::find($id);
-        if($etablissement->praticiens->count() > 0) {
-            return response()->json(['error'=>"Cet élément est lié à un autre (praticien), Vous devez supprimer tous les elements auquel il est lié"],422);
+
+        try{
+            $etablissement = EtablissementExercice::with(['praticiens'])->find($id);
+            EtablissementExercice::destroy($id);
+            return response()->json(['etablissement'=>$etablissement]);
+
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
         }
-        EtablissementExercice::destroy($id);
-        return response()->json(['etablissement'=>$etablissement]);
     }
 
     /**

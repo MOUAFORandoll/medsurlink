@@ -7,6 +7,7 @@ use App\Http\Requests\SouscripteurStoreRequest;
 use App\Http\Requests\SouscripteurUpdateRequest;
 use App\Models\Souscripteur;
 use Illuminate\Support\Facades\Validator;
+use Netpok\Database\Support\DeleteRestrictionException;
 
 class SouscripteurController extends Controller
 {
@@ -18,7 +19,7 @@ class SouscripteurController extends Controller
      */
     public function index()
     {
-        $souscripteurs = Souscripteur::all();
+        $souscripteurs = Souscripteur::with('patients')->get();
         return response()->json(['souscripteurs'=>$souscripteurs]);
     }
 
@@ -127,7 +128,11 @@ class SouscripteurController extends Controller
         if(!is_null($validation))
             return $validation;
         $souscripteur = Souscripteur::find($id);
-        Souscripteur::destroy($id);
+        try{
+            Souscripteur::destroy($id);
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+        }
         return response()->json(['souscripteur'=>$souscripteur]);
 
     }

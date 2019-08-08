@@ -8,6 +8,7 @@ use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Netpok\Database\Support\DeleteRestrictionException;
 
 class PatientController extends Controller
 {
@@ -18,7 +19,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with(['souscripteur'])->get();
+        $patients = Patient::with(['souscripteur','dossier'])->get();
         return response()->json(['patients'=>$patients]);
     }
 
@@ -125,9 +126,13 @@ class PatientController extends Controller
          $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
-        $patient = Patient::with(['souscripteur'])->find($id);
-        Patient::destroy($id);
-        return response()->json(['patient'=>$patient]);
+        try{
+            $patient = Patient::with(['souscripteur'])->find($id);
+            Patient::destroy($id);
+            return response()->json(['patient'=>$patient]);
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+        }
     }
 
     /**

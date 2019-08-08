@@ -7,6 +7,7 @@ use App\Models\ConsultationPrenatale;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Netpok\Database\Support\DeleteRestrictionException;
 
 class ConsultationPrenantaleController extends Controller
 {
@@ -18,7 +19,7 @@ class ConsultationPrenantaleController extends Controller
      */
     public function index()
     {
-        $consultationsPrenatale = ConsultationPrenatale::with('consultationObstetrique')->get();
+        $consultationsPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->get();
         return response()->json(['consultationsPrenatale'=>$consultationsPrenatale]);
     }
 
@@ -64,7 +65,7 @@ class ConsultationPrenantaleController extends Controller
             return $validation;
 
 
-        $consultationPrenatale = ConsultationPrenatale::with('consultationObstetrique')->find($id);
+        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->find($id);
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
 
     }
@@ -100,7 +101,7 @@ class ConsultationPrenantaleController extends Controller
         //Attachement des parametres obstetrique
 
         ConsultationPrenatale::whereId($id)->update($request->validated());
-        $consultationPrenatale = ConsultationPrenatale::with('consultationObstetrique')->find($id);
+        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->find($id);
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }
 
@@ -120,10 +121,14 @@ class ConsultationPrenantaleController extends Controller
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
+        try{
+            $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->find($id);
+            ConsultationPrenatale::destroy($id);
+            return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+        }
 
-        $consultationPrenatale = ConsultationPrenatale::with('consultationObstetrique')->find($id);
-        ConsultationPrenatale::destroy($id);
-        return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }
 
     /**
@@ -139,7 +144,7 @@ class ConsultationPrenantaleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationPrenatale::with(['dossier','consultation'])->find($id);
+        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->find($id);
         if (is_null($resultat->passed_at)){
             return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
         }else{
@@ -162,7 +167,7 @@ class ConsultationPrenantaleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationPrenatale::with(['dossier','consultation'])->find($id);
+        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->find($id);
         $resultat->passed_at = Carbon::now();
         $resultat->save();
 

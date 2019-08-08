@@ -18,7 +18,7 @@ class ConclusionController extends Controller
      */
     public function index()
     {
-        $conclusions = Conclusion::all();
+        $conclusions = Conclusion::with(['consultationMedecine'])->get();
         return response()->json(['conclusions'=>$conclusions]);
     }
 
@@ -59,7 +59,7 @@ class ConclusionController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $conclusion = Conclusion::with('consultation')->find($id);
+        $conclusion = Conclusion::with(['consultationMedecine'])->find($id);
         return response()->json(['conclusion'=>$conclusion]);
 
     }
@@ -94,7 +94,7 @@ class ConclusionController extends Controller
         }
 
         Conclusion::whereId($id)->update($request->validated());
-        $conclusion = Conclusion::with('consultation')->find($id);
+        $conclusion = Conclusion::with(['consultationMedecine'])->find($id);
         return response()->json(['conclusion'=>$conclusion]);
     }
 
@@ -110,7 +110,7 @@ class ConclusionController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $conclusion = Conclusion::with('consultation')->find($id);
+        $conclusion = Conclusion::with(['consultationMedecine'])->find($id);
         Conclusion::destroy($id);
         return response()->json(['conclusion'=>$conclusion]);
     }

@@ -105,7 +105,6 @@ class AntecedentController extends Controller
             return $validation;
 
         $antecedent = Antecedent::with('consultation')->find($id);
-
         Antecedent::destroy($id);
         return response()->json(['antecedent'=>$antecedent]);
     }

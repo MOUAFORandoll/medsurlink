@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Netpok\Database\Support\DeleteRestrictionException;
 
 class ConsultationObstetriqueController extends Controller
 {
@@ -19,7 +20,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function index()
     {
-        $consultationsObstetrique = ConsultationObstetrique::all();
+        $consultationsObstetrique = ConsultationObstetrique::with(['consultationPrenatales'])->get();
         return response()->json(['consultationsObstetrique'=>$consultationsObstetrique]);
     }
 
@@ -73,7 +74,7 @@ class ConsultationObstetriqueController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $consultationObstetrique =  ConsultationObstetrique::find($id);
+        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales'])->find($id);
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
     }
 
@@ -107,7 +108,7 @@ class ConsultationObstetriqueController extends Controller
         }
 
         ConsultationObstetrique::whereId($id)->update($request->validated());
-        $consultationObstetrique =  ConsultationObstetrique::find($id);
+        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales'])->find($id);
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
     }
 
@@ -123,15 +124,18 @@ class ConsultationObstetriqueController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $consultationObstetrique =  ConsultationObstetrique::find($id);
 
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
-
-        ConsultationObstetrique::destroy($id);
-        return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
+        try{
+            $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales'])->find($id);
+            ConsultationObstetrique::destroy($id);
+            return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+        }
     }
 
     /**

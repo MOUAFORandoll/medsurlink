@@ -7,6 +7,7 @@ use App\Models\Profession;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Netpok\Database\Support\DeleteRestrictionException;
 
 class ProfessionController extends Controller
 {
@@ -115,10 +116,14 @@ class ProfessionController extends Controller
         }
 
         $profession = Profession::with('specialites')->find($id);
-        if($profession->specialites->count() > 0) {
-            return response()->json(['error'=>"Cet élément est lié à un autre (spécialité), Vous devez supprimer tous les elements auquel il est lié"],422);
-        }
+//        if($profession->specialites->count() > 0) {
+//            return response()->json(['error'=>"Cet élément est lié à un autre (spécialité), Vous devez supprimer tous les elements auquel il est lié"],422);
+//        }
+        try{
         Profession::destroy($id);
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+        }
         return response()->json(['profession'=>$profession]);
     }
 
