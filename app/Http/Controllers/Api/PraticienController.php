@@ -20,7 +20,7 @@ class PraticienController extends Controller
      */
     public function index()
     {
-        $praticiens = Praticien::with(['etablissements','specialite'])->get();
+        $praticiens = Praticien::with(['etablissements','specialite','user'])->get();
         return response()->json(['praticiens'=>$praticiens]);
     }
 
@@ -42,18 +42,26 @@ class PraticienController extends Controller
      */
     public function store(PraticienStoreRequest $request)
     {
-        //Sauvegarde des informations personnelles
-        $praticien = Praticien::create($request->validated());
-        $praticien->etablissements()->attach($request->get('etablissement_id'));
 
-        //Generation du mot de passe et envoie par mail
-        $user = UserController::generatedUser(fullName($request),$praticien->email);
+        //Creation de l'utilisateur dans la table user et génération du mot de passe
+        $userResponse =  UserController::generatedUser($request);
+        if ($userResponse->status() == 419)
+            return $userResponse;
+
+        $user = $userResponse->getOriginalContent()['user'];
+        $password = $userResponse->getOriginalContent()['password'];
+        //Attribution du rôle patient
         $user->assignRole('Praticien');
 
-        $praticien->user_id = $user->id;
+        //Sauvegarde des informations specifique
+        $praticien = Praticien::create($request->validated() + ['user_id' => $user->id]);
+        $praticien->etablissements()->attach($request->get('etablissement_id'));
         $praticien->save();
-        defineAsAuthor("Praticien",$praticien->id,'create');
 
+        defineAsAuthor("Praticien",$praticien->user_id,'create');
+
+        //Envoi des informations patient par mail
+        UserController::sendUserInformationViaMail($user,$password);
         return response()->json(['praticien'=>$praticien]);
 
     }
@@ -69,7 +77,7 @@ class PraticienController extends Controller
          $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
-        $praticien = Praticien::with('etablissements')->find($id);
+        $praticien = Praticien::with('etablissements','user')->whereUserId($id)->first();
         return response()->json(['praticien'=>$praticien]);
 
     }
@@ -97,13 +105,13 @@ class PraticienController extends Controller
          $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
-        Praticien::whereId($id)->update($request->validated());
-        $praticien = Praticien::with('etablissements')->find($id);
-
-        //ajustement de l'email du user
-        $user = $praticien->user;
-        $user->email = $praticien->email;
-        $user->save();
+        Praticien::whereUserId($id)->update($request->validated());
+        $praticien = Praticien::with('etablissements')->whereUserId($id)->first();
+//
+//        //ajustement de l'email du user
+//        $user = $praticien->user;
+//        $user->email = $praticien->email;
+//        $user->save();
 
         return response()->json(['praticien'=>$praticien]);
 
@@ -120,8 +128,8 @@ class PraticienController extends Controller
          $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
-        $praticien = Praticien::with('etablissements')->find($id);
-        Praticien::destroy($id);
+        $praticien = Praticien::with('etablissements')->whereUserId($id)->first();
+        $praticien->delete();
         return response()->json(['praticien'=>$praticien]);
 
     }
@@ -131,7 +139,7 @@ class PraticienController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:praticiens,id']);
+        $validation = Validator::make(compact('id'),['id'=>'exists:praticiens,user_id']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }
@@ -140,13 +148,13 @@ class PraticienController extends Controller
 
     public function addEtablissement(Request $request){
         $request->validate([
-            'etablissement_exercice_id'=>'required||integer',
-            'praticien_id'=>'required|exists:praticiens,id',
+            'etablissement_exercice_id'=>'sometimes|nullable|integer',
+            'praticien_id'=>'required|exists:praticiens,user_id',
             'name'=>'sometimes|nullable|string|min:5',
         ]);
 
         $etablissementId = $request->get('etablissement_exercice_id');
-        $praticien = Praticien::find($request->get('praticien_id'));
+        $praticien = Praticien::whereUserId($request->get('praticien_id'))->first();
 
         if ($request->get('etablissement_exercice_id') == 0){
            $etablissement = EtablissementExercice::create([
@@ -161,22 +169,22 @@ class PraticienController extends Controller
         }
 
         $praticien->etablissements()->attach($etablissement->id);
-        $praticien = Praticien::with('etablissements')->find($praticien->id);
+        $praticien = Praticien::with('etablissements')->whereUserId($praticien->user_id)->first();
         return response()->json(['praticien'=>$praticien]);
     }
 
     public function removeEtablissement(Request $request){
         $request->validate([
             'etablissement_exercice_id'=>'required||integer',
-            'praticien_id'=>'required|exists:praticiens,id',
+            'praticien_id'=>'required|exists:praticiens,user_id',
         ]);
 
         $etablissementId = $request->get('etablissement_exercice_id');
-        $praticien = Praticien::find($request->get('praticien_id'));
+        $praticien = Praticien::whereUserId($request->get('praticien_id'))->first();
         $etablissement = EtablissementExercice::find($etablissementId);
         $praticien->etablissements()->detach($etablissement->id);
 
-        $praticien = Praticien::with('etablissements')->find($praticien->id);
+        $praticien = Praticien::with('etablissements')->whereUserId($praticien->user_id)->first();
         return response()->json(['praticien'=>$praticien]);
     }
 }

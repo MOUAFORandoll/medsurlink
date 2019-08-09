@@ -53,7 +53,10 @@ class ContratIntermediationMedicaleRequest extends FormRequest
             "montantSous"=>["required","string"],
             "dateSignature"=>["required","date"],
         ];
+    }
 
-
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
     }
 }

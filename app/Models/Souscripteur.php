@@ -17,24 +17,38 @@ class Souscripteur extends Model
      */
     protected $restrictDeletes = ['patients'];
 
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'user_id';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
     protected $fillable = [
         "user_id",
-        "nom",
-        "prenom",
         "sexe",
         "date_de_naissance",
         "age",
-        "nationalite",
-        "ville",
-        "pays",
-        "telephone",
-        "email",
-        "quartier",
-        "code_postal",
+//        "nom",
+//        "prenom",
+//        "nationalite",
+//        "ville",
+//        "pays",
+//        "telephone",
+//        "email",
+//        "quartier",
+//        "code_postal",
     ];
 
     public function patients(){
-        return $this->hasMany(Patient::class,'souscripteur_id','id');
+        return $this->hasMany(Patient::class,'souscripteur_id','user_id');
     }
 
     public function auteurs()

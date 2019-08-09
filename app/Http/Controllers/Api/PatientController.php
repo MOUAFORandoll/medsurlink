@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\patientStoreRequest;
 use App\Http\Requests\PatientUpdateRequest;
+use App\Http\Requests\UserStoreRequest;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -12,6 +13,7 @@ use Netpok\Database\Support\DeleteRestrictionException;
 
 class PatientController extends Controller
 {
+    protected $table = 'Patients';
     /**
      * Display a listing of the resource.
      *
@@ -19,7 +21,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with(['souscripteur','dossier'])->get();
+        $patients = Patient::with(['souscripteur','dossier','user'])->get();
         return response()->json(['patients'=>$patients]);
     }
 
@@ -41,24 +43,30 @@ class PatientController extends Controller
      */
     public function store(patientStoreRequest $request)
     {
-        $patient = Patient::create($request->validated());
-        //Calcul de l'age
-        $age = evaluateYearOfOld($patient->date_de_naissance);
-        $patient->age = $age;
+
+        //Creation de l'utilisateur dans la table user et génération du mot de passe
+        $userResponse =  UserController::generatedUser($request);
+        if ($userResponse->status() == 419)
+            return $userResponse;
+
+        $user = $userResponse->getOriginalContent()['user'];
+        $password = $userResponse->getOriginalContent()['password'];
+        //Attribution du rôle patient
+        $user->assignRole('Patient');
+
+        //Creation du compte patient
+        $age = evaluateYearOfOld($request->date_de_naissance);
+        $patient = Patient::create($request->validated() + ['user_id' => $user->id,'age'=>$age]);
 
         //Generation du dossier client
-            $dossier = DossierMedicalController::genererDossier($patient->id);
-        //Generation du mot de passe et envoie par mail
-        $user = UserController::generatedUser(fullName($request),$patient->email);
-        $user->assignRole('Medecin controle');
+        $dossier = DossierMedicalController::genererDossier($patient->user_id);
+        defineAsAuthor("Patient",$patient->user_id,'create');
 
-        $patient->user_id = $user->id;
-        $patient->save();
+        //Envoi des informations patient par mail
+        UserController::sendUserInformationViaMail($user,$password);
 
-        defineAsAuthor("Patient",$patient->id,'create');
-
-        $patient = Patient::with('dossier')->find($patient->id);
-        return response()->json(['patient'=>$patient]);
+        $patient = Patient::with('dossier')->whereUserId($patient->user_id)->first();
+        return response()->json(['patient'=>$patient,"password"=>$password]);
     }
 
     /**
@@ -69,10 +77,11 @@ class PatientController extends Controller
      */
     public function show($id)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
-        $patient = Patient::with(['souscripteur'])->find($id);
+
+        $patient = Patient::with(['souscripteur','user'])->whereUserId($id)->first();
         return response()->json(['patient'=>$patient]);
 
     }
@@ -97,19 +106,20 @@ class PatientController extends Controller
      */
     public function update(PatientUpdateRequest $request, $id)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
 
-        Patient::whereId($id)->update($request->validated());
-        $patient = Patient::with(['souscripteur'])->find($id);
-        $patient->age = evaluateYearOfOld($patient->date_de_naissance);
-        $patient->save();
+        $age = evaluateYearOfOld($request->date_de_naissance);
 
-        //ajustement de l'email du user
-        $user = $patient->user;
-        $user->email = $patient->email;
-        $user->save();
+        Patient::whereUserId($id)->update($request->validated()+['age'=>$age]);
+        $patient = Patient::with(['souscripteur','user'])->whereUserId($id)->first();
+
+//
+//        //ajustement de l'email du user
+//        $user = $patient->user;
+//        $user->email = $patient->email;
+//        $user->save();
 
         return response()->json(['patient'=>$patient]);
 
@@ -123,12 +133,13 @@ class PatientController extends Controller
      */
     public function destroy($id)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
+
         try{
-            $patient = Patient::with(['souscripteur'])->find($id);
-            Patient::destroy($id);
+            $patient = Patient::with(['souscripteur','user'])->whereUserId($id)->first();
+            $patient->delete();
             return response()->json(['patient'=>$patient]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
             return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
@@ -140,7 +151,7 @@ class PatientController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:patients,id']);
+        $validation = Validator::make(compact('id'),['id'=>'exists:patients,user_id']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }

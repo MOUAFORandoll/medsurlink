@@ -6,6 +6,7 @@ use App\Models\ExamenClinique;
 use App\Models\Hospitalisation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class HospitalisationExamClinController extends Controller
 {
@@ -30,11 +31,14 @@ class HospitalisationExamClinController extends Controller
     }
 
     public function ajouterExamenClinique(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             "hospitalisation"=>"required|integer|exists:hospitalisations,id",
             "examensClinique.*"=>"sometimes|integer|exists:examen_cliniques,id",
             "examensCliniqueACreer.*"=>"sometimes|string|min:2"
         ]);
+
+        if ($validation->fails())
+            return response()->json(['error'=>$validation->errors()],419);
 
         $examensClinique = $request->get('examensClinique');
         $examensCliniqueACreer = $request->get('examensCliniqueACreer');

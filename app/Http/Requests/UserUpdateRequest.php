@@ -27,9 +27,18 @@ class UserUpdateRequest extends FormRequest
         $id = $this->route()->parameter('user');
 
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'nom' => ['required', 'string', 'max:255'],
+            'prenom' => ['sometimes','nullable', 'string', 'max:255'],
+            'nationalite' => ['required', 'string', 'max:255'],
+            'quartier' => ['sometimes','nullable', 'string', 'max:255'],
+            'code_postal' => ['sometimes','nullable', 'integer'],
+            'ville' => ['required','string', 'max:255'],
+            'pays' => ['required','string', 'max:255'],
+            'telephone' => ['required','string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255',new EmailExistRule($id,'User')],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
+
+
 }

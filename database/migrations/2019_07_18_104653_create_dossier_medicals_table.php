@@ -20,8 +20,9 @@ class CreateDossierMedicalsTable extends Migration
             $table->string('numero_dossier')->unique();
             $table->timestamps();
             $table->softDeletes();
+
             $table->foreign('patient_id')
-                ->references('id')
+                ->references('user_id')
                 ->on('patients')
                 ->onDelete('RESTRICT')
                 ->onUpdate('RESTRICT');

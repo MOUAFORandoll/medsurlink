@@ -11,34 +11,47 @@ class Patient extends Model
 {
     use SoftDeletes;
     use RestrictSoftDeletes;
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'user_id';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+    protected $fillable = [
+        "user_id",
+        "souscripteur_id",
+        "sexe",
+        "date_de_naissance",
+        "age",
+        "nom_contact",
+        "tel_contact",
+        "lien_contact",
+//        "nom",
+//        "nationalite",
+//        "prenom",
+//        "ville",
+//        "pays",
+//        "telephone",
+//        "email",
+//        "quartier",
+//        "code_postal",
+
+    ];
 
     /**
      * The relations restricting model deletion
      */
     protected $restrictDeletes = ['dossier'];
 
-    protected $fillable = [
-        "user_id",
-        "nom",
-        "souscripteur_id",
-        "prenom",
-        "sexe",
-        "date_de_naissance",
-        "age",
-        "nationalite",
-        "ville",
-        "pays",
-        "telephone",
-        "email",
-        "quartier",
-        "code_postal",
-        "nom_contact",
-        "tel_contact",
-        "lien_contact",
-    ];
-
     public function souscripteur(){
-        return $this->belongsTo(Souscripteur::class,'souscripteur_id','id');
+        return $this->belongsTo(Souscripteur::class,'souscripteur_id','user_id');
     }
 
     public function affiliations(){

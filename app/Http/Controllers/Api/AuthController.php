@@ -18,7 +18,6 @@ class AuthController extends AccessTokenController
 
         // $tokenInfo will contain the usual Laravel Passort token response.
         $tokenInfo = json_decode($token, true);
-
         // Then we just add the user to the response before returning it.
         $username = $request->getParsedBody()['username'];
         $user = User::whereEmail($username)->first();

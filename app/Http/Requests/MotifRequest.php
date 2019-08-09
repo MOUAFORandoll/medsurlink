@@ -28,4 +28,9 @@ class MotifRequest extends FormRequest
             "description"=>"required|string|min:3",
         ];
     }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
+    }
 }

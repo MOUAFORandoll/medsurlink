@@ -27,7 +27,7 @@ class CreateEtablissementExercicePraticiensTable extends Migration
                 ->onUpdate('RESTRICT');
 
             $table->foreign('praticien_id')
-                ->references('id')
+                ->references('user_id')
                 ->on('praticiens')
                 ->onDelete('RESTRICT')
                 ->onUpdate('RESTRICT');

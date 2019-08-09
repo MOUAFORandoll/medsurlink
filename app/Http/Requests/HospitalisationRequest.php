@@ -36,4 +36,9 @@ class HospitalisationRequest extends FormRequest
             "rendez_vous"=>"sometimes|nullable|string",
         ];
     }
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
+    }
+
 }

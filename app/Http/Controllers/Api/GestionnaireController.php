@@ -19,7 +19,7 @@ class GestionnaireController extends Controller
      */
     public function index()
     {
-        $gestionnaires = Gestionnaire::all();
+        $gestionnaires = Gestionnaire::with('user')->get();
         return response()->json(['gestionnaires'=>$gestionnaires]);
     }
 
@@ -41,15 +41,21 @@ class GestionnaireController extends Controller
      */
     public function store(GestionnaireStoreRequest $request)
     {
-        $gestionnaire = Gestionnaire::create($request->validated());
 
-        //Generation du mot de passe et envoie par mail
-        $user = UserController::generatedUser(fullName($request),$gestionnaire->email);
+        //Création des informations utilisateurs
+        $userResponse =  UserController::generatedUser($request);
+        if ($userResponse->status() == 419)
+            return $userResponse;
+
+        $user = $userResponse->getOriginalContent()['user'];
+        $password = $userResponse->getOriginalContent()['password'];
         $user->assignRole('Gestionnaire');
 
-        $gestionnaire->user_id = $user->id;
-        $gestionnaire->save();
-        defineAsAuthor("Gestionnaire",$gestionnaire->id,'create');
+        $gestionnaire = Gestionnaire::create($request->validated() + ['user_id' => $user->id]);
+        defineAsAuthor("Gestionnaire",$gestionnaire->user_id,'create');
+
+        //envoi des informations du compte utilisateurs par mail
+        UserController::sendUserInformationViaMail($user,$password);
 
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
@@ -66,7 +72,7 @@ class GestionnaireController extends Controller
          $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
-        $gestionnaire = Gestionnaire::find($id);
+        $gestionnaire = Gestionnaire::whereUserId($id)->first();
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
     }
@@ -95,13 +101,13 @@ class GestionnaireController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        Gestionnaire::whereId($id)->update($request->validated());
-        $gestionnaire = Gestionnaire::find($id);
+        Gestionnaire::whereUserId($id)->update($request->validated());
+        $gestionnaire = Gestionnaire::with('user')->whereUserId($id)->first();
 
-        //ajustement de l'email du user
-        $user = $gestionnaire->user;
-        $user->email = $gestionnaire->email;
-        $user->save();
+//        //ajustement de l'email du user
+//        $user = $gestionnaire->user;
+//        $user->email = $gestionnaire->email;
+//        $user->save();
 
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
@@ -119,8 +125,8 @@ class GestionnaireController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $gestionnaire = Gestionnaire::find($id);
-        Gestionnaire::destroy($id);
+        $gestionnaire = Gestionnaire::whereUserId($id)->first();
+        Gestionnaire::whereUserId($id)->delete();
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
     }
@@ -130,7 +136,7 @@ class GestionnaireController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:gestionnaires,id']);
+        $validation = Validator::make(compact('id'),['id'=>'exists:gestionnaires,user_id']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }

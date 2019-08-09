@@ -45,10 +45,10 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserStoreRequest $request)
+    public function store(Request $request)
     {
-        $user = User::create($request->validated());
-        return response()->json(['user'=>$user]);
+        $user = self::generatedUser($request);
+        return response()->json(['user'=>$user->getOriginalContent()]);
     }
 
     /**
@@ -92,14 +92,6 @@ class UserController extends Controller
             return $validation;
 
         $user = User::find($id);
-        $user->name = $request->validated()['name'];
-        $user->email = $request->validated()['email'];
-        $user->password = Hash::make($request->validated()['password']);
-        $user->save();
-
-        $userRole = ((getStatusUserRole($user->getRoleNames()->first(),$user))->getOriginalContent()['auteurable_user']);
-        $userRole->email  = $user->email;
-        $userRole->save();
 
         return response()->json(['user'=>$user]);
     }
@@ -132,19 +124,44 @@ class UserController extends Controller
         return null;
     }
 
-    public static function generatedUser($name, $email){
-        $validation = Validator::make(compact('email'),['email'=>'unique:users,email']);
-        if ($validation->fails()){
-            return response()->json(['email'=>$validation->errors()],422);
-        }
+    public static function generatedUser($request){
+
+       $validation = Validator::make($request->all(),[
+            'nom' => ['required', 'string', 'max:255'],
+            'prenom' => ['sometimes','nullable', 'string', 'max:255'],
+            'nationalite' => ['required', 'string', 'max:255'],
+            'quartier' => ['sometimes','nullable', 'string', 'max:255'],
+            'code_postal' => ['sometimes','nullable', 'integer'],
+            'ville' => ['required','string', 'max:255'],
+            'pays' => ['required','string', 'max:255'],
+            'telephone' => ['required','string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+//            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        if ($validation->fails())
+           return response()->json(['error'=>$validation->errors()],419);
+
         $password = str_random(10);
+
         $user = User::create([
-            'name'=>$name,
-            'email'=>$email,
+            'nom'=>$request->nom,
+            'prenom'=>$request->prenom,
+            'email'=>$request->email,
+            'nationalite'=>$request->nationalite,
+            'quartier'=>$request->quartier,
+            'code_postal'=>$request->code_postal,
+            'ville'=>$request->ville,
+            'pays'=>$request->pays,
+            'telephone'=>$request->telephone,
             'password'=>Hash::make($password)
         ]);
+
+        return response()->json(['user'=>$user,'password'=>$password]);
+    }
+
+    public static function sendUserInformationViaMail(User $user,$password){
         $mail = new PasswordGenerated($user,$password);
         Mail::to($user->email)->send($mail);
-        return $user;
     }
 }

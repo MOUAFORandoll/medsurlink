@@ -30,4 +30,9 @@ class ConsutationMedecineRequest extends FormRequest
             "mode_de_vie"=>"sometimes|nullable|string|min:5",
         ];
     }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
+    }
 }

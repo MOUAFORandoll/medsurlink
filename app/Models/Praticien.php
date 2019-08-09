@@ -9,22 +9,34 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Praticien extends Model
 {
     use SoftDeletes;
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $primaryKey = 'user_id';
 
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
 
     protected $fillable = [
         "user_id",
         "specialite_id",
         "civilite",
-        "nom",
-        "prenom",
-        "nationalite",
-        "ville",
-        "pays",
-        "telephone",
-        "email",
-        "quartier",
-        "code_postal",
         "numero_ordre",
+//        "nom",
+//        "prenom",
+//        "nationalite",
+//        "ville",
+//        "pays",
+//        "telephone",
+//        "email",
+//        "quartier",
+//        "code_postal",
     ];
 
     public function etablissements(){

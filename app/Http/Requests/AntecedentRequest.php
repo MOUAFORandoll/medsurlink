@@ -30,4 +30,8 @@ class AntecedentRequest extends FormRequest
             "type"=>"required|string|min:2",
         ];
     }
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
+    }
 }

@@ -32,4 +32,9 @@ class ResultatRequest extends FormRequest
             "date"=>"required|date",
         ];
     }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
+    }
 }

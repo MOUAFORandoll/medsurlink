@@ -24,9 +24,21 @@ class UserStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'nom' => ['required', 'string', 'max:255'],
+            'prenom' => ['sometimes','nullable', 'string', 'max:255'],
+            'nationalite' => ['required', 'string', 'max:255'],
+            'quartier' => ['sometimes','nullable', 'string', 'max:255'],
+            'code_postal' => ['sometimes','nullable', 'integer'],
+            'ville' => ['required','string', 'max:255'],
+            'pays' => ['required','string', 'max:255'],
+            'telephone' => ['required','string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+//            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
     }
 }

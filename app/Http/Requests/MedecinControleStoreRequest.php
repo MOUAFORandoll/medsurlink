@@ -26,18 +26,23 @@ class MedecinControleStoreRequest extends FormRequest
     {
         return [
             "specialite_id"=>'required|integer|exists:specialites,id',
-            "nom"=>'required|string|min:2',
+            "user_id"=>'sometimes|integer|exists:users,id',
             "numero_ordre"=>'required|string|min:2',
             "civilite"=>["required",Rule::in(['M.','Mme/Mlle.','Dr.','Pr.'])],
-            "nationalite"=>'required|string|min:4',
-            "ville"=>'required|string|min:2',
-            "pays"=>'required|string|min:2',
-            "telephone"=>'required|string|min:9',
-            "email"=>'required|string|unique:users,email',
-            "user_id"=>'sometimes|integer|exists:users,id',
-            "quartier"=>'sometimes|nullable|string|min:1',
-            "prenom"=>'sometimes|nullable|string|min:2',
-            "code_postal"=>'sometimes|integer',
+//            "nom"=>'required|string|min:2',
+//            "nationalite"=>'required|string|min:4',
+//            "ville"=>'required|string|min:2',
+//            "pays"=>'required|string|min:2',
+//            "telephone"=>'required|string|min:9',
+//            "email"=>'required|string|unique:users,email',
+//            "quartier"=>'sometimes|nullable|string|min:1',
+//            "prenom"=>'sometimes|nullable|string|min:2',
+//            "code_postal"=>'sometimes|integer',
         ];
+    }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
     }
 }

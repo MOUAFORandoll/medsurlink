@@ -14,24 +14,24 @@ class CreatePatientsTable extends Migration
     public function up()
     {
         Schema::create('patients', function (Blueprint $table) {
-            $table->bigIncrements('id');
+//            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('souscripteur_id')->nullable();
-            $table->string('nom');
-            $table->enum('sexe',['M','F']);
             $table->date('date_de_naissance');
+            $table->enum('sexe',['M','F']);
             $table->integer('age')->nullable();
-            $table->string('nationalite');
-            $table->string('ville');
-            $table->string('pays');
-            $table->string('telephone');
-            $table->string('email');
-            $table->string('prenom')->nullable();
-            $table->string('quartier')->nullable();
-            $table->integer('code_postal')->nullable();
             $table->string('nom_contact')->nullable();
             $table->string('tel_contact')->nullable();
             $table->string('lien_contact')->nullable();
+//            $table->string('email');
+//            $table->string('nom');
+//            $table->string('nationalite');
+//            $table->string('ville');
+//            $table->string('pays');
+//            $table->string('telephone');
+//            $table->string('prenom')->nullable();
+//            $table->string('quartier')->nullable();
+//            $table->integer('code_postal')->nullable();
             $table->softDeletes();
 
             $table->foreign('user_id')
@@ -41,7 +41,7 @@ class CreatePatientsTable extends Migration
                 ->onUpdate('RESTRICT');
 
             $table->foreign('souscripteur_id')
-                ->references('id')
+                ->references('user_id')
                 ->on('souscripteurs')
                 ->onDelete('RESTRICT')
                 ->onUpdate('RESTRICT');
