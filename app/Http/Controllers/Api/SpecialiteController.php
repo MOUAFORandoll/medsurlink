@@ -7,6 +7,7 @@ use App\Models\Specialite;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Netpok\Database\Support\DeleteRestrictionException;
 
 class SpecialiteController extends Controller
 {
@@ -106,9 +107,13 @@ class SpecialiteController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $specialite = Specialite::with('profession')->find($id);
-        Specialite::destroy($id);
-        return response()->json(['specialite'=>$specialite]);
+        try{
+            $specialite = Specialite::with('profession')->find($id);
+            $specialite->delete();
+            return response()->json(['specialite'=>$specialite]);
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+        }
 
     }
 

@@ -2,13 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/public/images/logo.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/DossierMedical.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DossierMedical.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Patient.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Providers/AuthServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AuthServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMotifController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMotifController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ContratIntermediationMedicaleController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SpecialiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SpecialiteController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ContratIntermediationMedicaleRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ContratIntermediationMedicale.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Specialite.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Specialite.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_06_25_105151_create_contrat_intermediation_medicales_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -183,19 +189,20 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../vuemedicalinkapp" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/public/images" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\medicalink-app\public\images" />
+      <recent name="C:\xampp\htdocs\medicalink-app\resources\views" />
+      <recent name="C:\xampp\htdocs\medicalink-app\database\seeds" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\medicalink-app\app\Models" />
       <recent name="C:\xampp\htdocs\medicalink-app\app\Http\Controllers\Api" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\medicalink-app\resources\views" />
-      <recent name="C:\xampp\htdocs\medicalink-app\database\seeds" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -290,7 +297,7 @@
       <workItem from="1565164966570" duration="9832000" />
       <workItem from="1565250667057" duration="18238000" />
       <workItem from="1565339888094" duration="26812000" />
-      <workItem from="1565682294917" duration="2438000" />
+      <workItem from="1565682294917" duration="6053000" />
     </task>
     <servers />
   </component>
