@@ -51,6 +51,6 @@ class AuthController extends AccessTokenController
 
             return [];
         }
-        return  $this->where('email', $username)->first();
+        return  User::where('email', $username)->first();
     }
 }

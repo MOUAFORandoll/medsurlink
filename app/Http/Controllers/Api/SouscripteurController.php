@@ -111,12 +111,6 @@ class SouscripteurController extends Controller
         //Calcul de l'age du souscripteur
         $souscripteur = Souscripteur::with('user','patients')->whereUserId($id)->first();
 
-
-//        //ajustement de l'email du user
-//        $user = $souscripteur->user;
-//        $user->email = $souscripteur->email;
-//        $user->save();
-
         return response()->json(['souscripteur'=>$souscripteur]);
 
     }
@@ -132,13 +126,14 @@ class SouscripteurController extends Controller
         $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
-        $souscripteur = Souscripteur::with('user','patients')->whereUserId($id)->first();
         try{
+            $souscripteur = Souscripteur::with('user','patients')->whereUserId($id)->first();
             $souscripteur->delete();
+            return response()->json(['souscripteur'=>$souscripteur]);
+
         }catch (DeleteRestrictionException $deleteRestrictionException){
             return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
         }
-        return response()->json(['souscripteur'=>$souscripteur]);
 
     }
 

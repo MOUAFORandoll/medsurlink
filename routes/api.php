@@ -13,7 +13,6 @@
 
 Route::post('oauth/token', 'Api\AuthController@auth');
 
-Route::resource('cim','Api\ContratIntermediationMedicaleController')->only('index','show','store','update','destroy');
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/countries', function () {
@@ -29,20 +28,20 @@ Route::middleware(['auth:api'])->group(function () {
 
 });
 Route::group(['middleware' => ['auth:api','role:Admin']], function () {
-    Route::resource('user', 'Api\UserController');
+    Route::resource('user', 'Api\UserController')->except(['create','edit']);
 });
 //        Définition des routes accéssible par le gestionnaire
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function () {
-    Route::resource('etablissement','Api\EtablissementExerciceController');
-    Route::resource('profession','Api\ProfessionController');
-    Route::resource('specialite','Api\SpecialiteController');
-    Route::resource('praticien','Api\PraticienController');
-    Route::resource('medecinControle','Api\MedecinControleController');
-    Route::resource('souscripteur','Api\SouscripteurController');
-    Route::resource('patient','Api\PatientController');
-    Route::resource('affiliation','Api\AffiliationController');
-    Route::resource('dossier','Api\DossierMedicalController');
-    Route::resource('gestionnaire','Api\GestionnaireController');
+    Route::resource('etablissement','Api\EtablissementExerciceController')->except(['create','edit']);
+    Route::resource('profession','Api\ProfessionController')->except(['create','edit']);
+    Route::resource('specialite','Api\SpecialiteController')->except(['create','edit']);
+    Route::resource('praticien','Api\PraticienController')->except(['create','edit']);
+    Route::resource('medecinControle','Api\MedecinControleController')->except(['create','edit']);
+    Route::resource('souscripteur','Api\SouscripteurController')->except(['create','edit']);
+    Route::resource('patient','Api\PatientController')->except(['create','edit']);
+    Route::resource('affiliation','Api\AffiliationController')->except(['create','edit']);
+    Route::resource('dossier','Api\DossierMedicalController')->except(['create','edit']);
+    Route::resource('gestionnaire','Api\GestionnaireController')->except(['create','edit']);
 
 //        Route pour ajouter ou supprimer les etablissement d'un praticien
     Route::post('praticien/add/etablissement','Api\PraticienController@addEtablissement');
@@ -114,25 +113,26 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
 
 //  Définition des routes accéssible a la fois par le medecin controle et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien']], function () {
-    Route::resource('consultationMedecine','Api\ConsultationMedecineGeneraleController');
-    Route::resource('consultationObstetrique','Api\ConsultationObstetriqueController');
-    Route::resource('motif','Api\MotifController');
-    Route::resource('allergie','Api\AllergieController');
-    Route::resource('antecedent','Api\AntecedentController');
-    Route::resource('traitement','Api\TraitementController');
-    Route::resource('parametreCommun','Api\ParametreCommunController');
-    Route::resource('conclusion','Api\ConclusionController');
-    Route::resource('resultat','Api\ResultatController');
-    Route::resource('examenClinique','Api\ExamenCliniqueController');
-    Route::resource('examenComplementaire','Api\ExamenComplementaireController');
-    Route::resource('consultationMedecine','Api\ConsultationMedecineGeneraleController');
-    Route::resource('consultationObstetrique','Api\ConsultationObstetriqueController');
-    Route::resource('consultationPrenatale','Api\ConsultationPrenantaleController');
-    Route::resource('parametreObstetrique','Api\ParametreObstetriqueController');
-    Route::resource('echographie','Api\EchographieController');
-    Route::resource('hospitalisation','Api\HospitalisationController');
+    Route::resource('consultationMedecine','Api\ConsultationMedecineGeneraleController')->except(['create','edit']);
+    Route::resource('consultationObstetrique','Api\ConsultationObstetriqueController')->except(['create','edit']);
+    Route::resource('motif','Api\MotifController')->except(['create','edit']);
+    Route::resource('allergie','Api\AllergieController')->except(['create','edit']);
+    Route::resource('antecedent','Api\AntecedentController')->except(['create','edit']);
+    Route::resource('traitement','Api\TraitementController')->except(['create','edit']);
+    Route::resource('parametreCommun','Api\ParametreCommunController')->except(['create','edit']);
+    Route::resource('conclusion','Api\ConclusionController')->except(['create','edit']);
+    Route::resource('resultat','Api\ResultatController')->except(['create','edit']);
+    Route::resource('examenClinique','Api\ExamenCliniqueController')->except(['create','edit']);
+    Route::resource('examenComplementaire','Api\ExamenComplementaireController')->except(['create','edit']);
+    Route::resource('consultationMedecine','Api\ConsultationMedecineGeneraleController')->except(['create','edit']);
+    Route::resource('consultationObstetrique','Api\ConsultationObstetriqueController')->except(['create','edit']);
+    Route::resource('consultationPrenatale','Api\ConsultationPrenantaleController')->except(['create','edit']);
+    Route::resource('parametreObstetrique','Api\ParametreObstetriqueController')->except(['create','edit']);
+    Route::resource('echographie','Api\EchographieController')->except(['create','edit']);
+    Route::resource('hospitalisation','Api\HospitalisationController')->except(['create','edit']);
 
     Route::post('removeMotif','Api\ConsultationMotifController@removeMotif');
+    Route::post('ajouterMotif','Api\ConsultationMotifController@ajouterMotif');
 
     Route::post('retirerExamenClinique','Api\ConsultationExamenCliniqueController@retirerExamenClinique');
     Route::post('ajouterExamenClinique','Api\ConsultationExamenCliniqueController@ajouterExamenClinique');
