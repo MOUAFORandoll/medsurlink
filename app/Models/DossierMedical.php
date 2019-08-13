@@ -14,4 +14,8 @@ class DossierMedical extends Model
       "date_de_creation",
       "numero_dossier",
     ];
+
+    public function patient(){
+        return $this->belongsTo(Patient::class,'patient_id','user_id');
+    }
 }

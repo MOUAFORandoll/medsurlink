@@ -57,7 +57,6 @@ class PatientController extends Controller
         //Creation du compte patient
         $age = evaluateYearOfOld($request->date_de_naissance);
         $patient = Patient::create($request->validated() + ['user_id' => $user->id,'age'=>$age]);
-
         //Generation du dossier client
         $dossier = DossierMedicalController::genererDossier($patient->user_id);
         defineAsAuthor("Patient",$patient->user_id,'create');

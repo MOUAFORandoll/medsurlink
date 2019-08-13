@@ -55,10 +55,10 @@ class Patient extends Model
     }
 
     public function affiliations(){
-        return $this->hasMany(Affiliation::class,'patient_id','id');
+        return $this->hasMany(Affiliation::class,'patient_id','user_id');
     }
     public function dossier(){
-        return $this->hasOne(DossierMedical::class,'patient_id','id');
+        return $this->hasOne(DossierMedical::class,'patient_id','user_id');
     }
 
     public function auteurs()
