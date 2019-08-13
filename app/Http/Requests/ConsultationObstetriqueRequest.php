@@ -34,4 +34,9 @@ class ConsultationObstetriqueRequest extends FormRequest
             "facteur_de_risque"=>"sometimes|nullable|string",
         ];
     }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
+    }
 }

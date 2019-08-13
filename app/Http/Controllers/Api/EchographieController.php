@@ -44,6 +44,8 @@ class EchographieController extends Controller
     {
 
         $echographie = Echographie::create($request->validated());
+        defineAsAuthor("Echographie",$echographie->id,'create');
+
         return response()->json(['echographie'=>$echographie]);
     }
 
@@ -86,6 +88,12 @@ class EchographieController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         Echographie::whereId($id)->update($request->validated());
         $echographie = Echographie::with('consultation')->find($id);
         return response()->json(['echographie'=>$echographie]);
@@ -102,6 +110,12 @@ class EchographieController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         $echographie = Echographie::with('consultation')->find($id);
         Echographie::destroy($id);
         return response()->json(['echographie'=>$echographie]);

@@ -28,7 +28,11 @@ class AffiliationRequest extends FormRequest
             "patient_id"=>"required|integer|exists:patients,id",
             "nom"=>["required",Rule::in(['One shot','Annuelle'])],
             "date_debut"=>"required|date",
-            "date_fin"=>"sometimes|nullable|date|after:date_debut",
+            "date_fin"=>"sometimes|nullable|date|after_or_equal:date_debut",
         ];
+    }
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
     }
 }

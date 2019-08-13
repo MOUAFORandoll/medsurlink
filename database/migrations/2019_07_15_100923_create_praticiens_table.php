@@ -14,22 +14,22 @@ class CreatePraticiensTable extends Migration
     public function up()
     {
         Schema::create('praticiens', function (Blueprint $table) {
-            $table->bigIncrements('id');
+//            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('specialite_id');
             $table->enum('civilite',['M.','Mme/Mlle.','Dr.','Pr.']);
-            $table->string('nom');
-            $table->string('prenom')->nullable();
-            $table->string('nationalite');
-            $table->string('quartier')->nullable();
-            $table->integer('code_postal')->nullable();
-            $table->string('ville');
-            $table->string('pays');
-            $table->string('telephone');
-            $table->string('email');
-            $table->string('numero_ordre');
             $table->softDeletes();
+            $table->string('numero_ordre');
             $table->timestamps();
+//            $table->string('nom');
+//            $table->string('prenom')->nullable();
+//            $table->string('nationalite');
+//            $table->string('quartier')->nullable();
+//            $table->integer('code_postal')->nullable();
+//            $table->string('ville');
+//            $table->string('pays');
+//            $table->string('telephone');
+//            $table->string('email');
 
 
             $table->foreign('specialite_id')

@@ -29,4 +29,9 @@ class SpecialiteRequest extends FormRequest
             "description"=>"sometimes|nullable|string|min:10"
         ];
     }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
+    }
 }

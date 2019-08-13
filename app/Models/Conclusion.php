@@ -15,7 +15,7 @@ class Conclusion extends Model
         "description",
     ];
 
-    public function consultation(){
+    public function consultationMedecine(){
         return $this->belongsTo(ConsultationMedecineGenerale::class,'consultation_medecine_generale_id','id');
     }
 }

@@ -7,8 +7,10 @@ use App\Models\ConsultationMedecineGenerale;
 use App\Models\ExamenClinique;
 use App\Models\ExamenComplementaire;
 use App\Models\Motif;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Netpok\Database\Support\DeleteRestrictionException;
 
 class ConsultationMedecineGeneraleController extends Controller
 {
@@ -20,7 +22,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function index()
     {
-        $consultations = ConsultationMedecineGenerale::with(['motifs','examensClinique','examensComplementaire','allergies','traitements'])->get();
+        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->get();
         return response()->json(["consultations"=>$consultations]);
     }
 
@@ -102,8 +104,9 @@ class ConsultationMedecineGeneraleController extends Controller
         }
         $consultation->date_consultation = dateOfToday();
         $consultation->save();
+        defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create');
 
-        $consultation = ConsultationMedecineGenerale::with(['motifs','examensClinique','examensComplementaire','allergies','traitements'])->find($consultation->id);
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->find($consultation->id);
         return response()->json(["consultation"=>$consultation]);
     }
 
@@ -148,9 +151,14 @@ class ConsultationMedecineGeneraleController extends Controller
         if(!is_null($validation))
             return $validation;
 
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         ConsultationMedecineGenerale::whereId($id)->update($request->validated());
 
-        $consultation = ConsultationMedecineGenerale::with(['motifs','examensClinique','examensComplementaire','allergies','traitements'])->find($consultation->id);
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->find($id);
         return response()->json(["consultation"=>$consultation]);
     }
 
@@ -165,8 +173,62 @@ class ConsultationMedecineGeneraleController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
-        $consultation = ConsultationMedecineGenerale::find($id);
-        ConsultationMedecineGenerale::destroy($id);
-        return response()->json(["consultation"=>$consultation]);
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+        try{
+            $consultation = ConsultationMedecineGenerale::find($id);
+            ConsultationMedecineGenerale::destroy($id);
+            return response()->json(["consultation"=>$consultation]);
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+        }
     }
+
+    /**
+     * Archieved the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function archiver($id)
+    {
+        $validation = validatedId($id,$this->table);
+        if(!is_null($validation))
+            return $validation;
+
+        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->find($id);
+        if (is_null($resultat->passed_at)){
+            return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
+        }else{
+            $resultat->archieved_at = Carbon::now();
+            $resultat->save();
+            return response()->json(['resultat'=>$resultat]);
+        }
+    }
+
+    /**
+     * Passed the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function transmettre($id)
+    {
+        $validation = validatedId($id,$this->table);
+        if(!is_null($validation))
+            return $validation;
+
+        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->find($id);
+        $resultat->passed_at = Carbon::now();
+        $resultat->save();
+
+        return response()->json(['resultat'=>$resultat]);
+
+    }
+
 }

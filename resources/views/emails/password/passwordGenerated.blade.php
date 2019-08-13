@@ -1,7 +1,7 @@
 @component('mail::message')
 # Medicalink
 
-Hello <strong>{{$user->name}}</strong>,<br>
+Hello <strong>{{ucfirst($user->prenom).'  '.strtoupper($user->nom)}}</strong>,<br>
 Nous espérons vous trouvez bien portant. Voici <strong>vos identifiants</strong> pour accéder à votre compte Medicalink:<br>
 Email : <strong> {{$user->email}} </strong><br>
 Mot de passe : <strong>{{$password}}</strong><br><br>

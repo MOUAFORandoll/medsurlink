@@ -40,6 +40,8 @@ class ExamenComplementaireController extends Controller
     public function store(ExamenComplementaireRequest $request)
     {
         $examenComplementaire = ExamenComplementaire::create($request->validated());
+        defineAsAuthor("ExamenComplementaire",$examenComplementaire->id,'create');
+
         return response()->json(['examenComplementaire'=>$examenComplementaire]);
 
     }
@@ -85,6 +87,11 @@ class ExamenComplementaireController extends Controller
         if(!is_null($validation))
             return $validation;
 
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ExamenComplementaire",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         ExamenComplementaire::whereId($id)->update($request->validated());
         $examenComplementaire = ExamenComplementaire::find($id);
         return response()->json(['examenComplementaire'=>$examenComplementaire]);
@@ -101,6 +108,11 @@ class ExamenComplementaireController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ExamenComplementaire",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
 
         $examenComplementaire = ExamenComplementaire::find($id);
         ExamenComplementaire::destroy($id);

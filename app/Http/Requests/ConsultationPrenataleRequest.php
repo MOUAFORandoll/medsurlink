@@ -32,4 +32,9 @@ class ConsultationPrenataleRequest extends FormRequest
             "recommandations"=>"sometimes|nullable|string|min:2",
         ];
     }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
+    }
 }

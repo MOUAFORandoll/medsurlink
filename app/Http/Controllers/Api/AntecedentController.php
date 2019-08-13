@@ -40,6 +40,8 @@ class AntecedentController extends Controller
     public function store(AntecedentRequest $request)
     {
         $antecedent = Antecedent::create($request->validated());
+        defineAsAuthor("Antecedent",$antecedent->id,'create');
+
         $antecedent = Antecedent::with('consultation')->find($antecedent->id);
         return response()->json(['antecedent'=>$antecedent]);
     }
@@ -103,7 +105,6 @@ class AntecedentController extends Controller
             return $validation;
 
         $antecedent = Antecedent::with('consultation')->find($id);
-
         Antecedent::destroy($id);
         return response()->json(['antecedent'=>$antecedent]);
     }

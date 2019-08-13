@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EtablissementExerciceRequest;
 use App\Models\EtablissementExercice;
 use Illuminate\Support\Facades\Validator;
+use Netpok\Database\Support\DeleteRestrictionException;
 
 /**
  * Class EtablissementExerciceController
@@ -21,7 +22,7 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::all();
+        $etablissements =  EtablissementExercice::with(['praticiens'])->get();
         return response()->json(['etablissements'=>$etablissements]);
     }
 
@@ -44,6 +45,11 @@ class EtablissementExerciceController extends Controller
     public function store(EtablissementExerciceRequest $request)
     {
         $etablissement = EtablissementExercice::create($request->validated());
+        defineAsAuthor("EtablissementExercice",$etablissement->id,'create');
+
+        if($etablissement->praticiens->count() > 0) {
+            return response()->json(['error'=>"Cet élément est lié à un autre, Vous devez supprimer tous les elements auquel il est lié"],422);
+        }
         return response()->json(['etablissement'=>$etablissement]);
     }
 
@@ -59,7 +65,7 @@ class EtablissementExerciceController extends Controller
         if(!is_null($validation))
             return $validation;;
 
-        $etablissement = EtablissementExercice::find($id);
+        $etablissement = EtablissementExercice::with(['praticiens'])->find($id);
         return response()->json(['etablissement'=>$etablissement]);
 
 
@@ -90,7 +96,7 @@ class EtablissementExerciceController extends Controller
             return $validation;;
 
         EtablissementExercice::whereId($id)->update($request->validated());
-        $etablissement = EtablissementExercice::find($id);
+        $etablissement = EtablissementExercice::with(['praticiens'])->find($id);
         return response()->json(['etablissement'=>$etablissement]);
 
     }
@@ -106,9 +112,15 @@ class EtablissementExerciceController extends Controller
          $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;;
-        $etablissement = EtablissementExercice::find($id);
-        EtablissementExercice::destroy($id);
-        return response()->json(['etablissement'=>$etablissement]);
+
+        try{
+            $etablissement = EtablissementExercice::with(['praticiens'])->find($id);
+            EtablissementExercice::destroy($id);
+            return response()->json(['etablissement'=>$etablissement]);
+
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+        }
     }
 
     /**

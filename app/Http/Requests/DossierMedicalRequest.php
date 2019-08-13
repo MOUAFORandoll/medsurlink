@@ -29,4 +29,9 @@ class DossierMedicalRequest extends FormRequest
             "numero_dossier"=>"sometimes|string|min:8|unique:dossier_medicals,numero_dossier",
         ];
     }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
+    }
 }

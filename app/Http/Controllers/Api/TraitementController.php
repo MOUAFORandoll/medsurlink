@@ -40,6 +40,7 @@ class TraitementController extends Controller
     public function store(TraitementRequest $request)
     {
         $traitement = Traitement::create($request->validated());
+        defineAsAuthor("Traitement",$traitement->id,'create');
         return response()->json(['traitement'=>$traitement]);
     }
 
@@ -83,6 +84,11 @@ class TraitementController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
 
         Traitement::whereId($id)->update($request->validated());
         $traitement = Traitement::find($id);

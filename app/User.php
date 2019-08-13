@@ -2,14 +2,18 @@
 
 namespace App;
 
+use App\Models\DossierMedical;
 use App\Models\Gestionnaire;
 use App\Models\MedecinControle;
 use App\Models\Patient;
 use App\Models\Praticien;
 use App\Models\Souscripteur;
+use http\Env\Response;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -26,7 +30,16 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'nom',
+        'email',
+        'prenom',
+        'nationalite',
+        'quartier',
+        'code_postal',
+        'ville',
+        'pays',
+        'telephone',
+        'password',
     ];
 
     /**
@@ -46,6 +59,40 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Validate the password of the user for the Passport password grant.
+     *
+     * @param  string $password
+     * @return bool
+     */
+    public function validateForPassportPasswordGrant($password)
+    {
+        return Hash::check($password, $this->password);
+    }
+
+    /**
+     * Find the user instance for the given username.
+     *
+     * @param  string  $username
+     * @return \App\User
+     */
+    public function findForPassport($username)
+    {
+        //Verification de l'existence de l'adresse email
+        $validator = Validator::make(compact('username'),['username'=>['exists:users,email']]);
+        if($validator->fails()){
+            //Verification de l'existence du numero de dossier
+            if (strlen($username)==8){
+                $numero_dossier = $username;
+                $dossier = DossierMedical::with('patient')->whereNumeroDossier($numero_dossier)->first();
+                return $dossier->patient->user;
+            }
+
+            return [];
+        }
+        return  $this->where('email', $username)->first();
+    }
 
     public function praticien(){
         return $this->hasOne(Praticien::class,'user_id','id');

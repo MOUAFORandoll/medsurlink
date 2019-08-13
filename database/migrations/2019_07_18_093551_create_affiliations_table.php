@@ -23,7 +23,7 @@ class CreateAffiliationsTable extends Migration
             $table->timestamps();
 
             $table->foreign('patient_id')
-                ->references('id')
+                ->references('user_id')
                 ->on('patients')
                 ->onDelete('RESTRICT')
                 ->onUpdate('RESTRICT');

@@ -18,7 +18,7 @@ class ConclusionController extends Controller
      */
     public function index()
     {
-        $conclusions = Conclusion::all();
+        $conclusions = Conclusion::with(['consultationMedecine'])->get();
         return response()->json(['conclusions'=>$conclusions]);
     }
 
@@ -41,6 +41,8 @@ class ConclusionController extends Controller
     public function store(ConclusionRequest $request)
     {
         $conclusion = Conclusion::create($request->validated());
+        defineAsAuthor("Conclusion",$conclusion->id,'create');
+
         return response()->json(['conclusion'=>$conclusion]);
 
     }
@@ -57,7 +59,7 @@ class ConclusionController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $conclusion = Conclusion::with('consultation')->find($id);
+        $conclusion = Conclusion::with(['consultationMedecine'])->find($id);
         return response()->json(['conclusion'=>$conclusion]);
 
     }
@@ -85,8 +87,14 @@ class ConclusionController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         Conclusion::whereId($id)->update($request->validated());
-        $conclusion = Conclusion::with('consultation')->find($id);
+        $conclusion = Conclusion::with(['consultationMedecine'])->find($id);
         return response()->json(['conclusion'=>$conclusion]);
     }
 
@@ -102,7 +110,7 @@ class ConclusionController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $conclusion = Conclusion::with('consultation')->find($id);
+        $conclusion = Conclusion::with(['consultationMedecine'])->find($id);
         Conclusion::destroy($id);
         return response()->json(['conclusion'=>$conclusion]);
     }

@@ -15,6 +15,7 @@ class Auteur extends Model
         "operationable_type",
         "operationable_id",
         "action",
+        "user_id",
     ];
 
     /**

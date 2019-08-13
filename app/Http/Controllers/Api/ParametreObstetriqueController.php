@@ -41,6 +41,8 @@ class ParametreObstetriqueController extends Controller
     public function store(ParametreObstRequest $request)
     {
         $parametreObs = ParametreObstetrique::create($request->validated());
+        defineAsAuthor("ParametreObstetrique",$parametreObs->id,'create');
+
         return response()->json(['parametreObs'=>$parametreObs]);
     }
 
@@ -85,6 +87,11 @@ class ParametreObstetriqueController extends Controller
         if(!is_null($validation))
             return $validation;
 
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         ParametreObstetrique::whereId($id)->update($request->validated());
         $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->find($id);
         return response()->json(['parametreObs'=>$parametreObs]);
@@ -101,6 +108,12 @@ class ParametreObstetriqueController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->find($id);
         ParametreObstetrique::destroy($id);
         return response()->json(['parametreObs'=>$parametreObs]);

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\ResultatRequest;
 use App\Models\Resultat;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class ResultatController extends Controller
@@ -49,6 +51,9 @@ class ResultatController extends Controller
                 $file = $path;
                 $resultat->file = $file;
                 $resultat->save();
+
+                defineAsAuthor("Resultat",$resultat->id,'create');
+
             }
         }else{
             return response()->json(['file'=>"File required"],422);
@@ -97,6 +102,12 @@ class ResultatController extends Controller
         if(!is_null($validation))
             return $validation;
 
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         Resultat::whereId($id)->update($request->validated());
         $resultat = Resultat::with(['dossier','consultation'])->find($id);
 
@@ -112,6 +123,50 @@ class ResultatController extends Controller
     }
 
     /**
+     * Archieved the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function archiver($id)
+    {
+        $validation = validatedId($id,$this->table);
+        if(!is_null($validation))
+            return $validation;
+
+            $resultat = Resultat::with(['dossier','consultation'])->find($id);
+            if (is_null($resultat->passed_at)){
+                return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
+            }else{
+                $resultat->archieved_at = Carbon::now();
+                $resultat->save();
+                return response()->json(['resultat'=>$resultat]);
+            }
+    }
+
+    /**
+     * Passed the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function transmettre($id)
+    {
+        $validation = validatedId($id,$this->table);
+        if(!is_null($validation))
+            return $validation;
+
+        $resultat = Resultat::with(['dossier','consultation'])->find($id);
+        $resultat->passed_at = Carbon::now();
+        $resultat->save();
+
+        return response()->json(['resultat'=>$resultat]);
+
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -122,6 +177,11 @@ class ResultatController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
 
         $resultat = Resultat::with(['dossier','consultation'])->find($id);
         Resultat::destroy($id);

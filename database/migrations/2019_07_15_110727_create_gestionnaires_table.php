@@ -14,20 +14,20 @@ class CreateGestionnairesTable extends Migration
     public function up()
     {
         Schema::create('gestionnaires', function (Blueprint $table) {
-            $table->bigIncrements('id');
+//            $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->enum('civilite',['M.','Mme/Mlle.','Dr.','Pr.']);
-            $table->string('nom');
-            $table->string('prenom')->nullable();
-            $table->string('nationalite');
-            $table->string('quartier')->nullable();
-            $table->integer('code_postal')->nullable();
-            $table->string('ville');
-            $table->string('pays');
-            $table->string('telephone');
-            $table->string('email');
             $table->softDeletes();
             $table->timestamps();
+//            $table->string('nom');
+//            $table->string('prenom')->nullable();
+//            $table->string('nationalite');
+//            $table->string('quartier')->nullable();
+//            $table->integer('code_postal')->nullable();
+//            $table->string('ville');
+//            $table->string('pays');
+//            $table->string('telephone');
+//            $table->string('email');
 
             $table->foreign('user_id')
                 ->references('id')

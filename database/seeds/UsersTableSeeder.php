@@ -12,7 +12,14 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         \Illuminate\Support\Facades\DB::table('users')->insert([
-            'name'=>'admin',
+            'nom'=>'admin',
+            'prenom'=>'admin',
+            'nationalite'=>'Camerounaise',
+            'quartier'=>'Akwa',
+            'code_postal'=>'4615',
+            'ville'=>'Douala',
+            'pays'=>'Cameroun',
+            'telephone'=>'698900294',
             'email'=>'admin@medicasure.com',
             'password'=>'$2y$10$HhalUPBaWXh7QgFolSCS0emmkuCazgaAGd8gjB0rbeV5TQLZDJmHG',
         ]);

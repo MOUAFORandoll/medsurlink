@@ -42,6 +42,8 @@ class SpecialiteController extends Controller
     public function store(SpecialiteRequest $request)
     {
         $specialite = Specialite::create($request->validated());
+        defineAsAuthor("Specialite",$specialite->id,'create');
+
         return response()->json(['specialite'=>$specialite]);
     }
 

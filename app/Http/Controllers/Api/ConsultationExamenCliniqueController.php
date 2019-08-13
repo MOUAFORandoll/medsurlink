@@ -16,6 +16,12 @@ class ConsultationExamenCliniqueController extends Controller
         ]);
 
         $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationExamenClinique",$consultation->id,"attach");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         $consultation->examensClinique()->detach($request->get('examensClinique'));
 
         $consultation = ConsultationMedecineGenerale::with('examensClinique')->find($request->get('consultation'));
@@ -48,7 +54,7 @@ class ConsultationExamenCliniqueController extends Controller
                 $consultation->examensClinique()->attach($examensClinique);
         }
 
-
+        defineAsAuthor("ConsultationExamenClinique",$consultation->id,'attach');
         $consultation = ConsultationMedecineGenerale::with('examensClinique')->find($request->get('consultation'));
         return response()->json(['consultation'=>$consultation]);
     }

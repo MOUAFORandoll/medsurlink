@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SouscripteurRequest;
+use App\Http\Requests\SouscripteurStoreRequest;
+use App\Http\Requests\SouscripteurUpdateRequest;
 use App\Models\Souscripteur;
 use Illuminate\Support\Facades\Validator;
+use Netpok\Database\Support\DeleteRestrictionException;
 
 class SouscripteurController extends Controller
 {
@@ -17,7 +19,7 @@ class SouscripteurController extends Controller
      */
     public function index()
     {
-        $souscripteurs = Souscripteur::all();
+        $souscripteurs = Souscripteur::with('patients','user')->get();
         return response()->json(['souscripteurs'=>$souscripteurs]);
     }
 
@@ -37,20 +39,26 @@ class SouscripteurController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(SouscripteurRequest $request)
+    public function store(SouscripteurStoreRequest $request)
     {
-        $souscripteur = Souscripteur::create($request->validated());
-        //Calcul de l'age du souscripteur
-        $age = evaluateYearOfOld($souscripteur->date_de_naissance);
-        $souscripteur->age = $age;
+        //Création des informations utilisateurs
+        $userResponse =  UserController::generatedUser($request);
+        if ($userResponse->status() == 419)
+            return $userResponse;
 
-        //Generation du mot de passe et envoie par mail
-        $user = UserController::generatedUser(fullName($request),$souscripteur->email);
+        $user = $userResponse->getOriginalContent()['user'];
+        $password = $userResponse->getOriginalContent()['password'];
         $user->assignRole('Souscripteur');
 
-        $souscripteur->user_id = $user->id;
-        $souscripteur->save();
+        //Creation du compte souscripteurs
+        $age = evaluateYearOfOld($request->date_de_naissance);
+        array_merge($request->validated(), ['user_id' => $user->id]);
+        $souscripteur = Souscripteur::create($request->validated() + ['user_id' => $user->id,'age'=>$age]);
 
+        defineAsAuthor("Souscripteur",$souscripteur->user_id,'create');
+
+        //envoi des informations du compte utilisateurs par mail
+        UserController::sendUserInformationViaMail($user,$password);
         return response()->json(['souscripteur'=>$souscripteur]);
 
     }
@@ -63,10 +71,11 @@ class SouscripteurController extends Controller
      */
     public function show($id)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
-        $souscripteur = Souscripteur::find($id);
+
+        $souscripteur = Souscripteur::with('user','patients')->whereUserId($id)->first();
         return response()->json(['souscripteur'=>$souscripteur]);
 
     }
@@ -89,18 +98,24 @@ class SouscripteurController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(SouscripteurRequest $request, $id)
+    public function update(SouscripteurUpdateRequest $request, $id)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
-        Souscripteur::whereId($id)->update($request->validated());
+
+        $age = evaluateYearOfOld($request->date_de_naissance);
+
+        Souscripteur::whereUserId($id)->update($request->validated()+['age'=>$age]);
 
         //Calcul de l'age du souscripteur
-        $souscripteur = Souscripteur::find($id);
-        $age = evaluateYearOfOld($souscripteur->date_de_naissance);
-        $souscripteur->age = $age;
-        $souscripteur->save();
+        $souscripteur = Souscripteur::with('user','patients')->whereUserId($id)->first();
+
+
+//        //ajustement de l'email du user
+//        $user = $souscripteur->user;
+//        $user->email = $souscripteur->email;
+//        $user->save();
 
         return response()->json(['souscripteur'=>$souscripteur]);
 
@@ -114,11 +129,15 @@ class SouscripteurController extends Controller
      */
     public function destroy($id)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
-        $souscripteur = Souscripteur::find($id);
-        Souscripteur::destroy($id);
+        $souscripteur = Souscripteur::with('user','patients')->whereUserId($id)->first();
+        try{
+            $souscripteur->delete();
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+        }
         return response()->json(['souscripteur'=>$souscripteur]);
 
     }
@@ -128,7 +147,7 @@ class SouscripteurController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:souscripteurs,id']);
+        $validation = Validator::make(compact('id'),['id'=>'exists:souscripteurs,user_id']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }

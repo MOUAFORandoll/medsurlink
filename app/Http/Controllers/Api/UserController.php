@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Mail\Password\PasswordGenerated;
 use App\User;
 use Illuminate\Http\Request;
@@ -22,6 +23,9 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+        foreach ( $users as $user){
+            $user->roles;
+        }
         return response()->json(['users'=>$users]);
     }
 
@@ -41,10 +45,10 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(Request $request)
     {
-        $user = User::create($request->validated());
-        return response()->json(['user'=>$user]);
+        $user = self::generatedUser($request);
+        return response()->json(['user'=>$user->getOriginalContent()]);
     }
 
     /**
@@ -55,10 +59,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
         $user = User::find($id);
+        $user->roles;
         return response()->json(['user'=>$user]);
     }
 
@@ -80,13 +85,14 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
-        User::whereId($id)->update($request->validated());
+
         $user = User::find($id);
+
         return response()->json(['user'=>$user]);
     }
 
@@ -98,7 +104,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedId($id);
         if(!is_null($validation))
             return $validation;
         $user = User::find($id);
@@ -118,19 +124,44 @@ class UserController extends Controller
         return null;
     }
 
-    public static function generatedUser($name, $email){
-        $validation = Validator::make(compact('email'),['email'=>'unique:users,email']);
-        if ($validation->fails()){
-            return response()->json(['email'=>$validation->errors()],422);
-        }
+    public static function generatedUser($request){
+
+       $validation = Validator::make($request->all(),[
+            'nom' => ['required', 'string', 'max:255'],
+            'prenom' => ['sometimes','nullable', 'string', 'max:255'],
+            'nationalite' => ['required', 'string', 'max:255'],
+            'quartier' => ['sometimes','nullable', 'string', 'max:255'],
+            'code_postal' => ['sometimes','nullable', 'integer'],
+            'ville' => ['required','string', 'max:255'],
+            'pays' => ['required','string', 'max:255'],
+            'telephone' => ['required','string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+//            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        if ($validation->fails())
+           return response()->json(['error'=>$validation->errors()],419);
+
         $password = str_random(10);
+
         $user = User::create([
-            'name'=>$name,
-            'email'=>$email,
+            'nom'=>$request->nom,
+            'prenom'=>$request->prenom,
+            'email'=>$request->email,
+            'nationalite'=>$request->nationalite,
+            'quartier'=>$request->quartier,
+            'code_postal'=>$request->code_postal,
+            'ville'=>$request->ville,
+            'pays'=>$request->pays,
+            'telephone'=>$request->telephone,
             'password'=>Hash::make($password)
         ]);
+
+        return response()->json(['user'=>$user,'password'=>$password]);
+    }
+
+    public static function sendUserInformationViaMail(User $user,$password){
         $mail = new PasswordGenerated($user,$password);
-        //Mail::to($user->email)->send($mail);
-        return $user;
+        Mail::to($user->email)->send($mail);
     }
 }

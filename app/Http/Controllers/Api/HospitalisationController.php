@@ -40,6 +40,8 @@ class HospitalisationController extends Controller
     public function store(HospitalisationRequest $request)
     {
         $hospitalisation = Hospitalisation::create($request->validated());
+        defineAsAuthor("Hospitalisation",$hospitalisation->id,'create');
+
         return response()->json(['hospitalisation'=>$hospitalisation]);
 
     }
@@ -83,6 +85,12 @@ class HospitalisationController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         Hospitalisation::whereId($id)->update($request->validated());
         $hospitalisation = Hospitalisation::with('dossier')->find($id);
         return response()->json(['hospitalisation'=>$hospitalisation]);
@@ -99,6 +107,13 @@ class HospitalisationController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
+
         $hospitalisation = Hospitalisation::with('dossier')->find($id);
         Hospitalisation::destroy($id);
         return response()->json(['hospitalisation'=>$hospitalisation]);

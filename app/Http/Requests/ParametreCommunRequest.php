@@ -35,4 +35,9 @@ class ParametreCommunRequest extends FormRequest
             "sato2"=>"sometimes|nullable|numeric"
         ];
     }
+
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        return response()->json(['error'=>$validator->errors()],419);
+    }
 }

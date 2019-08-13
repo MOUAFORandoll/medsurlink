@@ -4,10 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Netpok\Database\Support\RestrictSoftDeletes;
 
 class ConsultationPrenatale extends Model
 {
     use SoftDeletes;
+    use RestrictSoftDeletes;
+
+    /**
+     * The relations restricting model deletion
+     */
+    protected $restrictDeletes = ['parametreObstetrique','examensClinique','examensComplementaire'];
 
     protected $fillable = [
         "consultation_obstetrique_id",
@@ -15,6 +22,8 @@ class ConsultationPrenatale extends Model
         "plaintes",
         "antecedent_conjoint",
         "recommandations",
+        'archieved_at',
+        'passed_at',
     ];
 
     public function parametreObstetrique(){

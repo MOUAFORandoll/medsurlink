@@ -15,7 +15,15 @@ class ConsultationAllergieController extends Controller
             "allergies.*"=>"required|integer|exists:allergies,id"
         ]);
 
+
+
         $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationAllergie",$consultation->id,"attach");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
         $consultation->allergies()->detach($request->get('allergies'));
 
         $consultation = ConsultationMedecineGenerale::with(['examensClinique','allergies','examensComplementaire'])->find($request->get('consultation'));
@@ -52,7 +60,7 @@ class ConsultationAllergieController extends Controller
             }
         }
 
-
+        defineAsAuthor("ConsultationAllergie",$consultation->id,'attach');
         $consultation = ConsultationMedecineGenerale::with('examensClinique','examensComplementaire','allergies')->find($request->get('consultation'));
         return response()->json(['consultation'=>$consultation]);
     }

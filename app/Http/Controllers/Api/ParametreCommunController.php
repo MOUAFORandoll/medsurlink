@@ -46,6 +46,7 @@ class ParametreCommunController extends Controller
             $parametreCommun->bmi = $bmi;
             $parametreCommun->save();
         }
+        defineAsAuthor("ParametreCommun",$parametreCommun->id,'create');
         return response()->json(['parametreCommun'=>$parametreCommun]);
 
     }
@@ -91,6 +92,12 @@ class ParametreCommunController extends Controller
         if(!is_null($validation))
             return $validation;
 
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
+
         ParametreCommun::whereId($id)->update($request->validated());
         $parametreCommun = ParametreCommun::with('consultation')->find($id);
 
@@ -114,6 +121,14 @@ class ParametreCommunController extends Controller
         $validation = validatedId($id,$this->table);
         if(!is_null($validation))
             return $validation;
+
+
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
+
+
         $parametreCommun = ParametreCommun::with('consultation')->find($id);
         ParametreCommun::destroy($id);
         return response()->json(['parametreCommun'=>$parametreCommun]);
