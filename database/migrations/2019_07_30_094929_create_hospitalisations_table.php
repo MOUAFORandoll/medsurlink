@@ -27,6 +27,7 @@ class CreateHospitalisationsTable extends Migration
             $table->text('rendez_vous')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('slug')->unique();
 
             $table->foreign('dossier_medical_id')
                 ->references('id')

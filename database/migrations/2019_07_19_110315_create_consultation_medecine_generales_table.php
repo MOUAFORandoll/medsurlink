@@ -21,6 +21,7 @@ class CreateConsultationMedecineGeneralesTable extends Migration
             $table->text('mode_de_vie')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('slug')->unique();
 
             $table->foreign('dossier_medical_id')
                 ->references('id')

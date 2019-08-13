@@ -23,6 +23,7 @@ class CreateConsultationPrenatalesTable extends Migration
             $table->text('recommandations')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('slug')->unique();
 
             $table->foreign('consultation_obstetrique_id')
                 ->references('id')

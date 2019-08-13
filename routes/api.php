@@ -29,10 +29,6 @@ Route::middleware(['auth:api'])->group(function () {
 });
 Route::group(['middleware' => ['auth:api','role:Admin']], function () {
     Route::resource('user', 'Api\UserController')->except(['create','edit']);
-
-    Route::get('test',function (){
-        return response()->json(['slug'=>\Illuminate\Support\Str::slug('model')]);
-    });
 });
 //        Définition des routes accéssible par le gestionnaire
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function () {

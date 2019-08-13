@@ -19,6 +19,7 @@ class CreateEtablissementExercicePraticiensTable extends Migration
             $table->unsignedBigInteger('praticien_id');
             $table->timestamps();
             $table->softDeletes();
+            $table->string('slug')->unique();
 
             $table->foreign('etablissement_id')
                 ->references('id')

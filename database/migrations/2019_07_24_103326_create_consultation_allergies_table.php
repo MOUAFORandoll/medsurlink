@@ -20,6 +20,7 @@ class CreateConsultationAllergiesTable extends Migration
             $table->date('date');
             $table->softDeletes();
             $table->timestamps();
+            $table->string('slug')->unique();
 
             $table->foreign('consultation_medecine_generale_id')
                 ->references('id')

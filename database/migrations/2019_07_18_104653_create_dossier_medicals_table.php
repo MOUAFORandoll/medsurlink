@@ -20,6 +20,7 @@ class CreateDossierMedicalsTable extends Migration
             $table->string('numero_dossier')->unique();
             $table->timestamps();
             $table->softDeletes();
+            $table->string('slug')->unique();
 
             $table->foreign('patient_id')
                 ->references('user_id')

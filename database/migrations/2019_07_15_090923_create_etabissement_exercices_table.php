@@ -19,6 +19,8 @@ class CreateEtabissementExercicesTable extends Migration
             $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->string('slug')->unique();
+
         });
     }
 

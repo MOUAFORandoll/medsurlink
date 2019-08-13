@@ -8,6 +8,8 @@ use App\Models\MedecinControle;
 use App\Models\Patient;
 use App\Models\Praticien;
 use App\Models\Souscripteur;
+use App\Models\Traits\SlugRoutable;
+use Cviebrock\EloquentSluggable\Sluggable;
 use http\Env\Response;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -22,6 +24,8 @@ class User extends Authenticatable
     use Notifiable;
     use HasApiTokens;
     use HasRoles;
+    use Sluggable;
+    use SlugRoutable;
 
     protected $guard_name = 'api';
     /**
@@ -42,6 +46,19 @@ class User extends Authenticatable
         'password',
     ];
 
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'nom'
+            ]
+        ];
+    }
     /**
      * The attributes that should be hidden for arrays.
      *

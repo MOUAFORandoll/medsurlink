@@ -26,6 +26,7 @@ class CreateEchographiesTable extends Migration
             $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('slug')->unique();
 
             $table->foreign('consultation_obstetrique_id')
                 ->references('id')

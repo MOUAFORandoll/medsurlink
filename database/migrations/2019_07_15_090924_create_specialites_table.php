@@ -20,6 +20,7 @@ class CreateSpecialitesTable extends Migration
             $table->text('description')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('slug')->unique();
 
             $table->foreign('profession_id')
                 ->references('id')

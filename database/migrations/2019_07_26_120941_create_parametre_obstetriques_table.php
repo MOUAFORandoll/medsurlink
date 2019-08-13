@@ -24,6 +24,7 @@ class CreateParametreObstetriquesTable extends Migration
             $table->integer('bruit_du_coeur')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('slug')->unique();
 
             $table->foreign('consultation_prenatale_id')
                 ->references('id')

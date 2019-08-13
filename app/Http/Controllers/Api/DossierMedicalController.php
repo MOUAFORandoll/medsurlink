@@ -22,7 +22,7 @@ class DossierMedicalController extends Controller
      */
     public function index()
     {
-        $dossiers = DossierMedical::all();
+        $dossiers = DossierMedical::with(['patient'])->get();
         return response()->json(['dossiers'=>$dossiers]);
     }
 
@@ -66,7 +66,7 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $dossier = DossierMedical::find($id);
+        $dossier = DossierMedical::with(['patient'])->find($id);
         return response()->json(['dossier'=>$dossier]);
     }
 
@@ -105,8 +105,8 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $dossier = DossierMedical::find($id);
-        DossierMedical::destroy($id);
+        $dossier = DossierMedical::with(['patient'])->find($id);
+        $dossier->delete();
         return response()->json(['dossier'=>$dossier]);
     }
 
