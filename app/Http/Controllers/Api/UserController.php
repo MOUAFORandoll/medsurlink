@@ -130,7 +130,7 @@ class UserController extends Controller
             'password'=>Hash::make($password)
         ]);
         $mail = new PasswordGenerated($user,$password);
-        Mail::to($user->email)->send($mail);
+        //Mail::to($user->email)->send($mail);
         return $user;
     }
 }
