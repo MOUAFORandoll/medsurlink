@@ -2,18 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/images/logo.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMotifController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMotifController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ContratIntermediationMedicaleController.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SpecialiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SpecialiteController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ContratIntermediationMedicaleRequest.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ContratIntermediationMedicale.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Specialite.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Specialite.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_06_25_105151_create_contrat_intermediation_medicales_table.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -297,7 +286,7 @@
       <workItem from="1565164966570" duration="9832000" />
       <workItem from="1565250667057" duration="18238000" />
       <workItem from="1565339888094" duration="26812000" />
-      <workItem from="1565682294917" duration="6053000" />
+      <workItem from="1565682294917" duration="8254000" />
     </task>
     <servers />
   </component>
