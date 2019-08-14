@@ -75,7 +75,7 @@ class AffiliationController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $affiliation = Affiliation::with(['patient'])->whereSlug($slug)->first();
+        $affiliation = Affiliation::with(['patient','patient'])->whereSlug($slug)->first();
         return response()->json(['affiliation'=>$affiliation]);
     }
 

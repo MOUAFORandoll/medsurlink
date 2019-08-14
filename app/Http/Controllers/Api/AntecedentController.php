@@ -39,10 +39,14 @@ class AntecedentController extends Controller
      */
     public function store(AntecedentRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
         $antecedent = Antecedent::create($request->validated());
         defineAsAuthor("Antecedent",$antecedent->id,'create');
 
-        $antecedent = Antecedent::with('consultation')->find($antecedent->id);
+        $antecedent = Antecedent::with('consultation')->whereSlug($antecedent->slug)->first();
         return response()->json(['antecedent'=>$antecedent]);
     }
 
@@ -52,13 +56,13 @@ class AntecedentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $antecedent = Antecedent::with('consultation')->find($id);
+        $antecedent = Antecedent::with('consultation')->whereSlug($slug)->rfirst();
         return response()->json(['antecedent'=>$antecedent]);
 
     }
@@ -81,14 +85,18 @@ class AntecedentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AntecedentRequest $request, $id)
+    public function update(AntecedentRequest $request, $slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        Antecedent::whereId($id)->update($request->validated());
-        $antecedent = Antecedent::with('consultation')->find($id);
+        Antecedent::whereSlug($slug)->update($request->validated());
+        $antecedent = Antecedent::with('consultation')->whereSlug($slug)->first();
         return response()->json(['antecedent'=>$antecedent]);
     }
 
@@ -98,14 +106,14 @@ class AntecedentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $antecedent = Antecedent::with('consultation')->find($id);
-        Antecedent::destroy($id);
+        $antecedent = Antecedent::with('consultation')->whereSlug($slug)->first();
+        $antecedent->delete();
         return response()->json(['antecedent'=>$antecedent]);
     }
 }

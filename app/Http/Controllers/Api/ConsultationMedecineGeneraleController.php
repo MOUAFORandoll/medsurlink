@@ -45,7 +45,10 @@ class ConsultationMedecineGeneraleController extends Controller
     public function store(ConsutationMedecineRequest $request)
     {
 
-
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
         $consultation = ConsultationMedecineGenerale::create($request->validated());
         $motifs = $request->get('motifs');
         $motifACreer = $request->get('motifsACreer');
@@ -116,13 +119,13 @@ class ConsultationMedecineGeneraleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $consultation = ConsultationMedecineGenerale::with(['motifs'])->find($id);
+        $consultation = ConsultationMedecineGenerale::with(['motifs'])->whereSlug($slug)->first();
         return response()->json(["consultation"=>$consultation]);
 
     }
@@ -145,20 +148,26 @@ class ConsultationMedecineGeneraleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ConsutationMedecineRequest $request, $id)
+    public function update(ConsutationMedecineRequest $request, $slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$id,"create");
+        $consultation = ConsultationMedecineGenerale::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        ConsultationMedecineGenerale::whereId($id)->update($request->validated());
+        ConsultationMedecineGenerale::whereSlug($slug)->update($request->validated());
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->find($id);
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
         return response()->json(["consultation"=>$consultation]);
     }
 
@@ -168,19 +177,19 @@ class ConsultationMedecineGeneraleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
-
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$id,"create");
+        $consultation = ConsultationMedecineGenerale::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$consultation->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
         try{
-            $consultation = ConsultationMedecineGenerale::find($id);
-            ConsultationMedecineGenerale::destroy($id);
+            $consultation = ConsultationMedecineGenerale::findBySlug($slug);
+            $consultation->delete();
             return response()->json(["consultation"=>$consultation]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
             return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
@@ -194,13 +203,13 @@ class ConsultationMedecineGeneraleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function archiver($id)
+    public function archiver($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->find($id);
+        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
             return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
         }else{
@@ -217,13 +226,13 @@ class ConsultationMedecineGeneraleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function transmettre($id)
+    public function transmettre($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->find($id);
+        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
 

@@ -40,7 +40,10 @@ class ExamenCliniqueController extends Controller
      */
     public function store(ExamenCliniqueRequest $request)
     {
-
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
 
         $examenClinique = ExamenClinique::create($request->validated());
         defineAsAuthor("ExamenClinique",$examenClinique->id,'create');
@@ -55,13 +58,13 @@ class ExamenCliniqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $examenClinique = ExamenClinique::find($id);
+        $examenClinique = ExamenClinique::whereSlug($slug)->first();
         return response()->json(['examenClinique'=>$examenClinique]);
     }
 
@@ -83,19 +86,25 @@ class ExamenCliniqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ExamenCliniqueRequest $request, $id)
+    public function update(ExamenCliniqueRequest $request, $slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ExamenClinique",$id,"create");
+        $examenClinique = ExamenClinique::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ExamenClinique",$examenClinique->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        ExamenClinique::whereId($id)->update($request->validated());
-        $examenClinique = ExamenClinique::find($id);
+        ExamenClinique::whereSlug($slug)->update($request->validated());
+        $examenClinique = ExamenClinique::whereSlug($slug)->first();
         return response()->json(['examenClinique'=>$examenClinique]);
     }
 
@@ -105,19 +114,19 @@ class ExamenCliniqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
-
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ExamenClinique",$id,"create");
+        $examenClinique = ExamenClinique::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ExamenClinique",$examenClinique->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        $examenClinique = ExamenClinique::find($id);
-        ExamenClinique::destroy($id);
+        $examenClinique = ExamenClinique::whereSlug($slug)->first();
+        $examenClinique->delete();
         return response()->json(['examenClinique'=>$examenClinique]);
     }
 }

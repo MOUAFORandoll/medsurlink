@@ -42,6 +42,11 @@ class MedecinControleController extends Controller
      */
     public function store(MedecinControleStoreRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
         //Création des informations utilisateurs
         $userResponse =  UserController::generatedUser($request);
         if ($userResponse->status() == 419)
@@ -68,12 +73,12 @@ class MedecinControleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-         $validation = $this->validatedId($id);
+         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-        $medecin = MedecinControle::with('specialite')->whereUserId($id)->first();
+        $medecin = MedecinControle::with('specialite')->whereSlug($slug)->first();
         return response()->json(['medecin'=>$medecin]);
 
     }
@@ -96,14 +101,19 @@ class MedecinControleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MedecinControleUpdateRequest $request, $id)
+    public function update(MedecinControleUpdateRequest $request, $slug)
     {
-         $validation = $this->validatedId($id);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
 
-        MedecinControle::whereUserId($id)->update($request->validated());
-        $medecin = MedecinControle::with('specialite')->whereUserId($id)->first();
+        MedecinControle::whereSlug($slug)->update($request->validated());
+        $medecin = MedecinControle::with('specialite')->whereSlug($slug)->first();
 
 //        //ajustement de l'email du user
 //        $user = $medecin->user;
@@ -119,13 +129,13 @@ class MedecinControleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-         $validation = $this->validatedId($id);
+         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-        $medecin = MedecinControle::with('specialite','user')->whereUserId($id)->first();
-        MedecinControle::destroy($id);
+        $medecin = MedecinControle::with('specialite','user')->whereSlug($slug)->first();
+        $medecin->delete();
         return response()->json(['medecin'=>$medecin]);
 
     }
@@ -134,8 +144,8 @@ class MedecinControleController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:medecin_controles,user_id']);
+    public function validatedSlug($slug){
+        $validation = Validator::make(compact('slug'),['slug'=>'exists:medecin_controles,slug']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }

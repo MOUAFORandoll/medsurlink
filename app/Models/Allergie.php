@@ -15,11 +15,6 @@ class Allergie extends Model
     use Sluggable;
     use SluggableScopeHelpers;
     use SlugRoutable;
-    protected $fillable = [
-        "intitule",
-        "description",
-        'slug'
-    ];
     /**
      * Return the sluggable configuration array for this model.
      *
@@ -36,6 +31,13 @@ class Allergie extends Model
     public function getIntituleAndTimestampAttribute() {
         return $this->intitule . ' ' .Carbon::now()->timestamp;
     }
+
+    protected $fillable = [
+        "intitule",
+        "description",
+        'slug'
+    ];
+
 
     public  function  consultations(){
         return $this->belongsToMany(ConsultationMedecineGenerale::class,'consultation_allergie','allergie_id','consultation_medecine_generale_id');

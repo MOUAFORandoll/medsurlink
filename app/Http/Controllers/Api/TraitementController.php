@@ -39,6 +39,11 @@ class TraitementController extends Controller
      */
     public function store(TraitementRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
         $traitement = Traitement::create($request->validated());
         defineAsAuthor("Traitement",$traitement->id,'create');
         return response()->json(['traitement'=>$traitement]);
@@ -50,13 +55,13 @@ class TraitementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $traitement = Traitement::find($id);
+        $traitement = Traitement::findBySlug($slug);
         return response()->json(['traitement'=>$traitement]);
 
     }
@@ -79,19 +84,25 @@ class TraitementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(TraitementRequest $request, $id)
+    public function update(TraitementRequest $request, $slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$id,"create");
+        $traitement = Traitement::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Traitement",$traitement->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        Traitement::whereId($id)->update($request->validated());
-        $traitement = Traitement::find($id);
+        Traitement::whereSlug($slug)->update($request->validated());
+        $traitement = Traitement::findBySlug($slug);
         return response()->json(['traitement'=>$traitement]);
     }
 
@@ -101,14 +112,14 @@ class TraitementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $traitement = Traitement::find($id);
-        Traitement::destroy($id);
+        $traitement = Traitement::findBySlug($slug);
+        $traitement->delete();
         return response()->json(['traitement'=>$traitement]);
     }
 }

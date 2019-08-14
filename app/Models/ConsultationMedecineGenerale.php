@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SlugRoutable;
+use Carbon\Carbon;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Netpok\Database\Support\RestrictSoftDeletes;
@@ -10,6 +14,22 @@ class ConsultationMedecineGenerale extends Model
 {
     use SoftDeletes;
     use RestrictSoftDeletes;
+    use Sluggable;
+    use SluggableScopeHelpers;
+    use SlugRoutable;
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => ['dossier.slug',Carbon::now()->timestamp]
+            ]
+        ];
+    }
 
     /**
      * The relations restricting model deletion
@@ -23,6 +43,7 @@ class ConsultationMedecineGenerale extends Model
         "mode_de_vie",
         'archieved_at',
         'passed_at',
+        'slug'
     ];
 
     public function dossier(){

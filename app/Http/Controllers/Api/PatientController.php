@@ -21,7 +21,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with(['souscripteur','dossier','user'])->get();
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations'])->get();
         return response()->json(['patients'=>$patients]);
     }
 
@@ -43,7 +43,10 @@ class PatientController extends Controller
      */
     public function store(patientStoreRequest $request)
     {
-
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request);
         if ($userResponse->status() == 419)
@@ -63,7 +66,7 @@ class PatientController extends Controller
         //Envoi des informations patient par mail
         UserController::sendUserInformationViaMail($user,$password);
 
-        $patient = Patient::with('dossier')->whereSlug($patient->slug)->first();
+        $patient = Patient::with(['dossier','affiliations'])->whereSlug($patient->slug)->first();
         return response()->json(['patient'=>$patient,"password"=>$password]);
     }
 
@@ -79,7 +82,7 @@ class PatientController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $patient = Patient::with(['souscripteur','user'])->whereSlug($slug)->first();
+        $patient = Patient::with(['souscripteur','user','affiliations'])->whereSlug($slug)->first();
         return response()->json(['patient'=>$patient]);
 
     }
@@ -104,6 +107,11 @@ class PatientController extends Controller
      */
     public function update(PatientUpdateRequest $request, $slug)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
@@ -111,13 +119,7 @@ class PatientController extends Controller
         $age = evaluateYearOfOld($request->date_de_naissance);
 
         Patient::whereSlug($slug)->update($request->validated()+['age'=>$age]);
-        $patient = Patient::with(['souscripteur','user'])->whereSlug($slug)->first();
-
-//
-//        //ajustement de l'email du user
-//        $user = $patient->user;
-//        $user->email = $patient->email;
-//        $user->save();
+        $patient = Patient::with(['souscripteur','user','affiliations'])->whereSlug($slug)->first();
 
         return response()->json(['patient'=>$patient]);
 
@@ -136,7 +138,7 @@ class PatientController extends Controller
             return $validation;
 
         try{
-            $patient = Patient::with(['souscripteur','user'])->whereSlug($slug)->first();
+            $patient = Patient::with(['souscripteur','user','affiliations'])->whereSlug($slug)->first();
             $patient->delete();
             return response()->json(['patient'=>$patient]);
         }catch (DeleteRestrictionException $deleteRestrictionException){

@@ -40,7 +40,10 @@ class AllergieController extends Controller
      */
     public function store(AllergieRequest $request)
     {
-
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
         $allergie = Allergie::create($request->validated());
         defineAsAuthor("Allergie",$allergie->id,'create');
         return response()->json(['allergie'=>$allergie]);
@@ -53,13 +56,13 @@ class AllergieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $allergie = Allergie::find($id);
+        $allergie = Allergie::findBySlug($slug);
         return response()->json(['allergie'=>$allergie]);
 
     }
@@ -82,14 +85,18 @@ class AllergieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(AllergieRequest $request, $id)
+    public function update(AllergieRequest $request, $slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        Allergie::whereId($id)->update($request->validated());
-        $allergie = Allergie::find($id);
+        Allergie::whereSlug($slug)->update($request->validated());
+        $allergie = Allergie::findBySlug($slug);
         return response()->json(['allergie'=>$allergie]);
     }
 
@@ -99,14 +106,14 @@ class AllergieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $allergie = Allergie::find($id);
-        Allergie::destroy($id);
+        $allergie = Allergie::findBySlug($slug);
+        $allergie->delete();
         return response()->json(['allergie'=>$allergie]);
     }
 }

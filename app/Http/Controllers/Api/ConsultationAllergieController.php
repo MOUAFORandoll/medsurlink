@@ -15,8 +15,6 @@ class ConsultationAllergieController extends Controller
             "allergies.*"=>"required|integer|exists:allergies,id"
         ]);
 
-
-
         $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
 
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationAllergie",$consultation->id,"attach");

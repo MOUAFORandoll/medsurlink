@@ -34,7 +34,7 @@ if (!function_exists('fullName')){
 if (!function_exists('validatedSlug')){
 
     function validatedSlug($slug, $table){
-        $validation = Validator::make(compact('slug'),['$slug'=>'exists:'.$table.',slug']);
+        $validation = Validator::make(compact('slug'),['slug'=>'exists:'.$table.',slug']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }

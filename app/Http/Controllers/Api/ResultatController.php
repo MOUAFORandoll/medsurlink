@@ -42,6 +42,10 @@ class ResultatController extends Controller
      */
     public function store(ResultatRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
 
         if($request->hasFile('file')){
             if ($request->file('file')->isValid()) {
@@ -68,13 +72,13 @@ class ResultatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $resultat = Resultat::with(['dossier','consultation'])->find($id);
+        $resultat = Resultat::with(['dossier','consultation'])->whereSlug($slug)->first();
         return response()->json(['resultat'=>$resultat]);
     }
 
@@ -96,20 +100,25 @@ class ResultatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ResultatRequest $request, $id)
+    public function update(ResultatRequest $request, $slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$id,"create");
+        $resultat = Resultat::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$resultat->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        Resultat::whereId($id)->update($request->validated());
-        $resultat = Resultat::with(['dossier','consultation'])->find($id);
+        Resultat::whereSlug($slug)->update($request->validated());
+        $resultat = Resultat::with(['dossier','consultation'])->whereSlug($slug)->first();
 
         if($request->hasFile('file')){
             if ($request->file('file')->isValid()) {
@@ -129,20 +138,20 @@ class ResultatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function archiver($id)
+    public function archiver($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-            $resultat = Resultat::with(['dossier','consultation'])->find($id);
-            if (is_null($resultat->passed_at)){
-                return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
-            }else{
-                $resultat->archieved_at = Carbon::now();
-                $resultat->save();
-                return response()->json(['resultat'=>$resultat]);
-            }
+        $resultat = Resultat::with(['dossier','consultation'])->whereSlug($slug)->first();
+        if (is_null($resultat->passed_at)){
+            return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
+        }else{
+            $resultat->archieved_at = Carbon::now();
+            $resultat->save();
+            return response()->json(['resultat'=>$resultat]);
+        }
     }
 
     /**
@@ -152,13 +161,13 @@ class ResultatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function transmettre($id)
+    public function transmettre($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $resultat = Resultat::with(['dossier','consultation'])->find($id);
+        $resultat = Resultat::with(['dossier','consultation'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
 
@@ -172,19 +181,19 @@ class ResultatController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$id,"create");
+        $resultat = Resultat::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$resultat->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        $resultat = Resultat::with(['dossier','consultation'])->find($id);
-        Resultat::destroy($id);
+        $resultat->delete();
         return response()->json(['resultat'=>$resultat]);
     }
 }

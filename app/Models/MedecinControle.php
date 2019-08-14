@@ -2,13 +2,28 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SlugRoutable;
 use App\User;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MedecinControle extends Model
 {
     use SoftDeletes;
+    use Sluggable;
+    use SluggableScopeHelpers;
+    use SlugRoutable;
+
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'user.slug'
+            ]
+        ];
+    }
     /**
      * The primary key associated with the table.
      *
@@ -28,15 +43,6 @@ class MedecinControle extends Model
         "numero_ordre",
         "civilite",
         'slug'
-//        "nom",
-//        "prenom",
-//        "nationalite",
-//        "ville",
-//        "pays",
-//        "telephone",
-//        "email",
-//        "quartier",
-//        "code_postal",
     ];
 
     public function specialite(){

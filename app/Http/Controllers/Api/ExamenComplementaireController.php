@@ -39,6 +39,10 @@ class ExamenComplementaireController extends Controller
      */
     public function store(ExamenComplementaireRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
         $examenComplementaire = ExamenComplementaire::create($request->validated());
         defineAsAuthor("ExamenComplementaire",$examenComplementaire->id,'create');
 
@@ -52,13 +56,13 @@ class ExamenComplementaireController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $examenComplementaire = ExamenComplementaire::find($id);
+        $examenComplementaire = ExamenComplementaire::whereSlug($slug)->first();
         return response()->json(['examenComplementaire'=>$examenComplementaire]);
 
     }
@@ -81,19 +85,23 @@ class ExamenComplementaireController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ExamenComplementaireRequest $request, $id)
+    public function update(ExamenComplementaireRequest $request, $slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
-
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ExamenComplementaire",$id,"create");
+$examenComplementaire =ExamenComplementaire::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ExamenComplementaire",$examenComplementaire->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        ExamenComplementaire::whereId($id)->update($request->validated());
-        $examenComplementaire = ExamenComplementaire::find($id);
+        ExamenComplementaire::whereSlug($slug)->update($request->validated());
+        $examenComplementaire = ExamenComplementaire::whereSlug($slug)->first();
         return response()->json(['examenComplementaire'=>$examenComplementaire]);
     }
 
@@ -103,19 +111,20 @@ class ExamenComplementaireController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ExamenComplementaire",$id,"create");
+        $examenComplementaire  = ExamenComplementaire::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ExamenComplementaire",$examenComplementaire->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        $examenComplementaire = ExamenComplementaire::find($id);
-        ExamenComplementaire::destroy($id);
+        $examenComplementaire = ExamenComplementaire::whereSlug($slug)->first();
+        $examenComplementaire->delete();
         return response()->json(['examenComplementaire'=>$examenComplementaire]);
     }
 }

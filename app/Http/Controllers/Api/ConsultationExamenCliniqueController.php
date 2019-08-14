@@ -6,14 +6,19 @@ use App\Models\ConsultationMedecineGenerale;
 use App\Models\ExamenClinique;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class ConsultationExamenCliniqueController extends Controller
 {
     public function retirerExamenClinique(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
             "examensClinique.*"=>"required|integer|exists:examen_cliniques,id"
         ]);
+
+        if ($validation->fails()){
+            return response()->json(['error'=>$validation->errors()],419);
+        }
 
         $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
 
@@ -29,11 +34,15 @@ class ConsultationExamenCliniqueController extends Controller
     }
 
     public function ajouterExamenClinique(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
             "examensClinique.*"=>"sometimes|integer|exists:examen_cliniques,id",
             "examensCliniqueACreer.*"=>"sometimes|string|min:2"
         ]);
+
+        if ($validation->fails()){
+            return response()->json(['error'=>$validation->errors()],419);
+        }
 
         $examensClinique = $request->get('examensClinique');
         $examensCliniqueACreer = $request->get('examensCliniqueACreer');

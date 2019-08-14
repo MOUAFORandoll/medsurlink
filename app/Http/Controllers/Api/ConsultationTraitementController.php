@@ -6,15 +6,18 @@ use App\Models\ConsultationMedecineGenerale;
 use App\Models\Traitement;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class ConsultationTraitementController extends Controller
 {
     public function retirerTraitement(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
             "traitements.*"=>"required|integer|exists:traitements,id"
         ]);
-
+        if ($validation->fails()){
+            return response()->json(['error'=>$validation->errors()],419);
+        }
         $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
 
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationTraitement",$consultation->id,"attach");
@@ -29,14 +32,16 @@ class ConsultationTraitementController extends Controller
     }
 
     public function ajouterTraitement(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
             "traitements.*.id"=>"required|integer|exists:traitements,id",
             "traitements.*.date"=>"required|date",
             "traitementsACreer.*.intitule"=>"sometimes|string|min:2",
             "traitementsACreer.*.date"=>"sometimes|date|min:2"
         ]);
-
+        if ($validation->fails()){
+            return response()->json(['error'=>$validation->errors()],419);
+        }
         $traitements = $request->get('traitements');
         $traitementsACreer = $request->get('traitementsACreer');
 

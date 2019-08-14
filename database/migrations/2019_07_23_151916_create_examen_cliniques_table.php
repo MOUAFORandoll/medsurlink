@@ -17,6 +17,7 @@ class CreateExamenCliniquesTable extends Migration
             $table->bigIncrements('id');
             $table->string('reference');
             $table->text('description')->nullable();
+            $table->string('slug')->unique();
             $table->timestamps();
             $table->softDeletes();
         });
