@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\DossierMedicalRequest;
 use App\Models\DossierMedical;
+use App\Models\Patient;
 use Carbon\Carbon;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
@@ -12,8 +13,6 @@ use App\Http\Controllers\Controller;
 class DossierMedicalController extends Controller
 {
     protected $table = 'dossier_medicals';
-
-
 
     /**
      * Display a listing of the resource.
@@ -44,6 +43,16 @@ class DossierMedicalController extends Controller
      */
     public function store(DossierMedicalRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $patient =Patient::with('dossier')->find($request->get('patient_id'));
+        if (!is_null($patient->dossier) or !empty($patient->dossier)){
+            return  response()->json(['error'=>'Ce patient a déja un dossier: '.$patient->dossier->numero_dossier]);
+        }
+
         $numero_dossier = $this->randomNumeroDossier();
         $dossier = DossierMedical::create([
            'patient_id'=>$request->get('patient_id'),
@@ -60,13 +69,13 @@ class DossierMedicalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $dossier = DossierMedical::with(['patient'])->find($id);
+        $dossier = DossierMedical::with(['patient'])->whereSlug($slug)->first();
         return response()->json(['dossier'=>$dossier]);
     }
 
@@ -99,13 +108,13 @@ class DossierMedicalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $dossier = DossierMedical::with(['patient'])->find($id);
+        $dossier = DossierMedical::with(['patient'])->whereSlug($slug)->first();
         $dossier->delete();
         return response()->json(['dossier'=>$dossier]);
     }

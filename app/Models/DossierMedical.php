@@ -14,6 +14,7 @@ class DossierMedical extends Model
     use Sluggable;
     use SluggableScopeHelpers;
     use SlugRoutable;
+
     protected $fillable = [
       "patient_id",
       "date_de_creation",

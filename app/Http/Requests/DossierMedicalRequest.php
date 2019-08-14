@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 
 class DossierMedicalRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class DossierMedicalRequest extends FormRequest
     public function rules()
     {
         return [
-            "patient_id"=>"required|integer|exists:patients,id",
+            "patient_id"=>"required|integer|exists:patients,user_id",
             "date_de_creation"=>"sometimes|nullable|date",
             "numero_dossier"=>"sometimes|string|min:8|unique:dossier_medicals,numero_dossier",
         ];
@@ -32,6 +33,6 @@ class DossierMedicalRequest extends FormRequest
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        return response()->json(['error'=>$validator->errors()],419);
+        Request::merge(['error'=>$validator->errors()->getMessages()]);
     }
 }
