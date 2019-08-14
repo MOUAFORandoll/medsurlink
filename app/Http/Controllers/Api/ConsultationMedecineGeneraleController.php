@@ -118,7 +118,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function show($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -147,7 +147,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function update(ConsutationMedecineRequest $request, $id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -170,7 +170,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function destroy($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -196,7 +196,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function archiver($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -219,7 +219,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function transmettre($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 

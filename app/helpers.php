@@ -31,9 +31,9 @@ if (!function_exists('fullName')){
  * @param $table
  * @return \Illuminate\Http\JsonResponse|null
  */
-if (!function_exists('validatedId')){
+if (!function_exists('validatedSlug')){
 
-    function validatedId($slug, $table){
+    function validatedSlug($slug, $table){
         $validation = Validator::make(compact('slug'),['$slug'=>'exists:'.$table.',slug']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);

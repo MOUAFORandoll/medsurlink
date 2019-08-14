@@ -54,7 +54,7 @@ class HospitalisationController extends Controller
      */
     public function show($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -82,7 +82,7 @@ class HospitalisationController extends Controller
      */
     public function update(HospitalisationRequest $request, $id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -104,7 +104,7 @@ class HospitalisationController extends Controller
      */
     public function destroy($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 

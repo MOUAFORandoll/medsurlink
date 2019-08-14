@@ -34,7 +34,6 @@ class AffiliationRequest extends FormRequest
     }
     protected  function  failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-//        Request::merge(['error'=>$validator->errors()->getMessages()]);
-        return response()->json(['error'=>$validator->errors()],419);
+        Request::merge(['error'=>$validator->errors()->getMessages()]);
     }
 }

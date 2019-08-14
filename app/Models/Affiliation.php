@@ -17,16 +17,12 @@ class Affiliation extends Model
     use SlugRoutable;
 
     protected $fillable = [
-      "patient_id",
-      "nom",
-      "date_debut",
-      "date_fin",
+        "patient_id",
+        "nom",
+        "date_debut",
+        "date_fin",
         'slug'
     ];
-
-    public function patient(){
-        return $this->belongsTo(Patient::class,'patient_id','id');
-    }
 
     /**
      * Return the sluggable configuration array for this model.
@@ -44,4 +40,10 @@ class Affiliation extends Model
     public function getNomAndTimestampAttribute() {
         return $this->nom . ' ' .Carbon::now()->timestamp;
     }
+
+    public function patient(){
+        return $this->belongsTo(Patient::class,'patient_id','user_id');
+    }
+
+
 }

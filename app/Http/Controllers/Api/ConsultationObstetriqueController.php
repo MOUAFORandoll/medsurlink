@@ -70,7 +70,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function show($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -98,7 +98,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function update(ConsultationObstetriqueRequest $request, $id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -120,7 +120,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function destroy($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -147,7 +147,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function archiver($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -170,7 +170,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function transmettre($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 

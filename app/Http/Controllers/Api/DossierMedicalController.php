@@ -62,7 +62,7 @@ class DossierMedicalController extends Controller
      */
     public function show($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -101,7 +101,7 @@ class DossierMedicalController extends Controller
      */
     public function destroy($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 

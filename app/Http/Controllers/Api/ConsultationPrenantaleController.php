@@ -60,7 +60,7 @@ class ConsultationPrenantaleController extends Controller
      */
     public function show($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -90,7 +90,7 @@ class ConsultationPrenantaleController extends Controller
      */
     public function update(ConsultationPrenataleRequest $request, $id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -113,7 +113,7 @@ class ConsultationPrenantaleController extends Controller
      */
     public function destroy($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -140,7 +140,7 @@ class ConsultationPrenantaleController extends Controller
      */
     public function archiver($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -163,7 +163,7 @@ class ConsultationPrenantaleController extends Controller
      */
     public function transmettre($id)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($id,$this->table);
         if(!is_null($validation))
             return $validation;
 
