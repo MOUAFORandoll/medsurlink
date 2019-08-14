@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\EmailExistRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
 
 class SouscripteurUpdateRequest extends FormRequest
@@ -31,20 +32,11 @@ class SouscripteurUpdateRequest extends FormRequest
             "user_id"=>'sometimes|integer|exists:users,id',
             "sexe"=>["required",Rule::in(['M','F'])],
             "date_de_naissance"=>'required|date',
-//            "prenom"=>'sometimes|nullable|string|min:2',
-//            "nom"=>'required|string|min:2',
-//            "nationalite"=>'required|string|min:4',
-//            "ville"=>'required|string|min:2',
-//            "pays"=>'required|string|min:2',
-//            "telephone"=>'required|string|min:9',
-//            "email"=>['required','string',new EmailExistRule($id,'Souscripteur')],
-//            "quartier"=>'sometimes|nullable|string|min:1',
-//            "code_postal"=>'sometimes|integer',
-        ];
+   ];
     }
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        return response()->json(['error'=>$validator->errors()],419);
+        Request::merge(['error'=>$validator->errors()->getMessages()]);
     }
 }

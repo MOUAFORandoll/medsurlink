@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\EmailExistRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
 
 class PatientUpdateRequest extends FormRequest
@@ -36,19 +37,11 @@ class PatientUpdateRequest extends FormRequest
             "nom_contact"=>'sometimes|nullbale|string|min:2',
             "tel_contact"=>'sometimes|nullable|string|min:9',
             "lien_contact"=>'sometimes|nullable|string|min:4',
-//            "nom"=>'required|string|min:2',
-//            "nationalite"=>'required|string|min:4',
-//            "ville"=>'required|string|min:2',
-//            "pays"=>'required|string|min:2',
-//            "telephone"=>'required|string|min:9',
-//            "email"=>['required','string',new EmailExistRule($id,'Patient')],
-//            "quartier"=>'sometimes|nullable|string|min:1',
-//            "prenom"=>'sometimes|nullable|string|min:2',
-        ];
+      ];
     }
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        return response()->json(['error'=>$validator->errors()],419);
+        Request::merge(['error'=>$validator->errors()->getMessages()]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 
 class ConsultationPrenataleRequest extends FormRequest
 {
@@ -35,6 +36,7 @@ class ConsultationPrenataleRequest extends FormRequest
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        return response()->json(['error'=>$validator->errors()],419);
+        Request::merge(['error'=>$validator->errors()->getMessages()]);
+
     }
 }
