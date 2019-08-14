@@ -24,6 +24,7 @@ class ConsultationPrenatale extends Model
         "recommandations",
         'archieved_at',
         'passed_at',
+        'slug'
     ];
 
     public function parametreObstetrique(){

@@ -28,6 +28,7 @@ class Praticien extends Model
         "specialite_id",
         "civilite",
         "numero_ordre",
+        'slug'
 //        "nom",
 //        "prenom",
 //        "nationalite",

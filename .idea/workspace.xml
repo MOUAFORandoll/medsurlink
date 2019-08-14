@@ -2,41 +2,48 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Models/Traits/SlugRoutable.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/medicalink-app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/medicalink-app.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.rnd" beforeDir="false" afterPath="$PROJECT_DIR$/.rnd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/AffiliationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/AffiliationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/AffiliationRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/AffiliationRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/UserUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/UserUpdateRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Affiliation.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Affiliation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Allergie.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Allergie.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Antecedent.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Antecedent.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Conclusion.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Conclusion.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/DossierMedical.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DossierMedical.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Echographie.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Echographie.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/EtablissementExercice.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/EtablissementExercice.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ExamenClinique.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ExamenClinique.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ExamenComplementaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ExamenComplementaire.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Gestionnaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Gestionnaire.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Hospitalisation.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Hospitalisation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/MedecinControle.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/MedecinControle.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Motif.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Motif.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ParametreCommun.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ParametreCommun.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ParametreObstetrique.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ParametreObstetrique.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Patient.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Praticien.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Praticien.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Profession.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Profession.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Resultat.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Resultat.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Souscripteur.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Souscripteur.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Specialite.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Specialite.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Traitement.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Traitement.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Traits/SlugRoutable.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Traits/SlugRoutable.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Rules/EmailExistRule.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Rules/EmailExistRule.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2014_10_12_000000_create_users_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_090922_create_professions_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_090922_create_professions_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_090923_create_etabissement_exercices_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_090923_create_etabissement_exercices_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_090924_create_specialites_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_090924_create_specialites_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_16_120654_create_etablissement_exercice_praticiens_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_16_120654_create_etablissement_exercice_praticiens_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_18_093551_create_affiliations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_18_093551_create_affiliations_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_18_104653_create_dossier_medicals_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_18_104653_create_dossier_medicals_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_19_110315_create_consultation_medecine_generales_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_19_110315_create_consultation_medecine_generales_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_19_125537_create_motifs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_19_125537_create_motifs_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_24_074233_create_examen_complementaires_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_24_074233_create_examen_complementaires_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_24_082541_create_antecedents_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_24_082541_create_antecedents_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_24_101042_create_allergies_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_24_101042_create_allergies_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_24_103326_create_consultation_allergies_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_24_103326_create_consultation_allergies_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_24_130500_create_traitements_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_24_130500_create_traitements_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_24_144806_create_parametre_communs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_24_144806_create_parametre_communs_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_25_104647_create_conclusions_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_25_104647_create_conclusions_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_25_130807_create_resultats_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_25_130807_create_resultats_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_26_095815_create_consultation_obstetriques_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_26_095815_create_consultation_obstetriques_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_26_114204_create_consultation_prenatales_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_26_114204_create_consultation_prenatales_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_26_120941_create_parametre_obstetriques_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_26_120941_create_parametre_obstetriques_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_30_091543_create_echographies_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_30_091543_create_echographies_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_30_094929_create_hospitalisations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_30_094929_create_hospitalisations_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_08_13_121707_add_slug_to_all_table.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/UsersTableSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/UsersTableSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/helpers.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_090920_create_souscripteurs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_090920_create_souscripteurs_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_090921_create_patients_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_090921_create_patients_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_100923_create_praticiens_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_100923_create_praticiens_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_110146_create_medecin_controles_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_110146_create_medecin_controles_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_15_110727_create_gestionnaires_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_15_110727_create_gestionnaires_table.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -76,6 +83,13 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="patients: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -322,6 +336,7 @@
       <workItem from="1565250667057" duration="18238000" />
       <workItem from="1565339888094" duration="26812000" />
       <workItem from="1565682294917" duration="15688000" />
+      <workItem from="1565768093074" duration="9540000" />
     </task>
     <servers />
   </component>

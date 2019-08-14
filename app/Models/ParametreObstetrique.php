@@ -17,6 +17,7 @@ class ParametreObstetrique extends Model
         "hauteur_urine",
         "toucher_vaginal",
         "bruit_du_coeur",
+        'slug'
     ];
 
     public function consultationPrenatale(){

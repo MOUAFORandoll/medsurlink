@@ -17,6 +17,7 @@ class Resultat extends Model
         "file",
         'archieved_at',
         'passed_at',
+        'slug'
     ];
 
     public function dossier(){

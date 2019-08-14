@@ -27,6 +27,7 @@ class Gestionnaire extends Model
     protected $fillable = [
         "user_id",
         "civilite",
+        'slug'
 //        "nom",
 //        "prenom",
 //        "nationalite",

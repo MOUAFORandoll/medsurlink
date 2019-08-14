@@ -11,6 +11,7 @@ class Traitement extends Model
     protected $fillable = [
         "intitule",
         "description",
+        'slug'
     ];
 
     public  function  consultations(){

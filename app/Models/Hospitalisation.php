@@ -19,6 +19,7 @@ class Hospitalisation extends Model
         "avis",
         "traitement_sortie",
         "rendez_vous",
+        'slug'
     ];
 
     public function dossier(){

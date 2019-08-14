@@ -19,6 +19,7 @@ class Echographie extends Model
         "biometrie",
         "annexe",
         "description",
+        'slug'
     ];
 
     public function consultation(){

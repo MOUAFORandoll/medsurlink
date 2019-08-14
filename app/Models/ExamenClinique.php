@@ -12,6 +12,7 @@ class ExamenClinique extends Model
     protected $fillable = [
         "reference",
         "description",
+        'slug'
     ];
 
     public  function  consultations(){

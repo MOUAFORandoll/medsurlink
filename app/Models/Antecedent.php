@@ -13,6 +13,7 @@ class Antecedent extends Model
         "description",
         "date",
         "type",
+        'slug'
     ];
 
     public function consultation(){

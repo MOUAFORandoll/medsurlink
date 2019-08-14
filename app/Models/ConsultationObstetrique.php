@@ -28,6 +28,7 @@ class ConsultationObstetrique extends Model
         "facteur_de_risque",
         'archieved_at',
         'passed_at',
+        'slug'
     ];
 
     public function consultationPrenatales(){

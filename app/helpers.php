@@ -33,8 +33,8 @@ if (!function_exists('fullName')){
  */
 if (!function_exists('validatedId')){
 
-    function validatedId($id, $table){
-        $validation = Validator::make(compact('id'),['id'=>'exists:'.$table.',id']);
+    function validatedId($slug, $table){
+        $validation = Validator::make(compact('slug'),['$slug'=>'exists:'.$table.',slug']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }
@@ -163,23 +163,23 @@ if (!function_exists('getUser')){
 
     function getUser($id,$roleName){
         if ($roleName == "Praticien"){
-            $praticien = \App\Models\Praticien::whereId($id)->first();
+            $praticien = \App\Models\Praticien::whereUserId($id)->first();
             return response()->json(['user'=>$praticien->user]);
         }
         elseif ($roleName == "Patient"){
-            $patient = \App\Models\Patient::whereId($id)->first();
+            $patient = \App\Models\Patient::whereUserId($id)->first();
             return response()->json(['user'=>$patient->user]);
         }
         elseif ($roleName == "Gestionnaire"){
-            $gestionnaire = \App\Models\Gestionnaire::whereId($id)->first();
+            $gestionnaire = \App\Models\Gestionnaire::whereUserId($id)->first();
             return response()->json(['user'=>$gestionnaire->user]);
         }
         elseif ($roleName == "Souscripteur"){
-            $souscripteur = \App\Models\Souscripteur::whereId($id)->first();
+            $souscripteur = \App\Models\Souscripteur::whereUserId($id)->first();
             return response()->json(['user'=>$souscripteur->user]);
         }
         elseif ($roleName == "Medecin controle"){
-            $medecinControle = \App\Models\MedecinControle::whereId($id)->first();
+            $medecinControle = \App\Models\MedecinControle::whereUserId($id)->first();
             return response()->json(['user'=>$medecinControle->user]);
         }
 

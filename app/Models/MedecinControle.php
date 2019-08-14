@@ -27,6 +27,7 @@ class MedecinControle extends Model
         "specialite_id",
         "numero_ordre",
         "civilite",
+        'slug'
 //        "nom",
 //        "prenom",
 //        "nationalite",

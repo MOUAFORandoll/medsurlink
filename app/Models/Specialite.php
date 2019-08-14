@@ -19,7 +19,8 @@ class Specialite extends Model
     protected $fillable = [
         "name",
         "description",
-        "profession_id"
+        "profession_id",
+        'slug'
     ];
 
     public function profession(){

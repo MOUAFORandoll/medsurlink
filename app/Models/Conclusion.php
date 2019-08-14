@@ -13,6 +13,7 @@ class Conclusion extends Model
         "consultation_medecine_generale_id",
         "reference",
         "description",
+        'slug'
     ];
 
     public function consultationMedecine(){

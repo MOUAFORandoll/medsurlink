@@ -9,7 +9,9 @@ use App\Models\Patient;
 use App\Models\Praticien;
 use App\Models\Souscripteur;
 use App\Models\Traits\SlugRoutable;
+use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use http\Env\Response;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -25,6 +27,7 @@ class User extends Authenticatable
     use HasApiTokens;
     use HasRoles;
     use Sluggable;
+    use SluggableScopeHelpers;
     use SlugRoutable;
 
     protected $guard_name = 'api';
@@ -44,6 +47,7 @@ class User extends Authenticatable
         'pays',
         'telephone',
         'password',
+        'slug'
     ];
 
     /**
@@ -55,10 +59,14 @@ class User extends Authenticatable
     {
         return [
             'slug' => [
-                'source' => 'nom'
+                'source' => 'NomAndTimestamp'
             ]
         ];
     }
+    public function getNomAndTimestampAttribute() {
+        return $this->nom . ' ' .Carbon::now()->timestamp;
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *

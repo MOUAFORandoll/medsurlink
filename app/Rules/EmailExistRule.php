@@ -14,9 +14,9 @@ class EmailExistRule implements Rule
      *
      * @return void
      */
-    public function __construct($id,$roleName)
+    public function __construct($slug,$roleName)
     {
-        $this->id = $id;
+        $this->slug = $slug;
         $this->roleName = $roleName;
     }
 
@@ -29,9 +29,9 @@ class EmailExistRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        $user = getUser($this->id,$this->roleName)->getOriginalContent()['user'];
+        $user = getUser($this->slug,$this->roleName)->getOriginalContent()['user'];
 //        Je vais regarder s'il existe un utilisateur avec cette email a part l'utilisateur qu'on veut modifier ses informations
-        $nbre =   User::where('email','=',$value)->where('id','<>',$user->id)->count();
+        $nbre =   User::where('email','=',$value)->where('slug','like',$user->slug)->count();
         return $nbre == 0;
     }
 

@@ -19,6 +19,7 @@ class ParametreCommun extends Model
         "temperature",
         "frequence_cardiaque",
         "sato2",
+        'slug'
     ];
 
     public function consultation(){
