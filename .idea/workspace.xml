@@ -3,10 +3,20 @@
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/GestionnaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/GestionnaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/GestionnaireStoreRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/GestionnaireStoreRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/GestionnaireUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/GestionnaireUpdateRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Gestionnaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Gestionnaire.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/EtablissementExerciceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/EtablissementExerciceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ProfessionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ProfessionController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SpecialiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SpecialiteController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/EtablissementExerciceRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/EtablissementExerciceRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/PraticienStoreRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/PraticienStoreRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/PraticienUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/PraticienUpdateRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ProfessionRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ProfessionRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/SpecialiteRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/SpecialiteRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/EtablissementExercice.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/EtablissementExercice.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Praticien.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Praticien.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Profession.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Profession.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Specialite.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Specialite.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_16_120654_create_etablissement_exercice_praticiens_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_16_120654_create_etablissement_exercice_praticiens_table.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -52,7 +62,7 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
-        <item name="patients: table" type="dbc44a63:MariaImplModel$Table" />
+        <item name="etablissement_exercices: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />

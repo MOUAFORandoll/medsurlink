@@ -42,6 +42,11 @@ class ProfessionController extends Controller
      */
     public function store(ProfessionRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
         $profession = Profession::create($request->validated());
         defineAsAuthor("Profession",$profession->id,'create');
 
@@ -54,12 +59,12 @@ class ProfessionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-        $profession = Profession::with('specialites')->find($id);
+        $profession = Profession::with('specialites')->whereSlug($slug)->first();
         return response()->json(['profession'=>$profession]);
 
     }
@@ -82,19 +87,20 @@ class ProfessionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProfessionRequest $request, $id)
+    public function update(ProfessionRequest $request, $slug)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Profession",$id,"create");
+        $profession  = Profession::whereSlug($slug)->first();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Profession",$profession->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        Profession::whereId($id)->update($request->validated());
-        $profession = Profession::with('specialites')->find($id);
+        Profession::whereSlug($slug)->update($request->validated());
+        $profession = Profession::with('specialites')->whereSlug($slug)->first();
         return response()->json(['profession'=>$profession]);
     }
 
@@ -104,23 +110,21 @@ class ProfessionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Profession",$id,"create");
+        $profession  = Profession::whereSlug($slug)->first();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Profession",$profession->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        $profession = Profession::with('specialites')->find($id);
-//        if($profession->specialites->count() > 0) {
-//            return response()->json(['error'=>"Cet élément est lié à un autre (spécialité), Vous devez supprimer tous les elements auquel il est lié"],422);
-//        }
         try{
-        Profession::destroy($id);
+            $profession = Profession::with('specialites')->whereSlug($slug)->first();
+            $profession->delete();
         }catch (DeleteRestrictionException $deleteRestrictionException){
             return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
         }
@@ -131,8 +135,8 @@ class ProfessionController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:professions,id']);
+    public function validatedSlug($slug){
+        $validation = Validator::make(compact('slug'),['slug'=>'exists:professions,slug']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }

@@ -42,6 +42,10 @@ class PraticienController extends Controller
      */
     public function store(PraticienStoreRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
 
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request);
@@ -72,12 +76,12 @@ class PraticienController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-         $validation = $this->validatedId($id);
+         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-        $praticien = Praticien::with('etablissements','user')->whereUserId($id)->first();
+        $praticien = Praticien::with('etablissements','user')->whereSlug($slug)->first();
         return response()->json(['praticien'=>$praticien]);
 
     }
@@ -100,19 +104,18 @@ class PraticienController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PraticienUpdateRequest $request, $id)
+    public function update(PraticienUpdateRequest $request, $slug)
     {
-         $validation = $this->validatedId($id);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-        Praticien::whereUserId($id)->update($request->validated());
-        $praticien = Praticien::with('etablissements')->whereUserId($id)->first();
-//
-//        //ajustement de l'email du user
-//        $user = $praticien->user;
-//        $user->email = $praticien->email;
-//        $user->save();
-
+        Praticien::whereSlug($slug)->update($request->validated());
+        $praticien = Praticien::with('etablissements')->whereSlug($slug)->first();
         return response()->json(['praticien'=>$praticien]);
 
     }
@@ -123,12 +126,12 @@ class PraticienController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-         $validation = $this->validatedId($id);
+         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-        $praticien = Praticien::with('etablissements')->whereUserId($id)->first();
+        $praticien = Praticien::with('etablissements')->whereSlug($slug)->first();
         $praticien->delete();
         return response()->json(['praticien'=>$praticien]);
 
@@ -138,8 +141,8 @@ class PraticienController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:praticiens,user_id']);
+    public function validatedSlug($slug){
+        $validation = Validator::make(compact('slug'),['slug'=>'exists:praticiens,slug']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }
@@ -148,7 +151,7 @@ class PraticienController extends Controller
 
     public function addEtablissement(Request $request){
         $request->validate([
-            'etablissement_exercice_id'=>'sometimes|nullable|integer',
+            'etablissement_exercice_id'=>'sometimes|nullable|integer|exists:etablissement_exercices,id',
             'praticien_id'=>'required|exists:praticiens,user_id',
             'name'=>'sometimes|nullable|string|min:5',
         ]);
@@ -175,7 +178,7 @@ class PraticienController extends Controller
 
     public function removeEtablissement(Request $request){
         $request->validate([
-            'etablissement_exercice_id'=>'required||integer',
+            'etablissement_exercice_id'=>'required|integer|exists:etablissement_exercices,id',
             'praticien_id'=>'required|exists:praticiens,user_id',
         ]);
 

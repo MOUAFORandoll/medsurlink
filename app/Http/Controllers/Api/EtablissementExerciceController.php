@@ -44,12 +44,13 @@ class EtablissementExerciceController extends Controller
      */
     public function store(EtablissementExerciceRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
         $etablissement = EtablissementExercice::create($request->validated());
         defineAsAuthor("EtablissementExercice",$etablissement->id,'create');
-
-        if($etablissement->praticiens->count() > 0) {
-            return response()->json(['error'=>"Cet élément est lié à un autre, Vous devez supprimer tous les elements auquel il est lié"],422);
-        }
         return response()->json(['etablissement'=>$etablissement]);
     }
 
@@ -59,13 +60,13 @@ class EtablissementExerciceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-         $validation = $this->validatedId($id);
+         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;;
 
-        $etablissement = EtablissementExercice::with(['praticiens'])->find($id);
+        $etablissement = EtablissementExercice::with(['praticiens'])->whereSlug($slug)->first();
         return response()->json(['etablissement'=>$etablissement]);
 
 
@@ -89,14 +90,19 @@ class EtablissementExerciceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EtablissementExerciceRequest $request, $id)
+    public function update(EtablissementExerciceRequest $request, $slug)
     {
-         $validation = $this->validatedId($id);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;;
 
-        EtablissementExercice::whereId($id)->update($request->validated());
-        $etablissement = EtablissementExercice::with(['praticiens'])->find($id);
+        EtablissementExercice::whereSlug($slug)->update($request->validated());
+        $etablissement = EtablissementExercice::with(['praticiens'])->whereSlug($slug)->first();
         return response()->json(['etablissement'=>$etablissement]);
 
     }
@@ -107,15 +113,15 @@ class EtablissementExerciceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-         $validation = $this->validatedId($id);
+         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;;
 
         try{
-            $etablissement = EtablissementExercice::with(['praticiens'])->find($id);
-            EtablissementExercice::destroy($id);
+            $etablissement = EtablissementExercice::with(['praticiens'])->whereSlug($slug)->first();
+            $etablissement->delete();
             return response()->json(['etablissement'=>$etablissement]);
 
         }catch (DeleteRestrictionException $deleteRestrictionException){
@@ -127,8 +133,8 @@ class EtablissementExerciceController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:etablissement_exercices,id']);
+    public function validatedSlug($slug){
+        $validation = Validator::make(compact('slug'),['slug'=>'exists:etablissement_exercices,slug']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }
