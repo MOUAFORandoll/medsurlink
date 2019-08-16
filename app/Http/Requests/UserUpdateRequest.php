@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\EmailExistRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -40,5 +41,9 @@ class UserUpdateRequest extends FormRequest
         ];
     }
 
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        Request::merge(['error'=>$validator->errors()->getMessages()]);
 
+    }
 }

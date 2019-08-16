@@ -58,14 +58,14 @@ class ConsultationPrenantaleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
 
-        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->find($id);
+        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
 
     }
@@ -88,9 +88,14 @@ class ConsultationPrenantaleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ConsultationPrenataleRequest $request, $id)
+    public function update(ConsultationPrenataleRequest $request, $slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
@@ -100,8 +105,8 @@ class ConsultationPrenantaleController extends Controller
 
         //Attachement des parametres obstetrique
 
-        ConsultationPrenatale::whereId($id)->update($request->validated());
-        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->find($id);
+        ConsultationPrenatale::whereSlug($slug)->update($request->validated());
+        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }
 
@@ -111,19 +116,20 @@ class ConsultationPrenantaleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationPrenatale",$id,"create");
+        $consultationPrenatale = ConsultationPrenatale::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationPrenatale",$consultationPrenatale->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
         try{
-            $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->find($id);
-            ConsultationPrenatale::destroy($id);
+            $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+            $consultationPrenatale->delete();
             return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
             return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
@@ -138,13 +144,13 @@ class ConsultationPrenantaleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function archiver($id)
+    public function archiver($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->find($id);
+        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
             return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
         }else{
@@ -161,13 +167,13 @@ class ConsultationPrenantaleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function transmettre($id)
+    public function transmettre($slug)
     {
-        $validation = validatedSlug($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->find($id);
+        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
 

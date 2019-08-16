@@ -24,9 +24,12 @@ class Resultat extends Model
     {
         return [
             'slug' => [
-                'source' => ['type',Carbon::now()->timestamp]
+                'source' => 'TypeAndTimestamp'
             ]
         ];
+    }
+    public function getTypeAndTimestampAttribute() {
+        return $this->type . ' ' .Carbon::now()->timestamp;
     }
     protected $fillable = [
         "dossier_medical_id",

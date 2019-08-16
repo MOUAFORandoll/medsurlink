@@ -63,7 +63,7 @@ class ConclusionController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $conclusion = Conclusion::with(['consultationMedecine'])->scopeWhereSlug($slug)->first();
+        $conclusion = Conclusion::with(['consultationMedecine'])->whereSlug($slug)->first();
         return response()->json(['conclusion'=>$conclusion]);
 
     }

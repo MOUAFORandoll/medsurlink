@@ -2028,820 +2028,820 @@ operationable_id</ColNames>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="487" parent="339" name="slug">
-      <Position>8</Position>
-      <DataType>varchar(191)|0s</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <index id="488" parent="339" name="consultation_allergie_slug_unique">
-      <ColNames>slug</ColNames>
-      <Unique>1</Unique>
-      <Type>btree</Type>
-    </index>
-    <index id="489" parent="339" name="consultation_allergie_consultation_medecine_generale_id_foreign">
+    <index id="487" parent="339" name="consultation_allergie_consultation_medecine_generale_id_foreign">
       <ColNames>consultation_medecine_generale_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="490" parent="339" name="consultation_allergie_allergie_id_foreign">
+    <index id="488" parent="339" name="consultation_allergie_allergie_id_foreign">
       <ColNames>allergie_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="491" parent="339" name="PRIMARY">
+    <key id="489" parent="339" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="492" parent="339" name="consultation_allergie_slug_unique">
-      <ColNames>slug</ColNames>
-      <UnderlyingIndexName>consultation_allergie_slug_unique</UnderlyingIndexName>
-    </key>
-    <foreign-key id="493" parent="339" name="consultation_allergie_consultation_medecine_generale_id_foreign">
+    <foreign-key id="490" parent="339" name="consultation_allergie_consultation_medecine_generale_id_foreign">
       <ColNames>consultation_medecine_generale_id</ColNames>
       <RefTableName>consultation_medecine_generales</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="494" parent="339" name="consultation_allergie_allergie_id_foreign">
+    <foreign-key id="491" parent="339" name="consultation_allergie_allergie_id_foreign">
       <ColNames>allergie_id</ColNames>
       <RefTableName>allergies</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="495" parent="340" name="id">
+    <column id="492" parent="340" name="id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="496" parent="340" name="consultation_medecine_generale_id">
+    <column id="493" parent="340" name="consultation_medecine_generale_id">
       <Position>2</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="497" parent="340" name="examen_clinique_id">
+    <column id="494" parent="340" name="examen_clinique_id">
       <Position>3</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="498" parent="340" name="deleted_at">
+    <column id="495" parent="340" name="deleted_at">
       <Position>4</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="499" parent="340" name="created_at">
+    <column id="496" parent="340" name="created_at">
       <Position>5</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="500" parent="340" name="updated_at">
+    <column id="497" parent="340" name="updated_at">
       <Position>6</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="501" parent="340" name="consultation_clinique_consultation_medecine_generale_id_foreign">
+    <index id="498" parent="340" name="consultation_clinique_consultation_medecine_generale_id_foreign">
       <ColNames>consultation_medecine_generale_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="502" parent="340" name="consultation_clinique_examen_clinique_id_foreign">
+    <index id="499" parent="340" name="consultation_clinique_examen_clinique_id_foreign">
       <ColNames>examen_clinique_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="503" parent="340" name="PRIMARY">
+    <key id="500" parent="340" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="504" parent="340" name="consultation_clinique_consultation_medecine_generale_id_foreign">
+    <foreign-key id="501" parent="340" name="consultation_clinique_consultation_medecine_generale_id_foreign">
       <ColNames>consultation_medecine_generale_id</ColNames>
       <RefTableName>consultation_medecine_generales</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="505" parent="340" name="consultation_clinique_examen_clinique_id_foreign">
+    <foreign-key id="502" parent="340" name="consultation_clinique_examen_clinique_id_foreign">
       <ColNames>examen_clinique_id</ColNames>
       <RefTableName>examen_cliniques</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="506" parent="341" name="id">
+    <column id="503" parent="341" name="id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="507" parent="341" name="consultation_medecine_generale_id">
+    <column id="504" parent="341" name="consultation_medecine_generale_id">
       <Position>2</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="508" parent="341" name="examen_complementaire_id">
+    <column id="505" parent="341" name="examen_complementaire_id">
       <Position>3</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="509" parent="341" name="deleted_at">
+    <column id="506" parent="341" name="deleted_at">
       <Position>4</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="510" parent="341" name="created_at">
+    <column id="507" parent="341" name="created_at">
       <Position>5</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="511" parent="341" name="updated_at">
+    <column id="508" parent="341" name="updated_at">
       <Position>6</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="512" parent="341" name="consultation_exam_com_consultation_medecine_generale_id_foreign">
+    <index id="509" parent="341" name="consultation_exam_com_consultation_medecine_generale_id_foreign">
       <ColNames>consultation_medecine_generale_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="513" parent="341" name="consultation_exam_com_examen_complementaire_id_foreign">
+    <index id="510" parent="341" name="consultation_exam_com_examen_complementaire_id_foreign">
       <ColNames>examen_complementaire_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="514" parent="341" name="PRIMARY">
+    <key id="511" parent="341" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="515" parent="341" name="consultation_exam_com_consultation_medecine_generale_id_foreign">
+    <foreign-key id="512" parent="341" name="consultation_exam_com_consultation_medecine_generale_id_foreign">
       <ColNames>consultation_medecine_generale_id</ColNames>
       <RefTableName>consultation_medecine_generales</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="516" parent="341" name="consultation_exam_com_examen_complementaire_id_foreign">
+    <foreign-key id="513" parent="341" name="consultation_exam_com_examen_complementaire_id_foreign">
       <ColNames>examen_complementaire_id</ColNames>
       <RefTableName>examen_complementaires</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="517" parent="342" name="id">
+    <column id="514" parent="342" name="id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="518" parent="342" name="dossier_medical_id">
+    <column id="515" parent="342" name="dossier_medical_id">
       <Position>2</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="519" parent="342" name="date_consultation">
+    <column id="516" parent="342" name="date_consultation">
       <Position>3</Position>
       <DataType>date|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="520" parent="342" name="anamese">
+    <column id="517" parent="342" name="anamese">
       <Position>4</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="521" parent="342" name="mode_de_vie">
+    <column id="518" parent="342" name="mode_de_vie">
       <Position>5</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="522" parent="342" name="deleted_at">
+    <column id="519" parent="342" name="deleted_at">
       <Position>6</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="523" parent="342" name="created_at">
+    <column id="520" parent="342" name="created_at">
       <Position>7</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="524" parent="342" name="updated_at">
+    <column id="521" parent="342" name="updated_at">
       <Position>8</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="525" parent="342" name="slug">
+    <column id="522" parent="342" name="slug">
       <Position>9</Position>
       <DataType>varchar(191)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="526" parent="342" name="archieved_at">
+    <column id="523" parent="342" name="archieved_at">
       <Position>10</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="527" parent="342" name="passed_at">
+    <column id="524" parent="342" name="passed_at">
       <Position>11</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="528" parent="342" name="consultation_medecine_generales_slug_unique">
+    <index id="525" parent="342" name="consultation_medecine_generales_slug_unique">
       <ColNames>slug</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="529" parent="342" name="consultation_medecine_generales_dossier_medical_id_foreign">
+    <index id="526" parent="342" name="consultation_medecine_generales_dossier_medical_id_foreign">
       <ColNames>dossier_medical_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="530" parent="342" name="PRIMARY">
+    <key id="527" parent="342" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="531" parent="342" name="consultation_medecine_generales_slug_unique">
+    <key id="528" parent="342" name="consultation_medecine_generales_slug_unique">
       <ColNames>slug</ColNames>
       <UnderlyingIndexName>consultation_medecine_generales_slug_unique</UnderlyingIndexName>
     </key>
-    <foreign-key id="532" parent="342" name="consultation_medecine_generales_dossier_medical_id_foreign">
+    <foreign-key id="529" parent="342" name="consultation_medecine_generales_dossier_medical_id_foreign">
       <ColNames>dossier_medical_id</ColNames>
       <RefTableName>dossier_medicals</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="533" parent="343" name="id">
+    <column id="530" parent="343" name="id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="534" parent="343" name="consultation_medecine_generale_id">
+    <column id="531" parent="343" name="consultation_medecine_generale_id">
       <Position>2</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="535" parent="343" name="motif_id">
+    <column id="532" parent="343" name="motif_id">
       <Position>3</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="536" parent="343" name="deleted_at">
+    <column id="533" parent="343" name="deleted_at">
       <Position>4</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="537" parent="343" name="created_at">
+    <column id="534" parent="343" name="created_at">
       <Position>5</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="538" parent="343" name="updated_at">
+    <column id="535" parent="343" name="updated_at">
       <Position>6</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="539" parent="343" name="consultation_motif_consultation_medecine_generale_id_foreign">
+    <index id="536" parent="343" name="consultation_motif_consultation_medecine_generale_id_foreign">
       <ColNames>consultation_medecine_generale_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="540" parent="343" name="consultation_motif_motif_id_foreign">
+    <index id="537" parent="343" name="consultation_motif_motif_id_foreign">
       <ColNames>motif_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="541" parent="343" name="PRIMARY">
+    <key id="538" parent="343" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="542" parent="343" name="consultation_motif_consultation_medecine_generale_id_foreign">
+    <foreign-key id="539" parent="343" name="consultation_motif_consultation_medecine_generale_id_foreign">
       <ColNames>consultation_medecine_generale_id</ColNames>
       <RefTableName>consultation_medecine_generales</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="543" parent="343" name="consultation_motif_motif_id_foreign">
+    <foreign-key id="540" parent="343" name="consultation_motif_motif_id_foreign">
       <ColNames>motif_id</ColNames>
       <RefTableName>motifs</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="544" parent="344" name="id">
+    <column id="541" parent="344" name="id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="545" parent="344" name="date_creation">
+    <column id="542" parent="344" name="date_creation">
       <Position>2</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;2019-08-14&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="546" parent="344" name="numero_grossesse">
+    <column id="543" parent="344" name="numero_grossesse">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="547" parent="344" name="ddr">
+    <column id="544" parent="344" name="ddr">
       <Position>4</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="548" parent="344" name="serologie">
+    <column id="545" parent="344" name="serologie">
       <Position>5</Position>
       <DataType>varchar(191)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="549" parent="344" name="groupe_sanguin">
+    <column id="546" parent="344" name="groupe_sanguin">
       <Position>6</Position>
       <DataType>varchar(191)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="550" parent="344" name="statut_socio_familiale">
+    <column id="547" parent="344" name="statut_socio_familiale">
       <Position>7</Position>
       <DataType>varchar(191)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="551" parent="344" name="assuetudes">
+    <column id="548" parent="344" name="assuetudes">
       <Position>8</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="552" parent="344" name="antecedent_de_transfusion">
+    <column id="549" parent="344" name="antecedent_de_transfusion">
       <Position>9</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="553" parent="344" name="facteur_de_risque">
+    <column id="550" parent="344" name="facteur_de_risque">
       <Position>10</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="554" parent="344" name="deleted_at">
+    <column id="551" parent="344" name="deleted_at">
       <Position>11</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="555" parent="344" name="created_at">
+    <column id="552" parent="344" name="created_at">
       <Position>12</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="556" parent="344" name="updated_at">
+    <column id="553" parent="344" name="updated_at">
       <Position>13</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="557" parent="344" name="slug">
+    <column id="554" parent="344" name="slug">
       <Position>14</Position>
       <DataType>varchar(191)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="558" parent="344" name="archieved_at">
+    <column id="555" parent="344" name="archieved_at">
       <Position>15</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="559" parent="344" name="passed_at">
+    <column id="556" parent="344" name="passed_at">
       <Position>16</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="560" parent="344" name="consultation_obstetriques_slug_unique">
+    <index id="557" parent="344" name="consultation_obstetriques_slug_unique">
       <ColNames>slug</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="561" parent="344" name="PRIMARY">
+    <key id="558" parent="344" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="562" parent="344" name="consultation_obstetriques_slug_unique">
+    <key id="559" parent="344" name="consultation_obstetriques_slug_unique">
       <ColNames>slug</ColNames>
       <UnderlyingIndexName>consultation_obstetriques_slug_unique</UnderlyingIndexName>
     </key>
-    <column id="563" parent="345" name="id">
+    <column id="560" parent="345" name="id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="564" parent="345" name="consultation_obstetrique_id">
+    <column id="561" parent="345" name="consultation_obstetrique_id">
       <Position>2</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="565" parent="345" name="date_creation">
+    <column id="562" parent="345" name="date_creation">
       <Position>3</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;2019-08-14&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="566" parent="345" name="type_de_consultation">
+    <column id="563" parent="345" name="type_de_consultation">
       <Position>4</Position>
       <DataType>varchar(191)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="567" parent="345" name="plaintes">
+    <column id="564" parent="345" name="plaintes">
       <Position>5</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="568" parent="345" name="antecedent_conjoint">
+    <column id="565" parent="345" name="antecedent_conjoint">
       <Position>6</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="569" parent="345" name="recommandations">
+    <column id="566" parent="345" name="recommandations">
       <Position>7</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="570" parent="345" name="deleted_at">
+    <column id="567" parent="345" name="deleted_at">
       <Position>8</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="571" parent="345" name="created_at">
+    <column id="568" parent="345" name="created_at">
       <Position>9</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="572" parent="345" name="updated_at">
+    <column id="569" parent="345" name="updated_at">
       <Position>10</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="573" parent="345" name="slug">
+    <column id="570" parent="345" name="slug">
       <Position>11</Position>
       <DataType>varchar(191)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="574" parent="345" name="archieved_at">
+    <column id="571" parent="345" name="archieved_at">
       <Position>12</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="575" parent="345" name="passed_at">
+    <column id="572" parent="345" name="passed_at">
       <Position>13</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="576" parent="345" name="consultation_prenatales_slug_unique">
+    <index id="573" parent="345" name="consultation_prenatales_slug_unique">
       <ColNames>slug</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="577" parent="345" name="consultation_prenatales_consultation_obstetrique_id_foreign">
+    <index id="574" parent="345" name="consultation_prenatales_consultation_obstetrique_id_foreign">
       <ColNames>consultation_obstetrique_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="578" parent="345" name="PRIMARY">
+    <key id="575" parent="345" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="579" parent="345" name="consultation_prenatales_slug_unique">
+    <key id="576" parent="345" name="consultation_prenatales_slug_unique">
       <ColNames>slug</ColNames>
       <UnderlyingIndexName>consultation_prenatales_slug_unique</UnderlyingIndexName>
     </key>
-    <foreign-key id="580" parent="345" name="consultation_prenatales_consultation_obstetrique_id_foreign">
+    <foreign-key id="577" parent="345" name="consultation_prenatales_consultation_obstetrique_id_foreign">
       <ColNames>consultation_obstetrique_id</ColNames>
       <RefTableName>consultation_obstetriques</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="581" parent="346" name="id">
+    <column id="578" parent="346" name="id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="582" parent="346" name="patient_id">
+    <column id="579" parent="346" name="patient_id">
       <Position>2</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="583" parent="346" name="date_de_creation">
+    <column id="580" parent="346" name="date_de_creation">
       <Position>3</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="584" parent="346" name="numero_dossier">
+    <column id="581" parent="346" name="numero_dossier">
       <Position>4</Position>
       <DataType>varchar(191)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="585" parent="346" name="created_at">
+    <column id="582" parent="346" name="created_at">
       <Position>5</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="586" parent="346" name="updated_at">
+    <column id="583" parent="346" name="updated_at">
       <Position>6</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="587" parent="346" name="deleted_at">
+    <column id="584" parent="346" name="deleted_at">
       <Position>7</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="588" parent="346" name="slug">
+    <column id="585" parent="346" name="slug">
       <Position>8</Position>
       <DataType>varchar(191)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="589" parent="346" name="dossier_medicals_numero_dossier_unique">
+    <index id="586" parent="346" name="dossier_medicals_numero_dossier_unique">
       <ColNames>numero_dossier</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="590" parent="346" name="dossier_medicals_slug_unique">
+    <index id="587" parent="346" name="dossier_medicals_slug_unique">
       <ColNames>slug</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="591" parent="346" name="dossier_medicals_patient_id_foreign">
+    <index id="588" parent="346" name="dossier_medicals_patient_id_foreign">
       <ColNames>patient_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="592" parent="346" name="PRIMARY">
+    <key id="589" parent="346" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="593" parent="346" name="dossier_medicals_numero_dossier_unique">
+    <key id="590" parent="346" name="dossier_medicals_numero_dossier_unique">
       <ColNames>numero_dossier</ColNames>
       <UnderlyingIndexName>dossier_medicals_numero_dossier_unique</UnderlyingIndexName>
     </key>
-    <key id="594" parent="346" name="dossier_medicals_slug_unique">
+    <key id="591" parent="346" name="dossier_medicals_slug_unique">
       <ColNames>slug</ColNames>
       <UnderlyingIndexName>dossier_medicals_slug_unique</UnderlyingIndexName>
     </key>
-    <foreign-key id="595" parent="346" name="dossier_medicals_patient_id_foreign">
+    <foreign-key id="592" parent="346" name="dossier_medicals_patient_id_foreign">
       <ColNames>patient_id</ColNames>
       <RefTableName>patients</RefTableName>
       <RefColNames>user_id</RefColNames>
     </foreign-key>
-    <column id="596" parent="347" name="id">
+    <column id="593" parent="347" name="id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="597" parent="347" name="consultation_obstetrique_id">
+    <column id="594" parent="347" name="consultation_obstetrique_id">
       <Position>2</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="598" parent="347" name="date_creation">
+    <column id="595" parent="347" name="date_creation">
       <Position>3</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;2019-08-14&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="599" parent="347" name="type">
+    <column id="596" parent="347" name="type">
       <Position>4</Position>
       <DataType>varchar(191)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="600" parent="347" name="ddr">
+    <column id="597" parent="347" name="ddr">
       <Position>5</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="601" parent="347" name="dpa">
+    <column id="598" parent="347" name="dpa">
       <Position>6</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="602" parent="347" name="semaine_amenorrhee">
+    <column id="599" parent="347" name="semaine_amenorrhee">
       <Position>7</Position>
       <DataType>int(11)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="603" parent="347" name="biometrie">
+    <column id="600" parent="347" name="biometrie">
       <Position>8</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="604" parent="347" name="annexe">
+    <column id="601" parent="347" name="annexe">
       <Position>9</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="605" parent="347" name="description">
+    <column id="602" parent="347" name="description">
       <Position>10</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="606" parent="347" name="deleted_at">
+    <column id="603" parent="347" name="deleted_at">
       <Position>11</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="607" parent="347" name="created_at">
+    <column id="604" parent="347" name="created_at">
       <Position>12</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="608" parent="347" name="updated_at">
+    <column id="605" parent="347" name="updated_at">
       <Position>13</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="609" parent="347" name="slug">
+    <column id="606" parent="347" name="slug">
       <Position>14</Position>
       <DataType>varchar(191)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="610" parent="347" name="echographies_slug_unique">
+    <index id="607" parent="347" name="echographies_slug_unique">
       <ColNames>slug</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="611" parent="347" name="echographies_consultation_obstetrique_id_foreign">
+    <index id="608" parent="347" name="echographies_consultation_obstetrique_id_foreign">
       <ColNames>consultation_obstetrique_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="612" parent="347" name="PRIMARY">
+    <key id="609" parent="347" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="613" parent="347" name="echographies_slug_unique">
+    <key id="610" parent="347" name="echographies_slug_unique">
       <ColNames>slug</ColNames>
       <UnderlyingIndexName>echographies_slug_unique</UnderlyingIndexName>
     </key>
-    <foreign-key id="614" parent="347" name="echographies_consultation_obstetrique_id_foreign">
+    <foreign-key id="611" parent="347" name="echographies_consultation_obstetrique_id_foreign">
       <ColNames>consultation_obstetrique_id</ColNames>
       <RefTableName>consultation_obstetriques</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="615" parent="348" name="id">
+    <column id="612" parent="348" name="id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="616" parent="348" name="etablissement_id">
+    <column id="613" parent="348" name="etablissement_id">
       <Position>2</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="617" parent="348" name="praticien_id">
+    <column id="614" parent="348" name="praticien_id">
       <Position>3</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="618" parent="348" name="created_at">
+    <column id="615" parent="348" name="created_at">
       <Position>4</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="619" parent="348" name="updated_at">
+    <column id="616" parent="348" name="updated_at">
       <Position>5</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="620" parent="348" name="deleted_at">
+    <column id="617" parent="348" name="deleted_at">
       <Position>6</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="621" parent="348" name="etablissement_exercice_praticien_etablissement_id_foreign">
+    <index id="618" parent="348" name="etablissement_exercice_praticien_etablissement_id_foreign">
       <ColNames>etablissement_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="622" parent="348" name="etablissement_exercice_praticien_praticien_id_foreign">
+    <index id="619" parent="348" name="etablissement_exercice_praticien_praticien_id_foreign">
       <ColNames>praticien_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="623" parent="348" name="PRIMARY">
+    <key id="620" parent="348" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="624" parent="348" name="etablissement_exercice_praticien_etablissement_id_foreign">
+    <foreign-key id="621" parent="348" name="etablissement_exercice_praticien_etablissement_id_foreign">
       <ColNames>etablissement_id</ColNames>
       <RefTableName>etablissement_exercices</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <foreign-key id="625" parent="348" name="etablissement_exercice_praticien_praticien_id_foreign">
+    <foreign-key id="622" parent="348" name="etablissement_exercice_praticien_praticien_id_foreign">
       <ColNames>praticien_id</ColNames>
       <RefTableName>praticiens</RefTableName>
       <RefColNames>user_id</RefColNames>
     </foreign-key>
-    <column id="626" parent="349" name="id">
+    <column id="623" parent="349" name="id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="627" parent="349" name="name">
+    <column id="624" parent="349" name="name">
       <Position>2</Position>
       <DataType>varchar(191)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="628" parent="349" name="description">
+    <column id="625" parent="349" name="description">
       <Position>3</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="629" parent="349" name="created_at">
+    <column id="626" parent="349" name="created_at">
       <Position>4</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="630" parent="349" name="updated_at">
+    <column id="627" parent="349" name="updated_at">
       <Position>5</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="631" parent="349" name="deleted_at">
+    <column id="628" parent="349" name="deleted_at">
       <Position>6</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="632" parent="349" name="slug">
+    <column id="629" parent="349" name="slug">
       <Position>7</Position>
       <DataType>varchar(191)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="633" parent="349" name="etablissement_exercices_slug_unique">
+    <index id="630" parent="349" name="etablissement_exercices_slug_unique">
       <ColNames>slug</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="634" parent="349" name="PRIMARY">
+    <key id="631" parent="349" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="635" parent="349" name="etablissement_exercices_slug_unique">
+    <key id="632" parent="349" name="etablissement_exercices_slug_unique">
       <ColNames>slug</ColNames>
       <UnderlyingIndexName>etablissement_exercices_slug_unique</UnderlyingIndexName>
     </key>
-    <column id="636" parent="350" name="id">
+    <column id="633" parent="350" name="id">
       <Position>1</Position>
       <DataType>bigint(20) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="637" parent="350" name="reference">
+    <column id="634" parent="350" name="reference">
       <Position>2</Position>
       <DataType>varchar(191)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="638" parent="350" name="description">
+    <column id="635" parent="350" name="description">
       <Position>3</Position>
       <DataType>text|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="639" parent="350" name="created_at">
+    <column id="636" parent="350" name="slug">
       <Position>4</Position>
-      <DataType>timestamp|0s</DataType>
+      <DataType>varchar(191)|0s</DataType>
+      <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="640" parent="350" name="updated_at">
+    <column id="637" parent="350" name="created_at">
       <Position>5</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="641" parent="350" name="deleted_at">
+    <column id="638" parent="350" name="updated_at">
       <Position>6</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="642" parent="350" name="PRIMARY">
+    <column id="639" parent="350" name="deleted_at">
+      <Position>7</Position>
+      <DataType>timestamp|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="640" parent="350" name="examen_cliniques_slug_unique">
+      <ColNames>slug</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <key id="641" parent="350" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
+    </key>
+    <key id="642" parent="350" name="examen_cliniques_slug_unique">
+      <ColNames>slug</ColNames>
+      <UnderlyingIndexName>examen_cliniques_slug_unique</UnderlyingIndexName>
     </key>
     <column id="643" parent="351" name="id">
       <Position>1</Position>

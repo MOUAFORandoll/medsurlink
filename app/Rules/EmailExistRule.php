@@ -31,7 +31,7 @@ class EmailExistRule implements Rule
     {
         $user = getUser($this->slug,$this->roleName)->getOriginalContent()['user'];
 //        Je vais regarder s'il existe un utilisateur avec cette email a part l'utilisateur qu'on veut modifier ses informations
-        $nbre =   User::where('email','=',$value)->where('slug','like',$user->slug)->count();
+        $nbre =   User::where('email','=',$value)->where('slug','not like',$user->slug)->count();
         return $nbre == 0;
     }
 

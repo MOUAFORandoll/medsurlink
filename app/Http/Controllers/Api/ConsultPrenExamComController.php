@@ -7,14 +7,19 @@ use App\Models\ExamenClinique;
 use App\Models\ExamenComplementaire;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class ConsultPrenExamComController extends Controller
 {
     public function retirerExamenComplementaire(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_obstetriques,id",
             "examensComplementaire.*"=>"required|integer|exists:examen_complementaires,id"
         ]);
+
+        if ($validation->fails()){
+            return response()->json(['error'=>$validation->errors()],419);
+        }
 
         $consultation = ConsultationPrenatale::find($request->get('consultation'));
 
@@ -30,12 +35,14 @@ class ConsultPrenExamComController extends Controller
     }
 
     public function ajouterExamenComplementaire(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_obstetriques,id",
             "examensComplementaire.*"=>"sometimes|integer|exists:examen_complementaires,id",
             "examensComplementaireACreer.*"=>"sometimes|string|min:2"
         ]);
-
+        if ($validation->fails()){
+            return response()->json(['error'=>$validation->errors()],419);
+        }
         $examensComplementaire = $request->get('examensComplementaire');
         $examensComplementaireACreer = $request->get('examensComplementaireACreer');
 

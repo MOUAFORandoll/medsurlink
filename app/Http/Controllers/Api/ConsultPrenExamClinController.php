@@ -7,14 +7,20 @@ use App\Models\ConsultationPrenatale;
 use App\Models\ExamenClinique;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class ConsultPrenExamClinController extends Controller
 {
     public function retirerExamenClinique(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_obstetriques,id",
             "examensClinique.*"=>"required|integer|exists:examen_cliniques,id"
         ]);
+
+        if ($validation->fails()){
+            return response()->json(['error'=>$validation->errors()],419);
+        }
+
         $consultation = ConsultationPrenatale::find($request->get('consultation'));
 
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultPrenExamClin",$consultation->id,"attach");
@@ -30,11 +36,15 @@ class ConsultPrenExamClinController extends Controller
     }
 
     public function ajouterExamenClinique(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_obstetriques,id",
             "examensClinique.*"=>"sometimes|integer|exists:examen_cliniques,id",
             "examensCliniqueACreer.*"=>"sometimes|string|min:2"
         ]);
+
+        if ($validation->fails()){
+            return response()->json(['error'=>$validation->errors()],419);
+        }
 
         $examensClinique = $request->get('examensClinique');
         $examensCliniqueACreer = $request->get('examensCliniqueACreer');

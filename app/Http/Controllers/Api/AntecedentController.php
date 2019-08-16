@@ -62,7 +62,7 @@ class AntecedentController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $antecedent = Antecedent::with('consultation')->whereSlug($slug)->rfirst();
+        $antecedent = Antecedent::with('consultation')->whereSlug($slug)->first();
         return response()->json(['antecedent'=>$antecedent]);
 
     }

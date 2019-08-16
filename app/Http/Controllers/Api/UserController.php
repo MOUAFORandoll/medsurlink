@@ -87,6 +87,11 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, $slug)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
