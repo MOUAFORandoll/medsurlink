@@ -10,6 +10,6 @@ Mot de passe : <strong>{{$password}}</strong><br><br>
 Thanks,<br>
 {{ config('app.name') }}
 <div class="div-logo-mail">
-    <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure" height="100px" width="200px">
+    <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure" height="50px" width="200px">
 </div>
 @endcomponent
