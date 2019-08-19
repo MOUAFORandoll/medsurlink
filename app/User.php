@@ -13,22 +13,26 @@ use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use http\Env\Response;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\HasApiTokens;
+use Netpok\Database\Support\RestrictSoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    use SoftDeletes;
     use Notifiable;
     use HasApiTokens;
     use HasRoles;
     use Sluggable;
     use SluggableScopeHelpers;
     use SlugRoutable;
+    use RestrictSoftDeletes;
 
     protected $guard_name = 'api';
     /**
@@ -49,6 +53,17 @@ class User extends Authenticatable
         'password',
         'slug'
     ];
+
+    /**
+     * The relations restricting model deletion
+     */
+    protected $restrictDeletes = [
+        'praticien',
+        'patient',
+        'gestionnaire',
+        'souscripteur',
+        'medecinControle',
+        ];
 
     /**
      * Return the sluggable configuration array for this model.

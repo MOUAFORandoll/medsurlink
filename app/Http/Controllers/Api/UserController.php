@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Netpok\Database\Support\DeleteRestrictionException;
 
 class UserController extends Controller
 {
@@ -113,9 +114,13 @@ class UserController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $user = User::findBySlug($slug);
-       $user->delete();
-        return response()->json(['user'=>$user]);
+        try{
+            $user = User::findBySlug($slug);
+            $user->delete();
+            return response()->json(['user'=>$user]);
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+        }
     }
 
     /**
@@ -132,7 +137,7 @@ class UserController extends Controller
 
     public static function generatedUser($request){
 
-       $validation = Validator::make($request->all(),[
+        $validation = Validator::make($request->all(),[
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['sometimes','nullable', 'string', 'max:255'],
             'nationalite' => ['required', 'string', 'max:255'],
@@ -146,7 +151,7 @@ class UserController extends Controller
         ]);
 
         if ($validation->fails())
-           return response()->json(['error'=>$validation->errors()],419);
+            return response()->json(['error'=>$validation->errors()],419);
 
         $password = str_random(10);
 

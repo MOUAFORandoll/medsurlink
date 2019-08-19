@@ -99,6 +99,11 @@ class AffiliationController extends Controller
      */
     public function update(AffiliationRequest $request, $slug)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;

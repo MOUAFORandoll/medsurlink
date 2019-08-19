@@ -25,7 +25,7 @@ class AuthController extends AccessTokenController
 //return response()->json(['error'=>$tokenInfo]);
 
         if ($tokenInfo->has('error'))
-            return response()->json(['error'=>$tokenInfo->get('message')]);
+            return response()->json(['error'=>$tokenInfo->get('message')],401);
 
 
         // Then we just add the user to the response before returning it.

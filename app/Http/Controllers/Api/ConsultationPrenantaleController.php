@@ -41,6 +41,10 @@ class ConsultationPrenantaleController extends Controller
      */
     public function store(ConsultationPrenataleRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
         $consultationPrenatale = ConsultationPrenatale::create($request->validated());
         //Attachement des examens clinique
 
