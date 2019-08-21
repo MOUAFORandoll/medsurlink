@@ -8,20 +8,31 @@ use App\Models\MedecinControle;
 use App\Models\Patient;
 use App\Models\Praticien;
 use App\Models\Souscripteur;
+use App\Models\Traits\SlugRoutable;
+use Carbon\Carbon;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use http\Env\Response;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\HasApiTokens;
+use Netpok\Database\Support\RestrictSoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    use SoftDeletes;
     use Notifiable;
     use HasApiTokens;
     use HasRoles;
+    use Sluggable;
+    use SluggableScopeHelpers;
+    use SlugRoutable;
+    use RestrictSoftDeletes;
 
     protected $guard_name = 'api';
     /**
@@ -40,7 +51,36 @@ class User extends Authenticatable
         'pays',
         'telephone',
         'password',
+        'slug'
     ];
+
+    /**
+     * The relations restricting model deletion
+     */
+    protected $restrictDeletes = [
+        'praticien',
+        'patient',
+        'gestionnaire',
+        'souscripteur',
+        'medecinControle',
+        ];
+
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'NomAndTimestamp'
+            ]
+        ];
+    }
+    public function getNomAndTimestampAttribute() {
+        return $this->nom . ' ' .Carbon::now()->timestamp;
+    }
 
     /**
      * The attributes that should be hidden for arrays.

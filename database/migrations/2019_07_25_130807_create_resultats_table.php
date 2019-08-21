@@ -23,6 +23,7 @@ class CreateResultatsTable extends Migration
             $table->string('file')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->string('slug')->unique();
 
             $table->foreign('dossier_medical_id')
                 ->references('id')

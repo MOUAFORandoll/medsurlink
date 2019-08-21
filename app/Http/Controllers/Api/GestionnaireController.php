@@ -41,6 +41,10 @@ class GestionnaireController extends Controller
      */
     public function store(GestionnaireStoreRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
 
         //Création des informations utilisateurs
         $userResponse =  UserController::generatedUser($request);
@@ -67,12 +71,12 @@ class GestionnaireController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-        $gestionnaire = Gestionnaire::whereUserId($id)->first();
+        $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
     }
@@ -95,19 +99,19 @@ class GestionnaireController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(GestionnaireUpdateRequest $request, $id)
+    public function update(GestionnaireUpdateRequest $request, $slug)
     {
-         $validation = $this->validatedId($id);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
 
-        Gestionnaire::whereUserId($id)->update($request->validated());
-        $gestionnaire = Gestionnaire::with('user')->whereUserId($id)->first();
-
-//        //ajustement de l'email du user
-//        $user = $gestionnaire->user;
-//        $user->email = $gestionnaire->email;
-//        $user->save();
+        Gestionnaire::whereSlug($slug)->update($request->validated());
+        $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();
 
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
@@ -119,14 +123,14 @@ class GestionnaireController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-         $validation = $this->validatedId($id);
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
 
-        $gestionnaire = Gestionnaire::whereUserId($id)->first();
-        Gestionnaire::whereUserId($id)->delete();
+        $gestionnaire = Gestionnaire::whereSlug($slug)->first();
+        $gestionnaire->delete();
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
     }
@@ -135,8 +139,8 @@ class GestionnaireController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:gestionnaires,user_id']);
+    public function validatedSlug($slug){
+        $validation = Validator::make(compact('slug'),['slug'=>'exists:gestionnaires,slug']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }

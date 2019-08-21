@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SlugRoutable;
 use App\User;
+use Carbon\Carbon;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Netpok\Database\Support\RestrictSoftDeletes;
@@ -11,6 +15,9 @@ class Patient extends Model
 {
     use SoftDeletes;
     use RestrictSoftDeletes;
+    use Sluggable;
+    use SluggableScopeHelpers;
+    use SlugRoutable;
     /**
      * The primary key associated with the table.
      *
@@ -24,6 +31,11 @@ class Patient extends Model
      * @var bool
      */
     public $incrementing = false;
+
+    /**
+     * The relations restricting model deletion
+     */
+    protected $restrictDeletes = ['dossier'];
     protected $fillable = [
         "user_id",
         "souscripteur_id",
@@ -33,22 +45,16 @@ class Patient extends Model
         "nom_contact",
         "tel_contact",
         "lien_contact",
-//        "nom",
-//        "nationalite",
-//        "prenom",
-//        "ville",
-//        "pays",
-//        "telephone",
-//        "email",
-//        "quartier",
-//        "code_postal",
-
+        'slug',
     ];
-
-    /**
-     * The relations restricting model deletion
-     */
-    protected $restrictDeletes = ['dossier'];
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'user.slug'
+            ]
+        ];
+    }
 
     public function souscripteur(){
         return $this->belongsTo(Souscripteur::class,'souscripteur_id','user_id');

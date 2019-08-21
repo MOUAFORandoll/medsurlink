@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Netpok\Database\Support\DeleteRestrictionException;
 
 class UserController extends Controller
 {
@@ -57,12 +58,12 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = $this->validatedId($id);
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-        $user = User::find($id);
+        $user = User::findBySlug($slug);
         $user->roles;
         return response()->json(['user'=>$user]);
     }
@@ -85,13 +86,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserUpdateRequest $request, $id)
+    public function update(UserUpdateRequest $request, $slug)
     {
-        $validation = $this->validatedId($id);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
 
-        $user = User::find($id);
+        $user = User::findBySlug($slug);
 
         return response()->json(['user'=>$user]);
     }
@@ -102,22 +108,27 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = $this->validatedId($id);
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-        $user = User::find($id);
-        User::destroy($id);
-        return response()->json(['user'=>$user]);
+
+        try{
+            $user = User::findBySlug($slug);
+            $user->delete();
+            return response()->json(['user'=>$user]);
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+        }
     }
 
     /**
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:users,id']);
+    public function validatedSlug($slug){
+        $validation = Validator::make(compact('slug'),['slug'=>'exists:users,slug']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }
@@ -126,7 +137,7 @@ class UserController extends Controller
 
     public static function generatedUser($request){
 
-       $validation = Validator::make($request->all(),[
+        $validation = Validator::make($request->all(),[
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['sometimes','nullable', 'string', 'max:255'],
             'nationalite' => ['required', 'string', 'max:255'],
@@ -140,7 +151,7 @@ class UserController extends Controller
         ]);
 
         if ($validation->fails())
-           return response()->json(['error'=>$validation->errors()],419);
+            return response()->json(['error'=>$validation->errors()],419);
 
         $password = str_random(10);
 

@@ -40,6 +40,10 @@ class ConclusionController extends Controller
      */
     public function store(ConclusionRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
         $conclusion = Conclusion::create($request->validated());
         defineAsAuthor("Conclusion",$conclusion->id,'create');
 
@@ -53,13 +57,13 @@ class ConclusionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $conclusion = Conclusion::with(['consultationMedecine'])->find($id);
+        $conclusion = Conclusion::with(['consultationMedecine'])->whereSlug($slug)->first();
         return response()->json(['conclusion'=>$conclusion]);
 
     }
@@ -82,19 +86,23 @@ class ConclusionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ConclusionRequest $request, $id)
+    public function update(ConclusionRequest $request, $slug)
     {
-        $validation = validatedId($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
-
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$id,"create");
+        $conclusion = Conclusion::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$conclusion->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        Conclusion::whereId($id)->update($request->validated());
-        $conclusion = Conclusion::with(['consultationMedecine'])->find($id);
+        Conclusion::whereSlug($slug)->update($request->validated());
+        $conclusion = Conclusion::with(['consultationMedecine'])->whereSlug($slug)->first();
         return response()->json(['conclusion'=>$conclusion]);
     }
 
@@ -104,14 +112,14 @@ class ConclusionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $conclusion = Conclusion::with(['consultationMedecine'])->find($id);
-        Conclusion::destroy($id);
+        $conclusion = Conclusion::with(['consultationMedecine'])->whereSlug($slug)->first();
+        $conclusion->delete();
         return response()->json(['conclusion'=>$conclusion]);
     }
 }

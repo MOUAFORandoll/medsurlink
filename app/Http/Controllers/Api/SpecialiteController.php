@@ -20,7 +20,7 @@ class SpecialiteController extends Controller
      */
     public function index()
     {
-        $specialites = Specialite::with('profession')->get();
+        $specialites = Specialite::with(['profession'])->get();
         return response()->json(['specialites'=>$specialites]);
     }
 
@@ -42,6 +42,10 @@ class SpecialiteController extends Controller
      */
     public function store(SpecialiteRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
         $specialite = Specialite::create($request->validated());
         defineAsAuthor("Specialite",$specialite->id,'create');
 
@@ -54,13 +58,13 @@ class SpecialiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = $this->validatedId($id);
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
 
-        $specialite = Specialite::with('profession')->find($id);
+        $specialite = Specialite::with(['profession'])->whereSlug($slug)->first();
         return response()->json(['specialite'=>$specialite]);
 
     }
@@ -83,14 +87,19 @@ class SpecialiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(SpecialiteRequest $request, $id)
+    public function update(SpecialiteRequest $request, $slug)
     {
-        $validation = $this->validatedId($id);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
 
-        Specialite::whereId($id)->update($request->validated());
-        $specialite = Specialite::with('profession')->find($id);
+        Specialite::whereSlug($slug)->update($request->validated());
+        $specialite = Specialite::with(['profession'])->whereSlug($slug)->first();
         return response()->json(['specialite'=>$specialite]);
 
     }
@@ -101,14 +110,14 @@ class SpecialiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = $this->validatedId($id);
+        $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
 
         try{
-            $specialite = Specialite::with('profession')->find($id);
+            $specialite = Specialite::with(['profession'])->whereSlug($slug)->first();
             $specialite->delete();
             return response()->json(['specialite'=>$specialite]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
@@ -121,8 +130,8 @@ class SpecialiteController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:specialites,id']);
+    public function validatedSlug($slug){
+        $validation = Validator::make(compact('slug'),['slug'=>'exists:specialites,slug']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }

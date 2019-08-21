@@ -20,6 +20,8 @@ class CreateConclusionsTable extends Migration
             $table->text('description')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->string('slug')->unique();
+
             $table->foreign('consultation_medecine_generale_id')
                 ->references('id')
                 ->on('consultation_medecine_generales')

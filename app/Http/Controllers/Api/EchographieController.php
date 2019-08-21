@@ -42,7 +42,10 @@ class EchographieController extends Controller
      */
     public function store(EchographieRequest $request)
     {
-
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
         $echographie = Echographie::create($request->validated());
         defineAsAuthor("Echographie",$echographie->id,'create');
 
@@ -55,13 +58,13 @@ class EchographieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $echographie = Echographie::with('consultation')->find($id);
+        $echographie = Echographie::with('consultation')->whereSlug($slug)->first();
         return response()->json(['echographie'=>$echographie]);
     }
 
@@ -83,19 +86,24 @@ class EchographieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EchographieRequest $request, $id)
+    public function update(EchographieRequest $request, $slug)
     {
-        $validation = validatedId($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
-
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$id,"create");
+        $echographie = Echographie::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$echographie->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        Echographie::whereId($id)->update($request->validated());
-        $echographie = Echographie::with('consultation')->find($id);
+        Echographie::whereSlug($slug)->update($request->validated());
+        $echographie = Echographie::with('consultation')->whereSlug($slug)->first();
         return response()->json(['echographie'=>$echographie]);
     }
 
@@ -105,19 +113,20 @@ class EchographieController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$id,"create");
+        $echographie = Echographie::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$echographie->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        $echographie = Echographie::with('consultation')->find($id);
-        Echographie::destroy($id);
+        $echographie = Echographie::with('consultation')->whereSlug($slug)->first();
+        $echographie->delete();
         return response()->json(['echographie'=>$echographie]);
     }
 }

@@ -6,16 +6,18 @@ use App\Models\Allergie;
 use App\Models\ConsultationMedecineGenerale;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class ConsultationAllergieController extends Controller
 {
     public function retirerAllergie(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
             "allergies.*"=>"required|integer|exists:allergies,id"
         ]);
-
-
+        if ($validation->fails()){
+            return response()->json(['error'=>$validation->errors()],419);
+        }
 
         $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
 
@@ -31,13 +33,17 @@ class ConsultationAllergieController extends Controller
     }
 
     public function ajouterAllergie(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
             "allergies.*.id"=>"required|integer|exists:allergies,id",
             "allergies.*.date"=>"required|date",
             "allergiesACreer.*.intitule"=>"sometimes|string|min:2",
             "allergiesACreer.*.date"=>"sometimes|date|min:2"
         ]);
+
+        if ($validation->fails()){
+            return response()->json(['error'=>$validation->errors()],419);
+        }
 
         $allergies = $request->get('allergies');
         $allergiesACreer = $request->get('allergiesACreer');

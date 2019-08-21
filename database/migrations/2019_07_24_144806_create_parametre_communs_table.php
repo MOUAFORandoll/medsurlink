@@ -27,6 +27,7 @@ class CreateParametreCommunsTable extends Migration
             $table->integer('sato2')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('slug')->unique();
 
             $table->foreign('consultation_medecine_generale_id')
                 ->references('id')

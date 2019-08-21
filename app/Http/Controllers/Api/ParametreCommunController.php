@@ -39,6 +39,11 @@ class ParametreCommunController extends Controller
      */
     public function store(ParametreCommunRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
         $parametreCommun = ParametreCommun::create($request->validated());
         if (!is_null($request->get('taille') && !is_null($request->get('poids')))){
             $tailleEnMetre = $request->get('taille') * 0.01;
@@ -57,13 +62,13 @@ class ParametreCommunController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $parametreCommun = ParametreCommun::with('consultation')->find($id);
+        $parametreCommun = ParametreCommun::with('consultation')->whereSlug($slug)->first();
         return response()->json(['parametreCommun'=>$parametreCommun]);
 
     }
@@ -86,20 +91,26 @@ class ParametreCommunController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ParametreCommunRequest $request, $id)
+    public function update(ParametreCommunRequest $request, $slug)
     {
-        $validation = validatedId($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$id,"create");
+        $parametreCommun = ParametreCommun::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$parametreCommun->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
 
-        ParametreCommun::whereId($id)->update($request->validated());
-        $parametreCommun = ParametreCommun::with('consultation')->find($id);
+        ParametreCommun::whereSlug($slug)->update($request->validated());
+        $parametreCommun = ParametreCommun::with('consultation')->whereSlug($slug)->first();
 
         if (!is_null($request->get('taille') && !is_null($request->get('poids')))){
             $tailleEnMetre = $request->get('taille') * 0.01;
@@ -116,21 +127,19 @@ class ParametreCommunController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$id,"create");
+        $parametreCommun = ParametreCommun::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$parametreCommun->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-
-        $parametreCommun = ParametreCommun::with('consultation')->find($id);
-        ParametreCommun::destroy($id);
+        $parametreCommun->delete();
         return response()->json(['parametreCommun'=>$parametreCommun]);
     }
 }

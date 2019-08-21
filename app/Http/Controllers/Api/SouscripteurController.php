@@ -52,7 +52,6 @@ class SouscripteurController extends Controller
 
         //Creation du compte souscripteurs
         $age = evaluateYearOfOld($request->date_de_naissance);
-        array_merge($request->validated(), ['user_id' => $user->id]);
         $souscripteur = Souscripteur::create($request->validated() + ['user_id' => $user->id,'age'=>$age]);
 
         defineAsAuthor("Souscripteur",$souscripteur->user_id,'create');
@@ -69,13 +68,13 @@ class SouscripteurController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = $this->validatedId($id);
+        $validation = $this->validatedId($slug);
         if(!is_null($validation))
             return $validation;
 
-        $souscripteur = Souscripteur::with('user','patients')->whereUserId($id)->first();
+        $souscripteur = Souscripteur::with('user','patients')->whereSlug($slug)->first();
         return response()->json(['souscripteur'=>$souscripteur]);
 
     }
@@ -98,18 +97,18 @@ class SouscripteurController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(SouscripteurUpdateRequest $request, $id)
+    public function update(SouscripteurUpdateRequest $request, $slug)
     {
-        $validation = $this->validatedId($id);
+        $validation = $this->validatedId($slug);
         if(!is_null($validation))
             return $validation;
 
         $age = evaluateYearOfOld($request->date_de_naissance);
 
-        Souscripteur::whereUserId($id)->update($request->validated()+['age'=>$age]);
+        Souscripteur::whereSlug($slug)->update($request->validated()+['age'=>$age]);
 
         //Calcul de l'age du souscripteur
-        $souscripteur = Souscripteur::with('user','patients')->whereUserId($id)->first();
+        $souscripteur = Souscripteur::with('user','patients')->whereSlug($slug)->first();
 
         return response()->json(['souscripteur'=>$souscripteur]);
 
@@ -121,13 +120,13 @@ class SouscripteurController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = $this->validatedId($id);
+        $validation = $this->validatedId($slug);
         if(!is_null($validation))
             return $validation;
         try{
-            $souscripteur = Souscripteur::with('user','patients')->whereUserId($id)->first();
+            $souscripteur = Souscripteur::with('user','patients')->whereSlug($slug)->first();
             $souscripteur->delete();
             return response()->json(['souscripteur'=>$souscripteur]);
 
@@ -141,8 +140,8 @@ class SouscripteurController extends Controller
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function validatedId($id){
-        $validation = Validator::make(compact('id'),['id'=>'exists:souscripteurs,user_id']);
+    public function validatedId($slug){
+        $validation = Validator::make(compact('slug'),['slug'=>'exists:souscripteurs,slug']);
         if ($validation->fails()){
             return response()->json($validation->errors(),422);
         }

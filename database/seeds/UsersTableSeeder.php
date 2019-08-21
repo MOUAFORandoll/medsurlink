@@ -22,6 +22,7 @@ class UsersTableSeeder extends Seeder
             'telephone'=>'698900294',
             'email'=>'admin@medicasure.com',
             'password'=>'$2y$10$HhalUPBaWXh7QgFolSCS0emmkuCazgaAGd8gjB0rbeV5TQLZDJmHG',
+            'slug'=>'admin-1'
         ]);
 
         \Illuminate\Support\Facades\DB::table('model_has_roles')->insert([

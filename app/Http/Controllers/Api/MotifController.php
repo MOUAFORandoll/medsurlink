@@ -39,6 +39,11 @@ class MotifController extends Controller
      */
     public function store(MotifRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
         $motif = Motif::create($request->validated());
         defineAsAuthor("Motif",$motif->id,'create');
 
@@ -52,13 +57,13 @@ class MotifController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $motif = Motif::find($id);
+        $motif = Motif::findBySlug($slug);
         return response()->json(['motif'=>$motif]);
     }
 
@@ -80,20 +85,26 @@ class MotifController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(MotifRequest $request, $id)
+    public function update(MotifRequest $request, $slug)
     {
-        $validation = validatedId($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$id,"create");
+        $motif = Motif::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$motif->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        $motif = Motif::whereId($id)->update($request->validated());
+        $motif = Motif::whereSlug($slug)->update($request->validated());
 
-        $motif = Motif::find($id);
+        $motif = Motif::findBySlug($slug);
         return response()->json(['motif'=>$motif]);
     }
 
@@ -103,19 +114,20 @@ class MotifController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$id,"create");
+        $motif  = Motif::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$slug,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        $motif = Motif::find($id);
-        Motif::destroy($id);
+        $motif = Motif::findBySlug($slug);
+        $motif->delete();
         return response()->json(['motif'=>$motif]);
     }
 }

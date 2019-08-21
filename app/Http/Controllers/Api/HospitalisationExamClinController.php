@@ -11,10 +11,13 @@ use Illuminate\Support\Facades\Validator;
 class HospitalisationExamClinController extends Controller
 {
     public function retirerExamenClinique(Request $request){
-        $request->validate([
+        $validation = Validator::make($request->all(),[
             "hospitalisation"=>"required|integer|exists:hospitalisations,id",
             "examensClinique.*"=>"required|integer|exists:examen_cliniques,id"
         ]);
+
+        if ($validation->fails())
+            return response()->json(['error'=>$validation->errors()],419);
 
         $hospitalisation = Hospitalisation::find($request->get('hospitalisation'));
 

@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SlugRoutable;
 use App\User;
+use Carbon\Carbon;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Netpok\Database\Support\RestrictSoftDeletes;
@@ -11,7 +15,9 @@ class Souscripteur extends Model
 {
     use SoftDeletes;
     use RestrictSoftDeletes;
-
+    use Sluggable;
+    use SluggableScopeHelpers;
+    use SlugRoutable;
     /**
      * The relations restricting model deletion
      */
@@ -36,17 +42,22 @@ class Souscripteur extends Model
         "sexe",
         "date_de_naissance",
         "age",
-//        "nom",
-//        "prenom",
-//        "nationalite",
-//        "ville",
-//        "pays",
-//        "telephone",
-//        "email",
-//        "quartier",
-//        "code_postal",
+        'slug'
     ];
 
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'user.slug'
+            ]
+        ];
+    }
     public function patients(){
         return $this->hasMany(Patient::class,'souscripteur_id','user_id');
     }

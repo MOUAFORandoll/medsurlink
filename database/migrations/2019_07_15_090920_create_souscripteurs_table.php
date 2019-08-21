@@ -20,6 +20,7 @@ class CreateSouscripteursTable extends Migration
             $table->date('date_de_naissance');
             $table->integer('age')->nullable();
             $table->timestamps();
+            $table->string('slug')->unique();
             $table->softDeletes();
 //            $table->string('nom');
 //            $table->string('nationalite');

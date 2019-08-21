@@ -42,6 +42,11 @@ class ConsultationObstetriqueController extends Controller
      */
     public function store(ConsultationObstetriqueRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
         $user = Auth::user();
         if($user->hasRole('Praticien')){
             $praticen = $user->praticien;
@@ -68,13 +73,13 @@ class ConsultationObstetriqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales'])->find($id);
+        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales'])->whereSlug($slug)->first();
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
     }
 
@@ -96,19 +101,24 @@ class ConsultationObstetriqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ConsultationObstetriqueRequest $request, $id)
+    public function update(ConsultationObstetriqueRequest $request, $slug)
     {
-        $validation = validatedId($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
-
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$id,"create");
+        $consultationObstetrique = ConsultationObstetrique::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$consultationObstetrique->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        ConsultationObstetrique::whereId($id)->update($request->validated());
-        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales'])->find($id);
+        ConsultationObstetrique::whereSlug($slug)->update($request->validated());
+        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales'])->whereSlug($slug)->first();
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
     }
 
@@ -118,20 +128,20 @@ class ConsultationObstetriqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$id,"create");
+        $consultationObstetrique = ConsultationObstetrique::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$consultationObstetrique->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
         try{
-            $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales'])->find($id);
-            ConsultationObstetrique::destroy($id);
+            $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales'])->whereSlug($slug)->first();
+            $consultationObstetrique->delete();
             return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
             return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
@@ -145,13 +155,13 @@ class ConsultationObstetriqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function archiver($id)
+    public function archiver($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationObstetrique::with(['dossier','consultation'])->find($id);
+        $resultat = ConsultationObstetrique::with(['dossier','consultation'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
             return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
         }else{
@@ -168,13 +178,13 @@ class ConsultationObstetriqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function transmettre($id)
+    public function transmettre($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationObstetrique::with(['dossier','consultation'])->find($id);
+        $resultat = ConsultationObstetrique::with(['dossier','consultation'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
 

@@ -21,6 +21,7 @@ class CreateAffiliationsTable extends Migration
             $table->date('date_fin')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('slug')->unique();
 
             $table->foreign('patient_id')
                 ->references('user_id')

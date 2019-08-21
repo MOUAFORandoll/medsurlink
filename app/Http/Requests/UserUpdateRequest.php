@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\EmailExistRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 
 class UserUpdateRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class UserUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route()->parameter('user');
+        $slug = $this->route()->parameter('user');
 
         return [
             'nom' => ['required', 'string', 'max:255'],
@@ -35,10 +36,14 @@ class UserUpdateRequest extends FormRequest
             'ville' => ['required','string', 'max:255'],
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255',new EmailExistRule($id,'User')],
+            'email' => ['required', 'string', 'email', 'max:255',new EmailExistRule($slug,'User')],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ];
     }
 
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        Request::merge(['error'=>$validator->errors()->getMessages()]);
 
+    }
 }

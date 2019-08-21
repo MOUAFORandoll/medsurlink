@@ -40,6 +40,10 @@ class ParametreObstetriqueController extends Controller
      */
     public function store(ParametreObstRequest $request)
     {
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
         $parametreObs = ParametreObstetrique::create($request->validated());
         defineAsAuthor("ParametreObstetrique",$parametreObs->id,'create');
 
@@ -52,13 +56,13 @@ class ParametreObstetriqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->find($id);
+        $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->whereSlug($slug)->first();
         return response()->json(['parametreObs'=>$parametreObs]);
 
     }
@@ -81,19 +85,25 @@ class ParametreObstetriqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ParametreObstRequest $request, $id)
+    public function update(ParametreObstRequest $request, $slug)
     {
-        $validation = validatedId($id,$this->table);
+        if ($request->has('error'))
+        {
+            return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$id,"create");
+        $parametreObs = ParametreObstetrique::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$parametreObs->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        ParametreObstetrique::whereId($id)->update($request->validated());
-        $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->find($id);
+        ParametreObstetrique::whereSlug($slug)->update($request->validated());
+        $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->whereSlug($slug)->first();
         return response()->json(['parametreObs'=>$parametreObs]);
     }
 
@@ -103,20 +113,19 @@ class ParametreObstetriqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($slug)
     {
-        $validation = validatedId($id,$this->table);
+        $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$id,"create");
+        $parametreObs = ParametreObstetrique::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$parametreObs->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->find($id);
-        ParametreObstetrique::destroy($id);
+        $parametreObs->delete();
         return response()->json(['parametreObs'=>$parametreObs]);
-
     }
 }

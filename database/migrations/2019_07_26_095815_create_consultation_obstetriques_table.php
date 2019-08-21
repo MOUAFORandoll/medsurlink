@@ -26,6 +26,8 @@ class CreateConsultationObstetriquesTable extends Migration
             $table->text('facteur_de_risque')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('slug')->unique();
+
         });
     }
 

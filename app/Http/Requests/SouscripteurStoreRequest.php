@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
 
 class SouscripteurStoreRequest extends FormRequest
@@ -28,20 +29,11 @@ class SouscripteurStoreRequest extends FormRequest
             "user_id"=>'sometimes|integer|exists:users,id',
             "sexe"=>["required",Rule::in(['M','F'])],
             "date_de_naissance"=>'required|date',
-//            "nationalite"=>'required|string|min:4',
-//            "ville"=>'required|string|min:2',
-//            "pays"=>'required|string|min:2',
-//            "telephone"=>'required|string|min:9',
-//            "email"=>'required|string|unique:users,email',
-//            "quartier"=>'sometimes|nullable|string|min:1',
-//            "code_postal"=>'sometimes|integer',
-//            "prenom"=>'sometimes|nullable|string|min:2',
-//            "nom"=>'required|string|min:2',
-        ];
+       ];
     }
 
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        return response()->json(['error'=>$validator->errors()],419);
+        Request::merge(['error'=>$validator->errors()->getMessages()]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
 
 class AffiliationRequest extends FormRequest
@@ -25,14 +26,14 @@ class AffiliationRequest extends FormRequest
     public function rules()
     {
         return [
-            "patient_id"=>"required|integer|exists:patients,id",
+            "patient_id"=>"required|integer|exists:patients,user_id",
             "nom"=>["required",Rule::in(['One shot','Annuelle'])],
             "date_debut"=>"required|date",
             "date_fin"=>"sometimes|nullable|date|after_or_equal:date_debut",
         ];
     }
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    protected  function  failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
-        return response()->json(['error'=>$validator->errors()],419);
+        Request::merge(['error'=>$validator->errors()->getMessages()]);
     }
 }

@@ -2,13 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Traits\SlugRoutable;
 use App\User;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Gestionnaire extends Model
 {
     use SoftDeletes;
+    use Sluggable;
+    use SluggableScopeHelpers;
+    use SlugRoutable;
 
     /**
      * The primary key associated with the table.
@@ -27,17 +33,17 @@ class Gestionnaire extends Model
     protected $fillable = [
         "user_id",
         "civilite",
-//        "nom",
-//        "prenom",
-//        "nationalite",
-//        "ville",
-//        "pays",
-//        "telephone",
-//        "email",
-//        "quartier",
-//        "code_postal",
+        'slug'
     ];
 
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'user.slug'
+            ]
+        ];
+    }
     /**
      * Get all of the gestionnaire action.
      */

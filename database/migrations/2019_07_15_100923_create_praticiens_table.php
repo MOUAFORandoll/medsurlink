@@ -21,6 +21,7 @@ class CreatePraticiensTable extends Migration
             $table->softDeletes();
             $table->string('numero_ordre');
             $table->timestamps();
+            $table->string('slug')->unique();
 //            $table->string('nom');
 //            $table->string('prenom')->nullable();
 //            $table->string('nationalite');
