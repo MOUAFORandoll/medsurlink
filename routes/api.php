@@ -157,6 +157,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
     Route::post('retirer-traitement','Api\ConsultationTraitementController@retirerTraitement');
     Route::post('ajouter-traitement','Api\ConsultationTraitementController@ajouterTraitement');
+
+    Route::get('max-consultation-obs','Api\ConsultationObstetriqueController@genererNumeroGrossesse');
 });
 
 
