@@ -21,6 +21,7 @@ class EchographieController extends Controller
     public function index()
     {
         $echographies = Echographie::with('consultation')->get();
+        $echographies = $echographies->groupBy('consultation_obstetrique_id');
         return response()->json(['echographies'=>$echographies]);
     }
 

@@ -55,7 +55,7 @@ class DossierMedicalController extends Controller
 
         $numero_dossier = $this->randomNumeroDossier();
         $dossier = DossierMedical::create([
-           'patient_id'=>$request->get('patient_id'),
+            'patient_id'=>$request->get('patient_id'),
             "date_de_creation"=>Carbon::now()->format('Y-m-d'),
             "numero_dossier"=>$numero_dossier,
         ]);
@@ -76,6 +76,8 @@ class DossierMedicalController extends Controller
             return $validation;
 
         $dossier = DossierMedical::with(['patient'])->whereSlug($slug)->first();
+        $user = $dossier->patient->user;
+        $dossier['user'] = $user;
         return response()->json(['dossier'=>$dossier]);
     }
 
@@ -121,7 +123,7 @@ class DossierMedicalController extends Controller
 
 
     public static function randomNumeroDossier(){
-$resultat = ''.rand(0,100000000);
+        $resultat = ''.rand(0,100000000);
         while (strlen($resultat)<8){
             $longueur = strlen($resultat);
             if ($longueur == 1)
@@ -142,8 +144,8 @@ $resultat = ''.rand(0,100000000);
         }
 
         while(count(DossierMedical::where('numero_dossier','=',$resultat)->get())>0){
-           $resultat = self::randomNumeroDossier();
-       }
+            $resultat = self::randomNumeroDossier();
+        }
 
         return $resultat;
     }

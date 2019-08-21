@@ -149,4 +149,6 @@ class User extends Authenticatable
     public function medecinControle(){
         return $this->hasOne(MedecinControle::class,'user_id','id');
     }
+
+
 }
