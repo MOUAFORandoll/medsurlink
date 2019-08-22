@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class ConsultationObstetriqueController extends Controller
@@ -20,7 +21,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function index()
     {
-        $consultationsObstetrique = ConsultationObstetrique::with(['consultationPrenatales'])->get();
+        $consultationsObstetrique = ConsultationObstetrique::with(['consultationPrenatales','echographies'])->get();
         return response()->json(['consultationsObstetrique'=>$consultationsObstetrique]);
     }
 
@@ -47,11 +48,12 @@ class ConsultationObstetriqueController extends Controller
             return  response()->json(['error'=>$request->all()['error']],419);
         }
 
+        $maxNumeroGrossesse = self::genererNumeroGrossesse();
         $user = Auth::user();
         if($user->hasRole('Praticien')){
             $praticen = $user->praticien;
             if ($praticen->specialite->name == "Gynéco-obstétrique"){
-                $consultationObstetrique =  ConsultationObstetrique::create($request->validated());
+                $consultationObstetrique =  ConsultationObstetrique::create($request->validated()+['numero_grossesse'=>$maxNumeroGrossesse]);
 
                 defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create');
 
@@ -60,7 +62,7 @@ class ConsultationObstetriqueController extends Controller
                 return response()->json(['error'=>"Vous ne disposez pas des autorisations pour effectuer cette action"],422);
             }
         }elseif($user->hasRole('Admin')){
-            $consultationObstetrique =  ConsultationObstetrique::create($request->validated());
+            $consultationObstetrique =  ConsultationObstetrique::create($request->validated()+['numero_grossesse'=>$maxNumeroGrossesse]);
             defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create');
             return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
         }
@@ -79,7 +81,7 @@ class ConsultationObstetriqueController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales'])->whereSlug($slug)->first();
+        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies'])->whereSlug($slug)->first();
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
     }
 
@@ -112,13 +114,15 @@ class ConsultationObstetriqueController extends Controller
         if(!is_null($validation))
             return $validation;
         $consultationObstetrique = ConsultationObstetrique::findBySlug($slug);
+
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$consultationObstetrique->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-        ConsultationObstetrique::whereSlug($slug)->update($request->validated());
-        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales'])->whereSlug($slug)->first();
+        $numeroGrossesse = $consultationObstetrique->numero_grossesse;
+        ConsultationObstetrique::whereSlug($slug)->update($request->validated() + ['numero_grossesse'=>$numeroGrossesse]);
+        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies'])->whereSlug($slug)->first();
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
     }
 
@@ -140,7 +144,7 @@ class ConsultationObstetriqueController extends Controller
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
         try{
-            $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales'])->whereSlug($slug)->first();
+            $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies'])->whereSlug($slug)->first();
             $consultationObstetrique->delete();
             return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
@@ -161,7 +165,7 @@ class ConsultationObstetriqueController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationObstetrique::with(['dossier','consultation'])->whereSlug($slug)->first();
+        $resultat = ConsultationObstetrique::with(['consultationPrenatales','echographies'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
             return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
         }else{
@@ -184,11 +188,16 @@ class ConsultationObstetriqueController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationObstetrique::with(['dossier','consultation'])->whereSlug($slug)->first();
+        $resultat = ConsultationObstetrique::with(['consultationPrenatales','echographies'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
 
         return response()->json(['resultat'=>$resultat]);
 
+    }
+
+    public static function genererNumeroGrossesse(){
+       $maxConsultationObst =  DB::table('consultation_obstetriques')->max('numero_grossesse');
+       return $maxConsultationObst +1;
     }
 }

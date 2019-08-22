@@ -17,22 +17,7 @@ class ConsultationObstetrique extends Model
     use Sluggable;
     use SluggableScopeHelpers;
     use SlugRoutable;
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'DdrAndTimestamp'
-            ]
-        ];
-    }
-    public function getDdrAndTimestampAttribute() {
-        return $this->ddr . ' ' .Carbon::now()->timestamp;
-    }
+
     /**
      * The relations restricting model deletion
      */
@@ -53,6 +38,22 @@ class ConsultationObstetrique extends Model
         'slug'
     ];
 
+    /**
+     * Return the sluggable configuration array for this model.
+     *
+     * @return array
+     */
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'DdrAndTimestamp'
+            ]
+        ];
+    }
+    public function getDdrAndTimestampAttribute() {
+        return $this->ddr . ' ' .Carbon::now()->timestamp;
+    }
     public function consultationPrenatales(){
         return $this->hasMany(ConsultationPrenatale::class,'consultation_obstetrique_id','id');
     }

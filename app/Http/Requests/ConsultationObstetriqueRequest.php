@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Controllers\Api\ConsultationObstetriqueController;
+use App\Models\ConsultationObstetrique;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 
@@ -25,7 +27,7 @@ class ConsultationObstetriqueRequest extends FormRequest
     public function rules()
     {
         return [
-            "numero_grossesse"=>"required|integer",
+//            "numero_grossesse"=>"sometimes|integer",
             "ddr"=>"required|date",
             "serologie"=>"sometimes|nullable|string|min:1",
             "groupe_sanguin"=>"sometimes|nullable|string",

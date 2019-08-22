@@ -118,15 +118,13 @@ class HospitalisationController extends Controller
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
-$hospitalisation = Hospitalisation::findBySlug($slug);
+        $hospitalisation = Hospitalisation::findBySlug($slug);
         $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$hospitalisation->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
 
-
-        $hospitalisation = Hospitalisation::with('dossier')->whereSlug($slug)->first();
-        $hospitalisation->all();
+        $hospitalisation->delete();
         return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 }

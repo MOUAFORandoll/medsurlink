@@ -54,7 +54,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien']], function () 
     Route::put('resultat/{id}/transmettre','Api\ResultatController@transmettre');
     Route::put('consultation-medecine/{id}/transmettre','Api\ConsultationMedecineGeneraleController@transmettre');
     Route::put('consultation-obstetrique/{id}/transmettre','Api\ConsultationObstetriqueController@transmettre');
-    Route::put('consultation-prenatale/{id}/transmettre','Api\ConsultationPrenantaleController@transmettre');
+    Route::put('consultation-Con/{id}/transmettre','Api\ConsultationPrenantaleController@transmettre');
 
 });
 
@@ -157,6 +157,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
     Route::post('retirer-traitement','Api\ConsultationTraitementController@retirerTraitement');
     Route::post('ajouter-traitement','Api\ConsultationTraitementController@ajouterTraitement');
+
+    Route::get('max-consultation-obs','Api\ConsultationObstetriqueController@genererNumeroGrossesse');
 });
 
 
