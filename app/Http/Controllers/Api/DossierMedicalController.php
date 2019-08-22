@@ -22,6 +22,11 @@ class DossierMedicalController extends Controller
     public function index()
     {
         $dossiers = DossierMedical::with(['patient'])->get();
+        foreach ($dossiers as $dossier){
+            $user = $dossier->patient->user;
+            $dossier['user'] = $user;
+        }
+
         return response()->json(['dossiers'=>$dossiers]);
     }
 
