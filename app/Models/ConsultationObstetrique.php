@@ -24,6 +24,7 @@ class ConsultationObstetrique extends Model
     protected $restrictDeletes = ['consultationPrenatales','echographies'];
 
     protected $fillable = [
+        "dossier_medical_id",
         "date_creation",
         "numero_grossesse",
         "ddr",
@@ -47,17 +48,21 @@ class ConsultationObstetrique extends Model
     {
         return [
             'slug' => [
-                'source' => 'DdrAndTimestamp'
+                'source' => 'DossierAndTimestamp'
             ]
         ];
     }
-    public function getDdrAndTimestampAttribute() {
-        return $this->ddr . ' ' .Carbon::now()->timestamp;
+    public function getDossierAndTimestampAttribute() {
+        return $this->dossier->slug . ' ' .Carbon::now()->timestamp;
     }
     public function consultationPrenatales(){
         return $this->hasMany(ConsultationPrenatale::class,'consultation_obstetrique_id','id');
     }
     public function echographies(){
         return $this->hasMany(Echographie::class,'consultation_obstetrique_id','id');
+    }
+
+    public function dossier(){
+        return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }
 }

@@ -28,6 +28,7 @@ class ConsultationObstetriqueRequest extends FormRequest
     {
         return [
 //            "numero_grossesse"=>"sometimes|integer",
+            "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
             "ddr"=>"required|date",
             "serologie"=>"sometimes|nullable|string|min:1",
             "groupe_sanguin"=>"sometimes|nullable|string",

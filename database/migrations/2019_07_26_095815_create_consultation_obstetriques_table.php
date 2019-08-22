@@ -15,6 +15,7 @@ class CreateConsultationObstetriquesTable extends Migration
     {
         Schema::create('consultation_obstetriques', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('dossier_medical_id');
             $table->date('date_creation')->default(Carbon\Carbon::now()->format('Y-m-d'));
             $table->integer('numero_grossesse');
             $table->date('ddr');
@@ -28,6 +29,11 @@ class CreateConsultationObstetriquesTable extends Migration
             $table->timestamps();
             $table->string('slug')->unique();
 
+            $table->foreign('dossier_medical_id')
+                ->references('id')
+                ->on('dossier_medicals')
+                ->onDelete('RESTRICT')
+                ->onUpdate('RESTRICT');
         });
     }
 
@@ -38,6 +44,8 @@ class CreateConsultationObstetriquesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('consultation_obstetriques');
+        Schema::dropIfExists('consultation_obstetriques', function (Blueprint $table) {
+            $table->dropForeign('dossier_medical_id');
+        });
     }
 }

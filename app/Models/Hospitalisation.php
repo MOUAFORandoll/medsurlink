@@ -37,11 +37,13 @@ class Hospitalisation extends Model
     {
         return [
             'slug' => [
-                'source' => ['dossier.slug','date_entree']
+                'source' =>'DossierAndTimestamp'
             ]
         ];
     }
-
+    public function getDossierAndTimestampAttribute() {
+        return $this->dossier->slug . ' ' .Carbon::now()->timestamp;
+    }
     public function dossier(){
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }
