@@ -37,7 +37,7 @@ class Hospitalisation extends Model
     {
         return [
             'slug' => [
-                'source' => ['dossier.slug',Carbon::now()->timestamp]
+                'source' => ['dossier.slug','date_entree']
             ]
         ];
     }
