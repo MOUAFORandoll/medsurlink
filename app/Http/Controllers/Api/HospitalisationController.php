@@ -63,7 +63,7 @@ class HospitalisationController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $hospitalisation = Hospitalisation::with('dossier')->whereSlug($slug)->first();
+        $hospitalisation = Hospitalisation::with('dossier','examensClinique','examensComplementaire')->whereSlug($slug)->first();
         return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
@@ -103,7 +103,7 @@ class HospitalisationController extends Controller
         }
 
         Hospitalisation::whereSlug($slug)->update($request->validated());
-        $hospitalisation = Hospitalisation::with('dossier')->whereSlug($slug)->first();
+        $hospitalisation = Hospitalisation::with(['dossier','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
         return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
