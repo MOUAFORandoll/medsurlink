@@ -20,6 +20,12 @@ class ConsultationPrenantaleController extends Controller
     public function index()
     {
         $consultationsPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->get();
+        foreach ($consultationsPrenatale as $consultationPrenatale){
+            $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
+            $dossier = $consultationPrenatale->consultationObstetrique->dossier;
+            $consultationObstetrique['user']=$user;
+            $consultationObstetrique['dossier']=$dossier;
+        }
         return response()->json(['consultationsPrenatale'=>$consultationsPrenatale]);
     }
 
@@ -70,6 +76,10 @@ class ConsultationPrenantaleController extends Controller
 
 
         $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
+        $dossier = $consultationPrenatale->consultationObstetrique->dossier;
+        $consultationObstetrique['user']=$user;
+        $consultationObstetrique['dossier']=$dossier;
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
 
     }
@@ -160,6 +170,10 @@ class ConsultationPrenantaleController extends Controller
         }else{
             $resultat->archieved_at = Carbon::now();
             $resultat->save();
+            $user = $resultat->consultationObstetrique->dossier->patient->user;
+            $dossier = $resultat->consultationObstetrique->dossier;
+            $resultat['user']=$user;
+            $resultat['dossier']=$dossier;
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -180,7 +194,10 @@ class ConsultationPrenantaleController extends Controller
         $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
-
+        $user = $resultat->consultationObstetrique->dossier->patient->user;
+        $dossier = $resultat->consultationObstetrique->dossier;
+        $resultat['user']=$user;
+        $resultat['dossier']=$dossier;
         return response()->json(['resultat'=>$resultat]);
 
     }
