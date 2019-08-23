@@ -23,8 +23,8 @@ class ConsultationPrenantaleController extends Controller
         foreach ($consultationsPrenatale as $consultationPrenatale){
             $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
             $dossier = $consultationPrenatale->consultationObstetrique->dossier;
-            $consultationObstetrique['user']=$user;
-            $consultationObstetrique['dossier']=$dossier;
+            $consultationPrenatale['user']=$user;
+            $consultationPrenatale['dossier']=$dossier;
         }
         return response()->json(['consultationsPrenatale'=>$consultationsPrenatale]);
     }
@@ -78,8 +78,8 @@ class ConsultationPrenantaleController extends Controller
         $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
         $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
         $dossier = $consultationPrenatale->consultationObstetrique->dossier;
-        $consultationObstetrique['user']=$user;
-        $consultationObstetrique['dossier']=$dossier;
+        $consultationPrenatale['user']=$user;
+        $consultationPrenatale['dossier']=$dossier;
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
 
     }
