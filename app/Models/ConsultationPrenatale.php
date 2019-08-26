@@ -49,7 +49,7 @@ class ConsultationPrenatale extends Model
         'slug'
     ];
 
-    public function parametreObstetrique(){
+    public function parametresObstetrique(){
         return $this->hasMany(ParametreObstetrique::class,'consultation_prenatale_id','id');
     }
 
@@ -64,4 +64,5 @@ class ConsultationPrenatale extends Model
     public function examensComplementaire(){
         return $this->belongsToMany(ExamenComplementaire::class,'consult_pren_exam_com','consultation_prenatale_id','examen_complementaire_id');
     }
+
 }
