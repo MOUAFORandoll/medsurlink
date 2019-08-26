@@ -24,9 +24,12 @@ class ParametreObstetrique extends Model
     {
         return [
             'slug' => [
-                'source' => ['consultationPrenatale.slug',Carbon::now()->timestamp]
+                'source' => 'ConsultationAndTimestamp'
             ]
         ];
+    }
+    public function getConsultationAndTimestampAttribute() {
+        return $this->consultationPrenatale->slug . ' ' .Carbon::now()->timestamp;
     }
     protected $table = "parametre_obs";
     protected $fillable = [

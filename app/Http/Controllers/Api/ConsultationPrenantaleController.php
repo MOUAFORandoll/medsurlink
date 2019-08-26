@@ -19,7 +19,7 @@ class ConsultationPrenantaleController extends Controller
      */
     public function index()
     {
-        $consultationsPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->get();
+        $consultationsPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->get();
         foreach ($consultationsPrenatale as $consultationPrenatale){
             $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
             $dossier = $consultationPrenatale->consultationObstetrique->dossier;
@@ -75,7 +75,7 @@ class ConsultationPrenantaleController extends Controller
             return $validation;
 
 
-        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
         $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
         $dossier = $consultationPrenatale->consultationObstetrique->dossier;
         $consultationPrenatale['user']=$user;
@@ -120,7 +120,7 @@ class ConsultationPrenantaleController extends Controller
         //Attachement des parametres obstetrique
 
         ConsultationPrenatale::whereSlug($slug)->update($request->validated());
-        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }
 
@@ -142,7 +142,7 @@ class ConsultationPrenantaleController extends Controller
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
         try{
-            $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+            $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
             $consultationPrenatale->delete();
             return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
@@ -164,7 +164,7 @@ class ConsultationPrenantaleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
             return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
         }else{
@@ -191,7 +191,7 @@ class ConsultationPrenantaleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametreObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
         $user = $resultat->consultationObstetrique->dossier->patient->user;

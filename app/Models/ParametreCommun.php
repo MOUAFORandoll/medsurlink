@@ -24,11 +24,13 @@ class ParametreCommun extends Model
     {
         return [
             'slug' => [
-                'source' => ['consultation.slug',Carbon::now()->timestamp]
+                'source' => 'ConsultationAndTimestamp'
             ]
         ];
     }
-
+    public function getConsultationAndTimestampAttribute() {
+        return $this->consultation->slug . ' ' .Carbon::now()->timestamp;
+    }
     protected $fillable = [
         "consultation_medecine_generale_id",
         "poids",
