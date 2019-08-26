@@ -45,6 +45,7 @@ class ParametreObstetriqueController extends Controller
             return  response()->json(['error'=>$request->all()['error']],419);
         }
         $parametreObs = ParametreObstetrique::create($request->validated());
+        $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->whereSlug($parametreObs->slug)->first();
         defineAsAuthor("ParametreObstetrique",$parametreObs->id,'create');
 
         return response()->json(['parametreObs'=>$parametreObs]);

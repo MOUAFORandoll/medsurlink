@@ -23,6 +23,12 @@ class ConsultationMedecineGeneraleController extends Controller
     public function index()
     {
         $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->get();
+        foreach ($consultations as $consultation){
+            $user = $consultation->dossier->patient->user;
+            $patient = $consultation->dossier->patient;
+            $consultation['user']=$user;
+            $consultation['patient']=$patient;
+        }
         return response()->json(["consultations"=>$consultations]);
     }
 
@@ -125,7 +131,12 @@ class ConsultationMedecineGeneraleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $consultation = ConsultationMedecineGenerale::with(['motifs'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
+        $user = $consultation->dossier->patient->user;
+        $patient = $consultation->dossier->patient;
+        $consultation['user']=$user;
+        $consultation['patient']=$patient;
+
         return response()->json(["consultation"=>$consultation]);
 
     }
@@ -182,7 +193,8 @@ class ConsultationMedecineGeneraleController extends Controller
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
-        $consultation = ConsultationMedecineGenerale::findBySlug($slug);
+
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$consultation->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);

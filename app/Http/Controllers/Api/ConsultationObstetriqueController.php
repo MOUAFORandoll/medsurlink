@@ -21,7 +21,11 @@ class ConsultationObstetriqueController extends Controller
      */
     public function index()
     {
-        $consultationsObstetrique = ConsultationObstetrique::with(['consultationPrenatales','echographies'])->get();
+        $consultationsObstetrique = ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->get();
+        foreach ($consultationsObstetrique as $consultationObstetrique){
+            $user = $consultationObstetrique->dossier->patient->user;
+            $consultationObstetrique['user']=$user;
+        }
         return response()->json(['consultationsObstetrique'=>$consultationsObstetrique]);
     }
 
@@ -81,7 +85,9 @@ class ConsultationObstetriqueController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies'])->whereSlug($slug)->first();
+        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
+        $user = $consultationObstetrique->dossier->patient->user;
+        $consultationObstetrique['user']=$user;
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
     }
 
@@ -122,7 +128,7 @@ class ConsultationObstetriqueController extends Controller
 
         $numeroGrossesse = $consultationObstetrique->numero_grossesse;
         ConsultationObstetrique::whereSlug($slug)->update($request->validated() + ['numero_grossesse'=>$numeroGrossesse]);
-        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies'])->whereSlug($slug)->first();
+        $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
     }
 
@@ -144,7 +150,7 @@ class ConsultationObstetriqueController extends Controller
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
         }
         try{
-            $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies'])->whereSlug($slug)->first();
+            $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
             $consultationObstetrique->delete();
             return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
@@ -165,7 +171,7 @@ class ConsultationObstetriqueController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationObstetrique::with(['consultationPrenatales','echographies'])->whereSlug($slug)->first();
+        $resultat = ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
             return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
         }else{
@@ -188,7 +194,7 @@ class ConsultationObstetriqueController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationObstetrique::with(['consultationPrenatales','echographies'])->whereSlug($slug)->first();
+        $resultat = ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
 
