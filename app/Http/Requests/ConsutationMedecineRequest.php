@@ -29,6 +29,8 @@ class ConsutationMedecineRequest extends FormRequest
             "date_consultation"=>"sometimes|nullable|date",
             "anamese"=>"sometimes|nullable|string|min:5",
             "mode_de_vie"=>"sometimes|nullable|string|min:5",
+            "motifs.*"=>"sometimes|integer|exists:motifs,id",
+            "motifsACreer.*"=>"required|string|min:2",
         ];
     }
 
