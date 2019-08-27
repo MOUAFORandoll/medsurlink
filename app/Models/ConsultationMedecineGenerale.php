@@ -26,11 +26,13 @@ class ConsultationMedecineGenerale extends Model
     {
         return [
             'slug' => [
-                'source' => ['dossier.slug',Carbon::now()->timestamp]
+                'source' => 'DossierAndTimestamp'
             ]
         ];
     }
-
+    public function getDossierAndTimestampAttribute() {
+        return $this->dossier->slug . ' ' .Carbon::now()->timestamp;
+    }
     /**
      * The relations restricting model deletion
      */

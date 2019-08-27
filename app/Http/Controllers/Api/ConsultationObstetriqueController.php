@@ -173,7 +173,7 @@ class ConsultationObstetriqueController extends Controller
 
         $resultat = ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
-            return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
+            return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],419 );
         }else{
             $resultat->archieved_at = Carbon::now();
             $resultat->save();
