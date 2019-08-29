@@ -13,7 +13,7 @@ class ConsultPrenExamClinController extends Controller
 {
     public function retirerExamenClinique(Request $request){
         $validation = Validator::make($request->all(),[
-            "consultation"=>"required|integer|exists:consultation_obstetriques,id",
+            "consultation"=>"required|integer|exists:consultation_prenatales,id",
             "examensClinique.*"=>"required|integer|exists:examen_cliniques,id"
         ]);
 
@@ -30,14 +30,14 @@ class ConsultPrenExamClinController extends Controller
 
         $consultation->examensClinique()->detach($request->get('examensClinique'));
 
-        $consultation = ConsultationPrenatale::with(['examensClinique','examensComplementaire'])->find($request->get('consultation'));
+        $consultation = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->find($request->get('consultation'));
 
         return response()->json(['consultation'=>$consultation]);
     }
 
     public function ajouterExamenClinique(Request $request){
         $validation = Validator::make($request->all(),[
-            "consultation"=>"required|integer|exists:consultation_obstetriques,id",
+            "consultation"=>"required|integer|exists:consultation_prenatales,id",
             "examensClinique.*"=>"sometimes|integer|exists:examen_cliniques,id",
             "examensCliniqueACreer.*"=>"sometimes|string|min:2"
         ]);
@@ -66,7 +66,7 @@ class ConsultPrenExamClinController extends Controller
         }
 
         defineAsAuthor("ConsultPrenExamClin",$consultation->id,'attach');
-        $consultation = ConsultationPrenatale::with(['examensClinique','examensComplementaire'])->find($request->get('consultation'));
+        $consultation = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->find($request->get('consultation'));
 
         return response()->json(['consultation'=>$consultation]);
     }

@@ -58,7 +58,11 @@ class ConsultationPrenantaleController extends Controller
 
         //Attcahement des parametres obstetrique
         defineAsAuthor("ConsultationPrenatale",$consultationPrenatale->id,'create');
-
+        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($consultationPrenatale->slug)->first();
+        $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
+        $dossier = $consultationPrenatale->consultationObstetrique->dossier;
+        $consultationPrenatale['user']=$user;
+        $consultationPrenatale['dossier']=$dossier;
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }
 
@@ -121,6 +125,10 @@ class ConsultationPrenantaleController extends Controller
 
         ConsultationPrenatale::whereSlug($slug)->update($request->validated());
         $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
+        $dossier = $consultationPrenatale->consultationObstetrique->dossier;
+        $consultationPrenatale['user']=$user;
+        $consultationPrenatale['dossier']=$dossier;
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }
 
