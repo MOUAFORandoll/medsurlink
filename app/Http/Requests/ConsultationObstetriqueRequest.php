@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Controllers\Api\ConsultationObstetriqueController;
 use App\Models\ConsultationObstetrique;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 
@@ -29,7 +30,7 @@ class ConsultationObstetriqueRequest extends FormRequest
         return [
 //            "numero_grossesse"=>"sometimes|integer",
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
-            "ddr"=>"required|date",
+            "ddr"=>"required|date|after_or_equal:".Carbon::now(),
             "serologie"=>"sometimes|nullable|string|min:1",
             "groupe_sanguin"=>"sometimes|nullable|string",
             "statut_socio_familiale"=>"sometimes|nullable|string",

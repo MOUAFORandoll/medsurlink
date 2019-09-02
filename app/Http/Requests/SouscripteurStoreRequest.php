@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
@@ -28,7 +29,7 @@ class SouscripteurStoreRequest extends FormRequest
         return [
             "user_id"=>'sometimes|integer|exists:users,id',
             "sexe"=>["required",Rule::in(['M','F'])],
-            "date_de_naissance"=>'required|date',
+            "date_de_naissance"=>'required|date|before_or_equal:'.Carbon::now(),
        ];
     }
 
