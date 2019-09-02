@@ -7,6 +7,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Netpok\Database\Support\RestrictSoftDeletes;
 
 class DossierMedical extends Model
 {
@@ -14,6 +15,7 @@ class DossierMedical extends Model
     use Sluggable;
     use SluggableScopeHelpers;
     use SlugRoutable;
+    use RestrictSoftDeletes;
 
     protected $fillable = [
       "patient_id",
@@ -30,8 +32,20 @@ class DossierMedical extends Model
             ]
         ];
     }
+    /**
+     * The relations restricting model deletion
+     */
+    protected $restrictDeletes = ['consultationsObstetrique','consultationsMedecine'];
 
     public function patient(){
         return $this->belongsTo(Patient::class,'patient_id','user_id');
+    }
+
+    public function consultationsObstetrique(){
+        return $this->hasMany(ConsultationObstetrique::class,'dossier_medical_id','id');
+    }
+
+    public function consultationsMedecine(){
+        return $this->hasMany(ConsultationMedecineGenerale::class,'dossier_medical_id','id');
     }
 }
