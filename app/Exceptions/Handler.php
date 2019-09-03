@@ -46,9 +46,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-                if ($request->has('error'))
+        if ($request->has('error'))
         {
             return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        if ($exception instanceof \Swift_TransportException ) {
+            return response()->json(['error'=>"L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou les configurations de votre serveur de messagerie la prochaine fois"],419);
         }
         return parent::render($request, $exception);
     }
