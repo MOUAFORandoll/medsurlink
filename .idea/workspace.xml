@@ -4,7 +4,6 @@
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/DossierMedical.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DossierMedical.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -311,7 +310,8 @@
       <workItem from="1567006147368" duration="1339000" />
       <workItem from="1567062526619" duration="3674000" />
       <workItem from="1567086405080" duration="2315000" />
-      <workItem from="1567415268509" duration="9842000" />
+      <workItem from="1567415268509" duration="10601000" />
+      <workItem from="1567496935522" duration="3443000" />
     </task>
     <servers />
   </component>
