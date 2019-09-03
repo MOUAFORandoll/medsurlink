@@ -39,10 +39,7 @@ class AntecedentController extends Controller
      */
     public function store(AntecedentRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
         $antecedent = Antecedent::create($request->validated());
         defineAsAuthor("Antecedent",$antecedent->id,'create');
 
@@ -87,10 +84,7 @@ class AntecedentController extends Controller
      */
     public function update(AntecedentRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;

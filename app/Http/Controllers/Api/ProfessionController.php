@@ -42,10 +42,6 @@ class ProfessionController extends Controller
      */
     public function store(ProfessionRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $profession = Profession::create($request->validated());
         defineAsAuthor("Profession",$profession->id,'create');

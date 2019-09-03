@@ -45,10 +45,6 @@ class AffiliationController extends Controller
      */
     public function store(AffiliationRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $message = $this->dejaAffilie($request);
         if (strlen($message)>0){

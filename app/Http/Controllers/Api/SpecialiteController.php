@@ -42,10 +42,6 @@ class SpecialiteController extends Controller
      */
     public function store(SpecialiteRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
         $specialite = Specialite::create($request->validated());
         defineAsAuthor("Specialite",$specialite->id,'create');
 
@@ -89,10 +85,6 @@ class SpecialiteController extends Controller
      */
     public function update(SpecialiteRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))

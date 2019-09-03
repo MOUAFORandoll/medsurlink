@@ -47,10 +47,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function store(ConsultationObstetriqueRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
 
         $maxNumeroGrossesse = self::genererNumeroGrossesse();
         $user = Auth::user();
@@ -111,10 +108,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function update(ConsultationObstetriqueRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
 
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))

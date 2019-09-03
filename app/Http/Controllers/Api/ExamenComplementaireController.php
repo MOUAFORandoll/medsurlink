@@ -39,10 +39,7 @@ class ExamenComplementaireController extends Controller
      */
     public function store(ExamenComplementaireRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
         $examenComplementaire = ExamenComplementaire::create($request->validated());
         defineAsAuthor("ExamenComplementaire",$examenComplementaire->id,'create');
 
@@ -87,10 +84,7 @@ class ExamenComplementaireController extends Controller
      */
     public function update(ExamenComplementaireRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;

@@ -39,10 +39,6 @@ class MotifController extends Controller
      */
     public function store(MotifRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $motif = Motif::create($request->validated());
         defineAsAuthor("Motif",$motif->id,'create');
@@ -87,10 +83,6 @@ class MotifController extends Controller
      */
     public function update(MotifRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))

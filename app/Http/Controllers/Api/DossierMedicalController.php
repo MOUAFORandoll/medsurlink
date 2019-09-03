@@ -10,11 +10,9 @@ use Netpok\Database\Support\DeleteRestrictionException;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Traits\ApiValidationError;
 
 class DossierMedicalController extends Controller
 {
-    use ApiValidationError;
     protected $table = 'dossier_medicals';
 
     /**
@@ -51,10 +49,6 @@ class DossierMedicalController extends Controller
      */
     public function store(DossierMedicalRequest $request)
     {
-//        if ($request->has('error'))
-//        {
-//            return  response()->json(['error'=>$request->all()['error']],419);
-//        }
 
         $patient =Patient::with('dossier')->find($request->get('patient_id'));
         if (!is_null($patient->dossier) or !empty($patient->dossier)){

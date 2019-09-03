@@ -44,10 +44,7 @@ class EtablissementExerciceController extends Controller
      */
     public function store(EtablissementExerciceRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
 
         $etablissement = EtablissementExercice::create($request->validated());
         defineAsAuthor("EtablissementExercice",$etablissement->id,'create');
@@ -92,10 +89,7 @@ class EtablissementExerciceController extends Controller
      */
     public function update(EtablissementExerciceRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
 
         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
