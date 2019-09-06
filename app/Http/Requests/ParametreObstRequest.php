@@ -30,8 +30,8 @@ class ParametreObstRequest extends FormRequest
             "ta_systolique"=>"sometimes|nullable|numeric",
             "ta_diastolique"=>"sometimes|nullable|numeric",
             "hauteur_urine"=>"sometimes|nullable|numeric",
-            "toucher_vaginal"=>"sometimes|nullable|string|min:2",
-            "bruit_du_coeur"=>"sometimes|nullable|string|min:2",
+            "toucher_vaginal"=>"sometimes|nullable|numeric",
+            "bruit_du_coeur"=>"sometimes|nullable|numeric",
         ];
     }
 

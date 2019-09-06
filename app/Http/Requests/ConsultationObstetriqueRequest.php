@@ -28,10 +28,9 @@ class ConsultationObstetriqueRequest extends FormRequest
     public function rules()
     {
         return [
-//            "numero_grossesse"=>"sometimes|integer",
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
             "ddr"=>"required|date|after_or_equal:".Carbon::now(),
-            "serologie"=>"sometimes|nullable|string|min:1",
+            "serologie"=>"sometimes|nullable|string",
             "groupe_sanguin"=>"sometimes|nullable|string",
             "statut_socio_familiale"=>"sometimes|nullable|string",
             "assuetudes"=>"sometimes|nullable|string",
