@@ -122,7 +122,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('parametre-commun','Api\ParametreCommunController')->except(['create','edit']);
     Route::resource('conclusion','Api\ConclusionController')->except(['create','edit']);
     Route::resource('resultat','Api\ResultatController')->except(['create','edit','update']);
-    Route::put('resultat/{resultat}','Api\ResultatController@update')->name('resultat.update');
+    Route::post('resultat/{resultat}','Api\ResultatController@update')->name('resultat.update');
     Route::resource('examen-clinique','Api\ExamenCliniqueController')->except(['create','edit']);
     Route::resource('examen-complementaire','Api\ExamenComplementaireController')->except(['create','edit']);
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except(['create','edit']);
