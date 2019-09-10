@@ -42,10 +42,6 @@ class ResultatController extends Controller
      */
     public function store(ResultatRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         if($request->hasFile('file')){
             if ($request->file('file')->isValid()) {
@@ -102,10 +98,6 @@ class ResultatController extends Controller
      */
     public function update(ResultatRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))

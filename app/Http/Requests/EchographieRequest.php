@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 
@@ -27,8 +28,8 @@ class EchographieRequest extends FormRequest
         return [
             "consultation_obstetrique_id"=>"required|integer|exists:consultation_obstetriques,id",
             "type"=>"required|string",
-            "ddr"=>"required|date",
-            "dpa"=>"required|date",
+            "ddr"=>"required|date|after_or_equal:".Carbon::now(),
+            "dpa"=>"required|date|after_or_equal:".Carbon::now(),
             "semaine_amenorrhee"=>"required|integer",
             "date_creation"=>"sometimes|nullable|date",
             "biometrie"=>"sometimes|nullable|string",

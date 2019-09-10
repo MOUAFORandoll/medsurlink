@@ -40,10 +40,7 @@ class ExamenCliniqueController extends Controller
      */
     public function store(ExamenCliniqueRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
 
         $examenClinique = ExamenClinique::create($request->validated());
         defineAsAuthor("ExamenClinique",$examenClinique->id,'create');
@@ -88,10 +85,7 @@ class ExamenCliniqueController extends Controller
      */
     public function update(ExamenCliniqueRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
 
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))

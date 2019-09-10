@@ -42,10 +42,7 @@ class EchographieController extends Controller
      */
     public function store(EchographieRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
         $echographie = Echographie::create($request->validated());
         defineAsAuthor("Echographie",$echographie->id,'create');
 
@@ -88,10 +85,7 @@ class EchographieController extends Controller
      */
     public function update(EchographieRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
 
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))

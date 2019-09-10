@@ -42,10 +42,7 @@ class PraticienController extends Controller
      */
     public function store(PraticienStoreRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
 
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request);
@@ -106,10 +103,6 @@ class PraticienController extends Controller
      */
     public function update(PraticienUpdateRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
          $validation = $this->validatedSlug($slug);
         if(!is_null($validation))

@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,23 +28,7 @@
     <option name="HIDDEN_KINDS">
       <set />
     </option>
-    <expand>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
-      </path>
-    </expand>
+    <expand />
     <select />
   </component>
   <component name="Git.Settings">
@@ -182,20 +164,21 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="G:/Wilfried/kanriBackEnd" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../vuemedicalinkapp" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\medicalink-app\public\images" />
-      <recent name="C:\xampp\htdocs\medicalink-app\resources\views" />
-      <recent name="C:\xampp\htdocs\medicalink-app\database\seeds" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\medicalink-app\app\Models" />
       <recent name="C:\xampp\htdocs\medicalink-app\app\Http\Controllers\Api" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\medicalink-app" />
+      <recent name="C:\xampp\htdocs\medicalink-app\public\images" />
+      <recent name="C:\xampp\htdocs\medicalink-app\resources\views" />
+      <recent name="C:\xampp\htdocs\medicalink-app\database\seeds" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -305,7 +288,20 @@
       <workItem from="1566545935649" duration="5285000" />
       <workItem from="1566569024116" duration="2990000" />
       <workItem from="1566804810917" duration="18212000" />
-      <workItem from="1566892354431" duration="4176000" />
+      <workItem from="1566892354431" duration="14664000" />
+      <workItem from="1566917884176" duration="2340000" />
+      <workItem from="1566977389013" duration="2935000" />
+      <workItem from="1567006147368" duration="1339000" />
+      <workItem from="1567062526619" duration="3674000" />
+      <workItem from="1567086405080" duration="2315000" />
+      <workItem from="1567415268509" duration="10601000" />
+      <workItem from="1567496935522" duration="12316000" />
+      <workItem from="1567583248286" duration="22000" />
+      <workItem from="1567608348095" duration="2776000" />
+      <workItem from="1567669759359" duration="2319000" />
+      <workItem from="1567684051189" duration="1767000" />
+      <workItem from="1567759166861" duration="2767000" />
+      <workItem from="1567774480709" duration="3374000" />
     </task>
     <servers />
   </component>

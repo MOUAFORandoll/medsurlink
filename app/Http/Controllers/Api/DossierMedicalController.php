@@ -6,6 +6,7 @@ use App\Http\Requests\DossierMedicalRequest;
 use App\Models\DossierMedical;
 use App\Models\Patient;
 use Carbon\Carbon;
+use Netpok\Database\Support\DeleteRestrictionException;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,7 +22,7 @@ class DossierMedicalController extends Controller
      */
     public function index()
     {
-        $dossiers = DossierMedical::with(['patient'])->get();
+        $dossiers = DossierMedical::with(['patient','consultationsMedecine','consultationsObstetrique'])->get();
         foreach ($dossiers as $dossier){
             $user = $dossier->patient->user;
             $dossier['user'] = $user;
@@ -48,10 +49,6 @@ class DossierMedicalController extends Controller
      */
     public function store(DossierMedicalRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $patient =Patient::with('dossier')->find($request->get('patient_id'));
         if (!is_null($patient->dossier) or !empty($patient->dossier)){
@@ -80,7 +77,7 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $dossier = DossierMedical::with(['patient'])->whereSlug($slug)->first();
+        $dossier = DossierMedical::with(['patient','consultationsMedecine','consultationsObstetrique'])->whereSlug($slug)->first();
         $user = $dossier->patient->user;
         $dossier['user'] = $user;
         return response()->json(['dossier'=>$dossier]);
@@ -120,10 +117,13 @@ class DossierMedicalController extends Controller
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
-
-        $dossier = DossierMedical::with(['patient'])->whereSlug($slug)->first();
+        try{
+        $dossier = DossierMedical::with(['patient','consultationsMedecine','consultationsObstetrique'])->whereSlug($slug)->first();
         $dossier->delete();
         return response()->json(['dossier'=>$dossier]);
+        }catch (DeleteRestrictionException $deleteRestrictionException){
+            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+        }
     }
 
 

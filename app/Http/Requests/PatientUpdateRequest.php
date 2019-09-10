@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\EmailExistRule;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
@@ -32,7 +33,7 @@ class PatientUpdateRequest extends FormRequest
             "user_id"=>'sometimes|integer|exists:users,id',
             "souscripteur_id"=>'required|integer|exists:souscripteurs,user_id',
             "sexe"=>["required",Rule::in(['M','F'])],
-            "date_de_naissance"=>'required|date',
+            "date_de_naissance"=>'required|date|after_or_equal:'.Carbon::now(),
             "code_postal"=>'sometimes|integer',
             "nom_contact"=>'sometimes|nullbale|string|min:2',
             "tel_contact"=>'sometimes|nullable|string|min:9',

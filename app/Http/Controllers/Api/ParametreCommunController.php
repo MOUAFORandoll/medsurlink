@@ -39,10 +39,6 @@ class ParametreCommunController extends Controller
      */
     public function store(ParametreCommunRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $parametreCommun = ParametreCommun::create($request->validated());
         if (!is_null($request->get('taille') && !is_null($request->get('poids')))){
@@ -93,10 +89,6 @@ class ParametreCommunController extends Controller
      */
     public function update(ParametreCommunRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))

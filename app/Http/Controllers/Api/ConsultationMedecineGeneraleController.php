@@ -51,10 +51,7 @@ class ConsultationMedecineGeneraleController extends Controller
     public function store(ConsutationMedecineRequest $request)
     {
 
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
         $consultation = ConsultationMedecineGenerale::create($request->validated());
         $motifs = $request->get('motifs');
         $motifACreer = $request->get('motifsACreer');
@@ -161,10 +158,6 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function update(ConsutationMedecineRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))

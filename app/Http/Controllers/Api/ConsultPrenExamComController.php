@@ -13,7 +13,7 @@ class ConsultPrenExamComController extends Controller
 {
     public function retirerExamenComplementaire(Request $request){
         $validation = Validator::make($request->all(),[
-            "consultation"=>"required|integer|exists:consultation_obstetriques,id",
+            "consultation"=>"required|integer|exists:consultation_prenatales,id",
             "examensComplementaire.*"=>"required|integer|exists:examen_complementaires,id"
         ]);
 
@@ -36,7 +36,7 @@ class ConsultPrenExamComController extends Controller
 
     public function ajouterExamenComplementaire(Request $request){
         $validation = Validator::make($request->all(),[
-            "consultation"=>"required|integer|exists:consultation_obstetriques,id",
+            "consultation"=>"required|integer|exists:consultation_prenatales,id",
             "examensComplementaire.*"=>"sometimes|integer|exists:examen_complementaires,id",
             "examensComplementaireACreer.*"=>"sometimes|string|min:2"
         ]);

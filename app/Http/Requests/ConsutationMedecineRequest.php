@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 
@@ -26,7 +27,7 @@ class ConsutationMedecineRequest extends FormRequest
     {
         return [
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
-            "date_consultation"=>"sometimes|nullable|date",
+            "date_consultation"=>"sometimes|nullable|date|after_or_equal:".Carbon::now(),
             "anamese"=>"sometimes|nullable|string|min:5",
             "mode_de_vie"=>"sometimes|nullable|string|min:5",
             "motifs.*"=>"sometimes|integer|exists:motifs,id",

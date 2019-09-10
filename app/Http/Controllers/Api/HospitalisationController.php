@@ -39,10 +39,7 @@ class HospitalisationController extends Controller
      */
     public function store(HospitalisationRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
 
         $hospitalisation = Hospitalisation::create($request->validated());
         defineAsAuthor("Hospitalisation",$hospitalisation->id,'create');
@@ -87,10 +84,7 @@ class HospitalisationController extends Controller
      */
     public function update(HospitalisationRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
 
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))

@@ -39,10 +39,6 @@ class TraitementController extends Controller
      */
     public function store(TraitementRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $traitement = Traitement::create($request->validated());
         defineAsAuthor("Traitement",$traitement->id,'create');
@@ -86,10 +82,6 @@ class TraitementController extends Controller
      */
     public function update(TraitementRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))

@@ -40,10 +40,6 @@ class ParametreObstetriqueController extends Controller
      */
     public function store(ParametreObstRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
         $parametreObs = ParametreObstetrique::create($request->validated());
         $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->whereSlug($parametreObs->slug)->first();
         defineAsAuthor("ParametreObstetrique",$parametreObs->id,'create');
@@ -88,10 +84,6 @@ class ParametreObstetriqueController extends Controller
      */
     public function update(ParametreObstRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))

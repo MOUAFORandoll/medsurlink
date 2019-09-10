@@ -43,10 +43,7 @@ class PatientController extends Controller
      */
     public function store(patientStoreRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request);
         if ($userResponse->status() == 419)
@@ -107,10 +104,6 @@ class PatientController extends Controller
      */
     public function update(PatientUpdateRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))

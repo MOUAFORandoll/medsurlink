@@ -47,18 +47,15 @@ class ConsultationPrenantaleController extends Controller
      */
     public function store(ConsultationPrenataleRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
         $consultationPrenatale = ConsultationPrenatale::create($request->validated());
-        //Attachement des examens clinique
 
-        //Attachement des examens complementaires
-
-        //Attcahement des parametres obstetrique
         defineAsAuthor("ConsultationPrenatale",$consultationPrenatale->id,'create');
-
+        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($consultationPrenatale->slug)->first();
+        $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
+        $dossier = $consultationPrenatale->consultationObstetrique->dossier;
+        $consultationPrenatale['user']=$user;
+        $consultationPrenatale['dossier']=$dossier;
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }
 
@@ -104,10 +101,7 @@ class ConsultationPrenantaleController extends Controller
      */
     public function update(ConsultationPrenataleRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
 
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
@@ -121,6 +115,10 @@ class ConsultationPrenantaleController extends Controller
 
         ConsultationPrenatale::whereSlug($slug)->update($request->validated());
         $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
+        $dossier = $consultationPrenatale->consultationObstetrique->dossier;
+        $consultationPrenatale['user']=$user;
+        $consultationPrenatale['dossier']=$dossier;
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }
 

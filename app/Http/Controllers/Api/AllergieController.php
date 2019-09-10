@@ -40,10 +40,6 @@ class AllergieController extends Controller
      */
     public function store(AllergieRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
         $allergie = Allergie::create($request->validated());
         defineAsAuthor("Allergie",$allergie->id,'create');
         return response()->json(['allergie'=>$allergie]);
@@ -87,10 +83,7 @@ class AllergieController extends Controller
      */
     public function update(AllergieRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;

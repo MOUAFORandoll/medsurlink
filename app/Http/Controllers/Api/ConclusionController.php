@@ -40,10 +40,7 @@ class ConclusionController extends Controller
      */
     public function store(ConclusionRequest $request)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
         $conclusion = Conclusion::create($request->validated());
         defineAsAuthor("Conclusion",$conclusion->id,'create');
 
@@ -88,10 +85,7 @@ class ConclusionController extends Controller
      */
     public function update(ConclusionRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
+
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;

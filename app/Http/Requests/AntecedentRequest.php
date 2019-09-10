@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 
@@ -27,7 +28,7 @@ class AntecedentRequest extends FormRequest
         return [
             "consultation_medecine_generale_id"=>"required|integer|exists:consultation_medecine_generales,id",
             "description"=>"required|string|min:3",
-            "date"=>"sometimes|nullable|date",
+            "date"=>"sometimes|nullable|date|before_or_equal:".Carbon::now(),
             "type"=>"required|string|min:2",
         ];
     }
