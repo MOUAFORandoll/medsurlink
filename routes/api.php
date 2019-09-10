@@ -36,7 +36,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
     Route::resource('profession','Api\ProfessionController')->except(['create','edit']);
     Route::resource('specialite','Api\SpecialiteController')->except(['create','edit']);
     Route::resource('praticien','Api\PraticienController')->except(['create','edit']);
-    Route::resource('medecinControle','Api\MedecinControleController')->except(['create','edit']);
+    Route::resource('medecin-controle','Api\MedecinControleController')->except(['create','edit']);
     Route::resource('souscripteur','Api\SouscripteurController')->except(['create','edit']);
     Route::resource('patient','Api\PatientController')->except(['create','edit']);
     Route::resource('affiliation','Api\AffiliationController')->except(['create','edit']);

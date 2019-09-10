@@ -28,7 +28,23 @@
     <option name="HIDDEN_KINDS">
       <set />
     </option>
-    <expand />
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+      </path>
+    </expand>
     <select />
   </component>
   <component name="Git.Settings">
@@ -301,7 +317,9 @@
       <workItem from="1567669759359" duration="2319000" />
       <workItem from="1567684051189" duration="1767000" />
       <workItem from="1567759166861" duration="2767000" />
-      <workItem from="1567774480709" duration="3374000" />
+      <workItem from="1567774480709" duration="4605000" />
+      <workItem from="1568020649533" duration="1695000" />
+      <workItem from="1568106922355" duration="668000" />
     </task>
     <servers />
   </component>
