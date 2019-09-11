@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], funct
 
 //    Définition des routes accéssible par le patient
 Route::group(['middleware' => ['auth:api','role:Admin|Patient']], function () {
+    Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->only('show','index');
 
 });
 
@@ -87,30 +88,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Patient|Medec
     Route::resource('patient','Api\PatientController')->only(['show']);
 
 });
-//  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
-Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
-    Route::resource('dossier','Api\DossierMedicalController')->only('show');
-    Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->only('show');
-    Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->only('show');
-    Route::resource('motif','Api\MotifController')->only('show');
-    Route::resource('allergie','Api\AllergieController')->only('show');
-    Route::resource('antecedent','Api\AntecedentController')->only('show');
-    Route::resource('traitement','Api\TraitementController')->only('show');
-    Route::resource('parametre-commun','Api\ParametreCommunController')->only('show');
-    Route::resource('conclusion','Api\ConclusionController')->only('show');
-    Route::resource('resultat','Api\ResultatController')->only('show');
-    Route::resource('examen-clinique','Api\ExamenCliniqueController');
-    Route::resource('examen-complementaire','Api\ExamenComplementaireController')->only('show');
-    Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->only('show');
-    Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->only('show');
-    Route::resource('consultation-prenatale','Api\ConsultationPrenantaleController')->only('show');
-    Route::resource('parametre-obstetrique','Api\ParametreObstetriqueController')->only('show');
-    Route::resource('echographie','Api\EchographieController')->only('show');
-    Route::resource('hospitalisation','Api\HospitalisationController')->only('show');
-
-
-});
-
 //  Définition des routes accéssible a la fois par le medecin controle et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien']], function () {
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except(['create','edit']);
@@ -125,8 +102,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::post('resultat/{resultat}','Api\ResultatController@update')->name('resultat.update');
     Route::resource('examen-clinique','Api\ExamenCliniqueController')->except(['create','edit']);
     Route::resource('examen-complementaire','Api\ExamenComplementaireController')->except(['create','edit']);
-    Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except(['create','edit']);
-    Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except(['create','edit']);
     Route::resource('consultation-prenatale','Api\ConsultationPrenantaleController')->except(['create','edit']);
     Route::resource('parametre-obstetrique','Api\ParametreObstetriqueController')->except(['create','edit']);
     Route::resource('echographie','Api\EchographieController')->except(['create','edit']);
@@ -161,5 +136,25 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
     Route::get('max-consultation-obs','Api\ConsultationObstetriqueController@genererNumeroGrossesse');
 });
+//  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
+Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
+    Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
+    Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except('store','update','destroy');
+    Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except('store','update','destroy');
+    Route::resource('motif','Api\MotifController')->except('store','update','destroy');
+    Route::resource('allergie','Api\AllergieController')->except('store','update','destroy');
+    Route::resource('antecedent','Api\AntecedentController')->except('store','update','destroy');
+    Route::resource('traitement','Api\TraitementController')->except('store','update','destroy');
+    Route::resource('parametre-commun','Api\ParametreCommunController')->except('store','update','destroy');
+    Route::resource('conclusion','Api\ConclusionController')->except('store','update','destroy');
+    Route::resource('resultat','Api\ResultatController')->except('store','update','destroy');
+    Route::resource('examen-clinique','Api\ExamenCliniqueController')->except('store','update','destroy');
+    Route::resource('examen-complementaire','Api\ExamenComplementaireController')->except('store','update','destroy');
+    Route::resource('consultation-prenatale','Api\ConsultationPrenantaleController')->except('store','update','destroy');
+    Route::resource('parametre-obstetrique','Api\ParametreObstetriqueController')->except('store','update','destroy');
+    Route::resource('echographie','Api\EchographieController')->except('store','update','destroy');
+    Route::resource('hospitalisation','Api\HospitalisationController')->except('store','update','destroy');
+});
+
 
 

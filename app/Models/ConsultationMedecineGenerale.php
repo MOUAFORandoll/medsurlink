@@ -8,6 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Netpok\Database\Support\RestrictSoftDeletes;
 
 class ConsultationMedecineGenerale extends Model
@@ -78,4 +79,16 @@ class ConsultationMedecineGenerale extends Model
         return $this->hasMany(Conclusion::class,'consultation_medecine_generale_id','id');
     }
 
+    public function scopeOfRole($query){
+        $user = Auth::user();
+        $userRoles = $user->getRoleNames();
+        if($userRoles->search('Patient')){
+            $dossier = $user->patient->dossier;
+            $query->with(['dossier'=>function($scopeQuery,$dossier){
+                $scopeQuery->where('dossier.numero_dossier','like',$dossier->numero_dossier);
+            }])->get();
+        }else{
+
+        }
+    }
 }

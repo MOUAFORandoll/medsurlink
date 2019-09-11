@@ -21,11 +21,15 @@ class ConsultationObstetriqueController extends Controller
      */
     public function index()
     {
-        $consultationsObstetrique = ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->get();
-        foreach ($consultationsObstetrique as $consultationObstetrique){
-            $user = $consultationObstetrique->dossier->patient->user;
-            $consultationObstetrique['user']=$user;
-        }
+        $consultationsObstetrique = ConsultationObstetrique::with([
+            'consultationPrenatales',
+            'echographies',
+            'dossier'
+        ])->restrictWithRole()->get();
+//        foreach ($consultationsObstetrique as $consultationObstetrique){
+////            $user = $consultationObstetrique->dossier->patient->user;
+////            $consultationObstetrique['user']=$user;
+//        }
         return response()->json(['consultationsObstetrique'=>$consultationsObstetrique]);
     }
 
@@ -197,7 +201,7 @@ class ConsultationObstetriqueController extends Controller
     }
 
     public static function genererNumeroGrossesse(){
-       $maxConsultationObst =  DB::table('consultation_obstetriques')->max('numero_grossesse');
-       return $maxConsultationObst +1;
+        $maxConsultationObst =  DB::table('consultation_obstetriques')->max('numero_grossesse');
+        return $maxConsultationObst +1;
     }
 }

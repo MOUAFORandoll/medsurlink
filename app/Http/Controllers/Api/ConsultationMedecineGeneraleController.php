@@ -22,7 +22,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function index()
     {
-        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->get();
+        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->ofRole()->get();
         foreach ($consultations as $consultation){
             $user = $consultation->dossier->patient->user;
             $patient = $consultation->dossier->patient;
