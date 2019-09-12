@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\ConsultationPrenataleRequest;
 use App\Models\ConsultationPrenatale;
+use App\Scopes\RestrictDossierScope;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,10 +22,10 @@ class ConsultationPrenantaleController extends Controller
     {
         $consultationsPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->get();
         foreach ($consultationsPrenatale as $consultationPrenatale){
-            $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
-            $dossier = $consultationPrenatale->consultationObstetrique->dossier;
-            $consultationPrenatale['user']=$user;
-            $consultationPrenatale['dossier']=$dossier;
+                $dossier = $consultationPrenatale->consultationObstetrique->dossier;
+                $user = $dossier->patient->user;
+                $consultationPrenatale['user']=$user;
+                $consultationPrenatale['dossier']=$dossier;
         }
         return response()->json(['consultationsPrenatale'=>$consultationsPrenatale]);
     }

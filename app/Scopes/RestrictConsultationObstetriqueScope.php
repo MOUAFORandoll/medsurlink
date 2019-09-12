@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\UnauthorizedException;
 
-class RoleScope implements Scope
+class RestrictConsultationObstetriqueScope implements Scope
 {
 
     /**
@@ -29,16 +29,27 @@ class RoleScope implements Scope
             $userRoles = $user->getRoleNames();
             if(gettype($userRoles->search('Patient')) == 'integer'){
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
-                $dossier = $user->patient->dossier;
-                $builder->where('dossier_medical_id','=',$dossier->id);
+                $consultationsObstetriqueCollection = $user->patient->dossier->consultationsObstetrique;
+                $consultationsObstetrique = [];
+                foreach ($consultationsObstetriqueCollection as $item){
+                    array_push($consultationsObstetrique,$item->id);
+                }
+                $builder->whereIn('consultation_obstetrique_id',$consultationsObstetrique);
+
             }elseif(gettype($userRoles->search('Souscripteur')) == 'integer'){
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
+                //Récupération des patiens du souscripteur
                 $patients = $user->souscripteur->patients;
-                $dossiers = [];
+                $consultationsObstetrique = [];
                 foreach ($patients as $patient){
-                    array_push($dossiers,$patient->dossier->id);
+                        //Récupération des consultations obstétrique des patients
+                    $consultationsObstetriqueCollection = $patient->dossier->consultationsObstetrique;
+                    foreach ($consultationsObstetriqueCollection as $item){
+                        array_push($consultationsObstetrique,$item->id);
+                    }
                 }
-                $builder->whereIn('dossier_medical_id',$dossiers);
+
+                $builder->whereIn('consultation_obstetrique_id',$consultationsObstetrique);
             }
             else{
                 return $builder;

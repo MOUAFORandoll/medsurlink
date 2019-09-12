@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
-use App\Scopes\RoleScope;
+use App\Scopes\RestrictDossierScope;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -89,6 +89,6 @@ class ConsultationMedecineGenerale extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(new RoleScope);
+        static::addGlobalScope(new RestrictDossierScope);
     }
 }

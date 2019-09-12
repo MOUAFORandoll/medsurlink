@@ -9,6 +9,7 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Netpok\Database\Support\RestrictSoftDeletes;
+use App\Scopes\RestrictConsultationObstetriqueScope;
 
 class ConsultationPrenatale extends Model
 {
@@ -64,5 +65,15 @@ class ConsultationPrenatale extends Model
     public function examensComplementaire(){
         return $this->belongsToMany(ExamenComplementaire::class,'consult_pren_exam_com','consultation_prenatale_id','examen_complementaire_id');
     }
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::addGlobalScope(new RestrictConsultationObstetriqueScope);
+    }
 }
