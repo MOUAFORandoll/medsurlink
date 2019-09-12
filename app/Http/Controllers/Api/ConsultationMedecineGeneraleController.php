@@ -22,7 +22,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function index()
     {
-        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->ofRole()->get();
+        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->get();
         foreach ($consultations as $consultation){
             $user = $consultation->dossier->patient->user;
             $patient = $consultation->dossier->patient;
@@ -113,6 +113,11 @@ class ConsultationMedecineGeneraleController extends Controller
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create');
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->find($consultation->id);
+        $user = $consultation->dossier->patient->user;
+        $patient = $consultation->dossier->patient;
+        $consultation['user']=$user;
+        $consultation['patient']=$patient;
+
         return response()->json(["consultation"=>$consultation]);
     }
 
@@ -172,6 +177,10 @@ class ConsultationMedecineGeneraleController extends Controller
         ConsultationMedecineGenerale::whereSlug($slug)->update($request->validated());
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
+        $user = $consultation->dossier->patient->user;
+        $patient = $consultation->dossier->patient;
+        $consultation['user']=$user;
+        $consultation['patient']=$patient;
         return response()->json(["consultation"=>$consultation]);
     }
 

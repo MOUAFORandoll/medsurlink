@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
+use App\Scopes\RoleScope;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -79,16 +80,15 @@ class ConsultationMedecineGenerale extends Model
         return $this->hasMany(Conclusion::class,'consultation_medecine_generale_id','id');
     }
 
-    public function scopeOfRole($query){
-        $user = Auth::user();
-        $userRoles = $user->getRoleNames();
-        if($userRoles->search('Patient')){
-            $dossier = $user->patient->dossier;
-            $query->with(['dossier'=>function($scopeQuery,$dossier){
-                $scopeQuery->where('dossier.numero_dossier','like',$dossier->numero_dossier);
-            }])->get();
-        }else{
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
 
-        }
+        static::addGlobalScope(new RoleScope);
     }
 }
