@@ -2,13 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Scopes/RestrictConsultationObstetriqueScope.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Scopes/RoleScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictDossierScope.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -334,7 +332,8 @@
       <workItem from="1568020649533" duration="1695000" />
       <workItem from="1568106922355" duration="5363000" />
       <workItem from="1568189470757" duration="21867000" />
-      <workItem from="1568274208905" duration="10707000" />
+      <workItem from="1568274208905" duration="12978000" />
+      <workItem from="1568294424067" duration="1402000" />
     </task>
     <servers />
   </component>
