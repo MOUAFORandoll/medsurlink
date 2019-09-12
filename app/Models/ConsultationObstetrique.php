@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
+use App\Scopes\RoleScope;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
-use http\Client\Curl\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
 use Netpok\Database\Support\RestrictSoftDeletes;
 
 class ConsultationObstetrique extends Model
@@ -67,25 +66,16 @@ class ConsultationObstetrique extends Model
     public function dossier(){
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }
-    public function scopeRestrictWithRole($query){
-        $user = Auth::user();
-        $userRoles = $user->getRoleNames();
 
-        if(gettype($userRoles->search('Patient')) == 'integer'){
-               $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
-               $dossier = $user->patient->dossier;
-                 return $query->where('dossier_medical_id','=',$dossier->id);
-        }elseif(gettype($userRoles->search('Souscripteur')) == 'integer'){
-            $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
-            $patients = $user->souscripteur->patients;
-            $dossiers = [];
-            foreach ($patients as $patient){
-                array_push($dossiers,$patient->dossier->id);
-            }
-           return $query->whereIn('dossier_medical_id',$dossiers);
-        }
-        else{
-            return $query;
-        }
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new RoleScope);
     }
 }

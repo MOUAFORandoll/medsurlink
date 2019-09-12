@@ -21,15 +21,11 @@ class ConsultationObstetriqueController extends Controller
      */
     public function index()
     {
-        $consultationsObstetrique = ConsultationObstetrique::with([
-            'consultationPrenatales',
-            'echographies',
-            'dossier'
-        ])->restrictWithRole()->get();
-//        foreach ($consultationsObstetrique as $consultationObstetrique){
-////            $user = $consultationObstetrique->dossier->patient->user;
-////            $consultationObstetrique['user']=$user;
-//        }
+        $consultationsObstetrique = ConsultationObstetrique::with(['consultationPrenatales', 'echographies', 'dossier'])->get();
+        foreach ($consultationsObstetrique as $consultationObstetrique){
+            $user = $consultationObstetrique->dossier->patient->user;
+            $consultationObstetrique['user']=$user;
+        }
         return response()->json(['consultationsObstetrique'=>$consultationsObstetrique]);
     }
 

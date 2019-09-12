@@ -24,10 +24,9 @@ class DossierMedicalController extends Controller
     {
         $dossiers = DossierMedical::with(['patient','consultationsMedecine','consultationsObstetrique'])->get();
         foreach ($dossiers as $dossier){
-            $user = $dossier->patient->user;
-            $dossier['user'] = $user;
+                $user = $dossier->patient->user;
+                $dossier['user'] = $user;
         }
-
         return response()->json(['dossiers'=>$dossiers]);
     }
 
@@ -118,9 +117,9 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
         try{
-        $dossier = DossierMedical::with(['patient','consultationsMedecine','consultationsObstetrique'])->whereSlug($slug)->first();
-        $dossier->delete();
-        return response()->json(['dossier'=>$dossier]);
+            $dossier = DossierMedical::with(['patient','consultationsMedecine','consultationsObstetrique'])->whereSlug($slug)->first();
+            $dossier->delete();
+            return response()->json(['dossier'=>$dossier]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
             return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
         }
