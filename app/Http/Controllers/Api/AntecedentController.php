@@ -88,9 +88,14 @@ class AntecedentController extends Controller
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
-
+        $antecedent = Antecedent::whereSlug($slug)->first();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$antecedent->id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
         Antecedent::whereSlug($slug)->update($request->validated());
         $antecedent = Antecedent::with('consultation')->whereSlug($slug)->first();
+
         return response()->json(['antecedent'=>$antecedent]);
     }
 
@@ -105,6 +110,12 @@ class AntecedentController extends Controller
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
+
+        $antecedent = Antecedent::whereSlug($slug)->first();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$antecedent->id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
 
         $antecedent = Antecedent::with('consultation')->whereSlug($slug)->first();
         $antecedent->delete();

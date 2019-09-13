@@ -87,7 +87,11 @@ class AllergieController extends Controller
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
-
+        $allergie = Allergie::whereSlug($slug)->first();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergie->id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
         Allergie::whereSlug($slug)->update($request->validated());
         $allergie = Allergie::findBySlug($slug);
         return response()->json(['allergie'=>$allergie]);
@@ -106,6 +110,10 @@ class AllergieController extends Controller
             return $validation;
 
         $allergie = Allergie::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergie->id,"create");
+        if($isAuthor->getOriginalContent() == false){
+            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+        }
         $allergie->delete();
         return response()->json(['allergie'=>$allergie]);
     }
