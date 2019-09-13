@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
+use App\Scopes\RestrictPatientScope;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
@@ -47,5 +48,17 @@ class DossierMedical extends Model
 
     public function consultationsMedecine(){
         return $this->hasMany(ConsultationMedecineGenerale::class,'dossier_medical_id','id');
+    }
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new RestrictPatientScope);
     }
 }
