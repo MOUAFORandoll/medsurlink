@@ -3,7 +3,6 @@
 
 namespace App\Scopes;
 
-
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -24,10 +23,11 @@ class RestrictPatientScope implements Scope
     {
         if (Auth::check()){
             $user = Auth::user();
-            $userRoles = $user->getRoleNames();
+            $userRoles = $user->getRoleNames();;
             if(gettype($userRoles->search('Patient')) == 'integer'){
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 $patient = $user->patient;
+
                 $builder->where('patient_id',$patient->user_id);
 
             }elseif(gettype($userRoles->search('Souscripteur')) == 'integer'){
@@ -35,13 +35,14 @@ class RestrictPatientScope implements Scope
                 //Récupération des patiens du souscripteur
                 $patients = $user->souscripteur->patients;
                 $patientsId = [];
+
                 foreach ($patients as $patient){
                         array_push($patientsId,$patient->user_id);
                 }
                 $builder->whereIn('patient_id',$patientsId);
             }
             else{
-                return $builder;
+
             }
         }else{
             throw new UnauthorizedException("Veuillez vous authentifier",401);

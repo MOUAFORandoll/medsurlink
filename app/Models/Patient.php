@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
+//use App\Scopes\RestrictUserScope;
 use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -76,5 +77,15 @@ class Patient extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
 
-
+//    /**
+//     * The "booting" method of the model.
+//     *
+//     * @return void
+//     */
+//    protected static function boot()
+//    {
+//        parent::boot();
+//
+//        static::addGlobalScope(new RestrictUserScope);
+//    }
 }

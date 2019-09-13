@@ -154,6 +154,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('parametre-obstetrique','Api\ParametreObstetriqueController')->except('store','update','destroy');
     Route::resource('echographie','Api\EchographieController')->except('store','update','destroy');
     Route::resource('hospitalisation','Api\HospitalisationController')->except('store','update','destroy');
+    Route::resource('patient','Api\PatientController')->except('store','update','destroy');
 });
 
 
