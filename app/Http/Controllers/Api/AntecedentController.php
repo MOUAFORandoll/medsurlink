@@ -91,7 +91,9 @@ class AntecedentController extends Controller
         $antecedent = Antecedent::whereSlug($slug)->first();
         $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$antecedent->id,"create");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+            $transmission = [];
+            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
+            return response()->json(['error'=>$transmission],419 );
         }
         Antecedent::whereSlug($slug)->update($request->validated());
         $antecedent = Antecedent::with('consultation')->whereSlug($slug)->first();
@@ -114,7 +116,9 @@ class AntecedentController extends Controller
         $antecedent = Antecedent::whereSlug($slug)->first();
         $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$antecedent->id,"create");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+            $transmission = [];
+            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
+            return response()->json(['error'=>$transmission],419 );
         }
 
         $antecedent = Antecedent::with('consultation')->whereSlug($slug)->first();

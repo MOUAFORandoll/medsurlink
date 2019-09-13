@@ -48,7 +48,9 @@ class AffiliationController extends Controller
 
         $message = $this->dejaAffilie($request);
         if (strlen($message)>0){
-            return response()->json(['erreur'=>$message],419);
+            $transmission = [];
+            $transmission['dejaAffilie'][0] = $message;
+            return response()->json(['error'=>$transmission],419 );
         }
         else{
             $affiliation = Affiliation::create($request->validated());
@@ -106,7 +108,10 @@ class AffiliationController extends Controller
 
         $message = $this->dejaAffilie($request);
         if (strlen($message)>0){
-            return response()->json(['erreur'=>$message],419);
+            $transmission = [];
+            $transmission['dejaAffilie'][0] = $message;
+            return response()->json(['error'=>$transmission],419 );
+
         }
         else {
             Affiliation::whereSlug($slug)->update($request->validated());

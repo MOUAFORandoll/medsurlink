@@ -92,7 +92,9 @@ class ConclusionController extends Controller
         $conclusion = Conclusion::findBySlug($slug);
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$conclusion->id,"create");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+            $transmission = [];
+            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
+            return response()->json(['error'=>$transmission],419 );
         }
 
         Conclusion::whereSlug($slug)->update($request->validated());

@@ -97,8 +97,9 @@ class ParametreCommunController extends Controller
         $parametreCommun = ParametreCommun::findBySlug($slug);
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$parametreCommun->id,"create");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
-        }
+            $transmission = [];
+            $transmission['accessRefuse'] = "Vous ne pouvez modifié un élement que vous n'avez crée";
+            return response()->json(['error'=>$transmission],419 );  }
 
 
         ParametreCommun::whereSlug($slug)->update($request->validated());
@@ -128,8 +129,9 @@ class ParametreCommunController extends Controller
         $parametreCommun = ParametreCommun::findBySlug($slug);
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$parametreCommun->id,"create");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
-        }
+            $transmission = [];
+            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
+            return response()->json(['error'=>$transmission],419 );}
 
         $parametreCommun->delete();
         return response()->json(['parametreCommun'=>$parametreCommun]);
