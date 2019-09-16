@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 
@@ -25,8 +26,8 @@ class AllergieRequest extends FormRequest
     public function rules()
     {
         return [
-            "intitule"=>"required|string|min:2",
-            "description"=>"sometimes|nullable|string|min:2",
+            "description"=>"required|string|min:6",
+            "date"=>"sometimes|date|before_or_equal:".Carbon::now(),
         ];
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateConsultationAllergiesTable extends Migration
+class CreateDossierAllergiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,16 @@ class CreateConsultationAllergiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('consultation_allergie', function (Blueprint $table) {
+        Schema::create('dossier_allergie', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('consultation_medecine_generale_id');
+            $table->unsignedBigInteger('dossier_medical_id');
             $table->unsignedBigInteger('allergie_id');
-            $table->date('date');
             $table->softDeletes();
             $table->timestamps();
 
-            $table->foreign('consultation_medecine_generale_id')
+            $table->foreign('dossier_medical_id')
                 ->references('id')
-                ->on('consultation_medecine_generales')
+                ->on('dossier_medicals')
                 ->onDelete('RESTRICT')
                 ->onUpdate('RESTRICT');
 
@@ -42,8 +41,8 @@ class CreateConsultationAllergiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('consultation_allergie', function (Blueprint $table) {
-            $table->dropForeign(['consultation_medecine_generale_id', 'allergie_id']);
+        Schema::dropIfExists('dossier_allergie', function (Blueprint $table) {
+            $table->dropForeign(['dossier_medical_id', 'allergie_id']);
         });
     }
 }

@@ -50,6 +50,10 @@ class DossierMedical extends Model
         return $this->hasMany(ConsultationMedecineGenerale::class,'dossier_medical_id','id');
     }
 
+    public function allergies(){
+        return $this->belongsToMany(Allergie::class,'dossier_allergie','dossier_medical_id','allergie_id');
+    }
+
     /**
      * The "booting" method of the model.
      *

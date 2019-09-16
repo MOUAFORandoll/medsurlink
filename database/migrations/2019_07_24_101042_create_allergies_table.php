@@ -15,8 +15,8 @@ class CreateAllergiesTable extends Migration
     {
         Schema::create('allergies', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('intitule');
-            $table->text('description')->nullable();
+            $table->text('description');
+            $table->date('date')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->string('slug')->unique();

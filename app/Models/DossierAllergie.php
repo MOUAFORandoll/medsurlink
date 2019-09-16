@@ -5,13 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ConsultationAllergie extends Model
+class DossierAllergie extends Model
 {
     use SoftDeletes;
 
     protected $fillable = [
-        "consultation_medecine_generale_id",
+        "dossier_medical_id",
         "allergie_id",
-        "date",
     ];
 }

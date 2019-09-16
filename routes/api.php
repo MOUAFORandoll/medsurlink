@@ -135,8 +135,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::post('hospitalisation/retirer-examen-complementaire','Api\HospitalisationExamComController@retirerExamenComplementaire');
     Route::post('hospitalisation/ajouter-examen-complementaire','Api\HospitalisationExamComController@ajouterExamenComplementaire');
 
-    Route::post('retirer-allergie','Api\ConsultationAllergieController@retirerAllergie');
-    Route::post('ajouter-allergie','Api\ConsultationAllergieController@ajouterAllergie');
+    Route::post('retirer-allergie','Api\DossierAllergieController@retirerAllergie');
+    Route::post('ajouter-allergie','Api\DossierAllergieController@ajouterAllergie');
 
     Route::post('retirer-traitement','Api\ConsultationTraitementController@retirerTraitement');
     Route::post('ajouter-traitement','Api\ConsultationTraitementController@ajouterTraitement');

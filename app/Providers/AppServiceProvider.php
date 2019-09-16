@@ -6,7 +6,7 @@ use App\Models\Affiliation;
 use App\Models\Allergie;
 use App\Models\Antecedent;
 use App\Models\Conclusion;
-use App\Models\ConsultationAllergie;
+use App\Models\DossierAllergie;
 use App\Models\ConsultationExamenClinique;
 use App\Models\ConsultationExamenComplementaire;
 use App\Models\ConsultationMedecineGenerale;
@@ -68,7 +68,7 @@ class AppServiceProvider extends ServiceProvider
             'Affiliation'=>Affiliation::class,
             'Antecedent'=>Antecedent::class,
             'Conclusion'=>Conclusion::class,
-            'ConsultationAllergie'=>ConsultationAllergie::class,
+            'DossierAllergie'=>DossierAllergie::class,
             'ConsultationPrenatale'=>ConsultationPrenatale::class,
             'ConsultationObstetrique'=>ConsultationObstetrique::class,
             'ConsultationExamenClinique'=>ConsultationExamenClinique::class,

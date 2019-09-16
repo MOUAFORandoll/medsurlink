@@ -2,15 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.rnd" beforeDir="false" afterPath="$PROJECT_DIR$/.rnd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsultationObstetriqueRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsultationObstetriqueRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsultationPrenataleRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsultationPrenataleRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_26_095815_create_consultation_obstetriques_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_26_095815_create_consultation_obstetriques_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_26_114204_create_consultation_prenatales_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_26_114204_create_consultation_prenatales_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/UsersTableSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/UsersTableSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationAllergieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierAllergieController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/AllergieRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/AllergieRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Allergie.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Allergie.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationAllergie.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DossierAllergie.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/DossierMedical.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DossierMedical.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_24_101042_create_allergies_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_24_101042_create_allergies_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_24_103326_create_consultation_allergies_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_24_103326_create_dossier_allergies_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -333,7 +336,7 @@
       <workItem from="1568294424067" duration="2440000" />
       <workItem from="1568361240911" duration="15112000" />
       <workItem from="1568385301364" duration="4517000" />
-      <workItem from="1568625647217" duration="12005000" />
+      <workItem from="1568625647217" duration="18467000" />
     </task>
     <servers />
   </component>

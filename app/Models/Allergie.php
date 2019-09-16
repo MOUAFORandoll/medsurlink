@@ -8,6 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use function GuzzleHttp\Psr7\str;
 
 class Allergie extends Model
 {
@@ -24,22 +25,22 @@ class Allergie extends Model
     {
         return [
             'slug' => [
-                'source' => 'IntituleAndTimestamp'
+                'source' => 'DescriptionAndTimestamp'
             ]
         ];
     }
-    public function getIntituleAndTimestampAttribute() {
-        return $this->intitule . ' ' .Carbon::now()->timestamp;
+    public function getDescriptionAndTimestampAttribute() {
+        return substr($this->description,0,5). ' ' .Carbon::now()->timestamp;
     }
 
     protected $fillable = [
-        "intitule",
         "description",
+        "date",
         'slug'
     ];
 
 
-    public  function  consultations(){
-        return $this->belongsToMany(ConsultationMedecineGenerale::class,'consultation_allergie','allergie_id','consultation_medecine_generale_id');
+    public  function  dossiers(){
+        return $this->belongsToMany(DossierMedical::class,'dossier_allergie','allergie_id','dossier_medical_id');
     }
 }
