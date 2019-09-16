@@ -17,7 +17,7 @@ class AntecedentController extends Controller
      */
     public function index()
     {
-        $antecedents = Antecedent::with('consultation')->get();
+        $antecedents = Antecedent::with('dossier')->get();
         return response()->json(['antecedents'=>$antecedents]);
     }
 
@@ -43,7 +43,7 @@ class AntecedentController extends Controller
         $antecedent = Antecedent::create($request->validated());
         defineAsAuthor("Antecedent",$antecedent->id,'create');
 
-        $antecedent = Antecedent::with('consultation')->whereSlug($antecedent->slug)->first();
+        $antecedent = Antecedent::with('dossier')->whereSlug($antecedent->slug)->first();
         return response()->json(['antecedent'=>$antecedent]);
     }
 
@@ -59,7 +59,7 @@ class AntecedentController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $antecedent = Antecedent::with('consultation')->whereSlug($slug)->first();
+        $antecedent = Antecedent::with('dossier')->whereSlug($slug)->first();
         return response()->json(['antecedent'=>$antecedent]);
 
     }
@@ -96,7 +96,7 @@ class AntecedentController extends Controller
             return response()->json(['error'=>$transmission],419 );
         }
         Antecedent::whereSlug($slug)->update($request->validated());
-        $antecedent = Antecedent::with('consultation')->whereSlug($slug)->first();
+        $antecedent = Antecedent::with('dossier')->whereSlug($slug)->first();
 
         return response()->json(['antecedent'=>$antecedent]);
     }
@@ -121,7 +121,7 @@ class AntecedentController extends Controller
             return response()->json(['error'=>$transmission],419 );
         }
 
-        $antecedent = Antecedent::with('consultation')->whereSlug($slug)->first();
+        $antecedent = Antecedent::with('dossier')->whereSlug($slug)->first();
         $antecedent->delete();
         return response()->json(['antecedent'=>$antecedent]);
     }

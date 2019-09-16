@@ -7,6 +7,7 @@ use App\Models\ConsultationObstetrique;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Validation\Rule;
 
 class ConsultationObstetriqueRequest extends FormRequest
 {
@@ -31,7 +32,7 @@ class ConsultationObstetriqueRequest extends FormRequest
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
             "ddr"=>"required|date|after_or_equal:".Carbon::now(),
             "serologie"=>"sometimes|nullable|string",
-            "groupe_sanguin"=>"sometimes|nullable|string",
+            "groupe_sanguin"=>["sometimes", "nullable", "string", Rule::in(['A-', 'A+', 'B-', 'B+', 'AB-', 'AB+', 'O-', 'O+'])],
             "statut_socio_familiale"=>"sometimes|nullable|string",
             "assuetudes"=>"sometimes|nullable|string",
             "antecassuetudesedent_de_transfusion"=>"sometimes|nullable|string",

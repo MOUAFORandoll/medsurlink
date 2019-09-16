@@ -26,7 +26,7 @@ class AntecedentRequest extends FormRequest
     public function rules()
     {
         return [
-            "consultation_medecine_generale_id"=>"required|integer|exists:consultation_medecine_generales,id",
+            "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
             "description"=>"required|string|min:3",
             "date"=>"sometimes|nullable|date|before_or_equal:".Carbon::now(),
             "type"=>"required|string|min:2",

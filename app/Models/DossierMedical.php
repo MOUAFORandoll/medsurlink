@@ -50,6 +50,10 @@ class DossierMedical extends Model
         return $this->hasMany(ConsultationMedecineGenerale::class,'dossier_medical_id','id');
     }
 
+    public function antecedents(){
+        return $this->hasMany(Antecedent::class,'dossier_medical_id','id');
+    }
+
     /**
      * The "booting" method of the model.
      *

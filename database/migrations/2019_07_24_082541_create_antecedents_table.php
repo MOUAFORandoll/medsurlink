@@ -15,7 +15,7 @@ class CreateAntecedentsTable extends Migration
     {
         Schema::create('antecedents', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('consultation_medecine_generale_id');
+            $table->unsignedBigInteger('dossier_medical_id');
             $table->text('description');
             $table->date('date')->nullable();
             $table->string('type');
@@ -23,9 +23,9 @@ class CreateAntecedentsTable extends Migration
             $table->softDeletes();
             $table->string('slug')->unique();
 
-            $table->foreign('consultation_medecine_generale_id')
+            $table->foreign('dossier_medical_id')
                 ->references('id')
-                ->on('consultation_medecine_generales')
+                ->on('dossier_medicals')
                 ->onDelete('RESTRICT')
                 ->onUpdate('RESTRICT');
         });
