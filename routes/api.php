@@ -46,6 +46,13 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
 //        Route pour ajouter ou supprimer les etablissement d'un praticien
     Route::post('praticien/add-etablissement','Api\PraticienController@addEtablissement');
     Route::post('praticien/delete-etablissement','Api\PraticienController@removeEtablissement');
+
+//    Route pour ajouter ou supprimer des patients à un etablissement
+
+    //        Route pour ajouter ou supprimer les etablissement d'un praticien
+    Route::post('etablissement/add-patient','Api\EtablissementPatientController@ajouterPatientAEtablissement');
+    Route::post('etablissement/delete-patient','Api\EtablissementPatientController@retirerPatientAEtablissement');
+
 });
 
 //    Définition des routes accéssible par le praticien

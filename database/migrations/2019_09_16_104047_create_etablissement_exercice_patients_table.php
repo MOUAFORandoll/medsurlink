@@ -13,7 +13,7 @@ class CreateEtablissementExercicePatientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('etablissement_exercice_patients', function (Blueprint $table) {
+        Schema::create('etablissement_exercice_patient', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('etablissement_id');
             $table->unsignedBigInteger('patient_id');
@@ -41,7 +41,7 @@ class CreateEtablissementExercicePatientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('etablissement_exercice_patients', function (Blueprint $table) {
+        Schema::dropIfExists('etablissement_exercice_patient', function (Blueprint $table) {
             $table->drop(['etablissement_id','patient_id']);
         });
     }

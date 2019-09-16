@@ -22,7 +22,7 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::with(['praticiens'])->get();
+        $etablissements =  EtablissementExercice::with(['praticiens','patients'])->get();
         return response()->json(['etablissements'=>$etablissements]);
     }
 
@@ -63,7 +63,7 @@ class EtablissementExerciceController extends Controller
         if(!is_null($validation))
             return $validation;;
 
-        $etablissement = EtablissementExercice::with(['praticiens'])->whereSlug($slug)->first();
+        $etablissement = EtablissementExercice::with(['praticiens','patients'])->whereSlug($slug)->first();
         return response()->json(['etablissement'=>$etablissement]);
 
 
@@ -96,7 +96,7 @@ class EtablissementExerciceController extends Controller
             return $validation;;
 
         EtablissementExercice::whereSlug($slug)->update($request->validated());
-        $etablissement = EtablissementExercice::with(['praticiens'])->whereSlug($slug)->first();
+        $etablissement = EtablissementExercice::with(['praticiens','patients'])->whereSlug($slug)->first();
         return response()->json(['etablissement'=>$etablissement]);
 
     }
@@ -114,7 +114,7 @@ class EtablissementExerciceController extends Controller
             return $validation;;
 
         try{
-            $etablissement = EtablissementExercice::with(['praticiens'])->whereSlug($slug)->first();
+            $etablissement = EtablissementExercice::with(['praticiens','patients'])->whereSlug($slug)->first();
             $etablissement->delete();
             return response()->json(['etablissement'=>$etablissement]);
 
