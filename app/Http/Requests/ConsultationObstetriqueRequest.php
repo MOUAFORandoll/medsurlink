@@ -36,6 +36,7 @@ class ConsultationObstetriqueRequest extends FormRequest
             "assuetudes"=>"sometimes|nullable|string",
             "antecassuetudesedent_de_transfusion"=>"sometimes|nullable|string",
             "facteur_de_risque"=>"sometimes|nullable|string",
+            "antecedent_conjoint"=>"sometimes|nullable|string|min:2",
         ];
     }
 

@@ -19,6 +19,7 @@ class CreateConsultationObstetriquesTable extends Migration
             $table->date('date_creation')->default(Carbon\Carbon::now()->format('Y-m-d'));
             $table->integer('numero_grossesse');
             $table->date('ddr');
+            $table->text('antecedent_conjoint')->nullable();
             $table->string('serologie')->nullable();
             $table->string('groupe_sanguin')->nullable();
             $table->string('statut_socio_familiale')->nullable();

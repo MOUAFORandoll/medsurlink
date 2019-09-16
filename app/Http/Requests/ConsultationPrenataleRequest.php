@@ -29,7 +29,6 @@ class ConsultationPrenataleRequest extends FormRequest
             "type_de_consultation"=>"required|string|min:2",
             "date_creation"=>"sometimes|nullable|date",
             "plaintes"=>"sometimes|nullable|string|min:2",
-            "antecedent_conjoint"=>"sometimes|nullable|string|min:2",
             "recommandations"=>"sometimes|nullable|string|min:2",
         ];
     }

@@ -43,7 +43,6 @@ class ConsultationPrenatale extends Model
         "consultation_obstetrique_id",
         "type_de_consultation",
         "plaintes",
-        "antecedent_conjoint",
         "recommandations",
         'archieved_at',
         'passed_at',

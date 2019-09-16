@@ -19,7 +19,6 @@ class CreateConsultationPrenatalesTable extends Migration
             $table->date('date_creation')->default(\Carbon\Carbon::now()->format('Y-m-d'));
             $table->string('type_de_consultation');
             $table->text('plaintes')->nullable();
-            $table->text('antecedent_conjoint')->nullable();
             $table->text('recommandations')->nullable();
             $table->softDeletes();
             $table->timestamps();
