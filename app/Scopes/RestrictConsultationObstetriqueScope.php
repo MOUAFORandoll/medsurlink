@@ -34,7 +34,7 @@ class RestrictConsultationObstetriqueScope implements Scope
                 foreach ($consultationsObstetriqueCollection as $item){
                     array_push($consultationsObstetrique,$item->id);
                 }
-                $builder->whereIn('consultation_obstetrique_id',$consultationsObstetrique);
+                $builder->whereIn('consultation_obstetrique_id',$consultationsObstetrique)->whereNotNull('archieved_at');
 
             }elseif(gettype($userRoles->search('Souscripteur')) == 'integer'){
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
@@ -49,7 +49,7 @@ class RestrictConsultationObstetriqueScope implements Scope
                     }
                 }
 
-                $builder->whereIn('consultation_obstetrique_id',$consultationsObstetrique);
+                $builder->whereIn('consultation_obstetrique_id',$consultationsObstetrique)->whereNotNull('archieved_at');
             }
             else{
                 return $builder;

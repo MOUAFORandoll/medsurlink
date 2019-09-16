@@ -2,30 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/AffiliationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/AffiliationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/AllergieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/AllergieController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/AntecedentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/AntecedentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConclusionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConclusionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamClinController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamClinController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamComController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamComController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationAllergieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationAllergieController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenCliniqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenCliniqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenComplentaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenComplentaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationTraitementController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationTraitementController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/EchographieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/EchographieController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenCliniqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenCliniqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenComplementaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenComplementaireController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationExamClinController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationExamClinController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationExamComController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationExamComController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/MotifController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/MotifController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreCommunController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreCommunController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreObstetriqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ProfessionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ProfessionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/TraitementController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/TraitementController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Scopes/RestrictConsultationObstetriqueScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictConsultationObstetriqueScope.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -65,6 +43,13 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="consultation_obstetriques: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -346,7 +331,9 @@
       <workItem from="1568189470757" duration="21867000" />
       <workItem from="1568274208905" duration="12978000" />
       <workItem from="1568294424067" duration="2440000" />
-      <workItem from="1568361240911" duration="14872000" />
+      <workItem from="1568361240911" duration="15112000" />
+      <workItem from="1568385301364" duration="4517000" />
+      <workItem from="1568625647217" duration="214000" />
     </task>
     <servers />
   </component>
