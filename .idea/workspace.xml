@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Scopes/RestrictDossierScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictDossierScope.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -326,7 +325,7 @@
       <workItem from="1568294424067" duration="2440000" />
       <workItem from="1568361240911" duration="15112000" />
       <workItem from="1568385301364" duration="4517000" />
-      <workItem from="1568625647217" duration="1673000" />
+      <workItem from="1568625647217" duration="3548000" />
     </task>
     <servers />
   </component>
