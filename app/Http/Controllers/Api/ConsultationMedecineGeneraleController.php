@@ -113,6 +113,11 @@ class ConsultationMedecineGeneraleController extends Controller
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create');
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->find($consultation->id);
+        $user = $consultation->dossier->patient->user;
+        $patient = $consultation->dossier->patient;
+        $consultation['user']=$user;
+        $consultation['patient']=$patient;
+
         return response()->json(["consultation"=>$consultation]);
     }
 
@@ -172,6 +177,10 @@ class ConsultationMedecineGeneraleController extends Controller
         ConsultationMedecineGenerale::whereSlug($slug)->update($request->validated());
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
+        $user = $consultation->dossier->patient->user;
+        $patient = $consultation->dossier->patient;
+        $consultation['user']=$user;
+        $consultation['patient']=$patient;
         return response()->json(["consultation"=>$consultation]);
     }
 
@@ -216,7 +225,9 @@ class ConsultationMedecineGeneraleController extends Controller
 
         $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
-            return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
+            $transmission = [];
+            $transmission['nonTransmis'] = "Ce resultat n'a pas encoré été transmis";
+            return response()->json(['error'=>$transmission],419 );
         }else{
             $resultat->archieved_at = Carbon::now();
             $resultat->save();

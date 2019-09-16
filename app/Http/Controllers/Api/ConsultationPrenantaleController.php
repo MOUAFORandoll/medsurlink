@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\ConsultationPrenataleRequest;
 use App\Models\ConsultationPrenatale;
+use App\Scopes\RestrictDossierScope;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,10 +22,10 @@ class ConsultationPrenantaleController extends Controller
     {
         $consultationsPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->get();
         foreach ($consultationsPrenatale as $consultationPrenatale){
-            $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
-            $dossier = $consultationPrenatale->consultationObstetrique->dossier;
-            $consultationPrenatale['user']=$user;
-            $consultationPrenatale['dossier']=$dossier;
+                $dossier = $consultationPrenatale->consultationObstetrique->dossier;
+                $user = $dossier->patient->user;
+                $consultationPrenatale['user']=$user;
+                $consultationPrenatale['dossier']=$dossier;
         }
         return response()->json(['consultationsPrenatale'=>$consultationsPrenatale]);
     }
@@ -137,8 +138,9 @@ class ConsultationPrenantaleController extends Controller
         $consultationPrenatale = ConsultationPrenatale::findBySlug($slug);
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationPrenatale",$consultationPrenatale->id,"create");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
-        }
+            $transmission = [];
+            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
+            return response()->json(['error'=>$transmission],419 ); }
         try{
             $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
             $consultationPrenatale->delete();
@@ -164,7 +166,9 @@ class ConsultationPrenantaleController extends Controller
 
         $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
-            return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],401);
+            $transmission = [];
+            $transmission['nonTransmis'][0] = "Ce resultat n'a pas encoré été transmis";
+            return response()->json(['error'=>$transmission],419 );
         }else{
             $resultat->archieved_at = Carbon::now();
             $resultat->save();

@@ -24,10 +24,9 @@ class DossierMedicalController extends Controller
     {
         $dossiers = DossierMedical::with(['patient','consultationsMedecine','consultationsObstetrique'])->get();
         foreach ($dossiers as $dossier){
-            $user = $dossier->patient->user;
-            $dossier['user'] = $user;
+                $user = $dossier->patient->user;
+                $dossier['user'] = $user;
         }
-
         return response()->json(['dossiers'=>$dossiers]);
     }
 
@@ -52,7 +51,9 @@ class DossierMedicalController extends Controller
 
         $patient =Patient::with('dossier')->find($request->get('patient_id'));
         if (!is_null($patient->dossier) or !empty($patient->dossier)){
-            return  response()->json(['error'=>'Ce patient a déja un dossier: '.$patient->dossier->numero_dossier]);
+            $transmission = [];
+            $transmission['uniqueDossier'][0] = 'Ce patient a déja un dossier: '.$patient->dossier->numero_dossier;
+            return response()->json(['error'=>$transmission],419 );
         }
 
         $numero_dossier = $this->randomNumeroDossier();
@@ -118,9 +119,9 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
         try{
-        $dossier = DossierMedical::with(['patient','consultationsMedecine','consultationsObstetrique'])->whereSlug($slug)->first();
-        $dossier->delete();
-        return response()->json(['dossier'=>$dossier]);
+            $dossier = DossierMedical::with(['patient','consultationsMedecine','consultationsObstetrique'])->whereSlug($slug)->first();
+            $dossier->delete();
+            return response()->json(['dossier'=>$dossier]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
             return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
         }

@@ -92,8 +92,9 @@ class ProfessionController extends Controller
         $profession  = Profession::whereSlug($slug)->first();
         $isAuthor = checkIfIsAuthorOrIsAuthorized("Profession",$profession->id,"create");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
-        }
+            $transmission = [];
+            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
+            return response()->json(['error'=>$transmission],419 ); }
 
         Profession::whereSlug($slug)->update($request->validated());
         $profession = Profession::with('specialites')->whereSlug($slug)->first();
@@ -115,8 +116,9 @@ class ProfessionController extends Controller
         $profession  = Profession::whereSlug($slug)->first();
         $isAuthor = checkIfIsAuthorOrIsAuthorized("Profession",$profession->id,"create");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
-        }
+            $transmission = [];
+            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
+            return response()->json(['error'=>$transmission],419 ); }
 
         try{
             $profession = Profession::with('specialites')->whereSlug($slug)->first();

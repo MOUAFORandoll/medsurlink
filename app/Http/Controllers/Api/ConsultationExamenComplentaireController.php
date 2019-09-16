@@ -24,8 +24,9 @@ class ConsultationExamenComplentaireController extends Controller
 
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationExamenComplementaire",$consultation->id,"attach");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
-        }
+            $transmission = [];
+            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
+            return response()->json(['error'=>$transmission],419 );   }
 
         $consultation->examensComplementaire()->detach($request->get('examensComplementaire'));
 

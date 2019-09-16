@@ -137,6 +137,7 @@ class User extends Authenticatable
     public function praticien(){
         return $this->hasOne(Praticien::class,'user_id','id');
     }
+
     public function patient(){
         return $this->hasOne(Patient::class,'user_id','id');
     }

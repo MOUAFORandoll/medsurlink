@@ -21,7 +21,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function index()
     {
-        $consultationsObstetrique = ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->get();
+        $consultationsObstetrique = ConsultationObstetrique::with(['consultationPrenatales', 'echographies', 'dossier'])->get();
         foreach ($consultationsObstetrique as $consultationObstetrique){
             $user = $consultationObstetrique->dossier->patient->user;
             $consultationObstetrique['user']=$user;
@@ -60,8 +60,9 @@ class ConsultationObstetriqueController extends Controller
 
                 return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
             }else{
-                return response()->json(['error'=>"Vous ne disposez pas des autorisations pour effectuer cette action"],422);
-            }
+                $transmission = [];
+                $transmission['accessRefuse'][0] = "Vous ne pouvez effectuer cette action";
+                return response()->json(['error'=>$transmission],419 );}
         }elseif($user->hasRole('Admin')){
             $consultationObstetrique =  ConsultationObstetrique::create($request->validated()+['numero_grossesse'=>$maxNumeroGrossesse]);
             defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create');
@@ -117,8 +118,9 @@ class ConsultationObstetriqueController extends Controller
 
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$consultationObstetrique->id,"create");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
-        }
+            $transmission = [];
+            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
+            return response()->json(['error'=>$transmission],419 ); }
 
         $numeroGrossesse = $consultationObstetrique->numero_grossesse;
         ConsultationObstetrique::whereSlug($slug)->update($request->validated() + ['numero_grossesse'=>$numeroGrossesse]);
@@ -141,8 +143,9 @@ class ConsultationObstetriqueController extends Controller
         $consultationObstetrique = ConsultationObstetrique::findBySlug($slug);
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$consultationObstetrique->id,"create");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
-        }
+            $transmission = [];
+            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
+            return response()->json(['error'=>$transmission],419 ); }
         try{
             $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
             $consultationObstetrique->delete();
@@ -167,7 +170,9 @@ class ConsultationObstetriqueController extends Controller
 
         $resultat = ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
-            return response()->json(['error'=>"Ce resultat n'a pas encoré été transmis"],419 );
+            $transmission = [];
+            $transmission['nonTransmis'][0] = "Ce resultat n'a pas encoré été transmis";
+            return response()->json(['error'=>$transmission],419 );
         }else{
             $resultat->archieved_at = Carbon::now();
             $resultat->save();
@@ -197,7 +202,7 @@ class ConsultationObstetriqueController extends Controller
     }
 
     public static function genererNumeroGrossesse(){
-       $maxConsultationObst =  DB::table('consultation_obstetriques')->max('numero_grossesse');
-       return $maxConsultationObst +1;
+        $maxConsultationObst =  DB::table('consultation_obstetriques')->max('numero_grossesse');
+        return $maxConsultationObst +1;
     }
 }

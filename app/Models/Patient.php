@@ -9,6 +9,8 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\UnauthorizedException;
 use Netpok\Database\Support\RestrictSoftDeletes;
 
 class Patient extends Model
@@ -76,5 +78,30 @@ class Patient extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
 
+    public function scopeRestrictUser($builder){
+        if (Auth::check()){
+            $user = Auth::user();
+            $userRoles = $user->getRoleNames();
+            if(gettype($userRoles->search('Patient')) == 'integer'){
+                $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
+                $builder->where('user_id',$user->id);
+
+            }else if(gettype($userRoles->search('Souscripteur')) == 'integer'){
+                $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
+                //Récupération des patiens du souscripteur
+                $patients = $user->souscripteur->patients;
+                $patientsId = [];
+                foreach ($patients as $patient){
+                    array_push($patientsId,$patient->user_id);
+                }
+                $builder->whereIn('user_id',$patientsId);
+            }
+            else{
+                return $builder;
+            }
+        }else{
+            throw new UnauthorizedException("Veuillez vous authentifier",401);
+        }
+    }
 
 }

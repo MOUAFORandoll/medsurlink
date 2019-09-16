@@ -21,7 +21,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with(['souscripteur','dossier','user','affiliations'])->get();
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations'])->restrictUser()->get();
         return response()->json(['patients'=>$patients]);
     }
 
@@ -63,7 +63,7 @@ class PatientController extends Controller
         //Envoi des informations patient par mail
         UserController::sendUserInformationViaMail($user,$password);
 
-        $patient = Patient::with(['dossier','affiliations'])->whereSlug($patient->slug)->first();
+        $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
         return response()->json(['patient'=>$patient,"password"=>$password]);
     }
 
@@ -79,7 +79,7 @@ class PatientController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $patient = Patient::with(['souscripteur','user','affiliations'])->whereSlug($slug)->first();
+        $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
         return response()->json(['patient'=>$patient]);
 
     }
@@ -112,7 +112,7 @@ class PatientController extends Controller
         $age = evaluateYearOfOld($request->date_de_naissance);
 
         Patient::whereSlug($slug)->update($request->validated()+['age'=>$age]);
-        $patient = Patient::with(['souscripteur','user','affiliations'])->whereSlug($slug)->first();
+        $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
 
         return response()->json(['patient'=>$patient]);
 
@@ -131,7 +131,7 @@ class PatientController extends Controller
             return $validation;
 
         try{
-            $patient = Patient::with(['souscripteur','user','affiliations'])->whereSlug($slug)->first();
+            $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
             $patient->delete();
             return response()->json(['patient'=>$patient]);
         }catch (DeleteRestrictionException $deleteRestrictionException){

@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Scopes/RestrictDossierScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictDossierScope.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +28,23 @@
     <option name="HIDDEN_KINDS">
       <set />
     </option>
-    <expand />
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+      </path>
+    </expand>
     <select />
   </component>
   <component name="Git.Settings">
@@ -164,21 +180,22 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../vuemedicalinkapp" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/Scopes" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\medicalink-app\app\Models" />
-      <recent name="C:\xampp\htdocs\medicalink-app\app\Http\Controllers\Api" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\medicalink-app\app\Scopes" />
       <recent name="C:\xampp\htdocs\medicalink-app" />
       <recent name="C:\xampp\htdocs\medicalink-app\public\images" />
       <recent name="C:\xampp\htdocs\medicalink-app\resources\views" />
       <recent name="C:\xampp\htdocs\medicalink-app\database\seeds" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\medicalink-app\app\Models" />
+      <recent name="C:\xampp\htdocs\medicalink-app\app\Http\Controllers\Api" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -301,7 +318,15 @@
       <workItem from="1567669759359" duration="2319000" />
       <workItem from="1567684051189" duration="1767000" />
       <workItem from="1567759166861" duration="2767000" />
-      <workItem from="1567774480709" duration="3374000" />
+      <workItem from="1567774480709" duration="4605000" />
+      <workItem from="1568020649533" duration="1695000" />
+      <workItem from="1568106922355" duration="5363000" />
+      <workItem from="1568189470757" duration="21867000" />
+      <workItem from="1568274208905" duration="12978000" />
+      <workItem from="1568294424067" duration="2440000" />
+      <workItem from="1568361240911" duration="15112000" />
+      <workItem from="1568385301364" duration="4517000" />
+      <workItem from="1568625647217" duration="1673000" />
     </task>
     <servers />
   </component>
