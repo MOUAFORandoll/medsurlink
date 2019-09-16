@@ -30,7 +30,7 @@ class RestrictDossierScope implements Scope
             if(gettype($userRoles->search('Patient')) == 'integer'){
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 $dossier = $user->patient->dossier;
-                $builder->where('dossier_medical_id','=',$dossier->id);
+                $builder->where('dossier_medical_id','=',$dossier->id)->whereNotNull('archieved_at');
             }elseif(gettype($userRoles->search('Souscripteur')) == 'integer'){
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 $patients = $user->souscripteur->patients;
@@ -38,7 +38,7 @@ class RestrictDossierScope implements Scope
                 foreach ($patients as $patient){
                     array_push($dossiers,$patient->dossier->id);
                 }
-                $builder->whereIn('dossier_medical_id',$dossiers);
+                $builder->whereIn('dossier_medical_id',$dossiers)->whereNotNull('archieved_at');
             }
             else{
                 return $builder;
