@@ -117,26 +117,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::post('consultation-medecine/retirer-motif','Api\ConsultationMotifController@removeMotif');
     Route::post('consultation-medecine/ajouter-motif','Api\ConsultationMotifController@ajouterMotif');
 
-    Route::post('retirer-examen-clinique','Api\ConsultationExamenCliniqueController@retirerExamenClinique');
-    Route::post('ajouter-examen-clinique','Api\ConsultationExamenCliniqueController@ajouterExamenClinique');
-
-    Route::post('retirer-examen-complementaire','Api\ConsultationExamenComplentaireController@retirerExamenComplementaire');
-    Route::post('ajouter-examen-complementaire','Api\ConsultationExamenComplentaireController@ajouterExamenComplementaire');
-
-    Route::post('consultation-prenantale/retirer-examen-clinique','Api\ConsultPrenExamClinController@retirerExamenClinique');
-    Route::post('consultation-prenantale/ajouter-examen-clinique','Api\ConsultPrenExamClinController@ajouterExamenClinique');
-
-    Route::post('consultation-prenantale/retirer-examen-complementaire','Api\ConsultPrenExamComController@retirerExamenComplementaire');
-    Route::post('consultation-prenantale/ajouter-examen-complementaire','Api\ConsultPrenExamComController@ajouterExamenComplementaire');
-
-    Route::post('hospitalisation/retirer-examen-clinique','Api\HospitalisationExamClinController@retirerExamenClinique');
-    Route::post('hospitalisation/ajouter-examen-clinique','Api\HospitalisationExamClinController@ajouterExamenClinique');
-
     Route::post('hospitalisation/ajouter-motif','Api\HospitalisationMotifController@ajouterMotif');
     Route::post('hospitalisation/retirer-motif','Api\HospitalisationMotifController@removeMotif');
-
-    Route::post('hospitalisation/retirer-examen-complementaire','Api\HospitalisationExamComController@retirerExamenComplementaire');
-    Route::post('hospitalisation/ajouter-examen-complementaire','Api\HospitalisationExamComController@ajouterExamenComplementaire');
 
     Route::post('retirer-allergie','Api\DossierAllergieController@retirerAllergie');
     Route::post('ajouter-allergie','Api\DossierAllergieController@ajouterAllergie');

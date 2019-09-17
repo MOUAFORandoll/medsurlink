@@ -35,6 +35,8 @@ class HospitalisationRequest extends FormRequest
             "avis"=>"sometimes|nullable|string",
             "traitement_sortie"=>"sometimes|nullable|string",
             "rendez_vous"=>"sometimes|nullable|string",
+            "examen_clinique"=>"sometimes|nullable|string|min:2",
+            "examen_complementaire"=>"sometimes|nullable|string|min:2",
         ];
     }
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)

@@ -25,6 +25,8 @@ class CreateHospitalisationsTable extends Migration
             $table->text('avis')->nullable();
             $table->text('traitement_sortie')->nullable();
             $table->text('rendez_vous')->nullable();
+            $table->text('examen_clinique')->nullable();
+            $table->text('examen_complementaire')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->string('slug')->unique();

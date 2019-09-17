@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ConsutationMedecineRequest;
 use App\Models\ConsultationMedecineGenerale;
-use App\Models\ExamenClinique;
-use App\Models\ExamenComplementaire;
 use App\Models\Motif;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class ConsultationMedecineGeneraleController extends Controller
@@ -22,7 +19,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function index()
     {
-        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->get();
+        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','antecedents','conclusions'])->get();
         foreach ($consultations as $consultation){
             $user = $consultation->dossier->patient->user;
             $patient = $consultation->dossier->patient;
@@ -55,42 +52,6 @@ class ConsultationMedecineGeneraleController extends Controller
         $consultation = ConsultationMedecineGenerale::create($request->validated());
         $motifs = $request->get('motifs');
         $motifACreer = $request->get('motifsACreer');
-        $examensClinique = $request->get('examensClinique');
-        $examensCliniqueACreer = $request->get('examensCliniqueACreer');
-        $examensCom = $request->get('examensCom');
-        $examensComACreer = $request->get('examensComACreer');
-
-//  examen clinique
-        if (!is_null($examensCliniqueACreer) or !empty($examensCliniqueACreer)){
-            foreach ( $examensCliniqueACreer as $examen)
-            {
-                $examen = ExamenClinique::create([
-                    'reference'=>$examen
-                ]);
-                $consultation->examensClinique()->attach($examen->id);
-            }
-        }
-
-        if (!is_null($examensClinique) or !empty($examensClinique)){
-                $consultation->examensClinique()->attach($examen);
-        }
-
-//          examen complementaire
-        if (!is_null($examensComACreer) or !empty($examensComACreer)){
-            foreach ( $examensComACreer as $examen)
-            {
-                $examen = ExamenComplementaire::create([
-                    'reference'=>$examen
-                ]);
-                $consultation->examensComplementaire()->attach($examen->id);
-            }
-        }
-
-        if (!is_null($examensCom) or !empty($examensCom)){
-                $consultation->examensComplementaire()->attach($examen);
-        }
-
-
 //         motif
         if (!is_null($motifACreer) or !empty($motifACreer)){
             foreach ( $motifACreer as $motif)
@@ -112,7 +73,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $consultation->save();
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create');
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->find($consultation->id);
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','antecedents','conclusions'])->find($consultation->id);
         $user = $consultation->dossier->patient->user;
         $patient = $consultation->dossier->patient;
         $consultation['user']=$user;
@@ -133,7 +94,7 @@ class ConsultationMedecineGeneraleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
         $user = $consultation->dossier->patient->user;
         $patient = $consultation->dossier->patient;
         $consultation['user']=$user;
@@ -176,7 +137,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
         ConsultationMedecineGenerale::whereSlug($slug)->update($request->validated());
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
         $user = $consultation->dossier->patient->user;
         $patient = $consultation->dossier->patient;
         $consultation['user']=$user;
@@ -196,7 +157,7 @@ class ConsultationMedecineGeneraleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$consultation->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
@@ -223,7 +184,7 @@ class ConsultationMedecineGeneraleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
+        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
             $transmission = [];
             $transmission['nonTransmis'] = "Ce resultat n'a pas encoré été transmis";
@@ -248,7 +209,7 @@ class ConsultationMedecineGeneraleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
+        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
 

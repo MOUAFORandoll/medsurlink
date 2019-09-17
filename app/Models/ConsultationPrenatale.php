@@ -37,7 +37,7 @@ class ConsultationPrenatale extends Model
     /**
      * The relations restricting model deletion
      */
-    protected $restrictDeletes = ['parametresObstetrique','examensClinique','examensComplementaire'];
+    protected $restrictDeletes = ['parametresObstetrique'];
 
     protected $fillable = [
         "consultation_obstetrique_id",
@@ -46,7 +46,9 @@ class ConsultationPrenatale extends Model
         "recommandations",
         'archieved_at',
         'passed_at',
-        'slug'
+        'slug',
+        "examen_clinique",
+        "examen_complementaire",
     ];
 
     public function parametresObstetrique(){
@@ -55,14 +57,6 @@ class ConsultationPrenatale extends Model
 
     public function consultationObstetrique(){
         return $this->belongsTo(ConsultationObstetrique::class,'consultation_obstetrique_id','id');
-    }
-
-    public function examensClinique(){
-        return $this->belongsToMany(ExamenClinique::class,'consult_pren_exam_clin','consultation_prenatale_id','examen_clinique_id');
-    }
-
-    public function examensComplementaire(){
-        return $this->belongsToMany(ExamenComplementaire::class,'consult_pren_exam_com','consultation_prenatale_id','examen_complementaire_id');
     }
     /**
      * The "booting" method of the model.

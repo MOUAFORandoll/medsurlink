@@ -20,6 +20,8 @@ class CreateConsultationPrenatalesTable extends Migration
             $table->string('type_de_consultation');
             $table->text('plaintes')->nullable();
             $table->text('recommandations')->nullable();
+            $table->text('examen_clinique')->nullable();
+            $table->text('examen_complementaire')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->string('slug')->unique();

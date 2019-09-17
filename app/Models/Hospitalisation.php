@@ -23,7 +23,9 @@ class Hospitalisation extends Model
         "avis",
         "traitement_sortie",
         "rendez_vous",
-        'slug'
+        'slug',
+        "examen_clinique",
+        "examen_complementaire",
     ];
     use Sluggable;
     use SluggableScopeHelpers;

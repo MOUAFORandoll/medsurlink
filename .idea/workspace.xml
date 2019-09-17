@@ -2,14 +2,38 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamClinController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultPrenExamComController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenCliniqueController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationExamenComplentaireController.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMotifController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMotifController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationExamClinController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationExamComController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsultationPrenataleRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsultationPrenataleRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/HospitalisationRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/HospitalisationRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ConsultPrenExamClin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ConsultPrenExamCom.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationExamenClinique.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationExamenComplementaire.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/Hospitalisation.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Hospitalisation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Motif.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Motif.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_19_125537_create_motifs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_19_125537_create_motifs_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/HospitalisationExamClin.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/HospitalisationExamCom.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_19_110315_create_consultation_medecine_generales_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_19_110315_create_consultation_medecine_generales_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_23_155937_create_consultation_examen_cliniques_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_24_075216_create_consultation_complementaires_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_26_114204_create_consultation_prenatales_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_26_114204_create_consultation_prenatales_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_29_125535_create_consult_pren_exam_clins_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_29_134459_create_consult_pren_exam_coms_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_30_094929_create_hospitalisations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_07_30_094929_create_hospitalisations_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_30_104000_create_hospitalisation_exam_clins_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_30_105733_create_hospitalisation_exam_coms_table.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -243,7 +267,12 @@
     <option name="allServicesViewState">
       <serviceView>
         <treeState>
-          <expand />
+          <expand>
+            <path>
+              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@854c5df1" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+            </path>
+          </expand>
           <select />
         </treeState>
       </serviceView>
@@ -335,7 +364,7 @@
       <workItem from="1568385301364" duration="4517000" />
       <workItem from="1568625647217" duration="18467000" />
       <workItem from="1568646546918" duration="478000" />
-      <workItem from="1568705844635" duration="4536000" />
+      <workItem from="1568705844635" duration="9296000" />
     </task>
     <servers />
   </component>

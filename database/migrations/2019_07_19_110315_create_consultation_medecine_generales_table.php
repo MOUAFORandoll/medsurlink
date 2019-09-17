@@ -19,6 +19,8 @@ class CreateConsultationMedecineGeneralesTable extends Migration
             $table->date('date_consultation')->nullable();
             $table->text('anamese')->nullable();
             $table->text('mode_de_vie')->nullable();
+            $table->text('examen_clinique')->nullable();
+            $table->text('examen_complementaire')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->string('slug')->unique();

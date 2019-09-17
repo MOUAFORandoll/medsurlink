@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\ConsultationPrenataleRequest;
 use App\Models\ConsultationPrenatale;
-use App\Scopes\RestrictDossierScope;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class ConsultationPrenantaleController extends Controller
@@ -20,7 +18,7 @@ class ConsultationPrenantaleController extends Controller
      */
     public function index()
     {
-        $consultationsPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->get();
+        $consultationsPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->get();
         foreach ($consultationsPrenatale as $consultationPrenatale){
                 $dossier = $consultationPrenatale->consultationObstetrique->dossier;
                 $user = $dossier->patient->user;
@@ -52,7 +50,7 @@ class ConsultationPrenantaleController extends Controller
         $consultationPrenatale = ConsultationPrenatale::create($request->validated());
 
         defineAsAuthor("ConsultationPrenatale",$consultationPrenatale->id,'create');
-        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($consultationPrenatale->slug)->first();
+        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->whereSlug($consultationPrenatale->slug)->first();
         $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
         $dossier = $consultationPrenatale->consultationObstetrique->dossier;
         $consultationPrenatale['user']=$user;
@@ -73,7 +71,7 @@ class ConsultationPrenantaleController extends Controller
             return $validation;
 
 
-        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->whereSlug($slug)->first();
         $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
         $dossier = $consultationPrenatale->consultationObstetrique->dossier;
         $consultationPrenatale['user']=$user;
@@ -108,14 +106,10 @@ class ConsultationPrenantaleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        //Attachement des examens clinique
-
-        //Attachement des examens complementaires
-
         //Attachement des parametres obstetrique
 
         ConsultationPrenatale::whereSlug($slug)->update($request->validated());
-        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->whereSlug($slug)->first();
         $user = $consultationPrenatale->consultationObstetrique->dossier->patient->user;
         $dossier = $consultationPrenatale->consultationObstetrique->dossier;
         $consultationPrenatale['user']=$user;
@@ -142,7 +136,7 @@ class ConsultationPrenantaleController extends Controller
             $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
             return response()->json(['error'=>$transmission],419 ); }
         try{
-            $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+            $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->whereSlug($slug)->first();
             $consultationPrenatale->delete();
             return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
@@ -164,7 +158,7 @@ class ConsultationPrenantaleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
             $transmission = [];
             $transmission['nonTransmis'][0] = "Ce resultat n'a pas encoré été transmis";
@@ -193,7 +187,7 @@ class ConsultationPrenantaleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $resultat = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
         $user = $resultat->consultationObstetrique->dossier->patient->user;

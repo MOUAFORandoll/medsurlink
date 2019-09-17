@@ -30,6 +30,8 @@ class ConsultationPrenataleRequest extends FormRequest
             "date_creation"=>"sometimes|nullable|date",
             "plaintes"=>"sometimes|nullable|string|min:2",
             "recommandations"=>"sometimes|nullable|string|min:2",
+            "examen_clinique"=>"sometimes|nullable|string|min:2",
+            "examen_complementaire"=>"sometimes|nullable|string|min:2",
         ];
     }
 

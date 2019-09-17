@@ -38,7 +38,7 @@ class ConsultationMedecineGenerale extends Model
     /**
      * The relations restricting model deletion
      */
-    protected $restrictDeletes = ['motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'];
+    protected $restrictDeletes = ['motifs','traitements','allergies','antecedents','conclusions'];
 
     protected $fillable = [
         "dossier_medical_id",
@@ -47,7 +47,9 @@ class ConsultationMedecineGenerale extends Model
         "mode_de_vie",
         'archieved_at',
         'passed_at',
-        'slug'
+        'slug',
+        "examen_clinique",
+        "examen_complementaire",
     ];
 
     public function dossier(){
@@ -56,13 +58,6 @@ class ConsultationMedecineGenerale extends Model
 
     public  function  motifs(){
         return $this->belongsToMany(Motif::class,'consultation_motif','consultation_medecine_generale_id','motif_id');
-    }
-
-    public  function  examensClinique(){
-        return $this->belongsToMany(ExamenClinique::class,'consultation_clinique','consultation_medecine_generale_id','examen_clinique_id');
-    }
-    public  function  examensComplementaire(){
-        return $this->belongsToMany(ExamenComplementaire::class,'consultation_exam_com','consultation_medecine_generale_id','examen_complementaire_id');
     }
 
     public  function  traitements(){
