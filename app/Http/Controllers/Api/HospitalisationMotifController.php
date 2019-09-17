@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\ConsultationMedecineGenerale;
+use App\Models\Hospitalisation;
 use App\Models\Motif;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
-class ConsultationMotifController extends Controller
+class HospitalisationMotifController extends Controller
 {
     public function removeMotif(Request $request){
         $validation = Validator::make($request->all(),[
-            "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
+            "hospitalisation_id"=>"required|integer|exists:hospitalisations,id",
             "motifs.*"=>"required|integer|exists:motifs,id"
         ]);
 
@@ -20,16 +20,16 @@ class ConsultationMotifController extends Controller
             return response()->json(['error'=>$validation->errors()],419);
         }
 
-        $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
-        $consultation->motifs()->detach($request->get('motifs'));
+        $hospitalisation = Hospitalisation::find($request->get('hospitalisation_id'));
+        $hospitalisation->motifs()->detach($request->get('motifs'));
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','conclusions'])->find($request->get('consultation'));
-        return response()->json(['consultation'=>$consultation]);
+        $hospitalisation = Hospitalisation::with('motifs')->find($request->get('hospitalisation_id'));
+        return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
     public function ajouterMotif(Request $request){
         $validation = Validator::make($request->all(),[
-            "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
+            "hospitalisation_id"=>"required|integer|exists:hospitalisations,id",
             "motifs"=>"required_without:motifsACreer",
             "motifsACreer"=>"required_without:motifs",
             "motifs.*"=>"required_without:motifsACreer|integer|exists:motifs,id",
@@ -41,9 +41,9 @@ class ConsultationMotifController extends Controller
             return response()->json(['error'=>$validation->errors()],419);
         }
 
-        $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
+        $hospitalisation = Hospitalisation::find($request->get('hospitalisation_id'));
         if (!is_null($request->get('motifs'))){
-            $consultation->motifs()->attach($request->get('motifs'));
+            $hospitalisation->motifs()->attach($request->get('motifs'));
 
         }
 
@@ -56,10 +56,10 @@ class ConsultationMotifController extends Controller
                     'description'=>$motif['description']
                 ]);
 
-                $consultation->motifs()->attach($motifCreer->id);
+                $hospitalisation->motifs()->attach($motifCreer->id);
             }
         }
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','conclusions'])->find($request->get('consultation'));
-        return response()->json(['consultation'=>$consultation]);
+        $hospitalisation = Hospitalisation::with('motifs')->find($request->get('hospitalisation_id'));
+        return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 }

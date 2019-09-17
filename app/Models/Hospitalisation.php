@@ -55,4 +55,8 @@ class Hospitalisation extends Model
     public function examensComplementaire(){
         return $this->belongsToMany(ExamenComplementaire::class,'hospitalisation_exam_com','hospitalisation_id','examen_complementaire_id');
     }
+
+    public  function  motifs(){
+        return $this->belongsToMany(Motif::class,'hospitalisation_motif','hospitalisation_id','motif_id');
+    }
 }

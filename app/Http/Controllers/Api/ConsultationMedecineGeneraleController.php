@@ -22,7 +22,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function index()
     {
-        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->get();
+        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->get();
         foreach ($consultations as $consultation){
             $user = $consultation->dossier->patient->user;
             $patient = $consultation->dossier->patient;
@@ -112,7 +112,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $consultation->save();
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create');
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->find($consultation->id);
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->find($consultation->id);
         $user = $consultation->dossier->patient->user;
         $patient = $consultation->dossier->patient;
         $consultation['user']=$user;
@@ -133,7 +133,7 @@ class ConsultationMedecineGeneraleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
         $user = $consultation->dossier->patient->user;
         $patient = $consultation->dossier->patient;
         $consultation['user']=$user;
@@ -176,7 +176,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
         ConsultationMedecineGenerale::whereSlug($slug)->update($request->validated());
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
         $user = $consultation->dossier->patient->user;
         $patient = $consultation->dossier->patient;
         $consultation['user']=$user;
@@ -196,7 +196,7 @@ class ConsultationMedecineGeneraleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$consultation->id,"create");
         if($isAuthor->getOriginalContent() == false){
             return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
@@ -223,7 +223,7 @@ class ConsultationMedecineGeneraleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
+        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
             $transmission = [];
             $transmission['nonTransmis'] = "Ce resultat n'a pas encoré été transmis";
@@ -248,7 +248,7 @@ class ConsultationMedecineGeneraleController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','allergies','antecedents','conclusions'])->whereSlug($slug)->first();
+        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','antecedents','conclusions'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
 

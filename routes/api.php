@@ -114,8 +114,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('echographie','Api\EchographieController')->except(['create','edit']);
     Route::resource('hospitalisation','Api\HospitalisationController')->except(['create','edit']);
 
-    Route::post('remove-motif','Api\ConsultationMotifController@removeMotif');
-    Route::post('ajouter-motif','Api\ConsultationMotifController@ajouterMotif');
+    Route::post('consultation-medecine/retirer-motif','Api\ConsultationMotifController@removeMotif');
+    Route::post('consultation-medecine/ajouter-motif','Api\ConsultationMotifController@ajouterMotif');
 
     Route::post('retirer-examen-clinique','Api\ConsultationExamenCliniqueController@retirerExamenClinique');
     Route::post('ajouter-examen-clinique','Api\ConsultationExamenCliniqueController@ajouterExamenClinique');
@@ -131,6 +131,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
     Route::post('hospitalisation/retirer-examen-clinique','Api\HospitalisationExamClinController@retirerExamenClinique');
     Route::post('hospitalisation/ajouter-examen-clinique','Api\HospitalisationExamClinController@ajouterExamenClinique');
+
+    Route::post('hospitalisation/ajouter-motif','Api\HospitalisationMotifController@ajouterMotif');
+    Route::post('hospitalisation/retirer-motif','Api\HospitalisationMotifController@removeMotif');
 
     Route::post('hospitalisation/retirer-examen-complementaire','Api\HospitalisationExamComController@retirerExamenComplementaire');
     Route::post('hospitalisation/ajouter-examen-complementaire','Api\HospitalisationExamComController@ajouterExamenComplementaire');

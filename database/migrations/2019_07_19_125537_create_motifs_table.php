@@ -16,7 +16,7 @@ class CreateMotifsTable extends Migration
         Schema::create('motifs', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('reference');
-            $table->text('description')->nullable();
+            $table->text('description');
             $table->softDeletes();
             $table->timestamps();
             $table->string('slug')->unique();

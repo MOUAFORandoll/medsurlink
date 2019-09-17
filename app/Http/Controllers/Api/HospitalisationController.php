@@ -17,7 +17,7 @@ class HospitalisationController extends Controller
      */
     public function index()
     {
-        $hospitalisations = Hospitalisation::with(['dossier','examensClinique','examensComplementaire'])->get();
+        $hospitalisations = Hospitalisation::with(['dossier','examensClinique','examensComplementaire','motifs'])->get();
         return response()->json(['hospitalisations'=>$hospitalisations]);
     }
 
@@ -60,7 +60,7 @@ class HospitalisationController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $hospitalisation = Hospitalisation::with(['dossier','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $hospitalisation = Hospitalisation::with(['dossier','examensClinique','examensComplementaire','motifs'])->whereSlug($slug)->first();
         return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
@@ -98,7 +98,7 @@ class HospitalisationController extends Controller
             return response()->json(['error'=>$transmission],419 );  }
 
         Hospitalisation::whereSlug($slug)->update($request->validated());
-        $hospitalisation = Hospitalisation::with(['dossier','examensClinique','examensComplementaire'])->whereSlug($slug)->first();
+        $hospitalisation = Hospitalisation::with(['dossier','examensClinique','examensComplementaire','motifs'])->whereSlug($slug)->first();
         return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
