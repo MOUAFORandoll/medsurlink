@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home';
 import About from '../views/About';
 import Contact from '../views/Contact';
+import RendezVous from '../views/RendezVous';
 
 // Import routes
 import adminRoutes from './admin';
@@ -14,6 +15,11 @@ import authRoutes from './auth';
 let routes = [
     adminRoutes,
     dashboardRoutes,
+    {
+        path: '/rendez-vous',
+        name: 'rendez-vous',
+        component: RendezVous
+    },
     /*authRoutes,
     {
         path: '/',

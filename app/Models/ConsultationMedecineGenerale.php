@@ -73,9 +73,6 @@ class ConsultationMedecineGenerale extends Model
         return $this->belongsToMany(Allergie::class,'consultation_allergie','consultation_medecine_generale_id','allergie_id');
     }
 
-    public function antecedents(){
-        return $this->hasMany(Antecedent::class,'consultation_medecine_generale_id','id');
-    }
     public function conclusions(){
         return $this->hasMany(Conclusion::class,'consultation_medecine_generale_id','id');
     }

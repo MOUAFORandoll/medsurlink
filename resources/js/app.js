@@ -1,3 +1,12 @@
+/*window._ = require('lodash');
+window.Popper = require('popper.js').default;
+
+try {
+    window.$ = window.jQuery = require('jquery');
+    require('bootstrap');
+} catch (e) {}*/
+
+
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -14,6 +23,9 @@ import VueI18n from 'vue-i18n';
 import Nprogress from 'nprogress';
 import Notifications from 'vue-notification';
 import velocity from 'velocity-animate';
+import Vuelidate from 'vuelidate';
+import VueSweetalert2 from 'vue-sweetalert2';
+import BootstrapVue from 'bootstrap-vue';
 
 // Store
 import { store } from './store/store';
@@ -35,6 +47,14 @@ Vue.use(Vuetify, {
 Vue.use(VueRouter);
 Vue.use(VueI18n);
 Vue.use(Notifications, { velocity });
+Vue.use(Vuelidate);
+Vue.use(VueSweetalert2, {
+    confirmButtonColor: '#00ADA7'
+});
+Vue.use(BootstrapVue);
+
+// Styles
+import '../sass/admin.scss';
 
 //window.Vue = require('vue');
 
@@ -49,21 +69,9 @@ Vue.use(Notifications, { velocity });
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-//Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component(
-    'passport-clients',
-    require('./components/passport/Clients.vue')
-);
+//Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('rendez-vous', require('./views/RendezVous.vue').default);
 
-Vue.component(
-    'passport-authorized-clients',
-    require('./components/passport/AuthorizedClients.vue')
-);
-
-Vue.component(
-    'passport-personal-access-tokens',
-    require('./components/passport/PersonalAccessTokens.vue')
-);
 // Navigation guards before each request
 router.beforeResolve((to, from, next) => {
     Nprogress.start();
@@ -80,6 +88,9 @@ router.beforeResolve((to, from, next) => {
 
             let expiryDate = new Date(date);
             let today = new Date();
+
+            console.log("Expiry date:", expiryDate);
+            console.log("Today:", today);
 
             if((today > expiryDate)) {
                 // If token has expired, logout user

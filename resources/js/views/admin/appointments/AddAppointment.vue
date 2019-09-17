@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container class="sv-container">
         <v-stepper v-model="e1">
             <v-stepper-header>
                 <v-stepper-step :complete="e1 > 1" step="1">
@@ -32,30 +32,24 @@
                                             xs12
                                             d-flex
                                     >
-                                        <v-autocomplete
-                                                v-model="pays"
-                                                color="primary"
-                                                :rules="[nameRules.required]"
-                                                :items="mCountries"
-                                                item-text="name"
-                                                item-value="name"
-                                                :label="$tc('message.qCountries', 1)"
-                                        ></v-autocomplete>
-                                    </v-flex>
+                                        <v-layout row wrap>
+                                            <v-flex xs12>
+                                                <p class="label">
+                                                    {{ $t('message.qCountries') }}
+                                                </p>
+                                            </v-flex>
 
-                                    <v-flex
-                                            xs12
-                                            d-flex
-                                    >
-                                        <v-autocomplete
-                                                v-model="type"
-                                                color="primary"
-                                                :rules="[nameRules.required]"
-                                                :items="types"
-                                                item-text="value"
-                                                item-value="key"
-                                                :label="$tc('message.qTypes', 1)"
-                                        ></v-autocomplete>
+                                            <v-flex xs12>
+                                                <v-autocomplete
+                                                        v-model="pays"
+                                                        color="primary"
+                                                        :rules="[nameRules.required]"
+                                                        :items="mCountries"
+                                                        item-text="name"
+                                                        item-value="name"
+                                                ></v-autocomplete>
+                                            </v-flex>
+                                        </v-layout>
                                     </v-flex>
 
                                     <v-flex
@@ -64,195 +58,249 @@
                                     >
                                         <v-layout row wrap>
                                             <v-flex xs12>
-                                                <v-container>
-                                                    <p>
-                                                        Durée en moyen de l’entretien : {{ intervale.telephonique }} min<br>
-                                                        Pour les présentations en vidéoconférence : {{ intervale.video}} min<br>
-                                                        Votre fuseau horaire est : (en fonction du lieu de résidence)<br>
-                                                    </p>
-                                                </v-container>
-                                                Choisissez la date et l’heure :<br>
+                                                <p class="label">
+                                                    {{ $t('message.qTypes') }}
+                                                </p>
                                             </v-flex>
-                                            <v-layout row wrap>
-                                                <v-flex xs12 sm6>
-                                                    <v-date-picker v-model="picker2" color="green lighten-1" header-color="primary"></v-date-picker>
-                                                </v-flex>
-                                                <v-flex xs12 sm6>
-                                                    <v-time-picker v-model="picker"></v-time-picker>
-                                                </v-flex>
-                                            </v-layout>
-<!--                                            <v-flex xs12>-->
-<!--                                                <v-sheet height="400">-->
-<!--                                                    <v-calendar-->
-<!--                                                            ref="calendar"-->
-<!--                                                            v-model="now"-->
-<!--                                                            :now="today"-->
-<!--                                                            :value="today"-->
-<!--                                                            color="primary"-->
-<!--                                                            interval-count="96"-->
-<!--                                                            interval-minutes="15"-->
-<!--                                                            type="week"-->
-<!--                                                            @click:date="dateClicked"-->
-<!--                                                            @click:day="dayClicked"-->
-<!--                                                            @click:time="timeClicked"-->
-<!--                                                    >-->
-<!--                                                        &lt;!&ndash; the events at the top (all-day) &ndash;&gt;-->
-<!--                                                        <template slot="dayHeader" slot-scope="{ date }">-->
-<!--                                                            <template v-for="(event, key) in eventsMap[date]">-->
-<!--                                                                &lt;!&ndash; all day events don't have time &ndash;&gt;-->
-<!--                                                                <div-->
-<!--                                                                        v-if="!event.time"-->
-<!--                                                                        :key="key"-->
-<!--                                                                        class="my-event"-->
-<!--                                                                        @click="open(event)"-->
-<!--                                                                        v-html="event.title"-->
-<!--                                                                ></div>-->
-<!--                                                            </template>-->
-<!--                                                        </template>-->
 
-<!--                                                        &lt;!&ndash; the events at the bottom (timed) &ndash;&gt;-->
-<!--                                                        <template slot="dayBody" slot-scope="{ date, timeToY, minutesToPixels }">-->
-<!--                                                            <template v-for="(event, key) in eventsMap[date]">-->
-<!--                                                                &lt;!&ndash; timed events &ndash;&gt;-->
-<!--                                                                <div-->
-<!--                                                                        v-if="event.time"-->
-<!--                                                                        :key="key"-->
-<!--                                                                        :style="{ top: timeToY(event.time) + 'px', height: minutesToPixels(event.duration) + 'px' }"-->
-<!--                                                                        class="my-event with-time"-->
-<!--                                                                        @click="open(event)"-->
-<!--                                                                        v-html="event.title"-->
-<!--                                                                ></div>-->
-<!--                                                            </template>-->
-<!--                                                        </template>-->
-
-<!--                                                        &lt;!&ndash; the events when an interval is clicked &ndash;&gt;-->
-<!--                                                        <template slot="interval" slot-scope="{ date, timeToY, minutesToPixels }">-->
-<!--                                                            <template v-for="(event, key) in eventsMap[date]">-->
-<!--                                                                &lt;!&ndash; timed events &ndash;&gt;-->
-<!--                                                                <div-->
-<!--                                                                        v-if="event.time"-->
-<!--                                                                        :key="key"-->
-<!--                                                                        :style="{ top: timeToY(event.time) + 'px', height: minutesToPixels(event.duration) + 'px' }"-->
-<!--                                                                        class="my-event with-time"-->
-<!--                                                                        @click="open(event)"-->
-<!--                                                                        v-html="event.title"-->
-<!--                                                                ></div>-->
-<!--                                                            </template>-->
-
-<!--                                                            &lt;!&ndash;v-layout-->
-<!--                                                                    fill-height-->
-<!--                                                                    align-center-->
-<!--                                                                    justify-center-->
-<!--                                                            >-->
-<!--                                                                <template v-if="(present || future) && !checked">-->
-<!--                                                                    <v-sheet-->
-<!--                                                                            :color="color"-->
-<!--                                                                            width="80%"-->
-<!--                                                                            height="80%"-->
-<!--                                                                            tile-->
-<!--                                                                    ></v-sheet>-->
-<!--                                                                </template>-->
-
-<!--                                                                <template v-else-if="checked">-->
-<!--                                                                    <v-sheet-->
-<!--                                                                            color="inherit"-->
-<!--                                                                    ></v-sheet>-->
-<!--                                                                </template>-->
-<!--                                                            </v-layout&ndash;&gt;-->
-<!--                                                        </template>-->
-<!--                                                    </v-calendar>-->
-<!--                                                </v-sheet>-->
-<!--                                            </v-flex>-->
-
-<!--                                            <v-flex-->
-<!--                                                    sm4-->
-<!--                                                    xs12-->
-<!--                                                    class="text-sm-left text-xs-center"-->
-<!--                                            >-->
-<!--                                                <v-btn @click="$refs.calendar.prev()">-->
-<!--                                                    <v-icon-->
-<!--                                                            dark-->
-<!--                                                            left-->
-<!--                                                    >-->
-<!--                                                        keyboard_arrow_left-->
-<!--                                                    </v-icon>-->
-<!--                                                    Prev-->
-<!--                                                </v-btn>-->
-<!--                                            </v-flex>-->
-
-<!--                                            <v-flex-->
-<!--                                                    sm4-->
-<!--                                                    xs12-->
-<!--                                                    class="text-xs-center"-->
-<!--                                            >-->
-<!--                                                <v-text-field-->
-<!--                                                        value="week"-->
-<!--                                                        label="Type"-->
-<!--                                                        disabled-->
-<!--                                                ></v-text-field>-->
-<!--                                            </v-flex>-->
-
-<!--                                            <v-flex-->
-<!--                                                    sm4-->
-<!--                                                    xs12-->
-<!--                                                    class="text-sm-right text-xs-center"-->
-<!--                                            >-->
-<!--                                                <v-btn @click="$refs.calendar.next()">-->
-<!--                                                    Next-->
-<!--                                                    <v-icon-->
-<!--                                                            right-->
-<!--                                                            dark-->
-<!--                                                    >-->
-<!--                                                        keyboard_arrow_right-->
-<!--                                                    </v-icon>-->
-<!--                                                </v-btn>-->
-<!--                                            </v-flex>-->
+                                            <v-flex xs12>
+                                                <v-autocomplete
+                                                        v-model="type"
+                                                        color="primary"
+                                                        :rules="[nameRules.required]"
+                                                        :items="types"
+                                                        item-text="value"
+                                                        item-value="key"
+                                                ></v-autocomplete>
+                                            </v-flex>
                                         </v-layout>
                                     </v-flex>
-                                    <v-flex
 
-                                        xs12
-
-                                        d-flex
-
-                                    >
-
-                                        <v-text-field
-
-                                            v-model="date_debut"
-
-                                            color="primary"
-
-                                            :label="$t('message.qTime')"
-
-                                            disabled
-
-                                        ></v-text-field>
-
-                                    </v-flex>
                                     <v-flex
                                             xs12
                                             d-flex
                                     >
-                                        <v-autocomplete
-                                                v-model="objet"
-                                                color="primary"
-                                                :rules="[nameRules.required]"
-                                                :items="objets"
-                                                :label="$t('message.qSubject')"
-                                        ></v-autocomplete>
+                                        <v-layout row wrap>
+                                            <v-flex xs12>
+                                                <v-container class="px-0">
+                                                    <p>
+                                                        Durée en moyenne de l’entretien : {{ intervale.telephonique }} min<br>
+                                                        Pour les présentations en vidéoconférence : {{ intervale.video}} min<br>
+                                                        Votre fuseau horaire est : (en fonction du lieu de résidence)<br>
+                                                    </p>
+
+                                                    <p class="label">
+                                                        Choisissez la date et l’heure qui vous conviennent :
+                                                    </p>
+                                                </v-container>
+                                            </v-flex>
+
+                                            <v-flex xs12>
+                                                <v-layout row wrap>
+                                                    <v-flex xs12 sm6>
+                                                        <v-menu
+                                                                ref="d1menu"
+                                                                v-model="d1menu"
+                                                                :close-on-content-click="false"
+                                                                :nudge-right="40"
+                                                                :return-value.sync="dpicker1"
+                                                                lazy
+                                                                transition="scale-transition"
+                                                                offset-y
+                                                                full-width
+                                                                min-width="290px"
+                                                        >
+                                                            <template slot="activator">
+                                                                <v-text-field
+                                                                        v-model="dpicker1"
+                                                                        prepend-icon="event"
+                                                                ></v-text-field>
+                                                            </template>
+
+                                                            <v-date-picker
+                                                                    v-model="dpicker1"
+                                                                    color="green lighten-1"
+                                                                    header-color="primary"
+                                                                    :min="minDate"
+                                                                    @input="day1Picked"
+                                                            ></v-date-picker>
+                                                        </v-menu>
+                                                    </v-flex>
+
+                                                    <v-flex xs12 sm6>
+                                                        <v-menu
+                                                                ref="t1menu"
+                                                                v-model="t1menu"
+                                                                :close-on-content-click="false"
+                                                                :nudge-right="40"
+                                                                :return-value.sync="tpicker1"
+                                                                lazy
+                                                                transition="scale-transition"
+                                                                offset-y
+                                                                full-width
+                                                                min-width="290px"
+                                                        >
+                                                            <template slot="activator">
+                                                                <v-text-field
+                                                                        v-model="tpicker1"
+                                                                        prepend-icon="schedule"
+                                                                ></v-text-field>
+                                                            </template>
+
+                                                            <v-time-picker
+                                                                    v-model="tpicker1"
+                                                                    :min="minTime1"
+                                                                    format="24hr"
+                                                                    @input="time1Picked"
+                                                            ></v-time-picker>
+                                                        </v-menu>
+                                                    </v-flex>
+                                                </v-layout>
+                                            </v-flex>
+
+
+                                            <v-flex xs12>
+                                                <v-layout row wrap justify-space-between>
+                                                    <v-flex xs12 sm6>
+                                                        <v-menu
+                                                                ref="d2menu"
+                                                                v-model="d2menu"
+                                                                :close-on-content-click="false"
+                                                                :nudge-right="40"
+                                                                :return-value.sync="dpicker2"
+                                                                lazy
+                                                                transition="scale-transition"
+                                                                offset-y
+                                                                full-width
+                                                                min-width="290px"
+                                                        >
+                                                            <template slot="activator">
+                                                                <v-text-field
+                                                                        v-model="dpicker2"
+                                                                        prepend-icon="event"
+                                                                ></v-text-field>
+                                                            </template>
+
+                                                            <v-date-picker
+                                                                    v-model="dpicker2"
+                                                                    color="green lighten-1"
+                                                                    header-color="primary"
+                                                                    :min="minDate"
+                                                                    @input="day2Picked"
+                                                            ></v-date-picker>
+                                                        </v-menu>
+                                                    </v-flex>
+
+                                                    <v-flex xs12 sm6>
+                                                        <v-menu
+                                                                ref="t2menu"
+                                                                v-model="t2menu"
+                                                                :close-on-content-click="false"
+                                                                :nudge-right="40"
+                                                                :return-value.sync="tpicker2"
+                                                                lazy
+                                                                transition="scale-transition"
+                                                                offset-y
+                                                                full-width
+                                                                min-width="290px"
+                                                        >
+                                                            <template slot="activator">
+                                                                <v-text-field
+                                                                        v-model="tpicker2"
+                                                                        prepend-icon="schedule"
+                                                                ></v-text-field>
+                                                            </template>
+
+                                                            <v-time-picker
+                                                                    v-model="tpicker2"
+                                                                    :min="minTime2"
+                                                                    :rules="[timeRules.different]"
+                                                                    format="24hr"
+                                                                    @input="time2Picked"
+                                                            ></v-time-picker>
+                                                        </v-menu>
+                                                    </v-flex>
+                                                </v-layout>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-flex>
+
+                                    <v-flex
+                                            xs12
+                                            d-flex
+                                    >
+                                        <v-layout row wrap>
+                                            <v-flex xs12>
+                                                <p class="label">
+                                                    {{ $t('message.qTime1') }}
+                                                </p>
+                                            </v-flex>
+
+                                            <v-flex xs12>
+                                                <v-text-field
+                                                        v-model="date_debut1"
+                                                        color="primary"
+                                                        disabled
+                                                ></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-flex>
+
+                                    <v-flex
+                                            xs12
+                                            d-flex
+                                    >
+                                        <v-layout row wrap>
+                                            <v-flex xs12>
+                                                <p class="label">
+                                                    {{ $t('message.qTime2') }}
+                                                </p>
+                                            </v-flex>
+
+                                            <v-flex xs12>
+                                                <v-text-field
+                                                        v-model="date_debut2"
+                                                        color="primary"
+                                                        disabled
+                                                ></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-flex>
+
+                                    <v-flex
+                                            xs12
+                                            d-flex
+                                    >
+                                        <v-layout row wrap>
+                                            <v-flex xs12>
+                                                <p class="label">
+                                                    {{ $t('message.qSubject') }}
+                                                </p>
+                                            </v-flex>
+
+                                            <v-flex xs12>
+                                                <v-autocomplete
+                                                        v-model="objet"
+                                                        color="primary"
+                                                        :rules="[nameRules.required]"
+                                                        :items="objets"
+                                                ></v-autocomplete>
+                                            </v-flex>
+                                        </v-layout>
                                     </v-flex>
                                 </v-layout>
                             </v-container>
                         </v-form>
                     </v-card>
 
-                    <v-btn
-                            color="primary"
-                            @click="goToStep2"
-                    >
-                        {{ $t('message.next') }}
-                    </v-btn>
+                    <div class="text-xs-right">
+                        <v-btn
+                                color="primary"
+                                @click="goToStep2"
+                        >
+                            {{ $t('message.next') }}
+                        </v-btn>
+                    </div>
                 </v-stepper-content>
 
                 <v-stepper-content step="2">
@@ -273,89 +321,170 @@
                                             xs12
                                             d-flex
                                     >
-                                        <v-text-field
-                                                v-model="selectedDate"
-                                                color="primary"
-                                                :label="$t('message.qTime')"
-                                                disabled
-                                        ></v-text-field>
+                                        <v-layout row wrap>
+                                            <v-flex xs12>
+                                                <p class="label">
+                                                    {{ $t('message.qTime1') }}
+                                                </p>
+                                            </v-flex>
+
+                                            <v-flex xs12>
+                                                <v-text-field
+                                                        v-model="selectedDate1"
+                                                        color="primary"
+                                                        disabled
+                                                ></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
                                     </v-flex>
 
                                     <v-flex
                                             xs12
                                             d-flex
                                     >
-                                        <v-text-field
-                                                v-model="nom"
-                                                :rules="[nameRules.required]"
-                                                color="primary"
-                                                :label="$t('message.qName')"
-                                        ></v-text-field>
+                                        <v-layout row wrap>
+                                            <v-flex xs12>
+                                                <p class="label">
+                                                    {{ $t('message.qTime2') }}
+                                                </p>
+                                            </v-flex>
+
+                                            <v-flex xs12>
+                                                <v-text-field
+                                                        v-model="selectedDate2"
+                                                        color="primary"
+                                                        disabled
+                                                ></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
                                     </v-flex>
 
                                     <v-flex
                                             xs12
                                             d-flex
                                     >
-                                        <v-text-field
-                                                v-model="email"
-                                                :rules="[emailRules.required, emailRules.valid]"
-                                                color="primary"
-                                                :label="$t('message.qEmail')"
-                                                :hint="$t('message.emailHint')"
-                                        ></v-text-field>
+                                        <v-layout row wrap>
+                                            <v-flex xs12>
+                                                <p class="label">
+                                                    {{ $t('message.qName') }}
+                                                </p>
+                                            </v-flex>
+
+                                            <v-flex xs12>
+                                                <v-text-field
+                                                        v-model="nom"
+                                                        :rules="[nameRules.required]"
+                                                        color="primary"
+                                                ></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
                                     </v-flex>
 
                                     <v-flex
                                             xs12
                                             d-flex
                                     >
-                                        <v-text-field
-                                                v-model="whatsapp"
-                                                color="primary"
-                                                :label="$t('message.whatsappNumber')"
-                                        ></v-text-field>
+                                        <v-layout row wrap>
+                                            <v-flex xs12>
+                                                <p class="label">
+                                                    {{ $t('message.email') }}
+                                                </p>
+                                            </v-flex>
+
+                                            <v-flex xs12>
+                                                <v-text-field
+                                                        v-model="email"
+                                                        :rules="[emailRules.required, emailRules.valid]"
+                                                        color="primary"
+                                                        :hint="$t('message.emailHint')"
+                                                ></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
                                     </v-flex>
 
                                     <v-flex
                                             xs12
                                             d-flex
                                     >
-                                        <v-text-field
-                                                v-model="numero"
-                                                color="primary"
-                                                :label="$t('message.phoneNumber')"
-                                        ></v-text-field>
+                                        <v-layout row wrap>
+                                            <v-flex xs12>
+                                                <p class="label">
+                                                    {{ $t('message.whatsappNumber') }}
+                                                </p>
+                                            </v-flex>
+
+                                            <v-flex xs12>
+                                                <v-text-field
+                                                        v-model="whatsapp"
+                                                        color="primary"
+                                                ></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
                                     </v-flex>
 
                                     <v-flex
                                             xs12
                                             d-flex
                                     >
-                                        <v-text-field
-                                                v-model="skype"
-                                                color="primary"
-                                                :label="$t('message.skype')"
-                                        ></v-text-field>
+                                        <v-layout row wrap>
+                                            <v-flex xs12>
+                                                <p class="label">
+                                                    {{ $t('message.phoneNumber') }}
+                                                </p>
+                                            </v-flex>
+
+                                            <v-flex xs12>
+                                                <v-text-field
+                                                        v-model="numero"
+                                                        :rules="[phoneRules.required]"
+                                                        color="primary"
+                                                ></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-flex>
+
+                                    <v-flex
+                                            xs12
+                                            d-flex
+                                    >
+                                        <v-layout row wrap>
+                                            <v-flex xs12>
+                                                <p class="label">
+                                                    {{ $t('message.skype') }}
+                                                </p>
+                                            </v-flex>
+
+                                            <v-flex xs12>
+                                                <v-text-field
+                                                        v-model="skype"
+                                                        color="primary"
+                                                ></v-text-field>
+                                            </v-flex>
+                                        </v-layout>
                                     </v-flex>
                                 </v-layout>
                             </v-container>
                         </v-form>
                     </v-card>
 
-                    <v-btn
-                            @click="e1 = 1"
-                            flat
-                    >
-                        {{ $t('message.previous') }}
-                    </v-btn>
+                    <v-layout row justify-space-around>
+                        <v-flex xs4>
+                            <v-btn
+                                    @click="e1 = 1"
+                            >
+                                {{ $t('message.previous') }}
+                            </v-btn>
+                        </v-flex>
 
-                    <v-btn
-                            color="primary"
-                            @click="submit"
-                    >
-                        {{ $t('message.submit') }}
-                    </v-btn>
+                        <v-flex xs4>
+                            <v-btn
+                                    color="primary"
+                                    @click="submit"
+                            >
+                                {{ $t('message.submit') }}
+                            </v-btn>
+                        </v-flex>
+                    </v-layout>
                 </v-stepper-content>
             </v-stepper-items>
         </v-stepper>
@@ -392,7 +521,6 @@
             },
 
             events: function() {
-                let self = this;
                 let eArray = this.rdvs;
 
                 _.forOwn(eArray, function(value, key) {
@@ -424,27 +552,100 @@
                 return map;
             },
 
-            selectedDate: function() {
-                return moment(this.date_debut).format('ddd, MMM Do YYYY, HH:mm') + ' - ' + moment(this.date_fin).format('ddd, MMM Do YYYY, HH:mm');
+            selectedDate1: function() {
+                return moment(this.date_debut1).format('DD/MM/YYYY HH:mm') + ' - ' + moment(this.date_fin1).format('DD-MM-YYYY HH:mm');
             },
 
-            date_debut: function() {
-                return moment(this.picker2 + ' ' + this.picker).format('YYYY-MM-DD HH:mm');
+            selectedDate2: function() {
+                return moment(this.date_debut2).format('DD/MM/YYYY HH:mm') + ' - ' + moment(this.date_fin2).format('DD-MM-YYYY HH:mm');
             },
 
+            date_debut1: function() {
+                return moment(this.dpicker1 + ' ' + this.tpicker1).format('DD/MM/YYYY HH:mm');
+            },
 
-            date_fin: function() {
-                let duration = 10;
+            date_debut2: function() {
+                return moment(this.dpicker2 + ' ' + this.tpicker2).format('DD/MM/YYYY HH:mm');
+            },
 
+            date_fin1: function() {
                 // Check type
+                let duration = this.intervale.telephonique;
+
                 if (this.type == 'skype') {
-                    duration = 25;
+
+                    duration = this.intervale.video;
+
                 }
 
-                // Determine end date
-                return moment(this.date_debut, 'YYYY-MM-DD HH:mm')
+                // Determine end date1
+                return moment(this.date_debut1, 'DD/MM/YYYY HH:mm')
+
                     .add(duration, 'minutes')
-                    .format('YYYY-MM-DD HH:mm');
+
+                    .format('DD/MM/YYYY HH:mm');
+
+            },
+
+            date_fin2: function() {
+                // Check type
+                let duration = this.intervale.telephonique;
+
+                if (this.type == 'skype') {
+
+                    duration = this.intervale.video;
+
+                }
+
+                // Determine end date2
+                return moment(this.date_debut2, 'DD/MM/YYYY HH:mm')
+
+                    .add(duration, 'minutes')
+
+                    .format('DD/MM/YYYY HH:mm');
+
+            },
+
+            minTime1: function() {
+                let format = 'HH:mm';
+                let d = moment(this.dpicker1).day();
+
+                if (d != 6 && d != 0) {
+                    let time = moment(this.tpicker1, format);
+                    let rTime = moment('18:00', format);
+
+                    if (time.isBefore(rTime)) {
+                        this.tpicker1 = '18:00';
+                    }
+
+                    return '18:00';
+                }
+
+                //this.tpicker1 = '08:00';
+                //console.log("Time1:", this.tpicker1);
+
+                return '00:00';
+            },
+
+            minTime2: function() {
+                let format = 'HH:mm';
+                let d = moment(this.dpicker2).day();
+
+                if (d != 6 && d != 0) {
+                    let time = moment(this.tpicker2, format);
+                    let rTime = moment('18:00', format);
+
+                    if (time.isBefore(rTime)) {
+                        this.tpicker1 = '18:00';
+                    }
+
+                    return '18:00';
+                }
+
+                //this.tpicker2 = '08:00';
+                //console.log("Time1:", this.tpicker2);
+
+                return '00:00';
             }
         },
 
@@ -486,14 +687,50 @@
                 phoneRules: {
                     required: value => !!value || this.$i18n.t('message.requiredField'),
                 },
+                timeRules: {
+                    required: value => !!value || this.$i18n.t('message.requiredField'),
+                    different: value => value != this.tpicker1 || this.$i18n.t('message.pickOtherTimeSlot')
+                },
                 now: moment(new Date()).format('YYYY-MM-DD HH:mm'),
                 today: moment(new Date()).format('YYYY-MM-DD'),
-                picker2: new Date().toISOString().substr(0, 10),
-                picker: null,
+                d1menu: false,
+                d2menu: false,
+                t1menu: false,
+                t2menu: false,
+                dpicker1: moment(new Date()).add(3, 'days').format('YYYY-MM-DD'),
+                dpicker2: moment(new Date()).add(3, 'days').format('YYYY-MM-DD'),
+                minDate: moment(new Date()).add(3, 'days').format('YYYY-MM-DD'),
+                tpicker1: '08:00',
+                tpicker2: '08:00',
             }
         },
 
         methods: {
+            day1Picked: function(input) {
+                //console.log("Day picked:", moment(input).day());
+                this.$refs.d1menu.save(this.dpicker1);
+            },
+
+            day2Picked: function(input) {
+                //console.log("Day picked:", moment(input).day());
+                this.$refs.d2menu.save(this.dpicker2);
+            },
+
+            d2AllowedDates: function(val) {
+                console.log("Value:", val);
+                console.log("DPicker1:", this.dpicker1);
+                console.log("Result:", new Date(val).getTime() != new Date(this.dpicker1).getTime());
+                return new Date(val).getTime() != new Date(this.dpicker1).getTime();
+            },
+
+            time1Picked: function(input) {
+                this.$refs.t1menu.save(this.tpicker1);
+            },
+
+            time2Picked: function(input) {
+                this.$refs.t2menu.save(this.tpicker2);
+            },
+
             dateClicked(event) {
                 //console.log("Date event:", event);
 
@@ -518,8 +755,8 @@
                 this.date = event.date;
                 this.heure_debut = event.time;
 
-                console.log("Date debut:", this.date_debut);
-                console.log("Date fin:", this.date_fin);
+                console.log("Date debut:", this.date_debut1);
+                console.log("Date fin:", this.date_fin1);
             },
 
             getCountries() {
@@ -555,7 +792,12 @@
             },
 
             goToStep2() {
-                if (this.$refs.step1.validate()) {
+                if (this.date_debut1 == '' || this.date_debut2 == '') {
+                    Vue.notify({
+                        type: 'error',
+                        text: this.$i18n.t('message.pickAtLeastTwoDates')
+                    });
+                } else if(this.$refs.step1.validate()) {
                     this.e1 = 2;
                 }
             },
@@ -573,15 +815,19 @@
                         let args = {
                             pays: this.pays,
                             style: this.type,
-                            date_debut: this.date_debut,
-                            date_fin: this.date_fin,
+                            date_debut1: this.date_debut1,
+                            date_debut2: this.date_debut2,
+                            date_fin1: this.date_fin1,
+                            date_fin2: this.date_fin2,
                             objet: this.objet,
                             nom: this.nom,
                             email: this.email,
                             whatsapp: this.whatsapp,
-                            telephone: this.numero,
+                            numero: this.numero,
                             skype: this.skype
                         };
+
+                        //console.log("Args:", args);
 
                         let successMessage = this.$i18n.t('message.appointmentMade');
                         let errorMessages = {
@@ -608,13 +854,21 @@
 
             // Récupérer les intervales
             this.getIntervals();
-
-            // this.$refs.calendar.scrollToTime('08:00');
         }
     }
 </script>
 
 <style scoped>
+    .sv-container {
+        font-size: 1.2em;
+        width: 80%;
+    }
+
+    .label {
+        color: #00ADA7;
+        margin-bottom: 0;
+    }
+
     .my-event {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -636,5 +890,11 @@
         position: absolute;
         right: 4px;
         margin-right: 0;
+    }
+
+    @media only screen and (min-width: 768px) {
+        .sv-container {
+            width: 75%;
+        }
     }
 </style>

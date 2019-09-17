@@ -32,14 +32,14 @@ class Antecedent extends Model
         return $this->type . ' ' .Carbon::now()->timestamp;
     }
     protected $fillable = [
-        "consultation_medecine_generale_id",
+        "dossier_medical_id",
         "description",
         "date",
         "type",
         'slug'
     ];
 
-    public function consultation(){
-        return $this->belongsTo(ConsultationMedecineGenerale::class,'consultation_medecine_generale_id','id');
+    public function dossier(){
+        return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }
 }

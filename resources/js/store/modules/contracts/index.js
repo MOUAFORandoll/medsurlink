@@ -65,7 +65,7 @@ const actions = {
                 text: payload.successMessage
             });
 
-            router.push({ name: 'users' });
+            router.push({ name: 'contracts' });
         }
 
         function errorCallback(error) {
@@ -87,7 +87,7 @@ const actions = {
                 text: payload.successMessage
             });
 
-            router.push({ name: 'users' });
+            router.push({ name: 'contracts' });
         }
 
         function errorCallback(error) {

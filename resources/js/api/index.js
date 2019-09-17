@@ -19,29 +19,6 @@ export const apiModel = {
         }
     },
 
-    "Contract" : {
-        "List" : {
-            "method" : "GET",
-            "url" : "/cim"
-        },
-        "Get" : {
-            "method" : "GET",
-            "url" : "/cim/:contract"
-        },
-        "Create" : {
-            "method" : "POST",
-            "url" : "/cim"
-        },
-        "Update" : {
-            "method" : "PUT",
-            "url" : "/cim/:contract"
-        },
-        "Delete" : {
-            "method" : "DELETE",
-            "url" : "/cim/:contract"
-        }
-    },
-
     "Country" : {
         "List" : {
             "method" : "GET",
@@ -82,6 +59,30 @@ export const apiModel = {
             "url" : "/user/:user/roles"
         }
     },
+
+    "Contract" : {
+        "List" : {
+            "method" : "GET",
+            "url" : "/cim"
+        },
+        "Get" : {
+            "method" : "GET",
+            "url" : "/cim/:contract"
+        },
+        "Create" : {
+            "method" : "POST",
+            "url" : "/cim"
+        },
+        "Update" : {
+            "method" : "PUT",
+            "url" : "/cim/:contract"
+        },
+        "Delete" : {
+            "method" : "DELETE",
+            "url" : "/cim/:contract"
+        }
+    },
+
     "Partner" : {
         "List" : {
             "method" : "GET",

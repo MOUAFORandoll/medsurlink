@@ -1,13 +1,13 @@
 <template>
     <nav>
-        <v-toolbar app dark scroll-off-screen class="primary">
+        <v-toolbar app dark class="primary">
             <v-toolbar-side-icon @click="showDrawer = !showDrawer"></v-toolbar-side-icon>
 
-            <v-avatar>
+            <!--v-avatar>
                 <img :src="logo" alt="avatar">
             </v-avatar>
 
-            <!--v-toolbar-title class="headline">
+            <v-toolbar-title class="headline">
                 <router-link class="toolbar-title" :to="{ name: 'home' }">
                     {{ appName }}
                 </router-link>
@@ -44,17 +44,17 @@
 
         <v-navigation-drawer
                 v-model="showDrawer"
-                :clipped="$vuetify.breakpoint.lgAndUp"
+                :clipped="$vuetify.breakpoint.xl"
                 fixed
                 app
         >
-            <v-toolbar dark class="primary">
+            <v-toolbar>
                 <v-list class="pa-0">
                     <v-list-tile avatar :to="{ name: 'profile' }">
                         <v-list-tile-avatar>
                             <!--img v-if="user.avatar" :src="'/public/storage/' + user.avatar"-->
 
-                            <img src="/public/storage/users/default.png">
+                            <img :src="baseURL + '/public/storage/users/default.png'">
                         </v-list-tile-avatar>
 
                         <v-list-tile-content>
@@ -141,7 +141,7 @@
                 appName: AppConfig.brandName,
                 baseURL: AppConfig.baseUrl,
                 logo: AppConfig.brandLogo,
-                showDrawer: false,
+                showDrawer: true,
                 //user: JSON.parse(localStorage.getItem('user')),
                 items: [
                     {
@@ -152,11 +152,14 @@
                     },
                     {
                         title: this.$i18n.tc('message.users', 2),
-                        icon: 'fas fa-caret-up',
-                        'icon-alt': 'fas fa-caret-down',
-                        model: false,
-                        route: '#',
-                        heading: true,
+                        //icon: 'fas fa-caret-up',
+                        //'icon-alt': 'fas fa-caret-down',
+                        //model: false,
+                        //route: '#',
+                        //heading: true,
+                        icon: 'fas fa-user',
+                        route: 'users',
+                        heading: false,
                         subs: [
                             {
                                 title: this.$i18n.t('message.add'),
@@ -172,11 +175,14 @@
                     },
                     {
                         title: this.$i18n.tc('message.contracts', 2),
-                        icon: 'fas fa-caret-up',
-                        'icon-alt': 'fas fa-caret-down',
-                        model: false,
-                        route: '#',
-                        heading: true,
+                        //icon: 'fas fa-caret-up',
+                        //'icon-alt': 'fas fa-caret-down',
+                        //model: false,
+                        //route: '#',
+                        //heading: true,
+                        icon: 'fas fa-file-signature',
+                        route: 'contracts',
+                        heading: false,
                         subs: [
                             {
                                 title: this.$i18n.t('message.add'),
@@ -192,11 +198,14 @@
                     },
                     {
                         title: this.$i18n.tc('message.partners', 2),
-                        icon: 'fas fa-caret-up',
-                        'icon-alt': 'fas fa-caret-down',
-                        model: false,
-                        route: '#',
-                        heading: true,
+                        //icon: 'fas fa-caret-up',
+                        //'icon-alt': 'fas fa-caret-down',
+                        //model: false,
+                        //route: '#',
+                        //heading: true,
+                        icon: 'fas fa-user',
+                        route: 'partners',
+                        heading: false,
                         subs: [
                             {
                                 title: this.$i18n.t('message.add'),
@@ -213,11 +222,14 @@
                     // Appointment
                     {
                         title: this.$i18n.tc('message.appointments', 2),
-                        icon: 'fas fa-caret-up',
-                        'icon-alt': 'fas fa-caret-down',
-                        model: false,
-                        route: '#',
-                        heading: true,
+                        //icon: 'fas fa-caret-up',
+                        //'icon-alt': 'fas fa-caret-down',
+                        //model: false,
+                        //route: '#',
+                        //heading: true,
+                        icon: 'fas fa-calendar-check',
+                        route: 'appointments',
+                        heading: false,
                         subs: [
                             {
                                 title: this.$i18n.t('message.add'),

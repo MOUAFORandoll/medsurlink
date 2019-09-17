@@ -178,8 +178,8 @@
             range(rdv) {
                 console.log("RDV:", rdv);
 
-                let d1 = moment(rdv.date_debut).format('HH:mm');
-                let d2 = moment(rdv.date_fin).format('HH:mm');
+                let d1 = moment(rdv.date_debut1).format('HH:mm');
+                let d2 = moment(rdv.date_fin1).format('HH:mm');
 
                 return d1 + ' - ' + d2;
             },

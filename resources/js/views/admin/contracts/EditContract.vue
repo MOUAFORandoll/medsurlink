@@ -42,7 +42,7 @@
                                                 v-model="mContract.nomS"
                                                 :rules="[nameRules.required]"
                                                 color="primary"
-                                                :label="$t('message.qName')"
+                                                :label="$t('message.nomSouscripteur')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -55,7 +55,7 @@
                                                 color="primary"
                                                 :rules="[nameRules.required]"
                                                 :items="countries"
-                                                :label="$tc('message.countries', 1)"
+                                                :label="$t('message.paysSouscripteur')"
                                         ></v-autocomplete>
                                     </v-flex>
 
@@ -67,7 +67,7 @@
                                                 v-model="mContract.villeS"
                                                 :rules="[nameRules.required]"
                                                 color="primary"
-                                                :label="$tc('message.cities', 1)"
+                                                :label="$t('message.villeSouscripteur')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -79,7 +79,7 @@
                                                 v-model="mContract.telephoneS1"
                                                 :rules="[phoneRules.required]"
                                                 color="primary"
-                                                :label="$t('message.phoneNumber')"
+                                                :label="$t('message.phone1Souscripteur')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -90,7 +90,7 @@
                                         <v-text-field
                                                 v-model="mContract.telephoneS2"
                                                 color="primary"
-                                                :label="$t('message.phoneNumber')"
+                                                :label="$t('message.phone2Souscripteur')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -102,7 +102,7 @@
                                                 v-model="mContract.emailS1"
                                                 :rules="[emailRules.required, emailRules.valid]"
                                                 color="primary"
-                                                :label="$t('message.email')"
+                                                :label="$t('message.email1Souscripteur')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -114,7 +114,7 @@
                                                 v-model="mContract.emailS2"
                                                 :rules="[emailRules.valid]"
                                                 color="primary"
-                                                :label="$t('message.email')"
+                                                :label="$t('message.email2Souscripteur')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -127,7 +127,7 @@
                                                 color="primary"
                                                 :rules="[nameRules.required]"
                                                 :items="types"
-                                                :label="$tc('message.types', 1)"
+                                                :label="$t('message.typeSouscription')"
                                         ></v-autocomplete>
                                     </v-flex>
 
@@ -140,7 +140,7 @@
                                                 color="primary"
                                                 :rules="[nameRules.required]"
                                                 :items="countries"
-                                                :label="$tc('message.countries', 1)"
+                                                :label="$t('message.paysSouscription')"
                                         ></v-autocomplete>
                                     </v-flex>
 
@@ -153,7 +153,7 @@
                                                 color="primary"
                                                 :rules="[nameRules.required]"
                                                 :items="titres"
-                                                :label="$tc('message.titles', 1)"
+                                                :label="$t('message.sexeSouscripteur')"
                                         ></v-autocomplete>
                                     </v-flex>
                                 </v-layout>
@@ -191,7 +191,7 @@
                                                 v-model="mContract.nomP"
                                                 :rules="[nameRules.required]"
                                                 color="primary"
-                                                :label="$t('message.qName')"
+                                                :label="$t('message.nomPartenaire')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -203,7 +203,7 @@
                                                 v-model="mContract.prenomP"
                                                 :rules="[nameRules.required]"
                                                 color="primary"
-                                                :label="$t('message.qName')"
+                                                :label="$t('message.prenomPartenaire')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -216,7 +216,7 @@
                                                 color="primary"
                                                 :rules="[nameRules.required]"
                                                 :items="titres"
-                                                :label="$tc('message.titles', 1)"
+                                                :label="$t('message.sexePartenaire')"
                                         ></v-autocomplete>
                                     </v-flex>
 
@@ -228,7 +228,7 @@
                                                 v-model="mContract.nomA"
                                                 :rules="[nameRules.required]"
                                                 color="primary"
-                                                :label="$t('message.qName')"
+                                                :label="$t('message.nomAffiliation')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -241,7 +241,7 @@
                                                 color="primary"
                                                 :rules="[nameRules.required]"
                                                 :items="titres"
-                                                :label="$tc('message.titles', 1)"
+                                                :label="$t('message.sexeAffiliation')"
                                         ></v-autocomplete>
                                     </v-flex>
 
@@ -254,7 +254,7 @@
                                                 type="number"
                                                 :rules="[nameRules.required]"
                                                 color="primary"
-                                                :label="$t('message.age')"
+                                                :label="$t('message.ageAffiliation')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -267,7 +267,7 @@
                                                 color="primary"
                                                 :rules="[nameRules.required]"
                                                 :items="countries"
-                                                :label="$tc('message.countries', 1)"
+                                                :label="$t('message.paysAffiliation')"
                                         ></v-autocomplete>
                                     </v-flex>
 
@@ -280,7 +280,7 @@
                                                 color="primary"
                                                 :rules="[nameRules.required]"
                                                 :items="towns"
-                                                :label="$tc('message.countries', 1)"
+                                                :label="$t('message.lieuEtablissement')"
                                         ></v-autocomplete>
                                     </v-flex>
 
@@ -292,7 +292,7 @@
                                                 v-model="mContract.villeA"
                                                 :rules="[nameRules.required]"
                                                 color="primary"
-                                                :label="$tc('message.cities', 1)"
+                                                :label="$t('message.villeAffiliation')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -314,7 +314,7 @@
                                             <template slot="activator">
                                                 <v-text-field
                                                         v-model="mContract.birthdayA"
-                                                        label="Birthday date"
+                                                        :label="$t('message.annivAffiliation')"
                                                         color="primary"
                                                         prepend-icon="event"
                                                         readonly
@@ -339,7 +339,7 @@
                                                 v-model="mContract.telephoneA1"
                                                 :rules="[phoneRules.required]"
                                                 color="primary"
-                                                :label="$t('message.phoneNumber')"
+                                                :label="$t('message.phone1Affiliation')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -350,7 +350,7 @@
                                         <v-text-field
                                                 v-model="mContract.telephoneA2"
                                                 color="primary"
-                                                :label="$t('message.phoneNumber')"
+                                                :label="$t('message.phone2Affiliation')"
                                         ></v-text-field>
                                     </v-flex>
                                 </v-layout>
@@ -395,7 +395,7 @@
                                                 v-model="mContract.contact1"
                                                 :rules="[nameRules.required]"
                                                 color="primary"
-                                                :label="$t('message.phoneNumber')"
+                                                :label="$t('message.phone1Contact')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -406,7 +406,7 @@
                                         <v-text-field
                                                 v-model="mContract.contact2"
                                                 color="primary"
-                                                :label="$t('message.phoneNumber')"
+                                                :label="$t('message.phone2Contact')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -418,7 +418,7 @@
                                                 v-model="mContract.nomContact"
                                                 :rules="[nameRules.required]"
                                                 color="primary"
-                                                :label="$t('message.name')"
+                                                :label="$t('message.nomContact')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -430,7 +430,7 @@
                                                 v-model="mContract.montantSous"
                                                 :rules="[nameRules.required]"
                                                 color="primary"
-                                                :label="$t('message.amount')"
+                                                :label="$t('message.montantSouscription')"
                                         ></v-text-field>
                                     </v-flex>
 
@@ -452,7 +452,7 @@
                                             <template slot="activator">
                                                 <v-text-field
                                                         v-model="mContract.dateSignature"
-                                                        label="Signature date"
+                                                        :label="$t('message.dateSignature')"
                                                         color="primary"
                                                         prepend-icon="event"
                                                         readonly

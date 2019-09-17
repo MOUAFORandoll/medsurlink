@@ -54,6 +54,10 @@ class DossierMedical extends Model
         return $this->belongsToMany(Allergie::class,'dossier_allergie','dossier_medical_id','allergie_id');
     }
 
+    public function antecedents(){
+        return $this->hasMany(Antecedent::class,'dossier_medical_id','id');
+    }
+
     /**
      * The "booting" method of the model.
      *
