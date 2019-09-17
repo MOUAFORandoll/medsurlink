@@ -39,6 +39,8 @@ class RestrictDossierScope implements Scope
                     array_push($dossiers,$patient->dossier->id);
                 }
                 $builder->whereIn('dossier_medical_id',$dossiers)->whereNotNull('archieved_at');
+            }elseif(gettype($userRoles->search('Medecin controle')) == 'integer'){
+                $builder->whereNotNull('passed_at');
             }
             else{
                 return $builder;
