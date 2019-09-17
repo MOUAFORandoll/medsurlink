@@ -51,7 +51,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
 //    Définition des routes accéssible par le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Praticien']], function () {
     Route::resource('praticien','Api\PraticienController')->only('show');
-    Route::put('resultat/{id}/transmettre','Api\ResultatController@transmettre');
+    //Route::put('resultat/{id}/transmettre','Api\ResultatController@transmettre');
+    Route::put('resultat-labo/{id}/transmettre','Api\ResultatLaboController@transmit');
+    Route::put('resultat-imagerie/{id}/transmettre','Api\ResultatImagerieController@transmit');
     Route::put('consultation-medecine/{id}/transmettre','Api\ConsultationMedecineGeneraleController@transmettre');
     Route::put('consultation-obstetrique/{id}/transmettre','Api\ConsultationObstetriqueController@transmettre');
     Route::put('consultation-prenatale/{id}/transmettre','Api\ConsultationPrenantaleController@transmettre');
@@ -67,7 +69,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Souscripteur']], function 
 //    Définition des routes accéssible par le medecin controle
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], function () {
     Route::resource('medecin-controle','Api\MedecinControleController')->only('show');
-    Route::put('resultat/{resultat}/archiver','Api\ResultatController@archiver');
+    //Route::put('resultat/{resultat}/archiver','Api\ResultatController@archiver');
+    Route::put('resultat-labo/{resultat}/archiver','Api\ResultatLaboController@archive');
+    Route::put('resultat-imagerie/{resultat}/archiver','Api\ResultatImagerieController@archive');
     Route::put('consultation-medecine/{consultation_medecine}/archiver','Api\ConsultationMedecineGeneraleController@archiver');
     Route::put('consultation-obstetrique/{consultation_obstetrique}/archiver','Api\ConsultationObstetriqueController@archiver');
     Route::put('consultation-prenatale/{consultation_prenatale}/archiver','Api\ConsultationPrenantaleController@archiver');
@@ -98,8 +102,12 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('traitement','Api\TraitementController')->except(['create','edit']);
     Route::resource('parametre-commun','Api\ParametreCommunController')->except(['create','edit']);
     Route::resource('conclusion','Api\ConclusionController')->except(['create','edit']);
-    Route::resource('resultat','Api\ResultatController')->except(['create','edit','update']);
-    Route::post('resultat/{resultat}','Api\ResultatController@update')->name('resultat.update');
+    //Route::resource('resultat','Api\ResultatController')->except(['create','edit','update']);
+    Route::resource('resultat-labo','Api\ResultatLaboController')->except(['create','edit','update']);
+    Route::resource('resultat-imagerie','Api\ResultatImagerieController')->except(['create','edit','update']);
+    //Route::post('resultat/{resultat}','Api\ResultatController@update')->name('resultat.update');
+    Route::post('resultat-labo/{resultat}','Api\ResultatLaboController@update')->name('resultat.labo.update');
+    Route::post('resultat-imagerie/{resultat}','Api\ResultatImagerieController@update')->name('resultat.imagerie.update');
     Route::resource('examen-clinique','Api\ExamenCliniqueController')->except(['create','edit']);
     Route::resource('examen-complementaire','Api\ExamenComplementaireController')->except(['create','edit']);
     Route::resource('consultation-prenatale','Api\ConsultationPrenantaleController')->except(['create','edit']);
@@ -147,7 +155,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('traitement','Api\TraitementController')->except('store','update','destroy');
     Route::resource('parametre-commun','Api\ParametreCommunController')->except('store','update','destroy');
     Route::resource('conclusion','Api\ConclusionController')->except('store','update','destroy');
-    Route::resource('resultat','Api\ResultatController')->except('store','update','destroy');
+    //Route::resource('resultat','Api\ResultatController')->except('store','update','destroy');
+    Route::resource('resultat-labo','Api\ResultatLaboController')->except('store','update','destroy');
+    Route::resource('resultat-imagerie','Api\ResultatImagerieController')->except('store','update','destroy');
     Route::resource('examen-clinique','Api\ExamenCliniqueController')->except('store','update','destroy');
     Route::resource('examen-complementaire','Api\ExamenComplementaireController')->except('store','update','destroy');
     Route::resource('consultation-prenatale','Api\ConsultationPrenantaleController')->except('store','update','destroy');
