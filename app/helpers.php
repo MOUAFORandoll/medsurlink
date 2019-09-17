@@ -124,19 +124,12 @@ if (!function_exists('checkIfIsAuthorOrIsAuthorized')){
         if ($user->getRoleNames()->first() != "Admin"){
             //Recuperation du role de celui qui a crée l'element
             $role = getAuthorRole($operationable_type,$operationable_id,$action);
+            $auteurId = getAuthorId($operationable_type,$operationable_id,$action);
+            $userStatusId = getStatus();
             //verification avec le role de celui qui veut y accéder
-            if ($role == $user->getRoleNames()->first()){
-                //Si l'utilisateur qui veut modifier la ressource a le meme role que celui qui a crée alors il peut y accéder
+            if (($role == $user->getRoleNames()->first()) and ($auteurId == $userStatusId->getOriginalContent()['auteurable_id']) ){
                 $nbre = 1;
             }
-            else{
-                //Sinon On vérifit s'il a déja effectué l'action passée en parametre sur la ressource
-                $elementsDontAuteur = ((getStatusUserRole($user->getRoleNames()->first(),$user))->getOriginalContent()['auteurable_user'])->auteurs;
-                if (!is_null($elementsDontAuteur)){
-                    $nbre = $elementsDontAuteur->where('action','=',$action)->where('operationable_type','=',$operationable_type)->where('operationable_id','=',$operationable_id)->count();
-                }
-            }
-
         }else{
             $nbre = 1;
         }
@@ -157,6 +150,13 @@ if (!function_exists('getAuthorRole')){
     function getAuthorRole($operationable_type, $operationable_id, $action){
         $auteur =   \App\Models\Auteur::where('action','=',$action)->where('operationable_type','=',$operationable_type)->where('operationable_id','=',$operationable_id)->first();
         return $auteur->auteurable_type;
+    }
+}
+if (!function_exists('getAuthorId')){
+
+    function getAuthorId($operationable_type, $operationable_id, $action){
+        $auteur =   \App\Models\Auteur::where('action','=',$action)->where('operationable_type','=',$operationable_type)->where('operationable_id','=',$operationable_id)->first();
+        return $auteur->auteurable_id;
     }
 }
 if (!function_exists('getUser')){
