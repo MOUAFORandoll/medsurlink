@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
+use App\Scopes\RestrictResultatScope;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -61,5 +62,17 @@ class ResultatImagerie extends Model
 
     public function consultation(){
         return $this->belongsTo(ConsultationMedecineGenerale::class,'consultation_medecine_generale_id','id');
+    }
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new RestrictResultatScope);
     }
 }
