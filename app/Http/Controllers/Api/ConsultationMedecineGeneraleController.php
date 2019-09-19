@@ -25,6 +25,8 @@ class ConsultationMedecineGeneraleController extends Controller
             $patient = $consultation->dossier->patient;
             $consultation['user']=$user;
             $consultation['patient']=$patient;
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
+            $consultation['isAuthor']=$isAuthor->getOriginalContent();
         }
         return response()->json(["consultations"=>$consultations]);
     }
@@ -99,7 +101,8 @@ class ConsultationMedecineGeneraleController extends Controller
         $patient = $consultation->dossier->patient;
         $consultation['user']=$user;
         $consultation['patient']=$patient;
-
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
+        $consultation['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(["consultation"=>$consultation]);
 
     }
@@ -142,6 +145,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $patient = $consultation->dossier->patient;
         $consultation['user']=$user;
         $consultation['patient']=$patient;
+        $consultation['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(["consultation"=>$consultation]);
     }
 
@@ -192,6 +196,8 @@ class ConsultationMedecineGeneraleController extends Controller
         }else{
             $resultat->archieved_at = Carbon::now();
             $resultat->save();
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$resultat->id,"create");
+            $consultation['isAuthor']=$isAuthor->getOriginalContent();
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -212,7 +218,8 @@ class ConsultationMedecineGeneraleController extends Controller
         $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
-
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$resultat->id,"create");
+        $consultation['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(['resultat'=>$resultat]);
 
     }
