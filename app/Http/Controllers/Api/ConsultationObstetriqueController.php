@@ -25,6 +25,8 @@ class ConsultationObstetriqueController extends Controller
         foreach ($consultationsObstetrique as $consultationObstetrique){
             $user = $consultationObstetrique->dossier->patient->user;
             $consultationObstetrique['user']=$user;
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$consultationObstetrique->id,"create");
+            $consultationObstetrique['isAuthor']=$isAuthor->getOriginalContent();
         }
         return response()->json(['consultationsObstetrique'=>$consultationsObstetrique]);
     }
@@ -86,6 +88,8 @@ class ConsultationObstetriqueController extends Controller
         $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
         $user = $consultationObstetrique->dossier->patient->user;
         $consultationObstetrique['user']=$user;
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$consultationObstetrique->id,"create");
+        $consultationObstetrique['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
     }
 
@@ -176,6 +180,7 @@ class ConsultationObstetriqueController extends Controller
         }else{
             $resultat->archieved_at = Carbon::now();
             $resultat->save();
+            defineAsAuthor("ConsultationObstetrique",$resultat->id,'archive');
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -196,6 +201,7 @@ class ConsultationObstetriqueController extends Controller
         $resultat = ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
+        defineAsAuthor("ConsultationObstetrique",$resultat->id,'transmettre');
 
         return response()->json(['resultat'=>$resultat]);
 

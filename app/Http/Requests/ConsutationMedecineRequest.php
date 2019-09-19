@@ -31,7 +31,7 @@ class ConsutationMedecineRequest extends FormRequest
             "anamese"=>"sometimes|nullable|string|min:5",
             "mode_de_vie"=>"sometimes|nullable|string|min:5",
             "motifs.*"=>"sometimes|integer|exists:motifs,id",
-            "motifsACreer.*"=>"required|string|min:2",
+            "motifsACreer.*"=>"sometimes|string|min:2",
             "examen_clinique"=>"sometimes|nullable|string|min:2",
             "examen_complementaire"=>"sometimes|nullable|string|min:2",
         ];
