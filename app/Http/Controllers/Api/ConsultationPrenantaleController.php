@@ -24,6 +24,8 @@ class ConsultationPrenantaleController extends Controller
                 $user = $dossier->patient->user;
                 $consultationPrenatale['user']=$user;
                 $consultationPrenatale['dossier']=$dossier;
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationPrenatale",$consultationPrenatale->id,"create");
+            $consultationPrenatale['isAuthor']=$isAuthor->getOriginalContent();
         }
         return response()->json(['consultationsPrenatale'=>$consultationsPrenatale]);
     }
@@ -76,6 +78,8 @@ class ConsultationPrenantaleController extends Controller
         $dossier = $consultationPrenatale->consultationObstetrique->dossier;
         $consultationPrenatale['user']=$user;
         $consultationPrenatale['dossier']=$dossier;
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationPrenatale",$consultationPrenatale->id,"create");
+        $consultationPrenatale['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
 
     }
@@ -114,6 +118,8 @@ class ConsultationPrenantaleController extends Controller
         $dossier = $consultationPrenatale->consultationObstetrique->dossier;
         $consultationPrenatale['user']=$user;
         $consultationPrenatale['dossier']=$dossier;
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationPrenatale",$consultationPrenatale->id,"create");
+        $consultationPrenatale['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }
 
@@ -170,6 +176,8 @@ class ConsultationPrenantaleController extends Controller
             $dossier = $resultat->consultationObstetrique->dossier;
             $resultat['user']=$user;
             $resultat['dossier']=$dossier;
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationPrenatale",$resultat->id,"create");
+            $resultat['isAuthor']=$isAuthor->getOriginalContent();
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -194,6 +202,8 @@ class ConsultationPrenantaleController extends Controller
         $dossier = $resultat->consultationObstetrique->dossier;
         $resultat['user']=$user;
         $resultat['dossier']=$dossier;
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationPrenatale",$resultat->id,"create");
+        $resultat['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(['resultat'=>$resultat]);
 
     }
