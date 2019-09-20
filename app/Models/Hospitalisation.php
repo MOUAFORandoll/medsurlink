@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
 use App\Scopes\RestrictDossierScope;
+use App\Scopes\RestrictHospitalisationScope;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -72,6 +73,6 @@ class Hospitalisation extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(new RestrictDossierScope);
+        static::addGlobalScope(new RestrictHospitalisationScope);
     }
 }
