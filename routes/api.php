@@ -106,7 +106,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('motif','Api\MotifController')->except(['create','edit']);
     Route::resource('allergie','Api\AllergieController')->except(['create','edit']);
     Route::resource('antecedent','Api\AntecedentController')->except(['create','edit']);
-    Route::resource('traitement','Api\TraitementController')->except(['create','edit']);
+    //Route::resource('traitement','Api\TraitementController')->except(['create','edit']);
+    Route::resource('traitement-actuel','Api\TraitementActuelController')->except(['create','edit']);
+    Route::resource('traitement-propose','Api\TraitementProposeController')->except(['create','edit']);
     Route::resource('parametre-commun','Api\ParametreCommunController')->except(['create','edit']);
     Route::resource('conclusion','Api\ConclusionController')->except(['create','edit']);
     //Route::resource('resultat','Api\ResultatController')->except(['create','edit','update']);
@@ -144,7 +146,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('motif','Api\MotifController')->except('store','update','destroy');
     Route::resource('allergie','Api\AllergieController')->except('store','update','destroy');
     Route::resource('antecedent','Api\AntecedentController')->except('store','update','destroy');
-    Route::resource('traitement','Api\TraitementController')->except('store','update','destroy');
+    //Route::resource('traitement','Api\TraitementController')->except('store','update','destroy');
+    Route::resource('traitement-actuel','Api\TraitementActuelController')->except('store','update','destroy');
+    Route::resource('traitement-propose','Api\TraitementProposeController')->except('store','update','destroy');
     Route::resource('parametre-commun','Api\ParametreCommunController')->except('store','update','destroy');
     Route::resource('conclusion','Api\ConclusionController')->except('store','update','destroy');
     //Route::resource('resultat','Api\ResultatController')->except('store','update','destroy');
