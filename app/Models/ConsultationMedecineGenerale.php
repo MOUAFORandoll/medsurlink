@@ -60,8 +60,8 @@ class ConsultationMedecineGenerale extends Model
         return $this->belongsToMany(Motif::class,'consultation_motif','consultation_medecine_generale_id','motif_id');
     }
 
-    public  function  traitements(){
-        return $this->belongsToMany(Traitement::class,'consult_traitement','consultation_medecine_generale_id','traitement_id');
+    public function traitementsProposes(){
+        return $this->hasMany(TraitementPropose::class,'consultation_medecine_generale_id');
     }
 
     public function conclusions(){
