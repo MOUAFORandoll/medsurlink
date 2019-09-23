@@ -125,15 +125,16 @@ if (!function_exists('checkIfIsAuthorOrIsAuthorized')){
             //Recuperation du role de celui qui a crée l'element
             $role = getAuthorRole($operationable_type,$operationable_id,$action);
             $auteurId = getAuthorId($operationable_type,$operationable_id,$action);
-            $userStatusId = getStatus();
-            //verification avec le role de celui qui veut y accéder
-            if (($role == $user->getRoleNames()->first()) and ($auteurId == $userStatusId->getOriginalContent()['auteurable_id']) ){
+            if (!is_null($role) && !is_null($auteurId)){
+                $userStatusId = getStatus();
+                //verification avec le role de celui qui veut y accéder
+                if (($role == $user->getRoleNames()->first()) and ($auteurId == $userStatusId->getOriginalContent()['auteurable_id']) ){
+                    $nbre = 1;
+                }
+            }else{
                 $nbre = 1;
             }
-        }else{
-            $nbre = 1;
         }
-
         if ($nbre>0)
             return response()->json(true);
         return response()->json(false);
@@ -149,6 +150,8 @@ if (!function_exists('getAuthorRole')){
 
     function getAuthorRole($operationable_type, $operationable_id, $action){
         $auteur =   \App\Models\Auteur::where('action','=',$action)->where('operationable_type','=',$operationable_type)->where('operationable_id','=',$operationable_id)->first();
+        if (is_null($auteur))
+            return null;
         return $auteur->auteurable_type;
     }
 }
@@ -156,6 +159,8 @@ if (!function_exists('getAuthorId')){
 
     function getAuthorId($operationable_type, $operationable_id, $action){
         $auteur =   \App\Models\Auteur::where('action','=',$action)->where('operationable_type','=',$operationable_type)->where('operationable_id','=',$operationable_id)->first();
+        if (is_null($auteur))
+            return null;
         return $auteur->auteurable_id;
     }
 }
