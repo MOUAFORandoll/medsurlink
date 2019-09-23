@@ -20,7 +20,7 @@ class MedecinControleController extends Controller
      */
     public function index()
     {
-        $medecins = MedecinControle::with('specialite','user')->get();
+        $medecins = MedecinControle::with(['specialite','user'])->get();
         return response()->json(['medecins'=>$medecins]);
     }
 
@@ -78,7 +78,7 @@ class MedecinControleController extends Controller
          $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-        $medecin = MedecinControle::with('specialite')->whereSlug($slug)->first();
+        $medecin = MedecinControle::with('specialite','user')->whereSlug($slug)->first();
         return response()->json(['medecin'=>$medecin]);
 
     }
@@ -113,7 +113,7 @@ class MedecinControleController extends Controller
             return $validation;
 
         MedecinControle::whereSlug($slug)->update($request->validated());
-        $medecin = MedecinControle::with('specialite')->whereSlug($slug)->first();
+        $medecin = MedecinControle::with('specialite','user')->whereSlug($slug)->first();
 
 //        //ajustement de l'email du user
 //        $user = $medecin->user;

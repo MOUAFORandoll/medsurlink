@@ -57,7 +57,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
 
 //    Définition des routes accéssible par le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Praticien']], function () {
-    Route::resource('praticien','Api\PraticienController')->only('show');
+//    Route::resource('praticien','Api\PraticienController')->only('show');
     //Route::put('resultat/{id}/transmettre','Api\ResultatController@transmettre');
     Route::put('resultat-labo/{id}/transmettre','Api\ResultatLaboController@transmit');
     Route::put('resultat-imagerie/{id}/transmettre','Api\ResultatImagerieController@transmit');
@@ -69,13 +69,13 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien']], function () 
 
 //    Définition des routes accéssible par le souscripteur
 Route::group(['middleware' => ['auth:api','role:Admin|Souscripteur']], function () {
-    Route::resource('souscripteur','Api\SouscripteurController')->only('show');
+//    Route::resource('souscripteur','Api\SouscripteurController')->only('show');
 
 });
 
 //    Définition des routes accéssible par le medecin controle
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], function () {
-    Route::resource('medecin-controle','Api\MedecinControleController')->only('show');
+//    Route::resource('medecin-controle','Api\MedecinControleController')->except('store','update','destroy');
     //Route::put('resultat/{resultat}/archiver','Api\ResultatController@archiver');
     Route::put('resultat-labo/{resultat}/archiver','Api\ResultatLaboController@archive');
     Route::put('resultat-imagerie/{resultat}/archiver','Api\ResultatImagerieController@archive');
@@ -95,10 +95,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('affiliation','Api\AffiliationController')->only('show');
 
 });
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Patient|Medecin controle|Souscripteur|Praticien']], function () {
-    Route::resource('patient','Api\PatientController')->only(['show']);
 
-});
 //  Définition des routes accéssible a la fois par le medecin controle et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien']], function () {
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except(['create','edit']);
@@ -163,5 +160,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('patient','Api\PatientController')->except('store','update','destroy');
 });
 
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Patient|Medecin controle|Souscripteur|Praticien']], function () {
+    Route::resource('patient','Api\PatientController')->except('store','update','destroy');
 
+});
 
