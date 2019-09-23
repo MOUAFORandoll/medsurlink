@@ -131,9 +131,9 @@ if (!function_exists('checkIfIsAuthorOrIsAuthorized')){
                 if (($role == $user->getRoleNames()->first()) and ($auteurId == $userStatusId->getOriginalContent()['auteurable_id']) ){
                     $nbre = 1;
                 }
-            }else{
-                $nbre = 1;
             }
+        }else{
+            $nbre = 1;
         }
         if ($nbre>0)
             return response()->json(true);

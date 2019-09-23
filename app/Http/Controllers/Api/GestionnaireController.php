@@ -22,8 +22,12 @@ class GestionnaireController extends Controller
     {
         $gestionnaires = Gestionnaire::with('user')->get();
         foreach ($gestionnaires as $gestionnaire){
-            $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->id,"create");
-            $gestionnaire['isAuthor']=$isAuthor->getOriginalContent();
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->user_id,"create");
+            if ($gestionnaire->user_id == Auth::id()){
+                $gestionnaire['isAuthor']=true;
+            } else{
+                $gestionnaire['isAuthor']=$isAuthor->getOriginalContent();
+            }
         }
 
         return response()->json(['gestionnaires'=>$gestionnaires]);
@@ -79,8 +83,13 @@ class GestionnaireController extends Controller
         if(!is_null($validation))
             return $validation;
         $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->id,"create");
-        $gestionnaire['isAuthor']=$isAuthor->getOriginalContent();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->user_id,"create");
+        if ($gestionnaire->user_id == Auth::id()){
+            $gestionnaire['isAuthor']=true;
+        } else{
+            $gestionnaire['isAuthor']=$isAuthor->getOriginalContent();
+        }
+
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
     }
@@ -111,7 +120,7 @@ class GestionnaireController extends Controller
             return $validation;
         $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->id,"create");
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->user_id,"create");
         if(!$isAuthor->getOriginalContent() && $gestionnaire->user_id != Auth::id())
             {
                 $transmission = [];
