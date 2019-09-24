@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\GestionnaireStoreRequest;
 use App\Http\Requests\GestionnaireUpdateRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\Gestionnaire;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -114,12 +116,16 @@ class GestionnaireController extends Controller
      */
     public function update(GestionnaireUpdateRequest $request, $slug)
     {
-
         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
+
         $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();
 
+        $user = UserController::updatePersonalInformation($request->except('civilite','manager'),$gestionnaire->user->slug);
+        if (array_key_exists('error',$user->getOriginalContent())){
+            return response()->json(['error'=>$user->getOriginalContent()['error']],419);
+        }
         $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->user_id,"create");
         if(!$isAuthor->getOriginalContent() && $gestionnaire->user_id != Auth::id())
             {

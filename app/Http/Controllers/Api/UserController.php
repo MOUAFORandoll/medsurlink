@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Mail\Password\PasswordGenerated;
+use App\Rules\EmailExistRule;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -97,7 +98,7 @@ class UserController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $user = User::findBySlug($slug);
+        $user = User::whereSlug($slug)->update($request->validated());
 
         return response()->json(['user'=>$user]);
     }
@@ -137,18 +138,7 @@ class UserController extends Controller
 
     public static function generatedUser($request){
 
-        $validation = Validator::make($request->all(),[
-            'nom' => ['required', 'string', 'max:255'],
-            'prenom' => ['sometimes','nullable', 'string', 'max:255'],
-            'nationalite' => ['required', 'string', 'max:255'],
-            'quartier' => ['sometimes','nullable', 'string', 'max:255'],
-            'code_postal' => ['sometimes','nullable', 'integer'],
-            'ville' => ['required','string', 'max:255'],
-            'pays' => ['required','string', 'max:255'],
-            'telephone' => ['required','string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-//            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+       $validation = self::personalValidation($request->all());
 
         if ($validation->fails())
             return response()->json(['error'=>$validation->errors()],419);
@@ -174,5 +164,47 @@ class UserController extends Controller
     public static function sendUserInformationViaMail(User $user,$password){
         $mail = new PasswordGenerated($user,$password);
         Mail::to($user->email)->send($mail);
+    }
+
+    public static function updatePersonalInformation($data,$slug){
+        $validation = self::personalUpdateValidation($data,$slug);
+
+        if ($validation->fails())
+            return response()->json(['error'=>$validation->errors()],419);
+
+        User::whereSlug($slug)->update($data);
+        $user = User::findBySlug($slug);
+        return response()->json(['user'=>$user]);
+    }
+
+    public static function personalUpdateValidation($data,$slug){
+        $validation = Validator::make($data,[
+            'nom' => ['required', 'string', 'max:255'],
+            'prenom' => ['sometimes','nullable', 'string', 'max:255'],
+            'nationalite' => ['required', 'string', 'max:255'],
+            'quartier' => ['sometimes','nullable', 'string', 'max:255'],
+            'code_postal' => ['sometimes','nullable', 'integer'],
+            'ville' => ['required','string', 'max:255'],
+            'pays' => ['required','string', 'max:255'],
+            'telephone' => ['required','string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255',new EmailExistRule($slug,'User')],
+//            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+        return $validation;
+    }
+    public static function personalValidation($data){
+        $validation = Validator::make($data,[
+            'nom' => ['required', 'string', 'max:255'],
+            'prenom' => ['sometimes','nullable', 'string', 'max:255'],
+            'nationalite' => ['required', 'string', 'max:255'],
+            'quartier' => ['sometimes','nullable', 'string', 'max:255'],
+            'code_postal' => ['sometimes','nullable', 'integer'],
+            'ville' => ['required','string', 'max:255'],
+            'pays' => ['required','string', 'max:255'],
+            'telephone' => ['required','string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+//            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+        return $validation;
     }
 }

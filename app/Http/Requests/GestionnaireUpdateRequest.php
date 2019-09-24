@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Gestionnaire;
 use App\Rules\EmailExistRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class GestionnaireUpdateRequest extends FormRequest
 {
@@ -26,12 +28,10 @@ class GestionnaireUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route()->parameter('gestionnaire');
-        return [
-            "user_id"=>'sometimes|integer|exists:users,id',
-            "civilite"=>["required",Rule::in(['M.','Mme/Mlle.','Dr.','Pr.'])],
-        ];
+        $rules["civilite"] = ["required",Rule::in(['M.','Mme/Mlle.','Dr.','Pr.'])];
+        return $rules ;
     }
+
     protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
     {
         Request::merge(['error'=>$validator->errors()->getMessages()]);
