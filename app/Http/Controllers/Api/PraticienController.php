@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PraticienStoreRequest;
 use App\Http\Requests\PraticienUpdateRequest;
 use App\Models\EtablissementExercice;
+use App\Models\EtablissementExercicePatient;
 use App\Models\Praticien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -97,8 +98,8 @@ class PraticienController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param PraticienUpdateRequest $request
+     * @param $slug
      * @return \Illuminate\Http\Response
      */
     public function update(PraticienUpdateRequest $request, $slug)
@@ -116,15 +117,19 @@ class PraticienController extends Controller
         }
         Praticien::whereSlug($slug)->update([
             'specialite_id' => $request->specialite_id,
-            'etablissement_id' => $request->etablissement_id,
             'numero_ordre' => $request->numero_ordre,
             'civilite' => $request->civilite
         ]);
 
         $praticien = Praticien::with('etablissements')->whereSlug($slug)->first();
 
-        return response()->json(['praticien'=>$praticien]);
+        // Insérer l'établissement du praticien
+        /*EtablissementExercicePatient::create([
+            'etablissement_id' => $request->etablissement_id,
+            'patient_id' => $praticien->id
+        ]);*/
 
+        return response()->json(['praticien' => $praticien]);
     }
 
     /**
