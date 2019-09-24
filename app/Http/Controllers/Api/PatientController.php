@@ -108,7 +108,11 @@ class PatientController extends Controller
         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-
+        $patient= Patient::with('user')->whereSlug($slug)->first();
+        $user = UserController::updatePersonalInformation($request->except('date_de_naissance','patient','souscripteur_id','sexe'),$patient->user->slug);
+        if (array_key_exists('error',$user->getOriginalContent())){
+            return response()->json(['error'=>$user->getOriginalContent()['error']],419);
+        }
         $age = evaluateYearOfOld($request->date_de_naissance);
 
         Patient::whereSlug($slug)->update($request->validated()+['age'=>$age]);

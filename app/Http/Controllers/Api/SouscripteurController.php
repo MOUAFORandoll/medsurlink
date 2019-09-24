@@ -103,6 +103,11 @@ class SouscripteurController extends Controller
         if(!is_null($validation))
             return $validation;
 
+        $souscripteur= Souscripteur::with('user')->whereSlug($slug)->first();
+        $user = UserController::updatePersonalInformation($request->except('subscriber','sexe','date_de_naissance'),$souscripteur->user->slug);
+        if (array_key_exists('error',$user->getOriginalContent())){
+            return response()->json(['error'=>$user->getOriginalContent()['error']],419);
+        }
         $age = evaluateYearOfOld($request->date_de_naissance);
 
         Souscripteur::whereSlug($slug)->update($request->validated()+['age'=>$age]);
