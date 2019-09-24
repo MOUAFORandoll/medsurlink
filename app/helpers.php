@@ -76,7 +76,7 @@ if (!function_exists('getStatus')){
     function getStatus(){
         $user = \Illuminate\Support\Facades\Auth::user();
         $auteurable_type = $user->getRoleNames()->first();
-        $auteurable_id = (getStatusUserRole($auteurable_type,$user)->getOriginalContent()['auteurable_user'])->id;
+        $auteurable_id = (getStatusUserRole($auteurable_type,$user)->getOriginalContent()['auteurable_user'])->user_id;
         return response()->json(['auteurable_type'=>$auteurable_type,'auteurable_id'=>$auteurable_id,]);
     }
 }
