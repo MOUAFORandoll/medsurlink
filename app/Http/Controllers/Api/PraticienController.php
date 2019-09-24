@@ -103,12 +103,20 @@ class PraticienController extends Controller
      */
     public function update(PraticienUpdateRequest $request, $slug)
     {
+        $validation = $this->validatedSlug($slug);
 
-         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-        Praticien::whereSlug($slug)->update($request->validated());
+
+        Praticien::whereSlug($slug)->update([
+            'specialite_id' => $request->specialite_id,
+            'etablissement_id' => $request->etablissement_id,
+            'numero_ordre' => $request->numero_ordre,
+            'civilite' => $request->civilite
+        ]);
+
         $praticien = Praticien::with('etablissements')->whereSlug($slug)->first();
+        
         return response()->json(['praticien'=>$praticien]);
 
     }
