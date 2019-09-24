@@ -19,6 +19,10 @@ class AllergieController extends Controller
     public function index()
     {
         $allergies = Allergie::all();
+        foreach ($allergies as $allergy){
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
+            $allergy['isAuthor']=$isAuthor->getOriginalContent();
+        }
         return response()->json(['allergies'=>$allergies]);
     }
 
@@ -59,6 +63,8 @@ class AllergieController extends Controller
             return $validation;
 
         $allergie = Allergie::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergie->id,"create");
+        $allergy['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(['allergie'=>$allergie]);
 
     }
