@@ -31,7 +31,7 @@ class SouscripteurUpdateRequest extends FormRequest
 
         return [
             "sexe"=>["required",Rule::in(['M','F'])],
-            "date_de_naissance"=>'required|date|before_or_equal:'.Carbon::now(),
+            "date_de_naissance"=>'required|date|before_or_equal:'.Carbon::now()->format('Y-m-d'),
    ];
     }
 

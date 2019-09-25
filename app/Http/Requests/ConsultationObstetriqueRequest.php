@@ -30,7 +30,7 @@ class ConsultationObstetriqueRequest extends FormRequest
     {
         return [
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
-            "ddr"=>"required|date|after_or_equal:".Carbon::now(),
+            "ddr"=>"required|date|after_or_equal:".Carbon::now()->format('Y-m-d'),
             "serologie"=>"sometimes|nullable|string",
             "groupe_sanguin"=>["sometimes", "nullable", "string", Rule::in(['A-', 'A+', 'B-', 'B+', 'AB-', 'AB+', 'O-', 'O+'])],
             "statut_socio_familiale"=>"sometimes|nullable|string",

@@ -28,7 +28,7 @@ class AntecedentRequest extends FormRequest
         return [
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
             "description"=>"required|string|min:3",
-            "date"=>"sometimes|nullable|date|before_or_equal:".Carbon::now(),
+            "date"=>"sometimes|nullable|date|before_or_equal:".Carbon::now()->format('Y-m-d'),
             "type"=>"required|string|min:2",
         ];
     }
