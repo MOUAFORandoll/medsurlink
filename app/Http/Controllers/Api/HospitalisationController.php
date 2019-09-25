@@ -17,6 +17,14 @@ class HospitalisationController extends Controller
     public function index()
     {
         $hospitalisations = Hospitalisation::with(['dossier','motifs'])->get();
+        foreach ($hospitalisations as $hospitalisation){
+            $user = $hospitalisation->dossier->patient->user;
+            $patient = $hospitalisation->dossier->patient;
+            $hospitalisation['user']=$user;
+            $hospitalisation['patient']=$patient;
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$hospitalisation->id,"create");
+            $hospitalisation['isAuthor']=$isAuthor->getOriginalContent();
+        }
         return response()->json(['hospitalisations'=>$hospitalisations]);
     }
 
@@ -60,6 +68,12 @@ class HospitalisationController extends Controller
             return $validation;
 
         $hospitalisation = Hospitalisation::with(['dossier','motifs'])->whereSlug($slug)->first();
+        $user = $hospitalisation->dossier->patient->user;
+        $patient = $hospitalisation->dossier->patient;
+        $hospitalisation['user']=$user;
+        $hospitalisation['patient']=$patient;
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$hospitalisation->id,"create");
+        $hospitalisation['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
@@ -98,6 +112,11 @@ class HospitalisationController extends Controller
 
         Hospitalisation::whereSlug($slug)->update($request->validated());
         $hospitalisation = Hospitalisation::with(['dossier','motifs'])->whereSlug($slug)->first();
+        $user = $hospitalisation->dossier->patient->user;
+        $patient = $hospitalisation->dossier->patient;
+        $hospitalisation['user']=$user;
+        $hospitalisation['patient']=$patient;
+        $hospitalisation['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
@@ -117,7 +136,8 @@ class HospitalisationController extends Controller
         if($isAuthor->getOriginalContent() == false){
             $transmission = [];
             $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 ); }
+            return response()->json(['error'=>$transmission],419 );
+        }
 
         $hospitalisation->delete();
         return response()->json(['hospitalisation'=>$hospitalisation]);

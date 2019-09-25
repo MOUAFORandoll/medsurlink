@@ -117,7 +117,7 @@ class ProfessionController extends Controller
         $isAuthor = checkIfIsAuthorOrIsAuthorized("Profession",$profession->id,"create");
         if($isAuthor->getOriginalContent() == false){
             $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
+            $transmission['accessRefuse'][0] = "Vous ne pouvez supprimer cet élement";
             return response()->json(['error'=>$transmission],419 ); }
 
         try{

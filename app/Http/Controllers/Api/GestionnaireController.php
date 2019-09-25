@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\GestionnaireStoreRequest;
 use App\Http\Requests\GestionnaireUpdateRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\Gestionnaire;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class GestionnaireController extends Controller
@@ -20,6 +23,15 @@ class GestionnaireController extends Controller
     public function index()
     {
         $gestionnaires = Gestionnaire::with('user')->get();
+        foreach ($gestionnaires as $gestionnaire){
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->user_id,"create");
+            if ($gestionnaire->user_id == Auth::id()){
+                $gestionnaire['isAuthor']=true;
+            } else{
+                $gestionnaire['isAuthor']=$isAuthor->getOriginalContent();
+            }
+        }
+
         return response()->json(['gestionnaires'=>$gestionnaires]);
     }
 
@@ -73,6 +85,13 @@ class GestionnaireController extends Controller
         if(!is_null($validation))
             return $validation;
         $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->user_id,"create");
+        if ($gestionnaire->user_id == Auth::id()){
+            $gestionnaire['isAuthor']=true;
+        } else{
+            $gestionnaire['isAuthor']=$isAuthor->getOriginalContent();
+        }
+
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
     }
@@ -97,10 +116,23 @@ class GestionnaireController extends Controller
      */
     public function update(GestionnaireUpdateRequest $request, $slug)
     {
-
         $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
+
+        $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();
+
+        $user = UserController::updatePersonalInformation($request->except('civilite','manager'),$gestionnaire->user->slug);
+        if (array_key_exists('error',$user->getOriginalContent())){
+            return response()->json(['error'=>$user->getOriginalContent()['error']],419);
+        }
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->user_id,"create");
+        if(!$isAuthor->getOriginalContent() && $gestionnaire->user_id != Auth::id())
+            {
+                $transmission = [];
+                $transmission['accessRefuse'][0] = "Vous ne pouvez effectuer cette action";
+                return response()->json(['error'=>$transmission],419 );
+            }
 
         Gestionnaire::whereSlug($slug)->update($request->validated());
         $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();

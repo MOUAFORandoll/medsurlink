@@ -26,8 +26,6 @@ class PraticienUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route()->parameter('praticien');
-
         return [
             "profession_id"=>'required|integer|exists:professions,id',
             "specialite_id"=>'required|integer|exists:specialites,id',

@@ -26,15 +26,11 @@ class MedecinControleUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route()->parameter('medecinControle');
 
         return [
             "specialite_id"=>'required|integer|exists:specialites,id',
-
             "numero_ordre"=>'required|string|min:2',
             "civilite"=>["required",Rule::in(['M.','Mme/Mlle.','Dr.','Pr.'])],
-            "user_id"=>'sometimes|integer|exists:users,id',
-
         ];
     }
 

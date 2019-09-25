@@ -109,6 +109,12 @@ class PraticienController extends Controller
         if(!is_null($validation))
             return $validation;
 
+
+        $praticien= Praticien::with('user')->whereSlug($slug)->first();
+        $user = UserController::updatePersonalInformation($request->except('civilite','practitioner','profession_id','specialite_id','numero_ordre'),$praticien->user->slug);
+        if (array_key_exists('error',$user->getOriginalContent())){
+            return response()->json(['error'=>$user->getOriginalContent()['error']],419);
+        }
         Praticien::whereSlug($slug)->update([
             'specialite_id' => $request->specialite_id,
             'numero_ordre' => $request->numero_ordre,

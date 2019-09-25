@@ -27,12 +27,11 @@ class SouscripteurUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $id = $this->route()->parameter('souscripteur');
+        $slug = $this->route()->parameter('souscripteur');
 
         return [
-            "user_id"=>'sometimes|integer|exists:users,id',
             "sexe"=>["required",Rule::in(['M','F'])],
-            "date_de_naissance"=>'required|date|before_or_equal:'.Carbon::now(),
+            "date_de_naissance"=>'required|date|before_or_equal:'.Carbon::now()->format('Y-m-d'),
    ];
     }
 

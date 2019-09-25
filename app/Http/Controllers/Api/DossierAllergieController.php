@@ -43,7 +43,7 @@ class DossierAllergieController extends Controller
             "allergiesACreer"=>"required_without:allergies",
             "allergies.*"=>"sometimes|integer|exists:allergies,id",
             "allergiesACreer.*.description"=>"sometimes|string|min:7",
-            "allergiesACreer.*.date"=>"sometimes|date|before_or_equal:".Carbon::now(),
+            "allergiesACreer.*.date"=>"sometimes|date|before_or_equal:".Carbon::now()->format('Y-m-d'),
 
         ]);
 
@@ -63,6 +63,7 @@ class DossierAllergieController extends Controller
                     'description'=>$allergy['description'],
                     'date'=>array_key_exists('date',$allergy) ? $allergy['date'] : null
                 ]);
+                defineAsAuthor("Allergie",$allergieCreer->id,'create');
                 $dossier->allergies()->attach($allergieCreer->id);
             }
         }

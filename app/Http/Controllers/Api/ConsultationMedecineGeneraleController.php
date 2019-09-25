@@ -23,8 +23,11 @@ class ConsultationMedecineGeneraleController extends Controller
         foreach ($consultations as $consultation){
             $user = $consultation->dossier->patient->user;
             $patient = $consultation->dossier->patient;
+            $consultation['allergies']=$consultation->dossier->allergies;
             $consultation['user']=$user;
             $consultation['patient']=$patient;
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
+            $consultation['isAuthor']=$isAuthor->getOriginalContent();
         }
         return response()->json(["consultations"=>$consultations]);
     }
@@ -47,8 +50,6 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function store(ConsutationMedecineRequest $request)
     {
-
-
         $consultation = ConsultationMedecineGenerale::create($request->validated());
         $motifs = $request->get('motifs');
         $motifACreer = $request->get('motifsACreer');
@@ -57,7 +58,8 @@ class ConsultationMedecineGeneraleController extends Controller
             foreach ( $motifACreer as $motif)
             {
                 $motif = Motif::create([
-                    'reference'=>$motif
+                    'reference'=>$motif->reference,
+                    'description'=>$motif->description
                 ]);
                 $consultation->motifs()->attach($motif->id);
             }
@@ -69,8 +71,6 @@ class ConsultationMedecineGeneraleController extends Controller
                 $consultation->motifs()->attach($motif);
             }
         }
-        $consultation->date_consultation = dateOfToday();
-        $consultation->save();
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create');
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->find($consultation->id);
@@ -97,9 +97,11 @@ class ConsultationMedecineGeneraleController extends Controller
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
         $user = $consultation->dossier->patient->user;
         $patient = $consultation->dossier->patient;
+        $consultation['allergies']=$consultation->dossier->allergies;
         $consultation['user']=$user;
         $consultation['patient']=$patient;
-
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
+        $consultation['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(["consultation"=>$consultation]);
 
     }
@@ -132,7 +134,9 @@ class ConsultationMedecineGeneraleController extends Controller
         $consultation = ConsultationMedecineGenerale::findBySlug($slug);
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+            $transmission = [];
+            $transmission['accessRefuse'][0] = "Vous ne pouvez effectuer cette action";
+            return response()->json(['error'=>$transmission],419 );
         }
 
         ConsultationMedecineGenerale::whereSlug($slug)->update($request->validated());
@@ -142,6 +146,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $patient = $consultation->dossier->patient;
         $consultation['user']=$user;
         $consultation['patient']=$patient;
+        $consultation['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(["consultation"=>$consultation]);
     }
 
@@ -160,7 +165,9 @@ class ConsultationMedecineGeneraleController extends Controller
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$consultation->id,"create");
         if($isAuthor->getOriginalContent() == false){
-            return response()->json(['error'=>"Vous ne pouvez modifié un élement que vous n'avez crée"],401);
+            $transmission = [];
+            $transmission['accessRefuse'][0] = "Vous ne pouvez effectuer cette action";
+            return response()->json(['error'=>$transmission],419 );
         }
         try{
             $consultation = ConsultationMedecineGenerale::findBySlug($slug);
@@ -192,6 +199,8 @@ class ConsultationMedecineGeneraleController extends Controller
         }else{
             $resultat->archieved_at = Carbon::now();
             $resultat->save();
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$resultat->id,"create");
+            $consultation['isAuthor']=$isAuthor->getOriginalContent();
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -212,7 +221,8 @@ class ConsultationMedecineGeneraleController extends Controller
         $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
-
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$resultat->id,"create");
+        $consultation['isAuthor']=$isAuthor->getOriginalContent();
         return response()->json(['resultat'=>$resultat]);
 
     }

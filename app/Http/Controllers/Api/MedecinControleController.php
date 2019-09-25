@@ -20,7 +20,7 @@ class MedecinControleController extends Controller
      */
     public function index()
     {
-        $medecins = MedecinControle::with('specialite','user')->get();
+        $medecins = MedecinControle::with(['specialite','user'])->get();
         return response()->json(['medecins'=>$medecins]);
     }
 
@@ -78,7 +78,7 @@ class MedecinControleController extends Controller
          $validation = $this->validatedSlug($slug);
         if(!is_null($validation))
             return $validation;
-        $medecin = MedecinControle::with('specialite')->whereSlug($slug)->first();
+        $medecin = MedecinControle::with('specialite','user')->whereSlug($slug)->first();
         return response()->json(['medecin'=>$medecin]);
 
     }
@@ -112,8 +112,14 @@ class MedecinControleController extends Controller
         if(!is_null($validation))
             return $validation;
 
+        $medecin= MedecinControle::with('user')->whereSlug($slug)->first();
+        $user = UserController::updatePersonalInformation($request->except('civilite','specialite_id','numero_ordre','doctor'),$medecin->user->slug);
+        if (array_key_exists('error',$user->getOriginalContent())){
+            return response()->json(['error'=>$user->getOriginalContent()['error']],419);
+        }
+
         MedecinControle::whereSlug($slug)->update($request->validated());
-        $medecin = MedecinControle::with('specialite')->whereSlug($slug)->first();
+        $medecin = MedecinControle::with('specialite','user')->whereSlug($slug)->first();
 
 //        //ajustement de l'email du user
 //        $user = $medecin->user;

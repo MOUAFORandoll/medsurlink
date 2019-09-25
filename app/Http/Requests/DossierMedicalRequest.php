@@ -27,7 +27,7 @@ class DossierMedicalRequest extends FormRequest
     {
         return [
             "patient_id"=>"required|integer|exists:patients,user_id",
-            "date_de_creation"=>"sometimes|nullable|date|after_or_equal:".Carbon::now(),
+            "date_de_creation"=>"sometimes|nullable|date|after_or_equal:".Carbon::now()->format('Y-m-d'),
             "numero_dossier"=>"sometimes|string|min:8|unique:dossier_medicals,numero_dossier",
         ];
     }
