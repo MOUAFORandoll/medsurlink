@@ -43,7 +43,7 @@ class DossierAllergieController extends Controller
             "allergiesACreer"=>"required_without:allergies",
             "allergies.*"=>"sometimes|integer|exists:allergies,id",
             "allergiesACreer.*.description"=>"sometimes|string|min:7",
-            "allergiesACreer.*.date"=>"sometimes|date|before_or_equal:".Carbon::now(),
+            "allergiesACreer.*.date"=>"sometimes|date|before_or_equal:".Carbon::now()->format('Y-m-d'),
 
         ]);
 
