@@ -22,7 +22,7 @@ class DossierMedicalController extends Controller
      */
     public function index()
     {
-        $dossiers = DossierMedical::with(['patient','consultationsMedecine','consultationsObstetrique'])->get();
+        $dossiers = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique'])->get();
         foreach ($dossiers as $dossier){
                 $user = $dossier->patient->user;
                 $dossier['user'] = $user;
@@ -78,7 +78,7 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $dossier = DossierMedical::with(['patient','consultationsMedecine','consultationsObstetrique'])->whereSlug($slug)->first();
+        $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique'])->whereSlug($slug)->first();
         $user = $dossier->patient->user;
         $dossier['user'] = $user;
         return response()->json(['dossier'=>$dossier]);
@@ -119,7 +119,7 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
         try{
-            $dossier = DossierMedical::with(['patient','consultationsMedecine','consultationsObstetrique'])->whereSlug($slug)->first();
+            $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique'])->whereSlug($slug)->first();
             $dossier->delete();
             return response()->json(['dossier'=>$dossier]);
         }catch (DeleteRestrictionException $deleteRestrictionException){

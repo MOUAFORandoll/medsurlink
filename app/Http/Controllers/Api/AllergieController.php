@@ -22,6 +22,11 @@ class AllergieController extends Controller
         foreach ($allergies as $allergy){
             $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
             $allergy['isAuthor']=$isAuthor->getOriginalContent();
+            $allergy['dossier']=$allergy->dossiers->first();
+            if (!is_null($allergy->dossiers->first())){
+                $allergy['patient']=$allergy->dossiers->first()->patient;
+                $allergy['user']=$allergy->dossiers->first()->patient->user;
+            }
         }
         return response()->json(['allergies'=>$allergies]);
     }
@@ -62,9 +67,13 @@ class AllergieController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $allergie = Allergie::findBySlug($slug);
+        $allergie = Allergie::whereSlug($slug)->first();
         $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergie->id,"create");
-        $allergy['isAuthor']=$isAuthor->getOriginalContent();
+        $allergie['isAuthor']=$isAuthor->getOriginalContent();
+        //Ici pour le momentm je ne recupere que le premier dossier medical
+        $allergie['patient']=$allergie->dossiers->first()->patient;
+        $allergie['dossier']=$allergie->dossiers->first();
+        $allergie['user']=$allergie->dossiers->first()->patient->user;
         return response()->json(['allergie'=>$allergie]);
 
     }

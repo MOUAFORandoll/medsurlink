@@ -23,7 +23,13 @@ class ConsultationMedecineGeneraleController extends Controller
         foreach ($consultations as $consultation){
             $user = $consultation->dossier->patient->user;
             $patient = $consultation->dossier->patient;
-            $consultation['allergies']=$consultation->dossier->allergies;
+            $allergies = $consultation->dossier->allergies;
+            foreach ($allergies as $allergy)
+            {
+                $allergieIsAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
+                $allergy['isAuthor'] = $allergieIsAuthor->getOriginalContent();
+            }
+            $consultation['allergies']= $allergies;
             $consultation['user']=$user;
             $consultation['patient']=$patient;
             $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
@@ -97,7 +103,13 @@ class ConsultationMedecineGeneraleController extends Controller
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
         $user = $consultation->dossier->patient->user;
         $patient = $consultation->dossier->patient;
-        $consultation['allergies']=$consultation->dossier->allergies;
+        $allergies = $consultation->dossier->allergies;
+       foreach ($allergies as $allergy)
+        {
+            $allergieIsAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
+            $allergy['isAuthor'] = $allergieIsAuthor->getOriginalContent();
+        }
+        $consultation['allergies']= $allergies;
         $consultation['user']=$user;
         $consultation['patient']=$patient;
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");

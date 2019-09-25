@@ -24,6 +24,13 @@ class ConsultationObstetriqueController extends Controller
         $consultationsObstetrique = ConsultationObstetrique::with(['consultationPrenatales', 'echographies', 'dossier'])->get();
         foreach ($consultationsObstetrique as $consultationObstetrique){
             $user = $consultationObstetrique->dossier->patient->user;
+            $allergies = $consultationObstetrique->dossier->allergies;
+            foreach ($allergies as $allergy)
+            {
+                $allergieIsAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
+                $allergy['isAuthor'] = $allergieIsAuthor->getOriginalContent();
+            }
+            $consultationObstetrique['allergies']= $allergies;
             $consultationObstetrique['user']=$user;
             $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$consultationObstetrique->id,"create");
             $consultationObstetrique['isAuthor']=$isAuthor->getOriginalContent();
@@ -87,6 +94,13 @@ class ConsultationObstetriqueController extends Controller
 
         $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
         $user = $consultationObstetrique->dossier->patient->user;
+        $allergies = $consultationObstetrique->dossier->allergies;
+        foreach ($allergies as $allergy)
+        {
+            $allergieIsAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
+            $allergy['isAuthor'] = $allergieIsAuthor->getOriginalContent();
+        }
+        $consultationObstetrique['allergies']= $allergies;
         $consultationObstetrique['user']=$user;
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$consultationObstetrique->id,"create");
         $consultationObstetrique['isAuthor']=$isAuthor->getOriginalContent();
