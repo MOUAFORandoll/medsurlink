@@ -50,8 +50,6 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function store(ConsutationMedecineRequest $request)
     {
-
-
         $consultation = ConsultationMedecineGenerale::create($request->validated());
         $motifs = $request->get('motifs');
         $motifACreer = $request->get('motifsACreer');
@@ -60,7 +58,8 @@ class ConsultationMedecineGeneraleController extends Controller
             foreach ( $motifACreer as $motif)
             {
                 $motif = Motif::create([
-                    'reference'=>$motif
+                    'reference'=>$motif->reference,
+                    'description'=>$motif->description
                 ]);
                 $consultation->motifs()->attach($motif->id);
             }
@@ -72,8 +71,6 @@ class ConsultationMedecineGeneraleController extends Controller
                 $consultation->motifs()->attach($motif);
             }
         }
-        $consultation->date_consultation = dateOfToday();
-        $consultation->save();
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create');
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->find($consultation->id);

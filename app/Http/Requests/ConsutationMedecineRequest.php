@@ -27,11 +27,14 @@ class ConsutationMedecineRequest extends FormRequest
     {
         return [
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
-            "date_consultation"=>"sometimes|nullable|date|after_or_equal:".Carbon::now(),
+            "date_consultation"=>"sometimes|nullable|date|after_or_equal:".Carbon::now()->format('Y-m-d'),
             "anamese"=>"sometimes|nullable|string|min:5",
             "mode_de_vie"=>"sometimes|nullable|string|min:5",
-            "motifs.*"=>"sometimes|integer|exists:motifs,id",
-            "motifsACreer.*"=>"sometimes|string|min:2",
+            "motifs"=>"required_without:motifsACreer",
+            "motifsACreer"=>"required_without:motifs",
+            "motifs.*"=>"required_without:motifsACreer|integer|exists:motifs,id",
+            "motifsACreer.*.reference"=>"required_without:motifs|string|min:2",
+            "motifsACreer.*.description"=>"required_without:motifs|string|min:2",
             "examen_clinique"=>"sometimes|nullable|string|min:2",
             "examen_complementaire"=>"sometimes|nullable|string|min:2",
         ];
