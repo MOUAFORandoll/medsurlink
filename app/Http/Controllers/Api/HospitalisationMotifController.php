@@ -29,20 +29,23 @@ class HospitalisationMotifController extends Controller
 
     public function ajouterMotif(Request $request){
         $validation = Validator::make($request->all(),[
-            "hospitalisation_id"=>"required|integer|exists:hospitalisations,id",
+            "hospitalisation" => ["required", "string", "exists:hospitalisations,slug"],
+            "reference" => ["required", "string", "max:255"],
+            "description" => ["required", "string"]
+            /*"hospitalisation_id"=>"required|integer|exists:hospitalisations,id",
             "motifs"=>"required_without:motifsACreer",
             "motifsACreer"=>"required_without:motifs",
             "motifs.*"=>"required_without:motifsACreer|integer|exists:motifs,id",
             "motifsACreer.*.reference"=>"required_without:motifs|string|min:2",
-            "motifsACreer.*.description"=>"required_without:motifs|string|min:2",
+            "motifsACreer.*.description"=>"required_without:motifs|string|min:2",*/
         ]);
 
         if ($validation->fails()){
             return response()->json(['error'=>$validation->errors()],419);
         }
 
-        $hospitalisation = Hospitalisation::find($request->get('hospitalisation_id'));
-        if (!is_null($request->get('motifs'))){
+        $hospitalisation = Hospitalisation::findBySlug($request->get('hospitalisation'));
+        /*if (!is_null($request->get('motifs'))){
             $hospitalisation->motifs()->attach($request->get('motifs'));
 
         }
@@ -58,8 +61,18 @@ class HospitalisationMotifController extends Controller
 
                 $hospitalisation->motifs()->attach($motifCreer->id);
             }
-        }
-        $hospitalisation = Hospitalisation::with('motifs')->find($request->get('hospitalisation_id'));
-        return response()->json(['hospitalisation'=>$hospitalisation]);
+        }*/
+
+        $motif = Motif::create([
+            'reference' => $request->get('reference'),
+            'description' => $request->get('description')
+        ]);
+
+        $hospitalisation->motifs()->attach($motif->id);
+
+        $hospitalisation = Hospitalisation::with('motifs')
+            ->find($request->get('hospitalisation'));
+
+        return response()->json(['hospitalisation' => $hospitalisation]);
     }
 }

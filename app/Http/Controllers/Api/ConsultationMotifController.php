@@ -69,7 +69,9 @@ class ConsultationMotifController extends Controller
 
         $consultation->motifs()->attach($motif->id);
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','conclusions'])->find($request->get('consultation'));
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','conclusions'])
+            ->find($request->get('consultation'));
+
         return response()->json(['consultation'=>$consultation]);
     }
 }
