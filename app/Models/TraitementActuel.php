@@ -18,7 +18,6 @@ class TraitementActuel extends Model
 
     protected $fillable = [
         "dossier_medical_id",
-        "intitule",
         "description",
         'slug'
     ];
@@ -32,14 +31,14 @@ class TraitementActuel extends Model
     {
         return [
             'slug' => [
-                'source' => 'IntituleAndTimestamp'
+                'source' => 'DescriptionAndTimestamp'
             ]
         ];
     }
 
-    public function getIntituleAndTimestampAttribute()
+    public function getDescriptionAndTimestampAttribute()
     {
-        return $this->intitule . ' ' . Carbon::now()->timestamp;
+        return substr($this->description,0,4) . ' ' . Carbon::now()->timestamp;
     }
 
     public function dossier()

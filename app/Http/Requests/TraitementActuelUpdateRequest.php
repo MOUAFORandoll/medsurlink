@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Request;
 
-class TraitementActuelRequest extends FormRequest
+class TraitementActuelUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +25,7 @@ class TraitementActuelRequest extends FormRequest
     {
         return [
             "dossier_medical_id" => "required|integer|exists:dossier_medicals,id",
-            "traitements.*.description" => "required|string|min:4",
+            "description" => "required|string|min:4",
         ];
     }
 }

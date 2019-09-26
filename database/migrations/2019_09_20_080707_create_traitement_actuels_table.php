@@ -17,8 +17,7 @@ class CreateTraitementActuelsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('dossier_medical_id');
             $table->string('slug')->unique();
-            $table->string('intitule');
-            $table->text('description')->nullable();
+            $table->text('description');
             $table->timestamps();
             $table->softDeletes();
         });

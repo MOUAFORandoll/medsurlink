@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\TraitementActuelRequest;
+use App\Http\Requests\TraitementActuelUpdateRequest;
+use App\Models\DossierMedical;
 use App\Models\TraitementActuel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -43,12 +45,18 @@ class TraitementActuelController extends Controller
      */
     public function store(TraitementActuelRequest $request)
     {
-        $traitement = TraitementActuel::create($request->validated());
+        $traitements = $request->get('traitements');
+        foreach ($traitements as $traitement){
+          $traitementCreer =   TraitementActuel::create([
+                'dossier_medical_id'=>$request->get('dossier_medical_id'),
+                'description'=>$traitement['description']
+            ]);
+            defineAsAuthor("TraitementActuel", $traitementCreer->id,'create');
 
-        defineAsAuthor("TraitementActuel", $traitement->id,'create');
-
+        }
+        $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique','traitements'])->whereId($request->get('dossier_medical_id'))->first();
         return response()->json([
-            'traitement' => $traitement
+            'dossier' => $dossier
         ]);
     }
 
@@ -92,7 +100,7 @@ class TraitementActuelController extends Controller
      * @param $slug
      * @return \Illuminate\Http\Response
      */
-    public function update(TraitementActuelRequest $request, $slug)
+    public function update(TraitementActuelUpdateRequest $request, $slug)
     {
         $validation = validatedSlug($slug,$this->table);
 
@@ -116,7 +124,7 @@ class TraitementActuelController extends Controller
         }
 
         TraitementActuel::whereSlug($slug)->update($request->validated());
-        $traitement = TraitementActuel::findBySlug($slug);
+        $traitement = TraitementActuel::with('dossier')->whereSlug($slug)->first();
 
         return response()->json([
             'traitement' => $traitement
@@ -136,11 +144,16 @@ class TraitementActuelController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $traitement = TraitementActuel::findBySlug($slug);
+        $traitement = TraitementActuel::with('dossier')->whereSlug($slug)->first();
         $traitement->delete();
 
+//        return response()->json([
+//            'traitement' => $traitement
+//        ]);
+//
+        $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique','traitements'])->whereId($traitement->dossier->id)->first();
         return response()->json([
-            'traitement' => $traitement
+            'dossier' => $dossier
         ]);
     }
 }

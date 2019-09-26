@@ -22,7 +22,7 @@ class DossierMedicalController extends Controller
      */
     public function index()
     {
-        $dossiers = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique'])->get();
+        $dossiers = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique','traitements'])->get();
         foreach ($dossiers as $dossier){
                 $user = $dossier->patient->user;
                 $dossier['user'] = $user;
@@ -78,7 +78,7 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique'])->whereSlug($slug)->first();
+        $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique','traitements'])->whereSlug($slug)->first();
         $user = $dossier->patient->user;
         $dossier['user'] = $user;
         return response()->json(['dossier'=>$dossier]);
