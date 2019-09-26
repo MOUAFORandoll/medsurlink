@@ -5,9 +5,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/TraitementActuelController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/TraitementActuelController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/TraitementActuelRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/TraitementActuelRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/TraitementActuel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/TraitementActuel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_09_20_080707_create_traitement_actuels_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_09_20_080707_create_traitement_actuels_table.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -344,7 +341,7 @@
       <workItem from="1569396368771" duration="11414000" />
       <workItem from="1569412639526" duration="7752000" />
       <workItem from="1569493823050" duration="8835000" />
-      <workItem from="1569518719073" duration="2227000" />
+      <workItem from="1569518719073" duration="3674000" />
     </task>
     <servers />
   </component>

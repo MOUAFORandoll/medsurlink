@@ -55,6 +55,10 @@ class TraitementActuelController extends Controller
 
         }
         $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique','traitements'])->whereId($request->get('dossier_medical_id'))->first();
+        foreach ($dossier->traitements as $traitement){
+            $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
+            $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
+        }
         return response()->json([
             'dossier' => $dossier
         ]);
@@ -152,7 +156,11 @@ class TraitementActuelController extends Controller
 //        ]);
 //
         $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique','traitements'])->whereId($traitement->dossier->id)->first();
-        return response()->json([
+        foreach ($dossier->traitements as $traitement){
+            $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
+            $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
+        }
+       return response()->json([
             'dossier' => $dossier
         ]);
     }

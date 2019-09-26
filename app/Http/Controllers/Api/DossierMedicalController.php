@@ -24,6 +24,10 @@ class DossierMedicalController extends Controller
     {
         $dossiers = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique','traitements'])->get();
         foreach ($dossiers as $dossier){
+                foreach ($dossier->traitements as $traitement){
+                    $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
+                    $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
+                }
                 $user = $dossier->patient->user;
                 $dossier['user'] = $user;
         }
