@@ -29,20 +29,22 @@ class ConsultationMotifController extends Controller
 
     public function ajouterMotif(Request $request){
         $validation = Validator::make($request->all(),[
-            "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
-            "motifs"=>"required_without:motifsACreer",
+            "consultation"=>"required|string|exists:consultation_medecine_generales,slug",
+            "reference" => ["required", "string", "max:255"],
+            "description" => ["required", "string"]
+            /*"motifs"=>"required_without:motifsACreer",
             "motifsACreer"=>"required_without:motifs",
             "motifs.*"=>"required_without:motifsACreer|integer|exists:motifs,id",
             "motifsACreer.*.reference"=>"required_without:motifs|string|min:2",
-            "motifsACreer.*.description"=>"required_without:motifs|string|min:2",
+            "motifsACreer.*.description"=>"required_without:motifs|string|min:2",*/
         ]);
 
         if ($validation->fails()){
             return response()->json(['error'=>$validation->errors()],419);
         }
 
-        $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
-        if (!is_null($request->get('motifs'))){
+        $consultation = ConsultationMedecineGenerale::findBySlug($request->get('consultation'));
+        /*if (!is_null($request->get('motifs'))){
             $consultation->motifs()->attach($request->get('motifs'));
 
         }
@@ -58,8 +60,18 @@ class ConsultationMotifController extends Controller
 
                 $consultation->motifs()->attach($motifCreer->id);
             }
-        }
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','conclusions'])->find($request->get('consultation'));
+        }*/
+
+        $motif = Motif::create([
+            'reference' => $request->get('reference'),
+            'description' => $request->get('description')
+        ]);
+
+        $consultation->motifs()->attach($motif->id);
+
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','conclusions'])
+            ->find($request->get('consultation'));
+
         return response()->json(['consultation'=>$consultation]);
     }
 }

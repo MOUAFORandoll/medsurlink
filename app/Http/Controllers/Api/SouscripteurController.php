@@ -74,7 +74,7 @@ class SouscripteurController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $souscripteur = Souscripteur::with('user','patients')->whereSlug($slug)->first();
+        $souscripteur = Souscripteur::with('user','patients.user')->whereSlug($slug)->first();
         return response()->json(['souscripteur'=>$souscripteur]);
 
     }
