@@ -54,7 +54,17 @@ class TraitementActuelController extends Controller
             defineAsAuthor("TraitementActuel", $traitementCreer->id,'create');
 
         }
-        $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique','traitements'])->whereId($request->get('dossier_medical_id'))->first();
+        $dossier = DossierMedical::with([
+            'allergies'=> function ($query) {
+                $query->orderBy('date', 'desc');
+            },
+            'patient',
+            'consultationsMedecine',
+            'consultationsObstetrique',
+            'traitements'=> function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }
+        ])->whereId($request->get('dossier_medical_id'))->first();
         foreach ($dossier->traitements as $traitement){
             $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
             $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
@@ -157,7 +167,17 @@ class TraitementActuelController extends Controller
 //            'traitement' => $traitement
 //        ]);
 //
-        $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique','traitements'])->whereId($traitement->dossier->id)->first();
+        $dossier = DossierMedical::with([
+            'allergies'=> function ($query) {
+                $query->orderBy('date', 'desc');
+            },
+            'patient',
+            'consultationsMedecine',
+            'consultationsObstetrique',
+            'traitements'=> function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }
+        ])->whereId($traitement->dossier->id)->first();
         foreach ($dossier->traitements as $traitement){
             $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
             $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();

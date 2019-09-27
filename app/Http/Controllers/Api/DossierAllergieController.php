@@ -32,7 +32,14 @@ class DossierAllergieController extends Controller
 
         $dossier->allergies()->detach($request->get('allergies'));
 
-        $dossier = DossierMedical::with(['patient','consultationsObstetrique','consultationsMedecine','allergies'])->find($request->get('dossier'));
+        $dossier = DossierMedical::with([
+            'patient',
+            'consultationsObstetrique',
+            'consultationsMedecine',
+            'allergies'=> function ($query) {
+                $query->orderBy('date', 'desc');
+            }
+            ])->find($request->get('dossier'));
         return response()->json(['dossier'=>$dossier]);
     }
 
@@ -73,7 +80,14 @@ class DossierAllergieController extends Controller
         }
 
         defineAsAuthor("DossierAllergie",$dossier->id,'attach');
-        $dossier = DossierMedical::with(['patient','consultationsObstetrique','consultationsMedecine','allergies'])->find($request->get('dossier'));
+        $dossier = DossierMedical::with([
+            'patient',
+            'consultationsObstetrique',
+            'consultationsMedecine',
+            'allergies'=> function ($query) {
+                $query->orderBy('date', 'desc');
+            }
+        ])->find($request->get('dossier'));
         return response()->json(['dossier'=>$dossier]);
     }
 }

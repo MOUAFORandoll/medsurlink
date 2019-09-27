@@ -22,7 +22,17 @@ class DossierMedicalController extends Controller
      */
     public function index()
     {
-        $dossiers = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique','traitements'])->get();
+        $dossiers = DossierMedical::with([
+            'allergies'=> function ($query) {
+                $query->orderBy('date', 'desc');
+            },
+            'patient',
+            'consultationsMedecine',
+            'consultationsObstetrique',
+            'traitements'=> function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }
+        ])->get();
         foreach ($dossiers as $dossier){
                 foreach ($dossier->traitements as $traitement){
                     $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
@@ -82,7 +92,17 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique','traitements'])->whereSlug($slug)->first();
+        $dossier = DossierMedical::with([
+            'allergies'=> function ($query) {
+                $query->orderBy('date', 'desc');
+            },
+            'patient',
+            'consultationsMedecine',
+            'consultationsObstetrique',
+            'traitements'=> function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }
+        ])->whereSlug($slug)->first();
         foreach ($dossier->traitements as $traitement){
             $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
             $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
@@ -127,7 +147,13 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
         try{
-            $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique'])->whereSlug($slug)->first();
+            $dossier = DossierMedical::with([
+                'allergies'=> function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                },
+                'patient',
+                'consultationsMedecine',
+                'consultationsObstetrique'])->whereSlug($slug)->first();
             $dossier->delete();
             return response()->json(['dossier'=>$dossier]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
