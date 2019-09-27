@@ -83,6 +83,10 @@ class DossierMedicalController extends Controller
             return $validation;
 
         $dossier = DossierMedical::with(['allergies','patient','consultationsMedecine','consultationsObstetrique','traitements'])->whereSlug($slug)->first();
+        foreach ($dossier->traitements as $traitement){
+            $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
+            $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
+        }
         $user = $dossier->patient->user;
         $dossier['user'] = $user;
         return response()->json(['dossier'=>$dossier]);

@@ -80,7 +80,9 @@ class TraitementActuelController extends Controller
         $traitement = TraitementActuel::with('dossier')
             ->whereSlug($slug)
             ->first();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel", $traitement->id,"create");
 
+        $traitement['isAuthor'] = $isAuthor->getOriginalContent();
         return response()->json([
             'traitement' => $traitement
         ]);

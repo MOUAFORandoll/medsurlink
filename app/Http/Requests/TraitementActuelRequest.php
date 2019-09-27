@@ -29,4 +29,8 @@ class TraitementActuelRequest extends FormRequest
             "traitements.*.description" => "required|string|min:4",
         ];
     }
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        Request::merge(['error'=>$validator->errors()->getMessages()]);
+    }
 }

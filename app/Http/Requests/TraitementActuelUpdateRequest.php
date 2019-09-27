@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Request;
 
 class TraitementActuelUpdateRequest extends FormRequest
 {
@@ -27,5 +28,9 @@ class TraitementActuelUpdateRequest extends FormRequest
             "dossier_medical_id" => "required|integer|exists:dossier_medicals,id",
             "description" => "required|string|min:4",
         ];
+    }
+    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
+    {
+        Request::merge(['error'=>$validator->errors()->getMessages()]);
     }
 }
