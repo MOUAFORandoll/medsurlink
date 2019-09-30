@@ -18,6 +18,10 @@ class MotifController extends Controller
     public function index()
     {
         $motifs = Motif::all();
+        foreach ($motifs as $motif){
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$motif->id,"create");
+            $motif['isAuthor'] = $isAuthor->getOriginalContent();
+        }
         return response()->json(['motifs'=>$motifs]);
     }
 
@@ -60,6 +64,8 @@ class MotifController extends Controller
             return $validation;
 
         $motif = Motif::findBySlug($slug);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$motif->id,"create");
+        $motif['isAuthor'] = $isAuthor->getOriginalContent();
         return response()->json(['motif'=>$motif]);
     }
 

@@ -18,6 +18,10 @@ class AntecedentController extends Controller
     public function index()
     {
         $antecedents = Antecedent::with('dossier')->get();
+        foreach ($antecedents as $antecedent){
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$antecedent->id,"create");
+            $antecedent['isAuthor'] = $isAuthor->getOriginalContent();
+        }
         return response()->json(['antecedents'=>$antecedents]);
     }
 
@@ -60,6 +64,8 @@ class AntecedentController extends Controller
             return $validation;
 
         $antecedent = Antecedent::with('dossier')->whereSlug($slug)->first();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$antecedent->id,"create");
+        $antecedent['isAuthor'] = $isAuthor->getOriginalContent();
         return response()->json(['antecedent'=>$antecedent]);
 
     }
