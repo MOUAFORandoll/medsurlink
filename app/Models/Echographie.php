@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
+use App\Scopes\RestrictConsultationObstetriqueScope;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -46,5 +47,16 @@ class Echographie extends Model
     }
     public function consultation(){
         return $this->belongsTo(ConsultationObstetrique::class,'consultation_obstetrique_id','id');
+    }
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new RestrictConsultationObstetriqueScope);
     }
 }

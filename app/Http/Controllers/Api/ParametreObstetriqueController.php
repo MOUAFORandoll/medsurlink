@@ -19,6 +19,10 @@ class ParametreObstetriqueController extends Controller
     public function index()
     {
         $parametresObs = ParametreObstetrique::with(['consultationPrenatale'])->get();
+        foreach ($parametresObs as $parametresOb){
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$parametresOb->id,"create");
+            $parametresOb['isAuthor'] = $isAuthor->getOriginalContent();
+        }
         return response()->json(['parametresObs'=>$parametresObs]);
     }
 
@@ -60,6 +64,8 @@ class ParametreObstetriqueController extends Controller
             return $validation;
 
         $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->whereSlug($slug)->first();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$parametreObs->id,"create");
+        $parametreObs['isAuthor'] = $isAuthor->getOriginalContent();
         return response()->json(['parametreObs'=>$parametreObs]);
 
     }

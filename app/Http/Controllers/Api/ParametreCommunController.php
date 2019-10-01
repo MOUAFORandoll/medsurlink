@@ -18,6 +18,11 @@ class ParametreCommunController extends Controller
     public function index()
     {
         $parametresCommun = ParametreCommun::with('consultation')->get();
+        foreach($parametresCommun as $item){
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$item->id,"create");
+            $item['isAuthor'] = $isAuthor->getOriginalContent();
+        }
+
         return response()->json(['parametresCommun'=>$parametresCommun]);
     }
 
@@ -65,6 +70,8 @@ class ParametreCommunController extends Controller
             return $validation;
 
         $parametreCommun = ParametreCommun::with('consultation')->whereSlug($slug)->first();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$parametreCommun->id,"create");
+        $item['isAuthor'] = $isAuthor->getOriginalContent();
         return response()->json(['parametreCommun'=>$parametreCommun]);
 
     }

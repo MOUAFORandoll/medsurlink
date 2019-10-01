@@ -19,6 +19,10 @@ class ConclusionController extends Controller
     public function index()
     {
         $conclusions = Conclusion::with(['consultationMedecine'])->get();
+        foreach ($conclusions as $conclusion){
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Conclusion",$conclusion->id,"create");
+            $conclusion['isAuthor'] = $isAuthor->getOriginalContent();
+        }
         return response()->json(['conclusions'=>$conclusions]);
     }
 
@@ -61,6 +65,8 @@ class ConclusionController extends Controller
             return $validation;
 
         $conclusion = Conclusion::with(['consultationMedecine'])->whereSlug($slug)->first();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Conclusion",$conclusion->id,"create");
+        $conclusion['isAuthor'] = $isAuthor->getOriginalContent();
         return response()->json(['conclusion'=>$conclusion]);
 
     }

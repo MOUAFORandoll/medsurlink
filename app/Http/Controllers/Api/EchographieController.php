@@ -21,6 +21,10 @@ class EchographieController extends Controller
     public function index()
     {
         $echographies = Echographie::with('consultation')->get();
+        foreach ($echographies as $echography){
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$echography->id,"create");
+            $echography['isAuthor'] = $isAuthor->getOriginalContent();
+        }
         return response()->json(['echographies'=>$echographies]);
     }
 
@@ -62,6 +66,8 @@ class EchographieController extends Controller
             return $validation;
 
         $echographie = Echographie::with('consultation')->whereSlug($slug)->first();
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$echographie->id,"create");
+        $echographie['isAuthor'] = $isAuthor->getOriginalContent();
         return response()->json(['echographie'=>$echographie]);
     }
 
