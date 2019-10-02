@@ -2,12 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConclusionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConclusionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/EchographieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/EchographieController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreCommunController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreCommunController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreObstetriqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Echographie.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Echographie.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Hospitalisation.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Hospitalisation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -53,7 +53,14 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
-        <item name="hospitalisations: table" type="dbc44a63:MariaImplModel$Table" />
+        <item name="resultat_imageries: table" type="dbc44a63:MariaImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="resultat_labos: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -65,6 +72,13 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="C:\xampp\htdocs\medicalink-app\.idea" />
+      </set>
+    </option>
   </component>
   <component name="PhpWorkspaceProjectConfiguration">
     <include_path>
@@ -194,7 +208,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/Scopes" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
@@ -250,7 +264,17 @@
     <option name="allServicesViewState">
       <serviceView>
         <treeState>
-          <expand />
+          <expand>
+            <path>
+              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@756a8756" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+            </path>
+            <path>
+              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@756a8756" type="7427dc5b:ServiceModel$ServiceGroupNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@9f68db8" type="9fbbdea:ServiceModel$ServiceNode" />
+            </path>
+          </expand>
           <select />
         </treeState>
       </serviceView>
@@ -356,7 +380,8 @@
       <workItem from="1569587030172" duration="2444000" />
       <workItem from="1569831845961" duration="7177000" />
       <workItem from="1569843390119" duration="2904000" />
-      <workItem from="1569915355069" duration="615000" />
+      <workItem from="1569915355069" duration="7388000" />
+      <workItem from="1570007042134" duration="3059000" />
     </task>
     <servers />
   </component>

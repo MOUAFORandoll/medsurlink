@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\HospitalisationRequest;
 use App\Models\Hospitalisation;
+use Carbon\Carbon;
 
 class HospitalisationController extends Controller
 {
@@ -141,5 +142,53 @@ class HospitalisationController extends Controller
 
         $hospitalisation->delete();
         return response()->json(['hospitalisation'=>$hospitalisation]);
+    }
+
+    /**
+     * Archieved the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function archiver($slug)
+    {
+        $validation = validatedSlug($slug,$this->table);
+        if(!is_null($validation))
+            return $validation;
+
+        $resultat = Hospitalisation::with(['dossier','motifs'])->whereSlug($slug)->first();
+        if (is_null($resultat->passed_at)){
+            $transmission = [];
+            $transmission['nonTransmis'][0] = "Ce resultat n'a pas encoré été transmis";
+            return response()->json(['error'=>$transmission],419 );
+        }else{
+            $resultat->archieved_at = Carbon::now();
+            $resultat->save();
+            defineAsAuthor("Hospitalisation",$resultat->id,'archive');
+            return response()->json(['resultat'=>$resultat]);
+        }
+    }
+
+    /**
+     * Passed the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function transmettre($slug)
+    {
+        $validation = validatedSlug($slug,$this->table);
+        if(!is_null($validation))
+            return $validation;
+
+        $resultat = Hospitalisation::with(['dossier','motifs'])->whereSlug($slug)->first();
+        $resultat->passed_at = Carbon::now();
+        $resultat->save();
+        defineAsAuthor("Hospitalisation",$resultat->id,'transmettre');
+
+        return response()->json(['resultat'=>$resultat]);
+
     }
 }

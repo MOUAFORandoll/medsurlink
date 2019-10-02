@@ -28,6 +28,8 @@ class Hospitalisation extends Model
         'slug',
         "examen_clinique",
         "examen_complementaire",
+        'archieved_at',
+        'passed_at',
     ];
     use Sluggable;
     use SluggableScopeHelpers;

@@ -64,6 +64,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien']], function () 
     Route::put('consultation-medecine/{id}/transmettre','Api\ConsultationMedecineGeneraleController@transmettre');
     Route::put('consultation-obstetrique/{id}/transmettre','Api\ConsultationObstetriqueController@transmettre');
     Route::put('consultation-prenatale/{id}/transmettre','Api\ConsultationPrenantaleController@transmettre');
+    Route::put('hospitalisation/{hospitalisation}/transmettre','Api\HospitalisationController@transmettre');
+
 
 });
 
@@ -78,6 +80,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], funct
 //    Route::resource('medecin-controle','Api\MedecinControleController')->except('store','update','destroy');
     //Route::put('resultat/{resultat}/archiver','Api\ResultatController@archiver');
     Route::put('resultat-labo/{resultat}/archiver','Api\ResultatLaboController@archive');
+    Route::put('hospitalisation/{hospitalisation}/archiver','Api\HospitalisationController@archive');
     Route::put('resultat-imagerie/{resultat}/archiver','Api\ResultatImagerieController@archive');
     Route::put('consultation-medecine/{consultation_medecine}/archiver','Api\ConsultationMedecineGeneraleController@archiver');
     Route::put('consultation-obstetrique/{consultation_obstetrique}/archiver','Api\ConsultationObstetriqueController@archiver');
