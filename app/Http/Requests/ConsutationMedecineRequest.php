@@ -37,6 +37,7 @@ class ConsutationMedecineRequest extends FormRequest
             "motifsACreer.*.description"=>"required_without:motifs|string|min:2",
             "examen_clinique"=>"sometimes|nullable|string|min:2",
             "examen_complementaire"=>"sometimes|nullable|string|min:2",
+            "traitement_propose"=>"sometimes|nullable|string|min:2",
         ];
     }
 

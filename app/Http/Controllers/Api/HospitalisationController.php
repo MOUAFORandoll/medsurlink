@@ -163,7 +163,7 @@ class HospitalisationController extends Controller
             $transmission['nonTransmis'][0] = "Ce resultat n'a pas encoré été transmis";
             return response()->json(['error'=>$transmission],419 );
         }else{
-            $resultat->archieved_at = Carbon::now();
+            $resultat->archived_at = Carbon::now();
             $resultat->save();
             defineAsAuthor("Hospitalisation",$resultat->id,'archive');
             return response()->json(['resultat'=>$resultat]);

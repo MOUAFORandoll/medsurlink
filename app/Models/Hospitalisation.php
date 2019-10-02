@@ -28,6 +28,7 @@ class Hospitalisation extends Model
         'slug',
         "examen_clinique",
         "examen_complementaire",
+        "traitement_propose",
         'archieved_at',
         'passed_at',
     ];

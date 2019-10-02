@@ -50,6 +50,7 @@ class ConsultationMedecineGenerale extends Model
         'slug',
         "examen_clinique",
         "examen_complementaire",
+        'traitement_propose'
     ];
 
     public function dossier(){

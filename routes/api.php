@@ -80,7 +80,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], funct
 //    Route::resource('medecin-controle','Api\MedecinControleController')->except('store','update','destroy');
     //Route::put('resultat/{resultat}/archiver','Api\ResultatController@archiver');
     Route::put('resultat-labo/{resultat}/archiver','Api\ResultatLaboController@archive');
-    Route::put('hospitalisation/{hospitalisation}/archiver','Api\HospitalisationController@archive');
+    Route::put('hospitalisation/{hospitalisation}/archiver','Api\HospitalisationController@archiver');
     Route::put('resultat-imagerie/{resultat}/archiver','Api\ResultatImagerieController@archive');
     Route::put('consultation-medecine/{consultation_medecine}/archiver','Api\ConsultationMedecineGeneraleController@archiver');
     Route::put('consultation-obstetrique/{consultation_obstetrique}/archiver','Api\ConsultationObstetriqueController@archiver');
