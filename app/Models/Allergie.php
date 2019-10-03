@@ -44,7 +44,7 @@ class Allergie extends Model
         return $this->belongsToMany(DossierMedical::class,'dossier_allergie','allergie_id','dossier_medical_id');
     }
 
-    public function updateItem(){
+    public function updateAllergyItem(){
         $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$this->id,"create");
         $this['isAuthor']=$isAuthor->getOriginalContent();
         $this['dossier']=$this->dossiers->first();

@@ -30,20 +30,9 @@ class ConsutationMedecineRequest extends FormRequest
             "date_consultation"=>"sometimes|nullable|date|after_or_equal:".Carbon::now()->format('Y-m-d'),
             "anamese"=>"sometimes|nullable|string|min:5",
             "mode_de_vie"=>"sometimes|nullable|string|min:5",
-            "motifs"=>"required_without:motifsACreer",
-            "motifsACreer"=>"required_without:motifs",
-            "motifs.*"=>"required_without:motifsACreer|integer|exists:motifs,id",
-            "motifsACreer.*.reference"=>"required_without:motifs|string|min:2",
-            "motifsACreer.*.description"=>"required_without:motifs|string|min:2",
             "examen_clinique"=>"sometimes|nullable|string|min:2",
             "examen_complementaire"=>"sometimes|nullable|string|min:2",
             "traitement_propose"=>"sometimes|nullable|string|min:2",
         ];
-    }
-
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        Request::merge(['error'=>$validator->errors()->getMessages()]);
-
     }
 }

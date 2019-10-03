@@ -42,4 +42,10 @@ class Antecedent extends Model
     public function dossier(){
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }
+
+    public function updateAntecedentItem(){
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$this->id,"create");
+        $this['isAuthor'] = $isAuthor->getOriginalContent();
+    }
+
 }

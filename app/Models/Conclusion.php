@@ -41,4 +41,9 @@ class Conclusion extends Model
     public function consultationMedecine(){
         return $this->belongsTo(ConsultationMedecineGenerale::class,'consultation_medecine_generale_id','id');
     }
+
+    public function updateConclusionItem(){
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Conclusion",$this->id,"create");
+        $this['isAuthor'] = $isAuthor->getOriginalContent();
+    }
 }

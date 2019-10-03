@@ -33,8 +33,5 @@ class AffiliationRequest extends FormRequest
             "date_fin"=>"sometimes|nullable|date|after_or_equal:date_debut",
         ];
     }
-    protected  function  failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        Request::merge(['error'=>$validator->errors()->getMessages()]);
-    }
+
 }

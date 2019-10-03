@@ -49,10 +49,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
         if ($exception instanceof RelationNotFoundException){
             return  response()->json(['error'=>$exception->getMessage(),'type'=>'Eloquent'],422);
@@ -67,7 +63,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof PersonnnalException ) {
-            return response()->json(['error'=>$exception->getErrorMessage(),'type'=>'Database'],419);
+            return response()->json(['error'=>$exception->getErrorMessage(),'type'=>'Database or logic'],419);
         }
 
         if ($exception instanceof \Swift_TransportException ) {

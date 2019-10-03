@@ -30,9 +30,5 @@ class ConclusionRequest extends FormRequest
             "description"=>"required|string|min:3",
         ];
     }
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        Request::merge(['error'=>$validator->errors()->getMessages()]);
 
-    }
 }

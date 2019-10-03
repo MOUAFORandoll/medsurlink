@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ConclusionRequest;
 use App\Models\Conclusion;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class ConclusionController extends Controller
 {
+    use PersonnalErrors;
     protected $table = "conclusions";
 
     /**
@@ -19,10 +20,11 @@ class ConclusionController extends Controller
     public function index()
     {
         $conclusions = Conclusion::with(['consultationMedecine'])->get();
+
         foreach ($conclusions as $conclusion){
-            $isAuthor = checkIfIsAuthorOrIsAuthorized("Conclusion",$conclusion->id,"create");
-            $conclusion['isAuthor'] = $isAuthor->getOriginalContent();
+            $conclusion->updateConclusionItem();
         }
+
         return response()->json(['conclusions'=>$conclusions]);
     }
 
@@ -46,6 +48,7 @@ class ConclusionController extends Controller
     {
 
         $conclusion = Conclusion::create($request->validated());
+
         defineAsAuthor("Conclusion",$conclusion->id,'create');
 
         return response()->json(['conclusion'=>$conclusion]);
@@ -55,18 +58,18 @@ class ConclusionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $conclusion = Conclusion::with(['consultationMedecine'])->whereSlug($slug)->first();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Conclusion",$conclusion->id,"create");
-        $conclusion['isAuthor'] = $isAuthor->getOriginalContent();
+
+        $conclusion->updateConclusionItem();
+
         return response()->json(['conclusion'=>$conclusion]);
 
     }
@@ -85,43 +88,42 @@ class ConclusionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param ConclusionRequest $request
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(ConclusionRequest $request, $slug)
     {
 
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
+
         $conclusion = Conclusion::findBySlug($slug);
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$conclusion->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 );
-        }
+
+        $this->checkIfAuthorized("ConsutationMedecine",$conclusion->id,"create");
 
         Conclusion::whereSlug($slug)->update($request->validated());
+
         $conclusion = Conclusion::with(['consultationMedecine'])->whereSlug($slug)->first();
+
         return response()->json(['conclusion'=>$conclusion]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $conclusion = Conclusion::with(['consultationMedecine'])->whereSlug($slug)->first();
         $conclusion->delete();
+
         return response()->json(['conclusion'=>$conclusion]);
     }
 }

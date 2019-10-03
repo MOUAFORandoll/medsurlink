@@ -22,7 +22,7 @@ class AllergieController extends Controller
         $allergies = Allergie::all();
 
         foreach ($allergies as $allergy){
-            $allergy->updateItem();
+            $allergy->updateAllergyItem();
         }
 
         return response()->json(['allergies'=>$allergies]);
@@ -64,7 +64,7 @@ class AllergieController extends Controller
 
         $allergie = Allergie::whereSlug($slug)->first();
 
-        $allergie->updateItem();
+        $allergie->updateAllergyItem();
 
         return response()->json(['allergie'=>$allergie]);
 
@@ -94,7 +94,7 @@ class AllergieController extends Controller
 
         $this->validatedSlug($slug,$this->table);
 
-        $allergie = Allergie::whereSlug($slug)->first();
+        $allergie = Allergie::findBySlug($slug);
 
         $this->checkIfAuthorized("Allergie",$allergie->id,"create");
 

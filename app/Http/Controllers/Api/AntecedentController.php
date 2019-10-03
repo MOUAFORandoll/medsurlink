@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AntecedentRequest;
 use App\Models\Antecedent;
 use Illuminate\Http\Request;
@@ -9,7 +10,9 @@ use App\Http\Controllers\Controller;
 
 class AntecedentController extends Controller
 {
+    use PersonnalErrors;
     protected $table = "antecedents";
+
     /**
      * Display a listing of the resource.
      *
@@ -19,8 +22,7 @@ class AntecedentController extends Controller
     {
         $antecedents = Antecedent::with('dossier')->get();
         foreach ($antecedents as $antecedent){
-            $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$antecedent->id,"create");
-            $antecedent['isAuthor'] = $isAuthor->getOriginalContent();
+            $antecedent->updateAntecedentItem();
         }
         return response()->json(['antecedents'=>$antecedents]);
     }
@@ -45,27 +47,28 @@ class AntecedentController extends Controller
     {
 
         $antecedent = Antecedent::create($request->validated());
+
         defineAsAuthor("Antecedent",$antecedent->id,'create');
 
         $antecedent = Antecedent::with('dossier')->whereSlug($antecedent->slug)->first();
+
         return response()->json(['antecedent'=>$antecedent]);
     }
 
+
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $slug
+     * @return \Illuminate\Http\JsonResponse|null
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $antecedent = Antecedent::with('dossier')->whereSlug($slug)->first();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$antecedent->id,"create");
-        $antecedent['isAuthor'] = $isAuthor->getOriginalContent();
+
+        $antecedent->updateAntecedentItem();
+
         return response()->json(['antecedent'=>$antecedent]);
 
     }
@@ -81,27 +84,24 @@ class AntecedentController extends Controller
         //
     }
 
+
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param AntecedentRequest $request
+     * @param $slug
+     * @return \Illuminate\Http\JsonResponse|null
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(AntecedentRequest $request, $slug)
     {
 
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
+
         $antecedent = Antecedent::whereSlug($slug)->first();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$antecedent->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 );
-        }
+
+        $this->checkIfAuthorized("Antecedent",$antecedent->id,"create");
+
         Antecedent::whereSlug($slug)->update($request->validated());
+
         $antecedent = Antecedent::with('dossier')->whereSlug($slug)->first();
 
         return response()->json(['antecedent'=>$antecedent]);
@@ -115,20 +115,15 @@ class AntecedentController extends Controller
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $antecedent = Antecedent::whereSlug($slug)->first();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$antecedent->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 );
-        }
+
+        $this->checkIfAuthorized("Antecedent",$antecedent->id,"create");
 
         $antecedent = Antecedent::with('dossier')->whereSlug($slug)->first();
         $antecedent->delete();
+
         return response()->json(['antecedent'=>$antecedent]);
     }
 }

@@ -32,9 +32,5 @@ class AntecedentRequest extends FormRequest
             "type"=>"required|string|min:2",
         ];
     }
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        Request::merge(['error'=>$validator->errors()->getMessages()]);
 
-    }
 }

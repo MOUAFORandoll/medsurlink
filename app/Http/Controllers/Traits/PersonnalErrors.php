@@ -49,5 +49,7 @@ trait PersonnalErrors
         if($isAuthor->getOriginalContent() == false){
             $this->revealError('accessRefuse',$this->accessRefuse);
         }
+
+        return true;
     }
 }

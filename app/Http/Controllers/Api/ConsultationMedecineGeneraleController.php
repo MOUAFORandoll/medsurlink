@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ConsutationMedecineRequest;
 use App\Models\ConsultationMedecineGenerale;
-use App\Models\Motif;
 use Carbon\Carbon;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class ConsultationMedecineGeneraleController extends Controller
 {
+    use PersonnalErrors;
     protected $table = 'consultation_medecine_generales';
+
     /**
      * Display a listing of the resource.
      *
@@ -20,21 +22,11 @@ class ConsultationMedecineGeneraleController extends Controller
     public function index()
     {
         $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->get();
+
         foreach ($consultations as $consultation){
-            $user = $consultation->dossier->patient->user;
-            $patient = $consultation->dossier->patient;
-            $allergies = $consultation->dossier->allergies;
-            foreach ($allergies as $allergy)
-            {
-                $allergieIsAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
-                $allergy['isAuthor'] = $allergieIsAuthor->getOriginalContent();
-            }
-            $consultation['allergies']= $allergies;
-            $consultation['user']=$user;
-            $consultation['patient']=$patient;
-            $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
-            $consultation['isAuthor']=$isAuthor->getOriginalContent();
+            $consultation->updateConsultationObstetric();
         }
+
         return response()->json(["consultations"=>$consultations]);
     }
 
@@ -57,33 +49,12 @@ class ConsultationMedecineGeneraleController extends Controller
     public function store(ConsutationMedecineRequest $request)
     {
         $consultation = ConsultationMedecineGenerale::create($request->validated());
-        $motifs = $request->get('motifs');
-        $motifACreer = $request->get('motifsACreer');
-//         motif
-        if (!is_null($motifACreer) or !empty($motifACreer)){
-            foreach ( $motifACreer as $motif)
-            {
-                $motif = Motif::create([
-                    'reference'=>$motif->reference,
-                    'description'=>$motif->description
-                ]);
-                $consultation->motifs()->attach($motif->id);
-            }
-        }
 
-        if (!is_null($motifs) or !empty($motifs)){
-            foreach ( $motifs as $motif)
-            {
-                $consultation->motifs()->attach($motif);
-            }
-        }
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create');
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->find($consultation->id);
-        $user = $consultation->dossier->patient->user;
-        $patient = $consultation->dossier->patient;
-        $consultation['user']=$user;
-        $consultation['patient']=$patient;
+
+        $consultation->updateConsultationObstetric();
 
         return response()->json(["consultation"=>$consultation]);
     }
@@ -91,29 +62,18 @@ class ConsultationMedecineGeneraleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
-        $user = $consultation->dossier->patient->user;
-        $patient = $consultation->dossier->patient;
-        $allergies = $consultation->dossier->allergies;
-       foreach ($allergies as $allergy)
-        {
-            $allergieIsAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
-            $allergy['isAuthor'] = $allergieIsAuthor->getOriginalContent();
-        }
-        $consultation['allergies']= $allergies;
-        $consultation['user']=$user;
-        $consultation['patient']=$patient;
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
-        $consultation['isAuthor']=$isAuthor->getOriginalContent();
+
+        $consultation->updateConsultationObstetric();
+
         return response()->json(["consultation"=>$consultation]);
 
     }
@@ -132,55 +92,46 @@ class ConsultationMedecineGeneraleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param ConsutationMedecineRequest $request
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(ConsutationMedecineRequest $request, $slug)
     {
 
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $consultation = ConsultationMedecineGenerale::findBySlug($slug);
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez effectuer cette action";
-            return response()->json(['error'=>$transmission],419 );
-        }
+
+        $this->checkIfAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
 
         ConsultationMedecineGenerale::whereSlug($slug)->update($request->validated());
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
-        $user = $consultation->dossier->patient->user;
-        $patient = $consultation->dossier->patient;
-        $consultation['user']=$user;
-        $consultation['patient']=$patient;
-        $consultation['isAuthor']=$isAuthor->getOriginalContent();
+
+        $consultation->updateConsultationObstetric();
+
         return response()->json(["consultation"=>$consultation]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsutationMedecine",$consultation->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez effectuer cette action";
-            return response()->json(['error'=>$transmission],419 );
-        }
+
+        $this->checkIfAuthorized("ConsutationMedecine",$consultation->id,"create");
+
         try{
             $consultation = ConsultationMedecineGenerale::findBySlug($slug);
             $consultation->delete();
@@ -193,26 +144,24 @@ class ConsultationMedecineGeneraleController extends Controller
     /**
      * Archieved the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function archiver($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
+
         if (is_null($resultat->passed_at)){
-            $transmission = [];
-            $transmission['nonTransmis'] = "Ce resultat n'a pas encoré été transmis";
-            return response()->json(['error'=>$transmission],419 );
+            $this->revealError('nonTransmis',"Ce resultat n'a pas encoré été transmis");
+
         }else{
             $resultat->archieved_at = Carbon::now();
             $resultat->save();
-            $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$resultat->id,"create");
-            $consultation['isAuthor']=$isAuthor->getOriginalContent();
+            $consultation['isAuthor'] = $this->checkIfAuthorized("ConsultationMedecineGenerale",$resultat->id,"create");
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -220,21 +169,20 @@ class ConsultationMedecineGeneraleController extends Controller
     /**
      * Passed the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function transmettre($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$resultat->id,"create");
-        $consultation['isAuthor']=$isAuthor->getOriginalContent();
+        $consultation['isAuthor']=$this->checkIfAuthorized("ConsultationMedecineGenerale",$resultat->id,"create");
+
         return response()->json(['resultat'=>$resultat]);
 
     }
