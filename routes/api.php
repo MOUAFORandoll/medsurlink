@@ -47,8 +47,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
     Route::post('praticien/add-etablissement','Api\PraticienController@addEtablissement');
     Route::post('praticien/delete-etablissement','Api\PraticienController@removeEtablissement');
 
-//    Route pour ajouter ou supprimer des patients à un etablissement
-
     //        Route pour ajouter ou supprimer les etablissement d'un praticien
     Route::post('etablissement/add-patient','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::post('etablissement/delete-patient','Api\EtablissementPatientController@retirerPatientAEtablissement');
@@ -57,8 +55,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
 
 //    Définition des routes accéssible par le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Praticien']], function () {
-//    Route::resource('praticien','Api\PraticienController')->only('show');
-    //Route::put('resultat/{id}/transmettre','Api\ResultatController@transmettre');
     Route::put('resultat-labo/{id}/transmettre','Api\ResultatLaboController@transmit');
     Route::put('resultat-imagerie/{id}/transmettre','Api\ResultatImagerieController@transmit');
     Route::put('consultation-medecine/{id}/transmettre','Api\ConsultationMedecineGeneraleController@transmettre');
@@ -71,14 +67,11 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien']], function () 
 
 //    Définition des routes accéssible par le souscripteur
 Route::group(['middleware' => ['auth:api','role:Admin|Souscripteur']], function () {
-//    Route::resource('souscripteur','Api\SouscripteurController')->only('show');
 
 });
 
 //    Définition des routes accéssible par le medecin controle
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], function () {
-//    Route::resource('medecin-controle','Api\MedecinControleController')->except('store','update','destroy');
-    //Route::put('resultat/{resultat}/archiver','Api\ResultatController@archiver');
     Route::put('resultat-labo/{resultat}/archiver','Api\ResultatLaboController@archive');
     Route::put('hospitalisation/{hospitalisation}/archiver','Api\HospitalisationController@archiver');
     Route::put('resultat-imagerie/{resultat}/archiver','Api\ResultatImagerieController@archive');
@@ -111,10 +104,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('traitement-propose','Api\TraitementProposeController')->except(['create','edit']);
     Route::resource('parametre-commun','Api\ParametreCommunController')->except(['create','edit']);
     Route::resource('conclusion','Api\ConclusionController')->except(['create','edit']);
-    //Route::resource('resultat','Api\ResultatController')->except(['create','edit','update']);
     Route::resource('resultat-labo','Api\ResultatLaboController')->except(['create','edit','update']);
     Route::resource('resultat-imagerie','Api\ResultatImagerieController')->except(['create','edit','update']);
-    //Route::post('resultat/{resultat}','Api\ResultatController@update')->name('resultat.update');
     Route::post('resultat-labo/{resultat}','Api\ResultatLaboController@update')->name('resultat.labo.update');
     Route::post('resultat-imagerie/{resultat}','Api\ResultatImagerieController@update')->name('resultat.imagerie.update');
     Route::resource('examen-clinique','Api\ExamenCliniqueController')->except(['create','edit']);
@@ -145,12 +136,10 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('motif','Api\MotifController')->except('store','update','destroy');
     Route::resource('allergie','Api\AllergieController')->except('store','update','destroy');
     Route::resource('antecedent','Api\AntecedentController')->except('store','update','destroy');
-    //Route::resource('traitement','Api\TraitementController')->except('store','update','destroy');
     Route::resource('traitement-actuel','Api\TraitementActuelController')->except('store','update','destroy');
     Route::resource('traitement-propose','Api\TraitementProposeController')->except('store','update','destroy');
     Route::resource('parametre-commun','Api\ParametreCommunController')->except('store','update','destroy');
     Route::resource('conclusion','Api\ConclusionController')->except('store','update','destroy');
-    //Route::resource('resultat','Api\ResultatController')->except('store','update','destroy');
     Route::resource('resultat-labo','Api\ResultatLaboController')->except('store','update','destroy');
     Route::resource('resultat-imagerie','Api\ResultatImagerieController')->except('store','update','destroy');
     Route::resource('examen-clinique','Api\ExamenCliniqueController')->except('store','update','destroy');

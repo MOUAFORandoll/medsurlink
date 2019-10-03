@@ -2,6 +2,8 @@
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+
 /**
  * Fonction permettant de calculer l'age lié a la date passé en parametre
  * @param $date_de_naissance
@@ -14,6 +16,7 @@ if (!function_exists('evaluateYearOfOld')){
         return $age;
     }
 }
+
 /**
  * Fonction qui concatenne en majuscule le nom lié à la requette et met en majuscule la premiere lettre du prenom et retourne
  * @param \Illuminate\Http\Request $request
@@ -25,6 +28,7 @@ if (!function_exists('fullName')){
         return strtoupper($request->nom).' '.ucfirst($request->prenom);
     }
 }
+
 /**
  * Fonction qui permet de verifie si l'identifiant passé en parametre existe dans la table spécifié
  * @param $id
@@ -36,11 +40,12 @@ if (!function_exists('validatedSlug')){
     function validatedSlug($slug, $table){
         $validation = Validator::make(compact('slug'),['slug'=>'exists:'.$table.',slug']);
         if ($validation->fails()){
-            return response()->json($validation->errors(),422);
+            throw new ValidationException($validation,$validation->errors()->messages());
         }
         return null;
     }
 }
+
 /**
  * Fonction qui retourne la date actuel au format Y-m-d
  * @return string
@@ -52,6 +57,7 @@ if (!function_exists('dateOfToday')) {
         return Carbon::now()->format('Y-m-d');
     }
 }
+
 /**
  * Fonction qui permet de définir un utilisateur comme celui qui a éffectué l'opetation "action" sur l'enregistrement "operationable_id" de la table "operationable_type"
  * @param $operationable_type
@@ -67,6 +73,7 @@ if (!function_exists('defineAsAuthor')){
         \App\Http\Controllers\Api\AuteurController::store($auteurable_type,$auteurable_id,$operationable_type,$operationable_id,$action);
     }
 }
+
 /**
  * Fonction qui retourne le role de l'utilisateur courant ainsi que son id dans la table ou il a ce rôle là
  * @return \Illuminate\Http\JsonResponse
@@ -80,6 +87,7 @@ if (!function_exists('getStatus')){
         return response()->json(['auteurable_type'=>$auteurable_type,'auteurable_id'=>$auteurable_id,]);
     }
 }
+
 /**
  * Fonction qui retourne les informations personnels de l'utilisateur lié au rôle spécifié
  * @param $roleName
@@ -109,6 +117,7 @@ if (!function_exists('getStatusUserRole')){
         }
     }
 }
+
 /** Fonction permettant de determiner si un utilisateur est autorisé à modifier une ressource ou pas
  * @param $operationable_type
  * @param $operationable_id
@@ -140,6 +149,7 @@ if (!function_exists('checkIfIsAuthorOrIsAuthorized')){
         return response()->json(false);
     }
 }
+
 /** Fonctionne qui retourne le role de l'utilisateur ayant éffectué l'operation "action" sur l'enregistrement "operationable_id" de la table "operationable_type"
  * @param $operationable_type
  * @param $operationable_id
@@ -155,6 +165,7 @@ if (!function_exists('getAuthorRole')){
         return $auteur->auteurable_type;
     }
 }
+
 if (!function_exists('getAuthorId')){
 
     function getAuthorId($operationable_type, $operationable_id, $action){
@@ -164,6 +175,7 @@ if (!function_exists('getAuthorId')){
         return $auteur->auteurable_id;
     }
 }
+
 if (!function_exists('getUser')){
 
     function getUser($slug,$roleName){

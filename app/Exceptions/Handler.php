@@ -3,7 +3,10 @@
 namespace App\Exceptions;
 
 use Exception;
+use Illuminate\Database\Eloquent\RelationNotFoundException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
 {
@@ -49,6 +52,22 @@ class Handler extends ExceptionHandler
         if ($request->has('error'))
         {
             return  response()->json(['error'=>$request->all()['error']],419);
+        }
+
+        if ($exception instanceof RelationNotFoundException){
+            return  response()->json(['error'=>$exception->getMessage(),'type'=>'Eloquent'],422);
+        }
+
+        if ($exception instanceof ValidationException){
+            return  response()->json(['error'=>$exception->errors(),'type'=>'Validation'],422);
+        }
+
+        if ($exception instanceof QueryException){
+            return  response()->json(['error'=>$exception->getMessage(),'type'=>'Database'],422);
+        }
+
+        if ($exception instanceof PersonnnalException ) {
+            return response()->json(['error'=>$exception->getErrorMessage(),'type'=>'Database'],419);
         }
 
         if ($exception instanceof \Swift_TransportException ) {

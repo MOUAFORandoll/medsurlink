@@ -43,4 +43,14 @@ class Allergie extends Model
     public  function  dossiers(){
         return $this->belongsToMany(DossierMedical::class,'dossier_allergie','allergie_id','dossier_medical_id');
     }
+
+    public function updateItem(){
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$this->id,"create");
+        $this['isAuthor']=$isAuthor->getOriginalContent();
+        $this['dossier']=$this->dossiers->first();
+        if (!is_null($this->dossiers->first())){
+            $this['patient']=$this->dossiers->first()->patient;
+            $this['user']=$this->dossiers->first()->patient->user;
+        }
+    }
 }

@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AffiliationRequest;
 use App\Models\Affiliation;
-use App\Models\Patient;
 use Carbon\Carbon;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class AffiliationController extends Controller
 {
+    use PersonnalErrors;
     protected $table = 'affiliations';
 
 
@@ -40,40 +40,37 @@ class AffiliationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param AffiliationRequest $request
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
      */
     public function store(AffiliationRequest $request)
     {
 
-        $message = $this->dejaAffilie($request);
-        if (strlen($message)>0){
-            $transmission = [];
-            $transmission['dejaAffilie'][0] = $message;
-            return response()->json(['error'=>$transmission],419 );
-        }
-        else{
-            $affiliation = Affiliation::create($request->validated());
-            $affiliation->date_fin = $this->evaluerDateFin($affiliation);
-            $affiliation->save();
-            defineAsAuthor("Affiliation",$affiliation->id,'create');
-            return response()->json(['affiliation'=>$affiliation]);
-        }
+        $this->Affiliated($request);
+
+        $affiliation = Affiliation::create($request->validated());
+
+        $this->updateDateFin($affiliation);
+
+        defineAsAuthor("Affiliation",$affiliation->id,'create');
+
+        return response()->json(['affiliation'=>$affiliation]);
+
     }
 
+
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $slug
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $affiliation = Affiliation::with(['patient','patient'])->whereSlug($slug)->first();
+
         return response()->json(['affiliation'=>$affiliation]);
     }
 
@@ -88,96 +85,102 @@ class AffiliationController extends Controller
         //
     }
 
+
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param AffiliationRequest $request
+     * @param $slug
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(AffiliationRequest $request, $slug)
     {
-        if ($request->has('error'))
-        {
-            return  response()->json(['error'=>$request->all()['error']],419);
-        }
 
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
-        $message = $this->dejaAffilie($request);
-        if (strlen($message)>0){
-            $transmission = [];
-            $transmission['dejaAffilie'][0] = $message;
-            return response()->json(['error'=>$transmission],419 );
+        $this->Affiliated($request);
 
-        }
-        else {
-            Affiliation::whereSlug($slug)->update($request->validated());
+        Affiliation::whereSlug($slug)->update($request->validated());
 
-            $affiliation = Affiliation::with(['patient'])->whereSlug($slug)->first();
-            $affiliation->date_fin = $this->evaluerDateFin($affiliation);
-            $affiliation->save();
+        $affiliation = Affiliation::with(['patient'])->whereSlug($slug)->first();
 
-            return response()->json(['affiliation' => $affiliation]);
-        }
+        $this->updateDateFin($affiliation);
+
+        return response()->json(['affiliation' => $affiliation]);
+
     }
 
+
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $slug
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $affiliation = Affiliation::with(['patient'])->whereSlug($slug)->first();
         $affiliation->delete();
+
         return response()->json(['affiliation'=>$affiliation]);
     }
 
-    public function evaluerDateFin(Affiliation $affiliation){
+    /**
+     * @param Affiliation $affiliation
+     */
+    public function updateDateFin(Affiliation $affiliation){
         $date_debut = $affiliation->date_debut;
+
         if ($affiliation->nom == 'One shot'){
             $date_fin = $date_debut;
+
         }elseif ($affiliation->nom == 'Annuelle'){
             $date_fin = Carbon::parse($date_debut)->addYears(1)->format('Y-m-d');
         }
-        return $date_fin;
+
+        $affiliation->date_fin = $date_fin;
+        $affiliation->save();
     }
 
-    public function dejaAffilie(Request $request){
+    /**
+     * Permet de determiner si un utilisateur possede deja une affiliation
+     * @param Request $request
+     * @throws \App\Exceptions\PersonnnalException
+     */
+    public function Affiliated(Request $request){
         $date_debut = Carbon::parse($request->date_debut)->year;
+
         //Ici on determine si le patient a deja une affiliation pour cette année
         $affiliation =  Affiliation::where('patient_id','=',$request->patient_id)->where('nom','=','Annuelle')->WhereYear('date_debut',$date_debut)->get();
+
         if (count($affiliation)>0) {
-            return "Le patient dispose déjà d'une affiliation pour cette année";
-        }
-        elseif ($request->nom == "One shot"){
-//            On determine si le patient a deja une affiliation oneshot a ce jour
+            $message = "Le patient dispose déjà d'une affiliation pour cette année";
+            $this->revealError('dejaAffilie',$message);
+
+        } elseif ($request->nom == "One shot"){
+            //On determine si le patient a deja une affiliation oneshot a ce jour
             $date_debut = $request->date_debut;
+
             if (is_null($request->date_fin)){
                 $date_fin = Carbon::now()->format('Y-m-d');
+
             }else{
                 $date_fin = $request->date_fin;
+
                 if ($date_fin != $date_debut){
-                    return "L'affiliation One shot se fait en un seul jour";
+                    $message = "L'affiliation One shot se fait en un seul jour";
+                    $this->revealError('dejaAffilie',$message);
                 }
             }
+
             if ($date_fin == $date_debut){
                 $affiliation =  Affiliation::where('patient_id','=',$request->patient_id)->where('nom','=','One shot')->whereDate('date_debut',$date_debut)->whereDate('date_fin',$date_fin)->get();
                 if (count($affiliation)>0){
-                    return "Le patient dispose déjà d'une affiliation pour ce jour";
+                    $message = "Le patient dispose déjà d'une affiliation pour ce jour";
+                    $this->revealError('dejaAffilie',$message);
                 }
             }
         }
-
-        return "";
-
     }
 }

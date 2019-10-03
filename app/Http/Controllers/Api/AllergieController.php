@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AllergieRequest;
 use App\Models\Allergie;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class AllergieController extends Controller
 {
+    use PersonnalErrors;
     protected  $table = "allergies";
 
     /**
@@ -19,15 +20,11 @@ class AllergieController extends Controller
     public function index()
     {
         $allergies = Allergie::all();
+
         foreach ($allergies as $allergy){
-            $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
-            $allergy['isAuthor']=$isAuthor->getOriginalContent();
-            $allergy['dossier']=$allergy->dossiers->first();
-            if (!is_null($allergy->dossiers->first())){
-                $allergy['patient']=$allergy->dossiers->first()->patient;
-                $allergy['user']=$allergy->dossiers->first()->patient->user;
-            }
+            $allergy->updateItem();
         }
+
         return response()->json(['allergies'=>$allergies]);
     }
 
@@ -42,38 +39,33 @@ class AllergieController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param AllergieRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(AllergieRequest $request)
     {
         $allergie = Allergie::create($request->validated());
+
         defineAsAuthor("Allergie",$allergie->id,'create');
+
         return response()->json(['allergie'=>$allergie]);
 
     }
 
+
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $slug
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $allergie = Allergie::whereSlug($slug)->first();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergie->id,"create");
-        $allergie['isAuthor']=$isAuthor->getOriginalContent();
-        //Ici pour le momentm je ne recupere que le premier dossier medical
-        $allergie['patient']=$allergie->dossiers->first()->patient;
-        $allergie['dossier']=$allergie->dossiers->first();
-        $allergie['user']=$allergie->dossiers->first()->patient->user;
+
+        $allergie->updateItem();
+
         return response()->json(['allergie'=>$allergie]);
 
     }
@@ -89,51 +81,47 @@ class AllergieController extends Controller
         //
     }
 
+
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param AllergieRequest $request
+     * @param $slug
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(AllergieRequest $request, $slug)
     {
 
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
+
         $allergie = Allergie::whereSlug($slug)->first();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergie->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 );
-        }
+
+        $this->checkIfAuthorized("Allergie",$allergie->id,"create");
+
         Allergie::whereSlug($slug)->update($request->validated());
+
         $allergie = Allergie::findBySlug($slug);
+
         return response()->json(['allergie'=>$allergie]);
     }
 
+
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $slug
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $allergie = Allergie::findBySlug($slug);
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergie->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 );
-        }
+
+        $this->checkIfAuthorized("Allergie",$allergie->id,"create");
+
         $allergie->delete();
+
         return response()->json(['allergie'=>$allergie]);
     }
 }
