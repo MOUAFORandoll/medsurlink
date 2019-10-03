@@ -79,4 +79,18 @@ class ConsultationObstetrique extends Model
 
         static::addGlobalScope(new RestrictDossierScope);
     }
+
+    public function updateObstetricConsultation(){
+        $user = $this->dossier->patient->user;
+        $allergies = $this->dossier->allergies;
+        foreach ($allergies as $allergy)
+        {
+            $allergieIsAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
+            $allergy['isAuthor'] = $allergieIsAuthor->getOriginalContent();
+        }
+        $this['allergies']= $allergies;
+        $this['user']=$user;
+        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$this->id,"create");
+        $this['isAuthor']=$isAuthor->getOriginalContent();
+    }
 }

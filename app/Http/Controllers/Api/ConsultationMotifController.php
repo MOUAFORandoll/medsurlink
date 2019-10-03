@@ -32,11 +32,6 @@ class ConsultationMotifController extends Controller
             "consultation"=>"required|string|exists:consultation_medecine_generales,slug",
             "reference" => ["required", "string", "max:255"],
             "description" => ["required", "string"]
-            /*"motifs"=>"required_without:motifsACreer",
-            "motifsACreer"=>"required_without:motifs",
-            "motifs.*"=>"required_without:motifsACreer|integer|exists:motifs,id",
-            "motifsACreer.*.reference"=>"required_without:motifs|string|min:2",
-            "motifsACreer.*.description"=>"required_without:motifs|string|min:2",*/
         ]);
 
         if ($validation->fails()){
@@ -44,23 +39,6 @@ class ConsultationMotifController extends Controller
         }
 
         $consultation = ConsultationMedecineGenerale::findBySlug($request->get('consultation'));
-        /*if (!is_null($request->get('motifs'))){
-            $consultation->motifs()->attach($request->get('motifs'));
-
-        }
-
-        $motifs = $request->get('motifsACreer');
-        if (!is_null($motifs) or !empty($motifs)){
-            foreach ( $motifs as $motif)
-            {
-                $motifCreer = Motif::create([
-                    'reference'=>$motif['reference'],
-                    'description'=>$motif['description']
-                ]);
-
-                $consultation->motifs()->attach($motifCreer->id);
-            }
-        }*/
 
         $motif = Motif::create([
             'reference' => $request->get('reference'),

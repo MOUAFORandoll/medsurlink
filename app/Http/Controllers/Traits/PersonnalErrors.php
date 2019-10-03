@@ -8,7 +8,6 @@ use Illuminate\Validation\ValidationException;
 
 trait PersonnalErrors
 {
-    protected $accessRefuse = "Vous n'êtes pas autorisé à mettre à jour cette element";
 
     /**
      * @param $field
@@ -47,9 +46,24 @@ trait PersonnalErrors
         $isAuthor = checkIfIsAuthorOrIsAuthorized($type,$id,$action);
 
         if($isAuthor->getOriginalContent() == false){
-            $this->revealError('accessRefuse',$this->accessRefuse);
+            $this->revealAccesRefuse();
         }
 
         return true;
+    }
+
+    /**
+     * @throws PersonnnalException
+     */
+    public function revealAccesRefuse(){
+        $accessRefuse = "Vous n'êtes pas autorisé à effectuer cette action";
+        $this->revealError('accessRefuse',$accessRefuse);
+    }
+    /**
+     * @throws PersonnnalException
+     */
+    public function revealNonTransmis(){
+        $nonTransmis = "Ce resultat n'a pas encoré été transmis";
+        $this->revealError('nonTransmis',$nonTransmis);
     }
 }

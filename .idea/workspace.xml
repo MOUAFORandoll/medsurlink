@@ -3,21 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exceptions/Handler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/AllergieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/AllergieController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/AntecedentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/AntecedentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConclusionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConclusionController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMotifController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMotifController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Traits/PersonnalErrors.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Traits/PersonnalErrors.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/AffiliationRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/AffiliationRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/AllergieRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/AllergieRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/AntecedentRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/AntecedentRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConclusionRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConclusionRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Allergie.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Allergie.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Antecedent.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Antecedent.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Conclusion.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Conclusion.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsultationObstetriqueRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsultationObstetriqueRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -389,7 +380,7 @@
       <workItem from="1569843390119" duration="2904000" />
       <workItem from="1569915355069" duration="7388000" />
       <workItem from="1570007042134" duration="6985000" />
-      <workItem from="1570088441770" duration="19117000" />
+      <workItem from="1570088441770" duration="21081000" />
     </task>
     <servers />
   </component>

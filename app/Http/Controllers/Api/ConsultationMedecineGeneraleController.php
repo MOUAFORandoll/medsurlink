@@ -156,12 +156,13 @@ class ConsultationMedecineGeneraleController extends Controller
         $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
 
         if (is_null($resultat->passed_at)){
-            $this->revealError('nonTransmis',"Ce resultat n'a pas encoré été transmis");
+            $this->revealNonTransmis();
 
         }else{
             $resultat->archieved_at = Carbon::now();
             $resultat->save();
-            $consultation['isAuthor'] = $this->checkIfAuthorized("ConsultationMedecineGenerale",$resultat->id,"create");
+
+            defineAsAuthor("ConsultationMedecineGenerale",$resultat->id,'archive');
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -181,8 +182,8 @@ class ConsultationMedecineGeneraleController extends Controller
         $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
-        $consultation['isAuthor']=$this->checkIfAuthorized("ConsultationMedecineGenerale",$resultat->id,"create");
 
+        defineAsAuthor("ConsultationMedecineGenerale",$resultat->id,'transmettre');
         return response()->json(['resultat'=>$resultat]);
 
     }
