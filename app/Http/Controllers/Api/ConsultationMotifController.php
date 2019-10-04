@@ -44,9 +44,9 @@ class ConsultationMotifController extends Controller
             'reference' => $request->get('reference'),
             'description' => $request->get('description')
         ]);
-
+        defineAsAuthor("Motif",$motif->id,'create');
         $consultation->motifs()->attach($motif->id);
-
+        defineAsAuthor("ConsultationMotif",$motif->id,'attach');
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','conclusions'])
             ->find($request->get('consultation'));
 

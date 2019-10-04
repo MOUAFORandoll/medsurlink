@@ -81,7 +81,7 @@ class ConsultationMedecineGenerale extends Model
         static::addGlobalScope(new RestrictDossierScope);
     }
 
-    public function updateConsultationObstetric(){
+    public function updateConsultationMedecine(){
         $user = $this->dossier->patient->user;
         $patient = $this->dossier->patient;
         $allergies = $this->dossier->allergies;

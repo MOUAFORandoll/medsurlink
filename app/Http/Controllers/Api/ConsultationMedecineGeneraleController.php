@@ -24,7 +24,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->get();
 
         foreach ($consultations as $consultation){
-            $consultation->updateConsultationObstetric();
+            $consultation->updateConsultationMedecine();
         }
 
         return response()->json(["consultations"=>$consultations]);
@@ -53,8 +53,8 @@ class ConsultationMedecineGeneraleController extends Controller
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create');
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->find($consultation->id);
-
-        $consultation->updateConsultationObstetric();
+        if(!is_null($consultation))
+            $consultation->updateConsultationMedecine();
 
         return response()->json(["consultation"=>$consultation]);
     }
