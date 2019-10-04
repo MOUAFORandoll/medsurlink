@@ -43,7 +43,9 @@ class Conclusion extends Model
     }
 
     public function updateConclusionItem(){
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Conclusion",$this->id,"create");
-        $this['isAuthor'] = $isAuthor->getOriginalContent();
+        if(!is_null($this)) {
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Conclusion", $this->id, "create");
+            $this['isAuthor'] = $isAuthor->getOriginalContent();
+        }
     }
 }

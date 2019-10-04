@@ -45,12 +45,14 @@ class Allergie extends Model
     }
 
     public function updateAllergyItem(){
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$this->id,"create");
-        $this['isAuthor']=$isAuthor->getOriginalContent();
-        $this['dossier']=$this->dossiers->first();
-        if (!is_null($this->dossiers->first())){
-            $this['patient']=$this->dossiers->first()->patient;
-            $this['user']=$this->dossiers->first()->patient->user;
+        if(!is_null($this)) {
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie", $this->id, "create");
+            $this['isAuthor'] = $isAuthor->getOriginalContent();
+            $this['dossier'] = $this->dossiers->first();
+            if (!is_null($this->dossiers->first())) {
+                $this['patient'] = $this->dossiers->first()->patient;
+                $this['user'] = $this->dossiers->first()->patient->user;
+            }
         }
     }
 }

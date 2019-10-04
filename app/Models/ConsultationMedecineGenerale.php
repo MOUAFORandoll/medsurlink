@@ -82,6 +82,7 @@ class ConsultationMedecineGenerale extends Model
     }
 
     public function updateConsultationMedecine(){
+        if(!is_null($this)){
         $user = $this->dossier->patient->user;
         $patient = $this->dossier->patient;
         $allergies = $this->dossier->allergies;
@@ -96,6 +97,7 @@ class ConsultationMedecineGenerale extends Model
         $this['patient']=$patient;
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$this->id,"create");
         $this['isAuthor']=$isAuthor->getOriginalContent();
+        }
     }
 
 }

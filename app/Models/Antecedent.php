@@ -44,8 +44,10 @@ class Antecedent extends Model
     }
 
     public function updateAntecedentItem(){
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$this->id,"create");
-        $this['isAuthor'] = $isAuthor->getOriginalContent();
+        if(!is_null($this)) {
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent", $this->id, "create");
+            $this['isAuthor'] = $isAuthor->getOriginalContent();
+        }
     }
 
 }
