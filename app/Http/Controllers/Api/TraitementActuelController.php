@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\TraitementActuelRequest;
 use App\Http\Requests\TraitementActuelUpdateRequest;
 use App\Models\DossierMedical;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Controller;
 
 class TraitementActuelController extends Controller
 {
+    use PersonnalErrors;
     protected $table = "traitement_actuels";
 
     /**
@@ -47,10 +49,12 @@ class TraitementActuelController extends Controller
     {
         $traitements = $request->get('traitements');
         foreach ($traitements as $traitement){
-          $traitementCreer =   TraitementActuel::create([
+
+            $traitementCreer =   TraitementActuel::create([
                 'dossier_medical_id'=>$request->get('dossier_medical_id'),
                 'description'=>$traitement['description']
             ]);
+
             defineAsAuthor("TraitementActuel", $traitementCreer->id,'create');
 
         }
@@ -66,8 +70,7 @@ class TraitementActuelController extends Controller
             }
         ])->whereId($request->get('dossier_medical_id'))->first();
         foreach ($dossier->traitements as $traitement){
-            $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
-            $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
+            $traitement->updateTraitementActuel();
         }
         return response()->json([
             'dossier' => $dossier
@@ -79,20 +82,18 @@ class TraitementActuelController extends Controller
      *
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = validatedSlug($slug, $this->table);
-
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug, $this->table);
 
         $traitement = TraitementActuel::with('dossier')
             ->whereSlug($slug)
             ->first();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel", $traitement->id,"create");
 
-        $traitement['isAuthor'] = $isAuthor->getOriginalContent();
+        $traitement->updateTraitementActuel();
+
         return response()->json([
             'traitement' => $traitement
         ]);
@@ -112,34 +113,22 @@ class TraitementActuelController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param TraitementActuelRequest $request
+     * @param TraitementActuelUpdateRequest $request
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(TraitementActuelUpdateRequest $request, $slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-
-        if (!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $traitement = TraitementActuel::findBySlug($slug);
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel", $traitement->id,"create");
-
-        if (!$isAuthor->getOriginalContent()) {
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez pas modifier un élément que vous n'avez pas créé";
-
-            return response()->json(
-                [
-                    'error' => $transmission
-                ],
-                419
-            );
-        }
+        $this->checkIfAuthorized("TraitementActuel", $traitement->id,"create");
 
         TraitementActuel::whereSlug($slug)->update($request->validated());
+
         $traitement = TraitementActuel::with('dossier')->whereSlug($slug)->first();
 
         return response()->json([
@@ -152,21 +141,15 @@ class TraitementActuelController extends Controller
      *
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug, $this->table);
-
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug, $this->table);
 
         $traitement = TraitementActuel::with('dossier')->whereSlug($slug)->first();
         $traitement->delete();
 
-//        return response()->json([
-//            'traitement' => $traitement
-//        ]);
-//
         $dossier = DossierMedical::with([
             'allergies'=> function ($query) {
                 $query->orderBy('date', 'desc');
@@ -179,10 +162,9 @@ class TraitementActuelController extends Controller
             }
         ])->whereId($traitement->dossier->id)->first();
         foreach ($dossier->traitements as $traitement){
-            $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
-            $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
+            $traitement->updateTraitementActuel();
         }
-       return response()->json([
+        return response()->json([
             'dossier' => $dossier
         ]);
     }

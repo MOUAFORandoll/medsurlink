@@ -69,4 +69,15 @@ class ConsultationPrenatale extends Model
 
         static::addGlobalScope(new RestrictConsultationObstetriqueScope);
     }
+
+    public function updatePrenatalConsultation(){
+        if (!is_null($this)){
+            $dossier = $this->consultationObstetrique->dossier;
+            $user = $dossier->patient->user;
+            $this['user']=$user;
+            $this['dossier']=$dossier;
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationPrenatale",$this->id,"create");
+            $this['isAuthor']=$isAuthor->getOriginalContent();
+        }
+    }
 }

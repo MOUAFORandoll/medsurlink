@@ -78,4 +78,15 @@ class Hospitalisation extends Model
 
         static::addGlobalScope(new RestrictHospitalisationScope);
     }
+
+    public function updateHospitalisation(){
+        if (!is_null($this)){
+            $user = $this->dossier->patient->user;
+            $patient = $this->dossier->patient;
+            $this['user']=$user;
+            $this['patient']=$patient;
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$this->id,"create");
+            $this['isAuthor']=$isAuthor->getOriginalContent();
+        }
+    }
 }

@@ -108,8 +108,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('resultat-imagerie','Api\ResultatImagerieController')->except(['create','edit','update']);
     Route::post('resultat-labo/{resultat}','Api\ResultatLaboController@update')->name('resultat.labo.update');
     Route::post('resultat-imagerie/{resultat}','Api\ResultatImagerieController@update')->name('resultat.imagerie.update');
-    Route::resource('examen-clinique','Api\ExamenCliniqueController')->except(['create','edit']);
-    Route::resource('examen-complementaire','Api\ExamenComplementaireController')->except(['create','edit']);
     Route::resource('consultation-prenatale','Api\ConsultationPrenantaleController')->except(['create','edit']);
     Route::resource('parametre-obstetrique','Api\ParametreObstetriqueController')->except(['create','edit']);
     Route::resource('echographie','Api\EchographieController')->except(['create','edit']);
@@ -142,8 +140,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('conclusion','Api\ConclusionController')->except('store','update','destroy');
     Route::resource('resultat-labo','Api\ResultatLaboController')->except('store','update','destroy');
     Route::resource('resultat-imagerie','Api\ResultatImagerieController')->except('store','update','destroy');
-    Route::resource('examen-clinique','Api\ExamenCliniqueController')->except('store','update','destroy');
-    Route::resource('examen-complementaire','Api\ExamenComplementaireController')->except('store','update','destroy');
     Route::resource('consultation-prenatale','Api\ConsultationPrenantaleController')->except('store','update','destroy');
     Route::resource('parametre-obstetrique','Api\ParametreObstetriqueController')->except('store','update','destroy');
     Route::resource('echographie','Api\EchographieController')->except('store','update','destroy');

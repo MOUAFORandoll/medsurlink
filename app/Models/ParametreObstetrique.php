@@ -46,4 +46,11 @@ class ParametreObstetrique extends Model
     public function consultationPrenatale(){
         return $this->belongsTo(ConsultationPrenatale::class,'consultation_prenatale_id','id');
     }
+
+    public function updateParametreObstetrique(){
+        if(!is_null($this)){
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$this->id,"create");
+            $this['isAuthor'] = $isAuthor->getOriginalContent();
+        }
+    }
 }

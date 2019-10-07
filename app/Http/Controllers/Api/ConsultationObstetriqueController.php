@@ -109,6 +109,7 @@ class ConsultationObstetriqueController extends Controller
      * @param ConsultationObstetriqueRequest $request
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
      * @throws \Illuminate\Validation\ValidationException
      */
     public function update(ConsultationObstetriqueRequest $request, $slug)

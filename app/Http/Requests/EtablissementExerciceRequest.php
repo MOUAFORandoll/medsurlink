@@ -29,9 +29,4 @@ class EtablissementExerciceRequest extends FormRequest
             "description"=>"sometimes|nullable|string|min:10"
         ];
     }
-
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        Request::merge(['error'=>$validator->errors()->getMessages()]);
-    }
 }

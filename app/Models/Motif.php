@@ -44,4 +44,11 @@ class Motif extends Model
         return $this->belongsToMany(Hospitalisation::class,'hospitalisation_motif','motif_id','hospitalisation_id');
     }
 
+    public function updateMotif(){
+        if (!is_null($this)){
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$this->id,"create");
+            $this['isAuthor'] = $isAuthor->getOriginalContent();
+        }
+    }
+
 }

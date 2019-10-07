@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\SouscripteurStoreRequest;
 use App\Http\Requests\SouscripteurUpdateRequest;
 use App\Models\Souscripteur;
@@ -11,6 +12,8 @@ use Netpok\Database\Support\DeleteRestrictionException;
 
 class SouscripteurController extends Controller
 {
+    use PersonnalErrors;
+    protected $table = "souscripteurs";
 
     /**
      * Display a listing of the resource.
@@ -36,8 +39,9 @@ class SouscripteurController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param SouscripteurStoreRequest $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(SouscripteurStoreRequest $request)
     {
@@ -70,11 +74,10 @@ class SouscripteurController extends Controller
      */
     public function show($slug)
     {
-        $validation = $this->validatedId($slug);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $souscripteur = Souscripteur::with('user','patients.user')->whereSlug($slug)->first();
+
         return response()->json(['souscripteur'=>$souscripteur]);
 
     }
@@ -93,21 +96,19 @@ class SouscripteurController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param SouscripteurUpdateRequest $request
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(SouscripteurUpdateRequest $request, $slug)
     {
-        $validation = $this->validatedId($slug);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $souscripteur= Souscripteur::with('user')->whereSlug($slug)->first();
-        $user = UserController::updatePersonalInformation($request->except('subscriber','sexe','date_de_naissance'),$souscripteur->user->slug);
-        if (array_key_exists('error',$user->getOriginalContent())){
-            return response()->json(['error'=>$user->getOriginalContent()['error']],419);
-        }
+
+        UserController::updatePersonalInformation($request->except('subscriber','sexe','date_de_naissance'),$souscripteur->user->slug);
+
         $age = evaluateYearOfOld($request->date_de_naissance);
 
         Souscripteur::whereSlug($slug)->update($request->validated()+['age'=>$age]);
@@ -127,9 +128,8 @@ class SouscripteurController extends Controller
      */
     public function destroy($slug)
     {
-        $validation = $this->validatedId($slug);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
+
         try{
             $souscripteur = Souscripteur::with('user','patients')->whereSlug($slug)->first();
             $souscripteur->delete();
@@ -139,17 +139,5 @@ class SouscripteurController extends Controller
             return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
         }
 
-    }
-
-    /**
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function validatedId($slug){
-        $validation = Validator::make(compact('slug'),['slug'=>'exists:souscripteurs,slug']);
-        if ($validation->fails()){
-            return response()->json($validation->errors(),422);
-        }
-        return null;
     }
 }

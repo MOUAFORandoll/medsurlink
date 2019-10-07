@@ -74,4 +74,15 @@ class DossierMedical extends Model
 
             static::addGlobalScope(new RestrictPatientScope);
     }
+
+    public function updateDossier(){
+        if(!is_null($this)){
+            foreach ($this->traitements as $traitement){
+                $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
+                $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
+            }
+            $user = $this->patient->user;
+            $this['user'] = $user;
+        }
+    }
 }

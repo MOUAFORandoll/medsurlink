@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\MotifRequest;
 use App\Models\Motif;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Controller;
 
 class MotifController extends Controller
 {
+    use PersonnalErrors;
     protected $table = "motifs";
     /**
      * Display a listing of the resource.
@@ -18,10 +20,11 @@ class MotifController extends Controller
     public function index()
     {
         $motifs = Motif::all();
+
         foreach ($motifs as $motif){
-            $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$motif->id,"create");
-            $motif['isAuthor'] = $isAuthor->getOriginalContent();
+            $motif->updateMotif();
         }
+
         return response()->json(['motifs'=>$motifs]);
     }
 
@@ -45,6 +48,7 @@ class MotifController extends Controller
     {
 
         $motif = Motif::create($request->validated());
+
         defineAsAuthor("Motif",$motif->id,'create');
 
         return response()->json(['motif'=>$motif]);
@@ -54,18 +58,18 @@ class MotifController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $motif = Motif::findBySlug($slug);
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$motif->id,"create");
-        $motif['isAuthor'] = $isAuthor->getOriginalContent();
+
+        $motif->updateMotif();
+
         return response()->json(['motif'=>$motif]);
     }
 
@@ -83,51 +87,47 @@ class MotifController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param MotifRequest $request
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(MotifRequest $request, $slug)
     {
 
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $motif = Motif::findBySlug($slug);
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$motif->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 );}
 
-        $motif = Motif::whereSlug($slug)->update($request->validated());
+        $this->checkIfAuthorized("Motif",$motif->id,"create");
+
+        Motif::whereSlug($slug)->update($request->validated());
 
         $motif = Motif::findBySlug($slug);
+
         return response()->json(['motif'=>$motif]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $motif  = Motif::findBySlug($slug);
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$slug,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 );}
+
+        $this->checkIfAuthorized("Motif",$motif->id,"create");
 
         $motif = Motif::findBySlug($slug);
         $motif->delete();
+
         return response()->json(['motif'=>$motif]);
     }
 }

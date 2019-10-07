@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\SpecialiteRequest;
 use App\Models\Specialite;
 use Illuminate\Http\Request;
@@ -11,7 +12,8 @@ use Netpok\Database\Support\DeleteRestrictionException;
 
 class SpecialiteController extends Controller
 {
-
+    use PersonnalErrors;
+    protected $table = "specialites";
 
     /**
      * Display a listing of the resource.
@@ -43,6 +45,7 @@ class SpecialiteController extends Controller
     public function store(SpecialiteRequest $request)
     {
         $specialite = Specialite::create($request->validated());
+
         defineAsAuthor("Specialite",$specialite->id,'create');
 
         return response()->json(['specialite'=>$specialite]);
@@ -51,16 +54,16 @@ class SpecialiteController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = $this->validatedSlug($slug);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $specialite = Specialite::with(['profession'])->whereSlug($slug)->first();
+
         return response()->json(['specialite'=>$specialite]);
 
     }
@@ -79,19 +82,20 @@ class SpecialiteController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param SpecialiteRequest $request
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(SpecialiteRequest $request, $slug)
     {
 
-        $validation = $this->validatedSlug($slug);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         Specialite::whereSlug($slug)->update($request->validated());
+
         $specialite = Specialite::with(['profession'])->whereSlug($slug)->first();
+
         return response()->json(['specialite'=>$specialite]);
 
     }
@@ -99,34 +103,22 @@ class SpecialiteController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = $this->validatedSlug($slug);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         try{
             $specialite = Specialite::with(['profession'])->whereSlug($slug)->first();
             $specialite->delete();
             return response()->json(['specialite'=>$specialite]);
+            
         }catch (DeleteRestrictionException $deleteRestrictionException){
             return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
         }
 
-    }
-
-    /**
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function validatedSlug($slug){
-        $validation = Validator::make(compact('slug'),['slug'=>'exists:specialites,slug']);
-        if ($validation->fails()){
-            return response()->json($validation->errors(),422);
-        }
-        return null;
     }
 }

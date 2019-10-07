@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ResultatRequest;
 use App\Models\ResultatImagerie;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class ResultatImagerieController extends Controller
 {
+    use PersonnalErrors;
     protected $table = "resultat_imageries";
 
     /**
@@ -48,12 +49,7 @@ class ResultatImagerieController extends Controller
             if ($request->file('file')->isValid()) {
                 $resultat = ResultatImagerie::create($request->validated());
 
-                $path = $request->file->store('Dossier Medicale/' . $resultat->dossier->numero_dossier . '/Consultation/' . $request->consultation_medecine_generale_id);
-                $file = $path;
-
-                $resultat->file = $file;
-
-                $resultat->save();
+                $this->uploadFile($request,$resultat);
 
                 defineAsAuthor("Resultat", $resultat->id,'create');
 
@@ -83,13 +79,11 @@ class ResultatImagerieController extends Controller
      *
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = validatedSlug($slug, $this->table);
-
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug, $this->table);
 
         $resultat = ResultatImagerie::with(['dossier', 'consultation'])
             ->whereSlug($slug)
@@ -117,6 +111,8 @@ class ResultatImagerieController extends Controller
      * @param ResultatRequest $request
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(ResultatRequest $request, $slug)
     {
@@ -127,16 +123,7 @@ class ResultatImagerieController extends Controller
 
         $resultat = ResultatImagerie::findBySlug($slug);
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Resultat", $resultat->id,"create");
-
-        if(!$isAuthor->getOriginalContent()){
-            return response()->json(
-                [
-                    'error' => "Vous ne pouvez modifié un élement que vous n'avez crée"
-                ],
-                401
-            );
-        }
+        $this->checkIfAuthorized("Resultat", $resultat->id,"create");
 
         ResultatImagerie::whereSlug($slug)->update($request->validated());
 
@@ -145,14 +132,7 @@ class ResultatImagerieController extends Controller
             ->first();
 
         if($request->hasFile('file')){
-            if ($request->file('file')->isValid()) {
-                $path = $request->file->store('Dossier Medicale/' . $resultat->dossier->numero_dossier . '/Consultation/' . $request->consultation_medecine_generale_id);
-                $file = $path;
-
-                $resultat->file = $file;
-
-                $resultat->save();
-            }
+            $this->uploadFile($request,$resultat);
         }
 
         return response()->json([
@@ -165,26 +145,25 @@ class ResultatImagerieController extends Controller
      *
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function archive($slug)
     {
-        $validation = validatedSlug($slug, $this->table);
-
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug, $this->table);
 
         $resultat = ResultatImagerie::with(['dossier', 'consultation'])
             ->whereSlug($slug)
             ->first();
 
         if (is_null($resultat->passed_at)) {
-            $transmission = [];
-            $transmission['nonTransmis'][0] = "Ce resultat n'a pas encoré été transmis";
+           $this->revealNonTransmis();
 
-            return response()->json(['error'=>$transmission],419 );
         } else {
             $resultat->archived_at = Carbon::now();
             $resultat->save();
+
+            defineAsAuthor("Resultat", $resultat->id,'archive');
 
             return response()->json([
                 'resultat' => $resultat
@@ -197,13 +176,11 @@ class ResultatImagerieController extends Controller
      *
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function transmit($slug)
     {
-        $validation = validatedSlug($slug, $this->table);
-
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug, $this->table);
 
         $resultat = ResultatImagerie::with(['dossier', 'consultation'])
             ->whereSlug($slug)
@@ -211,6 +188,8 @@ class ResultatImagerieController extends Controller
 
         $resultat->passed_at = Carbon::now();
         $resultat->save();
+
+        defineAsAuthor("Resultat", $resultat->id,'transmettre');
 
         return response()->json([
             'resultat' => $resultat
@@ -223,31 +202,32 @@ class ResultatImagerieController extends Controller
      *
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug, $this->table);
-
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug, $this->table);
 
         $resultat = ResultatImagerie::findBySlug($slug);
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Resultat", $resultat->id,"create");
-
-        if($isAuthor->getOriginalContent() == false){
-            return response()->json(
-                [
-                    'error' => "Vous ne pouvez modifié un élement que vous n'avez crée"
-                ],
-                401
-            );
-        }
+        $this->checkIfAuthorized("Resultat", $resultat->id,"create");
 
         $resultat->delete();
 
         return response()->json([
             'resultat' => $resultat
         ]);
+    }
+
+    public function uploadFile($request, $resultat){
+        if ($request->file('file')->isValid()) {
+            $path = $request->file->store('Dossier Medicale/' . $resultat->dossier->numero_dossier . '/Consultation/' . $request->consultation_medecine_generale_id);
+            $file = $path;
+
+            $resultat->file = $file;
+
+            $resultat->save();
+        }
     }
 }

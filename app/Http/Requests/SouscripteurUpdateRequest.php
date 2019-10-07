@@ -27,16 +27,10 @@ class SouscripteurUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        $slug = $this->route()->parameter('souscripteur');
-
-        return [
+      return [
             "sexe"=>["required",Rule::in(['M','F'])],
             "date_de_naissance"=>'required|date|before_or_equal:'.Carbon::now()->format('Y-m-d'),
-   ];
+        ];
     }
 
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        Request::merge(['error'=>$validator->errors()->getMessages()]);
-    }
 }

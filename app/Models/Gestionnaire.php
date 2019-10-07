@@ -8,6 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Gestionnaire extends Model
 {
@@ -62,5 +63,16 @@ class Gestionnaire extends Model
 
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
+    }
+
+    public function updateGestionnaire(){
+        if (!is_null($this)){
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$this->user_id,"create");
+            if ($this->user_id == Auth::id()){
+                $this['isAuthor']=true;
+            } else{
+                $this['isAuthor']=$isAuthor->getOriginalContent();
+            }
+        }
     }
 }

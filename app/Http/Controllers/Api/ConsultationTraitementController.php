@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\Traitement;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ConsultationTraitementController extends Controller
 {
+    use PersonnalErrors;
     public function retirerTraitement(Request $request){
         $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
@@ -18,13 +20,10 @@ class ConsultationTraitementController extends Controller
         if ($validation->fails()){
             return response()->json(['error'=>$validation->errors()],419);
         }
+
         $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationTraitement",$consultation->id,"attach");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 );}
+        $this->checkIfAuthorized("ConsultationTraitement",$consultation->id,"attach");
 
         $consultation->traitements()->detach($request->get('traitements'));
 

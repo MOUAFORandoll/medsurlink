@@ -45,4 +45,11 @@ class TraitementActuel extends Model
     {
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id');
     }
+
+    public function updateTraitementActuel(){
+        if(!is_null($this)){
+            $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$this->id,"create");
+            $this['isAuthor'] = $traitementIsAuthor->getOriginalContent();
+        }
+    }
 }

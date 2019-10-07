@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\DossierMedicalRequest;
 use App\Models\DossierMedical;
 use App\Models\Patient;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Controller;
 
 class DossierMedicalController extends Controller
 {
+    use PersonnalErrors;
     protected $table = 'dossier_medicals';
 
     /**
@@ -34,12 +36,7 @@ class DossierMedicalController extends Controller
             }
         ])->get();
         foreach ($dossiers as $dossier){
-                foreach ($dossier->traitements as $traitement){
-                    $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
-                    $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
-                }
-                $user = $dossier->patient->user;
-                $dossier['user'] = $user;
+               $dossier->updateDossier();
         }
         return response()->json(['dossiers'=>$dossiers]);
     }
@@ -65,9 +62,7 @@ class DossierMedicalController extends Controller
 
         $patient =Patient::with('dossier')->find($request->get('patient_id'));
         if (!is_null($patient->dossier) or !empty($patient->dossier)){
-            $transmission = [];
-            $transmission['uniqueDossier'][0] = 'Ce patient a déja un dossier: '.$patient->dossier->numero_dossier;
-            return response()->json(['error'=>$transmission],419 );
+            $this->revealDuplicateDossier($patient->dossier->numero_dossier);
         }
 
         $numero_dossier = $this->randomNumeroDossier();
@@ -83,8 +78,9 @@ class DossierMedicalController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
@@ -103,12 +99,8 @@ class DossierMedicalController extends Controller
                 $query->orderBy('created_at', 'desc');
             }
         ])->whereSlug($slug)->first();
-        foreach ($dossier->traitements as $traitement){
-            $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
-            $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
-        }
-        $user = $dossier->patient->user;
-        $dossier['user'] = $user;
+
+        $dossier->updateDossier();
         return response()->json(['dossier'=>$dossier]);
     }
 
@@ -138,14 +130,14 @@ class DossierMedicalController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $validation = $this->validatedSlug($slug,$this->table);
+
         try{
             $dossier = DossierMedical::with([
                 'allergies'=> function ($query) {

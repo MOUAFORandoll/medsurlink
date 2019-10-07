@@ -3,17 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\PraticienStoreRequest;
 use App\Http\Requests\PraticienUpdateRequest;
 use App\Models\EtablissementExercice;
-use App\Models\EtablissementExercicePatient;
 use App\Models\Praticien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class PraticienController extends Controller
 {
-
+    use PersonnalErrors;
+    protected $table ="praticiens";
     /**
      * Display a listing of the resource.
      *
@@ -38,8 +39,9 @@ class PraticienController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param PraticienStoreRequest $request
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(PraticienStoreRequest $request)
     {
@@ -47,8 +49,6 @@ class PraticienController extends Controller
 
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request);
-        if ($userResponse->status() == 419)
-            return $userResponse;
 
         $user = $userResponse->getOriginalContent()['user'];
         $password = $userResponse->getOriginalContent()['password'];
@@ -76,10 +76,10 @@ class PraticienController extends Controller
      */
     public function show($slug)
     {
-         $validation = $this->validatedSlug($slug);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
+
         $praticien = Praticien::with('etablissements','user')->whereSlug($slug)->first();
+
         return response()->json(['praticien'=>$praticien]);
 
     }
@@ -101,20 +101,16 @@ class PraticienController extends Controller
      * @param PraticienUpdateRequest $request
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(PraticienUpdateRequest $request, $slug)
     {
-        $validation = $this->validatedSlug($slug);
-
-        if(!is_null($validation))
-            return $validation;
-
+        $this->validatedSlug($slug,$this->table);
 
         $praticien= Praticien::with('user')->whereSlug($slug)->first();
-        $user = UserController::updatePersonalInformation($request->except('civilite','practitioner','profession_id','specialite_id','numero_ordre'),$praticien->user->slug);
-        if (array_key_exists('error',$user->getOriginalContent())){
-            return response()->json(['error'=>$user->getOriginalContent()['error']],419);
-        }
+
+        UserController::updatePersonalInformation($request->except('civilite','practitioner','profession_id','specialite_id','numero_ordre'),$praticien->user->slug);
+
         Praticien::whereSlug($slug)->update([
             'specialite_id' => $request->specialite_id,
             'numero_ordre' => $request->numero_ordre,
@@ -123,42 +119,25 @@ class PraticienController extends Controller
 
         $praticien = Praticien::with('etablissements')->whereSlug($slug)->first();
 
-        // Insérer l'établissement du praticien
-        /*EtablissementExercicePatient::create([
-            'etablissement_id' => $request->etablissement_id,
-            'patient_id' => $praticien->id
-        ]);*/
-
         return response()->json(['praticien' => $praticien]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-         $validation = $this->validatedSlug($slug);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
+
         $praticien = Praticien::with('etablissements')->whereSlug($slug)->first();
         $praticien->delete();
+
         return response()->json(['praticien'=>$praticien]);
 
-    }
-
-    /**
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function validatedSlug($slug){
-        $validation = Validator::make(compact('slug'),['slug'=>'exists:praticiens,slug']);
-        if ($validation->fails()){
-            return response()->json($validation->errors(),422);
-        }
-        return null;
     }
 
     public function addEtablissement(Request $request){
@@ -172,7 +151,7 @@ class PraticienController extends Controller
         $praticien = Praticien::whereUserId($request->get('praticien_id'))->first();
 
         if ($request->get('etablissement_exercice_id') == 0){
-           $etablissement = EtablissementExercice::create([
+            $etablissement = EtablissementExercice::create([
                 'name'=>$request->get('name')
             ]);
         }else{
@@ -184,7 +163,10 @@ class PraticienController extends Controller
         }
 
         $praticien->etablissements()->attach($etablissement->id);
+        defineAsAuthor("Praticien",$praticien->user_id,'attach');
+
         $praticien = Praticien::with('etablissements')->whereUserId($praticien->user_id)->first();
+
         return response()->json(['praticien'=>$praticien]);
     }
 
@@ -198,6 +180,8 @@ class PraticienController extends Controller
         $praticien = Praticien::whereUserId($request->get('praticien_id'))->first();
         $etablissement = EtablissementExercice::find($etablissementId);
         $praticien->etablissements()->detach($etablissement->id);
+
+        defineAsAuthor("Praticien",$praticien->user_id,'detach');
 
         $praticien = Praticien::with('etablissements')->whereUserId($praticien->user_id)->first();
         return response()->json(['praticien'=>$praticien]);

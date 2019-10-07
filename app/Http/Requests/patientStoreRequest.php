@@ -36,9 +36,4 @@ class patientStoreRequest extends FormRequest
             "lien_contact"=>'sometimes|nullable|string|min:4',
         ];
     }
-
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        Request::merge(['error'=>$validator->errors()->getMessages()]);
-    }
 }

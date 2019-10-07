@@ -5,6 +5,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\EchographieRequest;
 use App\Models\Echographie;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Controller;
 
 class EchographieController extends Controller
 {
+    use PersonnalErrors;
     protected $table = "echographies";
     /**
      * Display a listing of the resource.
@@ -21,10 +23,11 @@ class EchographieController extends Controller
     public function index()
     {
         $echographies = Echographie::with('consultation')->get();
+
         foreach ($echographies as $echography){
-            $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$echography->id,"create");
-            $echography['isAuthor'] = $isAuthor->getOriginalContent();
+            $echography->updateEchographie();
         }
+
         return response()->json(['echographies'=>$echographies]);
     }
 
@@ -48,6 +51,7 @@ class EchographieController extends Controller
     {
 
         $echographie = Echographie::create($request->validated());
+
         defineAsAuthor("Echographie",$echographie->id,'create');
 
         return response()->json(['echographie'=>$echographie]);
@@ -61,13 +65,12 @@ class EchographieController extends Controller
      */
     public function show($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $echographie = Echographie::with('consultation')->whereSlug($slug)->first();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$echographie->id,"create");
-        $echographie['isAuthor'] = $isAuthor->getOriginalContent();
+
+        $echographie->updateEchographie();
+
         return response()->json(['echographie'=>$echographie]);
     }
 
@@ -93,18 +96,16 @@ class EchographieController extends Controller
     {
 
 
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
+
         $echographie = Echographie::findBySlug($slug);
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$echographie->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 ); }
+
+        $this->checkIfAuthorized("Echographie",$echographie->id,"create");
 
         Echographie::whereSlug($slug)->update($request->validated());
+
         $echographie = Echographie::with('consultation')->whereSlug($slug)->first();
+
         return response()->json(['echographie'=>$echographie]);
     }
 
@@ -116,19 +117,15 @@ class EchographieController extends Controller
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $echographie = Echographie::findBySlug($slug);
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$echographie->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 ); }
+
+        $this->checkIfAuthorized("Echographie",$echographie->id,"create");
 
         $echographie = Echographie::with('consultation')->whereSlug($slug)->first();
         $echographie->delete();
+
         return response()->json(['echographie'=>$echographie]);
     }
 }

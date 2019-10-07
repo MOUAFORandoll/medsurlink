@@ -26,16 +26,10 @@ class MedecinControleUpdateRequest extends FormRequest
      */
     public function rules()
     {
-
         return [
             "specialite_id"=>'required|integer|exists:specialites,id',
             "numero_ordre"=>'required|string|min:2',
             "civilite"=>["required",Rule::in(['M.','Mme/Mlle.','Dr.','Pr.'])],
         ];
-    }
-
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        Request::merge(['error'=>$validator->errors()->getMessages()]);
     }
 }

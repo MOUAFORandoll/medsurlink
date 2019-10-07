@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\TraitementProposeRequest;
 use App\Models\TraitementPropose;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Controller;
 
 class TraitementProposeController extends Controller
 {
+    use PersonnalErrors;
     protected $table = 'traitement_proposes';
 
     /**
@@ -57,13 +59,11 @@ class TraitementProposeController extends Controller
      *
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = validatedSlug($slug, $this->table);
-
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug, $this->table);
 
         $traitement = TraitementPropose::with('consultation')
             ->whereSlug($slug)
@@ -91,29 +91,16 @@ class TraitementProposeController extends Controller
      * @param TraitementProposeRequest $request
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(TraitementProposeRequest $request, $slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-
-        if (!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $traitement = TraitementPropose::findBySlug($slug);
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("TraitementPropose", $traitement->id,"create");
-
-        if (!$isAuthor->getOriginalContent()) {
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez pas modifier un élément que vous n'avez pas créé";
-
-            return response()->json(
-                [
-                    'error' => $transmission
-                ],
-                419
-            );
-        }
+        $this->checkIfAuthorized("TraitementPropose", $traitement->id,"create");
 
         TraitementPropose::whereSlug($slug)->update($request->validated());
         $traitement = TraitementPropose::findBySlug($slug);
@@ -128,13 +115,11 @@ class TraitementProposeController extends Controller
      *
      * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug, $this->table);
-
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug, $this->table);
 
         $traitement = TraitementPropose::findBySlug($slug);
         $traitement->delete();

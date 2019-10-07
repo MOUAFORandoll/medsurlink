@@ -59,4 +59,11 @@ class Echographie extends Model
 
         static::addGlobalScope(new RestrictConsultationObstetriqueScope);
     }
+
+    public function updateEchographie(){
+        if (!is_null($this)){
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("Echographie",$this->id,"create");
+            $this['isAuthor'] = $isAuthor->getOriginalContent();
+        }
+    }
 }

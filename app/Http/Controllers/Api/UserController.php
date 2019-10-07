@@ -12,6 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class UserController extends Controller
@@ -141,7 +142,7 @@ class UserController extends Controller
        $validation = self::personalValidation($request->all());
 
         if ($validation->fails())
-            return response()->json(['error'=>$validation->errors()],419);
+            throw new ValidationException($validation,$validation->errors());
 
         $password = str_random(10);
 
@@ -170,7 +171,7 @@ class UserController extends Controller
         $validation = self::personalUpdateValidation($data,$slug);
 
         if ($validation->fails())
-            return response()->json(['error'=>$validation->errors()],419);
+            throw new ValidationException($validation,$validation->errors());
 
         User::whereSlug($slug)->update($data);
         $user = User::findBySlug($slug);

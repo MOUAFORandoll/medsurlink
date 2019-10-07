@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\HospitalisationRequest;
 use App\Models\Hospitalisation;
 use Carbon\Carbon;
 
 class HospitalisationController extends Controller
 {
+    use PersonnalErrors;
     protected $table = "hospitalisations";
     /**
      * Display a listing of the resource.
@@ -18,14 +20,11 @@ class HospitalisationController extends Controller
     public function index()
     {
         $hospitalisations = Hospitalisation::with(['dossier','motifs'])->get();
+
         foreach ($hospitalisations as $hospitalisation){
-            $user = $hospitalisation->dossier->patient->user;
-            $patient = $hospitalisation->dossier->patient;
-            $hospitalisation['user']=$user;
-            $hospitalisation['patient']=$patient;
-            $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$hospitalisation->id,"create");
-            $hospitalisation['isAuthor']=$isAuthor->getOriginalContent();
+           $hospitalisation->updateHospitalisation();
         }
+
         return response()->json(['hospitalisations'=>$hospitalisations]);
     }
 
@@ -47,9 +46,8 @@ class HospitalisationController extends Controller
      */
     public function store(HospitalisationRequest $request)
     {
-
-
         $hospitalisation = Hospitalisation::create($request->validated());
+
         defineAsAuthor("Hospitalisation",$hospitalisation->id,'create');
 
         return response()->json(['hospitalisation'=>$hospitalisation]);
@@ -59,22 +57,17 @@ class HospitalisationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $hospitalisation = Hospitalisation::with(['dossier','motifs'])->whereSlug($slug)->first();
-        $user = $hospitalisation->dossier->patient->user;
-        $patient = $hospitalisation->dossier->patient;
-        $hospitalisation['user']=$user;
-        $hospitalisation['patient']=$patient;
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$hospitalisation->id,"create");
-        $hospitalisation['isAuthor']=$isAuthor->getOriginalContent();
+        $hospitalisation->updateHospitalisation();
+
         return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
@@ -92,76 +85,64 @@ class HospitalisationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param HospitalisationRequest $request
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(HospitalisationRequest $request, $slug)
     {
-
-
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $hospitalisation = Hospitalisation::findBySlug($slug);
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$hospitalisation->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 );  }
+
+        $this->checkIfAuthorized("Hospitalisation",$hospitalisation->id,"create");
 
         Hospitalisation::whereSlug($slug)->update($request->validated());
+
         $hospitalisation = Hospitalisation::with(['dossier','motifs'])->whereSlug($slug)->first();
-        $user = $hospitalisation->dossier->patient->user;
-        $patient = $hospitalisation->dossier->patient;
-        $hospitalisation['user']=$user;
-        $hospitalisation['patient']=$patient;
-        $hospitalisation['isAuthor']=$isAuthor->getOriginalContent();
+        $hospitalisation->updateHospitalisation();
+
         return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
-        $hospitalisation = Hospitalisation::findBySlug($slug);
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$hospitalisation->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 );
-        }
+        $this->validatedSlug($slug,$this->table);
 
+        $hospitalisation = Hospitalisation::findBySlug($slug);
+
+        $this->checkIfAuthorized("Hospitalisation",$hospitalisation->id,"create");
         $hospitalisation->delete();
+
         return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
     /**
      * Archieved the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function archiver($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $resultat = Hospitalisation::with(['dossier','motifs'])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
-            $transmission = [];
-            $transmission['nonTransmis'][0] = "Ce resultat n'a pas encoré été transmis";
-            return response()->json(['error'=>$transmission],419 );
+           $this->revealNonTransmis();
+
         }else{
             $resultat->archived_at = Carbon::now();
             $resultat->save();
@@ -173,19 +154,19 @@ class HospitalisationController extends Controller
     /**
      * Passed the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function transmettre($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $resultat = Hospitalisation::with(['dossier','motifs'])->whereSlug($slug)->first();
+
         $resultat->passed_at = Carbon::now();
         $resultat->save();
+
         defineAsAuthor("Hospitalisation",$resultat->id,'transmettre');
 
         return response()->json(['resultat'=>$resultat]);

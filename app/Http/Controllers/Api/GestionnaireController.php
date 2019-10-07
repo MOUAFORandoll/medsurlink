@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\GestionnaireStoreRequest;
 use App\Http\Requests\GestionnaireUpdateRequest;
-use App\Http\Requests\UserUpdateRequest;
 use App\Models\Gestionnaire;
-use App\User;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class GestionnaireController extends Controller
 {
-
+    use PersonnalErrors;
+    protected $table = "gestionnaires";
     /**
      * Display a listing of the resource.
      *
@@ -23,13 +21,9 @@ class GestionnaireController extends Controller
     public function index()
     {
         $gestionnaires = Gestionnaire::with('user')->get();
+
         foreach ($gestionnaires as $gestionnaire){
-            $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->user_id,"create");
-            if ($gestionnaire->user_id == Auth::id()){
-                $gestionnaire['isAuthor']=true;
-            } else{
-                $gestionnaire['isAuthor']=$isAuthor->getOriginalContent();
-            }
+           $gestionnaire->updateGestionnaire();
         }
 
         return response()->json(['gestionnaires'=>$gestionnaires]);
@@ -56,8 +50,6 @@ class GestionnaireController extends Controller
 
         //Création des informations utilisateurs
         $userResponse =  UserController::generatedUser($request);
-        if ($userResponse->status() == 419)
-            return $userResponse;
 
         $user = $userResponse->getOriginalContent()['user'];
         $password = $userResponse->getOriginalContent()['password'];
@@ -76,21 +68,17 @@ class GestionnaireController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = $this->validatedSlug($slug);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
+
         $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->user_id,"create");
-        if ($gestionnaire->user_id == Auth::id()){
-            $gestionnaire['isAuthor']=true;
-        } else{
-            $gestionnaire['isAuthor']=$isAuthor->getOriginalContent();
-        }
+
+        $gestionnaire->updateGestionnaire();
 
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
@@ -110,31 +98,28 @@ class GestionnaireController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param GestionnaireUpdateRequest $request
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(GestionnaireUpdateRequest $request, $slug)
     {
-        $validation = $this->validatedSlug($slug);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();
 
-        $user = UserController::updatePersonalInformation($request->except('civilite','manager'),$gestionnaire->user->slug);
-        if (array_key_exists('error',$user->getOriginalContent())){
-            return response()->json(['error'=>$user->getOriginalContent()['error']],419);
-        }
+        UserController::updatePersonalInformation($request->except('civilite','manager'),$gestionnaire->user->slug);
+
         $isAuthor = checkIfIsAuthorOrIsAuthorized("Gestionnaire",$gestionnaire->user_id,"create");
         if(!$isAuthor->getOriginalContent() && $gestionnaire->user_id != Auth::id())
             {
-                $transmission = [];
-                $transmission['accessRefuse'][0] = "Vous ne pouvez effectuer cette action";
-                return response()->json(['error'=>$transmission],419 );
+                $this->revealAccesRefuse();
             }
 
         Gestionnaire::whereSlug($slug)->update($request->validated());
+
         $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();
 
         return response()->json(['gestionnaire'=>$gestionnaire]);
@@ -144,30 +129,19 @@ class GestionnaireController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = $this->validatedSlug($slug);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $gestionnaire = Gestionnaire::whereSlug($slug)->first();
         $gestionnaire->delete();
+
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
     }
 
-    /**
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function validatedSlug($slug){
-        $validation = Validator::make(compact('slug'),['slug'=>'exists:gestionnaires,slug']);
-        if ($validation->fails()){
-            return response()->json($validation->errors(),422);
-        }
-        return null;
-    }
 }

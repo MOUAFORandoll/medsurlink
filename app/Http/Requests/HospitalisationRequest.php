@@ -39,10 +39,4 @@ class HospitalisationRequest extends FormRequest
             "examen_complementaire"=>"sometimes|nullable|string|min:2",
         ];
     }
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        Request::merge(['error'=>$validator->errors()->getMessages()]);
-
-    }
-
 }

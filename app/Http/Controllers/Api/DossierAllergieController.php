@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Models\Allergie;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\DossierMedical;
@@ -12,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class DossierAllergieController extends Controller
 {
+    use PersonnalErrors;
     public function retirerAllergie(Request $request){
         $validation = Validator::make($request->all(),[
             "dossier"=>"required|integer|exists:dossier_medicals,id",
@@ -23,12 +25,7 @@ class DossierAllergieController extends Controller
 
         $dossier = DossierMedical::find($request->get('dossier'));
 
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("DossierAllergie",$dossier->id,"attach");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 );
-        }
+        $this->checkIfAuthorized("DossierAllergie",$dossier->id,"attach");
 
         $dossier->allergies()->detach($request->get('allergies'));
 

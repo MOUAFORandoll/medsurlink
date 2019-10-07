@@ -31,11 +31,4 @@ class GestionnaireUpdateRequest extends FormRequest
         $rules["civilite"] = ["required",Rule::in(['M.','Mme/Mlle.','Dr.','Pr.'])];
         return $rules ;
     }
-
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        Request::merge(['error'=>$validator->errors()->getMessages()]);
-
-    }
-
 }

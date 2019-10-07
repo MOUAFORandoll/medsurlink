@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Requests\ParametreCommunRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ParametreObstRequest;
 use App\Models\ParametreObstetrique;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class ParametreObstetriqueController extends Controller
 {
+    use PersonnalErrors;
     protected $table = "parametre_obs";
     /**
      * Display a listing of the resource.
@@ -19,10 +19,11 @@ class ParametreObstetriqueController extends Controller
     public function index()
     {
         $parametresObs = ParametreObstetrique::with(['consultationPrenatale'])->get();
-        foreach ($parametresObs as $parametresOb){
-            $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$parametresOb->id,"create");
-            $parametresOb['isAuthor'] = $isAuthor->getOriginalContent();
+
+        foreach ($parametresObs as $parametreOb){
+            $parametreOb->updateParametreObstetrique();
         }
+
         return response()->json(['parametresObs'=>$parametresObs]);
     }
 
@@ -45,7 +46,9 @@ class ParametreObstetriqueController extends Controller
     public function store(ParametreObstRequest $request)
     {
         $parametreObs = ParametreObstetrique::create($request->validated());
+
         $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->whereSlug($parametreObs->slug)->first();
+
         defineAsAuthor("ParametreObstetrique",$parametreObs->id,'create');
 
         return response()->json(['parametreObs'=>$parametreObs]);
@@ -54,18 +57,18 @@ class ParametreObstetriqueController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function show($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->whereSlug($slug)->first();
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$parametreObs->id,"create");
-        $parametreObs['isAuthor'] = $isAuthor->getOriginalContent();
+
+        $parametreObs->updateParametreObstetrique();
+
         return response()->json(['parametreObs'=>$parametreObs]);
 
     }
@@ -84,49 +87,46 @@ class ParametreObstetriqueController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param ParametreObstRequest $request
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function update(ParametreObstRequest $request, $slug)
     {
 
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $parametreObs = ParametreObstetrique::findBySlug($slug);
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$parametreObs->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 ); }
+
+        $this->checkIfAuthorized("ParametreObstetrique",$parametreObs->id,"create");
 
         ParametreObstetrique::whereSlug($slug)->update($request->validated());
+
         $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->whereSlug($slug)->first();
+
         return response()->json(['parametreObs'=>$parametreObs]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function destroy($slug)
     {
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        $this->validatedSlug($slug,$this->table);
 
         $parametreObs = ParametreObstetrique::findBySlug($slug);
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreObstetrique",$parametreObs->id,"create");
-        if($isAuthor->getOriginalContent() == false){
-            $transmission = [];
-            $transmission['accessRefuse'][0] = "Vous ne pouvez modifié un élement que vous n'avez crée";
-            return response()->json(['error'=>$transmission],419 );}
+
+        $this->checkIfAuthorized("ParametreObstetrique",$parametreObs->id,"create");
 
         $parametreObs->delete();
+
         return response()->json(['parametreObs'=>$parametreObs]);
     }
 }

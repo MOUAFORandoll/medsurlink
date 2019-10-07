@@ -30,9 +30,4 @@ class TraitementProposeRequest extends FormRequest
             "description" => "sometimes|nullable|string|min:2",
         ];
     }
-
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        Request::merge(['error'=>$validator->errors()->getMessages()]);
-    }
 }

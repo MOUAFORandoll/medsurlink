@@ -39,6 +39,7 @@ trait PersonnalErrors
      * @param $type
      * @param $id
      * @param $action
+     * @return bool
      * @throws PersonnnalException
      */
     public function checkIfAuthorized($type, $id, $action){
@@ -65,5 +66,10 @@ trait PersonnalErrors
     public function revealNonTransmis(){
         $nonTransmis = "Ce resultat n'a pas encoré été transmis";
         $this->revealError('nonTransmis',$nonTransmis);
+    }
+
+    public function revealDuplicateDossier($numeroDossier){
+        $uniqueDossier = "Ce patient a déja un dossier: ".$numeroDossier;
+        $this->revealError('uniqueDossier',$uniqueDossier);
     }
 }
