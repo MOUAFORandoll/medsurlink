@@ -4,9 +4,12 @@
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
 <<<<<<< HEAD
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
 =======
+=======
+>>>>>>> 5d51810... Fin refactoring Back-end
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationTraitementController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationTraitementController.php" afterDir="false" />
@@ -71,6 +74,9 @@
       <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_23_151916_create_examen_cliniques_table.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_24_074233_create_examen_complementaires_table.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_25_130807_create_resultats_table.php" beforeDir="false" />
+<<<<<<< HEAD
+>>>>>>> 5d51810... Fin refactoring Back-end
+=======
 >>>>>>> 5d51810... Fin refactoring Back-end
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
@@ -428,7 +434,11 @@
       <workItem from="1570199549524" duration="1174000" />
       <workItem from="1570434148278" duration="14712000" />
 <<<<<<< HEAD
+<<<<<<< HEAD
       <workItem from="1570452522872" duration="7998000" />
+=======
+      <workItem from="1570452522872" duration="2827000" />
+>>>>>>> 5d51810... Fin refactoring Back-end
 =======
       <workItem from="1570452522872" duration="2827000" />
 >>>>>>> 5d51810... Fin refactoring Back-end
