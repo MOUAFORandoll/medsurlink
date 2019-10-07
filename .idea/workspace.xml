@@ -3,8 +3,75 @@
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationPrenantaleController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationTraitementController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationTraitementController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierAllergieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierAllergieController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/EchographieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/EchographieController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/EtablissementExerciceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/EtablissementExerciceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenCliniqueController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenComplementaireController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/GestionnaireController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/GestionnaireController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationMotifController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationMotifController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/MedecinControleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/MedecinControleController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/MotifController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/MotifController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreCommunController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreCommunController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreObstetriqueController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ProfessionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ProfessionController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatImagerieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatImagerieController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatLaboController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ResultatLaboController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SpecialiteController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SpecialiteController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/TraitementActuelController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/TraitementActuelController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/TraitementController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/TraitementProposeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/TraitementProposeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Traits/PersonnalErrors.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Traits/PersonnalErrors.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsultationPrenataleRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsultationPrenataleRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/DossierMedicalRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/DossierMedicalRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/EchographieRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/EchographieRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/EtablissementExerciceRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/EtablissementExerciceRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ExamenCliniqueRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ExamenComplementaireRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/GestionnaireStoreRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/GestionnaireStoreRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/GestionnaireUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/GestionnaireUpdateRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/HospitalisationRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/HospitalisationRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/MedecinControleUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/MedecinControleUpdateRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/PatientUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/PatientUpdateRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/PraticienStoreRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/PraticienStoreRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/PraticienUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/PraticienUpdateRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ResultatRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ResultatRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/SouscripteurUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/SouscripteurUpdateRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/SpecialiteRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/SpecialiteRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/TraitementActuelUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/TraitementActuelUpdateRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/TraitementProposeRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/TraitementProposeRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/TraitementRequest.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/patientStoreRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/patientStoreRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/DossierMedical.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DossierMedical.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Echographie.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Echographie.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ExamenClinique.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ExamenComplementaire.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Gestionnaire.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Gestionnaire.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Hospitalisation.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Hospitalisation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Motif.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Motif.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ParametreCommun.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ParametreCommun.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ParametreObstetrique.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ParametreObstetrique.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Resultat.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/TraitementActuel.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/TraitementActuel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_23_151916_create_examen_cliniques_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_24_074233_create_examen_complementaires_table.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_07_25_130807_create_resultats_table.php" beforeDir="false" />
+>>>>>>> 5d51810... Fin refactoring Back-end
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -360,7 +427,11 @@
       <workItem from="1570174330584" duration="7175000" />
       <workItem from="1570199549524" duration="1174000" />
       <workItem from="1570434148278" duration="14712000" />
+<<<<<<< HEAD
       <workItem from="1570452522872" duration="7998000" />
+=======
+      <workItem from="1570452522872" duration="2827000" />
+>>>>>>> 5d51810... Fin refactoring Back-end
     </task>
     <servers />
   </component>
