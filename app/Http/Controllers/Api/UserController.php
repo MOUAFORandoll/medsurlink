@@ -9,11 +9,13 @@ use App\Rules\EmailExistRule;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Netpok\Database\Support\DeleteRestrictionException;
+use PHPUnit\Util\Json;
 
 class UserController extends Controller
 {
@@ -207,5 +209,15 @@ class UserController extends Controller
 //            'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
         return $validation;
+    }
+
+    public function logout(Request $request)
+    {
+      $user = User::whereId((json_decode($request->user))->id)->first();
+
+        return response()->json([
+            'message' => 'Successfully logged out',
+            'id'=>$user->token()
+        ],419);
     }
 }
