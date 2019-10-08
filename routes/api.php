@@ -12,6 +12,7 @@
 */
 
 Route::post('oauth/token', 'Api\AuthController@auth');
+Route::post('/logout','Api\UserController@logout');
 
 
 Route::middleware(['auth:api'])->group(function () {
@@ -23,8 +24,6 @@ Route::middleware(['auth:api'])->group(function () {
             ]
         );
     });
-
-    Route::get('auteur','Api\AuteurController@store');
 
 });
 Route::group(['middleware' => ['auth:api','role:Admin']], function () {

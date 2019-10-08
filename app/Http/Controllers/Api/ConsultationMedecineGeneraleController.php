@@ -72,7 +72,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
 
-        $consultation->updateConsultationObstetric();
+        $consultation->updateConsultationMedecine();
 
         return response()->json(["consultation"=>$consultation]);
 
