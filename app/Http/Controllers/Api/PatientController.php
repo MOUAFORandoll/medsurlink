@@ -15,7 +15,7 @@ use Netpok\Database\Support\DeleteRestrictionException;
 class PatientController extends Controller
 {
     use PersonnalErrors;
-    protected $table = 'Patients';
+    protected $table = 'patients';
     /**
      * Display a listing of the resource.
      *
