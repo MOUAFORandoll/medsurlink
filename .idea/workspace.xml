@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
 <<<<<<< HEAD
@@ -80,6 +81,9 @@
 >>>>>>> 5d51810... Fin refactoring Back-end
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
+=======
+    <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="" />
+>>>>>>> 871c22b6fa9b5d26efc2b9667124906999cc6ea2
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -436,12 +440,16 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
       <workItem from="1570452522872" duration="7998000" />
+<<<<<<< HEAD
 =======
       <workItem from="1570452522872" duration="2827000" />
 >>>>>>> 5d51810... Fin refactoring Back-end
 =======
       <workItem from="1570452522872" duration="2827000" />
 >>>>>>> 5d51810... Fin refactoring Back-end
+=======
+      <workItem from="1570530176591" duration="609000" />
+>>>>>>> 871c22b6fa9b5d26efc2b9667124906999cc6ea2
     </task>
     <servers />
   </component>
