@@ -18,7 +18,6 @@ header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Autho
 */
 
 Route::post('oauth/token', 'Api\AuthController@auth');
-Route::post('/logout','Api\UserController@logout');
 
 
 Route::middleware(['auth:api'])->group(function () {
@@ -30,6 +29,7 @@ Route::middleware(['auth:api'])->group(function () {
             ]
         );
     });
+    Route::post('/logout','Api\UserController@logout');
 
 });
 Route::group(['middleware' => ['auth:api','role:Admin']], function () {

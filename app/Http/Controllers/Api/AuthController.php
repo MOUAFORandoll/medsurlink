@@ -13,19 +13,19 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AuthController extends AccessTokenController
 {
-    public function auth(ServerRequestInterface $request)
+   public function auth(ServerRequestInterface $request)
     {
-        $tokenResponse = parent::issueToken($request);
-        $token = $tokenResponse->getContent();
+         $tokenResponse = parent::issueToken($request);
+         $token = $tokenResponse->getContent();
 
-        // $tokenInfo will contain the usual Laravel Passort token response.
-        $tokenInfo = json_decode($token, true);
-        $tokenInfo = collect($tokenInfo);
+         // $tokenInfo will contain the usual Laravel Passort token response.
+         $tokenInfo = json_decode($token, true);
+         $tokenInfo = collect($tokenInfo);
 
-//return response()->json(['error'=>$tokenInfo]);
+         //return response()->json(['error'=>$tokenInfo]);
 
-        if ($tokenInfo->has('error'))
-            return response()->json(['error'=>$tokenInfo->get('message')],401);
+         if ($tokenInfo->has('error'))
+             return response()->json(['error'=>$tokenInfo->get('message')],401);
 
 
         // Then we just add the user to the response before returning it.

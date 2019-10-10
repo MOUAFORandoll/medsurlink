@@ -67,7 +67,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof \Swift_TransportException ) {
-            return response()->json(['error'=>"L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou les configurations de votre serveur de messagerie la prochaine fois"],419);
+            return response()->json(['error'=>"L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur"],419);
         }
         return parent::render($request, $exception);
     }

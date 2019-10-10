@@ -213,11 +213,15 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
-      $user = User::whereId((json_decode($request->user))->id)->first();
+        if (Auth::check()) {
+            $request->user()->token()->revoke();
+            return response()->json([
+                'message' => 'Successfully logged out',
+            ]);
+        }else{
+            return response()->json(['error' =>'api.something_went_wrong'], 500);
+        }
 
-        return response()->json([
-            'message' => 'Successfully logged out',
-            'id'=>$user->token()
-        ],419);
+
     }
 }
