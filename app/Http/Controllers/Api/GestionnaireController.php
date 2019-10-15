@@ -59,9 +59,15 @@ class GestionnaireController extends Controller
         defineAsAuthor("Gestionnaire",$gestionnaire->user_id,'create');
 
         //envoi des informations du compte utilisateurs par mail
-        UserController::sendUserInformationViaMail($user,$password);
+        try{
+            UserController::sendUserInformationViaMail($user,$password);
+            return response()->json(['gestionnaire'=>$gestionnaire]);
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['gestionnaire'=>$gestionnaire, "message"=>$message]);
 
-        return response()->json(['gestionnaire'=>$gestionnaire]);
+        }
+
 
     }
 

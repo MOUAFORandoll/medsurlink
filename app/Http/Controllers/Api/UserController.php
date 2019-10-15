@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\PersonnnalException;
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Mail\Password\PasswordGenerated;
@@ -19,7 +21,7 @@ use PHPUnit\Util\Json;
 
 class UserController extends Controller
 {
-
+    use PersonnalErrors;
     /**
      * Display a listing of the resource.
      *
@@ -165,8 +167,9 @@ class UserController extends Controller
     }
 
     public static function sendUserInformationViaMail(User $user,$password){
-        $mail = new PasswordGenerated($user,$password);
-        Mail::to($user->email)->send($mail);
+
+            $mail = new PasswordGenerated($user,$password);
+            Mail::to($user->email)->send($mail);
     }
 
     public static function updatePersonalInformation($data,$slug){

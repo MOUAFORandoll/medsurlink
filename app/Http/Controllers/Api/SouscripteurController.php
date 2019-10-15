@@ -61,8 +61,14 @@ class SouscripteurController extends Controller
         defineAsAuthor("Souscripteur",$souscripteur->user_id,'create');
 
         //envoi des informations du compte utilisateurs par mail
-        UserController::sendUserInformationViaMail($user,$password);
-        return response()->json(['souscripteur'=>$souscripteur]);
+        try{
+            UserController::sendUserInformationViaMail($user,$password);
+            return response()->json(['souscripteur'=>$souscripteur]);
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['souscripteur'=>$souscripteur, "message"=>$message]);
+        }
+
 
     }
 

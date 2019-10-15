@@ -65,10 +65,15 @@ class PatientController extends Controller
         defineAsAuthor("Patient",$patient->user_id,'create');
 
         //Envoi des informations patient par mail
-        UserController::sendUserInformationViaMail($user,$password);
-
         $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
-        return response()->json(['patient'=>$patient,"password"=>$password]);
+        try{
+            UserController::sendUserInformationViaMail($user,$password);
+            return response()->json(['patient'=>$patient,"password"=>$password]);
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['patient'=>$patient, "message"=>$message]);
+        }
+
     }
 
     /**

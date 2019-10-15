@@ -63,8 +63,14 @@ class PraticienController extends Controller
         defineAsAuthor("Praticien",$praticien->user_id,'create');
 
         //Envoi des informations patient par mail
+        try{
         UserController::sendUserInformationViaMail($user,$password);
-        return response()->json(['praticien'=>$praticien]);
+            return response()->json(['praticien'=>$praticien]);
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['praticien'=>$praticien, "message"=>$message]);
+
+        }
 
     }
 

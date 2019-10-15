@@ -62,10 +62,14 @@ class MedecinControleController extends Controller
         defineAsAuthor("MedecinControle",$medecin->user_id,'create');
 
         //envoi des informations du compte utilisateurs par mail
+      try{
         UserController::sendUserInformationViaMail($user,$password);
+            return response()->json(['medecin'=>$medecin]);
+    }catch (\Swift_TransportException $transportException){
+        $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+        return response()->json(['medecin'=>$medecin, "message"=>$message]);
 
-        return response()->json(['medecin'=>$medecin]);
-
+    }
     }
 
     /**
