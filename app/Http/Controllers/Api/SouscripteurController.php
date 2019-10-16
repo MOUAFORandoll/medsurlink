@@ -7,7 +7,6 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\SouscripteurStoreRequest;
 use App\Http\Requests\SouscripteurUpdateRequest;
 use App\Models\Souscripteur;
-use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class SouscripteurController extends Controller
@@ -142,7 +141,7 @@ class SouscripteurController extends Controller
             return response()->json(['souscripteur'=>$souscripteur]);
 
         }catch (DeleteRestrictionException $deleteRestrictionException){
-            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+            $this->revealError('deletingError',$deleteRestrictionException->getMessage());
         }
 
     }

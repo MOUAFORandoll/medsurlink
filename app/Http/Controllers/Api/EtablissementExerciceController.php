@@ -120,7 +120,7 @@ class EtablissementExerciceController extends Controller
             return response()->json(['etablissement'=>$etablissement]);
 
         }catch (DeleteRestrictionException $deleteRestrictionException){
-            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+            $this->revealError('deletingError',$deleteRestrictionException->getMessage());
         }
     }
 }
