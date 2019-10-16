@@ -152,7 +152,7 @@ class ConsultationObstetriqueController extends Controller
             $consultationObstetrique->delete();
             return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
-            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+            $this->revealError('deletingError',$deleteRestrictionException->getMessage());
         }
     }
 

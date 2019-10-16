@@ -149,7 +149,7 @@ class DossierMedicalController extends Controller
             $dossier->delete();
             return response()->json(['dossier'=>$dossier]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
-            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+            $this->revealError('deletingError',$deleteRestrictionException->getMessage());
         }
     }
 

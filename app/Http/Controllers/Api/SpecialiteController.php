@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\SpecialiteRequest;
 use App\Models\Specialite;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class SpecialiteController extends Controller
@@ -115,9 +113,9 @@ class SpecialiteController extends Controller
             $specialite = Specialite::with(['profession'])->whereSlug($slug)->first();
             $specialite->delete();
             return response()->json(['specialite'=>$specialite]);
-            
+
         }catch (DeleteRestrictionException $deleteRestrictionException){
-            return response()->json(['error'=>$deleteRestrictionException->getMessage()],422);
+            $this->revealError('deletingError',$deleteRestrictionException->getMessage());
         }
 
     }
