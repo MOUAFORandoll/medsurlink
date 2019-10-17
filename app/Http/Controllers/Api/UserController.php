@@ -160,6 +160,7 @@ class UserController extends Controller
             'ville'=>$request->ville,
             'pays'=>$request->pays,
             'telephone'=>$request->telephone,
+            'adresse'=>$request->adresse,
             'password'=>Hash::make($password)
         ]);
 
@@ -194,7 +195,7 @@ class UserController extends Controller
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255',new EmailExistRule($slug,'User')],
-//            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'adresse' => ['required', 'string','min:3'],
         ]);
         return $validation;
     }
@@ -209,7 +210,7 @@ class UserController extends Controller
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-//            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'adresse' => ['required', 'string','min:3'],
         ]);
         return $validation;
     }
