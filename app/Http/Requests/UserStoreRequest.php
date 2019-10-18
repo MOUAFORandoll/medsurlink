@@ -34,7 +34,7 @@ class UserStoreRequest extends FormRequest
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-//            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'adresse' => ['required', 'string','min:3'],
         ];
     }
 

@@ -51,7 +51,8 @@ class User extends Authenticatable
         'pays',
         'telephone',
         'password',
-        'slug'
+        'slug',
+        'adresse'
     ];
 
     /**
