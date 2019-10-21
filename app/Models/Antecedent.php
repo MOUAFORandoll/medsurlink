@@ -46,6 +46,7 @@ class Antecedent extends Model
     public function updateAntecedentItem(){
         if(!is_null($this)) {
             $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent", $this->id, "create");
+            $this['user']= $this->dossier->patient->user;
             $this['isAuthor'] = $isAuthor->getOriginalContent();
         }
     }
