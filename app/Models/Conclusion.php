@@ -46,6 +46,8 @@ class Conclusion extends Model
         if(!is_null($this)) {
             $isAuthor = checkIfIsAuthorOrIsAuthorized("Conclusion", $this->id, "create");
             $this['isAuthor'] = $isAuthor->getOriginalContent();
+            $this['user'] = $this->consultationMedecine->dossier->patient->user;
+            $this['dossier'] = $this->consultationMedecine->dossier;
         }
     }
 }

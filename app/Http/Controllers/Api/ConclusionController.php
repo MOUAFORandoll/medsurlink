@@ -51,6 +51,10 @@ class ConclusionController extends Controller
 
         defineAsAuthor("Conclusion",$conclusion->id,'create');
 
+        $conclusion = Conclusion::with(['consultationMedecine'])->whereSlug($conclusion->slug)->first();
+
+        $conclusion->updateConclusionItem();
+
         return response()->json(['conclusion'=>$conclusion]);
 
     }
