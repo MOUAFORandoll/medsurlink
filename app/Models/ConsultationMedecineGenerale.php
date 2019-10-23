@@ -69,6 +69,10 @@ class ConsultationMedecineGenerale extends Model
         return $this->hasMany(Conclusion::class,'consultation_medecine_generale_id','id');
     }
 
+    public function parametresCommun(){
+        return $this->hasMany(ParametreCommun::class,'consultation_medecine_generale_id','id');
+    }
+
     /**
      * The "booting" method of the model.
      *
