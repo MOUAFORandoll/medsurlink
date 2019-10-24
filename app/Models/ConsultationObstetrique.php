@@ -93,4 +93,9 @@ class ConsultationObstetrique extends Model
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$this->id,"create");
         $this['isAuthor']=$isAuthor->getOriginalContent();
     }
+
+    public function scopeOrderByDateDeRendezVous($query)
+    {
+        return $query->orderBy('ddr', 'desc');
+    }
 }
