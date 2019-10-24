@@ -21,7 +21,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function index()
     {
-        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->get();
+        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->orderByDateConsultation()->get();
 
         foreach ($consultations as $consultation){
             $consultation->updateConsultationMedecine();
@@ -52,7 +52,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create');
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->find($consultation->id);
+        $consultation = ConsultationMedecineGenerale::with(['dossier','traitements','conclusions','parametresCommun'])->find($consultation->id);
         if(!is_null($consultation))
             $consultation->updateConsultationMedecine();
 
@@ -111,7 +111,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
 
-        $consultation->updateConsultationObstetric();
+        $consultation->updateConsultationMedecine();
 
         return response()->json(["consultation"=>$consultation]);
     }

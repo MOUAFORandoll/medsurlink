@@ -13,7 +13,7 @@ class ConsultationMotifController extends Controller
     public function removeMotif(Request $request){
         $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
-            "motifs.*"=>"required|integer|exists:motifs,id"
+            "motifs"=>"required|integer|exists:motifs,id"
         ]);
 
         if ($validation->fails()){
@@ -23,19 +23,24 @@ class ConsultationMotifController extends Controller
         $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
         $consultation->motifs()->detach($request->get('motifs'));
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','conclusions'])->find($request->get('consultation'));
+        $consultation = ConsultationMedecineGenerale::with(['dossier', 'traitements', 'conclusions', 'parametresCommun'])->find($consultation->id);
+
+        if (!is_null($consultation))
+            $consultation->updateConsultationMedecine();
+
         return response()->json(['consultation'=>$consultation]);
     }
 
-    public function ajouterMotif(Request $request){
-        $validation = Validator::make($request->all(),[
-            "consultation"=>"required|string|exists:consultation_medecine_generales,slug",
+    public function ajouterMotif(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            "consultation" => "required|string|exists:consultation_medecine_generales,slug",
             "reference" => ["required", "string", "max:255"],
             "description" => ["required", "string"]
         ]);
 
-        if ($validation->fails()){
-            return response()->json(['error'=>$validation->errors()],419);
+        if ($validation->fails()) {
+            return response()->json(['error' => $validation->errors()], 419);
         }
 
         $consultation = ConsultationMedecineGenerale::findBySlug($request->get('consultation'));
@@ -44,11 +49,15 @@ class ConsultationMotifController extends Controller
             'reference' => $request->get('reference'),
             'description' => $request->get('description')
         ]);
-        defineAsAuthor("Motif",$motif->id,'create');
+        defineAsAuthor("Motif", $motif->id, 'create');
         $consultation->motifs()->attach($motif->id);
-        defineAsAuthor("ConsultationMotif",$motif->id,'attach');
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','examensClinique','examensComplementaire','traitements','conclusions'])
-            ->find($request->get('consultation'));
+
+        defineAsAuthor("ConsultationMotif", $motif->id, 'attach');
+
+        $consultation = ConsultationMedecineGenerale::with(['dossier', 'traitements', 'conclusions', 'parametresCommun'])->find($consultation->id);
+
+        if (!is_null($consultation))
+            $consultation->updateConsultationMedecine();
 
         return response()->json(['consultation'=>$consultation]);
     }
