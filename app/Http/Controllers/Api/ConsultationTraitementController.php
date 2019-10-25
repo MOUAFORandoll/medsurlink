@@ -65,7 +65,10 @@ class ConsultationTraitementController extends Controller
 
         defineAsAuthor("ConsultationTraitement",$consultation->id,'attach');
 
-        $consultation = ConsultationMedecineGenerale::with(['examensClinique','examensComplementaire','traitements','traitements'])->find($request->get('consultation'));
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($consultation->slug)->first();
+
+        $consultation->updateConsultationMedecine();
+
         return response()->json(['consultation'=>$consultation]);
     }
 }

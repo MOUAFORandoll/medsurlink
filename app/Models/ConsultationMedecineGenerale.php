@@ -69,6 +69,10 @@ class ConsultationMedecineGenerale extends Model
         return $this->hasMany(Conclusion::class,'consultation_medecine_generale_id','id');
     }
 
+    public function parametresCommun(){
+        return $this->hasMany(ParametreCommun::class,'consultation_medecine_generale_id','id');
+    }
+
     /**
      * The "booting" method of the model.
      *
@@ -86,13 +90,22 @@ class ConsultationMedecineGenerale extends Model
         $user = $this->dossier->patient->user;
         $patient = $this->dossier->patient;
         $allergies = $this->dossier->allergies;
+        $motifs = $this->motifs;
 
         foreach ($allergies as $allergy)
         {
             $allergieIsAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
             $allergy['isAuthor'] = $allergieIsAuthor->getOriginalContent();
         }
+
+        foreach ($motifs as $motif)
+        {
+            $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$motif->id,"create");
+            $motif['isAuthor'] = $motifIsAuthor->getOriginalContent();
+        }
+
         $this['allergies']= $allergies;
+        $this['motifs']= $motifs;
         $this['user']=$user;
         $this['patient']=$patient;
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$this->id,"create");
@@ -100,4 +113,8 @@ class ConsultationMedecineGenerale extends Model
         }
     }
 
+    public function scopeOrderByDateConsultation($query)
+    {
+        return $query->orderBy('date_consultation', 'desc');
+    }
 }

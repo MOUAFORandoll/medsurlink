@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AntecedentRequest;
 use App\Models\Antecedent;
+use App\Models\DossierMedical;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -52,7 +53,23 @@ class AntecedentController extends Controller
 
         $antecedent = Antecedent::with('dossier')->whereSlug($antecedent->slug)->first();
 
-        return response()->json(['antecedent'=>$antecedent]);
+        $dossier = DossierMedical::with([
+            'allergies'=> function ($query) {
+                $query->orderBy('date', 'desc');
+            },
+            'antecedents',
+            'patient',
+            'consultationsMedecine',
+            'consultationsObstetrique',
+            'traitements'=> function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }
+        ])->whereId($antecedent->dossier_medical_id)->first();
+
+        $dossier->updateDossier();
+
+        return response()->json(['dossier'=>$dossier]);
+//        return response()->json(['antecedent'=>$antecedent]);
     }
 
 
@@ -124,6 +141,23 @@ class AntecedentController extends Controller
         $antecedent = Antecedent::with('dossier')->whereSlug($slug)->first();
         $antecedent->delete();
 
-        return response()->json(['antecedent'=>$antecedent]);
+        $dossier = DossierMedical::with([
+            'allergies'=> function ($query) {
+                $query->orderBy('date', 'desc');
+            },
+            'antecedents',
+            'patient',
+            'consultationsMedecine',
+            'consultationsObstetrique',
+            'traitements'=> function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }
+        ])->whereId($antecedent->dossier_medical_id)->first();
+
+        $dossier->updateDossier();
+
+        return response()->json(['dossier'=>$dossier]);
+
+//        return response()->json(['antecedent'=>$antecedent]);
     }
 }

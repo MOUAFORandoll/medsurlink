@@ -28,7 +28,7 @@ class EchographieRequest extends FormRequest
         return [
             "consultation_obstetrique_id"=>"required|integer|exists:consultation_obstetriques,id",
             "type"=>"required|string",
-            "ddr"=>"required|date|after_or_equal:".Carbon::now()->format('Y-m-d'),
+            "ddr"=>"required|date|before_or_equal:".Carbon::now()->format('Y-m-d'),
             "dpa"=>"required|date|after_or_equal:".Carbon::now()->format('Y-m-d'),
             "semaine_amenorrhee"=>"required|integer",
             "date_creation"=>"sometimes|nullable|date",

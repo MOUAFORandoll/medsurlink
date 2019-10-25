@@ -4688,26 +4688,31 @@ role_id</ColNames>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="993" parent="380" name="users_email_unique">
+    <column id="993" parent="380" name="adresse">
+      <Position>18</Position>
+      <DataType>varchar(191)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="994" parent="380" name="users_email_unique">
       <ColNames>email</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="994" parent="380" name="users_slug_unique">
+    <index id="995" parent="380" name="users_slug_unique">
       <ColNames>slug</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="995" parent="380" name="PRIMARY">
+    <key id="996" parent="380" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="996" parent="380" name="users_email_unique">
+    <key id="997" parent="380" name="users_email_unique">
       <ColNames>email</ColNames>
       <UnderlyingIndexName>users_email_unique</UnderlyingIndexName>
     </key>
-    <key id="997" parent="380" name="users_slug_unique">
+    <key id="998" parent="380" name="users_slug_unique">
       <ColNames>slug</ColNames>
       <UnderlyingIndexName>users_slug_unique</UnderlyingIndexName>
     </key>

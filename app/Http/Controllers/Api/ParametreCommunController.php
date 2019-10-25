@@ -52,6 +52,10 @@ class ParametreCommunController extends Controller
 
         defineAsAuthor("ParametreCommun",$parametreCommun->id,'create');
 
+        $parametreCommun = ParametreCommun::with('consultation')->whereSlug($parametreCommun->slug)->first();
+
+        $parametreCommun->updateParametreCommun();
+
         return response()->json(['parametreCommun'=>$parametreCommun]);
 
     }
@@ -123,7 +127,7 @@ class ParametreCommunController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $parametreCommun = ParametreCommun::findBySlug($slug);
+        $parametreCommun = ParametreCommun::with('consultation')->whereSlug($slug)->first();
 
         $this->checkIfAuthorized("ParametreCommun",$parametreCommun->id,"create");
         $parametreCommun->delete();

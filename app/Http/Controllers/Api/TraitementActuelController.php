@@ -48,6 +48,7 @@ class TraitementActuelController extends Controller
     public function store(TraitementActuelRequest $request)
     {
         $traitements = $request->get('traitements');
+
         foreach ($traitements as $traitement){
 
             $traitementCreer =   TraitementActuel::create([

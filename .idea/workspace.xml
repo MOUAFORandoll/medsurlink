@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a20ef2de-363e-4f01-bb3e-2f7d4904d46d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/UserStoreRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/UserStoreRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/UserUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/UserUpdateRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/AntecedentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/AntecedentController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -47,13 +45,20 @@
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
       </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="antecedents: table" type="dbc44a63:MariaImplModel$Table" />
+      </path>
     </expand>
     <select />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Staging" />
+        <entry key="$PROJECT_DIR$" value="WilfriedBranch" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -375,7 +380,19 @@
       <workItem from="1571124617590" duration="12042000" />
       <workItem from="1571210932324" duration="2602000" />
       <workItem from="1571221711422" duration="2907000" />
-      <workItem from="1571300703463" duration="1336000" />
+      <workItem from="1571300703463" duration="1429000" />
+      <workItem from="1571383619701" duration="6691000" />
+      <workItem from="1571404238389" duration="2780000" />
+      <workItem from="1571643375859" duration="6665000" />
+      <workItem from="1571667847989" duration="2222000" />
+      <workItem from="1571729980878" duration="4367000" />
+      <workItem from="1571737222139" duration="207000" />
+      <workItem from="1571744200086" duration="1513000" />
+      <workItem from="1571816989991" duration="2073000" />
+      <workItem from="1571826757133" duration="1304000" />
+      <workItem from="1571903487825" duration="5165000" />
+      <workItem from="1571915651460" duration="3414000" />
+      <workItem from="1571989373675" duration="5250000" />
     </task>
     <servers />
   </component>

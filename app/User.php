@@ -12,11 +12,10 @@ use App\Models\Traits\SlugRoutable;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
-use http\Env\Response;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\HasApiTokens;
@@ -64,7 +63,7 @@ class User extends Authenticatable
         'gestionnaire',
         'souscripteur',
         'medecinControle',
-        ];
+    ];
 
     /**
      * Return the sluggable configuration array for this model.
@@ -123,16 +122,21 @@ class User extends Authenticatable
         //Verification de l'existence de l'adresse email
         $validator = Validator::make(compact('username'),['username'=>['exists:users,email']]);
         if($validator->fails()){
+
             //Verification de l'existence du numero de dossier
             if (strlen($username)==8){
-                $numero_dossier = $username;
-                $dossier = DossierMedical::with('patient')->whereNumeroDossier($numero_dossier)->first();
-                return $dossier->patient->user;
-            }
 
+                $numero_dossier = $username;
+                $dossier = DB::table('dossier_medicals')->where('numero_dossier','=',$numero_dossier)->first();
+                if (!is_null($dossier)){
+                    $user = User::whereId($dossier->patient_id)->first();
+                    return $user;
+                }
+                return [];
+            }
             return [];
         }
-        return  $this->where('email', $username)->first();
+        return  User::where('email', $username)->first();
     }
 
     public function praticien(){

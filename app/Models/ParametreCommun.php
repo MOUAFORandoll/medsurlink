@@ -52,6 +52,8 @@ class ParametreCommun extends Model
         if (!is_null($this)){
             $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$this->id,"create");
             $this['isAuthor'] = $isAuthor->getOriginalContent();
+            $this['user'] = $this->consultation->dossier->patient->user;
+            $this['dossier'] = $this->consultation->dossier;
         }
     }
 }

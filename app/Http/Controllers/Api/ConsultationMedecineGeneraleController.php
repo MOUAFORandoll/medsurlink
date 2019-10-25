@@ -21,7 +21,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function index()
     {
-        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->get();
+        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->orderByDateConsultation()->get();
 
         foreach ($consultations as $consultation){
             $consultation->updateConsultationMedecine();
@@ -52,7 +52,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create');
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->find($consultation->id);
+        $consultation = ConsultationMedecineGenerale::with(['dossier','traitements','conclusions','parametresCommun'])->find($consultation->id);
         if(!is_null($consultation))
             $consultation->updateConsultationMedecine();
 
@@ -70,7 +70,7 @@ class ConsultationMedecineGeneraleController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
 
         $consultation->updateConsultationMedecine();
 
@@ -109,9 +109,9 @@ class ConsultationMedecineGeneraleController extends Controller
 
         ConsultationMedecineGenerale::whereSlug($slug)->update($request->validated());
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
 
-        $consultation->updateConsultationObstetric();
+        $consultation->updateConsultationMedecine();
 
         return response()->json(["consultation"=>$consultation]);
     }
@@ -128,7 +128,7 @@ class ConsultationMedecineGeneraleController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
 
         $this->checkIfAuthorized("ConsutationMedecine",$consultation->id,"create");
 
@@ -153,7 +153,7 @@ class ConsultationMedecineGeneraleController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
+        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
 
         if (is_null($resultat->passed_at)){
             $this->revealNonTransmis();
@@ -179,7 +179,7 @@ class ConsultationMedecineGeneraleController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions'])->whereSlug($slug)->first();
+        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
 

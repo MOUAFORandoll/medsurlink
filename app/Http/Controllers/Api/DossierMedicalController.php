@@ -28,6 +28,7 @@ class DossierMedicalController extends Controller
             'allergies'=> function ($query) {
                 $query->orderBy('date', 'desc');
             },
+            'antecedents',
             'patient',
             'consultationsMedecine',
             'consultationsObstetrique',
@@ -92,6 +93,7 @@ class DossierMedicalController extends Controller
             'allergies'=> function ($query) {
                 $query->orderBy('date', 'desc');
             },
+            'antecedents',
             'patient',
             'consultationsMedecine',
             'consultationsObstetrique',
