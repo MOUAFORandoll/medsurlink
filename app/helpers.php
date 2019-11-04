@@ -66,11 +66,11 @@ if (!function_exists('dateOfToday')) {
  */
 if (!function_exists('defineAsAuthor')){
 
-    function defineAsAuthor($operationable_type, $operationable_id, $action){
+    function defineAsAuthor($operationable_type, $operationable_id, $action,$patient_id = null){
         $status = getStatus();
         $auteurable_type = $status->getOriginalContent()['auteurable_type'];
         $auteurable_id = $status->getOriginalContent()['auteurable_id'];
-        \App\Http\Controllers\Api\AuteurController::store($auteurable_type,$auteurable_id,$operationable_type,$operationable_id,$action);
+        \App\Http\Controllers\Api\AuteurController::store($auteurable_type,$auteurable_id,$operationable_type,$operationable_id,$action,$patient_id);
     }
 }
 

@@ -46,7 +46,7 @@ class HospitalisationMotifController extends Controller
         ]);
 
         $hospitalisation->motifs()->attach($motif->id);
-        defineAsAuthor("HospitalisationMotif",$hospitalisation->id,'attach');
+        defineAsAuthor("HospitalisationMotif",$hospitalisation->id,'attach',$hospitalisation->dossier->patient->user_id);
 
         $hospitalisation = Hospitalisation::with('motifs')
             ->find($request->get('hospitalisation'));

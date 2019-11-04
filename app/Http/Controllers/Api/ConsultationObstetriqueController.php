@@ -52,15 +52,16 @@ class ConsultationObstetriqueController extends Controller
     {
 
 
-        $maxNumeroGrossesse = self::genererNumeroGrossesse();
+        $maxNumeroGrossesse = self::genererNumeroGrossesse($request->dossier_medical_id);
         $user = Auth::user();
+        $serologie = implode(" ",$request->serologie);
         if($user->hasRole('Praticien')){
             $praticen = $user->praticien;
             if ($praticen->specialite->name == "Gynéco-obstétrique"){
 
-                $consultationObstetrique =  ConsultationObstetrique::create($request->validated()+['numero_grossesse'=>$maxNumeroGrossesse]);
+                $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie]);
 
-                defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create');
+                defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create',$consultationObstetrique->dossier->patient->user_id);
 
                 return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
 
@@ -68,8 +69,10 @@ class ConsultationObstetriqueController extends Controller
                 $this->revealAccesRefuse();
             }
         }elseif($user->hasRole('Admin')){
-            $consultationObstetrique =  ConsultationObstetrique::create($request->validated()+['numero_grossesse'=>$maxNumeroGrossesse]);
-            defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create');
+            $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie]);
+
+            defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create',$consultationObstetrique->dossier->patient->user_id);
+
             return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
         }
 
@@ -123,8 +126,8 @@ class ConsultationObstetriqueController extends Controller
         $this->checkIfAuthorized("ConsultationObstetrique",$consultationObstetrique->id,"create");
 
         $numeroGrossesse = $consultationObstetrique->numero_grossesse;
-
-        ConsultationObstetrique::whereSlug($slug)->update($request->validated() + ['numero_grossesse'=>$numeroGrossesse]);
+        $serologie = implode(" ",$request->serologie);
+        ConsultationObstetrique::whereSlug($slug)->update($request->except('serologie')+['numero_grossesse'=>$numeroGrossesse,'serologie'=>$serologie]);
 
         $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
 
@@ -202,8 +205,8 @@ class ConsultationObstetriqueController extends Controller
     /**
      * @return int|mixed
      */
-    public static function genererNumeroGrossesse(){
-        $maxConsultationObst =  DB::table('consultation_obstetriques')->max('numero_grossesse');
+    public static function genererNumeroGrossesse($dossier){
+        $maxConsultationObst =  DB::table('consultation_obstetriques')->where('dossier_medical_id','=',$dossier)->max('numero_grossesse');
         return $maxConsultationObst +1;
     }
 }

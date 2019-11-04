@@ -99,6 +99,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
 
 //  Définition des routes accéssible a la fois par le medecin controle et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien']], function () {
+    Route::resource('etablissement','Api\EtablissementExerciceController')->except(['create','store','destroy','edit']);
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except(['create','edit']);
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except(['create','edit']);
     Route::resource('motif','Api\MotifController')->except(['create','edit']);
@@ -131,6 +132,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::post('ajouter-traitement','Api\ConsultationTraitementController@ajouterTraitement');
 
     Route::get('max-consultation-obs','Api\ConsultationObstetriqueController@genererNumeroGrossesse');
+
+    Route::get('latest-operation','Api\AuteurController@latestOperation');
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {

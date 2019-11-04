@@ -48,7 +48,7 @@ class HospitalisationController extends Controller
     {
         $hospitalisation = Hospitalisation::create($request->validated());
 
-        defineAsAuthor("Hospitalisation",$hospitalisation->id,'create');
+        defineAsAuthor("Hospitalisation",$hospitalisation->id,'create',$hospitalisation->dossier->patient->user_id);
 
         return response()->json(['hospitalisation'=>$hospitalisation]);
 

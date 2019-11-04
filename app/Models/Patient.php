@@ -81,6 +81,7 @@ class Patient extends Model
     public function etablissements(){
         return $this->belongsToMany(EtablissementExercice::class,'etablissement_exercice_patient','patient_id','etablissement_id');
     }
+
     public function scopeRestrictUser($builder){
         if (Auth::check()){
             $user = Auth::user();

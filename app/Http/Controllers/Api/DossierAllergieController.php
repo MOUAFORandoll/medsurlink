@@ -67,7 +67,7 @@ class DossierAllergieController extends Controller
                     'description'=>$allergy['description'],
                     'date'=>array_key_exists('date',$allergy) ? $allergy['date'] : null
                 ]);
-                defineAsAuthor("Allergie",$allergieCreer->id,'create');
+                defineAsAuthor("Allergie",$allergieCreer->id,'create',$dossier->patient->user_id);
                 $dossier->allergies()->attach($allergieCreer->id);
             }
         }

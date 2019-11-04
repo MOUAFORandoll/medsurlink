@@ -57,7 +57,7 @@ class AffiliationController extends Controller
 
         $this->updateDateFin($affiliation);
 
-        defineAsAuthor("Affiliation",$affiliation->id,'create');
+        defineAsAuthor("Affiliation",$affiliation->id,'create',$request->patient_id);
 
         return response()->json(['affiliation'=>$affiliation]);
 

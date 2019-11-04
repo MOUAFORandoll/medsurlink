@@ -72,7 +72,9 @@ class DossierMedicalController extends Controller
             "date_de_creation"=>Carbon::now()->format('Y-m-d'),
             "numero_dossier"=>$numero_dossier,
         ]);
-        defineAsAuthor("DossierMedical",$dossier->id,'create');
+
+        defineAsAuthor("DossierMedical",$dossier->id,'create',$dossier->patient->user_id);
+
         return response()->json(['dossier'=>$dossier]);
     }
 

@@ -49,7 +49,7 @@ class ParametreObstetriqueController extends Controller
 
         $parametreObs = ParametreObstetrique::with(['consultationPrenatale'])->whereSlug($parametreObs->slug)->first();
 
-        defineAsAuthor("ParametreObstetrique",$parametreObs->id,'create');
+        defineAsAuthor("ParametreObstetrique",$parametreObs->id,'create',$parametreObs->consultationPrenatale->consultationObstetrique->dossier->patient->user_id);
 
         return response()->json(['parametreObs'=>$parametreObs]);
     }

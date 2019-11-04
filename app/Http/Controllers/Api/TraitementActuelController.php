@@ -56,7 +56,7 @@ class TraitementActuelController extends Controller
                 'description'=>$traitement['description']
             ]);
 
-            defineAsAuthor("TraitementActuel", $traitementCreer->id,'create');
+            defineAsAuthor("TraitementActuel", $traitementCreer->id,'create',$traitementCreer->dossier->patient->user_id);
 
         }
         $dossier = DossierMedical::with([
