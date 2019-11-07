@@ -2,8 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/AuthController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/DossierMedical.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DossierMedical.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Scopes/RestrictDossierScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictDossierScope.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Scopes/RestrictPatientScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictPatientScope.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Scopes/RestrictResultatScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictResultatScope.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -398,6 +406,9 @@
       <workItem from="1572879985408" duration="8112000" />
       <workItem from="1572940180526" duration="2019000" />
       <workItem from="1573029070278" duration="2279000" />
+      <workItem from="1573112495616" duration="6769000" />
+      <workItem from="1573130631383" duration="2941000" />
+      <workItem from="1573138859974" duration="10182000" />
     </task>
     <servers />
   </component>

@@ -21,6 +21,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function index()
     {
+
         $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->orderByDateConsultation()->get();
 
         foreach ($consultations as $consultation){

@@ -50,12 +50,18 @@ class AuthController extends AccessTokenController
                 $dossier = DB::table('dossier_medicals')->where('numero_dossier','=',$numero_dossier)->first();
                 if (!is_null($dossier)){
                     $user = User::whereId($dossier->patient_id)->first();
+                    $user['dossier'] = $dossier->slug;
                     return $user;
                 }
                 return [];
             }
             return [];
         }
-        return  User::where('email', $username)->first();
+        $user = User::where('email', $username)->first();
+        $dossier = DB::table('dossier_medicals')->where('patient_id','=',$user->id)->first();
+        if(!is_null($dossier))
+        $user['dossier'] = $dossier->slug;
+        return $user;
+
     }
 }

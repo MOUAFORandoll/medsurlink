@@ -42,6 +42,18 @@ class DossierMedical extends Model
         return $this->belongsTo(Patient::class,'patient_id','user_id');
     }
 
+    public function resultatsImagerie(){
+    return $this->hasMany(ResultatImagerie::class,'dossier_medical_id','id');
+    }
+
+    public function resultatsLabo(){
+        return $this->hasMany(ResultatLabo::class,'dossier_medical_id','id');
+    }
+
+    public function hospitalisations(){
+     return $this->hasMany(Hospitalisation::class,'dossier_medical_id','id');
+    }
+
     public function consultationsObstetrique(){
         return $this->hasMany(ConsultationObstetrique::class,'dossier_medical_id','id');
     }
@@ -81,6 +93,16 @@ class DossierMedical extends Model
                 $traitementIsAuthor = checkIfIsAuthorOrIsAuthorized("TraitementActuel",$traitement->id,"create");
                 $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
             }
+
+            foreach ($this->consultationsMedecine as $consultation){
+                $consultation['motifs'] = $consultation->motifs;
+                $consultation['conclusions'] = $consultation->conclusions;
+            }
+
+            foreach ($this->hospitalisations as $hospitalisation){
+                $hospitalisation['motifs'] = $hospitalisation->motifs;
+            }
+
             $user = $this->patient->user;
             $this['user'] = $user;
         }
