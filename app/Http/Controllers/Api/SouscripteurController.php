@@ -81,7 +81,7 @@ class SouscripteurController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $souscripteur = Souscripteur::with('user','patients.user')->whereSlug($slug)->first();
+        $souscripteur = Souscripteur::with('user','patients.user','patients.dossier')->whereSlug($slug)->first();
 
         return response()->json(['souscripteur'=>$souscripteur]);
 

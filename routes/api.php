@@ -70,10 +70,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien']], function () 
 
 });
 
-//    Définition des routes accéssible par le souscripteur
-Route::group(['middleware' => ['auth:api','role:Admin|Souscripteur']], function () {
-
-});
 
 //    Définition des routes accéssible par le medecin controle
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], function () {
@@ -163,3 +159,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Patient|Medec
     Route::resource('affiliation','Api\AffiliationController')->except('store','update','destroy');
 });
 
+
+//    Définition des routes accéssible par le souscripteur
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Souscripteur']], function () {
+    Route::resource('souscripteur','Api\SouscripteurController')->except(['create','edit','index','store','update','destroy']);
+});
