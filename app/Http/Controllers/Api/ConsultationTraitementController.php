@@ -63,9 +63,10 @@ class ConsultationTraitementController extends Controller
             }
         }
 
-        defineAsAuthor("ConsultationTraitement",$consultation->id,'attach');
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($consultation->slug)->first();
+
+        defineAsAuthor("ConsultationTraitement",$consultation->id,'attach', $consultation->dossier->patient->user_id);
 
         $consultation->updateConsultationMedecine();
 

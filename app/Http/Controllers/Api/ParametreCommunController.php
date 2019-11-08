@@ -50,7 +50,7 @@ class ParametreCommunController extends Controller
 
         $this->updateBmi($request,$parametreCommun);
 
-        defineAsAuthor("ParametreCommun",$parametreCommun->id,'create');
+        defineAsAuthor("ParametreCommun",$parametreCommun->id,'create',$parametreCommun->consultation->dossier->patient->user_id);
 
         $parametreCommun = ParametreCommun::with('consultation')->whereSlug($parametreCommun->slug)->first();
 

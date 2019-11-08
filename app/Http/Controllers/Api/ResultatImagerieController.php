@@ -51,7 +51,7 @@ class ResultatImagerieController extends Controller
 
                 $this->uploadFile($request,$resultat);
 
-                defineAsAuthor("Resultat", $resultat->id,'create');
+                defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
                 return response()->json([
                     'resultat' => $resultat

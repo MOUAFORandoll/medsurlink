@@ -52,7 +52,7 @@ class ConsultationMotifController extends Controller
         defineAsAuthor("Motif", $motif->id, 'create');
         $consultation->motifs()->attach($motif->id);
 
-        defineAsAuthor("ConsultationMotif", $motif->id, 'attach');
+        defineAsAuthor("ConsultationMotif", $motif->id, 'attach',$consultation->dossier->patient->user_id);
 
         $consultation = ConsultationMedecineGenerale::with(['dossier', 'traitements', 'conclusions', 'parametresCommun'])->find($consultation->id);
 

@@ -70,10 +70,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien']], function () 
 
 });
 
-//    Définition des routes accéssible par le souscripteur
-Route::group(['middleware' => ['auth:api','role:Admin|Souscripteur']], function () {
-
-});
 
 //    Définition des routes accéssible par le medecin controle
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], function () {
@@ -88,6 +84,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], funct
 //    Définition des routes accéssible par le patient
 Route::group(['middleware' => ['auth:api','role:Admin|Patient']], function () {
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->only('show','index');
+    Route::get('{patient}/dossier-medical','Api\DossierMedicalController@dossierByPatientId');
 
 });
 
@@ -99,6 +96,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
 
 //  Définition des routes accéssible a la fois par le medecin controle et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien']], function () {
+    Route::resource('etablissement','Api\EtablissementExerciceController')->except(['create','store','destroy','edit']);
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except(['create','edit']);
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except(['create','edit']);
     Route::resource('motif','Api\MotifController')->except(['create','edit']);
@@ -131,6 +129,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::post('ajouter-traitement','Api\ConsultationTraitementController@ajouterTraitement');
 
     Route::get('max-consultation-obs','Api\ConsultationObstetriqueController@genererNumeroGrossesse');
+
+    Route::get('latest-operation','Api\AuteurController@latestOperation');
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
@@ -160,3 +160,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Patient|Medec
     Route::resource('affiliation','Api\AffiliationController')->except('store','update','destroy');
 });
 
+
+//    Définition des routes accéssible par le souscripteur
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Souscripteur']], function () {
+    Route::resource('souscripteur','Api\SouscripteurController')->except(['create','edit','index','store','update','destroy']);
+});

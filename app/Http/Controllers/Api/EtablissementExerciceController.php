@@ -26,6 +26,12 @@ class EtablissementExerciceController extends Controller
     public function index()
     {
         $etablissements =  EtablissementExercice::with(['praticiens','patients'])->get();
+        foreach ($etablissements as $etablissement){
+            foreach ($etablissement->patients as $patient) {
+                $patient['user'] = $patient->user;
+                $patient['dossier'] = $patient->dossier;
+            }
+        }
         return response()->json(['etablissements'=>$etablissements]);
     }
 

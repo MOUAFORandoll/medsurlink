@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -16,6 +17,7 @@ class Auteur extends Model
         "operationable_id",
         "action",
         "user_id",
+        "patient_id",
     ];
 
     /**
@@ -31,5 +33,9 @@ class Auteur extends Model
     public function operationable()
     {
         return $this->morphTo();
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class,'patient_id','id');
     }
 }

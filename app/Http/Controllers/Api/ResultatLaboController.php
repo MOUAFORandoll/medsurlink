@@ -52,7 +52,7 @@ class ResultatLaboController extends Controller
 
                 $this->uploadFile($request,$resultat);
 
-                defineAsAuthor("Resultat", $resultat->id,'create');
+                defineAsAuthor("Resultat", $resultat->id,'create',$request->dossier->patient->user_id);
 
                 return response()->json([
                     'resultat' => $resultat

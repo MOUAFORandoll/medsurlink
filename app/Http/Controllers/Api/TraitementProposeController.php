@@ -47,7 +47,7 @@ class TraitementProposeController extends Controller
     {
         $traitement = TraitementPropose::create($request->validated());
 
-        defineAsAuthor("TraitementPropose", $traitement->id,'create');
+        defineAsAuthor("TraitementPropose", $traitement->id,'create',$traitement->consultation->dossier->patient->user_id);
 
         return response()->json([
             'traitement' => $traitement

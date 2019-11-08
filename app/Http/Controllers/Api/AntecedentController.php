@@ -49,9 +49,9 @@ class AntecedentController extends Controller
 
         $antecedent = Antecedent::create($request->validated());
 
-        defineAsAuthor("Antecedent",$antecedent->id,'create');
-
         $antecedent = Antecedent::with('dossier')->whereSlug($antecedent->slug)->first();
+
+        defineAsAuthor("Antecedent",$antecedent->id,'create',$antecedent->dossier->patient->user_id);
 
         $dossier = DossierMedical::with([
             'allergies'=> function ($query) {

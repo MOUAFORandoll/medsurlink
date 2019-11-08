@@ -7,6 +7,7 @@ use App\Http\Requests\DossierMedicalRequest;
 use App\Models\DossierMedical;
 use App\Models\Patient;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
@@ -72,7 +73,9 @@ class DossierMedicalController extends Controller
             "date_de_creation"=>Carbon::now()->format('Y-m-d'),
             "numero_dossier"=>$numero_dossier,
         ]);
-        defineAsAuthor("DossierMedical",$dossier->id,'create');
+
+        defineAsAuthor("DossierMedical",$dossier->id,'create',$dossier->patient->user_id);
+
         return response()->json(['dossier'=>$dossier]);
     }
 
@@ -97,12 +100,19 @@ class DossierMedicalController extends Controller
             'patient',
             'consultationsMedecine',
             'consultationsObstetrique',
+            'consultationsObstetrique.echographies',
+            'hospitalisations'=> function ($query) {
+                $query->orderBy('created_at', 'desc');
+            },
             'traitements'=> function ($query) {
                 $query->orderBy('created_at', 'desc');
-            }
+            },
+            'resultatsImagerie',
+            'resultatsLabo'
         ])->whereSlug($slug)->first();
 
         $dossier->updateDossier();
+
         return response()->json(['dossier'=>$dossier]);
     }
 
@@ -138,7 +148,7 @@ class DossierMedicalController extends Controller
      */
     public function destroy($slug)
     {
-        $validation = $this->validatedSlug($slug,$this->table);
+        $this->validatedSlug($slug,$this->table);
 
         try{
             $dossier = DossierMedical::with([
@@ -195,4 +205,33 @@ class DossierMedicalController extends Controller
         return response()->json(['dossier'=>$dossier]);
     }
 
+
+    public function dossierByPatientId($patient_id){
+        $validator = Validator::make(compact('patient_id'),'exists:dossier_medicals,patient_id');
+        if ($validator->fails()){
+            return response()->json(compact($validator->errors()->getMessages()),422);
+        }
+
+        $dossier = DossierMedical::with([
+            'allergies'=> function ($query) {
+                $query->orderBy('date', 'desc');
+            },
+            'antecedents',
+            'patient',
+            'consultationsMedecine',
+            'consultationsObstetrique',
+            'consultationsObstetrique.echographies',
+            'hospitalisations'=> function ($query) {
+                $query->orderBy('created_at', 'desc');
+            },
+            'traitements'=> function ($query) {
+                $query->orderBy('created_at', 'desc');
+            },
+            'resultatsImagerie',
+            'resultatsLabo'
+        ])->where('patient_id' ,'=',$patient_id)->first();
+
+        $dossier->updateDossier();
+        return response()->json(['dossier'=>$dossier]);
+    }
 }

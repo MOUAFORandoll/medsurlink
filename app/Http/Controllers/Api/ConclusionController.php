@@ -49,9 +49,9 @@ class ConclusionController extends Controller
 
         $conclusion = Conclusion::create($request->validated());
 
-        defineAsAuthor("Conclusion",$conclusion->id,'create');
-
         $conclusion = Conclusion::with(['consultationMedecine'])->whereSlug($conclusion->slug)->first();
+
+        defineAsAuthor("Conclusion",$conclusion->id,'create',$conclusion->consultationMedecine->dossier->patient->user_id);
 
         $conclusion->updateConclusionItem();
 

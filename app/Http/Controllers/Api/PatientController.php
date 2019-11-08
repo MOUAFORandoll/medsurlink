@@ -62,7 +62,7 @@ class PatientController extends Controller
 
         //Generation du dossier client
         $dossier = DossierMedicalController::genererDossier($patient->user_id);
-        defineAsAuthor("Patient",$patient->user_id,'create');
+        defineAsAuthor("Patient",$patient->user_id,'create',$patient->user_id);
 
         //Envoi des informations patient par mail
         $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();

@@ -48,9 +48,11 @@ class ConsultationPrenantaleController extends Controller
 
         $consultationPrenatale = ConsultationPrenatale::create($request->validated());
 
-        defineAsAuthor("ConsultationPrenatale",$consultationPrenatale->id,'create');
         $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->whereSlug($consultationPrenatale->slug)->first();
         $consultationPrenatale->updatePrenatalConsultation();
+
+        defineAsAuthor("ConsultationPrenatale",$consultationPrenatale->id,'create',$consultationPrenatale->consultationObstetrique->dossier->patient->user_id);
+
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }
 
