@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Mail\Password\PasswordGenerated;
+use App\Models\Souscripteur;
 use App\Rules\EmailExistRule;
 use App\User;
 use Illuminate\Http\Request;
@@ -141,19 +142,28 @@ class UserController extends Controller
         return null;
     }
 
-    public static function generatedUser($request){
+    public static function generatedUser($request,$role = null){
 
-       $validation = self::personalValidation($request->all());
+        $validation = self::personalValidation($request->all(),$role);
 
         if ($validation->fails())
             throw new ValidationException($validation,$validation->errors());
 
         $password = str_random(10);
 
+        $email = $request->email;
+
+        if (!is_null($role) && $role == "Patient"){
+            if(is_null($email)){
+               $souscripteur =  Souscripteur::with('user')->where('user_id','=',$request->souscripteur_id)->first();
+                $email = $souscripteur->user->email;
+            }
+        }
+
         $user = User::create([
             'nom'=>$request->nom,
             'prenom'=>$request->prenom,
-            'email'=>$request->email,
+            'email'=>$email,
             'nationalite'=>$request->nationalite,
             'quartier'=>$request->quartier,
             'code_postal'=>$request->code_postal,
@@ -169,8 +179,8 @@ class UserController extends Controller
 
     public static function sendUserInformationViaMail(User $user,$password){
 
-            $mail = new PasswordGenerated($user,$password);
-            Mail::to($user->email)->send($mail);
+        $mail = new PasswordGenerated($user,$password);
+        Mail::to($user->email)->send($mail);
     }
 
     public static function updatePersonalInformation($data,$slug){
@@ -199,8 +209,8 @@ class UserController extends Controller
         ]);
         return $validation;
     }
-    public static function personalValidation($data){
-        $validation = Validator::make($data,[
+    public static function personalValidation($data,$role = null){
+        $rule = [
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['sometimes','nullable', 'string', 'max:255'],
             'nationalite' => ['required', 'string', 'max:255'],
@@ -209,9 +219,15 @@ class UserController extends Controller
             'ville' => ['required','string', 'max:255'],
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'adresse' => ['required', 'string','min:3'],
-        ]);
+        ];
+        if(!is_null($role) && $role == "Patient"){
+            $rule['email'] = "sometimes|nullable|string|email";
+        }else{
+            $rule['email'] = "required|string|email|max:255|unique:users";
+        }
+
+        $validation = Validator::make($data,$rule);
         return $validation;
     }
 
