@@ -2,8 +2,9 @@
 # Medicalink
 
 Hello <strong>{{ucfirst($souscripteur->user->prenom).'  '.strtoupper($souscripteur->user->nom)}}</strong>,<br>
-Nous espérons vous trouvez bien portant. Vous avez désigné comme souscripteur du patient:<br>
+Nous espérons vous trouvez bien portant. Vous avez été désigné comme souscripteur du patient:<br>
 <strong>{{ucfirst($patient->user->prenom).'  '.strtoupper($patient->user->nom)}}</strong><br>
+<strong>{{$patient->user->email}}</strong>
 
 Thanks,<br>
 {{ config('app.name') }}
