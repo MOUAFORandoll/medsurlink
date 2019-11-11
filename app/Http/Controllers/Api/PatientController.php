@@ -6,9 +6,12 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\patientStoreRequest;
 use App\Http\Requests\PatientUpdateRequest;
 use App\Http\Requests\UserStoreRequest;
+use App\Mail\PatientAffiliated;
 use App\Models\Patient;
+use App\Models\Souscripteur;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
 
@@ -48,7 +51,7 @@ class PatientController extends Controller
     {
 
         //Creation de l'utilisateur dans la table user et génération du mot de passe
-        $userResponse =  UserController::generatedUser($request);
+        $userResponse =  UserController::generatedUser($request,"Patient");
 
         $user = $userResponse->getOriginalContent()['user'];
         $password = $userResponse->getOriginalContent()['password'];
@@ -68,6 +71,13 @@ class PatientController extends Controller
         $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
         try{
             UserController::sendUserInformationViaMail($user,$password);
+
+            $patient = Patient::with('user')->where('user_id','=',$patient->user_id)->first();
+            $souscripteur = Souscripteur::with('user')->where('user_id','=',$patient->souscripteur_id)->first();
+
+            $mail = new PatientAffiliated($souscripteur,$patient);
+            Mail::to($souscripteur->user->email)->send($mail);
+
             return response()->json(['patient'=>$patient,"password"=>$password]);
         }catch (\Swift_TransportException $transportException){
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
