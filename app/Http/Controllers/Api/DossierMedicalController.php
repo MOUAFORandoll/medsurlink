@@ -31,6 +31,7 @@ class DossierMedicalController extends Controller
             },
             'antecedents',
             'patient',
+            'patient.user',
             'consultationsMedecine',
             'consultationsObstetrique',
             'traitements'=> function ($query) {
@@ -98,6 +99,8 @@ class DossierMedicalController extends Controller
             },
             'antecedents',
             'patient',
+            'patient.user',
+            'patient.souscripteur.user',
             'consultationsMedecine',
             'consultationsObstetrique',
             'consultationsObstetrique.echographies',
