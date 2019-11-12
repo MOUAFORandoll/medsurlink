@@ -103,8 +103,6 @@ class DossierMedical extends Model
                 $hospitalisation['motifs'] = $hospitalisation->motifs;
             }
 
-            $user = $this->patient->user;
-            $this['user'] = $user;
         }
     }
 }
