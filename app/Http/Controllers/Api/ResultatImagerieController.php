@@ -7,6 +7,8 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ResultatRequest;
 use App\Models\ResultatImagerie;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ResultatImagerieController extends Controller
 {
@@ -131,9 +133,13 @@ class ResultatImagerieController extends Controller
             ->whereSlug($slug)
             ->first();
 
+        $file = $resultat->file;
+
         if($request->hasFile('file')){
             $this->uploadFile($request,$resultat);
         }
+
+        File::delete(public_path().'/storage/'.$file);
 
         return response()->json([
             'resultat' => $resultat
@@ -209,11 +215,12 @@ class ResultatImagerieController extends Controller
     {
         $this->validatedSlug($slug, $this->table);
 
-        $resultat = ResultatImagerie::findBySlug($slug);
+        $resultat = ResultatImagerie::with('dossier')->whereSlug($slug)->first();
 
         $this->checkIfAuthorized("Resultat", $resultat->id,"create");
 
         $resultat->delete();
+        File::delete(public_path().'/storage/'.$resultat->file);
 
         return response()->json([
             'resultat' => $resultat
@@ -222,8 +229,8 @@ class ResultatImagerieController extends Controller
 
     public function uploadFile($request, $resultat){
         if ($request->file('file')->isValid()) {
-            $path = $request->file->store('Dossier Medicale/' . $resultat->dossier->numero_dossier . '/Consultation/' . $request->consultation_medecine_generale_id);
-            $file = $path;
+            $path = $request->file->store('public/DossierMedicale/' . $resultat->dossier->numero_dossier . '/Consultation/' . $request->consultation_medecine_generale_id);
+            $file = str_replace('public/','',$path);
 
             $resultat->file = $file;
 

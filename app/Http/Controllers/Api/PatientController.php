@@ -70,7 +70,7 @@ class PatientController extends Controller
         //Envoi des informations patient par mail
         $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
         try{
-            UserController::sendUserInformationViaMail($user,$password);
+            UserController::sendUserPatientInformationViaMail($user,$password);
 
             $patient = Patient::with('user')->where('user_id','=',$patient->user_id)->first();
             $souscripteur = Souscripteur::with('user')->where('user_id','=',$patient->souscripteur_id)->first();

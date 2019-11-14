@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Mail\Password\PasswordGenerated;
+use App\Mail\Password\PatientPasswordGenerated;
 use App\Models\Souscripteur;
 use App\Rules\EmailExistRule;
 use App\User;
@@ -182,6 +183,11 @@ class UserController extends Controller
         $mail = new PasswordGenerated($user,$password);
         Mail::to($user->email)->send($mail);
     }
+    public static function sendUserPatientInformationViaMail(User $user,$password){
+
+            $mail = new PatientPasswordGenerated($user,$password);
+            Mail::to($user->email)->send($mail);
+        }
 
     public static function updatePersonalInformation($data,$slug){
         $validation = self::personalUpdateValidation($data,$slug);

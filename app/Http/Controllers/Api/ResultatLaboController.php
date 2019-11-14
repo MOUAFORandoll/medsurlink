@@ -8,6 +8,8 @@ use App\Models\ResultatLabo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ResultatLaboController extends Controller
 {
@@ -129,9 +131,12 @@ class ResultatLaboController extends Controller
             ->whereSlug($slug)
             ->first();
 
+        $file = $resultat->file;
+
         if($request->hasFile('file')){
             $this->uploadFile($request,$resultat);
         }
+        File::delete(public_path().'/storage/'.$file);
 
         return response()->json([
             'resultat' => $resultat
@@ -205,11 +210,12 @@ class ResultatLaboController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $resultat = ResultatLabo::findBySlug($slug);
+        $resultat = ResultatLabo::with('dossier')->whereSlug($slug)->first();
 
         $this->checkIfAuthorized("Resultat", $resultat->id,"create");
 
         $resultat->delete();
+        File::delete(public_path().'/storage/'.$resultat->file);
 
         return response()->json([
             'resultat' => $resultat
@@ -218,8 +224,8 @@ class ResultatLaboController extends Controller
 
     public function uploadFile($request, $resultat){
         if ($request->file('file')->isValid()) {
-            $path = $request->file->store('Dossier Medicale/' . $resultat->dossier->numero_dossier . '/Consultation/' . $request->consultation_medecine_generale_id);
-            $file = $path;
+            $path = $request->file->store('public/DossierMedicale/' . $resultat->dossier->numero_dossier . '/Consultation/' . $request->consultation_medecine_generale_id);
+            $file = str_replace('public/','',$path);
 
             $resultat->file = $file;
 
