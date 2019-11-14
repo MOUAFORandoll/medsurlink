@@ -22,6 +22,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/public/storage/DossierMedicale/{fileNumber}/Consultation/{consultation}/{image}', function ($fileNumber,$consultation,$image) {
+    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/Consultation/'.$consultation.'/'.$image;
+    return response()->file($path);
+});
+
 Route::get('/contrat/{id}', function ($id) {
 
     $cim= ContratIntermediationMedicale::find($id);
