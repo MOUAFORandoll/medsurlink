@@ -72,7 +72,7 @@ class ConsultationMedecineGeneraleController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['dossier','dossier.allergies','dossier.antecedents','motifs','dossier.traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
 
         $consultation->updateConsultationMedecine();
 
