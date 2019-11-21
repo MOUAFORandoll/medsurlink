@@ -89,14 +89,7 @@ class ConsultationMedecineGenerale extends Model
         if(!is_null($this)){
         $user = $this->dossier->patient->user;
         $patient = $this->dossier->patient;
-        $allergies = $this->dossier->allergies;
         $motifs = $this->motifs;
-
-        foreach ($allergies as $allergy)
-        {
-            $allergieIsAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
-            $allergy['isAuthor'] = $allergieIsAuthor->getOriginalContent();
-        }
 
         foreach ($motifs as $motif)
         {
@@ -104,7 +97,6 @@ class ConsultationMedecineGenerale extends Model
             $motif['isAuthor'] = $motifIsAuthor->getOriginalContent();
         }
 
-        $this['allergies']= $allergies;
         $this['motifs']= $motifs;
         $this['user']=$user;
         $this['patient']=$patient;

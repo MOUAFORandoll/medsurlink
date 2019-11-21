@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/emails/Souscripteur/patientAffilated.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/Souscripteur/patientAffilated.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -46,6 +44,13 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="motifs: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
@@ -418,7 +423,16 @@
       <workItem from="1573630416725" duration="4213000" />
       <workItem from="1573718589732" duration="6260000" />
       <workItem from="1573729248564" duration="776000" />
-      <workItem from="1573743539139" duration="2953000" />
+      <workItem from="1573743539139" duration="3595000" />
+      <workItem from="1573803857342" duration="2007000" />
+      <workItem from="1573815524568" duration="1123000" />
+      <workItem from="1573827545423" duration="1408000" />
+      <workItem from="1574063142203" duration="1763000" />
+      <workItem from="1574078384829" duration="577000" />
+      <workItem from="1574149633356" duration="2185000" />
+      <workItem from="1574167360690" duration="603000" />
+      <workItem from="1574236004386" duration="788000" />
+      <workItem from="1574322414492" duration="4229000" />
     </task>
     <servers />
   </component>
