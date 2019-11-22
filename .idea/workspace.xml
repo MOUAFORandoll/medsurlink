@@ -2,9 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/medicalink-app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/medicalink-app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Scopes/RestrictPatientScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictPatientScope.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/app.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -50,7 +58,7 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
-        <item name="motifs: table" type="dbc44a63:MariaImplModel$Table" />
+        <item name="allergies: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
@@ -193,6 +201,8 @@
       <path value="$PROJECT_DIR$/vendor/kobalazs/laravel-restrict-soft-deletes" />
       <path value="$PROJECT_DIR$/vendor/cocur/slugify" />
       <path value="$PROJECT_DIR$/vendor/cviebrock/eloquent-sluggable" />
+      <path value="$PROJECT_DIR$/vendor/gbrock/laravel-table" />
+      <path value="$PROJECT_DIR$/vendor/symfony/error-handler" />
     </include_path>
   </component>
   <component name="ProjectId" id="1P0YUDd8cdj1PPHEEdkA64AYYNg" />
@@ -432,7 +442,10 @@
       <workItem from="1574149633356" duration="2185000" />
       <workItem from="1574167360690" duration="603000" />
       <workItem from="1574236004386" duration="788000" />
-      <workItem from="1574322414492" duration="4229000" />
+      <workItem from="1574322414492" duration="4878000" />
+      <workItem from="1574405886246" duration="2117000" />
+      <workItem from="1574414346486" duration="11045000" />
+      <workItem from="1574429596846" duration="1557000" />
     </task>
     <servers />
   </component>

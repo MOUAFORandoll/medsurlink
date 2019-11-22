@@ -49,6 +49,10 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function store(ConsutationMedecineRequest $request)
     {
+        $motifs = $request->get('motifs');
+        $antecedents = $request->get('antecedents');
+        $allergies = $request->get('allergies');
+        return response()->json(compact('allergies','antecedents','motifs'),419);
         $consultation = ConsultationMedecineGenerale::create($request->validated());
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','traitements','conclusions','parametresCommun'])->find($consultation->id);
