@@ -124,6 +124,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
     Route::post('retirer-allergie','Api\DossierAllergieController@retirerAllergie');
     Route::post('ajouter-allergie','Api\DossierAllergieController@ajouterAllergie');
+    Route::post('ajouter-allergie-version','Api\DossierAllergieController@ajouterAllergieVersionDeux');
 
     Route::post('retirer-traitement','Api\ConsultationTraitementController@retirerTraitement');
     Route::post('ajouter-traitement','Api\ConsultationTraitementController@ajouterTraitement');

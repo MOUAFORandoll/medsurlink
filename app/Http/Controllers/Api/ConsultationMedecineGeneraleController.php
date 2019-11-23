@@ -10,6 +10,7 @@ use App\Models\Conclusion;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\Motif;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class ConsultationMedecineGeneraleController extends Controller
@@ -53,7 +54,6 @@ class ConsultationMedecineGeneraleController extends Controller
     public function store(ConsutationMedecineRequest $request)
     {
 
-        return response()->json(compact('allergies','antecedents','motifs','conclusions'),419);
         $consultation = ConsultationMedecineGenerale::create($request->validated());
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','traitements','conclusions','parametresCommun'])->find($consultation->id);
@@ -66,12 +66,14 @@ class ConsultationMedecineGeneraleController extends Controller
 
         //Insertion des motifs
         foreach ($motifs as $motif){
-            if (is_integer($motif)){
-                $consultation->motifs()->attach($request->get('motifs'));
-                defineAsAuthor("ConsultationMotif", $motif, 'attach',$consultation->dossier->patient->user_id);
 
+            $converti = (integer) $motif;
+
+            if ($converti !== 0){
+                $consultation->motifs()->attach($motif);
+                defineAsAuthor("ConsultationMotif", $motif, 'attach',$consultation->dossier->patient->user_id);
             }else{
-              $item =   Motif::create([
+                $item =   Motif::create([
                     "reference"=>$consultation->date_consultation,
                     "description"=>$motif
                 ]);
@@ -83,7 +85,7 @@ class ConsultationMedecineGeneraleController extends Controller
             }
         }
 
-       $conclusion =  Conclusion::create([
+        $conclusion =  Conclusion::create([
             'consultation_medecine_generale_id' =>$consultation->id,
             "description"=>$conclusions
         ]);
