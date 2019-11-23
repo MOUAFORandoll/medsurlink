@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ConsutationMedecineRequest;
+use App\Models\Antecedent;
+use App\Models\Conclusion;
 use App\Models\ConsultationMedecineGenerale;
+use App\Models\Motif;
 use Carbon\Carbon;
 use Netpok\Database\Support\DeleteRestrictionException;
 
@@ -49,15 +52,44 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function store(ConsutationMedecineRequest $request)
     {
-        $motifs = $request->get('motifs');
-        $antecedents = $request->get('antecedents');
-        $allergies = $request->get('allergies');
-        return response()->json(compact('allergies','antecedents','motifs'),419);
+
+        return response()->json(compact('allergies','antecedents','motifs','conclusions'),419);
         $consultation = ConsultationMedecineGenerale::create($request->validated());
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','traitements','conclusions','parametresCommun'])->find($consultation->id);
 
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create',$consultation->dossier->patient->user_id);
+
+        $motifs = $request->get('motifs');
+
+        $conclusions = $request->get('conclusions');
+
+        //Insertion des motifs
+        foreach ($motifs as $motif){
+            if (is_integer($motif)){
+                $consultation->motifs()->attach($request->get('motifs'));
+                defineAsAuthor("ConsultationMotif", $motif, 'attach',$consultation->dossier->patient->user_id);
+
+            }else{
+              $item =   Motif::create([
+                    "reference"=>$consultation->date_consultation,
+                    "description"=>$motif
+                ]);
+
+                defineAsAuthor("Motif", $item->id, 'create');
+                $consultation->motifs()->attach($item->id);
+                defineAsAuthor("ConsultationMotif", $item->id, 'attach',$consultation->dossier->patient->user_id);
+
+            }
+        }
+
+       $conclusion =  Conclusion::create([
+            'consultation_medecine_generale_id' =>$consultation->id,
+            "description"=>$conclusions
+        ]);
+
+        defineAsAuthor("Conclusion",$conclusion->id,'create',$conclusion->consultationMedecine->dossier->patient->user_id);
+
 
         if(!is_null($consultation))
             $consultation->updateConsultationMedecine();
