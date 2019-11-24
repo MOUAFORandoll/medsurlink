@@ -38,7 +38,7 @@ class ConsultationMedecineGenerale extends Model
     /**
      * The relations restricting model deletion
      */
-    protected $restrictDeletes = ['motifs','traitements','allergies','antecedents','conclusions'];
+    protected $restrictDeletes = [];
 
     protected $fillable = [
         "dossier_medical_id",
