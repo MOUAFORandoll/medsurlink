@@ -37,7 +37,7 @@ class ConsultationPrenatale extends Model
     /**
      * The relations restricting model deletion
      */
-    protected $restrictDeletes = ['parametresObstetrique'];
+    protected $restrictDeletes = [''];
 
     protected $fillable = [
         "consultation_obstetrique_id",

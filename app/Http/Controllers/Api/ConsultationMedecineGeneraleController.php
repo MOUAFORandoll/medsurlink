@@ -56,7 +56,18 @@ class ConsultationMedecineGeneraleController extends Controller
 
         $consultation = ConsultationMedecineGenerale::create($request->validated());
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','traitements','conclusions','parametresCommun'])->find($consultation->id);
+        $consultation = ConsultationMedecineGenerale::with([
+            'dossier',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'traitements',
+            'conclusions',
+            'parametresCommun'])->find($consultation->id);
 
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create',$consultation->dossier->patient->user_id);
 
@@ -110,7 +121,21 @@ class ConsultationMedecineGeneraleController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $consultation = ConsultationMedecineGenerale::with(['dossier','dossier.allergies','dossier.antecedents','motifs','dossier.traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with([
+            'dossier',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.traitements',
+            'motifs',
+            'conclusions',
+            'parametresCommun'])->whereSlug($slug)->first();
 
         $consultation->updateConsultationMedecine();
 
