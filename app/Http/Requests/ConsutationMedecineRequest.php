@@ -27,6 +27,8 @@ class ConsutationMedecineRequest extends FormRequest
     {
         return [
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
+            "motifs.*"=>'required',
+            "conclusions"=>"sometimes|nullable|string|min:2",
             "date_consultation"=>"sometimes|nullable|date|after_or_equal:".Carbon::now()->format('Y-m-d'),
             "anamese"=>"sometimes|nullable|string|min:5",
             "mode_de_vie"=>"sometimes|nullable|string|min:5",

@@ -169,6 +169,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         Barryvdh\Snappy\ServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        'Gbrock\Table\Providers\TableServiceProvider',
 
         /*
          * Application Service Providers...

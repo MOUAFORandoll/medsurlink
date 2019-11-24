@@ -124,6 +124,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
     Route::post('retirer-allergie','Api\DossierAllergieController@retirerAllergie');
     Route::post('ajouter-allergie','Api\DossierAllergieController@ajouterAllergie');
+    Route::post('ajouter-allergie-version','Api\DossierAllergieController@ajouterAllergieVersionDeux');
 
     Route::post('retirer-traitement','Api\ConsultationTraitementController@retirerTraitement');
     Route::post('ajouter-traitement','Api\ConsultationTraitementController@ajouterTraitement');
@@ -155,6 +156,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Patient|Medecin controle|Souscripteur|Praticien']], function () {
     Route::resource('patient','Api\PatientController')->except('store','update','destroy');
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
+    Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
 });
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Patient|Medecin controle|Souscripteur']], function () {
     Route::resource('affiliation','Api\AffiliationController')->except('store','update','destroy');
