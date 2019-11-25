@@ -50,6 +50,21 @@ class HospitalisationController extends Controller
 
         defineAsAuthor("Hospitalisation",$hospitalisation->id,'create',$hospitalisation->dossier->patient->user_id);
 
+        $hospitalisation = Hospitalisation::with([
+            'dossier',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.traitements',
+            'motifs'
+        ])->whereSlug($hospitalisation->slug)->first();
+
         return response()->json(['hospitalisation'=>$hospitalisation]);
 
     }
@@ -65,7 +80,20 @@ class HospitalisationController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $hospitalisation = Hospitalisation::with(['dossier','motifs'])->whereSlug($slug)->first();
+        $hospitalisation = Hospitalisation::with([
+            'dossier',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.traitements',
+            'motifs'
+        ])->whereSlug($slug)->first();
         $hospitalisation->updateHospitalisation();
 
         return response()->json(['hospitalisation'=>$hospitalisation]);
@@ -101,7 +129,20 @@ class HospitalisationController extends Controller
 
         Hospitalisation::whereSlug($slug)->update($request->validated());
 
-        $hospitalisation = Hospitalisation::with(['dossier','motifs'])->whereSlug($slug)->first();
+        $hospitalisation = Hospitalisation::with([
+            'dossier',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.traitements',
+            'motifs'
+        ])->whereSlug($slug)->first();
         $hospitalisation->updateHospitalisation();
 
         return response()->json(['hospitalisation'=>$hospitalisation]);
@@ -119,7 +160,21 @@ class HospitalisationController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $hospitalisation = Hospitalisation::findBySlug($slug);
+        $hospitalisation = Hospitalisation::with([
+            'dossier',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.traitements',
+            'motifs'
+        ])->whereSlug($slug)->first();
+        $hospitalisation->updateHospitalisation();
 
         $this->checkIfAuthorized("Hospitalisation",$hospitalisation->id,"create");
         $hospitalisation->delete();
@@ -139,7 +194,20 @@ class HospitalisationController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $resultat = Hospitalisation::with(['dossier','motifs'])->whereSlug($slug)->first();
+        $resultat = Hospitalisation::with([
+            'dossier',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.traitements',
+            'motifs'
+        ])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
            $this->revealNonTransmis();
 
@@ -162,7 +230,20 @@ class HospitalisationController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $resultat = Hospitalisation::with(['dossier','motifs'])->whereSlug($slug)->first();
+        $resultat = Hospitalisation::with([
+            'dossier',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.traitements',
+            'motifs'
+        ])->whereSlug($slug)->first();
 
         $resultat->passed_at = Carbon::now();
         $resultat->save();
