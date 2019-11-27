@@ -201,7 +201,8 @@ class UserController extends Controller
     }
 
     public static function personalUpdateValidation($data,$slug){
-        $validation = Validator::make($data,[
+        $user = User::findBySlug($slug);
+        $rules = [
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['sometimes','nullable', 'string', 'max:255'],
             'nationalite' => ['required', 'string', 'max:255'],
@@ -210,9 +211,11 @@ class UserController extends Controller
             'ville' => ['required','string', 'max:255'],
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255',new EmailExistRule($slug,'User')],
+            'email' => ['required', 'string', 'email', 'max:255','unique:users,email,'.$user->id],
             'adresse' => ['required', 'string','min:3'],
-        ]);
+        ];
+        $validation = Validator::make($data,$rules);
+
         return $validation;
     }
     public static function personalValidation($data,$role = null){
