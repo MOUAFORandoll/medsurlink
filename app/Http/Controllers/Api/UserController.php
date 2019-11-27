@@ -227,11 +227,11 @@ class UserController extends Controller
             'telephone' => ['required','string', 'max:255'],
             'adresse' => ['required', 'string','min:3'],
         ];
-        if(!is_null($role) && $role == "Patient"){
+//        if(!is_null($role) && $role == "Patient"){
             $rule['email'] = "sometimes|nullable|string|email";
-        }else{
-            $rule['email'] = "required|string|email|max:255|unique:users";
-        }
+//        }else{
+//            $rule['email'] = "required|string|email|max:255|unique:users";
+//        }
 
         $validation = Validator::make($data,$rule);
         return $validation;

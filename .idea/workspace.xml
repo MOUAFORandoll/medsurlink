@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/HospitalisationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/HospitalisationRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/HospitalisationRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,13 +43,6 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
-      </path>
-      <path>
-        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
-        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
-        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
-        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
-        <item name="allergies: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -441,7 +433,8 @@
       <workItem from="1574526950901" duration="3025000" />
       <workItem from="1574591060328" duration="6576000" />
       <workItem from="1574610801713" duration="3864000" />
-      <workItem from="1574670568371" duration="3389000" />
+      <workItem from="1574670568371" duration="4043000" />
+      <workItem from="1574841935219" duration="2488000" />
     </task>
     <servers />
   </component>
