@@ -172,3 +172,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']],
     Route::resource('souscripteur','Api\SouscripteurController')->except(['create','edit','store','update','destroy']);
 
 });
+
+Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire']], function () {
+    Route::resource('etablissement', 'Api\EtablissementExerciceController')->except(['create', 'store', 'destroy', 'edit']);
+});
