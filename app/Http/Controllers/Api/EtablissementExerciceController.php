@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\EtablissementExerciceRequest;
 use App\Models\EtablissementExercice;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
 
@@ -54,6 +55,17 @@ class EtablissementExerciceController extends Controller
     public function store(EtablissementExerciceRequest $request)
     {
         $etablissement = EtablissementExercice::create($request->validated());
+
+        if($request->hasFile('logo')) {
+            if ($request->file('logo')->isValid()) {
+                $path = $request->logo->store('public/Etablissement/' . $etablissement->slug.'/Logo');
+                $file = str_replace('public/','',$path);
+
+                $etablissement->logo = $file;
+
+                $etablissement->save();
+            }
+        }
 
         defineAsAuthor("EtablissementExercice",$etablissement->id,'create');
 
@@ -104,6 +116,21 @@ class EtablissementExerciceController extends Controller
         EtablissementExercice::whereSlug($slug)->update($request->validated());
 
         $etablissement = EtablissementExercice::with(['praticiens','patients'])->whereSlug($slug)->first();
+
+        $logo = $etablissement->logo;
+
+        if($request->hasFile('logo')){
+            if ($request->file('logo')->isValid()) {
+                $path = $request->logo->store('public/Etablissement/' . $etablissement->slug.'/Logo');
+                $file = str_replace('public/','',$path);
+
+                $etablissement->logo = $file;
+
+                $etablissement->save();
+            }
+        }
+        if (!is_null($logo))
+        File::delete(public_path().'/storage/'.$logo);
 
         return response()->json(['etablissement'=>$etablissement]);
 
