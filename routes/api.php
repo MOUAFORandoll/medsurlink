@@ -165,14 +165,14 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Patient|Medec
 });
 
 
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Souscripteur']], function () {
+    Route::resource('patient','Api\PatientController')->except(['create','edit']);
+    Route::resource('souscripteur','Api\SouscripteurController')->except(['create','edit','store','update','destroy']);
+});
+
 //    Définition des routes accéssible par le souscripteur
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Souscripteur']], function () {
     Route::resource('souscripteur','Api\SouscripteurController')->except(['create','edit','index','store','update','destroy']);
-});
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {
-    Route::resource('patient','Api\PatientController')->except(['create','edit']);
-    Route::resource('souscripteur','Api\SouscripteurController')->except(['create','edit','store','update','destroy']);
-
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire']], function () {
