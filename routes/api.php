@@ -56,6 +56,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
     Route::post('etablissement/add-patient','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::post('etablissement/delete-patient','Api\EtablissementPatientController@retirerPatientAEtablissement');
 
+    Route::post('etablissement/{etablissement}','Api\EtablissementExerciceController@update')->name('etablissement.info.update');
+
+
 });
 
 //    Définition des routes accéssible par le praticien
@@ -112,7 +115,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::post('resultat-labo/{resultat}','Api\ResultatLaboController@update')->name('resultat.labo.update');
     Route::post('resultat-imagerie/{resultat}','Api\ResultatImagerieController@update')->name('resultat.imagerie.update');
     Route::post('medecin-controle/{medecin}','Api\MedecinControleController@update')->name('medecin.controle.update');
-    Route::post('etablissement/{etablissement}','Api\EtablissementExerciceController@update')->name('etablissement.info.update');
     Route::resource('consultation-prenatale','Api\ConsultationPrenantaleController')->except(['create','edit']);
     Route::resource('parametre-obstetrique','Api\ParametreObstetriqueController')->except(['create','edit']);
     Route::resource('echographie','Api\EchographieController')->except(['create','edit']);
