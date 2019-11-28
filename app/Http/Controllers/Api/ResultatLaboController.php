@@ -136,7 +136,9 @@ class ResultatLaboController extends Controller
         if($request->hasFile('file')){
             $this->uploadFile($request,$resultat);
         }
-        File::delete(public_path().'/storage/'.$file);
+
+        if (!is_null($file))
+            File::delete(public_path().'/storage/'.$file);
 
         return response()->json([
             'resultat' => $resultat

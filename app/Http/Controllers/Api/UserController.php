@@ -11,6 +11,7 @@ use App\Mail\Password\PatientPasswordGenerated;
 use App\Models\Souscripteur;
 use App\Rules\EmailExistRule;
 use App\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -190,6 +191,7 @@ class UserController extends Controller
         }
 
     public static function updatePersonalInformation($data,$slug){
+//        dd($data);
         $validation = self::personalUpdateValidation($data,$slug);
 
         if ($validation->fails())

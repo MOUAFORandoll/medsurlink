@@ -25,7 +25,8 @@ class EtablissementExercice extends Model
     protected $fillable = [
         "name",
         "description",
-        'slug'
+        'slug',
+        'logo'
 
     ];
 
