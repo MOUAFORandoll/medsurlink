@@ -21,10 +21,11 @@ class ConsultationMotifController extends Controller
         }
 
         $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
+
         $motifs = $request->get('motifs');
         foreach ($motifs as $motif){
             $consultation->motifs()->detach($motif);
-            defineAsAuthor("ConsultationMotif", $motif->id, 'detach',$consultation->dossier->patient->user_id);
+            defineAsAuthor("ConsultationMotif", $motif, 'detach',$consultation->dossier->patient->user_id);
         }
 
         $consultation = ConsultationMedecineGenerale::with(['dossier', 'traitements', 'conclusions', 'parametresCommun'])->find($consultation->id);

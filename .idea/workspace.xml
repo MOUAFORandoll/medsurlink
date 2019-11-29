@@ -2,20 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/AuthController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/AuthController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMotifController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMotifController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/PraticienStoreRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/PraticienStoreRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/PraticienUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/PraticienUpdateRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Patient.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/MotifsTableSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/MotifsTableSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -455,7 +443,7 @@
       <workItem from="1574670568371" duration="4043000" />
       <workItem from="1574841935219" duration="11847000" />
       <workItem from="1574927155815" duration="16634000" />
-      <workItem from="1575012988119" duration="9657000" />
+      <workItem from="1575012988119" duration="10002000" />
     </task>
     <servers />
   </component>
