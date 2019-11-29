@@ -108,7 +108,16 @@ class User extends Authenticatable
      */
     public function validateForPassportPasswordGrant($password)
     {
-        return Hash::check($password, $this->password);
+        $users = User::where('email', $this->email)->get();
+        $passwordExist = false;
+        foreach ($users as $user){
+            if(Hash::check($password,$user->password)){
+                $passwordExist = true;
+                break;
+            }
+        }
+
+        return $passwordExist;
     }
 
     /**
@@ -136,8 +145,10 @@ class User extends Authenticatable
             }
             return [];
         }
+        //Retourne tous les utilisateurs qui ont cette adresse email
         return  User::where('email', $username)->first();
     }
+
 
     public function praticien(){
         return $this->hasOne(Praticien::class,'user_id','id');

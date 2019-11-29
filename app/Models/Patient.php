@@ -83,6 +83,7 @@ class Patient extends Model
     }
 
     public function scopeRestrictUser($builder){
+
         if (Auth::check()){
             $user = Auth::user();
             $userRoles = $user->getRoleNames();
@@ -104,6 +105,7 @@ class Patient extends Model
                 return $builder;
             }
         }else{
+
             throw new UnauthorizedException("Veuillez vous authentifier",401);
         }
     }

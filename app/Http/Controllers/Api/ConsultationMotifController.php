@@ -13,7 +13,7 @@ class ConsultationMotifController extends Controller
     public function removeMotif(Request $request){
         $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
-            "motifs"=>"required|integer|exists:motifs,id"
+            "motifs.*"=>"required|integer|exists:motifs,id"
         ]);
 
         if ($validation->fails()){
@@ -21,7 +21,12 @@ class ConsultationMotifController extends Controller
         }
 
         $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
-        $consultation->motifs()->detach($request->get('motifs'));
+
+        $motifs = $request->get('motifs');
+        foreach ($motifs as $motif){
+            $consultation->motifs()->detach($motif);
+            defineAsAuthor("ConsultationMotif", $motif, 'detach',$consultation->dossier->patient->user_id);
+        }
 
         $consultation = ConsultationMedecineGenerale::with(['dossier', 'traitements', 'conclusions', 'parametresCommun'])->find($consultation->id);
 

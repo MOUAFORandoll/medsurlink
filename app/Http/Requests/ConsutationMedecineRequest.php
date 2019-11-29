@@ -25,16 +25,33 @@ class ConsutationMedecineRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
-            "motifs.*"=>'required',
+        $rules = ["dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
             "conclusions"=>"sometimes|nullable|string|min:2",
-            "date_consultation"=>"sometimes|nullable|date|after_or_equal:".Carbon::now()->format('Y-m-d'),
             "anamese"=>"sometimes|nullable|string|min:5",
             "mode_de_vie"=>"sometimes|nullable|string|min:5",
             "examen_clinique"=>"sometimes|nullable|string|min:2",
             "examen_complementaire"=>"sometimes|nullable|string|min:2",
             "traitement_propose"=>"sometimes|nullable|string|min:2",
+            "profession"=>"sometimes|nullable|string|min:2",
+            "situation_familiale"=>"sometimes|nullable|string|min:2",
+            "nbre_enfant"=>"sometimes|nullable|string|min:1",
+            "tabac"=>"sometimes|nullable|string|min:2",
+            "alcool"=>"sometimes|nullable|string|min:2",
+            "autres"=>"sometimes|nullable|string|min:2",
         ];
+
+        if($this->method == 'Post')
+        {
+            $rules["motifs.*"] = 'required';
+            $rules["date_consultation"]="sometimes|nullable|date|after_or_equal:".Carbon::now()->format('Y-m-d');
+
+        }
+
+        elseif ($this->method == 'Put'){
+            $rules["motifs.*"] = 'sometimes|nullable|string|min:2';
+            $rules["date_consultation"]="sometimes|nullable|date";
+        }
+
+        return $rules;
     }
 }
