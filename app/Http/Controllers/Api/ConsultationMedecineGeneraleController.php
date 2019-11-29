@@ -172,7 +172,40 @@ class ConsultationMedecineGeneraleController extends Controller
 
         $this->checkIfAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
 
-        ConsultationMedecineGenerale::whereSlug($slug)->update($request->validated());
+        $motifs = $request->get('motifs');
+
+        $rConclusions = $request->get('conclusions');
+
+        //Insertion des motifs
+        foreach ($motifs as $motif){
+
+            $converti = (integer) $motif;
+
+            if ($converti !== 0){
+                $consultation->motifs()->attach($motif);
+                defineAsAuthor("ConsultationMotif", $motif, 'attach',$consultation->dossier->patient->user_id);
+            }else{
+                $item =   Motif::create([
+                    "reference"=>$consultation->date_consultation,
+                    "description"=>$motif
+                ]);
+
+                defineAsAuthor("Motif", $item->id, 'create');
+                $consultation->motifs()->attach($item->id);
+                defineAsAuthor("ConsultationMotif", $item->id, 'attach',$consultation->dossier->patient->user_id);
+
+            }
+        }
+
+        foreach ($consultation->conclusions as $conclusion){
+            $conclusion->description = $rConclusions;
+            $conclusion->save();
+            defineAsAuthor("Conclusion",$conclusion->id,'update',$conclusion->consultationMedecine->dossier->patient->user_id);
+
+        }
+
+        ConsultationMedecineGenerale::whereSlug($slug)->update($request->except(['motifs','conclusions','consultation']));
+
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
 

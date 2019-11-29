@@ -213,7 +213,8 @@ class UserController extends Controller
             'ville' => ['required','string', 'max:255'],
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255','unique:users,email,'.$user->id],
+//            'email' => ['required', 'string', 'email', 'max:255','unique:users,email,'.$user->id],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'adresse' => ['required', 'string','min:3'],
         ];
         $validation = Validator::make($data,$rules);

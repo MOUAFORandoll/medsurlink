@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use Psr\Http\Message\ServerRequestInterface;
@@ -27,10 +28,10 @@ class AuthController extends AccessTokenController
          if ($tokenInfo->has('error'))
              return response()->json(['message'=>$tokenInfo->get('message')],401);
 
-
         // Then we just add the user to the response before returning it.
         $username = $request->getParsedBody()['username'];
-        $user = $this->getUser($username);
+        $password = $request->getParsedBody()['password'];
+        $user = $this->getUser($username,$password);
         $user->roles;
         Auth::setUser($user);
         $tokenInfo->put('user', $user);
@@ -39,11 +40,10 @@ class AuthController extends AccessTokenController
         return $tokenInfo;
     }
 
-    public function getUser($username){
+    public function getUser($username,$password){
         //Verification de l'existence de l'adresse email
         $validator = Validator::make(compact('username'),['username'=>['exists:users,email']]);
         if($validator->fails()){
-
             //Verification de l'existence du numero de dossier
             if (strlen($username)==8){
                 $numero_dossier = $username;
@@ -57,11 +57,17 @@ class AuthController extends AccessTokenController
             }
             return [];
         }
-        $user = User::where('email', $username)->first();
-        $dossier = DB::table('dossier_medicals')->where('patient_id','=',$user->id)->first();
-        if(!is_null($dossier))
-        $user['dossier'] = $dossier->slug;
-        return $user;
 
+        $users = User::where('email', $username)->get();
+        $authUser = new User();
+        foreach ($users as $user){
+            if(Hash::check($password,$user->password)){
+                $authUser = $user;
+                $dossier = DB::table('dossier_medicals')->where('patient_id','=',$authUser->id)->first();
+                if(!is_null($dossier))
+                    $authUser['dossier'] = $dossier->slug;
+            }
+        }
+        return $authUser;
     }
 }
