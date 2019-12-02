@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\PraticienStoreRequest;
 use App\Http\Requests\PraticienUpdateRequest;
+use App\Mail\updateSetting;
 use App\Models\EtablissementExercice;
 use App\Models\Praticien;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class PraticienController extends Controller
@@ -124,6 +126,17 @@ class PraticienController extends Controller
         ]);
 
         $praticien = Praticien::with('etablissements')->whereSlug($slug)->first();
+
+        try{
+            $mail = new updateSetting($praticien->user);
+
+            Mail::to($praticien->user->email)->send($mail);
+
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['particien'=>$praticien, "message"=>$message]);
+
+        }
 
         return response()->json(['praticien' => $praticien]);
     }

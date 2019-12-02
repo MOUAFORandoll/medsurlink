@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\SouscripteurStoreRequest;
 use App\Http\Requests\SouscripteurUpdateRequest;
+use App\Mail\updateSetting;
 use App\Models\Souscripteur;
+use Illuminate\Support\Facades\Mail;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class SouscripteurController extends Controller
@@ -120,6 +122,17 @@ class SouscripteurController extends Controller
 
         //Calcul de l'age du souscripteur
         $souscripteur = Souscripteur::with('user','patients')->whereSlug($slug)->first();
+
+        try{
+            $mail = new updateSetting($souscripteur->user);
+
+            Mail::to($souscripteur->user->email)->send($mail);
+
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['souscripteur'=>$souscripteur, "message"=>$message]);
+
+        }
 
         return response()->json(['souscripteur'=>$souscripteur]);
 
