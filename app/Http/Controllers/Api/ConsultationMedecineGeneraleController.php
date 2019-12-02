@@ -55,6 +55,7 @@ class ConsultationMedecineGeneraleController extends Controller
     {
 
         $consultation = ConsultationMedecineGenerale::create($request->validated());
+        defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create',$consultation->dossier->patient->user_id);
 
         $consultation = ConsultationMedecineGenerale::with([
             'dossier',
@@ -229,7 +230,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
 
-        $this->checkIfAuthorized("ConsutationMedecine",$consultation->id,"create");
+        $this->checkIfAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
 
         try{
             $consultation = ConsultationMedecineGenerale::findBySlug($slug);
