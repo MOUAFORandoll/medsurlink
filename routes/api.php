@@ -171,7 +171,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Patient|Medec
 });
 
 
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Souscripteur']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Souscripteur|Patient']], function () {
     Route::get('patient','Api\PatientController@index')->name('patient.index');
     Route::get('souscripteur/{souscripteur}','Api\SouscripteurController@show')->name('souscripteur.show');
 });
