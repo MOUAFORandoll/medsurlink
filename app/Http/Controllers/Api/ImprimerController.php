@@ -17,20 +17,16 @@ class ImprimerController extends Controller
     use PersonnalErrors;
     public function dossier($slug){
 
-//        $this->validatedSlug($slug,'dossier_medicals');
+        $this->validatedSlug($slug,'dossier_medicals');
 
         $dossier = DossierMedical::findBySlug($slug);
         $data = compact('dossier');
         $pdf = PDF::loadView('rapport',$data);
-        return $pdf->download('dossier.pdf');
 
-        $pdf = PDF::loadView('pdf.invoice', $data);
+        $path = 'public/pdf/'.$dossier->numero_dossier.'.pdf';
 
-        Storage::put('public/pdf/invoice.pdf', $pdf->output());
-
-        $path = public_path().'/storage/pdf/invoice.pdf';
-        return response()->file($path);
-//        return $pdf->download('invoice.pdf');
+        Storage::put($path, $pdf->output());
+        return  response()->json(['name'=>$dossier->numero_dossier.".pdf"]);
     }
 
     public function generale($slug){
@@ -39,8 +35,13 @@ class ImprimerController extends Controller
 
         $consultationMedecine = ConsultationMedecineGenerale::findBySlug($slug);
 
-        $pdf = PDF::loadView('contrat_version_imprimable',compact('consultationMedecine'));
-        return $pdf->download('consultation_generale.pdf');
+        $data = compact('consultationMedecine');
+        $pdf = PDF::loadView('rapport',$data);
+
+        $path = 'public/pdf/'.'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf';
+
+        Storage::put($path, $pdf->output());
+        return  response()->json(['name'=>'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf']);
     }
 
     public function obstetrique($slug){
