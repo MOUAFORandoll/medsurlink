@@ -164,7 +164,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']],
     Route::resource('souscripteur','Api\SouscripteurController');
 });
 
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Patient|Medecin controle|Souscripteur']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Patient|Medecin controle|Souscripteur']], function () {
     Route::resource('affiliation','Api\AffiliationController')->except('store','update','destroy');
     Route::get('patient/{patient}','Api\PatientController@show')->name('patient.show');
 
