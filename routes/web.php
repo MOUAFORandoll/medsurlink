@@ -37,6 +37,11 @@ Route::get('/public/storage/Etablissement/{fileNumber}/Logo/{image}', function (
     return response()->file($path);
 });
 
+Route::get('/public/storage/pdf/{fileNumber}', function ($fileNumber) {
+    $path = public_path().'/storage/pdf/'.$fileNumber;
+    return response()->file($path);
+});
+
 Route::get('/contrat/{id}', function ($id) {
 
     $cim= ContratIntermediationMedicale::find($id);
