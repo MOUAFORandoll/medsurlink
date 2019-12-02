@@ -85,7 +85,7 @@ class ConsultationMedecineGeneraleController extends Controller
                 defineAsAuthor("ConsultationMotif", $motif, 'attach',$consultation->dossier->patient->user_id);
             }else{
                 $item =   Motif::create([
-                    "reference"=>$motif,
+                    "reference"=>$consultation->date_consultation,
                     "description"=>$motif
                 ]);
 
@@ -98,6 +98,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
         $conclusion =  Conclusion::create([
             'consultation_medecine_generale_id' =>$consultation->id,
+            'reference'=>$consultation->date_consultation,
             "description"=>$conclusions
         ]);
 
