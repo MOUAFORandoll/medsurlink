@@ -158,6 +158,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Patient|Medecin controle|Souscripteur|Praticien']], function () {
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
+    Route::get('imprimer-consultation-medecine/{generale}','Api\ImprimerController@generale');
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {

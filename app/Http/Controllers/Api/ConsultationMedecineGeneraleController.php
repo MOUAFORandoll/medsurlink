@@ -233,7 +233,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $this->checkIfAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
 
         try{
-            $consultation = ConsultationMedecineGenerale::findBySlug($slug);
+            $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
             $consultation->delete();
             return response()->json(["consultation"=>$consultation]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
