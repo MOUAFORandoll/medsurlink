@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Gbrock\Table\Table;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 
 class ImprimerController extends Controller
 {
@@ -22,6 +23,14 @@ class ImprimerController extends Controller
         $data = compact('dossier');
         $pdf = PDF::loadView('rapport',$data);
         return $pdf->download('dossier.pdf');
+
+        $pdf = PDF::loadView('pdf.invoice', $data);
+
+        Storage::put('public/pdf/invoice.pdf', $pdf->output());
+
+        $path = public_path().'/storage/pdf/invoice.pdf';
+        return response()->file($path);
+//        return $pdf->download('invoice.pdf');
     }
 
     public function generale($slug){
