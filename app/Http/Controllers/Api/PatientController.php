@@ -7,6 +7,7 @@ use App\Http\Requests\patientStoreRequest;
 use App\Http\Requests\PatientUpdateRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Mail\PatientAffiliated;
+use App\Mail\updateSetting;
 use App\Models\Patient;
 use App\Models\Souscripteur;
 use Illuminate\Http\Request;
@@ -133,6 +134,16 @@ class PatientController extends Controller
 
         $patient = Patient::with(['souscripteur','user','affiliations','etablissements'])->restrictUser()->whereSlug($slug)->first();
 
+        try{
+            $mail = new updateSetting($patient->user);
+
+            Mail::to($patient->user->email)->send($mail);
+
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['patient'=>$patient, "message"=>$message]);
+
+        }
         return response()->json(['patient'=>$patient]);
 
     }

@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\GestionnaireStoreRequest;
 use App\Http\Requests\GestionnaireUpdateRequest;
+use App\Mail\updateSetting;
 use App\Models\Gestionnaire;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class GestionnaireController extends Controller
 {
@@ -128,6 +130,16 @@ class GestionnaireController extends Controller
 
         $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();
 
+        try{
+        $mail = new updateSetting($gestionnaire->user);
+
+        Mail::to($gestionnaire->user->email)->send($mail);
+
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['gestionnaire'=>$gestionnaire, "message"=>$message]);
+
+        }
         return response()->json(['gestionnaire'=>$gestionnaire]);
 
     }

@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\MedecinControleStoreRequest;
 use App\Http\Requests\MedecinControleUpdateRequest;
+use App\Mail\updateSetting;
 use App\Models\MedecinControle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class MedecinControleController extends Controller
@@ -142,7 +144,18 @@ class MedecinControleController extends Controller
         }
 
         if (!is_null($signature))
-        File::delete(public_path().'/storage/'.$signature);
+            File::delete(public_path().'/storage/'.$signature);
+
+        try{
+            $mail = new updateSetting($medecin->user);
+
+            Mail::to($medecin->user->email)->send($mail);
+
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['medecin'=>$medecin, "message"=>$message]);
+
+        }
 
         return response()->json(['medecin'=>$medecin]);
 
