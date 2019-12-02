@@ -42,6 +42,7 @@ Route::get('/contrat/{id}', function ($id) {
     $cim= ContratIntermediationMedicale::find($id);
     return view('contrat',compact('cim'));
 });
+
 //Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
 
 Route::get('imprimer/contrat/{id}', function ($id) {
