@@ -25,7 +25,8 @@ class ConsutationMedecineRequest extends FormRequest
      */
     public function rules()
     {
-        $rules = ["dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
+        $rules = [
+            "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
             "conclusions"=>"sometimes|nullable|string|min:2",
             "anamese"=>"sometimes|nullable|string|min:5",
             "mode_de_vie"=>"sometimes|nullable|string|min:5",
@@ -40,14 +41,14 @@ class ConsutationMedecineRequest extends FormRequest
             "autres"=>"sometimes|nullable|string|min:2",
         ];
 
-        if($this->method == 'Post')
+        if($this->isMethod('POST'))
         {
             $rules["motifs.*"] = 'required';
             $rules["date_consultation"]="sometimes|nullable|date|after_or_equal:".Carbon::now()->format('Y-m-d');
 
         }
 
-        elseif ($this->method == 'Put'){
+        elseif ($this->isMethod('PUT')){
             $rules["motifs.*"] = 'sometimes|nullable|string|min:2';
             $rules["date_consultation"]="sometimes|nullable|date";
         }
