@@ -41,7 +41,6 @@ class ImprimerController extends Controller
         $path = storage_path().'/app/public/pdf/'.'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf';
 
         $pdf->save($path);
-        return  response()->json(['name'=>'-generale-.pdf'],419);
 
         return  response()->json(['name'=>'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf'],419);
     }
