@@ -14,7 +14,7 @@
         font-weight : 500;
         font-family: 'Raleway', sans-serif;
         letter-spacing : 1.3px;
-        color : #333333
+        color : black;
 
     }
     h2 {
@@ -65,7 +65,7 @@
 @endisset
 
 @isset($consultationMedecine)
-    <p class="text-center"><strong>Rapport de consultation</strong></p>
+    <p style="text-align: center; text-transform: uppercase"><strong>Rapport de consultation</strong></p>
     <br>
     <p>Honorée Consoeur, Honorée Confrère,</p>
     <p>J'ai vue en date du <strong>{{\Carbon\Carbon::parse($consultationMedecine->date_consultation)->format('d/m/Y')}}</strong>, pour une consultation, votre patient(e)
