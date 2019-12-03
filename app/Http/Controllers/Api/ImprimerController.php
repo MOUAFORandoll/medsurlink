@@ -38,9 +38,9 @@ class ImprimerController extends Controller
         $data = compact('consultationMedecine');
         $pdf = PDF::loadView('rapport',$data);
 
-        $path = 'public/pdf/'.'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf';
+        $path = storage_path().'/app/public/pdf/'.'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf';
 
-        Storage::put($path, $pdf->output());
+        $pdf->save($path);
         return  response()->json(['name'=>'-generale-.pdf'],419);
 
         return  response()->json(['name'=>'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf'],419);
