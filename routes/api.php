@@ -58,6 +58,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
     Route::post('etablissement/{etablissement}','Api\EtablissementExerciceController@update')->name('etablissement.info.update');
 
     Route::post('medecin-controle/{medecin}','Api\MedecinControleController@update')->name('medecin.controle.update');
+    Route::post('praticien/{praticien}','Api\PraticienController@update')->name('praticien.post.update');
 
 });
 

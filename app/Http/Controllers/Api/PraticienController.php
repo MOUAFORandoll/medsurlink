@@ -129,7 +129,7 @@ class PraticienController extends Controller
 
         $praticien= Praticien::with('user')->whereSlug($slug)->first();
 
-        UserController::updatePersonalInformation($request->except('civilite','practitioner','profession_id','specialite_id','numero_ordre'),$praticien->user->slug);
+        UserController::updatePersonalInformation($request->except('civilite','practitioner','profession_id','specialite_id','numero_ordre','signature'),$praticien->user->slug);
 
         Praticien::whereSlug($slug)->update([
             'specialite_id' => $request->specialite_id,
@@ -143,7 +143,7 @@ class PraticienController extends Controller
 
         if($request->hasFile('signature')){
             if ($request->file('signature')->isValid()) {
-                $path = $request->signature->store('public/Medecin/' . $praticien->slug . '/Signature');
+                $path = $request->signature->store('public/Praticien/' . $praticien->slug . '/Signature');
                 $file = str_replace('public/', '', $path);
 
                 $praticien->signature = $file;

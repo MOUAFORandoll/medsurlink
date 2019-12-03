@@ -32,6 +32,11 @@ Route::get('/public/storage/Medecin/{fileNumber}/Signature/{image}', function ($
     return response()->file($path);
 });
 
+Route::get('/public/storage/Praticien/{fileNumber}/Signature/{image}', function ($fileNumber,$image) {
+    $path = public_path().'/storage/Praticien/'.$fileNumber.'/Signature/'.'/'.$image;
+    return response()->file($path);
+});
+
 Route::get('/public/storage/Etablissement/{fileNumber}/Logo/{image}', function ($fileNumber,$image) {
     $path = public_path().'/storage/Etablissement/'.$fileNumber.'/Logo'.'/'.$image;
     return response()->file($path);
