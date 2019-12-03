@@ -39,9 +39,8 @@ class ImprimerController extends Controller
         $pdf = PDF::loadView('rapport',$data);
 
         $path = 'public/pdf/'.'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf';
-        return response(['name'=>'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf'],419);
         Storage::put($path, $pdf->output());
-        return  response()->json(['name'=>'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf']);
+        return  response()->json(['name'=>'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf'],419);
     }
 
     public function obstetrique($slug){
