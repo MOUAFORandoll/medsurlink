@@ -30,6 +30,7 @@ class ImprimerController extends Controller
     }
 
     public function generale($slug){
+        return  response()->json(['name'=>'Consultation-generale-.pdf'],419);
 
         $this->validatedSlug($slug,'consultation_medecine_generales');
 
