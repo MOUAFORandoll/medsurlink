@@ -34,12 +34,12 @@ class ImprimerController extends Controller
         $this->validatedSlug($slug,'consultation_medecine_generales');
 
         $consultationMedecine = ConsultationMedecineGenerale::findBySlug($slug);
-        return  response()->json(['name'=>'Consultation-generale-.pdf'],419);
 
         $data = compact('consultationMedecine');
         $pdf = PDF::loadView('rapport',$data);
 
         $path = 'public/pdf/'.'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf';
+        return  response()->json(['name'=>'ltation-generale-.pdf'],419);
 
         Storage::put($path, $pdf->output());
         return  response()->json(['name'=>'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf'],419);
