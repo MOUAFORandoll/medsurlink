@@ -65,6 +65,8 @@
 @endisset
 
 @isset($consultationMedecine)
+    <div style="color: black">
+
     <p style="text-align: center; text-transform: uppercase"><strong>Rapport de consultation</strong></p>
     <br>
     <p>Honorée Consoeur, Honorée Confrère,</p>
@@ -150,6 +152,7 @@
         <p>{{$consultationMedecine->conclusions->first()->description}}</p>
     @endif
 
+    </div>
 @endisset
 
 @isset($resultatLabo)
