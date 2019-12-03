@@ -164,7 +164,9 @@
 <p style="text-align: right"> Date de création : {{\Carbon\Carbon::parse()->format('d/m/Y')}}</p>
 @isset($signature)
 @if(!is_null($signature))
-<img src="../../public/storage/".{{$signature}} />
+    <div>
+        <img  style="float: right" width="300px" height="300px" src={{public_path('/storage/'.$signature)}} />
+    </div>
 @endif
 @endisset
 </body>

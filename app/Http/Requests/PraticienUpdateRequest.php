@@ -30,7 +30,7 @@ class PraticienUpdateRequest extends FormRequest
             "profession_id"=>'required|integer|exists:professions,id',
             "specialite_id"=>'required|integer|exists:specialites,id',
             //"etablissement_id"=>'sometimes|nullable|integer|exists:etablissement_exercices,id',
-            "numero_ordre"=>'sometimes|nullable|string|min:6',
+            "numero_ordre"=>'sometimes|nullable',
             "civilite"=>["required",Rule::in(['M.','Mme/Mlle.','Dr.','Pr.'])],
         ];
     }
