@@ -49,7 +49,7 @@ class ConsutationMedecineRequest extends FormRequest
         }
 
         elseif ($this->isMethod('PUT')){
-            $rules["motifs.*"] = 'sometimes|nullable|string|min:2';
+            $rules["motifs.*"] = 'sometimes|nullable|string|min:1';
             $rules["date_consultation"]="sometimes|nullable|date";
         }
 
