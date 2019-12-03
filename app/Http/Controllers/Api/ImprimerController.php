@@ -42,7 +42,7 @@ class ImprimerController extends Controller
 
         $pdf->save($path);
 
-        return  response()->json(['name'=>'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf'],419);
+        return  response()->json(['name'=>'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf']);
     }
 
     public function obstetrique($slug){
