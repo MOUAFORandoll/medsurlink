@@ -161,6 +161,11 @@
 @isset($resultatImagerie)
 @endisset
 
-
+<p style="text-align: right"> Date de création : {{\Carbon\Carbon::parse()->format('d/m/Y')}}</p>
+@isset($signature)
+@if(!is_null($signature))
+<img src="../../public/storage/".{{$signature}} />
+@endif
+@endisset
 </body>
 </html>

@@ -10,6 +10,7 @@ use App\Mail\updateSetting;
 use App\Models\EtablissementExercice;
 use App\Models\Praticien;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -61,6 +62,17 @@ class PraticienController extends Controller
         $praticien = Praticien::create($request->validated() + ['user_id' => $user->id]);
         $praticien->etablissements()->attach($request->get('etablissement_id'));
         $praticien->save();
+
+        if($request->hasFile('signature')) {
+            if ($request->file('signature')->isValid()) {
+                $path = $request->signature->store('public/Praticien/' . $praticien->slug . '/Signature');
+                $file = str_replace('public/', '', $path);
+
+                $praticien->signature = $file;
+
+                $praticien->save();
+            }
+        }
 
         defineAsAuthor("Praticien",$praticien->user_id,'create');
 
@@ -126,6 +138,22 @@ class PraticienController extends Controller
         ]);
 
         $praticien = Praticien::with('etablissements')->whereSlug($slug)->first();
+
+        $signature = $praticien->signature;
+
+        if($request->hasFile('signature')){
+            if ($request->file('signature')->isValid()) {
+                $path = $request->signature->store('public/Medecin/' . $praticien->slug . '/Signature');
+                $file = str_replace('public/', '', $path);
+
+                $praticien->signature = $file;
+
+                $praticien->save();
+            }
+        }
+
+        if (!is_null($signature))
+            File::delete(public_path().'/storage/'.$signature);
 
         try{
             $mail = new updateSetting($praticien->user);

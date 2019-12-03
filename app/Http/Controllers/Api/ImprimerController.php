@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\ConsultationObstetrique;
 use App\Models\DossierMedical;
+use App\Models\Praticien;
 use Barryvdh\DomPDF\Facade as PDF;
 use Gbrock\Table\Table;
 use Illuminate\Http\Request;
@@ -35,9 +36,17 @@ class ImprimerController extends Controller
 
         $consultationMedecine = ConsultationMedecineGenerale::findBySlug($slug);
 
-        $data = compact('consultationMedecine');
-        $pdf = PDF::loadView('rapport',$data);
+        $auteur = getAuthor("ConsultationMedecineGenerale",$consultationMedecine->id,"create");
+        $signature = null;
+        if (!is_null($auteur)){
+            if ($auteur->auteurable_type == 'Praticien'){
+                $praticien = Praticien::find($auteur->auteurable_id);
+                $signature = $praticien->signature;
+            }
+        }
 
+        $data = compact('consultationMedecine','signature');
+        $pdf = PDF::loadView('rapport',$data);
         $path = storage_path().'/app/public/pdf/'.'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf';
 
         $pdf->save($path);
