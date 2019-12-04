@@ -162,6 +162,12 @@ class DossierMedicalController extends Controller
                 'consultationsMedecine',
                 'consultationsObstetrique'])->whereSlug($slug)->first();
             $dossier->delete();
+            $patient = Patient::where('user_id','=',$dossier->patient_id)->first();
+            $patient->delete();
+
+            defineAsAuthor("DossierMedical",$dossier->id,'delete',$dossier->patient->user_id);
+            defineAsAuthor("Patient",$dossier->id,'delete',$dossier->patient->user_id);
+
             return response()->json(['dossier'=>$dossier]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
             $this->revealError('deletingError',$deleteRestrictionException->getMessage());
