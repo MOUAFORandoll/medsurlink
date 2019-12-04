@@ -49,16 +49,13 @@ class TraitementActuelController extends Controller
     {
         $traitements = $request->get('traitements');
 
-        foreach ($traitements as $traitement){
-
-            $traitementCreer =   TraitementActuel::create([
+             $traitementCreer =   TraitementActuel::create([
                 'dossier_medical_id'=>$request->get('dossier_medical_id'),
-                'description'=>$traitement['description']
+                'description'=>$traitements
             ]);
 
             defineAsAuthor("TraitementActuel", $traitementCreer->id,'create',$traitementCreer->dossier->patient->user_id);
 
-        }
         $dossier = DossierMedical::with([
             'allergies'=> function ($query) {
                 $query->orderBy('date', 'desc');

@@ -26,11 +26,7 @@ class TraitementActuelRequest extends FormRequest
     {
         return [
             "dossier_medical_id" => "required|integer|exists:dossier_medicals,id",
-            "traitements.*.description" => "required|string|min:4",
+            "traitements" => "required|string|min:4",
         ];
-    }
-    protected function failedValidation(\Illuminate\Contracts\Validation\Validator $validator)
-    {
-        Request::merge(['error'=>$validator->errors()->getMessages()]);
     }
 }
