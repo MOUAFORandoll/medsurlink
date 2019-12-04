@@ -161,6 +161,11 @@ class PatientController extends Controller
 
         try{
             $patient = Patient::with(['souscripteur','user','affiliations','etablissements'])->restrictUser()->whereSlug($slug)->first();
+            $dossier = $patient->dossier;
+            if (!is_null($dossier)){
+                $dossier->delete();
+                defineAsAuthor("DossierMedical",$dossier->id,'delete',$patient->user_id);
+            }
             $patient->delete();
             defineAsAuthor("Patient",$patient->user_id,'delete',$patient->user_id);
             return response()->json(['patient'=>$patient]);
