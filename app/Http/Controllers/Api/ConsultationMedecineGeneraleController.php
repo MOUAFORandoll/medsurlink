@@ -26,7 +26,7 @@ class ConsultationMedecineGeneraleController extends Controller
     public function index()
     {
 
-        $consultations = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->orderByDateConsultation()->get();
+        $consultations = ConsultationMedecineGenerale::with(['dossier','etablissement','motifs','traitements','conclusions','parametresCommun'])->orderByDateConsultation()->get();
 
         foreach ($consultations as $consultation){
             $consultation->updateConsultationMedecine();
@@ -68,7 +68,9 @@ class ConsultationMedecineGeneraleController extends Controller
             'dossier.antecedents',
             'traitements',
             'conclusions',
-            'parametresCommun'])->find($consultation->id);
+            'parametresCommun',
+            'etablissement'
+        ])->find($consultation->id);
 
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create',$consultation->dossier->patient->user_id);
 
@@ -137,7 +139,9 @@ class ConsultationMedecineGeneraleController extends Controller
             'dossier.traitements',
             'motifs',
             'conclusions',
-            'parametresCommun'])->whereSlug($slug)->first();
+            'parametresCommun',
+            'etablissement'
+            ])->whereSlug($slug)->first();
 
         $consultation->updateConsultationMedecine();
 
