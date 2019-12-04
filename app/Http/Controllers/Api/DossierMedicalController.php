@@ -39,7 +39,9 @@ class DossierMedicalController extends Controller
             }
         ])->get();
         foreach ($dossiers as $dossier){
-               $dossier->updateDossier();
+            if (!is_null($dossier)){
+                $dossier->updateDossier();
+            }
         }
         return response()->json(['dossiers'=>$dossiers]);
     }
@@ -114,7 +116,9 @@ class DossierMedicalController extends Controller
             'resultatsLabo'
         ])->whereSlug($slug)->first();
 
-        $dossier->updateDossier();
+        if (!is_null($dossier)) {
+            $dossier->updateDossier();
+        }
 
         return response()->json(['dossier'=>$dossier]);
     }
@@ -240,7 +244,10 @@ class DossierMedicalController extends Controller
             'resultatsLabo'
         ])->where('patient_id' ,'=',$patient_id)->first();
 
-        $dossier->updateDossier();
+        if (!is_null($dossier)) {
+            $dossier->updateDossier();
+        }
+
         return response()->json(['dossier'=>$dossier]);
     }
 }
