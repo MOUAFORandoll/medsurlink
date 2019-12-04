@@ -39,6 +39,7 @@ class ConsutationMedecineRequest extends FormRequest
             "tabac"=>"sometimes|nullable|string|min:2",
             "alcool"=>"sometimes|nullable|string|min:2",
             "autres"=>"sometimes|nullable|string|min:2",
+            'etablissement_id'=>'required|integer|exists:etablissement_exercices,id'
         ];
 
         if($this->isMethod('POST'))

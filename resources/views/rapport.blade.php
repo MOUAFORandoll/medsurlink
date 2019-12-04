@@ -66,6 +66,14 @@
 
 @isset($consultationMedecine)
     <div style="color: black">
+        @if(!is_null($consultationMedecine->etablissement))
+            <div>
+                @if(!is_null($consultationMedecine->etablissement->logo))
+                    <img style="float: left" src="{{public_path('/storage/'.$consultationMedecine->etablissement->logo)}}" />
+                @endif
+                <p style="text-align: center">{{$consultationMedecine->etablissement->name}}</p>
+            </div>
+        @endif
 
         <p style="text-align: center; text-transform: uppercase"><strong>Rapport de consultation</strong></p>
         <br>
@@ -157,7 +165,7 @@
             </tbody>
         </table>
 
-        <h4>Traitement proposé pour la consultation</h4>
+        <h4>Conduite à tenir</h4>
         <p>{{$consultationMedecine->traitement_propose}}</p>
 
         <h4>Examen clinique</h4>
