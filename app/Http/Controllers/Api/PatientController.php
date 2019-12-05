@@ -62,7 +62,7 @@ class PatientController extends Controller
 
         //Creation du compte patient
         $age = evaluateYearOfOld($request->date_de_naissance);
-        $patient = Patient::create($request->validated() + ['user_id' => $user->id,'age'=>$age]);
+        $patient = Patient::create($request->except(['code_postal','quartier']) + ['user_id' => $user->id,'age'=>$age]);
 
         //Generation du dossier client
         $dossier = DossierMedicalController::genererDossier($patient->user_id);
@@ -130,7 +130,16 @@ class PatientController extends Controller
         UserController::updatePersonalInformation($request->except('date_de_naissance','patient','souscripteur_id','sexe'),$patient->user->slug);
 
         $age = evaluateYearOfOld($request->date_de_naissance);
-        Patient::whereSlug($slug)->update($request->validated()+['age'=>$age]);
+        Patient::whereSlug($slug)->update($request->only([
+                "user_id",
+                "souscripteur_id",
+                "sexe",
+                "date_de_naissance",
+                "age",
+                "nom_contact",
+                "tel_contact",
+                "lien_contact",
+            ])+['age'=>$age]);
 
         $patient = Patient::with(['souscripteur','user','affiliations','etablissements'])->restrictUser()->whereSlug($slug)->first();
 

@@ -126,7 +126,11 @@ class MedecinControleController extends Controller
         $medecin= MedecinControle::with('user')->whereSlug($slug)->first();
 
         UserController::updatePersonalInformation($request->except('civilite','specialite_id','numero_ordre','doctor','signature'),$medecin->user->slug);
-        MedecinControle::whereSlug($slug)->update($request->validated());
+        MedecinControle::whereSlug($slug)->update($request->only([
+            "specialite_id",
+            "numero_ordre",
+            "civilite",
+        ]));
 
         $medecin = MedecinControle::with('specialite','user')->whereSlug($slug)->first();
 

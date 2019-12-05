@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\DossierMedical;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -22,8 +23,8 @@ class AuthController extends AccessTokenController
          $token = $tokenResponse->getContent();
 
          // $tokenInfo will contain the usual Laravel Passort token response.
-         $tokenInfo = json_decode($token, true);
-        $tokenInfo = collect($tokenInfo);
+         $tokenInformation = json_decode($token, true);
+        $tokenInfo = collect($tokenInformation);
 
          if ($tokenInfo->has('error'))
              return response()->json(['message'=>$tokenInfo->get('message')],401);
@@ -34,6 +35,7 @@ class AuthController extends AccessTokenController
         $user = $this->getUser($username,$password);
         $user->roles;
         Auth::setUser($user);
+        $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
         $tokenInfo->put('user', $user);
         $status = getStatus();
         defineAsAuthor($status->getOriginalContent()['auteurable_type'],$status->getOriginalContent()['auteurable_id'],'Connexion');
