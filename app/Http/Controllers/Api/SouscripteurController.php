@@ -118,7 +118,7 @@ class SouscripteurController extends Controller
 
         $age = evaluateYearOfOld($request->date_de_naissance);
 
-        Souscripteur::whereSlug($slug)->update($request->validated()+['age'=>$age]);
+        Souscripteur::whereSlug($slug)->update($request->only(['sexe','date_de_naissance'])+['age'=>$age]);
 
         //Calcul de l'age du souscripteur
         $souscripteur = Souscripteur::with('user','patients')->whereSlug($slug)->first();
