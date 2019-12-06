@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreCommunController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ParametreCommunController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ParametreCommunRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ParametreCommunRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Scopes/RestrictPatientScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictPatientScope.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -448,7 +447,7 @@
       <workItem from="1575365059402" duration="11482000" />
       <workItem from="1575445964861" duration="17479000" />
       <workItem from="1575533071880" duration="9643000" />
-      <workItem from="1575618766141" duration="9109000" />
+      <workItem from="1575618766141" duration="11360000" />
     </task>
     <servers />
   </component>

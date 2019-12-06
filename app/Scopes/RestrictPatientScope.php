@@ -30,6 +30,7 @@ class RestrictPatientScope implements Scope
                 $builder->where('patient_id',$patient->user_id);
 
             }elseif(gettype($userRoles->search('Souscripteur')) == 'integer'){
+                return response()->json('erreur',419);
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 //Récupération des patiens du souscripteur
                 $patients = $user->souscripteur->patients;
