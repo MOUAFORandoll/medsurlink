@@ -49,6 +49,9 @@ class GestionnaireController extends Controller
      */
     public function store(GestionnaireStoreRequest $request)
     {
+        if (is_null($request->get('nationalite'))){
+            $this->revealError('nationalite','nationalite field is required');
+        }
 
         //Création des informations utilisateurs
         $userResponse =  UserController::generatedUser($request);
@@ -114,6 +117,10 @@ class GestionnaireController extends Controller
      */
     public function update(GestionnaireUpdateRequest $request, $slug)
     {
+        if (is_null($request->get('nationalite'))){
+            $this->revealError('nationalite','nationalite field is required');
+        }
+
         $this->validatedSlug($slug,$this->table);
 
         $gestionnaire = Gestionnaire::with('user')->whereSlug($slug)->first();

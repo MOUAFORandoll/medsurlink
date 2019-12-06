@@ -207,7 +207,7 @@ class UserController extends Controller
         $rules = [
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['sometimes','nullable', 'string', 'max:255'],
-            'nationalite' => ['required', 'string', 'max:255'],
+            'nationalite' => ['sometimes','nullable', 'string', 'max:255'],
             'quartier' => ['sometimes','nullable', 'string', 'max:255'],
             'code_postal' => ['sometimes','nullable', 'integer'],
             'ville' => ['required','string', 'max:255'],
@@ -225,7 +225,7 @@ class UserController extends Controller
         $rule = [
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['sometimes','nullable', 'string', 'max:255'],
-            'nationalite' => ['required', 'string', 'max:255'],
+            'nationalite' => ['sometimes','nullable', 'string', 'max:255'],
             'quartier' => ['sometimes','nullable', 'string', 'max:255'],
             'code_postal' => ['sometimes','nullable', 'integer'],
             'ville' => ['required','string', 'max:255'],
