@@ -103,19 +103,19 @@ class DossierMedicalController extends Controller
                 'allergies'=> function ($query) {
                     $query->orderBy('date', 'desc');
                 },
-//                'antecedents',
-//                'patient',
-//                'patient.user',
-//                'patient.souscripteur.user',
-//                'consultationsMedecine',
-//                'consultationsObstetrique',
-//                'consultationsObstetrique.echographies',
-//                'hospitalisations'=> function ($query) {
-//                    $query->orderBy('created_at', 'desc');
-//                },
-//                'traitements'=> function ($query) {
-//                    $query->orderBy('created_at', 'desc');
-//                },
+                'antecedents',
+                'patient',
+                'patient.user',
+                'patient.souscripteur.user',
+                'consultationsMedecine',
+                'consultationsObstetrique',
+                'consultationsObstetrique.echographies',
+                'hospitalisations'=> function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                },
+                'traitements'=> function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                }
 //                'resultatsImagerie',
 //                'resultatsLabo'
             ])->whereSlug($slug)->first();
