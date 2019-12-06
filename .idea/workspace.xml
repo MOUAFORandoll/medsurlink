@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Scopes/RestrictPatientScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictPatientScope.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -447,7 +448,7 @@
       <workItem from="1575365059402" duration="11482000" />
       <workItem from="1575445964861" duration="17479000" />
       <workItem from="1575533071880" duration="9643000" />
-      <workItem from="1575618766141" duration="11360000" />
+      <workItem from="1575618766141" duration="11891000" />
     </task>
     <servers />
   </component>
@@ -472,14 +473,18 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="275" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1575288542385" />
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1575543962210">
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1575649275373">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1575543962210" />
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1575649275373" />
     <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1575271626926">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1575271626926" />
+    <state x="514" y="74" key="RollbackChangesDialog" timestamp="1575649215715">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="514" y="74" key="RollbackChangesDialog/0.0.1366.728@0.0.1366.728" timestamp="1575649215715" />
     <state x="384" y="187" key="com.intellij.ide.util.TipDialog" timestamp="1575358712539">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

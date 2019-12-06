@@ -23,14 +23,13 @@ class RestrictPatientScope implements Scope
     {
         if (Auth::check()){
             $user = Auth::user();
-            $userRoles = $user->getRoleNames();;
+            $userRoles = $user->getRoleNames();
             if(gettype($userRoles->search('Patient')) == 'integer'){
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 $patient = $user->patient;
                 $builder->where('patient_id',$patient->user_id);
 
             }elseif(gettype($userRoles->search('Souscripteur')) == 'integer'){
-                return response()->json('erreur',419);
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 //Récupération des patiens du souscripteur
                 $patients = $user->souscripteur->patients;
