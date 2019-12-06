@@ -33,6 +33,7 @@ class ParametreCommunRequest extends FormRequest
             "ta_diastolique"=>"sometimes|nullable|numeric",
             "temperature"=>"sometimes|nullable|numeric",
             "frequence_cardiaque"=>"sometimes|nullable|numeric",
+            "frequence_respiratoire"=>"sometimes|nullable|numeric",
             "sato2"=>"sometimes|nullable|numeric"
         ];
     }
