@@ -28,7 +28,7 @@ class MedecinControleStoreRequest extends FormRequest
         return [
             "specialite_id"=>'required|integer|exists:specialites,id',
             "user_id"=>'sometimes|integer|exists:users,id',
-            "numero_ordre"=>'required|string|min:2',
+            "numero_ordre"=>'sometimes|nullable|string|min:6',
             "civilite"=>["required",Rule::in(['M.','Mme/Mlle.','Dr.','Pr.'])],
  ];
     }
