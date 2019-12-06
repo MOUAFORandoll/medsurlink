@@ -110,9 +110,9 @@ class DossierMedicalController extends Controller
 //                'consultationsMedecine',
 //                'consultationsObstetrique',
 //                'consultationsObstetrique.echographies',
-                'hospitalisations'=> function ($query) {
-                    $query->orderBy('created_at', 'desc');
-                },
+//                'hospitalisations'=> function ($query) {
+//                    $query->orderBy('created_at', 'desc');
+//                },
                 'traitements'=> function ($query) {
                     $query->orderBy('created_at', 'desc');
                 }
