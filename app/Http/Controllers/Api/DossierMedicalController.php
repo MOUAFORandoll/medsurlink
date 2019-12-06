@@ -92,15 +92,15 @@ class DossierMedicalController extends Controller
      */
     public function show($slug)
     {
+        $validation = validatedSlug($slug,$this->table);
+        if(!is_null($validation))
+            return $validation;
+
         $user = Auth::user();
         $userRoles = $user->getRoleNames();
         if(gettype($userRoles->search('Souscripteur')) == 'integer'){
             return response()->json('errer',419);
         }
-
-        $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
 
         $dossier = DossierMedical::with([
             'allergies'=> function ($query) {
