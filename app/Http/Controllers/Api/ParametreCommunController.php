@@ -52,7 +52,7 @@ class ParametreCommunController extends Controller
 
         defineAsAuthor("ParametreCommun",$parametreCommun->id,'create',$parametreCommun->consultation->dossier->patient->user_id);
 
-        $parametreCommun = ParametreCommun::with('consultation')->whereSlug($parametreCommun->slug)->first();
+        $parametreCommun = ParametreCommun::with('consultation','consultation.dossier')->whereSlug($parametreCommun->slug)->first();
 
         $parametreCommun->updateParametreCommun();
 
@@ -109,7 +109,7 @@ class ParametreCommunController extends Controller
 
         ParametreCommun::whereSlug($slug)->update($request->validated());
 
-        $parametreCommun = ParametreCommun::with('consultation')->whereSlug($slug)->first();
+        $parametreCommun = ParametreCommun::with('consultation','consultation.dossier')->whereSlug($slug)->first();
 
         $this->updateBmi($request,$parametreCommun);
 
