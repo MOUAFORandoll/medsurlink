@@ -99,8 +99,26 @@ class DossierMedicalController extends Controller
         $user = Auth::user();
         $userRoles = $user->getRoleNames();
         if(gettype($userRoles->search('Souscripteur')) == 'integer'){
-            $dossier = DossierMedical::
-            whereSlug($slug)->first();
+            $dossier = DossierMedical::with([
+                'allergies'=> function ($query) {
+                    $query->orderBy('date', 'desc');
+                },
+//                'antecedents',
+//                'patient',
+//                'patient.user',
+//                'patient.souscripteur.user',
+//                'consultationsMedecine',
+//                'consultationsObstetrique',
+//                'consultationsObstetrique.echographies',
+//                'hospitalisations'=> function ($query) {
+//                    $query->orderBy('created_at', 'desc');
+//                },
+//                'traitements'=> function ($query) {
+//                    $query->orderBy('created_at', 'desc');
+//                },
+//                'resultatsImagerie',
+//                'resultatsLabo'
+            ])->whereSlug($slug)->first();
             return response()->json($dossier,419);
         }else{
 
