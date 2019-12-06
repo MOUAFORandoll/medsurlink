@@ -104,12 +104,12 @@ class DossierMedicalController extends Controller
                     $query->orderBy('date', 'desc');
                 },
                 'antecedents',
-                'patient',
-                'patient.user',
-                'patient.souscripteur.user',
-                'consultationsMedecine',
-                'consultationsObstetrique',
-                'consultationsObstetrique.echographies',
+//                'patient',
+//                'patient.user',
+//                'patient.souscripteur.user',
+//                'consultationsMedecine',
+//                'consultationsObstetrique',
+//                'consultationsObstetrique.echographies',
                 'hospitalisations'=> function ($query) {
                     $query->orderBy('created_at', 'desc');
                 },
