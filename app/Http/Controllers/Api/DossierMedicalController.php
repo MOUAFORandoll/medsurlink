@@ -7,7 +7,6 @@ use App\Http\Requests\DossierMedicalRequest;
 use App\Models\DossierMedical;
 use App\Models\Patient;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
 use function GuzzleHttp\Psr7\str;
@@ -96,60 +95,32 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $user = Auth::user();
-        $userRoles = $user->getRoleNames();
-        if(gettype($userRoles->search('Souscripteur')) == 'integer'){
-            $dossier = DossierMedical::with([
-                'allergies'=> function ($query) {
-                    $query->orderBy('date', 'desc');
-                },
-                'antecedents',
-                'patient',
-                'patient.user',
-                'patient.souscripteur.user',
-                'consultationsMedecine',
-                'consultationsObstetrique',
-                'consultationsObstetrique.echographies',
-//                'hospitalisations'=> function ($query) {
-//                    $query->orderBy('created_at', 'desc');
-//                },
-                'traitements'=> function ($query) {
-                    $query->orderBy('created_at', 'desc');
-                },
-                'resultatsImagerie',
-                'resultatsLabo'
-            ])->whereSlug($slug)->first();
-            return response()->json($dossier,419);
-        }else{
+        $dossier = DossierMedical::with([
+            'allergies'=> function ($query) {
+                $query->orderBy('date', 'desc');
+            },
+            'antecedents',
+            'patient',
+            'patient.user',
+            'patient.souscripteur.user',
+            'consultationsMedecine',
+            'consultationsObstetrique',
+            'consultationsObstetrique.echographies',
+            'hospitalisations'=> function ($query) {
+                $query->orderBy('created_at', 'desc');
+            },
+            'traitements'=> function ($query) {
+                $query->orderBy('created_at', 'desc');
+            },
+            'resultatsImagerie',
+            'resultatsLabo'
+        ])->whereSlug($slug)->first();
 
-            $dossier = DossierMedical::with([
-                'allergies'=> function ($query) {
-                    $query->orderBy('date', 'desc');
-                },
-                'antecedents',
-                'patient',
-                'patient.user',
-                'patient.souscripteur.user',
-                'consultationsMedecine',
-                'consultationsObstetrique',
-                'consultationsObstetrique.echographies',
-                'hospitalisations'=> function ($query) {
-                    $query->orderBy('created_at', 'desc');
-                },
-                'traitements'=> function ($query) {
-                    $query->orderBy('created_at', 'desc');
-                },
-                'resultatsImagerie',
-                'resultatsLabo'
-            ])->whereSlug($slug)->first();
-
-            if (!is_null($dossier)) {
-                $dossier->updateDossier();
-            }
-
-            return response()->json(['dossier'=>$dossier]);
+        if (!is_null($dossier)) {
+            $dossier->updateDossier();
         }
 
+        return response()->json(['dossier'=>$dossier]);
     }
 
     /**
