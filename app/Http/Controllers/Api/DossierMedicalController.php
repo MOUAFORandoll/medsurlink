@@ -7,6 +7,7 @@ use App\Http\Requests\DossierMedicalRequest;
 use App\Models\DossierMedical;
 use App\Models\Patient;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
 use function GuzzleHttp\Psr7\str;
@@ -91,6 +92,12 @@ class DossierMedicalController extends Controller
      */
     public function show($slug)
     {
+        $user = Auth::user();
+        $userRoles = $user->getRoleNames();
+        if(gettype($userRoles->search('Souscripteur')) == 'integer'){
+            return response()->json('errer',419);
+        }
+
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
