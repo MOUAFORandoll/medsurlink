@@ -96,11 +96,6 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $user = Auth::user();
-        $userRoles = $user->getRoleNames();
-        if(gettype($userRoles->search('Souscripteur')) == 'integer'){
-            return response()->json('errer',419);
-        }
 
         $dossier = DossierMedical::with([
             'allergies'=> function ($query) {
@@ -122,7 +117,11 @@ class DossierMedicalController extends Controller
             'resultatsImagerie',
             'resultatsLabo'
         ])->whereSlug($slug)->first();
-
+        $user = Auth::user();
+        $userRoles = $user->getRoleNames();
+        if(gettype($userRoles->search('Souscripteur')) == 'integer'){
+            return response()->json('errer',419);
+        }
         if (!is_null($dossier)) {
             $dossier->updateDossier();
         }
