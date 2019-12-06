@@ -100,10 +100,10 @@ class DossierMedicalController extends Controller
         $userRoles = $user->getRoleNames();
         if(gettype($userRoles->search('Souscripteur')) == 'integer'){
             $dossier = DossierMedical::with([
-                'allergies'=> function ($query) {
-                    $query->orderBy('date', 'desc');
-                },
-                'antecedents',
+//                'allergies'=> function ($query) {
+//                    $query->orderBy('date', 'desc');
+//                },
+//                'antecedents',
 //                'patient',
 //                'patient.user',
 //                'patient.souscripteur.user',
