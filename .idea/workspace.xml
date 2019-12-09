@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="" />
+    <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -445,8 +447,16 @@
       <workItem from="1575445964861" duration="17479000" />
       <workItem from="1575533071880" duration="9643000" />
       <workItem from="1575618766141" duration="13629000" />
-      <workItem from="1575877539795" duration="4012000" />
+      <workItem from="1575877539795" duration="4393000" />
     </task>
+    <task id="LOCAL-00001" summary="Mise a jour gitignore">
+      <created>1575882021506</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1575882021506</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -464,6 +474,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Mise a jour gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mise a jour gitignore" />
   </component>
   <component name="WindowStateProjectService">
     <state x="275" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575288542385">
@@ -490,6 +504,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="514" y="74" key="RollbackChangesDialog/0.0.1366.728@0.0.1366.728" timestamp="1575649215715" />
+    <state x="470" y="79" key="VCS.ChangeListViewerDialog" timestamp="1575882049035">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="470" y="79" key="VCS.ChangeListViewerDialog/0.0.1366.728@0.0.1366.728" timestamp="1575882049035" />
     <state x="384" y="187" key="com.intellij.ide.util.TipDialog" timestamp="1575358712539">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
