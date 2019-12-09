@@ -43,11 +43,10 @@ class DossierAllergieController extends Controller
     public function ajouterAllergie(Request $request){
         $validation = Validator::make($request->all(),[
             "dossier"=>"required|integer|exists:dossier_medicals,id",
-            "allergies"=>"required_without:allergiesACreer",
-            "allergiesACreer"=>"required_without:allergies",
-            "allergies.*"=>"sometimes|integer|exists:allergies,id",
-            "allergiesACreer.*.description"=>"sometimes|string|min:7",
-            "allergiesACreer.*.date"=>"sometimes|date|before_or_equal:".Carbon::now()->format('Y-m-d'),
+//            "allergies"=>"required_without:allergiesACreer",
+//            "allergiesACreer"=>"required_without:allergies",
+//            "allergies.*"=>"sometimes|integer|exists:allergies,id",
+            "allergiesACreer"=>"required|string|min:7",
 
         ]);
 
@@ -55,26 +54,26 @@ class DossierAllergieController extends Controller
             return response()->json(['error'=>$validation->errors()],419);
         }
 
-        $allergies = $request->get('allergies');
+//        $allergies = $request->get('allergies');
         $allergiesACreer = $request->get('allergiesACreer');
 
         $dossier = DossierMedical::find($request->get('dossier'));
 
-        if (!is_null($allergiesACreer) or !empty($allergiesACreer)){
-            foreach ( $allergiesACreer as $allergy)
-            {
+//        if (!is_null($allergiesACreer) or !empty($allergiesACreer)){
+//            foreach ( $allergiesACreer as $allergy)
+//            {
                 $allergieCreer = Allergie::create([
-                    'description'=>$allergy['description'],
-                    'date'=>array_key_exists('date',$allergy) ? $allergy['date'] : null
+                    'description'=>$allergiesACreer,
+//                    'date'=>array_key_exists('date',$allergy) ? $allergy['date'] : null
                 ]);
                 defineAsAuthor("Allergie",$allergieCreer->id,'create',$dossier->patient->user_id);
                 $dossier->allergies()->attach($allergieCreer->id);
-            }
-        }
+//            }
+//        }
 
-        if (!is_null($allergies) or !empty($allergies)){
-                $dossier->allergies()->attach($allergies);
-        }
+//        if (!is_null($allergies) or !empty($allergies)){
+//                $dossier->allergies()->attach($allergies);
+//        }
 
         defineAsAuthor("DossierAllergie",$dossier->id,'attach');
         $dossier = DossierMedical::with([
