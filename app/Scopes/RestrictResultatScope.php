@@ -30,12 +30,15 @@ class RestrictResultatScope implements Scope
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 $dossier = $user->patient->dossier;
                 $builder->where('dossier_medical_id','=',$dossier->id)->whereNotNull('archived_at');
-            }elseif(gettype($userRoles->search('Souscripteur')) == 'integer'){
+            }elseif(gettype($userRoles->search('Souscripteur')) == 'integer'){                return response()->json(Auth::user(),419);
+//                return response()->json(Auth::id(),419);
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 $patients = $user->souscripteur->patients;
                 $dossiers = [];
                 foreach ($patients as $patient){
-                    array_push($dossiers,$patient->dossier->id);
+                    if (!is_null($patient->dossier)){
+                        array_push($dossiers,$patient->dossier->id);
+                    }
                 }
                 $builder->whereIn('dossier_medical_id',$dossiers)->whereNotNull('archived_at');
             }elseif(gettype($userRoles->search('Medecin controle')) == 'integer'){

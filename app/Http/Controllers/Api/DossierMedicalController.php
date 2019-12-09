@@ -95,32 +95,31 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $dossier = DossierMedical::with([
-            'allergies'=> function ($query) {
-                $query->orderBy('date', 'desc');
-            },
-            'antecedents',
-            'patient',
-            'patient.user',
-            'patient.souscripteur.user',
-            'consultationsMedecine',
-            'consultationsObstetrique',
-            'consultationsObstetrique.echographies',
-            'hospitalisations'=> function ($query) {
-                $query->orderBy('created_at', 'desc');
-            },
-            'traitements'=> function ($query) {
-                $query->orderBy('created_at', 'desc');
-            },
-            'resultatsImagerie',
-            'resultatsLabo'
-        ])->whereSlug($slug)->first();
+                 $dossier = DossierMedical::with([
+                'allergies'=> function ($query) {
+                    $query->orderBy('date', 'desc');
+                },
+                'antecedents',
+                'patient',
+                'patient.user',
+                'patient.souscripteur.user',
+                'consultationsMedecine',
+                'consultationsObstetrique',
+                'consultationsObstetrique.echographies',
+                'hospitalisations'=> function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                },
+                'traitements'=> function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                },
+                'resultatsImagerie',
+                'resultatsLabo'
+            ])->whereSlug($slug)->first();
 
-        if (!is_null($dossier)) {
-            $dossier->updateDossier();
-        }
-
-        return response()->json(['dossier'=>$dossier]);
+            if (!is_null($dossier)) {
+                $dossier->updateDossier();
+            }
+       return response()->json(['dossier'=>$dossier]);
     }
 
     /**

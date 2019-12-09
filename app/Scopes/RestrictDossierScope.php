@@ -34,12 +34,14 @@ class RestrictDossierScope implements Scope
                 $dossier = $user->patient->dossier;
                 $builder->where('dossier_medical_id','=',$dossier->id)->whereNotNull('archieved_at');
             }elseif(gettype($userRoles->search('Souscripteur')) == 'integer'){
-                $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
-                $patients = $user->souscripteur->patients;
-                $dossiers = [];
-                foreach ($patients as $patient){
-                    array_push($dossiers,$patient->dossier->id);
-                }
+                    $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
+                    $patients = $user->souscripteur->patients;
+                    $dossiers = [];
+                    foreach ($patients as $patient){
+                        if (!is_null($patient->dossier)){
+                            array_push($dossiers,$patient->dossier->id);
+                        }
+                    }
                 $builder->whereIn('dossier_medical_id',$dossiers)->whereNotNull('archieved_at');
             }elseif(gettype($userRoles->search('Medecin controle')) == 'integer'){
                 $builder->whereNotNull('passed_at');
