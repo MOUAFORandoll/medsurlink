@@ -45,7 +45,7 @@ class ConsutationMedecineRequest extends FormRequest
         if($this->isMethod('POST'))
         {
             $rules["motifs.*"] = 'required';
-            $rules["date_consultation"]="sometimes|nullable|date|after_or_equal:".Carbon::now()->format('Y-m-d');
+            $rules["date_consultation"]="sometimes|nullable|date";
 
         }
 

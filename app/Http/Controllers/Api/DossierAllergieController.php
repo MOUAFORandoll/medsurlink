@@ -36,7 +36,7 @@ class DossierAllergieController extends Controller
             'allergies'=> function ($query) {
                 $query->orderBy('date', 'desc');
             }
-            ])->find($request->get('dossier'));
+        ])->find($request->get('dossier'));
         return response()->json(['dossier'=>$dossier]);
     }
 
@@ -62,12 +62,12 @@ class DossierAllergieController extends Controller
 //        if (!is_null($allergiesACreer) or !empty($allergiesACreer)){
 //            foreach ( $allergiesACreer as $allergy)
 //            {
-                $allergieCreer = Allergie::create([
-                    'description'=>$allergiesACreer,
+        $allergieCreer = Allergie::create([
+            'description'=>$allergiesACreer,
 //                    'date'=>array_key_exists('date',$allergy) ? $allergy['date'] : null
-                ]);
-                defineAsAuthor("Allergie",$allergieCreer->id,'create',$dossier->patient->user_id);
-                $dossier->allergies()->attach($allergieCreer->id);
+        ]);
+        defineAsAuthor("Allergie",$allergieCreer->id,'create',$dossier->patient->user_id);
+        $dossier->allergies()->attach($allergieCreer->id);
 //            }
 //        }
 
@@ -98,11 +98,11 @@ class DossierAllergieController extends Controller
             return response()->json(['error'=>$validation->errors()],419);
         }
 
-        $description = $request->get('description');
+        $descriptions = $request->get('description');
         $date = $request->get('date');
 
         $dossier = DossierMedical::find($request->get('dossier_medical_id'));
-
+        foreach ($descriptions as $description){
             $converti = (integer) $description;
             if ($converti == 0){
                 $allergieCreer = Allergie::create([
@@ -122,7 +122,9 @@ class DossierAllergieController extends Controller
                 $dossier->allergies()->attach($allergy->id);
             }
 
-        defineAsAuthor("DossierAllergie",$dossier->id,'attach');
+            defineAsAuthor("DossierAllergie",$dossier->id,'attach');
+
+        }
 
         $dossier = DossierMedical::with([
             'patient',
