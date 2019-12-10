@@ -98,14 +98,16 @@ class ConsultationMedecineGeneraleController extends Controller
 
             }
         }
+        if (!is_null($conclusions)){
+            $conclusion =  Conclusion::create([
+                'consultation_medecine_generale_id' =>$consultation->id,
+                'reference'=>$consultation->date_consultation,
+                "description"=>$conclusions
+            ]);
 
-        $conclusion =  Conclusion::create([
-            'consultation_medecine_generale_id' =>$consultation->id,
-            'reference'=>$consultation->date_consultation,
-            "description"=>$conclusions
-        ]);
+            defineAsAuthor("Conclusion",$conclusion->id,'create',$conclusion->consultationMedecine->dossier->patient->user_id);
 
-        defineAsAuthor("Conclusion",$conclusion->id,'create',$conclusion->consultationMedecine->dossier->patient->user_id);
+        }
 
 
         if(!is_null($consultation))
@@ -141,7 +143,7 @@ class ConsultationMedecineGeneraleController extends Controller
             'conclusions',
             'parametresCommun',
             'etablissement'
-            ])->whereSlug($slug)->first();
+        ])->whereSlug($slug)->first();
 
         $consultation->updateConsultationMedecine();
 
