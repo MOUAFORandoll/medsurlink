@@ -73,8 +73,6 @@ class AffiliationController extends Controller
      */
     public function show($slug)
     {
-        return response()->json($slug,419);
-
         $this->validatedSlug($slug,$this->table);
         $affiliation = Affiliation::with(['patient'])->whereSlug($slug)->first();
         if (!is_null($affiliation->patient)) {
