@@ -46,6 +46,15 @@ class ConsutationMedecineRequest extends FormRequest
         {
             $rules["motifs.*"] = 'required';
             $rules["date_consultation"]="sometimes|nullable|date";
+            $rules["poids"]="sometimes|nullable|numeric";
+            $rules["taille"]="sometimes|nullable|numeric";
+            $rules["bmi"]="sometimes|nullable|numeric";
+            $rules["ta_systolique"]="sometimes|nullable|numeric";
+            $rules["ta_diastolique"]="sometimes|nullable|numeric";
+            $rules["temperature"]="sometimes|nullable|numeric";
+            $rules["frequence_cardiaque"]="sometimes|nullable|numeric";
+            $rules["frequence_respiratoire"]="sometimes|nullable|numeric";
+            $rules["sato2"]="sometimes|nullable|numeric";
 
         }
 

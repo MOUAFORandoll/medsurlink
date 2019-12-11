@@ -135,10 +135,13 @@ class ParametreCommunController extends Controller
         return response()->json(['parametreCommun'=>$parametreCommun]);
     }
 
-    public function updateBmi($request,ParametreCommun $parametreCommun){
+    public function  updateBmi($request,ParametreCommun $parametreCommun){
         if (!is_null($request->get('taille') && !is_null($request->get('poids')))){
             $tailleEnMetre = $request->get('taille') * 0.01;
-            $bmi = round((($request->get('poids'))/($tailleEnMetre * $tailleEnMetre)),2);
+            $bmi=0;
+            if($tailleEnMetre!=0){
+                $bmi = round((($request->get('poids'))/($tailleEnMetre * $tailleEnMetre)),2);
+            }
             $parametreCommun->bmi = $bmi;
             $parametreCommun->save();
         }

@@ -9,6 +9,7 @@ use App\Models\Antecedent;
 use App\Models\Conclusion;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\Motif;
+use App\Models\ParametreCommun;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
@@ -98,6 +99,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
             }
         }
+        //Insertion de consultation
         if (!is_null($conclusions)){
             $conclusion =  Conclusion::create([
                 'consultation_medecine_generale_id' =>$consultation->id,
@@ -108,7 +110,22 @@ class ConsultationMedecineGeneraleController extends Controller
             defineAsAuthor("Conclusion",$conclusion->id,'create',$conclusion->consultationMedecine->dossier->patient->user_id);
 
         }
+        //Insertion des parametre
+        $parametreCommun = ParametreCommun::create($request->only(
+            "poids",
+            "taille",
+            "bmi",
+            "ta_systolique",
+            "ta_diastolique",
+            "temperature",
+            "frequence_cardiaque",
+            "sato2")
+            +
+            [ "consultation_medecine_generale_id"=>$consultation->id]);
 
+        $this->updateBmi($request,$parametreCommun);
+
+        defineAsAuthor("ParametreCommun",$parametreCommun->id,'create',$parametreCommun->consultation->dossier->patient->user_id);
 
         if(!is_null($consultation))
             $consultation->updateConsultationMedecine();
@@ -205,6 +222,7 @@ class ConsultationMedecineGeneraleController extends Controller
             }
         }
 
+        //Insertion de la conclusion
         foreach ($consultation->conclusions as $conclusion){
             $conclusion->description = $rConclusions;
             $conclusion->save();
@@ -213,7 +231,6 @@ class ConsultationMedecineGeneraleController extends Controller
         }
 
         ConsultationMedecineGenerale::whereSlug($slug)->update($request->except(['motifs','conclusions','consultation']));
-
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
 
@@ -294,4 +311,15 @@ class ConsultationMedecineGeneraleController extends Controller
 
     }
 
+    public function  updateBmi($request,ParametreCommun $parametreCommun){
+        if (!is_null($request->get('taille') && !is_null($request->get('poids')))){
+            $tailleEnMetre = $request->get('taille') * 0.01;
+            $bmi=0;
+            if($tailleEnMetre!=0){
+                $bmi = round((($request->get('poids'))/($tailleEnMetre * $tailleEnMetre)),2);
+            }
+            $parametreCommun->bmi = $bmi;
+            $parametreCommun->save();
+        }
+    }
 }
