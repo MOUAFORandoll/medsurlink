@@ -43,7 +43,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
     Route::resource('praticien','Api\PraticienController')->except(['create','edit']);
     Route::resource('medecin-controle','Api\MedecinControleController')->except(['create','edit']);
 //    Route::resource('souscripteur','Api\SouscripteurController')->except(['create','edit']);
-    Route::resource('affiliation','Api\AffiliationController')->except(['create','edit']);
+    Route::resource('affiliation','Api\AffiliationController')->except(['create','edit','show']);
     Route::resource('dossier','Api\DossierMedicalController')->except(['create','edit']);
     Route::resource('gestionnaire','Api\GestionnaireController')->except(['create','edit']);
 
@@ -167,7 +167,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']],
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Patient|Medecin controle|Souscripteur']], function () {
-    Route::resource('affiliation','Api\AffiliationController')->except('store','update','destroy');
+    Route::get('affiliationRevue/{affiliation}','Api\AffiliationController@show');
     Route::get('patient/{patient}','Api\PatientController@show')->name('patient.show');
 
 });
