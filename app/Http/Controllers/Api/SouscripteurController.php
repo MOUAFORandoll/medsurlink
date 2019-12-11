@@ -56,7 +56,11 @@ class SouscripteurController extends Controller
         $user->assignRole('Souscripteur');
 
         //Creation du compte souscripteurs
-        $age = evaluateYearOfOld($request->date_de_naissance);
+        $age = 0;
+
+        if (!is_null($request->date_de_naissance)){
+            $age = evaluateYearOfOld($request->date_de_naissance);
+        }
         $souscripteur = Souscripteur::create($request->validated() + ['user_id' => $user->id,'age'=>$age]);
 
         defineAsAuthor("Souscripteur",$souscripteur->user_id,'create');
@@ -115,6 +119,12 @@ class SouscripteurController extends Controller
         $souscripteur= Souscripteur::with('user')->whereSlug($slug)->first();
 
         UserController::updatePersonalInformation($request->except('subscriber','sexe','date_de_naissance'),$souscripteur->user->slug);
+
+        $age = 0;
+
+        if (!is_null($request->date_de_naissance)){
+            $age = evaluateYearOfOld($request->date_de_naissance);
+        }
 
         $age = evaluateYearOfOld($request->date_de_naissance);
 
