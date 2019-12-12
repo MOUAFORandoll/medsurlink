@@ -10,6 +10,8 @@ use App\Models\Conclusion;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\Motif;
 use App\Models\ParametreCommun;
+use App\Models\Traitement;
+use App\Models\TraitementActuel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
@@ -126,6 +128,18 @@ class ConsultationMedecineGeneraleController extends Controller
         $this->updateBmi($request,$parametreCommun);
 
         defineAsAuthor("ParametreCommun",$parametreCommun->id,'create',$parametreCommun->consultation->dossier->patient->user_id);
+
+//        Insertion de traitement actuel
+        $traitementsACreer = $request->get('traitements');
+        if (!is_null($traitementsACreer))
+        {
+            $traitementCreer = TraitementActuel::create([
+                'description'=>$traitementsACreer,
+                'dossier_medical_id'=>$consultation->dossier->id
+            ]);
+
+            defineAsAuthor("TraitementActuel", $traitementCreer->id,'create',$traitementCreer->dossier->patient->user_id);
+        }
 
         if(!is_null($consultation))
             $consultation->updateConsultationMedecine();

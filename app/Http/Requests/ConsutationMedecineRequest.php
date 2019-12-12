@@ -39,7 +39,7 @@ class ConsutationMedecineRequest extends FormRequest
             "tabac"=>"sometimes|nullable|string|min:2",
             "alcool"=>"sometimes|nullable|string|min:2",
             "autres"=>"sometimes|nullable|string|min:2",
-            'etablissement_id'=>'required|integer|exists:etablissement_exercices,id'
+            'etablissement_id'=>'required|integer|exists:etablissement_exercices,id',
         ];
 
         if($this->isMethod('POST'))
@@ -55,6 +55,7 @@ class ConsutationMedecineRequest extends FormRequest
             $rules["frequence_cardiaque"]="sometimes|nullable|numeric";
             $rules["frequence_respiratoire"]="sometimes|nullable|numeric";
             $rules["sato2"]="sometimes|nullable|numeric";
+            $rules["traitements"]="sometimes|nullable|string|min:2";
 
         }
 
