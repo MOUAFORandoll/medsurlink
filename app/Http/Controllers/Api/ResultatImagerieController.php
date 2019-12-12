@@ -47,10 +47,10 @@ class ResultatImagerieController extends Controller
      */
     public function store(ResultatRequest $request)
     {
+
         if($request->hasFile('file')) {
             if ($request->file('file')->isValid()) {
                 $resultat = ResultatImagerie::create($request->validated());
-
                 $this->uploadFile($request,$resultat);
 
                 defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
@@ -66,14 +66,22 @@ class ResultatImagerieController extends Controller
                 ],
                 422
             );
-        } else {
-            return response()->json(
-                [
-                    'file' => "File required"
-                ],
-                422
-            );
+        }else{
+            $resultat = ResultatImagerie::create($request->validated());
+            defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
+
+            return response()->json([
+                'resultat' => $resultat
+            ]);
         }
+// else {
+//            return response()->json(
+//                [
+//                    'file' => "File required"
+//                ],
+//                422
+//            );
+//        }
     }
 
     /**
@@ -87,7 +95,7 @@ class ResultatImagerieController extends Controller
     {
         $this->validatedSlug($slug, $this->table);
 
-        $resultat = ResultatImagerie::with(['dossier', 'consultation'])
+        $resultat = ResultatImagerie::with(['dossier.patient.user','dossier.consultationsMedecine', 'consultation'])
             ->whereSlug($slug)
             ->first();
 

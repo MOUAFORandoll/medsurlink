@@ -67,14 +67,23 @@ class ResultatLaboController extends Controller
                 ],
                 422
             );
-        } else {
-            return response()->json(
-                [
-                    'file' => "File required"
-                ],
-                422
-            );
+        }else{
+            $resultat = ResultatLabo::create($request->validated());
+
+            defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
+
+            return response()->json([
+                'resultat' => $resultat
+            ]);
         }
+//        else {
+//            return response()->json(
+//                [
+//                    'file' => "File required"
+//                ],
+//                422
+//            );
+//        }
     }
 
     /**
@@ -88,7 +97,7 @@ class ResultatLaboController extends Controller
     {
         $this->validatedSlug($slug, $this->table);
 
-        $resultat = ResultatLabo::with(['dossier', 'consultation'])
+        $resultat = ResultatLabo::with(['dossier.patient.user','dossier.consultationsMedecine', 'consultation'])
             ->whereSlug($slug)
             ->first();
 
