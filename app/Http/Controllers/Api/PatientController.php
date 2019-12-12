@@ -50,9 +50,9 @@ class PatientController extends Controller
      */
     public function store(patientStoreRequest $request)
     {
-        if (is_null($request->get('nationalite'))){
-            $this->revealError('nationalite','nationalite field is required');
-        }
+//        if (is_null($request->get('nationalite'))){
+//            $this->revealError('nationalite','nationalite field is required');
+//        }
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request,"Patient");
 
@@ -125,9 +125,9 @@ class PatientController extends Controller
      */
     public function update(PatientUpdateRequest $request, $slug)
     {
-        if (is_null($request->get('nationalite'))){
-            $this->revealError('nationalite','nationalite field is required');
-        }
+//        if (is_null($request->get('nationalite'))){
+//            $this->revealError('nationalite','nationalite field is required');
+//        }
 
         $this->validatedSlug($slug,$this->table);
 
