@@ -8,6 +8,7 @@ use App\Http\Requests\PraticienStoreRequest;
 use App\Http\Requests\PraticienUpdateRequest;
 use App\Mail\updateSetting;
 use App\Models\EtablissementExercice;
+use App\Models\EtablissementExercicePraticien;
 use App\Models\Praticien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -190,12 +191,12 @@ class PraticienController extends Controller
     public function addEtablissement(Request $request){
         $request->validate([
             'etablissement_exercice_id'=>'sometimes|nullable|integer|exists:etablissement_exercices,id',
-            'praticien_id'=>'required|exists:praticiens,user_id',
+            'praticien_id'=>'required|exists:praticiens,slug',
             'name'=>'sometimes|nullable|string|min:5',
         ]);
 
         $etablissementId = $request->get('etablissement_exercice_id');
-        $praticien = Praticien::whereUserId($request->get('praticien_id'))->first();
+        $praticien = Praticien::whereSlug($request->get('praticien_id'))->first();
 
         if ($request->get('etablissement_exercice_id') == 0){
             $etablissement = EtablissementExercice::create([
@@ -208,9 +209,12 @@ class PraticienController extends Controller
             }
             $etablissement = EtablissementExercice::find($etablissementId);
         }
-
-        $praticien->etablissements()->attach($etablissement->id);
-        defineAsAuthor("Praticien",$praticien->user_id,'attach');
+//Je verifie si ce praticien n'est pas encore dans cette etablissement
+        $nbre = EtablissementExercicePraticien::where('etablissement_id','=',$etablissementId)->where('praticien_id','=',$praticien->user_id)->count();
+        if ($nbre ==0){
+            $praticien->etablissements()->attach($etablissement->id);
+            defineAsAuthor("Praticien",$praticien->user_id,'attach');
+        }
 
         $praticien = Praticien::with('etablissements')->whereUserId($praticien->user_id)->first();
 
