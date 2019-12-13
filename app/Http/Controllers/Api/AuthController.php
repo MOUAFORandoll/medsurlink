@@ -66,8 +66,9 @@ class AuthController extends AccessTokenController
             if(Hash::check($password,$user->password)){
                 $authUser = $user;
                 $dossier = DB::table('dossier_medicals')->where('patient_id','=',$authUser->id)->first();
-                if(!is_null($dossier))
+                if(!is_null($dossier)){
                     $authUser['dossier'] = $dossier->slug;
+                }
             }
         }
         return $authUser;

@@ -179,7 +179,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
 });
 
 
-Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur']], function () {
     Route::resource('etablissement', 'Api\EtablissementExerciceController')->except(['create', 'store', 'destroy', 'edit']);
 });
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {

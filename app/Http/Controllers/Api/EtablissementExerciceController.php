@@ -26,13 +26,13 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::with(['praticiens','patients'])->get();
-        foreach ($etablissements as $etablissement){
-            foreach ($etablissement->patients as $patient) {
-                $patient['user'] = $patient->user;
-                $patient['dossier'] = $patient->dossier;
-            }
-        }
+        $etablissements =  EtablissementExercice::with(['praticiens','patients.dossier','patients.user'])->get();
+//        foreach ($etablissements as $etablissement){
+//            foreach ($etablissement->patients as $patient) {
+//                $patient['user'] = $patient->user;
+//                $patient['dossier'] = $patient->dossier;
+//            }
+//        }
         return response()->json(['etablissements'=>$etablissements]);
     }
 
@@ -83,7 +83,7 @@ class EtablissementExerciceController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $etablissement = EtablissementExercice::with(['praticiens','patients'])->whereSlug($slug)->first();
+        $etablissement = EtablissementExercice::with(['praticiens','patients.dossier','patients.user'])->whereSlug($slug)->first();
 
         return response()->json(['etablissement'=>$etablissement]);
 
