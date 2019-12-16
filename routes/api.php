@@ -186,6 +186,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']],
     Route::post('patient','Api\PatientController@store')->name('patient.store');
     Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
     Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');
-    Route::post('etablissement/add-patient','Api\EtablissementPatientController@ajouterPatientAEtablissement');
+    Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
 
 });
