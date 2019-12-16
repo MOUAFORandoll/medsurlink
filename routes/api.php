@@ -52,7 +52,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
     Route::post('praticien/delete-etablissement','Api\PraticienController@removeEtablissement');
 
     //        Route pour ajouter ou supprimer les etablissement d'un praticien
-    Route::post('etablissement/add-patient','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::post('etablissement/delete-patient','Api\EtablissementPatientController@retirerPatientAEtablissement');
 
     Route::post('etablissement/{etablissement}','Api\EtablissementExerciceController@update')->name('etablissement.info.update');
@@ -164,6 +163,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Patient|Medec
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {
     Route::resource('souscripteur','Api\SouscripteurController');
+
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Patient|Medecin controle|Souscripteur']], function () {
@@ -186,4 +186,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']],
     Route::post('patient','Api\PatientController@store')->name('patient.store');
     Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
     Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');
+    Route::post('etablissement/add-patient','Api\EtablissementPatientController@ajouterPatientAEtablissement');
+
 });
