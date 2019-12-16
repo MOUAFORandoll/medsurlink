@@ -8,6 +8,8 @@ use App\Http\Requests\PatientUpdateRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Mail\PatientAffiliated;
 use App\Mail\updateSetting;
+use App\Models\EtablissementExercice;
+use App\Models\EtablissementExercicePatient;
 use App\Models\Patient;
 use App\Models\Souscripteur;
 use Illuminate\Http\Request;
@@ -69,6 +71,21 @@ class PatientController extends Controller
         //Generation du dossier client
         $dossier = DossierMedicalController::genererDossier($patient->user_id);
         defineAsAuthor("Patient",$patient->user_id,'create',$patient->user_id);
+
+        //Ajout du patient à l'etablissement selectionné
+        $etablissements = $request->get('etablissement_id');
+        foreach ($etablissements as $etablissementId){
+            //Je verifie si ce patient n'est pas encore dans cette etablissement
+            $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissementId)->where('patient_id','=',$patient->user_id)->count();
+            if ($nbre ==0){
+                $etablissement = EtablissementExercice::find($etablissementId);
+
+                $etablissement->patients()->attach($patient->user_id);
+
+                defineAsAuthor("Patient",$patient->user_id,'add to etablissement id'.$etablissement->id,$patient->user_id);
+            }
+
+        }
 
         //Envoi des informations patient par mail
         $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
