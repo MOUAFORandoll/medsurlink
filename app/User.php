@@ -133,13 +133,14 @@ class User extends Authenticatable
         if($validator->fails()){
 
             //Verification de l'existence du numero de dossier
-            if (strlen($username)==8){
-
+            if (strlen($username)<=9){
                 $numero_dossier = $username;
                 $dossier = DB::table('dossier_medicals')->where('numero_dossier','=',$numero_dossier)->first();
+
                 if (!is_null($dossier)){
                     $user = User::whereId($dossier->patient_id)->first();
                     return $user;
+
                 }
                 return [];
             }

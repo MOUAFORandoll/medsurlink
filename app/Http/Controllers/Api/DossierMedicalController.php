@@ -179,23 +179,23 @@ class DossierMedicalController extends Controller
 
 
     public static function randomNumeroDossier(){
-        $resultat = ''.rand(0,100000000);
+        $resultat = ''.rand(0,99999999);
         while (strlen($resultat)<8){
             $longueur = strlen($resultat);
             if ($longueur == 1)
-                $resultat = $resultat.''.rand(0,10000000);
+                $resultat = $resultat.''.rand(0,9999999);
             elseif ($longueur == 2 )
-                $resultat = $resultat.''.rand(0,1000000);
+                $resultat = $resultat.''.rand(0,999999);
             elseif ($longueur == 3 )
-                $resultat = $resultat.''.rand(0,100000);
+                $resultat = $resultat.''.rand(0,99999);
             elseif ($longueur == 4 )
-                $resultat = $resultat.''.rand(0,10000);
+                $resultat = $resultat.''.rand(0,9999);
             elseif ($longueur == 5 )
-                $resultat = $resultat.''.rand(0,1000);
+                $resultat = $resultat.''.rand(0,999);
             elseif ($longueur == 6 )
-                $resultat = $resultat.''.rand(0,100);
+                $resultat = $resultat.''.rand(0,99);
             elseif ($longueur == 7 )
-                $resultat = $resultat.''.rand(0,10);
+                $resultat = $resultat.''.rand(0,9);
 
         }
 
