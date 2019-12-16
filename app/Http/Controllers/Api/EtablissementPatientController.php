@@ -15,7 +15,6 @@ class EtablissementPatientController extends Controller
             "etablissement"=>'required|integer|exists:etablissement_exercices,id',
             'patient'=>'required|string|exists:patients,slug'
         ]);
-
         if ($validation->fails()){
             return response()->json(['error'=>$validation->errors()->messages()],422);
         }
