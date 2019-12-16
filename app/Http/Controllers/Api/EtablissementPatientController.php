@@ -22,8 +22,8 @@ class EtablissementPatientController extends Controller
         $etablissement = EtablissementExercice::find($request->get('etablissement'));
         $patient = Patient::whereSlug($request->get('patient'))->first();
 
-        //Je verifie si ce praticien n'est pas encore dans cette etablissement
-        $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissement)->where('praticien_id','=',$patient->user_id)->count();
+        //Je verifie si ce patient n'est pas encore dans cette etablissement
+        $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissement)->where('patient_id','=',$patient->user_id)->count();
         if ($nbre ==0){
 
             $patientSlug = $request->get('patient');
