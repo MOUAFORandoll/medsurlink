@@ -9,6 +9,7 @@ use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use MongoDB\Driver\Session;
 use Netpok\Database\Support\DeleteRestrictionException;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
@@ -90,9 +91,9 @@ class DossierMedicalController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function show($slug)
+    public function show(Request $request,$slug)
     {
-//        dd($request->user);
+//        dd('user : '. $request->user());
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
@@ -117,7 +118,6 @@ class DossierMedicalController extends Controller
                 'resultatsImagerie',
                 'resultatsLabo'
             ])->whereSlug($slug)->first();
-//        dd('dosssier : '. $dossier);
 
             if (!is_null($dossier)) {
                 $dossier->updateDossier();
