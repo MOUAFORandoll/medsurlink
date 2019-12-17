@@ -3,15 +3,22 @@
 
 namespace App\Scopes;
 
+use App\Http\Controllers\Traits\Autorisation;
+use Firebase\JWT\JWT;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\UnauthorizedException;
+use Laravel\Passport\HasApiTokens;
+use Laravel\Passport\Http\Controllers\AuthorizationController;
+use Laravel\Passport\Token;
 
 class RestrictPatientScope implements Scope
 {
-
+    use Autorisation;
+    use HasApiTokens;
     /**
      * Apply the scope to a given Eloquent query builder.
      *
@@ -21,7 +28,10 @@ class RestrictPatientScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
+//        dd();
         if (Auth::check()){
+$element = DB::table('oauth_access_tokens')->whereId($this->getBearerToken())->first();
+//            dd('element  : '. $element);
             $user = Auth::user();
 //            dd($user);
 
