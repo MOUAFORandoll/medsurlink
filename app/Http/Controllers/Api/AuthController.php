@@ -25,7 +25,6 @@ class AuthController extends AccessTokenController
          // $tokenInfo will contain the usual Laravel Passort token response.
          $tokenInformation = json_decode($token, true);
         $tokenInfo = collect($tokenInformation);
-
          if ($tokenInfo->has('error'))
              return response()->json(['message'=>$tokenInfo->get('message')],401);
 
@@ -34,7 +33,7 @@ class AuthController extends AccessTokenController
         $password = $request->getParsedBody()['password'];
         $user = $this->getUser($username,$password);
         $user->roles;
-        Auth::setUser($user);
+        Auth::login($user);
         $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
         $tokenInfo->put('user', $user);
         $status = getStatus();
