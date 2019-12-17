@@ -103,9 +103,6 @@ class DossierMedical extends Model
             foreach ($this->hospitalisations as $hospitalisation){
                 $hospitalisation['motifs'] = $hospitalisation->motifs;
             }
-
-
-
         }
     }
 }
