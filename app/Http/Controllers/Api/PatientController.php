@@ -164,7 +164,7 @@ class PatientController extends Controller
                 "lien_contact",
             ])+['age'=>$age]);
 
-        $patient = Patient::with(['souscripteur','user','affiliations','etablissements'])->restrictUser()->whereSlug($slug)->first();
+        $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
 
         try{
             $mail = new updateSetting($patient->user);
