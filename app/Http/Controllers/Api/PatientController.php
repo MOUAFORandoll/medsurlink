@@ -192,7 +192,7 @@ class PatientController extends Controller
         $this->validatedSlug($slug,$this->table);
 
         try{
-            $patient = Patient::with(['souscripteur','user','affiliations','etablissements'])->restrictUser()->whereSlug($slug)->first();
+            $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
             $dossier = $patient->dossier;
             if (!is_null($dossier)){
                 $dossier->delete();
