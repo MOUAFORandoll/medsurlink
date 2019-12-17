@@ -117,7 +117,7 @@ class DossierMedicalController extends Controller
                 'resultatsImagerie',
                 'resultatsLabo'
             ])->whereSlug($slug)->first();
-        dd('dosssier : '. $dossier);
+//        dd('dosssier : '. $dossier);
 
             if (!is_null($dossier)) {
                 $dossier->updateDossier();
