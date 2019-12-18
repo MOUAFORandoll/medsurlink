@@ -8,8 +8,11 @@ use App\Http\Requests\ConsutationMedecineRequest;
 use App\Models\Antecedent;
 use App\Models\Conclusion;
 use App\Models\ConsultationMedecineGenerale;
+use App\Models\EtablissementExercice;
+use App\Models\EtablissementExercicePatient;
 use App\Models\Motif;
 use App\Models\ParametreCommun;
+use App\Models\Patient;
 use App\Models\Traitement;
 use App\Models\TraitementActuel;
 use Carbon\Carbon;
@@ -139,6 +142,20 @@ class ConsultationMedecineGeneraleController extends Controller
             ]);
 
             defineAsAuthor("TraitementActuel", $traitementCreer->id,'create',$traitementCreer->dossier->patient->user_id);
+        }
+
+        //Association de patient à l'etablissement
+        $etablissement = EtablissementExercice::find($request->get('etablissement_id'));
+        $patient = $consultation->dossier->patient;
+
+        //Je verifie si ce patient n'est pas encore dans cette etablissement
+        $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissement)->where('patient_id','=',$patient->user_id)->count();
+        if ($nbre ==0){
+
+
+            $etablissement->patients()->attach($patient->user_id);
+
+            defineAsAuthor("Patient",$patient->user_id,'add to etablissement',$patient->user_id);
         }
 
         if(!is_null($consultation))
