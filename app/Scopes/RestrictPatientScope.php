@@ -28,12 +28,8 @@ class RestrictPatientScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-//        dd();
-        if (Auth::check()){
 $element = DB::table('oauth_access_tokens')->whereId($this->getBearerToken())->first();
-//            dd('element  : '. $element);
             $user = Auth::user();
-//            dd($user);
 
             $userRoles = $user->getRoleNames();
             if(gettype($userRoles->search('Patient')) == 'integer'){
@@ -56,8 +52,8 @@ $element = DB::table('oauth_access_tokens')->whereId($this->getBearerToken())->f
             else{
 
             }
-        }else{
-            throw new UnauthorizedException("Veuillez vous authentifier",401);
-        }
+//        }else{
+//            throw new UnauthorizedException("Veuillez vous authentifier",401);
+//        }
     }
 }
