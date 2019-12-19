@@ -14,6 +14,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -32,6 +33,7 @@ class User extends Authenticatable
     use SluggableScopeHelpers;
     use SlugRoutable;
     use RestrictSoftDeletes;
+
 
     protected $guard_name = 'api';
     /**
@@ -116,7 +118,6 @@ class User extends Authenticatable
                 break;
             }
         }
-
         return $passwordExist;
     }
 
@@ -128,6 +129,7 @@ class User extends Authenticatable
      */
     public function findForPassport($username)
     {
+        $password = Request::capture()['password'];
         //Verification de l'existence de l'adresse email
         $validator = Validator::make(compact('username'),['username'=>['exists:users,email']]);
         if($validator->fails()){
@@ -146,8 +148,16 @@ class User extends Authenticatable
             }
             return [];
         }
-        //Retourne tous les utilisateurs qui ont cette adresse email
-        return  User::where('email', $username)->first();
+        //Retourne tous l'utilisateur qui ont cette adresse email
+        $users = User::where('email', $username)->get();
+        $authUser = new User();
+        foreach ($users as $user){
+            if(Hash::check($password,$user->password)){
+                $authUser = $user;
+                break;
+            }
+        }
+        return $authUser;
     }
 
 

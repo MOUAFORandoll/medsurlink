@@ -91,9 +91,8 @@ class DossierMedicalController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function show(Request $request,$slug)
+    public function show($slug)
     {
-//        dd('user : '. $request->user());
         $validation = validatedSlug($slug,$this->table);
         if(!is_null($validation))
             return $validation;
