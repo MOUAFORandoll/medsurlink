@@ -78,9 +78,9 @@
         <p style="text-align: center; text-transform: uppercase"><strong>Rapport de consultation</strong></p>
         <br>
         <p>Honorée Consoeur, Honorée Confrère,</p>
-        <p>J'ai vue en date du <strong>{{\Carbon\Carbon::parse($consultationMedecine->date_consultation)->format('d/m/Y')}}</strong>, pour une consultation, votre patient(e)
+        <p>J'ai vue en date du <strong>{{\Carbon\Carbon::parse($consultationMedecine->date_consultation)->format('d/m/Y')}}</strong>, pour une consultation médecine générale, votre patient(e)
             <strong>{{$consultationMedecine->dossier->patient->user->nom}}</strong> né(e) le <strong>{{\Carbon\Carbon::parse($consultationMedecine->dossier->patient->date_de_naissance)->format('d/m/Y')}}</strong>
-            pour
+            pour:
             @forelse($consultationMedecine->motifs as $motif)
                 <strong>{{$motif->description}},</strong>
             @empty
