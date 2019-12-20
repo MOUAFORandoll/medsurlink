@@ -131,14 +131,14 @@
         <table>
             <thead>
             <td>Description</td>
-            <td>Date debut</td>
+            {{--            <td>Date debut</td>--}}
             </thead>
             <tbody>
             <tr></tr>
             @forelse($consultationMedecine->dossier->allergies as $allergie)
                 <tr>
                     <td>{{$allergie->description}}</td>
-                    <td>{{\Carbon\Carbon::parse($allergie->date)->format('d/m/Y')}}</td>
+                    {{--                    <td>{{\Carbon\Carbon::parse($allergie->date)->format('d/m/Y')}}</td>--}}
                 </tr>
             @empty
                 <strong></strong>
@@ -165,20 +165,38 @@
             </tbody>
         </table>
 
-        <h4>Conduite à tenir</h4>
-        <p>{{$consultationMedecine->traitement_propose}}</p>
+        <h4>Parametres</h4>
+        @foreach($consultationMedecine->parametresCommun as $parametre)
+            @if($loop->first)
+                <p>Poids (kg) : {{$parametre->poids}} </p>
+                <p>Taille (cm): {{$parametre->taille}}</p>
+                <p>Bmi (kg/m²): {{$parametre->bmi}}</p>
+                <p>TA Systolique (mmHg) : {{$parametre->ta_systolique}}</p>
+                <p>TA Diastolique (mmHg) : {{$parametre->ta_diastolique}}</p>
+                <p>Température (°C): {{$parametre->temperature}}</p>
+                <p>Fréquence cardiaque (bpm) : {{$parametre->frequence_cardiaque}}</p>
+                <p>Fréquence respiratoire (cpm) : {{$parametre->frequence_respiratoire}}</p>
+                <p>sato2 (%) : {{$parametre->sato2}}</p>
+            @endif
 
-        <h4>Examen clinique</h4>
+
+        @endforeach
+
+        <h4>Examen(s) clinique(s)</h4>
         <p>{{$consultationMedecine->examen_clinique}}</p>
 
-        <h4>Examen complémentaire</h4>
+        <h4>Examen(s) complémentaire(s)</h4>
         <p>{{$consultationMedecine->examen_complementaire}}</p>
 
         <h4>Diagnostic</h4>
         @if(!is_object(collect($consultationMedecine->conclusions->toArray())->first()))
-            <p>{{$consultationMedecine->conclusions->first()->description}}</p>
+            @if(!is_null($consultationMedecine->conclusions->first()))
+                <p>{{($consultationMedecine->conclusions->first())->description}}</p>
+            @endif
         @endif
 
+        <h4>Conduite à tenir</h4>
+        <p>{{$consultationMedecine->traitement_propose}}</p>
     </div>
 @endisset
 
