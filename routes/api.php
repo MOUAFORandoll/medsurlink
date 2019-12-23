@@ -66,6 +66,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien']], function () 
     Route::put('resultat-labo/{id}/transmettre','Api\ResultatLaboController@transmit');
     Route::put('resultat-imagerie/{id}/transmettre','Api\ResultatImagerieController@transmit');
     Route::put('consultation-medecine/{id}/transmettre','Api\ConsultationMedecineGeneraleController@transmettre');
+    Route::post('consultation-medecine/{slug}','Api\ConsultationMedecineGeneraleController@update');
     Route::put('consultation-obstetrique/{id}/transmettre','Api\ConsultationObstetriqueController@transmettre');
     Route::put('consultation-prenatale/{id}/transmettre','Api\ConsultationPrenantaleController@transmettre');
     Route::put('hospitalisation/{hospitalisation}/transmettre','Api\HospitalisationController@transmettre');
@@ -119,8 +120,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('echographie','Api\EchographieController')->except(['create','edit']);
     Route::resource('hospitalisation','Api\HospitalisationController')->except(['create','edit']);
 
-    Route::post('consultation-medecine/retirer-motif','Api\ConsultationMotifController@removeMotif');
-    Route::post('consultation-medecine/ajouter-motif','Api\ConsultationMotifController@ajouterMotif');
+    Route::post('consultation-medecine-motif/retirer-motif','Api\ConsultationMotifController@removeMotif');
+    Route::post('consultation-medecine-motif/ajouter-motif','Api\ConsultationMotifController@ajouterMotif');
 
     Route::post('hospitalisation/ajouter-motif','Api\HospitalisationMotifController@ajouterMotif');
     Route::post('hospitalisation/retirer-motif','Api\HospitalisationMotifController@removeMotif');
