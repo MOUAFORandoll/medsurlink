@@ -98,6 +98,8 @@ class ResultatImagerieController extends Controller
         $resultat = ResultatImagerie::with(['dossier.patient.user','dossier.consultationsMedecine', 'consultation'])
             ->whereSlug($slug)
             ->first();
+        $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$resultat->id,"create");
+        $resultat['isAuthor'] = $motifIsAuthor->getOriginalContent();
 
         return response()->json([
             'resultat' => $resultat
