@@ -45,8 +45,6 @@ class PraticienController extends Controller
      */
     public function store(PraticienStoreRequest $request)
     {
-
-
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request);
 

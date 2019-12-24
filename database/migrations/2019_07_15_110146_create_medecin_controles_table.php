@@ -13,8 +13,10 @@ class CreateMedecinControlesTable extends Migration
      */
     public function up()
     {
-        Schema::create('medecin_controles', function (Blueprint $table) {
-//            $table->bigIncrements('id');
+
+            Schema::create('medecin_controles', function (Blueprint $table) {                                                    
+//          $table->bigIncrements('id');
+
             $table->string('slug')->unique();
             $table->unsignedBigInteger('specialite_id');
             $table->unsignedBigInteger('user_id')->nullable();
@@ -22,6 +24,7 @@ class CreateMedecinControlesTable extends Migration
             $table->string('numero_ordre');
             $table->softDeletes();
             $table->timestamps();
+
 //            $table->string('nom');
 //            $table->string('prenom')->nullable();
 //            $table->string('nationalite');

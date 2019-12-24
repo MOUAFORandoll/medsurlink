@@ -4,36 +4,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
+    <link href="{{ asset('css/rapportMedical.css') }}" rel="stylesheet">
     <title>Medicalink</title>
 </head>
-<style>
-    body{
-
-        font-size : 1em ;
-        line-height : 1.2;
-        font-weight : 500;
-        font-family: 'Raleway', sans-serif;
-        letter-spacing : 1.3px;
-        color : #333333
-
-    }
-    h2 {
-        color: #00ada7;
-        font-weight: 600;
-        text-align : left;
-        font-size : 2em !important;
-    }
-
-    h3, b {
-        color : #91c01c;
-    }
-    td,th{
-        border: 1px solid #333333;
-    }
-    table{
-        border-collapse: collapse;
-    }
-</style>
 <body>
 yol
 @isset($dossier)
