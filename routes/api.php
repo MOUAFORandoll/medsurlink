@@ -18,6 +18,8 @@ header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Autho
 */
 
 Route::post('oauth/token', 'Api\AuthController@auth');
+Route::post('password/email','Auth\ForgotPasswordController@sendResetLinkEmail');
+Route::post('password/reset','Auth\ResetPasswordController@reset');
 
 
 Route::middleware(['auth:api'])->group(function () {
