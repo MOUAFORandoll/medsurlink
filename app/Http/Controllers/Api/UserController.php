@@ -209,7 +209,7 @@ class UserController extends Controller
             'prenom' => ['sometimes','nullable', 'string', 'max:255'],
             'nationalite' => ['sometimes','nullable', 'string', 'max:255'],
             'quartier' => ['sometimes','nullable', 'string', 'max:255'],
-            'code_postal' => ['sometimes','nullable', 'integer'],
+            'code_postal' => ['sometimes','nullable','string'],
             'ville' => ['required','string', 'max:255'],
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
