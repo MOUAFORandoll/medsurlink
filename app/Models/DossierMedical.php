@@ -97,12 +97,12 @@ class DossierMedical extends Model
             foreach ($this->consultationsMedecine as $consultation){
                 $consultation['motifs'] = $consultation->motifs;
                 $consultation['conclusions'] = $consultation->conclusions;
+                $consultation['etablissement'] = $consultation->etablissement;
             }
 
             foreach ($this->hospitalisations as $hospitalisation){
                 $hospitalisation['motifs'] = $hospitalisation->motifs;
             }
-
         }
     }
 }

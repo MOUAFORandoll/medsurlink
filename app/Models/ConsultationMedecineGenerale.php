@@ -50,11 +50,23 @@ class ConsultationMedecineGenerale extends Model
         'slug',
         "examen_clinique",
         "examen_complementaire",
-        'traitement_propose'
+        'traitement_propose',
+        "profession",
+        "situation_familiale",
+        "nbre_enfant",
+        "tabac",
+        "alcool",
+        "autres",
+        "etablissement_id",
+        "file"
     ];
 
     public function dossier(){
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
+    }
+
+    public function etablissement(){
+        return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
     }
 
     public  function  motifs(){
@@ -87,21 +99,21 @@ class ConsultationMedecineGenerale extends Model
 
     public function updateConsultationMedecine(){
         if(!is_null($this)){
-        $user = $this->dossier->patient->user;
-        $patient = $this->dossier->patient;
-        $motifs = $this->motifs;
+            $user = $this->dossier->patient->user;
+            $patient = $this->dossier->patient;
+            $motifs = $this->motifs;
 
-        foreach ($motifs as $motif)
-        {
-            $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$motif->id,"create");
-            $motif['isAuthor'] = $motifIsAuthor->getOriginalContent();
-        }
+            foreach ($motifs as $motif)
+            {
+                $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$motif->id,"create");
+                $motif['isAuthor'] = $motifIsAuthor->getOriginalContent();
+            }
 
-        $this['motifs']= $motifs;
-        $this['user']=$user;
-        $this['patient']=$patient;
-        $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$this->id,"create");
-        $this['isAuthor']=$isAuthor->getOriginalContent();
+            $this['motifs']= $motifs;
+            $this['user']=$user;
+            $this['patient']=$patient;
+            $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$this->id,"create");
+            $this['isAuthor']=$isAuthor->getOriginalContent();
         }
     }
 

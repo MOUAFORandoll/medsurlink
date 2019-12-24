@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
+use App\Scopes\RestrictEtablissementScope;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -25,7 +26,8 @@ class EtablissementExercice extends Model
     protected $fillable = [
         "name",
         "description",
-        'slug'
+        'slug',
+        'logo'
 
     ];
 
@@ -42,7 +44,17 @@ class EtablissementExercice extends Model
             ]
         ];
     }
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::addGlobalScope(new RestrictEtablissementScope);
+    }
     public function getNameAndTimestampAttribute() {
         return $this->name. ' ' .Carbon::now()->timestamp;
     }

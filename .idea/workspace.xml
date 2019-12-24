@@ -3,13 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationPrenatale.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/liste-de-routes.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/emails/setting/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/setting/update.blade.php" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,10 +48,20 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
-        <item name="allergies: table" type="dbc44a63:MariaImplModel$Table" />
+        <item name="praticiens: table" type="dbc44a63:MariaImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="professions: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="medicalink-app" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -200,13 +205,19 @@
   <component name="ProjectLevelVcsManager">
     <OptionsSetting value="false" id="Update" />
   </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../vuemedicalinkapp" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/Scopes" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
@@ -217,24 +228,12 @@
       <recent name="C:\xampp\htdocs\medicalink-app\app\Http\Controllers\Api" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\medicalink-app\app\Exceptions" />
       <recent name="C:\xampp\htdocs\medicalink-app\app\Scopes" />
+      <recent name="C:\xampp\htdocs\medicalink-app\app\Exceptions" />
       <recent name="C:\xampp\htdocs\medicalink-app" />
       <recent name="C:\xampp\htdocs\medicalink-app\public\images" />
       <recent name="C:\xampp\htdocs\medicalink-app\resources\views" />
     </key>
-  </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
   </component>
   <component name="RunManager" selected="PHPUnit.phpunit.xml">
     <configuration name="phpunit.xml" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
@@ -262,13 +261,15 @@
     </recent_temporary>
   </component>
   <component name="ServiceViewManager">
-    <option name="allServicesViewState">
-      <serviceView>
-        <treeState>
-          <expand />
-          <select />
-        </treeState>
-      </serviceView>
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
     </option>
   </component>
   <component name="SvnConfiguration">
@@ -442,8 +443,42 @@
       <workItem from="1574497325621" duration="6050000" />
       <workItem from="1574513779559" duration="8815000" />
       <workItem from="1574526950901" duration="3025000" />
-      <workItem from="1574591060328" duration="5065000" />
+      <workItem from="1574591060328" duration="6576000" />
+      <workItem from="1574610801713" duration="3864000" />
+      <workItem from="1574670568371" duration="4043000" />
+      <workItem from="1574841935219" duration="11847000" />
+      <workItem from="1574927155815" duration="16634000" />
+      <workItem from="1575012988119" duration="12105000" />
+      <workItem from="1575271561151" duration="25246000" />
+      <workItem from="1575358640640" duration="1977000" />
+      <workItem from="1575365059402" duration="11482000" />
+      <workItem from="1575445964861" duration="17479000" />
+      <workItem from="1575533071880" duration="9643000" />
+      <workItem from="1575618766141" duration="13629000" />
+      <workItem from="1575877539795" duration="10749000" />
+      <workItem from="1575963284272" duration="8923000" />
+      <workItem from="1576049863665" duration="10755000" />
+      <workItem from="1576135888409" duration="9773000" />
+      <workItem from="1576223223982" duration="19649000" />
+      <workItem from="1576480706838" duration="1100000" />
+      <workItem from="1576484282014" duration="7059000" />
+      <workItem from="1576501325605" duration="5011000" />
+      <workItem from="1576506877551" duration="1540000" />
+      <workItem from="1576567795974" duration="16959000" />
+      <workItem from="1576655306741" duration="3225000" />
+      <workItem from="1576741620647" duration="4596000" />
+      <workItem from="1576827951666" duration="6259000" />
+      <workItem from="1577088035324" duration="11031000" />
+      <workItem from="1577174743831" duration="17864000" />
     </task>
+    <task id="LOCAL-00001" summary="Mise a jour gitignore">
+      <created>1575882021506</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1575882021506</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -461,5 +496,79 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Mise a jour gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="Mise a jour gitignore" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="275" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575288542385">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="275" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1575288542385" />
+    <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser" timestamp="1576744283295">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1576744283295" />
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1577185675711">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1577185675711" />
+    <state x="308" y="0" key="CommitChangelistDialog2" timestamp="1575882019741">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="308" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1575882019741" />
+    <state x="92" y="92" width="1182" height="544" key="DiffContextDialog" timestamp="1577184035509">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="92" y="92" width="1182" height="544" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1577184035509" />
+    <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1575271626926">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1575271626926" />
+    <state width="905" height="179" key="GridCell.Tab.0.bottom" timestamp="1576484387730">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="905" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1576484387730" />
+    <state width="905" height="179" key="GridCell.Tab.0.center" timestamp="1576484387730">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="905" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1576484387730" />
+    <state width="905" height="179" key="GridCell.Tab.0.left" timestamp="1576484387730">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="905" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1576484387730" />
+    <state width="905" height="179" key="GridCell.Tab.0.right" timestamp="1576484387730">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="905" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1576484387730" />
+    <state x="421" y="178" key="NewPhpClassDialog" timestamp="1576578805099">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="421" y="178" key="NewPhpClassDialog/0.0.1366.728@0.0.1366.728" timestamp="1576578805099" />
+    <state x="514" y="74" key="RollbackChangesDialog" timestamp="1575649215715">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="514" y="74" key="RollbackChangesDialog/0.0.1366.728@0.0.1366.728" timestamp="1575649215715" />
+    <state x="470" y="79" key="VCS.ChangeListViewerDialog" timestamp="1575882049035">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="470" y="79" key="VCS.ChangeListViewerDialog/0.0.1366.728@0.0.1366.728" timestamp="1575882049035" />
+    <state x="384" y="187" key="com.intellij.ide.util.TipDialog" timestamp="1575358712539">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="384" y="187" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1575358712539" />
+    <state x="289" y="155" key="git4idea.merge.GitPullDialog" timestamp="1575881922263">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="289" y="155" key="git4idea.merge.GitPullDialog/0.0.1366.728@0.0.1366.728" timestamp="1575881922263" />
+    <state x="339" y="162" key="run.anything.popup" timestamp="1576742639883">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1576742639883" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1577183859334">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1577183859334" />
   </component>
 </project>

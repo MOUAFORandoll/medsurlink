@@ -29,7 +29,7 @@ class SouscripteurStoreRequest extends FormRequest
         return [
             "user_id"=>'sometimes|integer|exists:users,id',
             "sexe"=>["required",Rule::in(['M','F'])],
-            "date_de_naissance"=>'required|date|before_or_equal:'.Carbon::now()->format('Y-m-d'),
+            "date_de_naissance"=>'sometimes|nullable|date|before_or_equal:'.Carbon::now()->format('Y-m-d'),
        ];
     }
 

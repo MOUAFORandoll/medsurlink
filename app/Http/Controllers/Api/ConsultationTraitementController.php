@@ -48,12 +48,12 @@ class ConsultationTraitementController extends Controller
         $consultation = ConsultationMedecineGenerale::find($request->get('consultation'));
 
         if (!is_null($traitementsACreer) or !empty($traitementsACreer)){
-            foreach ( $traitementsACreer as $allergy)
+            foreach ( $traitementsACreer as $traitement)
             {
-                $allergieCreer = Traitement::create([
-                    'intitule'=>$allergy['intitule']
+                $traitementCreer = Traitement::create([
+                    'intitule'=>$traitement['intitule']
                 ]);
-                $consultation->traitements()->attach($allergieCreer->id,['date'=>$allergy['date']]);
+                $consultation->traitements()->attach($traitementCreer->id,['date'=>$traitementCreer['date']]);
             }
         }
 

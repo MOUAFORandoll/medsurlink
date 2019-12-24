@@ -25,8 +25,10 @@ class AffiliationController extends Controller
     {
         $affiliations = Affiliation::with(['patient'])->get();
         foreach ($affiliations as $affiliation){
-            $affiliation['user'] = $affiliation->patient->user;
-            $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
+            if (!is_null($affiliation->patient)){
+                $affiliation['user'] = $affiliation->patient->user;
+                $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
+            }
         }
         return response()->json(['affiliations'=>$affiliations]);
     }
@@ -72,11 +74,11 @@ class AffiliationController extends Controller
     public function show($slug)
     {
         $this->validatedSlug($slug,$this->table);
-
         $affiliation = Affiliation::with(['patient'])->whereSlug($slug)->first();
-        $affiliation['user'] = $affiliation->patient->user;
-        $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
-
+        if (!is_null($affiliation->patient)) {
+            $affiliation['user'] = $affiliation->patient->user;
+            $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
+        }
         return response()->json(['affiliation'=>$affiliation]);
     }
 

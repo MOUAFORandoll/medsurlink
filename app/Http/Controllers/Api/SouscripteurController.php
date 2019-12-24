@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\SouscripteurStoreRequest;
 use App\Http\Requests\SouscripteurUpdateRequest;
+use App\Mail\updateSetting;
 use App\Models\Souscripteur;
+use Illuminate\Support\Facades\Mail;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class SouscripteurController extends Controller
@@ -54,7 +56,11 @@ class SouscripteurController extends Controller
         $user->assignRole('Souscripteur');
 
         //Creation du compte souscripteurs
-        $age = evaluateYearOfOld($request->date_de_naissance);
+        $age = 0;
+
+        if (!is_null($request->date_de_naissance)){
+            $age = evaluateYearOfOld($request->date_de_naissance);
+        }
         $souscripteur = Souscripteur::create($request->validated() + ['user_id' => $user->id,'age'=>$age]);
 
         defineAsAuthor("Souscripteur",$souscripteur->user_id,'create');
@@ -114,12 +120,29 @@ class SouscripteurController extends Controller
 
         UserController::updatePersonalInformation($request->except('subscriber','sexe','date_de_naissance'),$souscripteur->user->slug);
 
+        $age = 0;
+
+        if (!is_null($request->date_de_naissance)){
+            $age = evaluateYearOfOld($request->date_de_naissance);
+        }
+
         $age = evaluateYearOfOld($request->date_de_naissance);
 
-        Souscripteur::whereSlug($slug)->update($request->validated()+['age'=>$age]);
+        Souscripteur::whereSlug($slug)->update($request->only(['sexe','date_de_naissance'])+['age'=>$age]);
 
         //Calcul de l'age du souscripteur
         $souscripteur = Souscripteur::with('user','patients')->whereSlug($slug)->first();
+
+        try{
+            $mail = new updateSetting($souscripteur->user);
+
+            Mail::to($souscripteur->user->email)->send($mail);
+
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['souscripteur'=>$souscripteur, "message"=>$message]);
+
+        }
 
         return response()->json(['souscripteur'=>$souscripteur]);
 

@@ -27,11 +27,37 @@ Route::get('/public/storage/DossierMedicale/{fileNumber}/Consultation/{consultat
     return response()->file($path);
 });
 
+Route::get('/public/storage/DossierMedicale/{fileNumber}/ConsultationGenerale/{image}', function ($fileNumber,$image) {
+    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/ConsultationGenerale/'.$image;
+    return response()->file($path);
+});
+
+Route::get('/public/storage/Medecin/{fileNumber}/Signature/{image}', function ($fileNumber,$image) {
+    $path = public_path().'/storage/Medecin/'.$fileNumber.'/Signature/'.'/'.$image;
+    return response()->file($path);
+});
+
+Route::get('/public/storage/Praticien/{fileNumber}/Signature/{image}', function ($fileNumber,$image) {
+    $path = public_path().'/storage/Praticien/'.$fileNumber.'/Signature/'.'/'.$image;
+    return response()->file($path);
+});
+
+Route::get('/public/storage/Etablissement/{fileNumber}/Logo/{image}', function ($fileNumber,$image) {
+    $path = public_path().'/storage/Etablissement/'.$fileNumber.'/Logo'.'/'.$image;
+    return response()->file($path);
+});
+
+Route::get('/public/storage/pdf/{fileNumber}', function ($fileNumber) {
+    $path = public_path().'/storage/pdf/'.$fileNumber;
+    return response()->file($path);
+});
+
 Route::get('/contrat/{id}', function ($id) {
 
     $cim= ContratIntermediationMedicale::find($id);
     return view('contrat',compact('cim'));
 });
+
 //Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
 
 Route::get('imprimer/contrat/{id}', function ($id) {

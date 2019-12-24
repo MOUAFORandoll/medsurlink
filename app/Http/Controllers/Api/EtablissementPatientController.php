@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\EtablissementExercice;
+use App\Models\EtablissementExercicePatient;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,19 +16,23 @@ class EtablissementPatientController extends Controller
             "etablissement"=>'required|integer|exists:etablissement_exercices,id',
             'patient'=>'required|string|exists:patients,slug'
         ]);
-
         if ($validation->fails()){
             return response()->json(['error'=>$validation->errors()->messages()],422);
         }
-
         $etablissement = EtablissementExercice::find($request->get('etablissement'));
+        $patient = Patient::whereSlug($request->get('patient'))->first();
 
-        $patientSlug = $request->get('patient');
-        $patient = Patient::findBySlug($patientSlug);
+        //Je verifie si ce patient n'est pas encore dans cette etablissement
+        $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissement)->where('patient_id','=',$patient->user_id)->count();
+        if ($nbre ==0){
 
-        $etablissement->patients()->attach($patient->user_id);
+            $patientSlug = $request->get('patient');
+            $patient = Patient::findBySlug($patientSlug);
 
-        defineAsAuthor("Patient",$patient->user_id,'add to etablissement',$patient->user_id);
+            $etablissement->patients()->attach($patient->user_id);
+
+            defineAsAuthor("Patient",$patient->user_id,'add to etablissement',$patient->user_id);
+        }
 
 
         $etablissement = EtablissementExercice::with('patients')->find($etablissement->id);

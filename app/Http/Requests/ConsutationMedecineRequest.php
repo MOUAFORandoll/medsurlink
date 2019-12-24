@@ -25,16 +25,45 @@ class ConsutationMedecineRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
-            "motifs.*"=>'required',
             "conclusions"=>"sometimes|nullable|string|min:2",
-            "date_consultation"=>"sometimes|nullable|date|after_or_equal:".Carbon::now()->format('Y-m-d'),
             "anamese"=>"sometimes|nullable|string|min:5",
             "mode_de_vie"=>"sometimes|nullable|string|min:5",
             "examen_clinique"=>"sometimes|nullable|string|min:2",
             "examen_complementaire"=>"sometimes|nullable|string|min:2",
             "traitement_propose"=>"sometimes|nullable|string|min:2",
+            "profession"=>"sometimes|nullable|string|min:2",
+            "situation_familiale"=>"sometimes|nullable|string|min:2",
+            "nbre_enfant"=>"sometimes|nullable|string|min:1",
+            "tabac"=>"sometimes|nullable|string|min:2",
+            "alcool"=>"sometimes|nullable|string|min:2",
+            "autres"=>"sometimes|nullable|string|min:2",
+            'etablissement_id'=>'required|integer|exists:etablissement_exercices,id',
         ];
+
+        if($this->isMethod('POST'))
+        {
+            $rules["motifs.*"] = 'required';
+            $rules["date_consultation"]="sometimes|nullable|date";
+            $rules["poids"]="sometimes|nullable|numeric";
+            $rules["taille"]="sometimes|nullable|numeric";
+            $rules["bmi"]="sometimes|nullable|numeric";
+            $rules["ta_systolique"]="sometimes|nullable|numeric";
+            $rules["ta_diastolique"]="sometimes|nullable|numeric";
+            $rules["temperature"]="sometimes|nullable|numeric";
+            $rules["frequence_cardiaque"]="sometimes|nullable|numeric";
+            $rules["frequence_respiratoire"]="sometimes|nullable|numeric";
+            $rules["sato2"]="sometimes|nullable|numeric";
+            $rules["traitements"]="sometimes|nullable|string|min:2";
+
+        }
+
+        elseif ($this->isMethod('PUT')){
+            $rules["motifs.*"] = 'sometimes|nullable';
+            $rules["date_consultation"]="sometimes|nullable|date";
+        }
+
+        return $rules;
     }
 }

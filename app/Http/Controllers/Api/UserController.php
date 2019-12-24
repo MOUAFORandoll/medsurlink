@@ -11,6 +11,7 @@ use App\Mail\Password\PatientPasswordGenerated;
 use App\Models\Souscripteur;
 use App\Rules\EmailExistRule;
 use App\User;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -190,6 +191,7 @@ class UserController extends Controller
         }
 
     public static function updatePersonalInformation($data,$slug){
+//        dd($data);
         $validation = self::personalUpdateValidation($data,$slug);
 
         if ($validation->fails())
@@ -201,39 +203,53 @@ class UserController extends Controller
     }
 
     public static function personalUpdateValidation($data,$slug){
+<<<<<<< HEAD
 
         $validation = Validator::make($data,[
+=======
+        $user = User::findBySlug($slug);
+        $rules = [
+>>>>>>> 82b4a1a43344a27b4690f85da34b4a3c853e71fe
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['sometimes','nullable', 'string', 'max:255'],
-            'nationalite' => ['required', 'string', 'max:255'],
+            'nationalite' => ['sometimes','nullable', 'string', 'max:255'],
             'quartier' => ['sometimes','nullable', 'string', 'max:255'],
-            'code_postal' => ['sometimes','nullable', 'integer'],
+            'code_postal' => ['sometimes','nullable','string'],
             'ville' => ['required','string', 'max:255'],
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
+<<<<<<< HEAD
             'email' => ['required', 'string', 'email', 'max:255',new EmailExistRule($slug,'User')],
             'adresse' => ['required', 'string','min:3'],
         ]);
         
+=======
+//            'email' => ['required', 'string', 'email', 'max:255','unique:users,email,'.$user->id],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'adresse' => ['sometimes','nullable', 'string','min:3'],
+        ];
+        $validation = Validator::make($data,$rules);
+
+>>>>>>> 82b4a1a43344a27b4690f85da34b4a3c853e71fe
         return $validation;
     }
     public static function personalValidation($data,$role = null){
         $rule = [
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['sometimes','nullable', 'string', 'max:255'],
-            'nationalite' => ['required', 'string', 'max:255'],
+            'nationalite' => ['sometimes','nullable', 'string', 'max:255'],
             'quartier' => ['sometimes','nullable', 'string', 'max:255'],
             'code_postal' => ['sometimes','nullable', 'integer'],
             'ville' => ['required','string', 'max:255'],
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
-            'adresse' => ['required', 'string','min:3'],
+            'adresse' => ['sometimes','nullable', 'string','min:3'],
         ];
-        if(!is_null($role) && $role == "Patient"){
+//        if(!is_null($role) && $role == "Patient"){
             $rule['email'] = "sometimes|nullable|string|email";
-        }else{
-            $rule['email'] = "required|string|email|max:255|unique:users";
-        }
+//        }else{
+//            $rule['email'] = "required|string|email|max:255|unique:users";
+//        }
 
         $validation = Validator::make($data,$rule);
         return $validation;

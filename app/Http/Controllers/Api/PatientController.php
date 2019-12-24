@@ -7,6 +7,9 @@ use App\Http\Requests\patientStoreRequest;
 use App\Http\Requests\PatientUpdateRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Mail\PatientAffiliated;
+use App\Mail\updateSetting;
+use App\Models\EtablissementExercice;
+use App\Models\EtablissementExercicePatient;
 use App\Models\Patient;
 use App\Models\Souscripteur;
 use Illuminate\Http\Request;
@@ -26,7 +29,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with(['souscripteur','dossier','user','affiliations','etablissements'])->restrictUser()->get();
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations'])->restrictUser()->get();
         return response()->json(['patients'=>$patients]);
     }
 
@@ -49,7 +52,9 @@ class PatientController extends Controller
      */
     public function store(patientStoreRequest $request)
     {
-
+//        if (is_null($request->get('nationalite'))){
+//            $this->revealError('nationalite','nationalite field is required');
+//        }
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request,"Patient");
 
@@ -61,11 +66,26 @@ class PatientController extends Controller
 
         //Creation du compte patient
         $age = evaluateYearOfOld($request->date_de_naissance);
-        $patient = Patient::create($request->validated() + ['user_id' => $user->id,'age'=>$age]);
+        $patient = Patient::create($request->except(['code_postal','quartier']) + ['user_id' => $user->id,'age'=>$age]);
 
         //Generation du dossier client
         $dossier = DossierMedicalController::genererDossier($patient->user_id);
         defineAsAuthor("Patient",$patient->user_id,'create',$patient->user_id);
+
+        //Ajout du patient à l'etablissement selectionné
+        $etablissements = $request->get('etablissement_id');
+        foreach ($etablissements as $etablissementId){
+            //Je verifie si ce patient n'est pas encore dans cette etablissement
+            $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissementId)->where('patient_id','=',$patient->user_id)->count();
+            if ($nbre ==0){
+                $etablissement = EtablissementExercice::find($etablissementId);
+
+                $etablissement->patients()->attach($patient->user_id);
+
+                defineAsAuthor("Patient",$patient->user_id,'add to etablissement id'.$etablissement->id,$patient->user_id);
+            }
+
+        }
 
         //Envoi des informations patient par mail
         $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
@@ -96,7 +116,7 @@ class PatientController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $patient = Patient::with(['souscripteur','user','affiliations','etablissements'])->restrictUser()->whereSlug($slug)->first();
+        $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
 
         return response()->json(['patient'=>$patient]);
     }
@@ -122,6 +142,10 @@ class PatientController extends Controller
      */
     public function update(PatientUpdateRequest $request, $slug)
     {
+//        if (is_null($request->get('nationalite'))){
+//            $this->revealError('nationalite','nationalite field is required');
+//        }
+
         $this->validatedSlug($slug,$this->table);
 
         $patient= Patient::with('user')->whereSlug($slug)->first();
@@ -129,10 +153,29 @@ class PatientController extends Controller
         UserController::updatePersonalInformation($request->except('date_de_naissance','patient','souscripteur_id','sexe'),$patient->user->slug);
 
         $age = evaluateYearOfOld($request->date_de_naissance);
-        Patient::whereSlug($slug)->update($request->validated()+['age'=>$age]);
+        Patient::whereSlug($slug)->update($request->only([
+                "user_id",
+                "souscripteur_id",
+                "sexe",
+                "date_de_naissance",
+                "age",
+                "nom_contact",
+                "tel_contact",
+                "lien_contact",
+            ])+['age'=>$age]);
 
-        $patient = Patient::with(['souscripteur','user','affiliations','etablissements'])->restrictUser()->whereSlug($slug)->first();
+        $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
 
+        try{
+            $mail = new updateSetting($patient->user);
+
+            Mail::to($patient->user->email)->send($mail);
+
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['patient'=>$patient, "message"=>$message]);
+
+        }
         return response()->json(['patient'=>$patient]);
 
     }
@@ -149,8 +192,14 @@ class PatientController extends Controller
         $this->validatedSlug($slug,$this->table);
 
         try{
-            $patient = Patient::with(['souscripteur','user','affiliations','etablissements'])->restrictUser()->whereSlug($slug)->first();
+            $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
+            $dossier = $patient->dossier;
+            if (!is_null($dossier)){
+                $dossier->delete();
+                defineAsAuthor("DossierMedical",$dossier->id,'delete',$patient->user_id);
+            }
             $patient->delete();
+            defineAsAuthor("Patient",$patient->user_id,'delete',$patient->user_id);
             return response()->json(['patient'=>$patient]);
 
         }catch (DeleteRestrictionException $deleteRestrictionException){

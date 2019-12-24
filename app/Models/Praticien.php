@@ -34,7 +34,9 @@ class Praticien extends Model
         "specialite_id",
         "civilite",
         "numero_ordre",
-        'slug'
+        'slug',
+        'signature'
+
     ];
     public function sluggable()
     {

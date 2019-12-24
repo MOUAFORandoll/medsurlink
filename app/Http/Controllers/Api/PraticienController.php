@@ -6,9 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\PraticienStoreRequest;
 use App\Http\Requests\PraticienUpdateRequest;
+use App\Mail\updateSetting;
 use App\Models\EtablissementExercice;
+use App\Models\EtablissementExercicePraticien;
 use App\Models\Praticien;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class PraticienController extends Controller
@@ -57,6 +61,17 @@ class PraticienController extends Controller
         $praticien = Praticien::create($request->validated() + ['user_id' => $user->id]);
         $praticien->etablissements()->attach($request->get('etablissement_id'));
         $praticien->save();
+
+        if($request->hasFile('signature')) {
+            if ($request->file('signature')->isValid()) {
+                $path = $request->signature->store('public/Praticien/' . $praticien->slug . '/Signature');
+                $file = str_replace('public/', '', $path);
+
+                $praticien->signature = $file;
+
+                $praticien->save();
+            }
+        }
 
         defineAsAuthor("Praticien",$praticien->user_id,'create');
 
@@ -113,7 +128,7 @@ class PraticienController extends Controller
 
         $praticien= Praticien::with('user')->whereSlug($slug)->first();
 
-        UserController::updatePersonalInformation($request->except('civilite','practitioner','profession_id','specialite_id','numero_ordre'),$praticien->user->slug);
+        UserController::updatePersonalInformation($request->except('civilite','practitioner','profession_id','specialite_id','numero_ordre','signature'),$praticien->user->slug);
 
         Praticien::whereSlug($slug)->update([
             'specialite_id' => $request->specialite_id,
@@ -122,6 +137,33 @@ class PraticienController extends Controller
         ]);
 
         $praticien = Praticien::with('etablissements')->whereSlug($slug)->first();
+
+        $signature = $praticien->signature;
+
+        if($request->hasFile('signature')){
+            if ($request->file('signature')->isValid()) {
+                $path = $request->signature->store('public/Praticien/' . $praticien->slug . '/Signature');
+                $file = str_replace('public/', '', $path);
+
+                $praticien->signature = $file;
+
+                $praticien->save();
+            }
+        }
+
+        if (!is_null($signature))
+            File::delete(public_path().'/storage/'.$signature);
+
+        try{
+            $mail = new updateSetting($praticien->user);
+
+            Mail::to($praticien->user->email)->send($mail);
+
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['particien'=>$praticien, "message"=>$message]);
+
+        }
 
         return response()->json(['praticien' => $praticien]);
     }
@@ -147,12 +189,12 @@ class PraticienController extends Controller
     public function addEtablissement(Request $request){
         $request->validate([
             'etablissement_exercice_id'=>'sometimes|nullable|integer|exists:etablissement_exercices,id',
-            'praticien_id'=>'required|exists:praticiens,user_id',
+            'praticien_id'=>'required|exists:praticiens,slug',
             'name'=>'sometimes|nullable|string|min:5',
         ]);
 
         $etablissementId = $request->get('etablissement_exercice_id');
-        $praticien = Praticien::whereUserId($request->get('praticien_id'))->first();
+        $praticien = Praticien::whereSlug($request->get('praticien_id'))->first();
 
         if ($request->get('etablissement_exercice_id') == 0){
             $etablissement = EtablissementExercice::create([
@@ -165,9 +207,12 @@ class PraticienController extends Controller
             }
             $etablissement = EtablissementExercice::find($etablissementId);
         }
-
-        $praticien->etablissements()->attach($etablissement->id);
-        defineAsAuthor("Praticien",$praticien->user_id,'attach');
+//Je verifie si ce praticien n'est pas encore dans cette etablissement
+        $nbre = EtablissementExercicePraticien::where('etablissement_id','=',$etablissementId)->where('praticien_id','=',$praticien->user_id)->count();
+        if ($nbre ==0){
+            $praticien->etablissements()->attach($etablissement->id);
+            defineAsAuthor("Praticien",$praticien->user_id,'attach');
+        }
 
         $praticien = Praticien::with('etablissements')->whereUserId($praticien->user_id)->first();
 

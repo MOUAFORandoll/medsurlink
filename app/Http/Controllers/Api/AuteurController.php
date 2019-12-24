@@ -34,7 +34,11 @@ class AuteurController extends Controller
             ->orderByDesc('created_at')
             ->get();
         foreach ($lastOperations as $operation){
-            $operation['dossier']=$operation->user->patient->dossier;
+            if(!is_null($operation->user->patient)){
+                if ($operation->user->patient->dossier){
+                    $operation['dossier']=$operation->user->patient->dossier;
+                }
+            }
         }
 
         return response()->json(compact('lastOperations'));

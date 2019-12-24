@@ -7,7 +7,9 @@ use App\Http\Requests\DossierMedicalRequest;
 use App\Models\DossierMedical;
 use App\Models\Patient;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use MongoDB\Driver\Session;
 use Netpok\Database\Support\DeleteRestrictionException;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
@@ -39,7 +41,9 @@ class DossierMedicalController extends Controller
             }
         ])->get();
         foreach ($dossiers as $dossier){
-               $dossier->updateDossier();
+            if (!is_null($dossier)){
+                $dossier->updateDossier();
+            }
         }
         return response()->json(['dossiers'=>$dossiers]);
     }
@@ -93,30 +97,31 @@ class DossierMedicalController extends Controller
         if(!is_null($validation))
             return $validation;
 
-        $dossier = DossierMedical::with([
-            'allergies'=> function ($query) {
-                $query->orderBy('date', 'desc');
-            },
-            'antecedents',
-            'patient',
-            'patient.user',
-            'patient.souscripteur.user',
-            'consultationsMedecine',
-            'consultationsObstetrique',
-            'consultationsObstetrique.echographies',
-            'hospitalisations'=> function ($query) {
-                $query->orderBy('created_at', 'desc');
-            },
-            'traitements'=> function ($query) {
-                $query->orderBy('created_at', 'desc');
-            },
-            'resultatsImagerie',
-            'resultatsLabo'
-        ])->whereSlug($slug)->first();
+                 $dossier = DossierMedical::with([
+                'allergies'=> function ($query) {
+                    $query->orderBy('date', 'desc');
+                },
+                'antecedents',
+                'patient',
+                'patient.user',
+                'patient.souscripteur.user',
+                'consultationsMedecine',
+                'consultationsObstetrique',
+                'consultationsObstetrique.echographies',
+                'hospitalisations'=> function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                },
+                'traitements'=> function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                },
+                'resultatsImagerie',
+                'resultatsLabo'
+            ])->whereSlug($slug)->first();
 
-        $dossier->updateDossier();
-
-        return response()->json(['dossier'=>$dossier]);
+            if (!is_null($dossier)) {
+                $dossier->updateDossier();
+            }
+       return response()->json(['dossier'=>$dossier]);
     }
 
     /**
@@ -162,6 +167,12 @@ class DossierMedicalController extends Controller
                 'consultationsMedecine',
                 'consultationsObstetrique'])->whereSlug($slug)->first();
             $dossier->delete();
+            $patient = Patient::where('user_id','=',$dossier->patient_id)->first();
+            $patient->delete();
+
+            defineAsAuthor("DossierMedical",$dossier->id,'delete',$dossier->patient->user_id);
+            defineAsAuthor("Patient",$dossier->id,'delete',$dossier->patient->user_id);
+
             return response()->json(['dossier'=>$dossier]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
             $this->revealError('deletingError',$deleteRestrictionException->getMessage());
@@ -170,23 +181,23 @@ class DossierMedicalController extends Controller
 
 
     public static function randomNumeroDossier(){
-        $resultat = ''.rand(0,100000000);
+        $resultat = ''.rand(0,99999999);
         while (strlen($resultat)<8){
             $longueur = strlen($resultat);
             if ($longueur == 1)
-                $resultat = $resultat.''.rand(0,10000000);
+                $resultat = $resultat.''.rand(0,9999999);
             elseif ($longueur == 2 )
-                $resultat = $resultat.''.rand(0,1000000);
+                $resultat = $resultat.''.rand(0,999999);
             elseif ($longueur == 3 )
-                $resultat = $resultat.''.rand(0,100000);
+                $resultat = $resultat.''.rand(0,99999);
             elseif ($longueur == 4 )
-                $resultat = $resultat.''.rand(0,10000);
+                $resultat = $resultat.''.rand(0,9999);
             elseif ($longueur == 5 )
-                $resultat = $resultat.''.rand(0,1000);
+                $resultat = $resultat.''.rand(0,999);
             elseif ($longueur == 6 )
-                $resultat = $resultat.''.rand(0,100);
+                $resultat = $resultat.''.rand(0,99);
             elseif ($longueur == 7 )
-                $resultat = $resultat.''.rand(0,10);
+                $resultat = $resultat.''.rand(0,9);
 
         }
 
@@ -234,7 +245,10 @@ class DossierMedicalController extends Controller
             'resultatsLabo'
         ])->where('patient_id' ,'=',$patient_id)->first();
 
-        $dossier->updateDossier();
+        if (!is_null($dossier)) {
+            $dossier->updateDossier();
+        }
+
         return response()->json(['dossier'=>$dossier]);
     }
 }

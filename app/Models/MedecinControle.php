@@ -42,7 +42,8 @@ class MedecinControle extends Model
         "specialite_id",
         "numero_ordre",
         "civilite",
-        'slug'
+        'slug',
+        'signature'
     ];
 
     public function specialite(){

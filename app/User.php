@@ -9,11 +9,13 @@ use App\Models\Patient;
 use App\Models\Praticien;
 use App\Models\Souscripteur;
 use App\Models\Traits\SlugRoutable;
+use App\Notifications\MailResetPasswordNotification;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -108,7 +110,15 @@ class User extends Authenticatable
      */
     public function validateForPassportPasswordGrant($password)
     {
-        return Hash::check($password, $this->password);
+        $users = User::where('email', $this->email)->get();
+        $passwordExist = false;
+        foreach ($users as $user){
+            if(Hash::check($password,$user->password)){
+                $passwordExist = true;
+                break;
+            }
+        }
+        return $passwordExist;
     }
 
     /**
@@ -119,25 +129,37 @@ class User extends Authenticatable
      */
     public function findForPassport($username)
     {
+        $password = Request::capture()['password'];
         //Verification de l'existence de l'adresse email
         $validator = Validator::make(compact('username'),['username'=>['exists:users,email']]);
         if($validator->fails()){
 
             //Verification de l'existence du numero de dossier
-            if (strlen($username)==8){
-
+            if (strlen($username)<=9){
                 $numero_dossier = $username;
                 $dossier = DB::table('dossier_medicals')->where('numero_dossier','=',$numero_dossier)->first();
+
                 if (!is_null($dossier)){
                     $user = User::whereId($dossier->patient_id)->first();
                     return $user;
+
                 }
                 return [];
             }
             return [];
         }
-        return  User::where('email', $username)->first();
+        //Retourne tous l'utilisateur qui ont cette adresse email
+        $users = User::where('email', $username)->get();
+        $authUser = new User();
+        foreach ($users as $user){
+            if(Hash::check($password,$user->password)){
+                $authUser = $user;
+                break;
+            }
+        }
+        return $authUser;
     }
+
 
     public function praticien(){
         return $this->hasOne(Praticien::class,'user_id','id');
@@ -156,5 +178,14 @@ class User extends Authenticatable
         return $this->hasOne(MedecinControle::class,'user_id','id');
     }
 
-
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new MailResetPasswordNotification($token));
+    }
 }
