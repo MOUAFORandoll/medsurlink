@@ -9,6 +9,7 @@ use App\Models\Patient;
 use App\Models\Praticien;
 use App\Models\Souscripteur;
 use App\Models\Traits\SlugRoutable;
+use App\Notifications\MailResetPasswordNotification;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -33,7 +34,6 @@ class User extends Authenticatable
     use SluggableScopeHelpers;
     use SlugRoutable;
     use RestrictSoftDeletes;
-
 
     protected $guard_name = 'api';
     /**
@@ -178,5 +178,14 @@ class User extends Authenticatable
         return $this->hasOne(MedecinControle::class,'user_id','id');
     }
 
-
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new MailResetPasswordNotification($token));
+    }
 }
