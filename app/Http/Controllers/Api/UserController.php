@@ -273,13 +273,16 @@ class UserController extends Controller
 
         $password = $request->password;
         $users = User::whereEmail($user->email)->get();
-        foreach ($users as $user){
-            if (Hash::check($password,$user->password)){
-                $usePassword = [];
-                $usePassword['password'][0] = 'Password already used. Please use another password';
-                return \response()->json(['error'=>$usePassword],419);
+        if (count($users) >1){
+            foreach ($users as $item){
+                if (Hash::check($password,$item->password)){
+                    $usePassword = [];
+                    $usePassword['password'][0] = 'Password already used. Please use another password';
+                    return \response()->json(['error'=>$usePassword],419);
+                }
             }
         }
+
         $user->password = Hash::make($password);
 
         $user->setRememberToken(Str::random(60));
