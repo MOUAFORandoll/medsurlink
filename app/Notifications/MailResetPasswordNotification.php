@@ -89,7 +89,7 @@ class MailResetPasswordNotification extends Notification
 //            }
 //        }
 
-        $mail->view('emails.password.reset',compact('users','email','online','token','date'));
+        $mail->view('emails.password.reset',compact('users','email','online','local','token','date'));
 //        $mail->line(Lang::getFromJson('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]));
 //        $mail->line(Lang::getFromJson('If you did not request a password reset, no further action is required.'));
 //
