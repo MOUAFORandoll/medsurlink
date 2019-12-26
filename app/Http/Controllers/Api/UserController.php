@@ -8,6 +8,7 @@ use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Mail\Password\PasswordGenerated;
 use App\Mail\Password\PatientPasswordGenerated;
+use App\Mail\updateSetting;
 use App\Models\Souscripteur;
 use App\Rules\EmailExistRule;
 use App\User;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Netpok\Database\Support\DeleteRestrictionException;
 use PHPUnit\Util\Json;
@@ -158,8 +160,8 @@ class UserController extends Controller
         if (!is_null($role) && $role == "Patient"){
 
             if(is_null($email)){
-               $souscripteur =  Souscripteur::with('user')->where('user_id','=',$request->souscripteur_id)->first();
-               $email = $souscripteur->user->email;
+                $souscripteur =  Souscripteur::with('user')->where('user_id','=',$request->souscripteur_id)->first();
+                $email = $souscripteur->user->email;
             }
         }
 
@@ -182,13 +184,13 @@ class UserController extends Controller
 
     public static function sendUserInformationViaMail(User $user,$password){
 
-            $mail = new PasswordGenerated($user,$password);
-            Mail::to($user->email)->send($mail);
+        $mail = new PasswordGenerated($user,$password);
+        Mail::to($user->email)->send($mail);
     }
     public static function sendUserPatientInformationViaMail(User $user,$password){
-            $mail = new PatientPasswordGenerated($user,$password);
-            Mail::to($user->email)->send($mail);
-        }
+        $mail = new PatientPasswordGenerated($user,$password);
+        Mail::to($user->email)->send($mail);
+    }
 
     public static function updatePersonalInformation($data,$slug){
 //        dd($data);
@@ -234,7 +236,7 @@ class UserController extends Controller
             'adresse' => ['sometimes','nullable', 'string','min:3'],
         ];
 //        if(!is_null($role) && $role == "Patient"){
-            $rule['email'] = "sometimes|nullable|string|email";
+        $rule['email'] = "sometimes|nullable|string|email";
 //        }else{
 //            $rule['email'] = "required|string|email|max:255|unique:users";
 //        }
@@ -255,5 +257,46 @@ class UserController extends Controller
         }
 
 
+    }
+
+    public function reset(Request $request){
+        $validation =   Validator::make($request->all(),[
+            'token' => 'required',
+            'user'=>'required',
+            'password' => 'required|confirmed|min:8',
+        ]);
+        if ($validation->fails()){
+            return \response()->json(['error'=>$validation->errors()->getMessages()],419);
+        }
+
+        $user = User::findBySlug($request->user);
+
+        $password = $request->password;
+        $users = User::whereEmail($user->email)->get();
+        foreach ($users as $user){
+            if (Hash::check($password,$user->password)){
+                $usePassword = [];
+                $usePassword['password'][0] = 'Password already used. Please use another password';
+                return \response()->json(['error'=>$usePassword],419);
+            }
+        }
+        $user->password = Hash::make($password);
+
+        $user->setRememberToken(Str::random(60));
+
+        $user->save();
+
+        try{
+            $mail = new updateSetting($user);
+
+            Mail::to($user->email)->send($mail);
+
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(["message"=>$message]);
+
+        }
+
+        return \response()->json(['user'=>$user]);
     }
 }
