@@ -1,7 +1,7 @@
 # Medicalink
 <p>You are receiving this email because we received a password reset request for your account.</p>
 @if (count($users) == 1 )
-<a href="{{url($online.'/password/reset/'.$token.'/'.$user->slug)}}">{{$user->getRoleNames()->first()}} : {{strtoupper($user->nom).' '.ucfirst($user->prenom)}}</a><br>
+<a href="{{url($online.'/password/reset/'.$token.'/'.$users[0]->slug)}}">{{$users[0]->getRoleNames()->first()}} : {{strtoupper($users[0]->nom).' '.ucfirst($users[0]->prenom)}}</a><br>
 @else
 <p>You have many accounts link to your Email. Please choose account you want to update</p>
 @foreach ($users as $user)
