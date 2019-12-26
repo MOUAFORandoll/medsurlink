@@ -156,7 +156,7 @@ class UserController extends Controller
         $email = $request->email;
 
         if (!is_null($role) && $role == "Patient"){
-            
+
             if(is_null($email)){
                $souscripteur =  Souscripteur::with('user')->where('user_id','=',$request->souscripteur_id)->first();
                $email = $souscripteur->user->email;
@@ -203,13 +203,8 @@ class UserController extends Controller
     }
 
     public static function personalUpdateValidation($data,$slug){
-<<<<<<< HEAD
 
-        $validation = Validator::make($data,[
-=======
-        $user = User::findBySlug($slug);
         $rules = [
->>>>>>> 82b4a1a43344a27b4690f85da34b4a3c853e71fe
             'nom' => ['required', 'string', 'max:255'],
             'prenom' => ['sometimes','nullable', 'string', 'max:255'],
             'nationalite' => ['sometimes','nullable', 'string', 'max:255'],
@@ -218,21 +213,14 @@ class UserController extends Controller
             'ville' => ['required','string', 'max:255'],
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
-<<<<<<< HEAD
-            'email' => ['required', 'string', 'email', 'max:255',new EmailExistRule($slug,'User')],
-            'adresse' => ['required', 'string','min:3'],
-        ]);
-        
-=======
-//            'email' => ['required', 'string', 'email', 'max:255','unique:users,email,'.$user->id],
             'email' => ['required', 'string', 'email', 'max:255'],
             'adresse' => ['sometimes','nullable', 'string','min:3'],
         ];
         $validation = Validator::make($data,$rules);
 
->>>>>>> 82b4a1a43344a27b4690f85da34b4a3c853e71fe
         return $validation;
     }
+
     public static function personalValidation($data,$role = null){
         $rule = [
             'nom' => ['required', 'string', 'max:255'],
