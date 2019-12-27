@@ -100,7 +100,7 @@ class MailResetPasswordNotification extends Notification
 //
             return $mail;
         }else{
-         $this->revealError('email','This user account has been disable');
+         $this->revealError('email','This user account has been deleted');
         }
     }
 

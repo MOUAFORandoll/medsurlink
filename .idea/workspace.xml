@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Notifications/MailResetPasswordNotification.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Notifications/MailResetPasswordNotification.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -465,7 +464,7 @@
       <workItem from="1577174743831" duration="19537000" />
       <workItem from="1577346505388" duration="159000" />
       <workItem from="1577352650988" duration="14277000" />
-      <workItem from="1577461596033" duration="4031000" />
+      <workItem from="1577461596033" duration="4182000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
