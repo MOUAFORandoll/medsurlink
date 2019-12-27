@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Http\Controllers\Traits\PersonnalErrors;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Lang;
 class MailResetPasswordNotification extends Notification
 {
     use Queueable;
+    use PersonnalErrors;
     public $token;
     /**
      * Create a new notification instance.
@@ -47,7 +49,8 @@ class MailResetPasswordNotification extends Notification
         $online = 'https://www.medsurlink.com';
         $date = Carbon::now();
         $mail = new MailMessage;
-        $users = User::whereEmail($email)->get();
+        $users = User::with(['patient','gestionnaire','souscripteur','medecinControle','praticien'])->whereEmail($email)->get();
+
         foreach ($users as $key => $user){
             if ($user->getRoleNames()->first() == 'Patient'){
                 if (is_null($user->patient)){
@@ -72,12 +75,14 @@ class MailResetPasswordNotification extends Notification
                 }
             }
         }
-        $token = $this->token;
-        $mail->from('no-reply@medicasure.com');
-        $mail->subject(Lang::getFromJson('Reset Password Notification'));
-        $mail->line(Lang::getFromJson('You are receiving this email because we received a password reset request for your account.'));
 
-        //        if (count($users) == 1 ){
+        if (count($users)>0) {
+            $token = $this->token;
+            $mail->from('no-reply@medicasure.com');
+            $mail->subject(Lang::getFromJson('Reset Password Notification'));
+            $mail->line(Lang::getFromJson('You are receiving this email because we received a password reset request for your account.'));
+
+            //        if (count($users) == 1 ){
 //            $mail->action(Lang::getFromJson('Reset Password'), url($local.'/password/reset/'.$this->token.'/email/'.$email));
 //        }else{
 //            $mail->line(Lang::getFromJson('You have many accounts link to your Email. Please choose account you want to update'));
@@ -89,16 +94,14 @@ class MailResetPasswordNotification extends Notification
 //            }
 //        }
 
-        $mail->view('emails.password.reset',compact('users','email','online','local','token','date'));
+            $mail->view('emails.password.reset', compact('users', 'email', 'online', 'local', 'token', 'date'));
 //        $mail->line(Lang::getFromJson('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]));
 //        $mail->line(Lang::getFromJson('If you did not request a password reset, no further action is required.'));
 //
-
-
-        return $mail;
-
-
-
+            return $mail;
+        }else{
+         $this->revealError('email','This user account has been deleted');
+        }
     }
 
     /**
