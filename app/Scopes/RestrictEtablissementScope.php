@@ -62,19 +62,21 @@ class RestrictEtablissementScope implements Scope
                 $builder->whereIn('id',$etablissementsId);
             }
             elseif(gettype($userRoles->search('Praticien')) == 'integer'){
-                $user = \App\User::with(['praticien'])->whereId(Auth::id())->first();
-                //Recuperation des etablissements du praticien
-                if (!is_null($user->praticien)){
-                    $etablissements = EtablissementExercicePraticien::where('praticien_id','=',Auth::id())->get();
-                    $etablissementsId = [];
-                    foreach ($etablissements as $etablissement){
-                        if (!is_null($etablissement))
-                        {
-                            array_push($etablissementsId, $etablissement->etablissement_id);
-                        }
-                    }
-                    $builder->whereIn('id',$etablissementsId);
-                }
+//                $user = \App\User::with(['praticien'])->whereId(Auth::id())->first();
+//                //Recuperation des etablissements du praticien
+//                if (!is_null($user->praticien)){
+//                    $etablissements = EtablissementExercicePraticien::where('praticien_id','=',Auth::id())->get();
+//                    $etablissementsId = [];
+//                    foreach ($etablissements as $etablissement){
+//                        if (!is_null($etablissement))
+//                        {
+//                            array_push($etablissementsId, $etablissement->etablissement_id);
+//                        }
+//                    }
+//                    $builder->whereIn('id',$etablissementsId);
+//                }
+                $builder;
+
             }elseif(gettype($userRoles->search('Medecin controle')) == 'integer'){
                 $builder;
             }

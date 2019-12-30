@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\EtablissementExerciceRequest;
 use App\Models\EtablissementExercice;
+use App\Models\EtablissementExercicePatient;
+use App\Models\EtablissementExercicePraticien;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
@@ -130,7 +133,7 @@ class EtablissementExerciceController extends Controller
             }
         }
         if (!is_null($logo))
-        File::delete(public_path().'/storage/'.$logo);
+            File::delete(public_path().'/storage/'.$logo);
 
         return response()->json(['etablissement'=>$etablissement]);
 
@@ -154,6 +157,47 @@ class EtablissementExerciceController extends Controller
 
         }catch (DeleteRestrictionException $deleteRestrictionException){
             $this->revealError('deletingError',$deleteRestrictionException->getMessage());
+        }
+    }
+
+    public function userEtablissements(){
+        $user = Auth::user();
+        $userRoles = $user->getRoleNames();
+
+        if(gettype($userRoles->search('Praticien')) == 'integer'){
+            $user = \App\User::with(['praticien'])->whereId(Auth::id())->first();
+            //Recuperation des etablissements du praticien
+            if (!is_null($user->praticien)){
+                $etablissements = EtablissementExercicePraticien::where('praticien_id','=',Auth::id())->get();
+                $etablissementsId = [];
+                foreach ($etablissements as $etablissement){
+                    if (!is_null($etablissement))
+                    {
+                        array_push($etablissementsId, $etablissement->etablissement_id);
+                    }
+                }
+                $etablissements = EtablissementExercice::whereIn('id',$etablissementsId)->get();
+                return response()->json(['etablissements'=>$etablissements]);
+            }
+        }
+        else if(gettype($userRoles->search('Patient')) == 'integer'){
+            $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
+            //Recuperation des etablissements du patient
+            if (!is_null($user->patient)){
+                $etablissements = EtablissementExercicePatient::where('patient_id','=',Auth::id())->get();
+                $etablissementsId = [];
+
+                foreach ($etablissements as $etablissement){
+                    if (!is_null($etablissement)){
+                        array_push($etablissementsId, $etablissement->etablissement_id);
+                    }
+                }
+                $etablissements = EtablissementExercice::whereIn('id',$etablissementsId)->get();
+                return response()->json(['etablissements'=>$etablissements]);
+            }
+        }else{
+            return response()->json(['etablissements'=>[]]);
+
         }
     }
 }
