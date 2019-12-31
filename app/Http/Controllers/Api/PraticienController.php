@@ -77,7 +77,7 @@ class PraticienController extends Controller
 
         //Envoi des informations patient par mail
         try{
-        UserController::sendUserInformationViaMail($user,$password);
+            UserController::sendUserInformationViaMail($user,$password);
             return response()->json(['praticien'=>$praticien]);
         }catch (\Swift_TransportException $transportException){
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
@@ -97,7 +97,7 @@ class PraticienController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $praticien = Praticien::with('etablissements','user')->whereSlug($slug)->first();
+        $praticien = Praticien::with('etablissements','specialite','user')->whereSlug($slug)->first();
 
         return response()->json(['praticien'=>$praticien]);
 
@@ -136,7 +136,7 @@ class PraticienController extends Controller
             'civilite' => $request->civilite
         ]);
 
-        $praticien = Praticien::with('etablissements')->whereSlug($slug)->first();
+        $praticien = Praticien::with('etablissements','specialite','user')->whereSlug($slug)->first();
 
         $signature = $praticien->signature;
 
@@ -179,7 +179,7 @@ class PraticienController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $praticien = Praticien::with('etablissements')->whereSlug($slug)->first();
+        $praticien = Praticien::with('etablissements','specialite','user')->whereSlug($slug)->first();
         $praticien->delete();
 
         return response()->json(['praticien'=>$praticien]);
@@ -187,52 +187,53 @@ class PraticienController extends Controller
     }
 
     public function addEtablissement(Request $request){
-        $request->validate([
-            'etablissement_exercice_id'=>'sometimes|nullable|integer|exists:etablissement_exercices,id',
+        $validation = Validator::make($request->all(),[
+            'etablissement_exercice_id.*'=>'sometimes|nullable|integer|exists:etablissement_exercices,id',
             'praticien_id'=>'required|exists:praticiens,slug',
-            'name'=>'sometimes|nullable|string|min:5',
         ]);
 
-        $etablissementId = $request->get('etablissement_exercice_id');
+        if ($validation->fails()){
+            return response()->json(['id'=>$validation->errors()],422);
+        }
+
+        $etablissements = $request->get('etablissement_exercice_id');
         $praticien = Praticien::whereSlug($request->get('praticien_id'))->first();
 
-        if ($request->get('etablissement_exercice_id') == 0){
-            $etablissement = EtablissementExercice::create([
-                'name'=>$request->get('name')
-            ]);
-        }else{
-            $validation = Validator::make(compact('etablissementId'),['etablissementId'=>'exists:etablissement_exercices,id']);
-            if ($validation->fails()){
-                return response()->json(['id'=>$validation->errors()],422);
-            }
+        foreach ($etablissements as $etablissementId){
             $etablissement = EtablissementExercice::find($etablissementId);
-        }
 //Je verifie si ce praticien n'est pas encore dans cette etablissement
-        $nbre = EtablissementExercicePraticien::where('etablissement_id','=',$etablissementId)->where('praticien_id','=',$praticien->user_id)->count();
-        if ($nbre ==0){
-            $praticien->etablissements()->attach($etablissement->id);
-            defineAsAuthor("Praticien",$praticien->user_id,'attach');
+            $nbre = EtablissementExercicePraticien::where('etablissement_id','=',$etablissementId)->where('praticien_id','=',$praticien->user_id)->count();
+            if ($nbre ==0){
+                $praticien->etablissements()->attach($etablissement->id);
+                defineAsAuthor("Praticien",$praticien->user_id,'attach');
+            }
         }
 
-        $praticien = Praticien::with('etablissements')->whereUserId($praticien->user_id)->first();
+        $praticien = Praticien::with('etablissements','specialite','user')->whereUserId($praticien->user_id)->first();
 
         return response()->json(['praticien'=>$praticien]);
     }
 
     public function removeEtablissement(Request $request){
-        $request->validate([
-            'etablissement_exercice_id'=>'required|integer|exists:etablissement_exercices,id',
+        $validation = Validator::make($request->all(),[
+            'etablissement_id.*'=>'required|integer|exists:etablissement_exercices,id',
             'praticien_id'=>'required|exists:praticiens,user_id',
         ]);
 
-        $etablissementId = $request->get('etablissement_exercice_id');
+        if ($validation->fails()){
+            return response()->json(['id'=>$validation->errors()],422);
+        }
+
+        $etablissements = $request->get('etablissement_id');
         $praticien = Praticien::whereUserId($request->get('praticien_id'))->first();
-        $etablissement = EtablissementExercice::find($etablissementId);
-        $praticien->etablissements()->detach($etablissement->id);
+        foreach ($etablissements as $etablissementId){
+            $etablissement = EtablissementExercice::find($etablissementId);
+            $praticien->etablissements()->detach($etablissement->id);
+            defineAsAuthor("Praticien",$praticien->user_id,'detach etablissement '.$etablissement->name);
+        }
 
-        defineAsAuthor("Praticien",$praticien->user_id,'detach');
 
-        $praticien = Praticien::with('etablissements')->whereUserId($praticien->user_id)->first();
+        $praticien = Praticien::with('etablissements','specialite','user')->whereUserId($praticien->user_id)->first();
         return response()->json(['praticien'=>$praticien]);
     }
 }
