@@ -51,7 +51,6 @@ class ConsultationObstetriqueController extends Controller
     public function store(ConsultationObstetriqueRequest $request)
     {
 
-
         $maxNumeroGrossesse = self::genererNumeroGrossesse($request->dossier_medical_id);
         $user = Auth::user();
         $serologie = implode(" ",$request->serologie);
