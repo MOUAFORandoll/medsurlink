@@ -38,7 +38,18 @@ class ConsultationObstetrique extends Model
         "antecedent_conjoint",
         'archieved_at',
         'passed_at',
-        'slug'
+        'slug',
+        "pcr_gonocoque",
+        "pcr_chlamydia",
+        "rcc",
+        "glycemie",
+        "emu",
+        "tsh",
+        "anti_tpo",
+        "ft4",
+        "ft3",
+        "attention",
+        "info_prise_en_charge"
     ];
 
     /**
