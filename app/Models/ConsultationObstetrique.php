@@ -49,7 +49,8 @@ class ConsultationObstetrique extends Model
         "ft4",
         "ft3",
         "attention",
-        "info_prise_en_charge"
+        "info_prise_en_charge",
+        "etablissement_id",
     ];
 
     /**
@@ -78,7 +79,9 @@ class ConsultationObstetrique extends Model
     public function dossier(){
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }
-
+    public function etablissement(){
+        return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
+    }
     /**
      * The "booting" method of the model.
      *
