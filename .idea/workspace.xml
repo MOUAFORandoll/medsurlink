@@ -467,7 +467,8 @@
       <workItem from="1577461596033" duration="4513000" />
       <workItem from="1577692102802" duration="7841000" />
       <workItem from="1577779614413" duration="7729000" />
-      <workItem from="1577950470363" duration="7632000" />
+      <workItem from="1577950470363" duration="8332000" />
+      <workItem from="1578038721279" duration="769000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -568,9 +569,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1576742639883" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1577788759283">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1578038900553">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1577788759283" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1578038900553" />
   </component>
 </project>
