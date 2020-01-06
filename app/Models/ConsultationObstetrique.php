@@ -51,6 +51,9 @@ class ConsultationObstetrique extends Model
         "attention",
         "info_prise_en_charge",
         "etablissement_id",
+        "t1",
+        "nle_anle",
+        "sexe",
     ];
 
     /**
