@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsultationObstetriqueRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsultationObstetriqueRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_11_11_142520_set_email_to_not_unique_to_users_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_11_11_142520_set_email_to_not_unique_to_users_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_11_28_100933_update_mode_de_vie_to_consultation_medecine_generales_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_11_28_100933_update_mode_de_vie_to_consultation_medecine_generales_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2019_12_06_095031_update_numero_ordre_to_praticiens_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_12_06_095031_update_numero_ordre_to_praticiens_table.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -466,7 +462,7 @@
       <workItem from="1577779614413" duration="7729000" />
       <workItem from="1577950470363" duration="8332000" />
       <workItem from="1578038721279" duration="10060000" />
-      <workItem from="1578296571198" duration="5212000" />
+      <workItem from="1578296571198" duration="5846000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
