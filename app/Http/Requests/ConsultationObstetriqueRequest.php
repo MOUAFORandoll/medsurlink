@@ -50,6 +50,9 @@ class ConsultationObstetriqueRequest extends FormRequest
             "attention"=>"sometimes|nullable|string",
             "info_prise_en_charge"=>"sometimes|nullable|string",
             'etablissement_id'=>'required|integer|exists:etablissement_exercices,id',
+            "t1"=>"sometimes|nullable|string",
+            "nle_anle"=>"sometimes|nullable|string",
+            "sexe"=>"sometimes|nullable|string",
         ];
     }
 }
