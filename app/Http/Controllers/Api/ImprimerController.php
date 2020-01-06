@@ -31,7 +31,6 @@ class ImprimerController extends Controller
     }
 
     public function generale($slug){
-
         $this->validatedSlug($slug,'consultation_medecine_generales');
 
         $consultationMedecine = ConsultationMedecineGenerale::findBySlug($slug);

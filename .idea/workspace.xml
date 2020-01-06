@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ImprimerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ImprimerController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/rapport.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -462,7 +464,8 @@
       <workItem from="1577779614413" duration="7729000" />
       <workItem from="1577950470363" duration="8332000" />
       <workItem from="1578038721279" duration="10060000" />
-      <workItem from="1578296571198" duration="5846000" />
+      <workItem from="1578296571198" duration="8542000" />
+      <workItem from="1578316857191" duration="579000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -563,9 +566,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1576742639883" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1578038900553">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1578315827935">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1578038900553" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1578315827935" />
   </component>
 </project>

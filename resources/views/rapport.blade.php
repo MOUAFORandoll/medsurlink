@@ -7,7 +7,6 @@
     <link href="{{ asset('css/rapportMedical.css') }}" rel="stylesheet">
     <title>Medicalink</title>
 </head>
-
 <body>
 
 @isset($dossier)
@@ -43,7 +42,9 @@
         @if(!is_null($consultationMedecine->etablissement))
             <div>
                 @if(!is_null($consultationMedecine->etablissement->logo))
-                    <img style="float: left" src="{{public_path('/storage/'.$consultationMedecine->etablissement->logo)}}" />
+                    <div style="margin-left: 35%">
+                        <img src="{{public_path('/storage/'.$consultationMedecine->etablissement->logo)}}" height="50px" width="150px"/>
+                    </div>
                 @endif
                 <p style="text-align: center">{{$consultationMedecine->etablissement->name}}</p>
             </div>
