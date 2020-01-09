@@ -139,13 +139,34 @@ if (!function_exists('checkIfIsAuthorOrIsAuthorized')){
             if (!is_null($role) && !is_null($auteurId)){
                 $userStatusId = getStatus();
                 //verification avec le role de celui qui veut y accéder
-                if (($role == $user->getRoleNames()->first()) and ($auteurId == $userStatusId->getOriginalContent()['auteurable_id']) ){
+                if (($role == $user->getRoleNames()->first()) and ($auteurId == $userStatusId->getOriginalContent()['auteurable_id']) ) {
                     $nbre = 1;
                 }
             }
         }else{
             $nbre = 1;
         }
+        if ($nbre>0)
+            return response()->json(true);
+        return response()->json(false);
+    }
+}
+
+if (!function_exists('checkIfCanUpdate')){
+
+    function checkIfCanUpdated($operationable_type, $operationable_id, $action){
+        $user = \Illuminate\Support\Facades\Auth::user();
+        $nbre  = 0;
+            //Recuperation du role de celui qui a crée l'element
+            $role = getAuthorRole($operationable_type,$operationable_id,$action);
+            $isAuthor = checkIfIsAuthorOrIsAuthorized($operationable_type, $operationable_id, $action);
+            if($isAuthor->getOriginalContent() == false){
+                if ($role == 'Praticien' && $user->getRoleNames()->first() == 'Medecin controle' ){
+                    $nbre = 1;
+                }
+            }else{
+                $nbre = 1;
+            }
         if ($nbre>0)
             return response()->json(true);
         return response()->json(false);

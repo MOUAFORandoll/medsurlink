@@ -52,6 +52,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
 //        Route pour ajouter ou supprimer les etablissement d'un praticien
     Route::post('praticien/add-etablissement','Api\PraticienController@addEtablissement');
     Route::post('praticien/delete-etablissement','Api\PraticienController@removeEtablissement');
+    Route::post('medecin-controle/add-etablissement','Api\MedecinControleController@addEtablissement');
+    Route::post('medecin-controle/delete-etablissement','Api\MedecinControleController@removeEtablissement');
 
     //        Route pour ajouter ou supprimer les etablissement d'un praticien
     Route::post('etablissement/delete-patient','Api\EtablissementPatientController@retirerPatientAEtablissement');
@@ -64,10 +66,11 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
 });
 
 //    Définition des routes accéssible par le praticien
-Route::group(['middleware' => ['auth:api','role:Admin|Praticien']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle']], function () {
     Route::put('resultat-labo/{id}/transmettre','Api\ResultatLaboController@transmit');
     Route::put('resultat-imagerie/{id}/transmettre','Api\ResultatImagerieController@transmit');
     Route::put('consultation-medecine/{id}/transmettre','Api\ConsultationMedecineGeneraleController@transmettre');
+    Route::put('consultation-medecine/{id}/reactiver','Api\ConsultationMedecineGeneraleController@reactiver');
     Route::post('consultation-medecine/{slug}','Api\ConsultationMedecineGeneraleController@update');
     Route::put('consultation-obstetrique/{id}/transmettre','Api\ConsultationObstetriqueController@transmettre');
     Route::put('consultation-prenatale/{id}/transmettre','Api\ConsultationPrenantaleController@transmettre');
