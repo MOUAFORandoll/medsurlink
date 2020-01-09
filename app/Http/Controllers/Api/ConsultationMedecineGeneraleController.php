@@ -83,8 +83,6 @@ class ConsultationMedecineGeneraleController extends Controller
                 ])->find($consultation->id);
                 //Insertion de l'image
 
-                defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create',$consultation->dossier->patient->user_id);
-
                 $motifs = $request->get('motifs');
                 $motifs = explode(",",$motifs);
 
@@ -193,10 +191,9 @@ class ConsultationMedecineGeneraleController extends Controller
                 'conclusions',
                 'parametresCommun',
                 'etablissement'
-            ])->find($consultation->id);
-            //Insertion de l'image
+            ])->whereId($consultation->id)->first();
 
-            defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create',$consultation->dossier->patient->user_id);
+            //Insertion de l'image
 
             $motifs = $request->get('motifs');
 
@@ -231,7 +228,6 @@ class ConsultationMedecineGeneraleController extends Controller
                 ]);
 
                 defineAsAuthor("Conclusion",$conclusion->id,'create',$conclusion->consultationMedecine->dossier->patient->user_id);
-
             }
             //Insertion des parametre
             $parametreCommun = ParametreCommun::create($request->only(
@@ -345,7 +341,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
         $consultation = ConsultationMedecineGenerale::findBySlug($slug);
 
-        $this->checkIfAuthorized("ConsultationMedecineGenerale",$consultation->id,"create");
+        $this->checkIfCanUpdated("ConsultationMedecineGenerale",$consultation->id,"create");
 
         $motifs = $request->get('motifs');
 
@@ -374,11 +370,25 @@ class ConsultationMedecineGeneraleController extends Controller
         }
 
         //Insertion de la conclusion
-        foreach ($consultation->conclusions as $conclusion){
-            $conclusion->description = $rConclusions;
-            $conclusion->save();
-            defineAsAuthor("Conclusion",$conclusion->id,'update',$conclusion->consultationMedecine->dossier->patient->user_id);
+        if ((count($consultation->conclusions) ==0) && !is_null($rConclusions) ){
+            $conclusion =  Conclusion::create([
+                'consultation_medecine_generale_id' =>$consultation->id,
+                'reference'=>$consultation->date_consultation,
+                "description"=>$rConclusions
+            ]);
 
+            defineAsAuthor("Conclusion",$conclusion->id,'create',$conclusion->consultationMedecine->dossier->patient->user_id);
+
+        }else{
+            if (!is_null($rConclusions)){
+
+                foreach ($consultation->conclusions as $conclusion){
+                    $conclusion->description = $rConclusions;
+                    $conclusion->save();
+                    defineAsAuthor("Conclusion",$conclusion->id,'update',$conclusion->consultationMedecine->dossier->patient->user_id);
+
+                }
+            }
         }
 
         ConsultationMedecineGenerale::whereSlug($slug)->update($request->except(['motifs','conclusions','consultation']));
@@ -446,6 +456,7 @@ class ConsultationMedecineGeneraleController extends Controller
             $resultat->save();
 
             defineAsAuthor("ConsultationMedecineGenerale",$resultat->id,'archive');
+            $resultat->updateConsultationMedecine();
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -467,6 +478,22 @@ class ConsultationMedecineGeneraleController extends Controller
         $resultat->save();
 
         defineAsAuthor("ConsultationMedecineGenerale",$resultat->id,'transmettre');
+        $resultat->updateConsultationMedecine();
+        return response()->json(['resultat'=>$resultat]);
+
+    }
+
+    public function reactiver($slug)
+    {
+        $this->validatedSlug($slug,$this->table);
+
+        $resultat = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
+        $resultat->passed_at = null;
+        $resultat->archieved_at = null;
+        $resultat->save();
+
+        defineAsAuthor("ConsultationMedecineGenerale",$resultat->id,'reactiver');
+        $resultat->updateConsultationMedecine();
         return response()->json(['resultat'=>$resultat]);
 
     }

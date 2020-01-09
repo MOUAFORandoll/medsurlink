@@ -6,6 +6,8 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\MedecinControleStoreRequest;
 use App\Http\Requests\MedecinControleUpdateRequest;
 use App\Mail\updateSetting;
+use App\Models\EtablissementExercice;
+use App\Models\EtablissementExerciceMedecin;
 use App\Models\MedecinControle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -25,7 +27,7 @@ class MedecinControleController extends Controller
      */
     public function index()
     {
-        $medecins = MedecinControle::with(['specialite','user'])->get();
+        $medecins = MedecinControle::with(['etablissements','specialite','user'])->get();
         return response()->json(['medecins'=>$medecins]);
     }
 
@@ -94,7 +96,7 @@ class MedecinControleController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $medecin = MedecinControle::with('specialite','user')->whereSlug($slug)->first();
+        $medecin = MedecinControle::with(['specialite','user','etablissements'])->whereSlug($slug)->first();
 
         return response()->json(['medecin'=>$medecin]);
 
@@ -181,6 +183,57 @@ class MedecinControleController extends Controller
 
         return response()->json(['medecin'=>$medecin]);
 
+    }
+
+    public function addEtablissement(Request $request){
+        $validation = Validator::make($request->all(),[
+            'etablissement_exercice_id.*'=>'sometimes|nullable|integer|exists:etablissement_exercices,id',
+            'medecin_id'=>'required|exists:medecin_controles,slug',
+        ]);
+
+        if ($validation->fails()){
+            return response()->json(['id'=>$validation->errors()],422);
+        }
+
+        $etablissements = $request->get('etablissement_exercice_id');
+        $medecin = MedecinControle::whereSlug($request->get('medecin_id'))->first();
+
+        foreach ($etablissements as $etablissementId){
+            $etablissement = EtablissementExercice::find($etablissementId);
+//Je verifie si ce medecin n'est pas encore dans cette etablissement
+            $nbre = EtablissementExerciceMedecin::where('etablissement_id','=',$etablissementId)->where('medecin_controle_id','=',$medecin->user_id)->count();
+            if ($nbre ==0){
+                $medecin->etablissements()->attach($etablissement->id);
+                defineAsAuthor("Medecin",$medecin->user_id,'attach');
+            }
+        }
+
+        $medecin = MedecinControle::with('etablissements','specialite','user')->whereUserId($medecin->user_id)->first();
+
+        return response()->json(['medecin'=>$medecin]);
+    }
+
+    public function removeEtablissement(Request $request){
+        $validation = Validator::make($request->all(),[
+            'etablissement_id.*'=>'required|integer|exists:etablissement_exercices,id',
+            'medecin_id'=>'required|exists:medecin_controles,slug',
+        ]);
+
+        if ($validation->fails()){
+            return response()->json(['id'=>$validation->errors()],422);
+        }
+
+        $etablissements = $request->get('etablissement_id');
+        $medecin = MedecinControle::whereSlug($request->get('medecin_id'))->first();
+        foreach ($etablissements as $etablissementId){
+            $etablissement = EtablissementExercice::find($etablissementId);
+            $medecin->etablissements()->detach($etablissement->id);
+            defineAsAuthor("Medecin",$medecin->user_id,'detach etablissement '.$etablissement->name);
+        }
+
+
+        $medecin = MedecinControle::with('etablissements','specialite','user')->whereUserId($medecin->user_id)->first();
+        return response()->json(['medecin'=>$medecin]);
     }
 
 }

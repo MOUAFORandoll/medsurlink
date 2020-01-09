@@ -53,6 +53,18 @@ trait PersonnalErrors
         return true;
     }
 
+    public function checkIfCanUpdated($type, $id, $action){
+
+        $isAuthor = checkIfCanUpdated($type,$id,$action);
+
+        if($isAuthor->getOriginalContent() == false){
+            $this->revealAccesRefuse();
+        }
+
+        return true;
+    }
+
+
     /**
      * @throws PersonnnalException
      */

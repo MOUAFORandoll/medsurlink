@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\EtablissementExerciceRequest;
 use App\Models\EtablissementExercice;
+use App\Models\EtablissementExerciceMedecin;
 use App\Models\EtablissementExercicePatient;
 use App\Models\EtablissementExercicePraticien;
 use Illuminate\Support\Facades\Auth;
@@ -169,6 +170,22 @@ class EtablissementExerciceController extends Controller
             //Recuperation des etablissements du praticien
             if (!is_null($user->praticien)){
                 $etablissements = EtablissementExercicePraticien::where('praticien_id','=',Auth::id())->get();
+                $etablissementsId = [];
+                foreach ($etablissements as $etablissement){
+                    if (!is_null($etablissement))
+                    {
+                        array_push($etablissementsId, $etablissement->etablissement_id);
+                    }
+                }
+                $etablissements = EtablissementExercice::whereIn('id',$etablissementsId)->get();
+                return response()->json(['etablissements'=>$etablissements]);
+            }
+        }
+        else if(gettype($userRoles->search('Medecin controle')) == 'integer'){
+            $user = \App\User::with(['medecinControle'])->whereId(Auth::id())->first();
+            //Recuperation des etablissements du praticien
+            if (!is_null($user->medecinControle)){
+                $etablissements = EtablissementExerciceMedecin::where('medecin_controle_id','=',Auth::id())->get();
                 $etablissementsId = [];
                 foreach ($etablissements as $etablissement){
                     if (!is_null($etablissement))
