@@ -177,7 +177,7 @@ class EtablissementExerciceController extends Controller
                         array_push($etablissementsId, $etablissement->etablissement_id);
                     }
                 }
-                $etablissements = EtablissementExercice::whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['patients'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }
@@ -193,7 +193,7 @@ class EtablissementExerciceController extends Controller
                         array_push($etablissementsId, $etablissement->etablissement_id);
                     }
                 }
-                $etablissements = EtablissementExercice::whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['patients'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }

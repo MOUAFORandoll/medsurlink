@@ -208,6 +208,16 @@ if (!function_exists('getAuthor')) {
     }
 }
 
+if (!function_exists('getUpdatedAuthor')) {
+    function getUpdatedAuthor($operationable_type, $operationable_id, $action){
+        $auteur =   \App\Models\Auteur::where('action','like','%'.$action.'%')->where('operationable_type','=',$operationable_type)->where('operationable_id','=',$operationable_id)->distinct()->get();
+        if (is_null($auteur))
+            return null;
+        return $auteur;
+    }
+}
+
+
 if (!function_exists('getUser')){
 
     function getUser($slug,$roleName){

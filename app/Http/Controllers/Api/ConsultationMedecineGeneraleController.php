@@ -355,7 +355,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
             if ($converti !== 0){
                 $consultation->motifs()->attach($motif);
-                defineAsAuthor("ConsultationMotif", $motif, 'attach',$consultation->dossier->patient->user_id);
+                defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
             }else{
                 $item =   Motif::create([
                     "reference"=>$consultation->date_consultation,
@@ -364,7 +364,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
                 defineAsAuthor("Motif", $item->id, 'create');
                 $consultation->motifs()->attach($item->id);
-                defineAsAuthor("ConsultationMotif", $item->id, 'attach',$consultation->dossier->patient->user_id);
+                defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
 
             }
         }
@@ -377,7 +377,7 @@ class ConsultationMedecineGeneraleController extends Controller
                 "description"=>$rConclusions
             ]);
 
-            defineAsAuthor("Conclusion",$conclusion->id,'create',$conclusion->consultationMedecine->dossier->patient->user_id);
+            defineAsAuthor("Conclusion",$conclusion->id,'create and update',$conclusion->consultationMedecine->dossier->patient->user_id);
 
         }else{
             if (!is_null($rConclusions)){
@@ -385,13 +385,14 @@ class ConsultationMedecineGeneraleController extends Controller
                 foreach ($consultation->conclusions as $conclusion){
                     $conclusion->description = $rConclusions;
                     $conclusion->save();
-                    defineAsAuthor("Conclusion",$conclusion->id,'update',$conclusion->consultationMedecine->dossier->patient->user_id);
+                    defineAsAuthor("Consultation conclusion",$consultation->id,'update',$conclusion->consultationMedecine->dossier->patient->user_id);
 
                 }
             }
         }
 
         ConsultationMedecineGenerale::whereSlug($slug)->update($request->except(['motifs','conclusions','consultation']));
+        defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'update',$consultation->dossier->patient->user_id);
 
         $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
 
