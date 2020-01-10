@@ -172,6 +172,12 @@
 
         <h4>Conduite à tenir</h4>
         <p>{{$consultationMedecine->traitement_propose}}</p>
+        @if(count($medecins) != 0)
+        <h4>Medecin ayant vérifié votre consultation</h4>
+            @foreach($medecins as $medecin)
+                <p>{{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
+                @endforeach
+        @endif
     </div>
 @endisset
 
@@ -182,6 +188,7 @@
 @endisset
 
 <p style="text-align: right"> Date de création : {{\Carbon\Carbon::parse()->format('d/m/Y')}}</p>
+<p>{{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</p>
 @isset($signature)
     @if(!is_null($signature))
         <div>
