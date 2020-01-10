@@ -40,12 +40,12 @@ class ImprimerController extends Controller
         $updateAuteurs = getUpdatedAuthor("ConsultationMedecineGenerale",$consultationMedecine->id,"update");
         $signature = null;
         $medecins = [];
-        $praticiens = [];
+        $praticiens = new Praticien();
         $auteurs = [];
         if (!is_null($auteur)){
             if ($auteur->auteurable_type == 'Praticien'){
                 $praticien = Praticien::with('user')->find($auteur->auteurable_id);
-                array_push($praticiens, $praticien);
+                $praticiens = $praticien;
                 $signature = $praticien->signature;
             }
         }
