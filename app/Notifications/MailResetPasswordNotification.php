@@ -42,12 +42,14 @@ class MailResetPasswordNotification extends Notification
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail( $notifiable ) {
+
         $email = $notifiable->getEmailForPasswordReset();
         $local = "http://localhost:8080";
         $online = 'https://www.medsurlink.com';
         $date = Carbon::now();
         $mail = new MailMessage;
         $users = User::whereEmail($email)->get();
+
         foreach ($users as $key => $user){
             if ($user->getRoleNames()->first() == 'Patient'){
                 if (is_null($user->patient)){

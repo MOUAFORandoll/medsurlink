@@ -10,7 +10,7 @@
 
 <body>
 
-@isset($dossier)
+@isset($dossier) 
     <div class="justify-content-center">
         <h2>{{is_null($dossier->patient->user->prenom) ? "" :  is_null($dossier->patient->user->prenom) }} {{$dossier->patient->user->nom}}</h2>
         <h3>{{$dossier->patient->date_de_naissance}}</h3>
