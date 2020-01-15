@@ -14,12 +14,12 @@ class UpdateModeDeVieToConsultationMedecineGeneralesTable extends Migration
     public function up()
     {
         Schema::table('consultation_medecine_generales', function (Blueprint $table) {
-            $table->text('profession')->nullable()->change();
-            $table->string('situation_familiale')->nullable()->change();
-            $table->string('nbre_enfant')->default('0')->change();
-            $table->string('tabac')->default('Non')->change();
-            $table->string('alcool')->default('Non')->change();
-            $table->text('autres')->nullable()->change();
+            $table->text('profession')->nullable();
+            $table->string('situation_familiale')->nullable();
+            $table->string('nbre_enfant')->default('0');
+            $table->string('tabac')->default('Non');
+            $table->string('alcool')->default('Non');
+            $table->text('autres')->nullable();
         });
     }
 
