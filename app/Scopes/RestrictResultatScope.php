@@ -43,6 +43,7 @@ class RestrictResultatScope implements Scope
                 $builder->whereIn('dossier_medical_id',$dossiers)->whereNotNull('archived_at');
             }elseif(gettype($userRoles->search('Medecin controle')) == 'integer'){
                 $builder->whereNotNull('passed_at');
+                $builder;
             }
             else{
                 return $builder;
