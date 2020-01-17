@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Scopes/RestrictResultatScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictResultatScope.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ReadMe.docx" beforeDir="false" afterPath="$PROJECT_DIR$/ReadMe.docx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -482,7 +482,9 @@
       <workItem from="1578992424707" duration="2203000" />
       <workItem from="1579080198129" duration="2967000" />
       <workItem from="1579089955512" duration="2340000" />
-      <workItem from="1579158925762" duration="1632000" />
+      <workItem from="1579158925762" duration="3551000" />
+      <workItem from="1579177085838" duration="1172000" />
+      <workItem from="1579248482514" duration="1960000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -587,9 +589,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1576742639883" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1579015818692">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1579167211475">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1579015818692" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1579167211475" />
   </component>
 </project>
