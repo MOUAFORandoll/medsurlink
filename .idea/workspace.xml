@@ -47,7 +47,7 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
-        <item name="auteurs: table" type="dbc44a63:MariaImplModel$Table" />
+        <item name="consultation_medecine_generales: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -475,7 +475,15 @@
       <workItem from="1578382806049" duration="3426000" />
       <workItem from="1578469948715" duration="7490000" />
       <workItem from="1578555301582" duration="9724000" />
-      <workItem from="1578642967167" duration="6534000" />
+      <workItem from="1578642967167" duration="7363000" />
+      <workItem from="1578730663015" duration="1205000" />
+      <workItem from="1578900202508" duration="1178000" />
+      <workItem from="1578992424707" duration="2203000" />
+      <workItem from="1579080198129" duration="2967000" />
+      <workItem from="1579089955512" duration="2340000" />
+      <workItem from="1579158925762" duration="3551000" />
+      <workItem from="1579177085838" duration="1172000" />
+      <workItem from="1579248482514" duration="3426000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -580,9 +588,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1576742639883" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1578563308157">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1579167211475">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1578563308157" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1579167211475" />
   </component>
 </project>
