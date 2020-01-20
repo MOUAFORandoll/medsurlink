@@ -4,8 +4,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
-    <link href="{{ asset('css/rapportMedical.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/rapportMedical.css') }}" rel="stylesheet">
     <title>Medicalink</title>
+
 </head>
 <body>
 
@@ -173,10 +174,13 @@
         <h4>Conduite à tenir</h4>
         <p>{{$consultationMedecine->traitement_propose}}</p>
         @if(count($medecins) != 0)
-        <h4>Medecin ayant vérifié votre consultation</h4>
+            <h4>Medecin ayant vérifié votre consultation</h4>
             @foreach($medecins as $medecin)
-                <p>{{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
-                @endforeach
+                @if(!is_null($medecin->user))
+                    <p>{{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
+                @endif
+
+            @endforeach
         @endif
     </div>
 @endisset
@@ -188,7 +192,9 @@
 @endisset
 
 <p style="text-align: right"> Date de création : {{\Carbon\Carbon::parse()->format('d/m/Y')}}</p>
-<p>{{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</p>
+@if(!is_null($praticiens->user))
+    <p>{{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</p>
+@endif
 @isset($signature)
     @if(!is_null($signature))
         <div>
