@@ -38,6 +38,21 @@ class ConsultationObstetriqueRequest extends FormRequest
             "antecassuetudesedent_de_transfusion"=>"sometimes|nullable|string",
             "facteur_de_risque"=>"sometimes|nullable|string",
             "antecedent_conjoint"=>"sometimes|nullable|string|min:2",
+            "pcr_gonocoque"=>"sometimes|nullable|string",
+            "pcr_chlamydia"=>"sometimes|nullable|string",
+            "rcc.*"=>"sometimes|nullable|string",
+            "glycemie"=>"sometimes|nullable|string|numeric",
+            "emu"=>"sometimes|nullable|string",
+            "tsh"=>"sometimes|nullable|string|numeric",
+            "anti_tpo"=>"sometimes|nullable|string|numeric",
+            "ft4"=>"sometimes|nullable|string|numeric",
+            "ft3"=>"sometimes|nullable|string|numeric",
+            "attention"=>"sometimes|nullable|string",
+            "info_prise_en_charge"=>"sometimes|nullable|string",
+            'etablissement_id'=>'required|integer|exists:etablissement_exercices,id',
+            "t1"=>"sometimes|nullable|string",
+            "nle_anle"=>"sometimes|nullable|string",
+            "sexe"=>"sometimes|nullable|string",
         ];
     }
 }

@@ -51,15 +51,15 @@ class ConsultationObstetriqueController extends Controller
     public function store(ConsultationObstetriqueRequest $request)
     {
 
-
         $maxNumeroGrossesse = self::genererNumeroGrossesse($request->dossier_medical_id);
         $user = Auth::user();
         $serologie = implode(" ",$request->serologie);
+        $rccs = implode(" ",$request->rcc);
         if($user->hasRole('Praticien')){
             $praticen = $user->praticien;
-            if ($praticen->specialite->name == "Gynéco-obstétrique"){
+            if ($praticen->specialite->name == "Gynéco-Obstétrique"){
 
-                $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie]);
+                $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie','rcc')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
 
                 defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create',$consultationObstetrique->dossier->patient->user_id);
 
@@ -120,6 +120,7 @@ class ConsultationObstetriqueController extends Controller
 
         $consultationObstetrique =  ConsultationObstetrique::with([
             'consultationPrenatales',
+            'etablissement',
             'echographies',
             'dossier',
             'dossier.allergies',
@@ -170,7 +171,8 @@ class ConsultationObstetriqueController extends Controller
 
         $numeroGrossesse = $consultationObstetrique->numero_grossesse;
         $serologie = implode(" ",$request->serologie);
-        ConsultationObstetrique::whereSlug($slug)->update($request->except('serologie')+['numero_grossesse'=>$numeroGrossesse,'serologie'=>$serologie]);
+        $rccs = implode(" ",$request->rcc);
+        ConsultationObstetrique::whereSlug($slug)->update($request->except('serologie','rcc','consultation')+['numero_grossesse'=>$numeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
 
         $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
 

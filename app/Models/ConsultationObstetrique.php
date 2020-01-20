@@ -38,7 +38,22 @@ class ConsultationObstetrique extends Model
         "antecedent_conjoint",
         'archieved_at',
         'passed_at',
-        'slug'
+        'slug',
+        "pcr_gonocoque",
+        "pcr_chlamydia",
+        "rcc",
+        "glycemie",
+        "emu",
+        "tsh",
+        "anti_tpo",
+        "ft4",
+        "ft3",
+        "attention",
+        "info_prise_en_charge",
+        "etablissement_id",
+        "t1",
+        "nle_anle",
+        "sexe",
     ];
 
     /**
@@ -67,7 +82,9 @@ class ConsultationObstetrique extends Model
     public function dossier(){
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }
-
+    public function etablissement(){
+        return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
+    }
     /**
      * The "booting" method of the model.
      *

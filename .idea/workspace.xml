@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="" />
+    <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -39,6 +41,13 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="auteurs: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -200,7 +209,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/Scopes" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
@@ -248,17 +257,7 @@
       <list>
         <serviceView>
           <treeState>
-            <expand>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:medicalinkapp@localhost" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              </path>
-              <path>
-                <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-                <item name="root:medicalinkapp@localhost" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="com.intellij.database.console.session.MessageBusSession@165fa0e9" type="9fbbdea:ServiceModel$ServiceNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </treeState>
         </serviceView>
@@ -464,7 +463,19 @@
       <workItem from="1577088035324" duration="11031000" />
       <workItem from="1577174743831" duration="19537000" />
       <workItem from="1577346505388" duration="159000" />
-      <workItem from="1577352650988" duration="13553000" />
+      <workItem from="1577352650988" duration="14277000" />
+      <workItem from="1577461596033" duration="4513000" />
+      <workItem from="1577692102802" duration="7841000" />
+      <workItem from="1577779614413" duration="7729000" />
+      <workItem from="1577950470363" duration="8332000" />
+      <workItem from="1578038721279" duration="10060000" />
+      <workItem from="1578296571198" duration="8542000" />
+      <workItem from="1578316857191" duration="1300000" />
+      <workItem from="1578382677160" duration="20000" />
+      <workItem from="1578382806049" duration="3426000" />
+      <workItem from="1578469948715" duration="7490000" />
+      <workItem from="1578555301582" duration="9724000" />
+      <workItem from="1578642967167" duration="6534000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -497,18 +508,18 @@
     <option name="LAST_COMMIT_MESSAGE" value="Mise a jour gitignore" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="275" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575288542385">
+    <state x="275" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1577962899444">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="275" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1575288542385" />
+    <state x="275" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1577962899444" />
     <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser" timestamp="1577360343156">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1577360343156" />
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1577364032195">
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1578406353071">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1577364032195" />
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1578406353071" />
     <state x="308" y="0" key="CommitChangelistDialog2" timestamp="1575882019741">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -521,22 +532,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1575271626926" />
-    <state width="905" height="179" key="GridCell.Tab.0.bottom" timestamp="1576484387730">
+    <state width="905" height="179" key="GridCell.Tab.0.bottom" timestamp="1577693418989">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="905" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1576484387730" />
-    <state width="905" height="179" key="GridCell.Tab.0.center" timestamp="1576484387730">
+    <state width="905" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1577693418989" />
+    <state width="905" height="179" key="GridCell.Tab.0.center" timestamp="1577693418989">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="905" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1576484387730" />
-    <state width="905" height="179" key="GridCell.Tab.0.left" timestamp="1576484387730">
+    <state width="905" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1577693418989" />
+    <state width="905" height="179" key="GridCell.Tab.0.left" timestamp="1577693418989">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="905" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1576484387730" />
-    <state width="905" height="179" key="GridCell.Tab.0.right" timestamp="1576484387730">
+    <state width="905" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1577693418989" />
+    <state width="905" height="179" key="GridCell.Tab.0.right" timestamp="1577693418989">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="905" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1576484387730" />
+    <state width="905" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1577693418989" />
     <state x="421" y="178" key="NewPhpClassDialog" timestamp="1576578805099">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -549,10 +560,18 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="470" y="79" key="VCS.ChangeListViewerDialog/0.0.1366.728@0.0.1366.728" timestamp="1575882049035" />
-    <state x="384" y="187" key="com.intellij.ide.util.TipDialog" timestamp="1575358712539">
+    <state x="275" y="98" key="Vcs.Push.Dialog.v2" timestamp="1577971966765">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="384" y="187" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1575358712539" />
+    <state x="275" y="98" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1577971966765" />
+    <state x="495" y="255" width="375" height="234" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1578402555511">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="495" y="255" width="375" height="234" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1366.728@0.0.1366.728" timestamp="1578402555511" />
+    <state x="384" y="187" key="com.intellij.ide.util.TipDialog" timestamp="1577950540243">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="384" y="187" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1577950540243" />
     <state x="289" y="155" key="git4idea.merge.GitPullDialog" timestamp="1575881922263">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -561,9 +580,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1576742639883" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1577365958221">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1578563308157">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1577365958221" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1578563308157" />
   </component>
 </project>

@@ -62,6 +62,9 @@ class EtablissementExercice extends Model
     public function praticiens(){
         return $this->belongsToMany(Praticien::class,'etablissement_exercice_praticien','etablissement_id','praticien_id');
     }
+    public function medecinControles(){
+        return $this->belongsToMany(MedecinControle::class,'etablissement_exercice_medecin','etablissement_id','medecin_controle_id');
+    }
 
     public function patients(){
         return $this->belongsToMany(Patient::class,'etablissement_exercice_patient','etablissement_id','patient_id');

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\DossierMedicalRequest;
 use App\Models\DossierMedical;
+use App\Models\EtablissementExercice;
+use App\Models\EtablissementExercicePatient;
+use App\Models\EtablissementExercicePraticien;
 use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -121,7 +124,8 @@ class DossierMedicalController extends Controller
             if (!is_null($dossier)) {
                 $dossier->updateDossier();
             }
-       return response()->json(['dossier'=>$dossier]);
+            $this->checkIfUserAuthorized($dossier);
+        return response()->json(['dossier'=>$dossier]);
     }
 
     /**
@@ -250,5 +254,18 @@ class DossierMedicalController extends Controller
         }
 
         return response()->json(['dossier'=>$dossier]);
+    }
+
+    public function checkIfUserAuthorized(DossierMedical $dossier)
+    {
+        $patientEtablissementId = EtablissementExercicePatient::where('patient_id', '=', $dossier->patient->user_id)->get('id');
+        $user = \App\User::with(['praticien'])->whereId(Auth::id())->first();
+        //Recuperation des etablissements du praticien
+        if (!is_null($user->praticien)) {
+            $etablissementsCount = EtablissementExercicePraticien::whereIn('etablissement_id', $patientEtablissementId)->count();
+            if ($etablissementsCount == 0){
+                defineAsAuthor("DossierMedical",$dossier->id,'accès non autorisé',$dossier->patient->user_id);
+            }
+        }
     }
 }

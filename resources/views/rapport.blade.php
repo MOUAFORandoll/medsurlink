@@ -7,7 +7,6 @@
     <link href="{{ asset('css/rapportMedical.css') }}" rel="stylesheet">
     <title>Medicalink</title>
 </head>
-
 <body>
 
 @isset($dossier) 
@@ -43,7 +42,9 @@
         @if(!is_null($consultationMedecine->etablissement))
             <div>
                 @if(!is_null($consultationMedecine->etablissement->logo))
-                    <img style="float: left" src="{{public_path('/storage/'.$consultationMedecine->etablissement->logo)}}" />
+                    <div style="margin-left: 35%">
+                        <img src="{{public_path('/storage/'.$consultationMedecine->etablissement->logo)}}" height="50px" width="150px"/>
+                    </div>
                 @endif
                 <p style="text-align: center">{{$consultationMedecine->etablissement->name}}</p>
             </div>
@@ -171,6 +172,12 @@
 
         <h4>Conduite à tenir</h4>
         <p>{{$consultationMedecine->traitement_propose}}</p>
+        @if(count($medecins) != 0)
+        <h4>Medecin ayant vérifié votre consultation</h4>
+            @foreach($medecins as $medecin)
+                <p>{{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
+                @endforeach
+        @endif
     </div>
 @endisset
 
@@ -181,6 +188,7 @@
 @endisset
 
 <p style="text-align: right"> Date de création : {{\Carbon\Carbon::parse()->format('d/m/Y')}}</p>
+<p>{{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</p>
 @isset($signature)
     @if(!is_null($signature))
         <div>

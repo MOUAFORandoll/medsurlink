@@ -113,7 +113,20 @@ class ConsultationMedecineGenerale extends Model
             $this['user']=$user;
             $this['patient']=$patient;
             $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$this->id,"create");
+            $canUpdate = checkIfCanUpdated("ConsultationMedecineGenerale",$this->id,"create");
             $this['isAuthor']=$isAuthor->getOriginalContent();
+            $connectedUser = Auth::user();
+            if ($connectedUser->getRoleNames()->first() == 'Praticien'){
+                $this['canUpdate']=$canUpdate->getOriginalContent() && is_null($this->passed_at) && is_null($this->archieved_at);
+            }elseif ($connectedUser->getRoleNames()->first() == 'Medecin controle'){
+                if ($isAuthor->getOriginalContent() == true)
+                    $this['canUpdate'] = is_null($this->archieved_at);
+                else{
+                    $this['canUpdate']=$canUpdate->getOriginalContent() && !is_null($this->passed_at) && is_null($this->archieved_at);
+                }
+            }elseif($connectedUser->getRoleNames()->first() == 'Admin'){
+                $this['canUpdate']=true;
+            }
         }
     }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\ConsultationObstetrique;
 use App\Models\DossierMedical;
+use App\Models\MedecinControle;
 use App\Models\Praticien;
 use Barryvdh\DomPDF\Facade as PDF;
 use Gbrock\Table\Table;
@@ -31,21 +32,35 @@ class ImprimerController extends Controller
     }
 
     public function generale($slug){
-
         $this->validatedSlug($slug,'consultation_medecine_generales');
 
         $consultationMedecine = ConsultationMedecineGenerale::findBySlug($slug);
 
         $auteur = getAuthor("ConsultationMedecineGenerale",$consultationMedecine->id,"create");
+        $updateAuteurs = getUpdatedAuthor("ConsultationMedecineGenerale",$consultationMedecine->id,"update");
         $signature = null;
+        $medecins = [];
+        $praticiens = new Praticien();
+        $auteurs = [];
         if (!is_null($auteur)){
             if ($auteur->auteurable_type == 'Praticien'){
-                $praticien = Praticien::find($auteur->auteurable_id);
+                $praticien = Praticien::with('user')->find($auteur->auteurable_id);
+                $praticiens = $praticien;
                 $signature = $praticien->signature;
             }
         }
-
-        $data = compact('consultationMedecine','signature');
+        foreach ($updateAuteurs as $item){
+            if ($item->auteurable_id != $auteur->auteurable_id){
+                if (!in_array($item->auteurable_id,$auteurs)){
+                    if ($item->auteurable_type == 'Medecin controle'){
+                        $medecin = MedecinControle::with('user')->find($item->auteurable_id);
+                        array_push($medecins,$medecin);
+                    }
+                    array_push($auteurs,$item);
+                }
+            }
+        }
+        $data = compact('consultationMedecine','signature','medecins','praticiens');
         $pdf = PDF::loadView('rapport',$data);
         $path = storage_path().'/app/public/pdf/'.'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf';
 
