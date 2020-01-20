@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ConsultationObstetriqueRequest;
+use App\Models\ConsultationMedecineGenerale;
 use App\Models\ConsultationObstetrique;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -55,9 +56,15 @@ class ConsultationObstetriqueController extends Controller
         $user = Auth::user();
         $serologie = implode(" ",$request->serologie);
         $rccs = implode(" ",$request->rcc);
-        if($user->hasRole('Praticien')){
-            $praticen = $user->praticien;
-            if ($praticen->specialite->name == "Gynéco-Obstétrique"){
+        if($user->hasRole('Praticien') || $user->hasRole('Medecin controle')){
+            $specialite  = '';
+            if(!is_null($user->praticien)){
+                $specialite = $user->praticien->specialite->name;
+            }
+            else{
+                $specialite = $user->medecinControle->specialite->name;
+            }
+                        if ($specialite == "Gynéco-Obstétrique"){
 
                 $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie','rcc')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
 
@@ -162,12 +169,11 @@ class ConsultationObstetriqueController extends Controller
     public function update(ConsultationObstetriqueRequest $request, $slug)
     {
 
-
         $this->validatedSlug($slug,$this->table);
 
         $consultationObstetrique = ConsultationObstetrique::findBySlug($slug);
 
-        $this->checkIfAuthorized("ConsultationObstetrique",$consultationObstetrique->id,"create");
+        $this->checkIfCanUpdated("ConsultationObstetrique",$consultationObstetrique->id,"create");
 
         $numeroGrossesse = $consultationObstetrique->numero_grossesse;
         $serologie = implode(" ",$request->serologie);
@@ -223,6 +229,7 @@ class ConsultationObstetriqueController extends Controller
             $resultat->archieved_at = Carbon::now();
             $resultat->save();
             defineAsAuthor("ConsultationObstetrique",$resultat->id,'archive');
+            $resultat->updateObstetricConsultation();
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -242,6 +249,23 @@ class ConsultationObstetriqueController extends Controller
         $resultat->passed_at = Carbon::now();
         $resultat->save();
         defineAsAuthor("ConsultationObstetrique",$resultat->id,'transmettre');
+        $resultat->updateObstetricConsultation();
+
+        return response()->json(['resultat'=>$resultat]);
+
+    }
+
+    public function reactiver($slug)
+    {
+        $this->validatedSlug($slug,$this->table);
+
+        $resultat = ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
+        $resultat->passed_at = null;
+        $resultat->archieved_at = null;
+        $resultat->save();
+
+        defineAsAuthor("ConsultationObstetrique",$resultat->id,'reactiver');
+        $resultat->updateObstetricConsultation();
 
         return response()->json(['resultat'=>$resultat]);
 
