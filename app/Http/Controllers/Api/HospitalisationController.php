@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\HospitalisationRequest;
 use App\Models\Hospitalisation;
+use App\Models\Motif;
 use Carbon\Carbon;
 
 class HospitalisationController extends Controller
@@ -19,7 +20,7 @@ class HospitalisationController extends Controller
      */
     public function index()
     {
-        $hospitalisations = Hospitalisation::with(['dossier','motifs'])->get();
+        $hospitalisations = Hospitalisation::with(['dossier','motifs','etablissement'])->get();
 
         foreach ($hospitalisations as $hospitalisation){
            $hospitalisation->updateHospitalisation();
@@ -50,6 +51,29 @@ class HospitalisationController extends Controller
 
         defineAsAuthor("Hospitalisation",$hospitalisation->id,'create',$hospitalisation->dossier->patient->user_id);
 
+        $motifs = $request->get('motifs');
+
+        //Insertion des motifs
+                foreach ($motifs as $motif){
+
+                    $converti = (integer) $motif;
+
+                    if ($converti !== 0){
+                        $hospitalisation->motifs()->attach($motif);
+                        defineAsAuthor("ConsultationMotif", $motif, 'attach',$hospitalisation->dossier->patient->user_id);
+                    }else{
+                        $item =   Motif::create([
+                            "reference"=>'H'.str_random(5),
+                            "description"=>$motif
+                        ]);
+
+                        defineAsAuthor("Motif", $item->id, 'create');
+                        $hospitalisation->motifs()->attach($item->id);
+                        defineAsAuthor("HospitalisationMotif", $item->id, 'attach',$hospitalisation->dossier->patient->user_id);
+
+                    }
+                }
+
         $hospitalisation = Hospitalisation::with([
             'dossier',
             'dossier.allergies',
@@ -62,7 +86,8 @@ class HospitalisationController extends Controller
             'dossier.allergies',
             'dossier.antecedents',
             'dossier.traitements',
-            'motifs'
+            'motifs',
+            'etablissement'
         ])->whereSlug($hospitalisation->slug)->first();
 
         return response()->json(['hospitalisation'=>$hospitalisation]);
@@ -93,6 +118,7 @@ class HospitalisationController extends Controller
             'dossier.antecedents',
             'dossier.traitements',
             'motifs'
+            ,'etablissement'
         ])->whereSlug($slug)->first();
         $hospitalisation->updateHospitalisation();
 
@@ -127,7 +153,7 @@ class HospitalisationController extends Controller
 
         $this->checkIfAuthorized("Hospitalisation",$hospitalisation->id,"create");
 
-        Hospitalisation::whereSlug($slug)->update($request->validated());
+        Hospitalisation::whereSlug($slug)->update($request->except('motifs','hospitalisation'));
 
         $hospitalisation = Hospitalisation::with([
             'dossier',
@@ -142,7 +168,43 @@ class HospitalisationController extends Controller
             'dossier.antecedents',
             'dossier.traitements',
             'motifs'
+            ,'etablissement'
         ])->whereSlug($slug)->first();
+        //Recupération des anciens motifs
+        $ancienMotifs = [];
+        foreach ($hospitalisation->motifs as $motif){
+            array_push($ancienMotifs,$motif->id);
+        }
+        $motifs = $request->get('motifs');
+
+        foreach ($ancienMotifs as $ancien){
+            if (!in_array($ancien, $motifs)){
+                $hospitalisation->motifs()->detach($ancien);
+                defineAsAuthor("HospitalisationMotif", $ancien, 'detach',$hospitalisation->dossier->patient->user_id);
+            }
+        }
+
+        foreach ($motifs as $motif){
+
+            $converti = (integer) $motif;
+            if ($converti !== 0){
+                if (!in_array($motif, $ancienMotifs)) {
+                    $hospitalisation->motifs()->attach($motif);
+                    defineAsAuthor("HospitalisationMotif", $hospitalisation->id, 'attach and update', $hospitalisation->dossier->patient->user_id);
+                }
+            }else{
+                $item =   Motif::create([
+                    "reference"=>'H'.str_random(5),
+                    "description"=>$motif
+                ]);
+
+                defineAsAuthor("Motif", $item->id, 'create');
+                $hospitalisation->motifs()->attach($item->id);
+                defineAsAuthor("HospitalisationMotif", $hospitalisation->id, 'attach and update',$hospitalisation->dossier->patient->user_id);
+
+            }
+        }
+
         $hospitalisation->updateHospitalisation();
 
         return response()->json(['hospitalisation'=>$hospitalisation]);
@@ -172,7 +234,7 @@ class HospitalisationController extends Controller
             'dossier.allergies',
             'dossier.antecedents',
             'dossier.traitements',
-            'motifs'
+            'motifs','etablissement'
         ])->whereSlug($slug)->first();
         $hospitalisation->updateHospitalisation();
 
@@ -206,7 +268,7 @@ class HospitalisationController extends Controller
             'dossier.allergies',
             'dossier.antecedents',
             'dossier.traitements',
-            'motifs'
+            'motifs','etablissement'
         ])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
            $this->revealNonTransmis();
@@ -242,7 +304,7 @@ class HospitalisationController extends Controller
             'dossier.allergies',
             'dossier.antecedents',
             'dossier.traitements',
-            'motifs'
+            'motifs','etablissement'
         ])->whereSlug($slug)->first();
 
         $resultat->passed_at = Carbon::now();
