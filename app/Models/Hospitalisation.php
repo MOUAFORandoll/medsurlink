@@ -31,6 +31,7 @@ class Hospitalisation extends Model
         "traitement_propose",
         'archieved_at',
         'passed_at',
+        'etablissement_id',
     ];
     use Sluggable;
     use SluggableScopeHelpers;
@@ -65,6 +66,10 @@ class Hospitalisation extends Model
 
     public  function  motifs(){
         return $this->belongsToMany(Motif::class,'hospitalisation_motif','hospitalisation_id','motif_id');
+    }
+
+    public function etablissement(){
+        return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
     }
 
     /**
