@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/HospitalisationRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/HospitalisationRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/rapport.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -486,7 +486,7 @@
       <workItem from="1579701013197" duration="589000" />
       <workItem from="1579708312583" duration="3588000" />
       <workItem from="1579764400866" duration="2383000" />
-      <workItem from="1579851488038" duration="6111000" />
+      <workItem from="1579851488038" duration="9368000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
