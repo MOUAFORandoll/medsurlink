@@ -27,7 +27,7 @@ class HospitalisationRequest extends FormRequest
         $rules =  [
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
             "histoire_clinique"=>"required|string",
-            "date_entree"=>"sometimes|nullable|date|before_or_equal:date_sortie",
+            "date_entree"=>"sometimes|nullable|date",
             "date_sortie"=>"sometimes|nullable|date|after_or_equal:date_entree",
             "mode_de_vie"=>"sometimes|nullable|string",
             "evolution"=>"sometimes|nullable|string",
