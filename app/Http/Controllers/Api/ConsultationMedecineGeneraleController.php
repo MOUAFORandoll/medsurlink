@@ -62,6 +62,7 @@ class ConsultationMedecineGeneraleController extends Controller
     {
 
         if($request->hasFile('file')) {
+
             if ($request->file('file')->isValid()) {
                 $consultation = ConsultationMedecineGenerale::create($request->validated());
                 $this->uploadFile($request,$consultation);
@@ -513,7 +514,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
     public function uploadFile($request, $consultation){
         if ($request->file('file')->isValid()) {
-            $path = $request->file->store('public/DossierMedicale/' . $consultation->dossier->numero_dossier . '/ConsultationGenerale' . $request->consultation_medecine_generale_id);
+            $path = $request->file->storeAs('public/DossierMedicale/' . $consultation->dossier->numero_dossier . '/ConsultationGenerale' . $request->consultation_medecine_generale_id,$request->file('file')->getClientOriginalName());
             $file = str_replace('public/','',$path);
 
             $consultation->file = $file;
