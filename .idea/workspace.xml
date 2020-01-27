@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/rapportMedical.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/rapportMedical.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/rapport.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -210,16 +208,16 @@
     <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\medicalink-app\app\Models" />
-      <recent name="C:\xampp\htdocs\medicalink-app\app\Http\Controllers\Api" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\medicalink-app\app\Scopes" />
       <recent name="C:\xampp\htdocs\medicalink-app\app\Exceptions" />
       <recent name="C:\xampp\htdocs\medicalink-app" />
       <recent name="C:\xampp\htdocs\medicalink-app\public\images" />
       <recent name="C:\xampp\htdocs\medicalink-app\resources\views" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\medicalink-app\app\Models" />
+      <recent name="C:\xampp\htdocs\medicalink-app\app\Http\Controllers\Api" />
     </key>
   </component>
   <component name="RunManager" selected="PHPUnit.phpunit.xml">
@@ -491,7 +489,7 @@
       <workItem from="1579936400900" duration="1714000" />
       <workItem from="1580024126500" duration="4108000" />
       <workItem from="1580109984896" duration="5479000" />
-      <workItem from="1580118887444" duration="3070000" />
+      <workItem from="1580118887444" duration="4624000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
