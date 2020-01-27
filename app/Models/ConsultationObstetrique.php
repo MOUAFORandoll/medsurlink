@@ -9,6 +9,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Netpok\Database\Support\RestrictSoftDeletes;
 
 class ConsultationObstetrique extends Model
@@ -108,7 +109,20 @@ class ConsultationObstetrique extends Model
         $this['allergies']= $allergies;
         $this['user']=$user;
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$this->id,"create");
+        $canUpdate = checkIfCanUpdated("ConsultationObstetrique",$this->id,"create");
         $this['isAuthor']=$isAuthor->getOriginalContent();
+        $connectedUser = Auth::user();
+        if ($connectedUser->getRoleNames()->first() == 'Praticien'){
+            $this['canUpdate']=$canUpdate->getOriginalContent() && is_null($this->passed_at) && is_null($this->archieved_at);
+        }elseif ($connectedUser->getRoleNames()->first() == 'Medecin controle'){
+            if ($isAuthor->getOriginalContent() == true)
+                $this['canUpdate'] = is_null($this->archieved_at);
+            else{
+                $this['canUpdate']=$canUpdate->getOriginalContent() && !is_null($this->passed_at) && is_null($this->archieved_at);
+            }
+        }elseif($connectedUser->getRoleNames()->first() == 'Admin'){
+            $this['canUpdate']=true;
+        }
     }
 
     public function scopeOrderByDateDeRendezVous($query)
