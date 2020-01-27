@@ -4,9 +4,43 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
-        <link href="{{ asset('css/rapportMedical.css') }}" rel="stylesheet">
+    {{--        <link href="{{ asset('css/rapportMedical.css') }}" rel="stylesheet">--}}
     <title>Medicalink</title>
+    <style>
+        body {
+            font-size: 1em;
+            line-height: 1.2;
+            font-weight: 500;
+            font-family: "Raleway", sans-serif;
+            letter-spacing: 1.3px;
+            color: #333333;
+            background-color: white;
+        }
 
+        h2 {
+            color: #00ada7;
+            font-weight: 600;
+            text-align: left;
+            font-size: 2em !important;
+        }
+
+        h3,
+        b {
+            color: #91c01c;
+        }
+
+        td,
+        th {
+            border: 1px solid #333333;
+            padding: 1em;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+
+    </style>
 </head>
 <body>
 
@@ -72,7 +106,7 @@
         @endforelse
 
         <h4>Anamnèse</h4>
-        <p>{{$consultationMedecine->anamese}}</p>
+        <p>{!! $consultationMedecine->anamese !!}</p>
 
         <h4>Mode de vie</h4>
         <p class="ml-5">Profession : <strong>{{$consultationMedecine->profession}}</strong></p>
@@ -80,7 +114,7 @@
         <p class="ml-5">Nombre d'enfants : <strong>{{$consultationMedecine->nbre_enfant}}</strong></p>
         <p class="ml-5">Tabac : <strong>{{$consultationMedecine->tabac}}</strong></p>
         <p class="ml-5">Alcool : <strong>{{$consultationMedecine->alcool}}</strong></p>
-        <p class="ml-5">Autres : <strong>{{$consultationMedecine->autres}}</strong></p>
+        <p class="ml-5">Autres : <strong>{!! $consultationMedecine->autres !!}</strong></p>
 
         <h4>Antédédents</h4>
         <table>
@@ -159,30 +193,29 @@
         @endforeach
 
         <h4>Examen(s) clinique(s)</h4>
-        <p>{{$consultationMedecine->examen_clinique}}</p>
+        <p>{!!$consultationMedecine->examen_clinique!!}</p>
 
         <h4>Examen(s) complémentaire(s)</h4>
-        <p>{{$consultationMedecine->examen_complementaire}}</p>
+        <p>{!!$consultationMedecine->examen_complementaire!!}</p>
 
         <h4>Diagnostic</h4>
         @if(!is_object(collect($consultationMedecine->conclusions->toArray())->first()))
             @if(!is_null($consultationMedecine->conclusions->first()))
-                <p>{{($consultationMedecine->conclusions->first())->description}}</p>
+                <p>{!!($consultationMedecine->conclusions->first())->description!!}</p>
             @endif
         @endif
 
         <h4>Conduite à tenir</h4>
-        <p>{{$consultationMedecine->traitement_propose}}</p>
-        @if(count($medecins) != 0)
-            <h4>Medecin ayant vérifié votre consultation</h4>
-            @foreach($medecins as $medecin)
-                @if(!is_null($medecin->user))
-                    <p>{{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
-                @endif
+        <p>{!! $consultationMedecine->traitement_propose !!}</p>
 
-            @endforeach
+        @if(!is_null($consultationMedecine->file))
+            <p>Consultter la pièce jointe
+                 <a href="{{public_path('storage/')}}{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a>
+            </p>
+
         @endif
     </div>
+
 @endisset
 
 @isset($resultatLabo)
@@ -192,9 +225,7 @@
 @endisset
 
 <p style="text-align: right"> Date de création : {{\Carbon\Carbon::parse()->format('d/m/Y')}}</p>
-@if(!is_null($praticiens->user))
-    <p>{{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</p>
-@endif
+
 @isset($signature)
     @if(!is_null($signature))
         <div>
@@ -202,5 +233,31 @@
         </div>
     @endif
 @endisset
+@if(!is_null($praticiens->user))
+    <p>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</p>
+    @if(!is_null($praticiens->numero_ordre))
+        <p>{{$praticiens->numero_ordre}}</p>
+    @endif
+@endif
+
+@if(count($medecins) != 0)
+
+    @foreach($medecins as $medecin)
+        @if(!is_null($medecin->user))
+            @if(!is_null($medecin->signature))
+                <div>
+                    <img  style="float: right" width="300px" height="300px" src={{public_path('/storage/'.$medecin->signature)}} />
+                </div>
+            @endif
+
+            <p>{{$medecin->civilite}} {{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
+
+            @if(!is_null($medecin->numero_ordre))
+                <p>{{$medecin->numero_ordre}}</p>
+            @endif
+        @endif
+
+    @endforeach
+@endif
 </body>
 </html>
