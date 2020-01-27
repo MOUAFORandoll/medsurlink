@@ -56,7 +56,7 @@ class ImprimerController extends Controller
                         $medecin = MedecinControle::with('user')->find($item->auteurable_id);
                         array_push($medecins,$medecin);
                     }
-                    array_push($auteurs,$item);
+                    array_push($auteurs,$item->auteurable_id);
                 }
             }
         }

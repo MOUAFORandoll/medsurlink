@@ -236,31 +236,48 @@
 
         @endforeach
 
+
+        @if(!is_null($consultationMedecine->examen_clinique))
         <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4>
         <p>{!!$consultationMedecine->examen_clinique!!}</p>
 
-        <h4 class="sous-titre-rapport">Examen(s) complémentaire(s)</h4>
-        <p>{!!$consultationMedecine->examen_complementaire!!}</p>
+        @endif
 
-        <h4 class="sous-titre-rapport">Diagnostic</h4>
+        @if(!is_null($consultationMedecine->examen_complementaire))
+            <h4 class="sous-titre-rapport">Examen(s) complémentaire(s)</h4>
+            <p>{!!$consultationMedecine->examen_complementaire!!}</p>
+        @endif
+
+
         @if(!is_object(collect($consultationMedecine->conclusions->toArray())->first()))
             @if(!is_null($consultationMedecine->conclusions->first()))
+                <h4 class="sous-titre-rapport">Diagnostic</h4>
                 <p>{!!($consultationMedecine->conclusions->first())->description!!}</p>
             @endif
         @endif
 
-        <h4 class="sous-titre-rapport">Conduite à tenir</h4>
-        <p>{!! $consultationMedecine->traitement_propose !!}</p>
-        @if(count($medecins) != 0)
-            <h4>Medecin ayant vérifié votre consultation</h4>
-            @foreach($medecins as $medecin)
-                @if(!is_null($medecin->user))
-                    <p>{{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
-                @endif
 
-            @endforeach
+        @if($consultationMedecine->traitement_propose)
+            <h4 class="sous-titre-rapport">Conduite à tenir</h4>
+            <p>{!! $consultationMedecine->traitement_propose !!}</p>
+            @if(count($medecins) != 0)
+                <h4>Medecin ayant vérifié votre consultation</h4>
+                @foreach($medecins as $medecin)
+                    @if(!is_null($medecin->user))
+                        <p>{{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
+                    @endif
+                @endforeach
+            @endif
+
+
+            @if(!is_null($consultationMedecine->file))
+                <p>Consultter la pièce jointe
+                    <a href="{{public_path('storage/')}}{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a>
+                </p>
+            @endif
         @endif
     </div>
+
 @endisset
 
 @isset($resultatLabo)
@@ -268,11 +285,8 @@
 
 @isset($resultatImagerie)
 @endisset
-
 <p style="text-align: right"> Date de création : {{\Carbon\Carbon::parse()->format('d/m/Y')}}</p>
-@if(!is_null($praticiens->user))
-    <p>{{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</p>
-@endif
+
 @isset($signature)
     @if(!is_null($signature))
         <div>
@@ -280,5 +294,31 @@
         </div>
     @endif
 @endisset
+@if(!is_null($praticiens->user))
+    <p>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</p>
+    @if(!is_null($praticiens->numero_ordre))
+        <p>{{$praticiens->numero_ordre}}</p>
+    @endif
+@endif
+
+@if(count($medecins) != 0)
+
+    @foreach($medecins as $medecin)
+        @if(!is_null($medecin->user))
+            @if(!is_null($medecin->signature))
+                <div>
+                    <img width="300px" height="300px" src={{public_path('/storage/'.$medecin->signature)}} />
+                </div>
+            @endif
+
+            <p>{{$medecin->civilite}} {{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
+
+            @if(!is_null($medecin->numero_ordre))
+                <p>{{$medecin->numero_ordre}}</p>
+            @endif
+        @endif
+    @endforeach
+@endif
+<p>Dossier relu et validé par l'équipe Medicasure</p>
 </body>
 </html>
