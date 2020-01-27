@@ -221,7 +221,6 @@
 
 @isset($resultatImagerie)
 @endisset
-
 <p style="text-align: right"> Date de création : {{\Carbon\Carbon::parse()->format('d/m/Y')}}</p>
 
 @isset($signature)
@@ -257,5 +256,6 @@
 
     @endforeach
 @endif
+<p>Dossier relu et validé par l'équipe Medicasure</p>
 </body>
 </html>
