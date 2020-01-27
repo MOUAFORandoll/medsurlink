@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
-            <link href="{{ asset('css/rapportMedical.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/rapportMedical.css') }}" rel="stylesheet">
     <title>Medicalink</title>
     <style>
         /*body {*/
@@ -190,27 +190,33 @@
 
         @endforeach
 
-        <h4>Examen(s) clinique(s)</h4>
-        <p>{!!$consultationMedecine->examen_clinique!!}</p>
+        @if(!is_null($consultationMedecine->examen_clinique))
+            <h4>Examen(s) clinique(s)</h4>
+            <p>{!!$consultationMedecine->examen_clinique!!}</p>
+        @endif
 
-        <h4>Examen(s) complémentaire(s)</h4>
-        <p>{!!$consultationMedecine->examen_complementaire!!}</p>
+        @if(!is_null($consultationMedecine->examen_complementaire))
+            <h4>Examen(s) complémentaire(s)</h4>
+            <p>{!!$consultationMedecine->examen_complementaire!!}</p>
+        @endif
 
-        <h4>Diagnostic</h4>
+
         @if(!is_object(collect($consultationMedecine->conclusions->toArray())->first()))
             @if(!is_null($consultationMedecine->conclusions->first()))
+                <h4>Diagnostic</h4>
                 <p>{!!($consultationMedecine->conclusions->first())->description!!}</p>
             @endif
         @endif
 
-        <h4>Conduite à tenir</h4>
-        <p>{!! $consultationMedecine->traitement_propose !!}</p>
+        @if($consultationMedecine->traitement_propose)
+            <h4>Conduite à tenir</h4>
+            <p>{!! $consultationMedecine->traitement_propose !!}</p>
+        @endif
 
         @if(!is_null($consultationMedecine->file))
             <p>Consultter la pièce jointe
-                 <a href="{{public_path('storage/')}}{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a>
+                <a href="{{public_path('storage/')}}{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a>
             </p>
-
         @endif
     </div>
 
@@ -243,7 +249,7 @@
         @if(!is_null($medecin->user))
             @if(!is_null($medecin->signature))
                 <div>
-                    <img  style="float: right" width="300px" height="300px" src={{public_path('/storage/'.$medecin->signature)}} />
+                    <img width="300px" height="300px" src={{public_path('/storage/'.$medecin->signature)}} />
                 </div>
             @endif
 
@@ -253,7 +259,6 @@
                 <p>{{$medecin->numero_ordre}}</p>
             @endif
         @endif
-
     @endforeach
 @endif
 <p>Dossier relu et validé par l'équipe Medicasure</p>
