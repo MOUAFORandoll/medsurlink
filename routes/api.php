@@ -1,9 +1,9 @@
 <?php
 
 /**-- Headers --**/
-header('Access-Control-Allow-Origin:  *');
-header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
-header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
+//header('Access-Control-Allow-Origin:  *');
+//header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
+//header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
 
 
 /*
@@ -18,7 +18,7 @@ header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Autho
 */
 
 Route::post('oauth/token', 'Api\AuthController@auth');
-Route::post('password/email','Auth\ForgotPasswordController@sendResetLinkEmail');
+Route::post('password/email','Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('cors');
 Route::post('password/reset','Api\UserController@reset');
 
 
