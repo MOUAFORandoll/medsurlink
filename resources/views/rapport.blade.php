@@ -27,9 +27,9 @@
             font-weight: 500;
         }
         h3,
-        b {
-            color: #dee2e6;
-        }
+        /*b {*/
+        /*    color: #dee2e6;*/
+        /*}*/
 
         td,
         th {
@@ -132,7 +132,7 @@
         <p class="titre-rapport"><strong>Rapport de consultation</strong></p>
         <br>
         <p>Honorée Consoeur, Honorée Confrère,</p>
-        <p>J'ai vue en date du <strong>{{\Carbon\Carbon::parse($consultationMedecine->date_consultation)->format('d/m/Y')}}</strong>, pour une consultation médecine générale, votre patient(e)
+        <p>J'ai vue en date du <strong>{{\Carbon\Carbon::parse($consultationMedecine->date_consultation)->format('d/m/Y')}}</strong>, pour une consultation de<b> médecine générale</b>, votre patient(e)
             <strong>{{$consultationMedecine->dossier->patient->user->nom}}</strong> né(e) le <strong>{{\Carbon\Carbon::parse($consultationMedecine->dossier->patient->date_de_naissance)->format('d/m/Y')}}</strong>
             pour:
             @forelse($consultationMedecine->motifs as $motif)
@@ -295,10 +295,12 @@
     @endif
 @endisset
 @if(!is_null($praticiens->user))
-    <p>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</p>
-    @if(!is_null($praticiens->numero_ordre))
-        <p>{{$praticiens->numero_ordre}}</p>
-    @endif
+    <p><b>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</b></p>
+{{--    @if(!is_null($praticiens->numero_ordre))--}}
+{{--        @if(strlen($praticiens->numero_ordre) > 0)--}}
+{{--            <p>Numéro d'ordre: {{$praticiens->numero_ordre}}</p>--}}
+{{--        @endif--}}
+{{--    @endif--}}
 @endif
 
 @if(count($medecins) != 0)
@@ -313,14 +315,16 @@
 
             <p>{{$medecin->civilite}} {{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
 
-            @if(!is_null($medecin->numero_ordre))
-                @if(strlen($medecin->numero_ordre) > 0)
-                    <p>Numéro d'ordre: {{$medecin->numero_ordre}}</p>
-                @endif
-            @endif
+{{--            @if(!is_null($medecin->numero_ordre))--}}
+{{--                @if(strlen($medecin->numero_ordre) > 0)--}}
+{{--                    <p>Numéro d'ordre: {{$medecin->numero_ordre}}</p>--}}
+{{--                @endif--}}
+{{--            @endif--}}
         @endif
     @endforeach
 @endif
-<p>Dossier relu et validé par l'équipe Medicasure</p>
+<p>Je vous remercie de m'avoir adressé votre patient(e) et vous adresse mes salutations confraternelles.</p>
+
+<p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
 </body>
 </html>

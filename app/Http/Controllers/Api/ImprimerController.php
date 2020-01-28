@@ -88,6 +88,7 @@ class ImprimerController extends Controller
 
 //        $path = storage_path().'/app/public/pdf/'.'Obstetrique'.$nom.' '.$prenom.'_'.$date.'.pdf';
         return $pdf->download('consultation_obstetrique.pdf');
+
     }
 
 }
