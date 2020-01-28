@@ -62,11 +62,16 @@ class ImprimerController extends Controller
         }
         $data = compact('consultationMedecine','signature','medecins','praticiens');
         $pdf = PDF::loadView('rapport',$data);
-        $path = storage_path().'/app/public/pdf/'.'Generale-'.$consultationMedecine->date_consultation.'.pdf';
+
+        $nom  = ucfirst($consultationMedecine->dossier->patient->user->nom);
+        $prenom  = ucfirst($consultationMedecine->dossier->patient->user->prenom);
+        $date= $consultationMedecine->date_consultation;
+
+        $path = storage_path().'/app/public/pdf/'.'Generale_'.$nom.' '.$prenom.'_'.$date.'.pdf';
 
         $pdf->save($path);
 
-        return  response()->json(['name'=>'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf']);
+        return  response()->json(['name'=>'Generale_'.$nom.' '.$prenom.'_'.$date.'.pdf']);
     }
 
     public function obstetrique($slug){
@@ -76,6 +81,12 @@ class ImprimerController extends Controller
         $consultationObstetrique = ConsultationObstetrique::findBySlug($slug);
 
         $pdf = PDF::loadView('contrat_version_imprimable',compact('consultationObstetrique'));
+
+//        $nom  = ucfirst($consultationMedecine->dossier->patient->user->nom);
+//        $prenom  = ucfirst($consultationMedecine->dossier->patient->user->prenom);
+//        $date= $consultationMedecine->date_consultation;
+
+//        $path = storage_path().'/app/public/pdf/'.'Obstetrique'.$nom.' '.$prenom.'_'.$date.'.pdf';
         return $pdf->download('consultation_obstetrique.pdf');
     }
 
