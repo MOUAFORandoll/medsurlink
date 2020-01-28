@@ -18,7 +18,7 @@
 */
 
 Route::post('oauth/token', 'Api\AuthController@auth');
-Route::post('password/email','Auth\ForgotPasswordController@sendResetLinkEmail')->middleware('cors');
+Route::post('password/email','Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('password/reset','Api\UserController@reset');
 
 
