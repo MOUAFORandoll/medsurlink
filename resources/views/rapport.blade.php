@@ -297,7 +297,9 @@
 @if(!is_null($praticiens->user))
     <p>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</p>
     @if(!is_null($praticiens->numero_ordre))
-        <p>{{$praticiens->numero_ordre}}</p>
+        @if(strlen($praticiens->numero_ordre) > 0)
+            <p>Numéro d'ordre: {{$praticiens->numero_ordre}}</p>
+        @endif
     @endif
 @endif
 
