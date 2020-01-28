@@ -52,6 +52,7 @@ class MailResetPasswordNotification extends Notification
         $mail = new MailMessage;
         $users = User::whereEmail($email)->get();
 
+
         foreach ($users as $key => $user){
             if ($user->getRoleNames()->first() == 'Patient'){
                 if (is_null($user->patient)){
@@ -71,12 +72,11 @@ class MailResetPasswordNotification extends Notification
                     $users->forget($key);
                 }
             }else if ($user->getRoleNames()->first() == 'Medecin controle'){
-                if (is_null($user->medecin)){
+                if (is_null($user->medecinControle)){
                     $users->forget($key);
                 }
             }
         }
-
         if (count($users)>0) {
             $token = $this->token;
             $mail->from('no-reply@medicasure.com');
