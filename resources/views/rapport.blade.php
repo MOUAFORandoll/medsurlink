@@ -27,9 +27,9 @@
             font-weight: 500;
         }
         h3,
-        /*b {*/
-        /*    color: #dee2e6;*/
-        /*}*/
+            /*b {*/
+            /*    color: #dee2e6;*/
+            /*}*/
 
         td,
         th {
@@ -96,21 +96,24 @@
         <h3>{{$dossier->patient->date_de_naissance}}</h3>
         <h3>Sexe : {{$dossier->patient->sexe}}</h3>
     </div>
-    <div class="justify-content-center"> Allergies Information </div>
-    @forelse($dossier->allergies as $allergie)
-        <table>
-            <thead>
-            <td class="title-table">Description</td>
-            <td class="title-table">Date debut</td>
-            </thead>
-            <tbody>
-            <td>{{$allergie->description}}</td>
-            <td>{{$allergie->date}}</td>
-            </tbody>
-        </table>
-    @empty
-        <p>Aucune allergie</p>
-    @endforelse
+
+    @if(count($dossier->allergies) >0)
+        <div class="justify-content-center"> Allergies Information </div>
+        @forelse($dossier->allergies as $allergie)
+            <table>
+                <thead>
+                <td class="title-table">Description</td>
+                <td class="title-table">Date debut</td>
+                </thead>
+                <tbody>
+                <td>{{$allergie->description}}</td>
+                <td>{{$allergie->date}}</td>
+                </tbody>
+            </table>
+        @empty
+            <p>Aucune allergie</p>
+        @endforelse
+    @endif
 
 @endisset
 
@@ -160,65 +163,68 @@
         <p class="ml-5">Alcool : <strong>{{$consultationMedecine->alcool}}</strong></p>
         <p class="ml-5">Autres : <strong>{!! $consultationMedecine->autres !!}</strong></p>
 
-        <h4 class="sous-titre-rapport--table">Antédédents</h4>
-        <table>
-            <thead>
-            <td class="title-table">Type</td>
-            <td class="title-table">Description</td>
-            <td class="title-table">Date debut</td>
-            </thead>
-            <tbody>
-            <tr></tr>
-            @forelse($consultationMedecine->dossier->antecedents as $antecedent)
-                <tr>
-                    <td>{{$antecedent->type}}</td>
-                    <td>{{$antecedent->description}}</td>
-                    <td>{{\Carbon\Carbon::parse($antecedent->date)->format('d/m/Y')}}</td>
-                </tr>
-            @empty
-                <strong></strong>
-            @endforelse
-            </tbody>
-        </table>
-
-        <h4 class="sous-titre-rapport--table">Allergies</h4>
-        <table>
-            <thead>
-            <td class="title-table">Description</td>
-            {{--            <td>Date debut</td>--}}
-            </thead>
-            <tbody>
-            <tr></tr>
-            @forelse($consultationMedecine->dossier->allergies as $allergie)
-                <tr>
-                    <td>{{$allergie->description}}</td>
-                    {{--                    <td>{{\Carbon\Carbon::parse($allergie->date)->format('d/m/Y')}}</td>--}}
-                </tr>
-            @empty
-                <strong></strong>
-            @endforelse
-            </tbody>
-        </table>
-
-        <h4 class="sous-titre-rapport--table">Traitement actuel</h4>
-        <table>
-            <thead>
-            <td class="title-table">Description</td>
-            <td class="title-table">Date prescription</td>
-            </thead>
-            <tbody>
-            <tr></tr>
-            @foreach($consultationMedecine->dossier->traitements as $traiement)
-                @if($loop->last)
+        @if(count($consultationMedecine->dossier->antecedents) >0)
+            <h4 class="sous-titre-rapport--table">Antédédents</h4>
+            <table>
+                <thead>
+                <td class="title-table">Type</td>
+                <td class="title-table">Description</td>
+                <td class="title-table">Date debut</td>
+                </thead>
+                <tbody>
+                <tr></tr>
+                @forelse($consultationMedecine->dossier->antecedents as $antecedent)
                     <tr>
-                        <td>{{$traiement->description}}</td>
-                        <td>{{\Carbon\Carbon::parse($traiement->created_at)->format('d/m/Y')}}</td>
+                        <td>{{$antecedent->type}}</td>
+                        <td>{{$antecedent->description}}</td>
+                        <td>{{\Carbon\Carbon::parse($antecedent->date)->format('d/m/Y')}}</td>
                     </tr>
-                @endif
-            @endforeach
-            </tbody>
-        </table>
-
+                @empty
+                    <strong></strong>
+                @endforelse
+                </tbody>
+            </table>
+        @endif
+        @if(count($consultationMedecine->dossier->allergies)>0)
+            <h4 class="sous-titre-rapport--table">Allergies</h4>
+            <table>
+                <thead>
+                <td class="title-table">Description</td>
+                {{--            <td>Date debut</td>--}}
+                </thead>
+                <tbody>
+                <tr></tr>
+                @forelse($consultationMedecine->dossier->allergies as $allergie)
+                    <tr>
+                        <td>{{$allergie->description}}</td>
+                        {{--                    <td>{{\Carbon\Carbon::parse($allergie->date)->format('d/m/Y')}}</td>--}}
+                    </tr>
+                @empty
+                    <strong></strong>
+                @endforelse
+                </tbody>
+            </table>
+        @endif
+        @if(count($consultationMedecine->dossier->traitements) >0)
+            <h4 class="sous-titre-rapport--table">Traitement actuel</h4>
+            <table>
+                <thead>
+                <td class="title-table">Description</td>
+                <td class="title-table">Date prescription</td>
+                </thead>
+                <tbody>
+                <tr></tr>
+                @foreach($consultationMedecine->dossier->traitements as $traiement)
+                    @if($loop->last)
+                        <tr>
+                            <td>{{$traiement->description}}</td>
+                            <td>{{\Carbon\Carbon::parse($traiement->created_at)->format('d/m/Y')}}</td>
+                        </tr>
+                    @endif
+                @endforeach
+                </tbody>
+            </table>
+        @endif
         <h4 class="sous-titre-rapport">Parametres</h4>
         @foreach($consultationMedecine->parametresCommun as $parametre)
             @if($loop->first)
@@ -296,11 +302,11 @@
 @endisset
 @if(!is_null($praticiens->user))
     <p><b>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</b></p>
-{{--    @if(!is_null($praticiens->numero_ordre))--}}
-{{--        @if(strlen($praticiens->numero_ordre) > 0)--}}
-{{--            <p>Numéro d'ordre: {{$praticiens->numero_ordre}}</p>--}}
-{{--        @endif--}}
-{{--    @endif--}}
+        @if(!is_null($praticiens->numero_ordre))
+            @if($praticiens->numero_ordre != 'null')
+                <p>Numéro d'ordre: {{$praticiens->numero_ordre}}</p>
+            @endif
+        @endif
 @endif
 
 @if(count($medecins) != 0)
@@ -315,11 +321,11 @@
 
             <p>{{$medecin->civilite}} {{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
 
-{{--            @if(!is_null($medecin->numero_ordre))--}}
-{{--                @if(strlen($medecin->numero_ordre) > 0)--}}
-{{--                    <p>Numéro d'ordre: {{$medecin->numero_ordre}}</p>--}}
-{{--                @endif--}}
-{{--            @endif--}}
+                        @if(!is_null($medecin->numero_ordre))
+                            @if($medecin->numero_ordre != 'null')
+                                <p>Numéro d'ordre: {{$medecin->numero_ordre}}</p>
+                            @endif
+                        @endif
         @endif
     @endforeach
 @endif
