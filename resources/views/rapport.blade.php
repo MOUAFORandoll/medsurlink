@@ -295,7 +295,7 @@
     @endif
 @endisset
 @if(!is_null($praticiens->user))
-    <p>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</p>
+    <p><b>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</b></p>
     @if(!is_null($praticiens->numero_ordre))
         @if(strlen($praticiens->numero_ordre) > 0)
             <p>Numéro d'ordre: {{$praticiens->numero_ordre}}</p>
@@ -323,6 +323,8 @@
         @endif
     @endforeach
 @endif
-<p>Dossier relu et validé par l'équipe Medicasure</p>
+<p>Je vous remercie de m'avoir adressé votre patient(e) et vous adresse mes salutations confraternelles.</p>
+
+<p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
 </body>
 </html>
