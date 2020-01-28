@@ -62,7 +62,7 @@ class ImprimerController extends Controller
         }
         $data = compact('consultationMedecine','signature','medecins','praticiens');
         $pdf = PDF::loadView('rapport',$data);
-        $path = storage_path().'/app/public/pdf/'.'Consultation-generale-'.$consultationMedecine->date_consultation.'.pdf';
+        $path = storage_path().'/app/public/pdf/'.'Generale-'.$consultationMedecine->date_consultation.'.pdf';
 
         $pdf->save($path);
 

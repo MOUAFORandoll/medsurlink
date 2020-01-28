@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,500,500i,600,700,800,900&display=swap" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
- 
+
     <title>Medicalink</title>
     <style>
-            body {
+        body {
             font-size: 0.9em;
             line-height: 1.2;
             font-family: 'Montserrat', sans-serif;
@@ -35,11 +35,11 @@
         th {
             border: 1px solid #dee2e6;
             padding: 0.5em;
-            
+
         }
 
         th{
-            font-weight:700; 
+            font-weight:700;
         }
 
         table {
@@ -49,7 +49,7 @@
             text-align: center;
             text-transform: uppercase;
             color:#00ada7;
-            font-weight: 900;  
+            font-weight: 900;
         }
         .sous-titre-rapport {
             text-transform: uppercase;
@@ -63,54 +63,54 @@
             width:60%;
             height:0.5px;
             font-weight: 600;
-            background-color:#dee2e6;       
-           /* margin:0 auto;*/
+            background-color:#dee2e6;
+            /* margin:0 auto;*/
             margin-top:3em;
         }
 
         .logo-rapport{
-            width:150px; 
+            width:150px;
             heigth: auto;
         }
 
         .rapport-logo-wrapper{
-            margin-left:43%; 
-                    
+            margin-left:43%;
+
         }
-       .title-table{
-           font-weight : 600;
-            
-       }
-       .sous-titre-rapport--table{
-        text-transform: uppercase;
+        .title-table{
+            font-weight : 600;
+
+        }
+        .sous-titre-rapport--table{
+            text-transform: uppercase;
             color:#00ada7;
             font-size:0.8em;
-       }
+        }
     </style>
 </head>
 <body>
 
-@isset($dossier) 
+@isset($dossier)
     <div class="justify-content-center">
         <h2>{{is_null($dossier->patient->user->prenom) ? "" :  $dossier->patient->user->prenom }} {{$dossier->patient->user->nom}}</h2>
         <h3>{{$dossier->patient->date_de_naissance}}</h3>
         <h3>Sexe : {{$dossier->patient->sexe}}</h3>
     </div>
     <div class="justify-content-center"> Allergies Information </div>
-        @forelse($dossier->allergies as $allergie)
-            <table>
-                <thead>
-                <td class="title-table">Description</td>
-                <td class="title-table">Date debut</td>
-                </thead>
-                <tbody>
-                <td>{{$allergie->description}}</td>
-                <td>{{$allergie->date}}</td>
-                </tbody>
-            </table>
-        @empty
-            <p>Aucune allergie</p>
-        @endforelse
+    @forelse($dossier->allergies as $allergie)
+        <table>
+            <thead>
+            <td class="title-table">Description</td>
+            <td class="title-table">Date debut</td>
+            </thead>
+            <tbody>
+            <td>{{$allergie->description}}</td>
+            <td>{{$allergie->date}}</td>
+            </tbody>
+        </table>
+    @empty
+        <p>Aucune allergie</p>
+    @endforelse
 
 @endisset
 
@@ -238,8 +238,8 @@
 
 
         @if(!is_null($consultationMedecine->examen_clinique))
-        <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4>
-        <p>{!!$consultationMedecine->examen_clinique!!}</p>
+            <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4>
+            <p>{!!$consultationMedecine->examen_clinique!!}</p>
 
         @endif
 
@@ -314,7 +314,9 @@
             <p>{{$medecin->civilite}} {{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
 
             @if(!is_null($medecin->numero_ordre))
-                <p>{{$medecin->numero_ordre}}</p>
+                @if(strlen($medecin->numero_ordre) > 0)
+                    <p>Numéro d'ordre: {{$medecin->numero_ordre}}</p>
+                @endif
             @endif
         @endif
     @endforeach
