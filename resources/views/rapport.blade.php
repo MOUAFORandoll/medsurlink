@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,500,500i,600,700,800,900&display=swap" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
 
-    <title>Medicalink</title>
+    <title>Medsurlink</title>
     <style>
         body {
             font-size: 0.9em;
@@ -54,7 +54,7 @@
         .sous-titre-rapport {
             text-transform: uppercase;
             color:#00ada7;
-            font-size:0.8em;
+            /*font-size:0.8em;*/
         }
 
         .sous-titre-rapport::after{
@@ -69,7 +69,7 @@
         }
 
         .logo-rapport{
-            width:150px;
+            width:200px;
             heigth: auto;
         }
 
@@ -126,7 +126,7 @@
                         <img src="{{public_path('/storage/'.$consultationMedecine->etablissement->logo)}}" class="logo-rapport" alt="" />
                     </div>
                 @endif
-                <p style="text-align: center">{{$consultationMedecine->etablissement->name}}</p>
+                <p style="text-align: center"><b>{{$consultationMedecine->etablissement->name}}</b></p>
             </div>
         @endif
         <p class="titre-rapport"><strong>Rapport de consultation</strong></p>
@@ -285,7 +285,7 @@
 
 @isset($resultatImagerie)
 @endisset
-<p style="text-align: right"> Date de création : {{\Carbon\Carbon::parse()->format('d/m/Y')}}</p>
+<p style="text-align: right"> Date de création : <b>{{\Carbon\Carbon::parse()->format('d/m/Y')}}</b></p>
 
 @isset($signature)
     @if(!is_null($signature))
