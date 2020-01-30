@@ -36,6 +36,8 @@ class ConsutationMedecineRequest extends FormRequest
             "profession"=>"sometimes|nullable|string|min:2",
             "situation_familiale"=>"sometimes|nullable|string|min:2",
             "nbre_enfant"=>"sometimes|nullable|string|min:1",
+            "nbreCigarette"=>"sometimes|nullable|string",
+            "nbreAnnee"=>"sometimes|nullable|string",
             "tabac"=>"sometimes|nullable|string",
             "alcool"=>"sometimes|nullable|string",
             "autres"=>"sometimes|nullable|string|min:2",

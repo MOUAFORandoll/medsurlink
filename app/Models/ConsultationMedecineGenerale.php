@@ -58,7 +58,9 @@ class ConsultationMedecineGenerale extends Model
         "alcool",
         "autres",
         "etablissement_id",
-        "file"
+        "file",
+        "nbreCigarette",
+        "nbreAnnee",
     ];
 
     public function dossier(){
