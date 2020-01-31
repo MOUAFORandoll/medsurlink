@@ -74,7 +74,7 @@
         }
 
         .rapport-logo-wrapper{
-            margin-left:43%;
+            margin-left:39%;
 
         }
         .title-table{
@@ -135,7 +135,7 @@
         <p class="titre-rapport"><strong>Rapport de consultation</strong></p>
         <br>
         <p>Honorée Consoeur, Honorée Confrère,</p>
-        <p>J'ai vue en date du <strong>{{\Carbon\Carbon::parse($consultationMedecine->date_consultation)->format('d/m/Y')}}</strong>, pour une consultation de<b> médecine générale</b>, votre patient(e)
+        <p>J'ai vu en date du <strong>{{\Carbon\Carbon::parse($consultationMedecine->date_consultation)->format('d/m/Y')}}</strong>, pour une consultation de<b> médecine générale</b>, votre patient(e)
             <strong>{{$consultationMedecine->dossier->patient->user->nom}}</strong> né(e) le <strong>{{\Carbon\Carbon::parse($consultationMedecine->dossier->patient->date_de_naissance)->format('d/m/Y')}}</strong>
             pour:
             @forelse($consultationMedecine->motifs as $motif)
@@ -143,7 +143,7 @@
             @empty
                 <strong></strong>
             @endforelse
-        </p>
+        </p>.
 
         <h4 class="sous-titre-rapport">Motif(s) de Consultation</h4>
         @forelse($consultationMedecine->motifs as $motif)
@@ -226,25 +226,39 @@
             </table>
         @endif
         <h4 class="sous-titre-rapport">Parametres</h4>
-        @foreach($consultationMedecine->parametresCommun as $parametre)
-            @if($loop->first)
-                <p>Poids (kg) : {{$parametre->poids}} </p>
-                <p>Taille (cm): {{$parametre->taille}}</p>
-                <p>Bmi (kg/m²): {{$parametre->bmi}}</p>
-                <p>TA Systolique (mmHg) : {{$parametre->ta_systolique}}</p>
-                <p>TA Diastolique (mmHg) : {{$parametre->ta_diastolique}}</p>
-                <p>Température (°C): {{$parametre->temperature}}</p>
-                <p>Fréquence cardiaque (bpm) : {{$parametre->frequence_cardiaque}}</p>
-                <p>Fréquence respiratoire (cpm) : {{$parametre->frequence_respiratoire}}</p>
-                <p>sato2 (%) : {{$parametre->sato2}}</p>
-            @endif
+        @if(count($consultationMedecine->parametresCommun)>=1))
+            @foreach($consultationMedecine->parametresCommun as $parametre)
+                @if($loop->first)
+                    <p>Poids (kg) : {{$parametre->poids}} </p>
+                    <p>Taille (cm): {{$parametre->taille}}</p>
+                    <p>Bmi (kg/m²): {{$parametre->bmi}}</p>
+                    <p>TA Systolique (mmHg) : {{$parametre->ta_systolique}}</p>
+                    <p>TA Diastolique (mmHg) : {{$parametre->ta_diastolique}}</p>
+                    <p>Température (°C): {{$parametre->temperature}}</p>
+                    <p>Fréquence cardiaque (bpm) : {{$parametre->frequence_cardiaque}}</p>
+                    <p>Fréquence respiratoire (cpm) : {{$parametre->frequence_respiratoire}}</p>
+                    <p>sato2 (%) : {{$parametre->sato2}}</p>
+                @endif
 
 
-        @endforeach
+            @endforeach
+        @else
+                <p>Poids (kg) :</p>
+                <p>Taille (cm): </p>
+                <p>Bmi (kg/m²):</p>
+                <p>TA Systolique (mmHg) :</p>
+                <p>TA Diastolique (mmHg) : </p>
+                <p>Température (°C):</p>
+                <p>Fréquence cardiaque (bpm) : </p>
+                <p>Fréquence respiratoire (cpm) : </p>
+                <p>sato2 (%) : </p>
+        @endif
+
+
 
 
         @if(!is_null($consultationMedecine->examen_clinique) )
-            <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4>
+            <h4 class="sous-titre-rapport">Examen clinique</h4>
             @if($consultationMedecine->examen_clinique != 'null')
                 <p>{!!$consultationMedecine->examen_clinique!!}</p>
             @endif
