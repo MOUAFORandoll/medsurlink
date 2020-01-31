@@ -55,6 +55,9 @@ class MedecinControleController extends Controller
             return  response()->json(['error'=>$request->all()['error']],419);
         }
 
+        $etablissements = $request->get('etablissements');
+        $etablissements = explode(",",$etablissements);
+
         //Création des informations utilisateurs
         $userResponse =  UserController::generatedUser($request);
 
@@ -63,6 +66,7 @@ class MedecinControleController extends Controller
         $user->assignRole('Medecin controle');
 
         $medecin = MedecinControle::create($request->validated() + ['user_id' => $user->id]);
+
         if($request->hasFile('signature')) {
             if ($request->file('signature')->isValid()) {
                 $path = $request->signature->store('public/Medecin/' . $medecin->slug . '/Signature');
@@ -75,6 +79,12 @@ class MedecinControleController extends Controller
         }
         defineAsAuthor("MedecinControle",$medecin->user_id,'create');
 
+        //Ajout des établissements
+        foreach ($etablissements as $etablissement){
+            $medecin->etablissements()->attach($etablissement);
+            defineAsAuthor("MedecinControle",$medecin->user_id,'Add etablissement '.$etablissement);
+
+        }
         //envoi des informations du compte utilisateurs par mail
         try{
             UserController::sendUserInformationViaMail($user,$password);

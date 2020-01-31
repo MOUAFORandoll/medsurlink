@@ -243,15 +243,18 @@
         @endforeach
 
 
-        @if(!is_null($consultationMedecine->examen_clinique))
+        @if(!is_null($consultationMedecine->examen_clinique) )
             <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4>
-            <p>{!!$consultationMedecine->examen_clinique!!}</p>
-
+            @if($consultationMedecine->examen_clinique != 'null')
+                <p>{!!$consultationMedecine->examen_clinique!!}</p>
+            @endif
         @endif
 
         @if(!is_null($consultationMedecine->examen_complementaire))
             <h4 class="sous-titre-rapport">Examen(s) complémentaire(s)</h4>
-            <p>{!!$consultationMedecine->examen_complementaire!!}</p>
+            @if($consultationMedecine->examen_complementaire != 'null')
+                <p>{!!$consultationMedecine->examen_complementaire!!}</p>
+            @endif
         @endif
 
 
@@ -263,24 +266,17 @@
         @endif
 
 
-        @if($consultationMedecine->traitement_propose)
+        @if(strlen($consultationMedecine->traitement_propose)>0)
             <h4 class="sous-titre-rapport">Conduite à tenir</h4>
-            <p>{!! $consultationMedecine->traitement_propose !!}</p>
-            @if(count($medecins) != 0)
-                <h4>Medecin ayant vérifié votre consultation</h4>
-                @foreach($medecins as $medecin)
-                    @if(!is_null($medecin->user))
-                        <p>{{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
-                    @endif
-                @endforeach
+            @if($consultationMedecine->traitement_propose != 'null')
+                <p>{!! $consultationMedecine->traitement_propose !!}</p>
             @endif
+        @endif
 
-
-            @if(!is_null($consultationMedecine->file))
-                <p>Consultter la pièce jointe
-                    <a href="{{public_path('storage/')}}{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a>
-                </p>
-            @endif
+        @if(!is_null($consultationMedecine->file) && $consultationMedecine->file != 'null')
+            <p>Consultter la pièce jointe
+                <a href="{{public_path('storage/')}}{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a>
+            </p>
         @endif
     </div>
 
@@ -291,46 +287,50 @@
 
 @isset($resultatImagerie)
 @endisset
-<p style="text-align: right"> Date de création : <b>{{\Carbon\Carbon::parse()->format('d/m/Y')}}</b></p>
 
-@isset($signature)
-    @if(!is_null($signature))
-        <div>
-            <img  style="float: right" width="300px" height="300px" src={{public_path('/storage/'.$signature)}} />
-        </div>
-    @endif
-@endisset
-@if(!is_null($praticiens->user))
-    <p><b>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</b></p>
-        @if(!is_null($praticiens->numero_ordre))
-            @if($praticiens->numero_ordre != 'null')
-                <p>Numéro d'ordre: {{$praticiens->numero_ordre}}</p>
-            @endif
-        @endif
-@endif
+
+<p>Je vous remercie de m'avoir adressé votre patient(e) et vous adresse mes salutations confraternelles.</p>
+
+<p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
 
 @if(count($medecins) != 0)
-
+    <h4>Medecin ayant vérifié votre consultation</h4>
     @foreach($medecins as $medecin)
         @if(!is_null($medecin->user))
             @if(!is_null($medecin->signature))
                 <div>
-                    <img width="300px" height="300px" src={{public_path('/storage/'.$medecin->signature)}} />
+                    <img width="300px" height="auto" src={{public_path('/storage/'.$medecin->signature)}} />
                 </div>
             @endif
 
             <p>{{$medecin->civilite}} {{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
 
-                        @if(!is_null($medecin->numero_ordre))
-                            @if($medecin->numero_ordre != 'null')
-                                <p>Numéro d'ordre: {{$medecin->numero_ordre}}</p>
-                            @endif
-                        @endif
+            @if(!is_null($medecin->numero_ordre))
+                @if($medecin->numero_ordre != 'null' && strlen($medecin->numero_ordre ) >0)
+                    <p>Numéro d'ordre: {{$medecin->numero_ordre}}</p>
+                @endif
+            @endif
         @endif
     @endforeach
 @endif
-<p>Je vous remercie de m'avoir adressé votre patient(e) et vous adresse mes salutations confraternelles.</p>
 
-<p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
+<p style="text-align: right"> Date de création : <b>{{\Carbon\Carbon::parse()->format('d/m/Y')}}</b></p>
+
+@isset($signature)
+    @if(!is_null($signature))
+        <div>
+            <img  style="float: right" width="300px" height="auto" src={{public_path('/storage/'.$signature)}} />
+        </div>
+    @endif
+@endisset
+
+@if(!is_null($praticiens->user))
+    <p><b>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</b></p>
+    @if(!is_null($praticiens->numero_ordre))
+        @if($praticiens->numero_ordre != 'null' && strlen($praticiens->numero_ordre ) >0)
+            <p>Numéro d'ordre: {{$praticiens->numero_ordre}}</p>
+        @endif
+    @endif
+@endif
 </body>
 </html>
