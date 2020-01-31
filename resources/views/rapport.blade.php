@@ -313,17 +313,6 @@
         @endif
     @endforeach
 @endif
-
-<p style="text-align: right"> Date de création : <b>{{\Carbon\Carbon::parse()->format('d/m/Y')}}</b></p>
-
-@isset($signature)
-    @if(!is_null($signature))
-        <div>
-            <img  style="float: right" width="300px" height="auto" src={{public_path('/storage/'.$signature)}} />
-        </div>
-    @endif
-@endisset
-
 @if(!is_null($praticiens->user))
     <p><b>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</b></p>
     @if(!is_null($praticiens->numero_ordre))
@@ -332,5 +321,17 @@
         @endif
     @endif
 @endif
+
+<p style="text-align: right"> Date de création : <b>{{\Carbon\Carbon::parse()->format('d/m/Y')}}</b></p>
+
+@isset($signature)
+    @if(!is_null($signature) && strlen($signature)>0)
+        <div>
+            <img  style="float: right" width="300px" height="auto" src={{public_path('/storage/'.$signature)}} />
+        </div>
+    @endif
+@endisset
+
+
 </body>
 </html>
