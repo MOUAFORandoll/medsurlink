@@ -86,6 +86,43 @@
             color:#00ada7;
             font-size:0.8em;
         }
+        /* DivTable.com */
+        .divTable {
+            display: table;
+            width: 100%;
+        }
+
+        .divTableRow {
+            display: table-row;
+        }
+
+        .divTableHeading {
+            /*background-color: #eee;*/
+            display: table-header-group;
+        }
+
+        .divTableCell,
+        .divTableHead {
+            /*border: 1px solid #999999;*/
+            display: table-cell;
+            padding: 3px 10px;
+        }
+
+        .divTableHeading {
+            /*background-color: #eee;*/
+            display: table-header-group;
+            font-weight: bold;
+        }
+
+        .divTableFoot {
+            /*background-color: #eee;*/
+            display: table-footer-group;
+            font-weight: bold;
+        }
+
+        .divTableBody {
+            display: table-row-group;
+        }
     </style>
 </head>
 <body>
@@ -165,45 +202,64 @@
 
         @if(count($consultationMedecine->dossier->antecedents) >0)
             <h4 class="sous-titre-rapport--table">Antédédents</h4>
-            <table>
-                <thead>
-                <td class="title-table">Type</td>
-                <td class="title-table">Description</td>
-                <td class="title-table">Date debut</td>
-                </thead>
-                <tbody>
-                <tr></tr>
-                @forelse($consultationMedecine->dossier->antecedents as $antecedent)
-                    <tr>
-                        <td>{{$antecedent->type}}</td>
-                        <td>{{$antecedent->description}}</td>
-                        <td>{{\Carbon\Carbon::parse($antecedent->date)->format('d/m/Y')}}</td>
-                    </tr>
-                @empty
-                    <strong></strong>
-                @endforelse
-                </tbody>
-            </table>
+            <div class="divTable">
+                <div class="divTableBody">
+                    <div class="divTableRow">
+
+                        <div class="divTableCell">
+                            <table>
+                                <thead>
+                                <td class="title-table">Type</td>
+                                <td class="title-table">Description</td>
+                                <td class="title-table">Date debut</td>
+                                </thead>
+                                <tbody>
+                                <tr></tr>
+                                @forelse($consultationMedecine->dossier->antecedents as $antecedent)
+                                    <tr>
+                                        <td>{{$antecedent->type}}</td>
+                                        <td>{{$antecedent->description}}</td>
+                                        <td>{{\Carbon\Carbon::parse($antecedent->date)->format('d/m/Y')}}</td>
+                                    </tr>
+                                @empty
+                                    <strong></strong>
+                                @endforelse
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endif
         @if(count($consultationMedecine->dossier->allergies)>0)
             <h4 class="sous-titre-rapport--table">Allergies</h4>
-            <table>
-                <thead>
-                <td class="title-table">Description</td>
-                {{--            <td>Date debut</td>--}}
-                </thead>
-                <tbody>
-                <tr></tr>
-                @forelse($consultationMedecine->dossier->allergies as $allergie)
-                    <tr>
-                        <td>{{$allergie->description}}</td>
-                        {{--                    <td>{{\Carbon\Carbon::parse($allergie->date)->format('d/m/Y')}}</td>--}}
-                    </tr>
-                @empty
-                    <strong></strong>
-                @endforelse
-                </tbody>
-            </table>
+            <div class="divTable">
+                <div class="divTableBody">
+                    <div class="divTableRow">
+
+                        <div class="divTableCell">
+                            <table>
+                                <thead>
+                                <td class="title-table">Description</td>
+                                {{--            <td>Date debut</td>--}}
+                                </thead>
+                                <tbody>
+                                <tr></tr>
+                                @forelse($consultationMedecine->dossier->allergies as $allergie)
+                                    <tr>
+                                        <td>{{$allergie->description}}</td>
+                                        {{--                    <td>{{\Carbon\Carbon::parse($allergie->date)->format('d/m/Y')}}</td>--}}
+                                    </tr>
+                                @empty
+                                    <strong></strong>
+                                @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endif
         @if(count($consultationMedecine->dossier->traitements) >0)
             <h4 class="sous-titre-rapport--table">Traitement actuel</h4>
@@ -227,31 +283,31 @@
         @endif
         <h4 class="sous-titre-rapport">Parametres</h4>
         @if(count($consultationMedecine->parametresCommun)>=1))
-            @foreach($consultationMedecine->parametresCommun as $parametre)
-                @if($loop->first)
-                    <p>Poids (kg) : {{$parametre->poids}} </p>
-                    <p>Taille (cm): {{$parametre->taille}}</p>
-                    <p>Bmi (kg/m²): {{$parametre->bmi}}</p>
-                    <p>TA Systolique (mmHg) : {{$parametre->ta_systolique}}</p>
-                    <p>TA Diastolique (mmHg) : {{$parametre->ta_diastolique}}</p>
-                    <p>Température (°C): {{$parametre->temperature}}</p>
-                    <p>Fréquence cardiaque (bpm) : {{$parametre->frequence_cardiaque}}</p>
-                    <p>Fréquence respiratoire (cpm) : {{$parametre->frequence_respiratoire}}</p>
-                    <p>sato2 (%) : {{$parametre->sato2}}</p>
-                @endif
+        @foreach($consultationMedecine->parametresCommun as $parametre)
+            @if($loop->first)
+                <p>Poids (kg) : {{$parametre->poids}} </p>
+                <p>Taille (cm): {{$parametre->taille}}</p>
+                <p>Bmi (kg/m²): {{$parametre->bmi}}</p>
+                <p>TA Systolique (mmHg) : {{$parametre->ta_systolique}}</p>
+                <p>TA Diastolique (mmHg) : {{$parametre->ta_diastolique}}</p>
+                <p>Température (°C): {{$parametre->temperature}}</p>
+                <p>Fréquence cardiaque (bpm) : {{$parametre->frequence_cardiaque}}</p>
+                <p>Fréquence respiratoire (cpm) : {{$parametre->frequence_respiratoire}}</p>
+                <p>sato2 (%) : {{$parametre->sato2}}</p>
+            @endif
 
 
-            @endforeach
+        @endforeach
         @else
-                <p>Poids (kg) :</p>
-                <p>Taille (cm): </p>
-                <p>Bmi (kg/m²):</p>
-                <p>TA Systolique (mmHg) :</p>
-                <p>TA Diastolique (mmHg) : </p>
-                <p>Température (°C):</p>
-                <p>Fréquence cardiaque (bpm) : </p>
-                <p>Fréquence respiratoire (cpm) : </p>
-                <p>sato2 (%) : </p>
+            <p>Poids (kg) :</p>
+            <p>Taille (cm): </p>
+            <p>Bmi (kg/m²):</p>
+            <p>TA Systolique (mmHg) :</p>
+            <p>TA Diastolique (mmHg) : </p>
+            <p>Température (°C):</p>
+            <p>Fréquence cardiaque (bpm) : </p>
+            <p>Fréquence respiratoire (cpm) : </p>
+            <p>sato2 (%) : </p>
         @endif
 
 
