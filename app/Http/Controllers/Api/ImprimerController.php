@@ -47,6 +47,10 @@ class ImprimerController extends Controller
                 $praticien = Praticien::with('user')->find($auteur->auteurable_id);
                 $praticiens = $praticien;
                 $signature = $praticien->signature;
+            }else if($auteur->auteurable_type == 'Medecin controle') {
+                $medecin = MedecinControle::with('user')->find($auteur->auteurable_id);
+                $praticiens = $medecin;
+                $signature = $medecin->signature;
             }
         }
         foreach ($updateAuteurs as $item){
