@@ -196,7 +196,7 @@
         <p class="ml-5">Profession : <strong>{{$consultationMedecine->profession}}</strong></p>
         <p class="ml-5">Situation familiale : <strong>{{$consultationMedecine->situation_familiale}}</strong></p>
         <p class="ml-5">Nombre d'enfants : <strong>{{$consultationMedecine->nbre_enfant}}</strong></p>
-        <p class="ml-5">Tabac : <strong>{{$consultationMedecine->tabac}}</strong></p>
+        <p class="ml-5">Tabac : <strong>{{$consultationMedecine->tabac}} </strong> UPA</p>
         <p class="ml-5">Alcool : <strong>{{$consultationMedecine->alcool}}</strong></p>
         <p class="ml-5">Autres : <strong>{!! $consultationMedecine->autres !!}</strong></p>
 
