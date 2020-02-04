@@ -345,7 +345,7 @@
 
         @if(!is_null($consultationMedecine->file) && $consultationMedecine->file != 'null')
             <p>Consulter la pièce jointe
-                <a href="{{public_path('storage/')}}{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a>
+                <a href="{{config('app.url')}}/public/storage/{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a>
             </p>
         @endif
     </div>
