@@ -196,7 +196,7 @@
         <p class="ml-5">Profession : <strong>{{$consultationMedecine->profession}}</strong></p>
         <p class="ml-5">Situation familiale : <strong>{{$consultationMedecine->situation_familiale}}</strong></p>
         <p class="ml-5">Nombre d'enfants : <strong>{{$consultationMedecine->nbre_enfant}}</strong></p>
-        <p class="ml-5">Tabac : <strong>{{$consultationMedecine->tabac}} </strong> UPA</p>
+        <p class="ml-5">Tabac : <strong>{{$consultationMedecine->tabac}} UPA</strong></p>
         <p class="ml-5">Alcool : <strong>{{$consultationMedecine->alcool}}</strong></p>
         <p class="ml-5">Autres : <strong>{!! $consultationMedecine->autres !!}</strong></p>
 
@@ -282,18 +282,18 @@
             </table>
         @endif
         <h4 class="sous-titre-rapport">Parametres</h4>
-        @if(count($consultationMedecine->parametresCommun)>=1))
+        @if(count($consultationMedecine->parametresCommun)>=1)
         @foreach($consultationMedecine->parametresCommun as $parametre)
             @if($loop->first)
-                <p>Poids (kg) : {{$parametre->poids}} </p>
-                <p>Taille (cm): {{$parametre->taille}}</p>
-                <p>Bmi (kg/m²): {{$parametre->bmi}}</p>
-                <p>TA Systolique (mmHg) : {{$parametre->ta_systolique}}</p>
-                <p>TA Diastolique (mmHg) : {{$parametre->ta_diastolique}}</p>
-                <p>Température (°C): {{$parametre->temperature}}</p>
-                <p>Fréquence cardiaque (bpm) : {{$parametre->frequence_cardiaque}}</p>
-                <p>Fréquence respiratoire (cpm) : {{$parametre->frequence_respiratoire}}</p>
-                <p>sato2 (%) : {{$parametre->sato2}}</p>
+                <p>Poids (kg) : <strong>{{$parametre->poids}}</strong> </p>
+                <p>Taille (cm): <strong>{{$parametre->taille}}</strong></p>
+                <p>Bmi (kg/m²): <strong>{{$parametre->bmi}}</strong></p>
+                <p>TA Systolique (mmHg) : <strong>{{$parametre->ta_systolique}}</strong></p>
+                <p>TA Diastolique (mmHg) : <strong>{{$parametre->ta_diastolique}}</strong></p>
+                <p>Température (°C): <strong>{{$parametre->temperature}}</strong></p>
+                <p>Fréquence cardiaque (bpm) : <strong>{{$parametre->frequence_cardiaque}}</strong></p>
+                <p>Fréquence respiratoire (cpm) : <strong>{{$parametre->frequence_respiratoire}}</strong></p>
+                <p>sato2 (%) : <strong>{{$parametre->sato2}}</strong></p>
             @endif
 
 
@@ -344,7 +344,7 @@
         @endif
 
         @if(!is_null($consultationMedecine->file) && $consultationMedecine->file != 'null')
-            <p>Consultter la pièce jointe
+            <p>Consulter la pièce jointe
                 <a href="{{public_path('storage/')}}{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a>
             </p>
         @endif
