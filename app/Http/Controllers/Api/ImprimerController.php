@@ -68,14 +68,14 @@ class ImprimerController extends Controller
         $pdf = PDF::loadView('rapport',$data);
 
         $nom  = ucfirst($consultationMedecine->dossier->patient->user->nom);
-        $prenom  = ucfirst($consultationMedecine->dossier->patient->user->prenom);
+        $prenom = is_null($consultationMedecine->dossier->patient->user->prenom) ? '' :$consultationMedecine->dossier->patient->user->prenom;
+        $prenom  = ucfirst($prenom);
         $date= $consultationMedecine->date_consultation;
 
-        $path = storage_path().'/app/public/pdf/'.'Generale_'.$nom.' '.$prenom.'_'.$date.'.pdf';
-
+        $path = storage_path().'/app/public/pdf/'.'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
         $pdf->save($path);
 
-        return  response()->json(['name'=>'Generale_'.$nom.' '.$prenom.'_'.$date.'.pdf']);
+        return  response()->json(['name'=>'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
     }
 
     public function obstetrique($slug){
