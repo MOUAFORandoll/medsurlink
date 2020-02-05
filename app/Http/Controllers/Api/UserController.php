@@ -302,4 +302,47 @@ class UserController extends Controller
 
         return \response()->json(['user'=>$user]);
     }
+
+    public function updatePassword(Request $request){
+        $validation =   Validator::make($request->all(),[
+            'user'=>'required',
+            'password' => 'required|confirmed|min:8',
+        ]);
+        if ($validation->fails()){
+            return \response()->json(['error'=>$validation->errors()->getMessages()],419);
+        }
+
+        $user = User::findBySlug($request->user);
+
+        $password = $request->password;
+        $users = User::whereEmail($user->email)->get();
+        if (count($users) >1){
+            foreach ($users as $item){
+                if (Hash::check($password,$item->password)){
+                    $usePassword = [];
+                    $usePassword['password'][0] = 'Password already used. Please use another password';
+                    return \response()->json(['error'=>$usePassword],419);
+                }
+            }
+        }
+
+        $user->password = Hash::make($password);
+
+        $user->setRememberToken(Str::random(60));
+
+        $user->save();
+
+        try{
+            $mail = new updateSetting($user);
+
+            Mail::to($user->email)->send($mail);
+
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(["message"=>$message]);
+
+        }
+
+        return \response()->json(['user'=>$user]);
+    }
 }
