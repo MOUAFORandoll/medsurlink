@@ -156,17 +156,17 @@ class ConsultationMedecineGeneraleController extends Controller
                 $patient = $consultation->dossier->patient;
 
                 //Enregistement des contributeurs
-                $contributeurs = $request->get('contributeurs');
-                $contributeurs = explode(",",$contributeurs);
-                if (!is_null($contributeurs)){
-                    foreach ($contributeurs as $contributeur){
-                        $nouveauContributeur = Contributeurs::create([
-                            'contributable_id'=>$contributeur,
-                            'contributable_type'=>'App\User'
-                        ]);
-                        defineAsAuthor("Consultation",$nouveauContributeur->id,'Ajout contributeur',$consultation->dossier->patient->user_id);
-                    }
-                }
+//                $contributeurs = $request->get('contributeurs');
+//                $contributeurs = explode(",",$contributeurs);
+//                if (!is_null($contributeurs)){
+//                    foreach ($contributeurs as $contributeur){
+//                        $nouveauContributeur = Contributeurs::create([
+//                            'contributable_id'=>$contributeur,
+//                            'contributable_type'=>'App\User'
+//                        ]);
+//                        defineAsAuthor("Consultation",$nouveauContributeur->id,'Ajout contributeur',$consultation->dossier->patient->user_id);
+//                    }
+//                }
 
                 //Je verifie si ce patient n'est pas encore dans cette etablissement
                 $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissement)->where('patient_id','=',$patient->user_id)->count();
@@ -280,17 +280,17 @@ class ConsultationMedecineGeneraleController extends Controller
 
             //Enregistement des contributeurs
 
-            $contributeurs = $request->get('contributeurs');
-            $contributeurs = explode(",",$contributeurs);
-            if (!is_null($contributeurs)){
-                foreach ($contributeurs as $contributeur){
-                    $nouveauContributeur = Contributeurs::create([
-                        'contributable_id'=>$contributeur,
-                        'contributable_type'=>'App\User'
-                    ]);
-                    defineAsAuthor("Consultation",$nouveauContributeur->id,'Ajout contributeur',$consultation->dossier->patient->user_id);
-                }
-            }
+//            $contributeurs = $request->get('contributeurs');
+//            $contributeurs = explode(",",$contributeurs);
+//            if (!is_null($contributeurs)){
+//                foreach ($contributeurs as $contributeur){
+//                    $nouveauContributeur = Contributeurs::create([
+//                        'contributable_id'=>$contributeur,
+//                        'contributable_type'=>'App\User'
+//                    ]);
+//                    defineAsAuthor("Consultation",$nouveauContributeur->id,'Ajout contributeur',$consultation->dossier->patient->user_id);
+//                }
+//            }
 
             //Je verifie si ce patient n'est pas encore dans cette etablissement
             $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissement)->where('patient_id','=',$patient->user_id)->count();
