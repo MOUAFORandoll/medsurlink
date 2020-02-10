@@ -364,7 +364,7 @@
 <p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
 
 @if(count($medecins) != 0)
-    <h4>Medecin ayant vérifié votre consultation</h4>
+    <h4>Medecin(s) ayant revisité(s) votre consultation</h4>
     @foreach($medecins as $medecin)
         @if(!is_null($medecin->user))
             @if(!is_null($medecin->signature))

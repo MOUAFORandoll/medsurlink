@@ -8,6 +8,7 @@ use App\Http\Requests\ConsutationMedecineRequest;
 use App\Models\Antecedent;
 use App\Models\Conclusion;
 use App\Models\ConsultationMedecineGenerale;
+use App\Models\Contributeurs;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePatient;
 use App\Models\Motif;
@@ -17,6 +18,7 @@ use App\Models\Traitement;
 use App\Models\TraitementActuel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
 
@@ -33,7 +35,7 @@ class ConsultationMedecineGeneraleController extends Controller
     public function index()
     {
 
-        $consultations = ConsultationMedecineGenerale::with(['dossier','etablissement','motifs','traitements','conclusions','parametresCommun'])->orderByDateConsultation()->get();
+        $consultations = ConsultationMedecineGenerale::with(['contributeurs','dossier','etablissement','motifs','traitements','conclusions','parametresCommun'])->orderByDateConsultation()->get();
 
         foreach ($consultations as $consultation){
             $consultation->updateConsultationMedecine();
@@ -137,7 +139,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
                 defineAsAuthor("ParametreCommun",$parametreCommun->id,'create',$parametreCommun->consultation->dossier->patient->user_id);
 
-//        Insertion de traitement actuel
+                //Insertion de traitement actuel
                 $traitementsACreer = $request->get('traitements');
                 if (!is_null($traitementsACreer))
                 {
@@ -152,6 +154,19 @@ class ConsultationMedecineGeneraleController extends Controller
                 //Association de patient à l'etablissement
                 $etablissement = EtablissementExercice::find($request->get('etablissement_id'));
                 $patient = $consultation->dossier->patient;
+
+                //Enregistement des contributeurs
+                $contributeurs = $request->get('contributeurs');
+                $contributeurs = explode(",",$contributeurs);
+                if (!is_null($contributeurs)){
+                    foreach ($contributeurs as $contributeur){
+                        $nouveauContributeur = Contributeurs::create([
+                            'contributable_id'=>$contributeur,
+                            'contributable_type'=>'App\User'
+                        ]);
+                        defineAsAuthor("Consultation",$nouveauContributeur->id,'Ajout contributeur',$consultation->dossier->patient->user_id);
+                    }
+                }
 
                 //Je verifie si ce patient n'est pas encore dans cette etablissement
                 $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissement)->where('patient_id','=',$patient->user_id)->count();
@@ -263,6 +278,20 @@ class ConsultationMedecineGeneraleController extends Controller
             $etablissement = EtablissementExercice::find($request->get('etablissement_id'));
             $patient = $consultation->dossier->patient;
 
+            //Enregistement des contributeurs
+
+            $contributeurs = $request->get('contributeurs');
+            $contributeurs = explode(",",$contributeurs);
+            if (!is_null($contributeurs)){
+                foreach ($contributeurs as $contributeur){
+                    $nouveauContributeur = Contributeurs::create([
+                        'contributable_id'=>$contributeur,
+                        'contributable_type'=>'App\User'
+                    ]);
+                    defineAsAuthor("Consultation",$nouveauContributeur->id,'Ajout contributeur',$consultation->dossier->patient->user_id);
+                }
+            }
+
             //Je verifie si ce patient n'est pas encore dans cette etablissement
             $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissement)->where('patient_id','=',$patient->user_id)->count();
             if ($nbre ==0){
@@ -293,6 +322,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $this->validatedSlug($slug,$this->table);
 
         $consultation = ConsultationMedecineGenerale::with([
+            'contributeurs',
             'dossier',
             'dossier.allergies',
             'dossier.antecedents',

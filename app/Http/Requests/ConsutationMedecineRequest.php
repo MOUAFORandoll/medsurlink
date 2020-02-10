@@ -58,6 +58,7 @@ class ConsutationMedecineRequest extends FormRequest
             $rules["frequence_respiratoire"]="sometimes|nullable|numeric";
             $rules["sato2"]="sometimes|nullable|numeric";
             $rules["traitements"]="sometimes|nullable|string|min:2";
+            $rules["contributeurs.*"] = "sometimes|nullable|integer";
 
         }
 
