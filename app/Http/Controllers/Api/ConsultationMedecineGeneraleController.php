@@ -35,7 +35,7 @@ class ConsultationMedecineGeneraleController extends Controller
     public function index()
     {
 
-        $consultations = ConsultationMedecineGenerale::with(['contributeurs','dossier','etablissement','motifs','traitements','conclusions','parametresCommun'])->orderByDateConsultation()->get();
+        $consultations = ConsultationMedecineGenerale::with(['dossier','etablissement','motifs','traitements','conclusions','parametresCommun'])->orderByDateConsultation()->get();
 
         foreach ($consultations as $consultation){
             $consultation->updateConsultationMedecine();
@@ -322,7 +322,6 @@ class ConsultationMedecineGeneraleController extends Controller
         $this->validatedSlug($slug,$this->table);
 
         $consultation = ConsultationMedecineGenerale::with([
-            'contributeurs',
             'dossier',
             'dossier.allergies',
             'dossier.antecedents',
