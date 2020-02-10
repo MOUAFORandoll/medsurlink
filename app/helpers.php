@@ -161,7 +161,7 @@ if (!function_exists('checkIfCanUpdate')){
             $role = getAuthorRole($operationable_type,$operationable_id,$action);
             $isAuthor = checkIfIsAuthorOrIsAuthorized($operationable_type, $operationable_id, $action);
             if($isAuthor->getOriginalContent() == false){
-                if ($role == 'Praticien' && $user->getRoleNames()->first() == 'Medecin controle' ){
+                if (($role == 'Praticien' && $user->getRoleNames()->first() == 'Medecin controle') || ($role == 'Medecin controle') ){
                     $nbre = 1;
                 }
             }else{

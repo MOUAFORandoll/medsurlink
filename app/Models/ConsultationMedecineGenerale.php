@@ -136,4 +136,8 @@ class ConsultationMedecineGenerale extends Model
     {
         return $query->orderBy('date_consultation', 'desc');
     }
+
+    public function contributeurs(){
+         return $this->morphMany(Contributeurs::class,'contributable');
+    }
 }
