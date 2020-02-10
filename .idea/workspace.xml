@@ -2,15 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/helpers.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/rapport.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -508,7 +501,8 @@
       <workItem from="1580888416104" duration="3613000" />
       <workItem from="1580977289626" duration="8599000" />
       <workItem from="1581003822092" duration="1636000" />
-      <workItem from="1581321111112" duration="2601000" />
+      <workItem from="1581321111112" duration="3219000" />
+      <workItem from="1581328509139" duration="850000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -621,9 +615,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1580398686859" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1581001512175">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1581328514525">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1581001512175" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1581328514525" />
   </component>
 </project>
