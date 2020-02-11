@@ -2,8 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ImprimerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ImprimerController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ConsutationMedecineRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2020_02_06_132647_create_contributeurs_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2020_02_06_132647_create_contributeurs_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/rapport.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +49,13 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="medecin_controles: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -502,7 +516,9 @@
       <workItem from="1580977289626" duration="8599000" />
       <workItem from="1581003822092" duration="1636000" />
       <workItem from="1581321111112" duration="3219000" />
-      <workItem from="1581328509139" duration="2336000" />
+      <workItem from="1581328509139" duration="7854000" />
+      <workItem from="1581407799818" duration="2950000" />
+      <workItem from="1581411401769" duration="3539000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -543,10 +559,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1577360343156" />
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1580996325368">
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1581338183910">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1580996325368" />
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1581338183910" />
     <state x="308" y="0" key="CommitChangelistDialog2" timestamp="1575882019741">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -611,13 +627,13 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="289" y="155" key="git4idea.merge.GitPullDialog/0.0.1366.728@0.0.1366.728" timestamp="1575881922263" />
-    <state x="339" y="162" key="run.anything.popup" timestamp="1580398686859">
+    <state x="339" y="162" key="run.anything.popup" timestamp="1581413807074">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1580398686859" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1581328514525">
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1581413807074" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1581410282978">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1581328514525" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1581410282978" />
   </component>
 </project>

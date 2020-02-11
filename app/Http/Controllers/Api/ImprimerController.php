@@ -34,7 +34,7 @@ class ImprimerController extends Controller
     public function generale($slug){
         $this->validatedSlug($slug,'consultation_medecine_generales');
 
-        $consultationMedecine = ConsultationMedecineGenerale::findBySlug($slug);
+        $consultationMedecine = ConsultationMedecineGenerale::with('operationables.contributable')->whereSlug($slug)->first();
 
         $auteur = getAuthor("ConsultationMedecineGenerale",$consultationMedecine->id,"create");
         $updateAuteurs = getUpdatedAuthor("ConsultationMedecineGenerale",$consultationMedecine->id,"update");
@@ -53,6 +53,7 @@ class ImprimerController extends Controller
                 $signature = $medecin->signature;
             }
         }
+
         foreach ($updateAuteurs as $item){
             if ($item->auteurable_id != $auteur->auteurable_id){
                 if (!in_array($item->auteurable_id,$auteurs)){
@@ -64,7 +65,17 @@ class ImprimerController extends Controller
                 }
             }
         }
-        $data = compact('consultationMedecine','signature','medecins','praticiens');
+
+        //Recuperation des contributeurs de la consultation
+        $cContributeurs = [];
+            foreach($consultationMedecine->operationables as $operationable){
+                array_push($cContributeurs,$operationable['contributable']['id']);
+            }
+
+        $pContributeurs = Praticien::with('user')->whereIn('user_id',$cContributeurs)->get();
+        $mContributeurs = MedecinControle::with('user')->whereIn('user_id',$cContributeurs)->get();
+
+        $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs');
         $pdf = PDF::loadView('rapport',$data);
 
         $nom  = ucfirst($consultationMedecine->dossier->patient->user->nom);
