@@ -283,21 +283,21 @@
         @endif
         <h4 class="sous-titre-rapport">Parametres</h4>
         @if(count($consultationMedecine->parametresCommun)>=1)
-        @foreach($consultationMedecine->parametresCommun as $parametre)
-            @if($loop->first)
-                <p>Poids (kg) : <strong>{{$parametre->poids}}</strong> </p>
-                <p>Taille (cm): <strong>{{$parametre->taille}}</strong></p>
-                <p>Bmi (kg/m²): <strong>{{$parametre->bmi}}</strong></p>
-                <p>TA Systolique (mmHg) : <strong>{{$parametre->ta_systolique}}</strong></p>
-                <p>TA Diastolique (mmHg) : <strong>{{$parametre->ta_diastolique}}</strong></p>
-                <p>Température (°C): <strong>{{$parametre->temperature}}</strong></p>
-                <p>Fréquence cardiaque (bpm) : <strong>{{$parametre->frequence_cardiaque}}</strong></p>
-                <p>Fréquence respiratoire (cpm) : <strong>{{$parametre->frequence_respiratoire}}</strong></p>
-                <p>sato2 (%) : <strong>{{$parametre->sato2}}</strong></p>
-            @endif
+            @foreach($consultationMedecine->parametresCommun as $parametre)
+                @if($loop->first)
+                    <p>Poids (kg) : <strong>{{$parametre->poids}}</strong> </p>
+                    <p>Taille (cm): <strong>{{$parametre->taille}}</strong></p>
+                    <p>Bmi (kg/m²): <strong>{{$parametre->bmi}}</strong></p>
+                    <p>TA Systolique (mmHg) : <strong>{{$parametre->ta_systolique}}</strong></p>
+                    <p>TA Diastolique (mmHg) : <strong>{{$parametre->ta_diastolique}}</strong></p>
+                    <p>Température (°C): <strong>{{$parametre->temperature}}</strong></p>
+                    <p>Fréquence cardiaque (bpm) : <strong>{{$parametre->frequence_cardiaque}}</strong></p>
+                    <p>Fréquence respiratoire (cpm) : <strong>{{$parametre->frequence_respiratoire}}</strong></p>
+                    <p>sato2 (%) : <strong>{{$parametre->sato2}}</strong></p>
+                @endif
 
 
-        @endforeach
+            @endforeach
         @else
             <p>Poids (kg) :</p>
             <p>Taille (cm): </p>
@@ -367,41 +367,84 @@
     <h4>Medecin(s) ayant revisité(s) votre consultation</h4>
     @foreach($medecins as $medecin)
         @if(!is_null($medecin->user))
-            @if(!is_null($medecin->signature))
-                <div>
-                    <img width="300px" height="auto" src={{public_path('/storage/'.$medecin->signature)}} />
-                </div>
-            @endif
-
-            <p>{{$medecin->civilite}} {{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
-
-            @if(!is_null($medecin->numero_ordre))
-                @if($medecin->numero_ordre != 'null' && strlen($medecin->numero_ordre ) >0)
-                    <p>Numéro d'ordre: {{$medecin->numero_ordre}}</p>
+            <div style="display: inline">
+                @if(!is_null($medecin->signature))
+                    <div>
+                        <img width="300px" height="auto" src={{public_path('/storage/'.$medecin->signature)}} />
+                    </div>
                 @endif
-            @endif
+
+                <p>{{$medecin->civilite}} {{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
+
+                @if(!is_null($medecin->numero_ordre))
+                    @if($medecin->numero_ordre != 'null' && strlen($medecin->numero_ordre ) >0)
+                        <p>Numéro d'ordre: {{$medecin->numero_ordre}}</p>
+                    @endif
+                @endif
+            </div>
         @endif
     @endforeach
 @endif
-@if(!is_null($praticiens->user))
-    <p><b>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</b></p>
-    @if(!is_null($praticiens->numero_ordre))
-        @if($praticiens->numero_ordre != 'null' && strlen($praticiens->numero_ordre ) >0)
-            <p>Numéro d'ordre: {{$praticiens->numero_ordre}}</p>
+<div style="display: inline">
+    @if(!is_null($praticiens->user))
+        <p>Généré par <b>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</b></p>
+        @if(!is_null($praticiens->numero_ordre))
+            @if($praticiens->numero_ordre != 'null' && strlen($praticiens->numero_ordre ) >0)
+                <p>Numéro d'ordre: {{$praticiens->numero_ordre}}</p>
+            @endif
         @endif
     @endif
+    <p style="text-align: right"> Date de création : <b>{{\Carbon\Carbon::parse()->format('d/m/Y')}}</b></p>
+
+    @isset($signature)
+        @if(!is_null($signature) && strlen($signature)>0)
+            <div>
+                <img  style="float: right" width="300px" height="auto" src={{public_path('/storage/'.$signature)}} />
+            </div>
+        @endif
+    @endisset
+</div>
+@if(count($consultationMedecine->operationables) >0)
+    <p>Contributeurs</p>
+    @foreach($mContributeurs as $medecin)
+        @if(!is_null($medecin->user))
+            <div style="display: inline">
+                @if(!is_null($medecin->signature))
+                    <div>
+                        <img width="300px" height="auto" src={{public_path('/storage/'.$medecin->signature)}} />
+                    </div>
+                @endif
+
+                <p>{{$medecin->civilite}} {{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
+
+                @if(!is_null($medecin->numero_ordre))
+                    @if($medecin->numero_ordre != 'null' && strlen($medecin->numero_ordre ) >0)
+                        <p>Numéro d'ordre: {{$medecin->numero_ordre}}</p>
+                    @endif
+                @endif
+            </div>
+        @endif
+    @endforeach
+    @foreach($pContributeurs as $praticien)
+        @if(!is_null($praticien->user))
+            <div style="display: inline">
+                @if(!is_null($praticien->signature))
+                    <div>
+                        <img width="300px" height="auto" src={{public_path('/storage/'.$praticien->signature)}} />
+                    </div>
+                @endif
+
+                <p>{{$praticien->civilite}} {{is_null($praticien->user->prenom) ? "" :  $praticien->user->prenom }} {{$praticien->user->nom}}</p>
+
+                @if(!is_null($praticien->numero_ordre))
+                    @if($praticien->numero_ordre != 'null' && strlen($praticien->numero_ordre ) >0)
+                        <p>Numéro d'ordre: {{$praticien->numero_ordre}}</p>
+                    @endif
+                @endif
+            </div>
+        @endif
+    @endforeach
 @endif
-
-<p style="text-align: right"> Date de création : <b>{{\Carbon\Carbon::parse()->format('d/m/Y')}}</b></p>
-
-@isset($signature)
-    @if(!is_null($signature) && strlen($signature)>0)
-        <div>
-            <img  style="float: right" width="300px" height="auto" src={{public_path('/storage/'.$signature)}} />
-        </div>
-    @endif
-@endisset
-
 
 </body>
 </html>

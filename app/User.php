@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Contributeurs;
 use App\Models\DossierMedical;
 use App\Models\Gestionnaire;
 use App\Models\MedecinControle;
@@ -187,5 +188,9 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new MailResetPasswordNotification($token));
+    }
+
+    public function contributeurs(){
+        return $this->morphMany(Contributeurs::class,'contributable');
     }
 }

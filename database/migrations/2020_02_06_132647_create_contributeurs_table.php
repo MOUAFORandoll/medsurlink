@@ -17,6 +17,7 @@ class CreateContributeursTable extends Migration
             $table->bigIncrements('id');
             $table->nullableMorphs('contributable');
             $table->nullableMorphs('operationable');
+            $table->string('slug');
             $table->timestamps();
             $table->softDeletes();
         });
