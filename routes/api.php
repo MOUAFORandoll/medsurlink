@@ -189,4 +189,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']],
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle']], function () {
     Route::resource('medecin-controle','Api\MedecinControleController')->only(['index']);
     Route::resource('praticien','Api\PraticienController')->only(['index']);
+    Route::resource('medicament','Api\MedicamentController')->except(['edit','create']);
+    Route::resource('ordonance','Api\OrdonanceController')->except(['edit','create']);
+    Route::put('ordonance/{ordonance}/archiver','Api\OrdonanceController@archiver');
+    Route::put('ordonance/{ordonance}/transmettre','Api\OrdonanceController@transmettre');
 });

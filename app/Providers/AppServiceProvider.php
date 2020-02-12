@@ -26,7 +26,10 @@ use App\Models\Hospitalisation;
 use App\Models\HospitalisationExamClin;
 use App\Models\HospitalisationExamCom;
 use App\Models\MedecinControle;
+use App\Models\Medicament;
 use App\Models\Motif;
+use App\Models\Ordonance;
+use App\Models\OrdonanceMedicament;
 use App\Models\ParametreCommun;
 use App\Models\ParametreObstetrique;
 use App\Models\Patient;
@@ -62,6 +65,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Relation::morphMap([
+            'OrdonanceMedicament'=>OrdonanceMedicament::class,
+            'Ordonance'=>Ordonance::class,
+            'Medicament'=>Medicament::class,
             'Motif'=>Motif::class,
             'Consultation'=>ConsultationMedecineGenerale::class,
             'Allergie'=>Allergie::class,
