@@ -39,4 +39,9 @@ class Medicament extends Model
     public function ordonances(){
         return $this->belongsToMany(OrdonanceMedicament::class,'medicament_id','id');
     }
+
+    public function updateMedicament(){
+        $isAuthor = checkIfIsAuthorOrIsAuthorized('Medicament',$this->id,'create');
+        $this['isAuthor']=$isAuthor->getOriginalContent();
+    }
 }

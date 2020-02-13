@@ -56,7 +56,7 @@ class MedicamentController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
         $medicament = Medicament::findBySlug($slug);
-
+        $medicament->updateMedicament();
         return response()->json(['medicament'=>$medicament]);
     }
 
