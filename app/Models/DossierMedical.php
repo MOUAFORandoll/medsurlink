@@ -75,6 +75,11 @@ class DossierMedical extends Model
         return $this->hasMany(TraitementActuel::class, 'dossier_medical_id');
     }
 
+    public function ordonances()
+    {
+        return $this->hasMany(Ordonance::class, 'dossier_medical_id');
+    }
+
     /**
      * The "booting" method of the model.
      *

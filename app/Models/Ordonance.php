@@ -16,7 +16,10 @@ class Ordonance extends Model
 
     protected $fillable = [
         "slug",
-        "dossier_medical_id"
+        "dossier_medical_id",
+        "date_prescription",
+        "archieved_at",
+        "passed_at",
     ];
     protected $dates = [
         "date_prescription",
@@ -28,13 +31,13 @@ class Ordonance extends Model
     {
         return [
             'slug' => [
-                'source' => 'dossier'
+                'source' => 'DossierAndTimestamp'
             ]
         ];
     }
 
-    public function getDossierAttribute() {
-        return $this->dossier()->slug.''.Carbon::now()->timestamp;
+    public function getDossierAndTimestampAttribute() {
+        return $this->dossier->slug.''.Carbon::now()->timestamp;
     }
 
     public function dossier(){
@@ -42,6 +45,11 @@ class Ordonance extends Model
     }
 
     public function medicaments(){
-        return $this->hasMany(OrdonanceMedicament::class,'ordonance_id','id');
+        return $this->belongsToMany(Medicament::class,'ordonance_medicament','ordonance_id','medicament_id');
+    }
+
+    public function updateOrdonance(){
+        $isAuthor = checkIfIsAuthorOrIsAuthorized('Ordonance',$this->id,'create');
+        $this['isAuthor']=$isAuthor->getOriginalContent();
     }
 }

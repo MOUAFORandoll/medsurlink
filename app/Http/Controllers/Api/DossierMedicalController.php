@@ -35,6 +35,7 @@ class DossierMedicalController extends Controller
                 $query->orderBy('date', 'desc');
             },
             'antecedents',
+            'ordonances',
             'patient',
             'patient.user',
             'consultationsMedecine',
@@ -105,6 +106,7 @@ class DossierMedicalController extends Controller
                     $query->orderBy('date', 'desc');
                 },
                 'antecedents',
+                'ordonances',
                 'patient',
                 'patient.user',
                 'patient.souscripteur.user',
@@ -236,6 +238,7 @@ class DossierMedicalController extends Controller
             },
             'antecedents',
             'patient',
+            'ordonances',
             'consultationsMedecine',
             'consultationsObstetrique',
             'consultationsObstetrique.echographies',

@@ -11,29 +11,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class OrdonanceMedicament extends Model
 {
     use SoftDeletes;
-    use Sluggable;
-    use SluggableScopeHelpers;
+//    use Sluggable;
+//    use SluggableScopeHelpers;
 
     protected $table = ['ordonance_medicament'];
 
     protected $fillable = [
         "ordonance_id",
         "medicament_id",
-        "slug",
     ];
 
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'medoc'
-            ]
-        ];
-    }
-
-    public function getMedocAttribute() {
-        return 'MedOrdo'.''.Carbon::now()->timestamp;
-    }
+//    public function sluggable()
+//    {
+//        return [
+//            'slug' => [
+//                'source' => 'Medoc'
+//            ]
+//        ];
+//    }
+//
+//    public function getMedocAttribute() {
+//        return $this->ordonance->slug.''.Carbon::now()->timestamp;
+//    }
 
     public function ordonance(){
         return $this->belongsTo(Ordonance::class,'ordonance_id','id');

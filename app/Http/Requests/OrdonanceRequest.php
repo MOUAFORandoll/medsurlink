@@ -24,8 +24,8 @@ class OrdonanceRequest extends FormRequest
     public function rules()
     {
         return [
-            'dossier_medical_id'=>'required|exists:dossier_medicals,id',
-            'date_prescription'=>'requierd|date',
+            'dossier_medical_id'=>'required|exists:dossier_medicals,slug',
+            'date_prescription'=>'required|date',
             'medicaments.*.*'=>'required|integer|exists:medicaments,id'
         ];
     }
