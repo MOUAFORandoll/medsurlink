@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\OrdonanceRequest;
+use App\Models\DossierMedical;
 use App\Models\Ordonance;
 use App\Models\OrdonanceMedicament;
 use Carbon\Carbon;
@@ -43,19 +44,16 @@ class OrdonanceController extends Controller
      */
     public function store(OrdonanceRequest $request)
     {
+        $dossier = DossierMedical::findBySlug($request->get('dossier_medical_id'));
         $ordonance = Ordonance::create([
             'date_prescription'=> $request->get('date_prescription'),
-            'dossier_medical_id'=>$request->get('dossier_medical_id')
+            'dossier_medical_id'=>$dossier->id
         ]);
+
         defineAsAuthor('Ordonance',$ordonance->id,'create',$ordonance->dossier->patient_id);
         $medicaments = $request->get('medicaments');
-
+        $ordonance->medicaments()->attach($medicaments);
         foreach ($medicaments as $medicament){
-            $ordonanceMedicament =  OrdonanceMedicament::create([
-                'ordonance_id'=>$ordonance->id,
-                'medicament_id'=>$medicament
-            ]);
-
             defineAsAuthor('Ordonance',$ordonance->id,'add medicament '.$medicament);
         }
 
@@ -73,6 +71,7 @@ class OrdonanceController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
         $ordonance = Ordonance::with('dossier','medicaments')->whereSlug($slug)->first();
+        $ordonance->updateOrdonance();
         return response()->json(['ordonance'=>$ordonance]);
     }
 
@@ -100,6 +99,7 @@ class OrdonanceController extends Controller
         $ordonance = Ordonance::with('dossier','medicaments')->whereSlug($slug)->first();
 
         $this->checkIfAuthorized('Ordonance',$ordonance->id,'create');
+        $ordonance->date_prescription = $request->get('date_prescription');
 
         $ancienMedicaments = [];
         foreach ($ordonance->medicaments as $medicament) {

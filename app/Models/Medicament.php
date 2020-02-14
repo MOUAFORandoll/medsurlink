@@ -37,7 +37,7 @@ class Medicament extends Model
     }
 
     public function ordonances(){
-        return $this->belongsToMany(OrdonanceMedicament::class,'medicament_id','id');
+        return $this->belongsToMany(Ordonance::class,'ordonance_medicament','medicament_id','ordonance_id');
     }
 
     public function updateMedicament(){
