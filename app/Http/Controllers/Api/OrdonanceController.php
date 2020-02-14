@@ -13,7 +13,7 @@ use App\Http\Controllers\Controller;
 
 class OrdonanceController extends Controller
 {
-    protected $table = 'Ordonances';
+    protected $table = 'ordonances';
     use PersonnalErrors;
     /**
      * Display a listing of the resource.
