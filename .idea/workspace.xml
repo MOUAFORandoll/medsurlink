@@ -3,13 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/OrdonanceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/OrdonanceController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Requests/OrdonanceRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/OrdonanceRequest.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/DossierMedical.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DossierMedical.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Medicament.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Medicament.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Ordonance.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Ordonance.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/OrdonanceMedicament.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/OrdonanceMedicament.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -521,7 +514,7 @@
       <workItem from="1581494149800" duration="4638000" />
       <workItem from="1581500289017" duration="7081000" />
       <workItem from="1581580329719" duration="13160000" />
-      <workItem from="1581665506259" duration="727000" />
+      <workItem from="1581665506259" duration="2192000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
