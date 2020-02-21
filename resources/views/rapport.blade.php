@@ -346,11 +346,11 @@
         @if((!is_null($consultationMedecine->file) && $consultationMedecine->file != 'null') || count($consultationMedecine->files)>0)
             <p>Consulter les pièces jointes</p>
             @if(!is_null($consultationMedecine->file) && $consultationMedecine->file != 'null')
-                <p><a href="{{config('app.url')}}/public/storage/{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a></p>
+                <a href="{{config('app.url')}}/public/storage/{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a><br>
             @endif
             @if(count($consultationMedecine->files)>0)
                 @foreach($consultationMedecine->files as $file)
-                    <p><a href="{{config('app.url')}}/public/storage/{{$file->chemin}}">{{$file->nom}}</a></p>
+                    <a href="{{config('app.url')}}/public/storage/{{$file->chemin}}">{{$file->nom}}</a><br>
                 @endforeach
             @endif
         @endif
