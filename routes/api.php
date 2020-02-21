@@ -193,4 +193,5 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::resource('ordonance','Api\OrdonanceController')->except(['edit','create']);
     Route::put('ordonance/{ordonance}/archiver','Api\OrdonanceController@archiver');
     Route::put('ordonance/{ordonance}/transmettre','Api\OrdonanceController@transmettre');
+    Route::delete('file/{file}','Api\FileController@destroy');
 });

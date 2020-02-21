@@ -343,11 +343,18 @@
             @endif
         @endif
 
-        @if(!is_null($consultationMedecine->file) && $consultationMedecine->file != 'null')
-            <p>Consulter la pièce jointe
-                <a href="{{config('app.url')}}/public/storage/{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a>
-            </p>
+        @if((!is_null($consultationMedecine->file) && $consultationMedecine->file != 'null') || count($consultationMedecine->files)>0)
+            <p>Consulter les pièces jointes</p>
+            @if(!is_null($consultationMedecine->file) && $consultationMedecine->file != 'null')
+                <p><a href="{{config('app.url')}}/public/storage/{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a></p>
+            @endif
+            @if(count($consultationMedecine->files)>0)
+                @foreach($consultationMedecine->files as $file)
+                    <p><a href="{{config('app.url')}}/public/storage/{{$file->chemin}}">{{$file->nom}}</a></p>
+                @endforeach
+            @endif
         @endif
+
     </div>
 
 @endisset

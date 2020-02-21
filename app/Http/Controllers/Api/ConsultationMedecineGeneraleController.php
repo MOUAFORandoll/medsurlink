@@ -8,6 +8,7 @@ use App\Http\Requests\ConsutationMedecineRequest;
 use App\Models\Antecedent;
 use App\Models\Conclusion;
 use App\Models\ConsultationMedecineGenerale;
+use App\Models\ConsultationMotifs;
 use App\Models\Contributeurs;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePatient;
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
+use Psy\Util\Json;
+use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 
 class ConsultationMedecineGeneraleController extends Controller
 {
@@ -35,13 +38,13 @@ class ConsultationMedecineGeneraleController extends Controller
     public function index()
     {
 
-        $consultations = ConsultationMedecineGenerale::with(['operationables.contributable','dossier','etablissement','motifs','traitements','conclusions','parametresCommun'])->orderByDateConsultation()->get();
+        $consultations = ConsultationMedecineGenerale::with(['operationables.contributable', 'dossier', 'etablissement', 'motifs', 'traitements', 'conclusions', 'parametresCommun'])->orderByDateConsultation()->get();
 
-        foreach ($consultations as $consultation){
+        foreach ($consultations as $consultation) {
             $consultation->updateConsultationMedecine();
         }
 
-        return response()->json(["consultations"=>$consultations]);
+        return response()->json(["consultations" => $consultations]);
     }
 
     /**
@@ -57,263 +60,254 @@ class ConsultationMedecineGeneraleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(ConsutationMedecineRequest $request)
     {
 
-        if($request->hasFile('file')) {
+        $consultation = ConsultationMedecineGenerale::create($request->except('documents'));
+        defineAsAuthor("ConsultationMedecineGenerale", $consultation->id, 'create', $consultation->dossier->patient->user_id);
 
-            if ($request->file('file')->isValid()) {
-                $consultation = ConsultationMedecineGenerale::create($request->validated());
-                $this->uploadFile($request,$consultation);
-                defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create',$consultation->dossier->patient->user_id);
+        $consultation = ConsultationMedecineGenerale::with([
+            'files',
+            'motifs',
+            'dossier',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'traitements',
+            'conclusions',
+            'parametresCommun',
+            'etablissement'
+        ])->find($consultation->id);
 
-                $consultation = ConsultationMedecineGenerale::with([
-                    'dossier',
-                    'dossier.resultatsLabo',
-                    'dossier.hospitalisations',
-                    'dossier.consultationsObstetrique',
-                    'dossier.consultationsMedecine',
-                    'dossier.resultatsImagerie',
-                    'dossier.allergies',
-                    'dossier.antecedents',
-                    'traitements',
-                    'conclusions',
-                    'parametresCommun',
-                    'etablissement'
-                ])->find($consultation->id);
-                //Insertion de l'image
+        $motifs = $request->get('motifs');
+        $motifs = explode(",", $motifs);
+        $conclusions = $request->get('conclusions');
+        //Insertion des motifs
 
-                $motifs = $request->get('motifs');
-                $motifs = explode(",",$motifs);
+        foreach ($motifs as $motif) {
 
-                $conclusions = $request->get('conclusions');
+            $converti = (integer)$motif;
+            if ($converti !== 0) {
+                $consultation->motifs()->attach($motif);
+                defineAsAuthor("ConsultationMotif", $motif, 'attach', $consultation->dossier->patient->user_id);
 
-                //Insertion des motifs
-                foreach ($motifs as $motif){
-
-                    $converti = (integer) $motif;
-
-                    if ($converti !== 0){
-                        $consultation->motifs()->attach($motif);
-                        defineAsAuthor("ConsultationMotif", $motif, 'attach',$consultation->dossier->patient->user_id);
-                    }else{
-                        $item =   Motif::create([
-                            "reference"=>$consultation->date_consultation,
-                            "description"=>$motif
-                        ]);
-
-                        defineAsAuthor("Motif", $item->id, 'create');
-                        $consultation->motifs()->attach($item->id);
-                        defineAsAuthor("ConsultationMotif", $item->id, 'attach',$consultation->dossier->patient->user_id);
-
-                    }
-                }
-                //Insertion de consultation
-                if (!is_null($conclusions)){
-                    $conclusion =  Conclusion::create([
-                        'consultation_medecine_generale_id' =>$consultation->id,
-                        'reference'=>$consultation->date_consultation,
-                        "description"=>$conclusions
-                    ]);
-
-                    defineAsAuthor("Conclusion",$conclusion->id,'create',$conclusion->consultationMedecine->dossier->patient->user_id);
-
-                }
-                //Insertion des parametre
-                $parametreCommun = ParametreCommun::create($request->only(
-                        "poids",
-                        "taille",
-                        "bmi",
-                        "ta_systolique",
-                        "ta_diastolique",
-                        "temperature",
-                        "frequence_cardiaque",
-                        "sato2")
-                    +
-                    [ "consultation_medecine_generale_id"=>$consultation->id]);
-
-                $this->updateBmi($request,$parametreCommun);
-
-                defineAsAuthor("ParametreCommun",$parametreCommun->id,'create',$parametreCommun->consultation->dossier->patient->user_id);
-
-                //Insertion de traitement actuel
-                $traitementsACreer = $request->get('traitements');
-                if (!is_null($traitementsACreer))
-                {
-                    $traitementCreer = TraitementActuel::create([
-                        'description'=>$traitementsACreer,
-                        'dossier_medical_id'=>$consultation->dossier->id
-                    ]);
-
-                    defineAsAuthor("TraitementActuel", $traitementCreer->id,'create',$traitementCreer->dossier->patient->user_id);
-                }
-
-                //Association de patient à l'etablissement
-                $etablissement = EtablissementExercice::find($request->get('etablissement_id'));
-                $patient = $consultation->dossier->patient;
-
-                //Enregistement des contributeurs
-                $contributeurs = $request->get('contributeurs');
-                $contributeurs = explode(",",$contributeurs);
-                if (!is_null($contributeurs)){
-                    foreach ($contributeurs as $contributeur){
-                        $nouveauContributeur = Contributeurs::create([
-                            'contributable_id'=>$contributeur,
-                            'contributable_type'=>'App\User',
-                            'operationable_id'=>$consultation->id,
-                            'operationable_type'=>'Consultation'
-
-                        ]);
-                        defineAsAuthor("Consultation",$nouveauContributeur->id,'Ajout contributeur',$consultation->dossier->patient->user_id);
-                    }
-                }
-
-                //Je verifie si ce patient n'est pas encore dans cette etablissement
-                $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissement)->where('patient_id','=',$patient->user_id)->count();
-                if ($nbre ==0){
-
-
-                    $etablissement->patients()->attach($patient->user_id);
-
-                    defineAsAuthor("Patient",$patient->user_id,'add to etablissement',$patient->user_id);
-                }
-
-                if(!is_null($consultation))
-                    $consultation->updateConsultationMedecine();
-
-                return response()->json(["consultation"=>$consultation]);
-            }
-
-            return response()->json(
-                [
-                    'file' => 'File is not valid'
-                ],
-                422
-            );
-        }else{
-            $consultation = ConsultationMedecineGenerale::create($request->validated());
-            defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create',$consultation->dossier->patient->user_id);
-
-            $consultation = ConsultationMedecineGenerale::with([
-                'dossier',
-                'dossier.resultatsLabo',
-                'dossier.hospitalisations',
-                'dossier.consultationsObstetrique',
-                'dossier.consultationsMedecine',
-                'dossier.resultatsImagerie',
-                'dossier.allergies',
-                'dossier.antecedents',
-                'traitements',
-                'conclusions',
-                'parametresCommun',
-                'etablissement'
-            ])->whereId($consultation->id)->first();
-
-            //Insertion de l'image
-
-            $motifs = $request->get('motifs');
-
-            $conclusions = $request->get('conclusions');
-            $motifs = explode(",",$motifs);
-            //Insertion des motifs
-            foreach ($motifs as $motif){
-
-                $converti = (integer) $motif;
-
-                if ($converti !== 0){
-                    $consultation->motifs()->attach($motif);
-                    defineAsAuthor("ConsultationMotif", $motif, 'attach',$consultation->dossier->patient->user_id);
-                }else{
-                    $item =   Motif::create([
-                        "reference"=>$consultation->date_consultation,
-                        "description"=>$motif
-                    ]);
-
-                    defineAsAuthor("Motif", $item->id, 'create');
-                    $consultation->motifs()->attach($item->id);
-                    defineAsAuthor("ConsultationMotif", $item->id, 'attach',$consultation->dossier->patient->user_id);
-
-                }
-            }
-            //Insertion de consultation
-            if (!is_null($conclusions)){
-                $conclusion =  Conclusion::create([
-                    'consultation_medecine_generale_id' =>$consultation->id,
-                    'reference'=>$consultation->date_consultation,
-                    "description"=>$conclusions
+            } else {
+                $item = Motif::create([
+                    "reference" => $consultation->date_consultation,
+                    "description" => $motif
                 ]);
 
-                defineAsAuthor("Conclusion",$conclusion->id,'create',$conclusion->consultationMedecine->dossier->patient->user_id);
+                defineAsAuthor("Motif", $item->id, 'create');
+                $consultation->motifs()->attach($item->id);
+                defineAsAuthor("ConsultationMotif", $item->id, 'attach', $consultation->dossier->patient->user_id);
             }
-            //Insertion des parametre
-            $parametreCommun = ParametreCommun::create($request->only(
-                    "poids",
-                    "taille",
-                    "bmi",
-                    "ta_systolique",
-                    "ta_diastolique",
-                    "temperature",
-                    "frequence_cardiaque",
-                    "sato2")
-                +
-                [ "consultation_medecine_generale_id"=>$consultation->id]);
+        }
+        //Insertion de consultation
+        if (!is_null($conclusions)) {
+            $conclusion = Conclusion::create([
+                'consultation_medecine_generale_id' => $consultation->id,
+                'reference' => $consultation->date_consultation,
+                "description" => $conclusions
+            ]);
 
-            $this->updateBmi($request,$parametreCommun);
+            defineAsAuthor("Conclusion", $conclusion->id, 'create', $conclusion->consultationMedecine->dossier->patient->user_id);
 
-            defineAsAuthor("ParametreCommun",$parametreCommun->id,'create',$parametreCommun->consultation->dossier->patient->user_id);
-
-//        Insertion de traitement actuel
-            $traitementsACreer = $request->get('traitements');
-            if (!is_null($traitementsACreer))
-            {
-                $traitementCreer = TraitementActuel::create([
-                    'description'=>$traitementsACreer,
-                    'dossier_medical_id'=>$consultation->dossier->id
-                ]);
-
-                defineAsAuthor("TraitementActuel", $traitementCreer->id,'create',$traitementCreer->dossier->patient->user_id);
-            }
-
-            //Association de patient à l'etablissement
-            $etablissement = EtablissementExercice::find($request->get('etablissement_id'));
-            $patient = $consultation->dossier->patient;
-
-            //Enregistement des contributeurs
-
-            $contributeurs = $request->get('contributeurs');
-            $contributeurs = explode(",",$contributeurs);
-            if (!is_null($contributeurs)){
-                foreach ($contributeurs as $contributeur){
-                    $nouveauContributeur = Contributeurs::create([
-                        'contributable_id'=>$contributeur,
-                        'contributable_type'=>'App\User',
-                        'operationable_id'=>$consultation->id,
-                        'operationable_type'=>'Consultation'
-                    ]);
-                    defineAsAuthor("Consultation",$nouveauContributeur->id,'Ajout contributeur',$consultation->dossier->patient->user_id);
-                }
-            }
-
-            //Je verifie si ce patient n'est pas encore dans cette etablissement
-            $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissement)->where('patient_id','=',$patient->user_id)->count();
-            if ($nbre ==0){
-
-
-                $etablissement->patients()->attach($patient->user_id);
-
-                defineAsAuthor("Patient",$patient->user_id,'add to etablissement',$patient->user_id);
-            }
-
-            if(!is_null($consultation))
-                $consultation->updateConsultationMedecine();
-
-            return response()->json(["consultation"=>$consultation]);
         }
 
+        //Insertion des parametre
+        $parametreCommun = ParametreCommun::create($request->only(
+                "poids",
+                "taille",
+                "bmi",
+                "ta_systolique",
+                "ta_diastolique",
+                "temperature",
+                "frequence_cardiaque",
+                "sato2")
+            +
+            ["consultation_medecine_generale_id" => $consultation->id]);
+
+
+        $this->updateBmi($request, $parametreCommun);
+
+        defineAsAuthor("ParametreCommun", $parametreCommun->id, 'create', $parametreCommun->consultation->dossier->patient->user_id);
+
+        //Insertion de traitement actuel
+        $traitementsACreer = $request->get('traitements');
+        if (!is_null($traitementsACreer)) {
+            $traitementCreer = TraitementActuel::create([
+                'description' => $traitementsACreer,
+                'dossier_medical_id' => $consultation->dossier->id
+            ]);
+
+            defineAsAuthor("TraitementActuel", $traitementCreer->id, 'create', $traitementCreer->dossier->patient->user_id);
+        }
+
+        //Association de patient à l'etablissement
+        $etablissement = EtablissementExercice::find($request->get('etablissement_id'));
+        $patient = $consultation->dossier->patient;
+        //Enregistement des contributeurs
+        $contributeurs = $request->get('contributeurs');
+        $contributeurs = explode(",", $contributeurs);
+        if (!is_null($contributeurs)) {
+            foreach ($contributeurs as $contributeur) {
+                if (strlen($contributeur >0)){
+                    $nouveauContributeur = Contributeurs::create([
+                        'contributable_id' => $contributeur,
+                        'contributable_type' => 'App\User',
+                        'operationable_id' => $consultation->id,
+                        'operationable_type' => 'Consultation'
+
+                    ]);
+                    defineAsAuthor("Consultation", $nouveauContributeur->id, 'Ajout contributeur', $consultation->dossier->patient->user_id);
+                }
+            }
+        }
+
+        //Je verifie si ce patient n'est pas encore dans cette etablissement
+        $nbre = EtablissementExercicePatient::where('etablissement_id', '=', $etablissement)->where('patient_id', '=', $patient->user_id)->count();
+        if ($nbre == 0) {
+
+
+            $etablissement->patients()->attach($patient->user_id);
+
+            defineAsAuthor("Patient", $patient->user_id, 'add to etablissement', $patient->user_id);
+        }
+
+        if (!is_null($consultation))
+            $consultation->updateConsultationMedecine();
+
+        if ($request->hasFile('documents')) {
+                $this->uploadFile($request, $consultation);
+        }
+
+        return response()->json(["consultation" => $consultation]);
     }
+//else{
+//            $consultation = ConsultationMedecineGenerale::create($request->validated());
+//            defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'create',$consultation->dossier->patient->user_id);
+//
+//            $consultation = ConsultationMedecineGenerale::with([
+//                'dossier',
+//                'dossier.resultatsLabo',
+//                'dossier.hospitalisations',
+//                'dossier.consultationsObstetrique',
+//                'dossier.consultationsMedecine',
+//                'dossier.resultatsImagerie',
+//                'dossier.allergies',
+//                'dossier.antecedents',
+//                'traitements',
+//                'conclusions',
+//                'parametresCommun',
+//                'etablissement'
+//            ])->whereId($consultation->id)->first();
+//
+//
+//            $motifs = $request->get('motifs');
+//
+//            $conclusions = $request->get('conclusions');
+//            $motifs = explode(",",$motifs);
+//            //Insertion des motifs
+//            foreach ($motifs as $motif){
+//
+//                $converti = (integer) $motif;
+//
+//                if ($converti !== 0){
+//                    $consultation->motifs()->attach($motif);
+//                    defineAsAuthor("ConsultationMotif", $motif, 'attach',$consultation->dossier->patient->user_id);
+//                }else{
+//                    $item =   Motif::create([
+//                        "reference"=>$consultation->date_consultation,
+//                        "description"=>$motif
+//                    ]);
+//
+//                    defineAsAuthor("Motif", $item->id, 'create');
+//                    $consultation->motifs()->attach($item->id);
+//                    defineAsAuthor("ConsultationMotif", $item->id, 'attach',$consultation->dossier->patient->user_id);
+//
+//                }
+//            }
+//            //Insertion de consultation
+//            if (!is_null($conclusions)){
+//                $conclusion =  Conclusion::create([
+//                    'consultation_medecine_generale_id' =>$consultation->id,
+//                    'reference'=>$consultation->date_consultation,
+//                    "description"=>$conclusions
+//                ]);
+//
+//                defineAsAuthor("Conclusion",$conclusion->id,'create',$conclusion->consultationMedecine->dossier->patient->user_id);
+//            }
+//            //Insertion des parametre
+//            $parametreCommun = ParametreCommun::create($request->only(
+//                    "poids",
+//                    "taille",
+//                    "bmi",
+//                    "ta_systolique",
+//                    "ta_diastolique",
+//                    "temperature",
+//                    "frequence_cardiaque",
+//                    "sato2")
+//                +
+//                [ "consultation_medecine_generale_id"=>$consultation->id]);
+//
+//            $this->updateBmi($request,$parametreCommun);
+//
+//            defineAsAuthor("ParametreCommun",$parametreCommun->id,'create',$parametreCommun->consultation->dossier->patient->user_id);
+//
+////        Insertion de traitement actuel
+//            $traitementsACreer = $request->get('traitements');
+//            if (!is_null($traitementsACreer))
+//            {
+//                $traitementCreer = TraitementActuel::create([
+//                    'description'=>$traitementsACreer,
+//                    'dossier_medical_id'=>$consultation->dossier->id
+//                ]);
+//
+//                defineAsAuthor("TraitementActuel", $traitementCreer->id,'create',$traitementCreer->dossier->patient->user_id);
+//            }
+//
+//            //Association de patient à l'etablissement
+//            $etablissement = EtablissementExercice::find($request->get('etablissement_id'));
+//            $patient = $consultation->dossier->patient;
+//
+//            //Enregistement des contributeurs
+//
+//            $contributeurs = $request->get('contributeurs');
+//            $contributeurs = explode(",",$contributeurs);
+//            if (!is_null($contributeurs)){
+//                foreach ($contributeurs as $contributeur){
+//                    $nouveauContributeur = Contributeurs::create([
+//                        'contributable_id'=>$contributeur,
+//                        'contributable_type'=>'App\User',
+//                        'operationable_id'=>$consultation->id,
+//                        'operationable_type'=>'Consultation'
+//                    ]);
+//                    defineAsAuthor("Consultation",$nouveauContributeur->id,'Ajout contributeur',$consultation->dossier->patient->user_id);
+//                }
+//            }
+//
+//            //Je verifie si ce patient n'est pas encore dans cette etablissement
+//            $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissement)->where('patient_id','=',$patient->user_id)->count();
+//            if ($nbre ==0){
+//
+//
+//                $etablissement->patients()->attach($patient->user_id);
+//
+//                defineAsAuthor("Patient",$patient->user_id,'add to etablissement',$patient->user_id);
+//            }
+//
+//            if(!is_null($consultation))
+//                $consultation->updateConsultationMedecine();
+//
+//            return response()->json(["consultation"=>$consultation]);
+//        }
 
     /**
      * Display the specified resource.
@@ -342,7 +336,8 @@ class ConsultationMedecineGeneraleController extends Controller
             'motifs',
             'conclusions',
             'parametresCommun',
-            'etablissement'
+            'etablissement',
+            'files'
         ])->whereSlug($slug)->first();
 
         $consultation->updateConsultationMedecine();
@@ -373,6 +368,7 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function update(ConsutationMedecineRequest $request, $slug)
     {
+
         $this->validatedSlug($slug,$this->table);
 
         $consultation = ConsultationMedecineGenerale::findBySlug($slug);
@@ -427,7 +423,7 @@ class ConsultationMedecineGeneraleController extends Controller
             }
         }
 
-        ConsultationMedecineGenerale::whereSlug($slug)->update($request->except(['motifs','conclusions','consultation','contributeurs']));
+        ConsultationMedecineGenerale::whereSlug($slug)->update($request->except(['motifs','conclusions','consultation','contributeurs','documents']));
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'update',$consultation->dossier->patient->user_id);
 
         $consultation = ConsultationMedecineGenerale::with(['operationables.contributable','dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
@@ -472,7 +468,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
         $file = $consultation->file;
 
-        if($request->hasFile('file')){
+        if($request->hasFile('documents')){
             $this->uploadFile($request,$consultation);
         }
 
@@ -586,13 +582,22 @@ class ConsultationMedecineGeneraleController extends Controller
     }
 
     public function uploadFile($request, $consultation){
-        if ($request->file('file')->isValid()) {
-            $path = $request->file->storeAs('public/DossierMedicale/' . $consultation->dossier->numero_dossier . '/ConsultationGenerale' . $request->consultation_medecine_generale_id,$request->file('file')->getClientOriginalName());
+        foreach ($request->documents as $document){
+            $path = $document->storeAs('public/DossierMedicale/' . $consultation->dossier->numero_dossier . '/ConsultationGenerale' . $request->consultation_medecine_generale_id,
+                $document->getClientOriginalName());
+
             $file = str_replace('public/','',$path);
 
-            $consultation->file = $file;
+            $file = \App\Models\File::create([
+                'fileable_type'=>'Consultation',
+                'fileable_id'=>$consultation->id,
+                'nom'=>$document->getClientOriginalName(),
+                'extension'=>$document->getClientOriginalExtension(),
+                'chemin'=>$file,
+            ]);
 
-            $consultation->save();
+            defineAsAuthor("File",$file->id,'create');
+
         }
     }
 }

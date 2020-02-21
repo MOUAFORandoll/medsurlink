@@ -34,7 +34,7 @@ class ImprimerController extends Controller
     public function generale($slug){
         $this->validatedSlug($slug,'consultation_medecine_generales');
 
-        $consultationMedecine = ConsultationMedecineGenerale::with('operationables.contributable')->whereSlug($slug)->first();
+        $consultationMedecine = ConsultationMedecineGenerale::with('operationables.contributable','files')->whereSlug($slug)->first();
 
         $auteur = getAuthor("ConsultationMedecineGenerale",$consultationMedecine->id,"create");
         $updateAuteurs = getUpdatedAuthor("ConsultationMedecineGenerale",$consultationMedecine->id,"update");

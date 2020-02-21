@@ -21,6 +21,7 @@ use App\Models\Echographie;
 use App\Models\EtablissementExercice;
 use App\Models\ExamenClinique;
 use App\Models\ExamenComplementaire;
+use App\Models\File;
 use App\Models\Gestionnaire;
 use App\Models\Hospitalisation;
 use App\Models\HospitalisationExamClin;
@@ -65,6 +66,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Relation::morphMap([
+            'File'=>File::class,
             'OrdonanceMedicament'=>OrdonanceMedicament::class,
             'Ordonance'=>Ordonance::class,
             'Medicament'=>Medicament::class,

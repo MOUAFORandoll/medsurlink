@@ -140,4 +140,8 @@ class ConsultationMedecineGenerale extends Model
     public function operationables(){
          return $this->morphMany(Contributeurs::class,'operationable');
     }
+
+    public function files(){
+        return $this->morphMany(File::class,'fileable');
+    }
 }
