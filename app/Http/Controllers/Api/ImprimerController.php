@@ -65,7 +65,6 @@ class ImprimerController extends Controller
                 }
             }
         }
-
         //Recuperation des contributeurs de la consultation
         $cContributeurs = [];
             foreach($consultationMedecine->operationables as $operationable){
@@ -77,16 +76,14 @@ class ImprimerController extends Controller
 
         $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs');
         $pdf = PDF::loadView('rapport',$data);
-
         $nom  = ucfirst($consultationMedecine->dossier->patient->user->nom);
         $prenom = is_null($consultationMedecine->dossier->patient->user->prenom) ? '' :$consultationMedecine->dossier->patient->user->prenom;
         $prenom  = ucfirst($prenom);
         $date= $consultationMedecine->date_consultation;
-
-        $path = storage_path().'/app/public/pdf/'.'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
+        $path = storage_path().'/app/public/pdf/'.'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf';        
         $pdf->save($path);
-
-        return  response()->json(['name'=>'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
+     
+return  response()->json(['name'=>'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
     }
 
     public function obstetrique($slug){

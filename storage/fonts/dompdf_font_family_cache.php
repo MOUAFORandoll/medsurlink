@@ -77,12 +77,12 @@
     'italic' => $rootDir . '/lib/fonts/DejaVuSerif-Italic',
     'normal' => $rootDir . '/lib/fonts/DejaVuSerif',
   ),
+  'montserrat' => array(
+    'italic' => $fontDir . '/e1edee9771a00b0a5381ecb87091787d',
+    'normal' => $fontDir . '/e331473642fec2105ae84324dafa8627',
+  ),
   'raleway' => array(
     'italic' => $fontDir . '/baf2bd3e3f07199a3a3624c084c52996',
     'normal' => $fontDir . '/b6fb1abb7760ef98e2666a5cf3c48419',
-  ),
-  'montserrat' => array(
-    'italic' => $fontDir . '\e1edee9771a00b0a5381ecb87091787d',
-    'normal' => $fontDir . '\e331473642fec2105ae84324dafa8627',
   ),
 ) ?>
