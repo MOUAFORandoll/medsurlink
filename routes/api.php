@@ -108,6 +108,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('etablissement','Api\EtablissementExerciceController')->except(['create','store','destroy','edit']);
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except(['create','edit']);
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except(['create','edit']);
+    Route::resource('consultation-cardiologie','Api\CardiologieController')->except(['create','edit']);
     Route::resource('motif','Api\MotifController')->except(['create','edit']);
     Route::resource('allergie','Api\AllergieController')->except(['create','edit']);
     Route::resource('antecedent','Api\AntecedentController')->except(['create','edit']);

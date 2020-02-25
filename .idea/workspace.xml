@@ -2,9 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c9f0565b-b00c-4876-ad03-cf6bfb0fc40f.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/rapport.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/app/public/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/DossierMedicalController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/EtablissementExerciceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/EtablissementExerciceController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/SouscripteurController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/ParametreCommunRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/ParametreCommunRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/PatientUpdateRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/PatientUpdateRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/PraticienStoreRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/PraticienStoreRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Requests/patientStoreRequest.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Requests/patientStoreRequest.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/DossierMedical.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/DossierMedical.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Echographie.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Echographie.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Motif.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Motif.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/ParametreCommun.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ParametreCommun.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Patient.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Patient.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/Souscripteur.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Souscripteur.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +63,13 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="patients: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -204,7 +231,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../medicalink" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
@@ -519,7 +546,11 @@
       <workItem from="1582129135921" duration="893000" />
       <workItem from="1582185362205" duration="11242000" />
       <workItem from="1582270289285" duration="5941000" />
-      <workItem from="1582283483121" duration="3713000" />
+      <workItem from="1582283483121" duration="5886000" />
+      <workItem from="1582442862082" duration="10374000" />
+      <workItem from="1582530138945" duration="22182000" />
+      <workItem from="1582615696192" duration="18976000" />
+      <workItem from="1582643137270" duration="6715000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -552,18 +583,18 @@
     <option name="LAST_COMMIT_MESSAGE" value="Mise a jour gitignore" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="275" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1580200778342">
+    <state x="275" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582615938643">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="275" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1580200778342" />
+    <state x="275" y="22" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1582615938643" />
     <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser" timestamp="1577360343156">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1577360343156" />
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1582102120150">
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1582638783687">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1582102120150" />
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1582638783687" />
     <state x="308" y="0" key="CommitChangelistDialog2" timestamp="1575882019741">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -616,10 +647,14 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="275" y="98" key="Vcs.Push.Dialog.v2/0.0.1366.728@0.0.1366.728" timestamp="1577971966765" />
-    <state x="495" y="255" width="375" height="234" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1579678688638">
+    <state x="495" y="255" width="375" height="234" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1" timestamp="1582543656005">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="495" y="255" width="375" height="234" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1366.728@0.0.1366.728" timestamp="1579678688638" />
+    <state x="495" y="255" width="375" height="234" key="com.intellij.database.actions.DdlActions$DeleteProvider2$1/0.0.1366.728@0.0.1366.728" timestamp="1582543656005" />
+    <state x="384" y="190" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog" timestamp="1582531873981">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="384" y="190" key="com.intellij.database.psi.DbRenamePsiElementProcessor.DbRenameDialog/0.0.1366.728@0.0.1366.728" timestamp="1582531873981" />
     <state x="384" y="187" key="com.intellij.ide.util.TipDialog" timestamp="1580197579335">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -632,13 +667,17 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="289" y="155" key="git4idea.merge.GitPullDialog/0.0.1366.728@0.0.1366.728" timestamp="1575881922263" />
-    <state x="339" y="162" key="run.anything.popup" timestamp="1581413807074">
+    <state x="339" y="162" key="run.anything.popup" timestamp="1582618193735">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1581413807074" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1582291348032">
+    <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1582618193735" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1582653888349">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1582291348032" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1582653888349" />
+    <state x="405" y="277" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1582463980420">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="405" y="277" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1366.728@0.0.1366.728" timestamp="1582463980420" />
   </component>
 </project>

@@ -34,6 +34,7 @@ class ParametreCommunRequest extends FormRequest
             "temperature"=>"sometimes|nullable|numeric",
             "frequence_cardiaque"=>"sometimes|nullable|numeric",
             "frequence_respiratoire"=>"sometimes|nullable|numeric",
+            "perimetre_abdominal"=>"sometimes|nullable|numeric",
             "sato2"=>"sometimes|nullable|numeric"
         ];
     }

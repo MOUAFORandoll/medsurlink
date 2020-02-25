@@ -130,6 +130,7 @@ class ConsultationMedecineGeneraleController extends Controller
                 "ta_diastolique",
                 "temperature",
                 "frequence_cardiaque",
+                "frequence_respiratoire",
                 "sato2")
             +
             ["consultation_medecine_generale_id" => $consultation->id]);
@@ -153,6 +154,7 @@ class ConsultationMedecineGeneraleController extends Controller
         //Association de patient à l'etablissement
         $etablissement = EtablissementExercice::find($request->get('etablissement_id'));
         $patient = $consultation->dossier->patient;
+
         //Enregistement des contributeurs
         $contributeurs = $request->get('contributeurs');
         $contributeurs = explode(",", $contributeurs);

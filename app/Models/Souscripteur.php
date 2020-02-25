@@ -67,6 +67,11 @@ class Souscripteur extends Model
         return $this->morphMany(Auteur::class, 'auteurable');
     }
 
+    public function financeurs()
+    {
+        return $this->morphMany(PatientSouscripteur::class, 'financable');
+    }
+
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
     }

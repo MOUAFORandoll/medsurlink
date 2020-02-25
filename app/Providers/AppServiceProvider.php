@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\ActionMotif;
 use App\Models\Affiliation;
 use App\Models\Allergie;
 use App\Models\Antecedent;
+use App\Models\Cardiologie;
 use App\Models\Conclusion;
 use App\Models\DossierAllergie;
 use App\Models\ConsultationExamenClinique;
@@ -19,6 +21,7 @@ use App\Models\ConsultPrenExamCom;
 use App\Models\DossierMedical;
 use App\Models\Echographie;
 use App\Models\EtablissementExercice;
+use App\Models\ExamenCardio;
 use App\Models\ExamenClinique;
 use App\Models\ExamenComplementaire;
 use App\Models\File;
@@ -66,6 +69,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Relation::morphMap([
+            'ActionMotif'=>ActionMotif::class,
+            'ExamenCardio'=>ExamenCardio::class,
+            'Cardiologie'=>Cardiologie::class,
             'File'=>File::class,
             'OrdonanceMedicament'=>OrdonanceMedicament::class,
             'Ordonance'=>Ordonance::class,
