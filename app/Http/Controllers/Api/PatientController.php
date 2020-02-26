@@ -29,7 +29,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with(['souscripteur','dossier','user','affiliations','financeurs'])->restrictUser()->get();
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','financeurs.financable'])->restrictUser()->get();
         return response()->json(['patients'=>$patients]);
     }
 
@@ -117,7 +117,7 @@ class PatientController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $patient = Patient::with(['souscripteur.user','user','affiliations','etablissements','financeurs'])->restrictUser()->whereSlug($slug)->first();
+        $patient = Patient::with(['souscripteur.user','user','affiliations','etablissements','financeurs.financable.user'])->restrictUser()->whereSlug($slug)->first();
 
         return response()->json(['patient'=>$patient]);
     }

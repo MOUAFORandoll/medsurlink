@@ -195,4 +195,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::put('ordonance/{ordonance}/archiver','Api\OrdonanceController@archiver');
     Route::put('ordonance/{ordonance}/transmettre','Api\OrdonanceController@transmettre');
     Route::delete('file/{file}','Api\FileController@destroy');
+    Route::resource('financeur','Api\PatientSouscripteurController');
+    Route::post('financeur/retirer','Api\PatientSouscripteurController@retirer');
 });

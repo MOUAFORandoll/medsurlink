@@ -37,6 +37,7 @@ use App\Models\OrdonanceMedicament;
 use App\Models\ParametreCommun;
 use App\Models\ParametreObstetrique;
 use App\Models\Patient;
+use App\Models\PatientSouscripteur;
 use App\Models\Praticien;
 use App\Models\Profession;
 use App\Models\Resultat;
@@ -69,6 +70,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Relation::morphMap([
+            'PatientSouscripteur'=>PatientSouscripteur::class,
             'ActionMotif'=>ActionMotif::class,
             'ExamenCardio'=>ExamenCardio::class,
             'Cardiologie'=>Cardiologie::class,

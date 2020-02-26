@@ -76,7 +76,7 @@ class Patient extends Model
 
     public function financeurs()
     {
-        return $this->morphMany(PatientSouscripteur::class, 'financable');
+        return $this->hasMany(PatientSouscripteur::class, 'patient_id','user_id');
     }
 
     public function user(){

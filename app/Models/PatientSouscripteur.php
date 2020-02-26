@@ -36,6 +36,6 @@ class PatientSouscripteur extends Model
     }
 
     public function patients(){
-        return $this->belongsTo(Patient::class,'patient_id','id');
+        return $this->belongsTo(Patient::class,'patient_id','user_id');
     }
 }
