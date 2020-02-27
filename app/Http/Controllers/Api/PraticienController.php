@@ -58,8 +58,12 @@ class PraticienController extends Controller
         $user->assignRole('Praticien');
 
         //Sauvegarde des informations specifique
+        $etablissements = $request->get('etablissement_id');
+        $etablissements = explode(",",$etablissements);
+
         $praticien = Praticien::create($request->validated() + ['user_id' => $user->id]);
-        $praticien->etablissements()->attach($request->get('etablissement_id'));
+        //Ajout des établissements
+        $praticien->etablissements()->attach($etablissements);
         $praticien->save();
 
         if($request->hasFile('signature')) {

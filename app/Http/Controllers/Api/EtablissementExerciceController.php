@@ -30,7 +30,7 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::with(['praticiens','patients.dossier','patients.user'])->get();
+        $etablissements =  EtablissementExercice::with(['praticiens','patients.dossier','patients.user','patients.financeurs'])->get();
 //        foreach ($etablissements as $etablissement){
 //            foreach ($etablissement->patients as $patient) {
 //                $patient['user'] = $patient->user;
@@ -58,7 +58,10 @@ class EtablissementExerciceController extends Controller
      */
     public function store(EtablissementExerciceRequest $request)
     {
-        $etablissement = EtablissementExercice::create($request->validated());
+        $etablissement = EtablissementExercice::create([
+            "name"=> strtoupper($request->name),
+            "description"=>$request->description,
+        ]);
 
         if($request->hasFile('logo')) {
             if ($request->file('logo')->isValid()) {
@@ -117,7 +120,10 @@ class EtablissementExerciceController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        EtablissementExercice::whereSlug($slug)->update($request->validated());
+        EtablissementExercice::whereSlug($slug)->update([
+            "name"=> strtoupper($request->name),
+            "description"=>$request->description,
+        ]);
 
         $etablissement = EtablissementExercice::with(['praticiens','patients'])->whereSlug($slug)->first();
 

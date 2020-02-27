@@ -31,7 +31,7 @@ class PatientUpdateRequest extends FormRequest
 
         return [
             "user_id"=>'sometimes|integer|exists:users,id',
-            "souscripteur_id"=>'required|integer|exists:souscripteurs,user_id',
+            "souscripteur_id"=>'sometimes|integer|exists:souscripteurs,user_id',
             "sexe"=>["required",Rule::in(['M','F'])],
             "date_de_naissance"=>'required|date|before_or_equal:'.Carbon::now()->format('Y-m-d'),
             "code_postal"=>'sometimes|nullable|string',

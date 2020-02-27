@@ -51,4 +51,7 @@ class Motif extends Model
         }
     }
 
+    public function actions(){
+        return $this->hasOne(Motif::class,'motif_id','id');
+    }
 }

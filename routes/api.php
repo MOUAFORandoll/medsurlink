@@ -108,6 +108,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('etablissement','Api\EtablissementExerciceController')->except(['create','store','destroy','edit']);
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except(['create','edit']);
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except(['create','edit']);
+    Route::resource('consultation-cardiologie','Api\CardiologieController')->except(['create','edit']);
     Route::resource('motif','Api\MotifController')->except(['create','edit']);
     Route::resource('allergie','Api\AllergieController')->except(['create','edit']);
     Route::resource('antecedent','Api\AntecedentController')->except(['create','edit']);
@@ -193,4 +194,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::resource('ordonance','Api\OrdonanceController')->except(['edit','create']);
     Route::put('ordonance/{ordonance}/archiver','Api\OrdonanceController@archiver');
     Route::put('ordonance/{ordonance}/transmettre','Api\OrdonanceController@transmettre');
+    Route::delete('file/{file}','Api\FileController@destroy');
+    Route::resource('financeur','Api\PatientSouscripteurController');
+    Route::post('financeur/retirer','Api\PatientSouscripteurController@retirer');
 });

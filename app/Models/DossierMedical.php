@@ -80,6 +80,11 @@ class DossierMedical extends Model
         return $this->hasMany(Ordonance::class, 'dossier_medical_id');
     }
 
+    public function cardiologies()
+    {
+        return $this->hasMany(Cardiologie::class, 'dossier_medical_id');
+    }
+
     /**
      * The "booting" method of the model.
      *
@@ -99,9 +104,30 @@ class DossierMedical extends Model
                 $traitement['isAuthor'] = $traitementIsAuthor->getOriginalContent();
             }
 
+            foreach ($this->allergies as $allergy){
+                $allergyAuthor = checkIfIsAuthorOrIsAuthorized("Allergie",$allergy->id,"create");
+                $allergy['isAuthor'] = $allergyAuthor->getOriginalContent();
+            }
+
+            foreach ($this->antecedents as $antecedent){
+                $antecedentAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent",$antecedent->id,"create");
+                $antecedent['isAuthor'] = $antecedentAuthor->getOriginalContent();
+            }
+
             foreach ($this->consultationsMedecine as $consultation){
                 $consultation['motifs'] = $consultation->motifs;
                 $consultation['conclusions'] = $consultation->conclusions;
+                $consultation['etablissement'] = $consultation->etablissement;
+            }
+
+            foreach ($this->cardiologies as $consultation){
+                $motifs = [];
+
+                foreach ($consultation->actions as $action){
+                    array_push($motifs,$action->motifs);
+                }
+
+                $consultation['motifs'] = $motifs;
                 $consultation['etablissement'] = $consultation->etablissement;
             }
 

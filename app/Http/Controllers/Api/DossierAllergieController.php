@@ -37,6 +37,7 @@ class DossierAllergieController extends Controller
                 $query->orderBy('date', 'desc');
             }
         ])->find($request->get('dossier'));
+        $dossier->updateDossier();
         return response()->json(['dossier'=>$dossier]);
     }
 
@@ -84,6 +85,7 @@ class DossierAllergieController extends Controller
                 $query->orderBy('date', 'desc');
             }
         ])->find($request->get('dossier'));
+        $dossier->updateDossier();
         return response()->json(['dossier'=>$dossier]);
     }
 

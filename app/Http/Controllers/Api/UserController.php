@@ -156,10 +156,11 @@ class UserController extends Controller
         $password = str_random(10);
 
         $email = $request->email;
+        $isMedicasure = $request->get('isMedicasure','0');
 
         if (!is_null($role) && $role == "Patient"){
-
-            if(is_null($email)){
+            //Si l'email est null
+            if(is_null($email) && $isMedicasure && !is_null($request->souscripteur_id)){
                 $souscripteur =  Souscripteur::with('user')->where('user_id','=',$request->souscripteur_id)->first();
                 $email = $souscripteur->user->email;
             }
@@ -176,6 +177,7 @@ class UserController extends Controller
             'pays'=>$request->pays,
             'telephone'=>$request->telephone,
             'adresse'=>$request->adresse,
+            'isMedicasure'=>$request->get('isMedicasure','0'),
             'password'=>Hash::make($password)
         ]);
 
@@ -183,13 +185,16 @@ class UserController extends Controller
     }
 
     public static function sendUserInformationViaMail(User $user,$password){
-
-        $mail = new PasswordGenerated($user,$password);
-        Mail::to($user->email)->send($mail);
+        if (!is_null($user->email)){
+            $mail = new PasswordGenerated($user,$password);
+            Mail::to($user->email)->send($mail);
+        }
     }
     public static function sendUserPatientInformationViaMail(User $user,$password){
-        $mail = new PatientPasswordGenerated($user,$password);
-        Mail::to($user->email)->send($mail);
+        if (!is_null($user->email)) {
+            $mail = new PatientPasswordGenerated($user, $password);
+            Mail::to($user->email)->send($mail);
+        }
     }
 
     public static function updatePersonalInformation($data,$slug){
@@ -217,6 +222,7 @@ class UserController extends Controller
             'telephone' => ['required','string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'adresse' => ['sometimes','nullable', 'string','min:3'],
+            'isMedicasure' => ['sometimes','nullable', 'string'],
         ];
         $validation = Validator::make($data,$rules);
 
@@ -234,6 +240,7 @@ class UserController extends Controller
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
             'adresse' => ['sometimes','nullable', 'string','min:3'],
+            'isMedicasure' => ['sometimes','nullable', 'string'],
         ];
 //        if(!is_null($role) && $role == "Patient"){
         $rule['email'] = "sometimes|nullable|string|email";

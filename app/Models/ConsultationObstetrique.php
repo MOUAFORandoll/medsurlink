@@ -129,4 +129,8 @@ class ConsultationObstetrique extends Model
     {
         return $query->orderBy('ddr', 'desc');
     }
+
+    public function files(){
+        return $this->morphMany(File::class,'fileable');
+    }
 }

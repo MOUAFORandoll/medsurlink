@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\ActionMotif;
 use App\Models\Affiliation;
 use App\Models\Allergie;
 use App\Models\Antecedent;
+use App\Models\Cardiologie;
 use App\Models\Conclusion;
 use App\Models\DossierAllergie;
 use App\Models\ConsultationExamenClinique;
@@ -19,8 +21,10 @@ use App\Models\ConsultPrenExamCom;
 use App\Models\DossierMedical;
 use App\Models\Echographie;
 use App\Models\EtablissementExercice;
+use App\Models\ExamenCardio;
 use App\Models\ExamenClinique;
 use App\Models\ExamenComplementaire;
+use App\Models\File;
 use App\Models\Gestionnaire;
 use App\Models\Hospitalisation;
 use App\Models\HospitalisationExamClin;
@@ -33,6 +37,7 @@ use App\Models\OrdonanceMedicament;
 use App\Models\ParametreCommun;
 use App\Models\ParametreObstetrique;
 use App\Models\Patient;
+use App\Models\PatientSouscripteur;
 use App\Models\Praticien;
 use App\Models\Profession;
 use App\Models\Resultat;
@@ -65,6 +70,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Relation::morphMap([
+            'PatientSouscripteur'=>PatientSouscripteur::class,
+            'ActionMotif'=>ActionMotif::class,
+            'ExamenCardio'=>ExamenCardio::class,
+            'Cardiologie'=>Cardiologie::class,
+            'File'=>File::class,
             'OrdonanceMedicament'=>OrdonanceMedicament::class,
             'Ordonance'=>Ordonance::class,
             'Medicament'=>Medicament::class,

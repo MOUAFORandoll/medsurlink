@@ -29,7 +29,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with(['souscripteur','dossier','user','affiliations'])->restrictUser()->get();
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','financeurs.financable'])->restrictUser()->get();
         return response()->json(['patients'=>$patients]);
     }
 
@@ -94,9 +94,10 @@ class PatientController extends Controller
 
             $patient = Patient::with('user')->where('user_id','=',$patient->user_id)->first();
             $souscripteur = Souscripteur::with('user')->where('user_id','=',$patient->souscripteur_id)->first();
-
-            $mail = new PatientAffiliated($souscripteur,$patient);
-            Mail::to($souscripteur->user->email)->send($mail);
+            if (!is_null($souscripteur)){
+                $mail = new PatientAffiliated($souscripteur,$patient);
+                Mail::to($souscripteur->user->email)->send($mail);
+            }
 
             return response()->json(['patient'=>$patient,"password"=>$password]);
         }catch (\Swift_TransportException $transportException){
@@ -116,7 +117,7 @@ class PatientController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $patient = Patient::with(['souscripteur.user','user','affiliations','etablissements'])->restrictUser()->whereSlug($slug)->first();
+        $patient = Patient::with(['souscripteur.user','user','affiliations','etablissements','financeurs.financable.user'])->restrictUser()->whereSlug($slug)->first();
 
         return response()->json(['patient'=>$patient]);
     }
