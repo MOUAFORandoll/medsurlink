@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/helpers.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/helpers.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +43,13 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
+        <item name="users: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -525,7 +534,7 @@
       <workItem from="1582712602907" duration="4544000" />
       <workItem from="1582718379500" duration="218000" />
       <workItem from="1582718682630" duration="8327000" />
-      <workItem from="1582789605817" duration="8820000" />
+      <workItem from="1582789605817" duration="11825000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -646,10 +655,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1582618193735" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1582794427575">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1582809671120">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1582794427575" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1582809671120" />
     <state x="405" y="277" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1582463980420">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

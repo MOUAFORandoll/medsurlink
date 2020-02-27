@@ -88,6 +88,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], funct
     Route::put('consultation-medecine/{consultation_medecine}/archiver','Api\ConsultationMedecineGeneraleController@archiver');
     Route::put('consultation-obstetrique/{consultation_obstetrique}/archiver','Api\ConsultationObstetriqueController@archiver');
     Route::put('consultation-prenatale/{consultation_prenatale}/archiver','Api\ConsultationPrenantaleController@archiver');
+    Route::put('ordonance/{ordonance}/archiver','Api\OrdonanceController@archiver');
 });
 
 //    Définition des routes accéssible par le patient
@@ -192,7 +193,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::resource('praticien','Api\PraticienController')->only(['index']);
     Route::resource('medicament','Api\MedicamentController')->except(['edit','create']);
     Route::resource('ordonance','Api\OrdonanceController')->except(['edit','create']);
-    Route::put('ordonance/{ordonance}/archiver','Api\OrdonanceController@archiver');
     Route::put('ordonance/{ordonance}/transmettre','Api\OrdonanceController@transmettre');
     Route::delete('file/{file}','Api\FileController@destroy');
     Route::resource('financeur','Api\PatientSouscripteurController');
