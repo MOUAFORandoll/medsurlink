@@ -12,6 +12,7 @@ use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePatient;
 use App\Models\Patient;
 use App\Models\Souscripteur;
+use App\Traits\SmsTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
@@ -21,6 +22,7 @@ use Netpok\Database\Support\DeleteRestrictionException;
 class PatientController extends Controller
 {
     use PersonnalErrors;
+    use SmsTrait;
     protected $table = 'patients';
     /**
      * Display a listing of the resource.
@@ -90,10 +92,15 @@ class PatientController extends Controller
         //Envoi des informations patient par mail
         $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
         try{
+            $user = $patient->user;
+            $dossier = $patient->dossier;
+//            dd(trans('sms.patientAccountCreated',['sexe'=>$patient->sexe=='F' ? 'M.' : "Mme.", 'nom'=>ucfirst($user->nom),'compte'=>$dossier->numero_dossier,'password'=>$password],'fr'));
+            $this->sendSMS($user->telephone,trans('sms.patientAccountCreated',['sexe'=>$patient->sexe=='F' ? 'M.' : "Mme.", 'nom'=>ucfirst($user->nom),'compte'=>$dossier->numero_dossier,'password'=>$password],'fr'));
+
             UserController::sendUserPatientInformationViaMail($user,$password);
 
-            $patient = Patient::with('user')->where('user_id','=',$patient->user_id)->first();
-            $souscripteur = Souscripteur::with('user')->where('user_id','=',$patient->souscripteur_id)->first();
+            $patient = Patient::with('user','dossier')->where('user_id','=',$patient->user_id)->first();
+           $souscripteur = Souscripteur::with('user')->where('user_id','=',$patient->souscripteur_id)->first();
             if (!is_null($souscripteur)){
                 $mail = new PatientAffiliated($souscripteur,$patient);
                 Mail::to($souscripteur->user->email)->send($mail);
