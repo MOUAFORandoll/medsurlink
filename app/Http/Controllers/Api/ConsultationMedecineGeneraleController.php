@@ -133,8 +133,7 @@ class ConsultationMedecineGeneraleController extends Controller
                 "frequence_respiratoire",
                 "sato2")
             +
-            ["consultation_medecine_generale_id" => $consultation->id]);
-
+            ["consultation_medecine_generale_id" => $consultation->id,"communable_type"=>"Consultation","communable_id"=>$consultation->id]);
 
         $this->updateBmi($request, $parametreCommun);
 
@@ -325,8 +324,6 @@ class ConsultationMedecineGeneraleController extends Controller
         $consultation = ConsultationMedecineGenerale::with([
             'operationables.contributable',
             'dossier',
-            'dossier.allergies',
-            'dossier.antecedents',
             'dossier.resultatsLabo',
             'dossier.hospitalisations',
             'dossier.consultationsObstetrique',
@@ -335,6 +332,7 @@ class ConsultationMedecineGeneraleController extends Controller
             'dossier.allergies',
             'dossier.antecedents',
             'dossier.traitements',
+            'dossier.cardiologies',
             'motifs',
             'conclusions',
             'parametresCommun',

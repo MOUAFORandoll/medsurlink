@@ -72,9 +72,14 @@ class CardiologieController extends Controller
             'actions.motifs',
             'parametresCommun',
             'examenCardios',
-            'dossier.traitements',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
             'dossier.allergies',
             'dossier.antecedents',
+            'dossier.traitements',
             "files",
             "operationables.contributable"
         )->find($cardiologie->id);
@@ -93,10 +98,15 @@ class CardiologieController extends Controller
     {
         $consultation = Cardiologie::with([
             'operationables.contributable',
-            'dossier',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
             'dossier.allergies',
             'dossier.antecedents',
             'dossier.traitements',
+            'dossier.cardiologies',
             'actions.motifs',
             'parametresCommun',
             'etablissement',
