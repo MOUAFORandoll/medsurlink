@@ -16,9 +16,7 @@ trait SmsTrait
      */
     public function sendSMS($telephone, $message, $sender = null)
     {
-        $sms = new SMS();
-        $sms->telephone = $telephone;
-        $sms->notify(new SendSMS($message, getFullNameWithoutAccent( is_null($sender) ? 'Medicasure' : $sender)));
+        sendSMS($telephone, $message, $sender);
     }
 
 }
