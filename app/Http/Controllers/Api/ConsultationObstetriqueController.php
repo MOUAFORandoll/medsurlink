@@ -230,6 +230,10 @@ class ConsultationObstetriqueController extends Controller
             $resultat->save();
             defineAsAuthor("ConsultationObstetrique",$resultat->id,'archive');
             $resultat->updateObstetricConsultation();
+
+            //Envoi du sms
+            $this->sendSmsToUser($resultat->dossier->patient->user);
+
             return response()->json(['resultat'=>$resultat]);
         }
     }

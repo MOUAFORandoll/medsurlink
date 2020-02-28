@@ -7,6 +7,7 @@ use App\Http\Requests\OrdonanceRequest;
 use App\Models\DossierMedical;
 use App\Models\Ordonance;
 use App\Models\OrdonanceMedicament;
+use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,6 +15,8 @@ use App\Http\Controllers\Controller;
 class OrdonanceController extends Controller
 {
     protected $table = 'ordonances';
+    use SmsTrait;
+
     use PersonnalErrors;
     /**
      * Display a listing of the resource.
@@ -156,6 +159,8 @@ class OrdonanceController extends Controller
         $ordonance->archieved_at = Carbon::now();
         $ordonance->save();
         defineAsAuthor('Ordonance',$ordonance->id,'archieve',$ordonance->dossier->patient_id);
+        //Envoi du sms
+        $this->sendSmsToUser($ordonance->dossier->patient->user);
         return response()->json(['ordonance'=>$ordonance]);
     }
 

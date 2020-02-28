@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ResultatRequest;
 use App\Models\ResultatImagerie;
+use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class ResultatImagerieController extends Controller
 {
     use PersonnalErrors;
+    use SmsTrait;
     protected $table = "resultat_imageries";
 
     /**
@@ -53,7 +55,7 @@ class ResultatImagerieController extends Controller
                 $resultat = ResultatImagerie::create($request->validated());
                 $this->uploadFile($request,$resultat);
 
-                defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
+                defineAsAuthor("ResultatImagerie", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
                 return response()->json([
                     'resultat' => $resultat
@@ -68,7 +70,7 @@ class ResultatImagerieController extends Controller
             );
         }else{
             $resultat = ResultatImagerie::create($request->validated());
-            defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
+            defineAsAuthor("ResultatImagerie", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
             return response()->json([
                 'resultat' => $resultat
@@ -135,7 +137,7 @@ class ResultatImagerieController extends Controller
 
         $resultat = ResultatImagerie::findBySlug($slug);
 
-        $this->checkIfAuthorized("Resultat", $resultat->id,"create");
+        $this->checkIfAuthorized("ResultatImagerie", $resultat->id,"create");
 
         ResultatImagerie::whereSlug($slug)->update($request->validated());
 
@@ -180,7 +182,9 @@ class ResultatImagerieController extends Controller
             $resultat->archived_at = Carbon::now();
             $resultat->save();
 
-            defineAsAuthor("Resultat", $resultat->id,'archive');
+            defineAsAuthor("ResultatImagerie", $resultat->id,'archive');
+            //Envoi du sms
+            $this->sendSmsToUser($resultat->dossier->patient->user);
 
             return response()->json([
                 'resultat' => $resultat

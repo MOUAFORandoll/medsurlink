@@ -17,6 +17,7 @@ use App\Models\ParametreCommun;
 use App\Models\Patient;
 use App\Models\Traitement;
 use App\Models\TraitementActuel;
+use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -28,6 +29,7 @@ use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 class ConsultationMedecineGeneraleController extends Controller
 {
     use PersonnalErrors;
+    use SmsTrait;
     protected $table = 'consultation_medecine_generales';
 
     /**
@@ -186,7 +188,7 @@ class ConsultationMedecineGeneraleController extends Controller
             $consultation->updateConsultationMedecine();
 
         if ($request->hasFile('documents')) {
-                $this->uploadFile($request, $consultation);
+            $this->uploadFile($request, $consultation);
         }
 
         return response()->json(["consultation" => $consultation]);
@@ -528,6 +530,10 @@ class ConsultationMedecineGeneraleController extends Controller
 
             defineAsAuthor("ConsultationMedecineGenerale",$resultat->id,'archive');
             $resultat->updateConsultationMedecine();
+
+            $user = $resultat->dossier->patient->user;
+            $this->sendSmsToUser($user);
+
             return response()->json(['resultat'=>$resultat]);
         }
     }

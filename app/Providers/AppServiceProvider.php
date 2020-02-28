@@ -41,6 +41,8 @@ use App\Models\PatientSouscripteur;
 use App\Models\Praticien;
 use App\Models\Profession;
 use App\Models\Resultat;
+use App\Models\ResultatImagerie;
+use App\Models\ResultatLabo;
 use App\Models\Souscripteur;
 use App\Models\Specialite;
 use App\Models\Traitement;
@@ -109,7 +111,8 @@ class AppServiceProvider extends ServiceProvider
             'Patient'=>Patient::class,
             'Praticien'=>Praticien::class,
             'Profession'=>Profession::class,
-            'Resultat'=>Resultat::class,
+            'ResultatLabo'=>ResultatLabo::class,
+            'ResultatImagerie'=>ResultatImagerie::class,
             'Souscripteur'=>Souscripteur::class,
             'Specialite'=>Specialite::class,
             'Traitement'=>Traitement::class,

@@ -101,16 +101,15 @@ class PatientController extends Controller
             UserController::sendUserPatientInformationViaMail($user,$password);
 
             $patient = Patient::with('user','dossier')->where('user_id','=',$patient->user_id)->first();
-           $souscripteur = Souscripteur::with('user')->where('user_id','=',$patient->souscripteur_id)->first();
+            $souscripteur = Souscripteur::with('user')->where('user_id','=',$patient->souscripteur_id)->first();
             if (!is_null($souscripteur)){
 
                 $user = $souscripteur->user;
-                $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
-                $this->sendSMS($user->telephone,trans('sms.accountUpdate',['nom'=>$nom],'fr'));
+                $this->sendSmsToUser($user);
 
                 $mail = new PatientAffiliated($souscripteur,$patient);
                 Mail::to($souscripteur->user->email)->send($mail);
-                }
+            }
 
             return response()->json(['patient'=>$patient,"password"=>$password]);
         }catch (\Swift_TransportException $transportException){

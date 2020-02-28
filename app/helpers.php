@@ -4,6 +4,20 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
+
+/**
+ * Fonction permettant de determiner si on a déjà archivé un element lié au user
+ * @param $user
+ * @return int
+ */
+//if (!function_exists('hasArchivedElement')){
+//
+//    function hasArchivedElement($user){
+//        $age = Carbon::today()->diffInYears(Carbon::parse($date_de_naissance));
+//        return $age;
+//    }
+//}
+
 /**
  * Fonction permettant de calculer l'age lié a la date passé en parametre
  * @param $date_de_naissance

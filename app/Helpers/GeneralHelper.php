@@ -27,6 +27,25 @@ if(!function_exists('sendSMS'))
     }
 }
 
+if(!function_exists('sendSmsToUser'))
+{
+    /**
+     * Send a SMS to a User
+     *
+     * @param $user
+     * @param null $sender
+     */
+    function sendSmsToUser($user,$sender = null) {
+        if (!is_null($user)){
+            try {
+                $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+                sendSMS($user->telephone,trans('sms.accountUpdated',['nom'=>$nom],'fr'),$sender);
+            }catch (\Exception $exception){
+                //$exception
+            }
+        }
+    }
+}
 
 if(!function_exists('getFullNameWithoutAccent'))
 {

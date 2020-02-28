@@ -7,11 +7,14 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\HospitalisationRequest;
 use App\Models\Hospitalisation;
 use App\Models\Motif;
+use App\Traits\SmsTrait;
 use Carbon\Carbon;
 
 class HospitalisationController extends Controller
 {
     use PersonnalErrors;
+    use SmsTrait;
+
     protected $table = "hospitalisations";
     /**
      * Display a listing of the resource.
@@ -277,6 +280,10 @@ class HospitalisationController extends Controller
             $resultat->archived_at = Carbon::now();
             $resultat->save();
             defineAsAuthor("Hospitalisation",$resultat->id,'archive');
+
+            //Envoi du sms
+            $this->sendSmsToUser($resultat->dossier->patient->user);
+
             return response()->json(['resultat'=>$resultat]);
         }
     }
