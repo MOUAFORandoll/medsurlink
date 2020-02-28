@@ -92,19 +92,25 @@ class PatientController extends Controller
         //Envoi des informations patient par mail
         $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
         try{
+            //Envoi de sms
             $user = $patient->user;
-            $dossier = $patient->dossier;
-//            dd(trans('sms.patientAccountCreated',['sexe'=>$patient->sexe=='F' ? 'M.' : "Mme.", 'nom'=>ucfirst($user->nom),'compte'=>$dossier->numero_dossier,'password'=>$password],'fr'));
-            $this->sendSMS($user->telephone,trans('sms.patientAccountCreated',['sexe'=>$patient->sexe=='F' ? 'M.' : "Mme.", 'nom'=>ucfirst($user->nom),'compte'=>$dossier->numero_dossier,'password'=>$password],'fr'));
+            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+            $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$password],'fr'));
+            //!Envoi de sms
 
             UserController::sendUserPatientInformationViaMail($user,$password);
 
             $patient = Patient::with('user','dossier')->where('user_id','=',$patient->user_id)->first();
            $souscripteur = Souscripteur::with('user')->where('user_id','=',$patient->souscripteur_id)->first();
             if (!is_null($souscripteur)){
+
+                $user = $souscripteur->user;
+                $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+                $this->sendSMS($user->telephone,trans('sms.accountUpdate',['nom'=>$nom],'fr'));
+
                 $mail = new PatientAffiliated($souscripteur,$patient);
                 Mail::to($souscripteur->user->email)->send($mail);
-            }
+                }
 
             return response()->json(['patient'=>$patient,"password"=>$password]);
         }catch (\Swift_TransportException $transportException){

@@ -1,5 +1,7 @@
 <?php
 
 return [
-    'patientAccountCreated'        => ':sexe :nom, utilisez les identifiants ci-dessous pour accéder à votre compte Medsur Compte: :compte Mot de passe: :password www.medsurlink.com',
-];
+    'accountCreated'        => 'MEDSURLINK Bonjour :nom, Nous espérons vous trouver bien portant. Veuillez cliquer sur ce lien pour accéder à votre compte MEDSURLINK : NB: Votre mot de passe: :password www.medsurlink.com  ',
+    'accountUpdate'        => 'MEDSURLINK Bonjour :nom, Nous espérons vous trouver bien portant. Veuillez cliquer sur ce lien pour accéder au mise à jour de votre compte MEDSURLINK : www.medsurlink.com',
+
+    ];

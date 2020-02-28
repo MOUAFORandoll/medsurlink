@@ -20,7 +20,7 @@ if(!function_exists('sendSMS'))
         if(!is_null($response)) {
             $sms = new SMS();
             $sms->telephone = $response;
-            $sms->notify(new SendSMS($message, getFullNameWithoutAccent( is_null($sender) ? 'Medicasure' : $sender)));
+            $sms->notify(new SendSMS($message, getFullNameWithoutAccent( is_null($sender) ? 'MEDSURLINK' : $sender)));
         }
 
         // TODO: Perform otherwise action
