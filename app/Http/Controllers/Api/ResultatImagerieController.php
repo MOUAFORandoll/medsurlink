@@ -55,7 +55,7 @@ class ResultatImagerieController extends Controller
                 $resultat = ResultatImagerie::create($request->validated());
                 $this->uploadFile($request,$resultat);
 
-                defineAsAuthor("ResultatImagerie", $resultat->id,'create',$resultat->dossier->patient->user_id);
+                defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
                 return response()->json([
                     'resultat' => $resultat
@@ -70,7 +70,7 @@ class ResultatImagerieController extends Controller
             );
         }else{
             $resultat = ResultatImagerie::create($request->validated());
-            defineAsAuthor("ResultatImagerie", $resultat->id,'create',$resultat->dossier->patient->user_id);
+            defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
             return response()->json([
                 'resultat' => $resultat
@@ -137,7 +137,7 @@ class ResultatImagerieController extends Controller
 
         $resultat = ResultatImagerie::findBySlug($slug);
 
-        $this->checkIfAuthorized("ResultatImagerie", $resultat->id,"create");
+        $this->checkIfAuthorized("Resultat", $resultat->id,"create");
 
         ResultatImagerie::whereSlug($slug)->update($request->validated());
 
@@ -182,7 +182,7 @@ class ResultatImagerieController extends Controller
             $resultat->archived_at = Carbon::now();
             $resultat->save();
 
-            defineAsAuthor("ResultatImagerie", $resultat->id,'archive');
+            defineAsAuthor("Resultat", $resultat->id,'archive');
             //Envoi du sms
             $this->sendSmsToUser($resultat->dossier->patient->user);
 
