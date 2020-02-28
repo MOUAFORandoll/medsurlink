@@ -13,6 +13,7 @@ use App\Models\EtablissementExercicePatient;
 use App\Models\Patient;
 use App\Models\Souscripteur;
 use App\Traits\SmsTrait;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
@@ -62,12 +63,15 @@ class PatientController extends Controller
 
         $user = $userResponse->getOriginalContent()['user'];
         $password = $userResponse->getOriginalContent()['password'];
-
+        $date_naissance = Carbon::parse($request->date_de_naissance)->year;
+        $password = $date_naissance.substr($password,0,5);
         //Attribution du rôle patient
         $user->assignRole('Patient');
 
         //Creation du compte patient
+
         $age = evaluateYearOfOld($request->date_de_naissance);
+
         $patient = Patient::create($request->except(['code_postal','quartier']) + ['user_id' => $user->id,'age'=>$age]);
 
         //Generation du dossier client
