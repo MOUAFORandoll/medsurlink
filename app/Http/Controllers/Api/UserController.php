@@ -191,9 +191,11 @@ class UserController extends Controller
         }
     }
     public static function sendUserPatientInformationViaMail(User $user,$password){
-        if (!is_null($user->email)) {
-            $mail = new PatientPasswordGenerated($user, $password);
-            Mail::to($user->email)->send($mail);
+        if (!is_null($user)){
+            if (!is_null($user->email)) {
+                $mail = new PatientPasswordGenerated($user, $password);
+                Mail::to($user->email)->send($mail);
+            }
         }
     }
 
@@ -220,7 +222,7 @@ class UserController extends Controller
             'ville' => ['required','string', 'max:255'],
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'email' => ['sometimes','nullable', 'string', 'email', 'max:255'],
             'adresse' => ['sometimes','nullable', 'string','min:3'],
             'isMedicasure' => ['sometimes','nullable', 'string'],
         ];

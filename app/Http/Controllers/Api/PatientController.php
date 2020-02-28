@@ -180,9 +180,11 @@ class PatientController extends Controller
         $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
 
         try{
-            $mail = new updateSetting($patient->user);
 
-            Mail::to($patient->user->email)->send($mail);
+            if (!is_null($patient->user->email)){
+                    $mail = new updateSetting($patient->user);
+                    Mail::to($patient->user->email)->send($mail);
+                }
 
         }catch (\Swift_TransportException $transportException){
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
