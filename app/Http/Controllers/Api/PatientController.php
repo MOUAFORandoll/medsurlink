@@ -64,7 +64,8 @@ class PatientController extends Controller
         $user = $userResponse->getOriginalContent()['user'];
         $password = $userResponse->getOriginalContent()['password'];
         $date_naissance = Carbon::parse($request->date_de_naissance)->year;
-        $password = $date_naissance.substr($password,0,5);
+        $code = substr($password,0,5);
+        $password = $date_naissance.$code;
         //Attribution du rôle patient
         $user->assignRole('Patient');
 
@@ -99,7 +100,7 @@ class PatientController extends Controller
             //Envoi de sms
             $user = $patient->user;
             $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
-            $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$password],'fr'));
+            $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$code],'fr'));
             //!Envoi de sms
 
             UserController::sendUserPatientInformationViaMail($user,$password);
