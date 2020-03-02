@@ -64,7 +64,14 @@ class PraticienController extends Controller
         $praticien = Praticien::create($request->validated() + ['user_id' => $user->id]);
         //Ajout des établissements
         $praticien->etablissements()->attach($etablissements);
+        if ($request->get('isMedicasure') == "1"){
+            if (!in_array(4,$etablissements)){
+                $praticien->etablissements()->attach(4);
+            }
+        }
         $praticien->save();
+
+
 
         if($request->hasFile('signature')) {
             if ($request->file('signature')->isValid()) {

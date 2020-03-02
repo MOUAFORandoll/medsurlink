@@ -12,6 +12,7 @@ use App\Mail\updateSetting;
 use App\Models\Souscripteur;
 use App\Rules\EmailExistRule;
 use App\User;
+use Carbon\Carbon;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -154,11 +155,15 @@ class UserController extends Controller
             throw new ValidationException($validation,$validation->errors());
 
         $password = str_random(10);
-
+        $code="";
         $email = $request->email;
         $isMedicasure = $request->get('isMedicasure','0');
 
         if (!is_null($role) && $role == "Patient"){
+            $date_naissance = Carbon::parse($request->date_de_naissance)->year;
+            $code = substr($password,0,5);
+            $password = $date_naissance.$code;
+
             //Si l'email est null
             if(is_null($email) && $isMedicasure && !is_null($request->souscripteur_id)){
                 $souscripteur =  Souscripteur::with('user')->where('user_id','=',$request->souscripteur_id)->first();
@@ -181,7 +186,7 @@ class UserController extends Controller
             'password'=>Hash::make($password)
         ]);
 
-        return response()->json(['user'=>$user,'password'=>$password]);
+        return response()->json(['user'=>$user,'password'=>$password,'code'=>$code]);
     }
 
     public static function sendUserInformationViaMail(User $user,$password){
