@@ -40,12 +40,16 @@ class CardiologieRequest extends FormRequest
             "perimetre_abdominal"=>"sometimes|nullable|string",
             "conduite_a_tenir"=>"sometimes|nullable|string",
             "rendez_vous"=>"sometimes|nullable|date",
+            "nbreCigarette"=>"sometimes|nullable|string",
+            "nbreAnnee"=>"sometimes|nullable|string",
             "contributeurs.*" => "sometimes|nullable|integer",
             "examen_cardio"=>"sometimes|nullable",
             "examen_cardio.*.nom"=>"required|string",
             "examen_cardio.*.date_examen"=>"required|date",
             "examen_cardio.*.description"=>"required|string"
         ];
+
+        $rules["traitements"]="sometimes|nullable|string|min:2";
 
         return $rules;
     }

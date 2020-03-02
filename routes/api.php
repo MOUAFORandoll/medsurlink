@@ -73,6 +73,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::put('consultation-medecine/{id}/reactiver','Api\ConsultationMedecineGeneraleController@reactiver');
     Route::put('consultation-obstetrique/{id}/reactiver','Api\ConsultationObstetriqueController@reactiver');
     Route::post('consultation-medecine/{slug}','Api\ConsultationMedecineGeneraleController@update');
+    Route::post('consultation-cardiologie/{slug}','Api\CardiologieController@update');
     Route::put('consultation-obstetrique/{id}/transmettre','Api\ConsultationObstetriqueController@transmettre');
     Route::put('consultation-prenatale/{id}/transmettre','Api\ConsultationPrenantaleController@transmettre');
     Route::put('hospitalisation/{hospitalisation}/transmettre','Api\HospitalisationController@transmettre');
