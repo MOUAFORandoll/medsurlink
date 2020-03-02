@@ -134,12 +134,76 @@ class CardiologieController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param string $slug
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CardiologieRequest $request, $slug)
     {
-        //
+        //verification si user peut modifier
+
+        //Modification de la consultation
+        $cardiologie = Cardiologie::whereSlug($slug)->update(
+            $request->only(
+                "etablissement_id",
+                "dossier_medical_id",
+                "examen_clinique",
+                "date_consultation",
+                "anamnese",
+                "facteur_de_risque",
+                "profession",
+                "situation_familiale",
+                "nbre_enfant",
+                "tabac",
+                "alcool",
+                "autres",
+                "conclusion",
+                "conduite_a_tenir",
+                "rendez_vous",
+                "slug",
+                "nbreCigarette",
+                "nbreAnnee"
+            )
+        );
+        $cardiologie = Cardiologie::whereSlug($slug)->first();
+        defineAsAuthor("Cardiologie", $cardiologie->id, 'update', $cardiologie->dossier->patient->user_id);
+
+        //Enregistrement de motif
+        $this->enregistrerMotifs($request, $cardiologie);
+
+        // Enregistrement de parametre
+        $this->enregistrerParametre($request,$cardiologie);
+
+        //Enregistrement d'examen cardio
+        $this->enregistrerExamenCardio($request,$cardiologie);
+
+        //Enregistrement de traitement actuel
+        $this->enregistrerTraitementActuel($request,$cardiologie);
+
+        //enregistrement de contributeurs
+        $this->enregistrementContributeurs($request,$cardiologie);
+
+        //enregistrement de documents
+        if ($request->hasFile('documents')) {
+            $this->uploadFile($request, $cardiologie);
+        }
+
+        $cardiologie = Cardiologie::with(
+            'actions.motifs',
+            'parametresCommun',
+            'examenCardios',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.traitements',
+            "files",
+            "operationables.contributable"
+        )->find($cardiologie->id);
+
+        return response()->json(['consultation' => $cardiologie]);
     }
 
     /**

@@ -30,6 +30,8 @@ class Cardiologie extends Model
         "conduite_a_tenir",
         "rendez_vous",
         "slug",
+        "nbreCigarette",
+        "nbreAnnee",
     ];
     /**
      * Return the sluggable configuration array for this model.
