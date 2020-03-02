@@ -63,9 +63,7 @@ class PatientController extends Controller
 
         $user = $userResponse->getOriginalContent()['user'];
         $password = $userResponse->getOriginalContent()['password'];
-        $date_naissance = Carbon::parse($request->date_de_naissance)->year;
-        $code = substr($password,0,5);
-        $password = $date_naissance.$code;
+        $code = $userResponse->getOriginalContent()['code'];
         //Attribution du rôle patient
         $user->assignRole('Patient');
 
@@ -134,7 +132,7 @@ class PatientController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $patient = Patient::with(['souscripteur.user','user','affiliations','etablissements','financeurs.financable.user'])->restrictUser()->whereSlug($slug)->first();
+        $patient = Patient::with(['souscripteur.user','user','affiliations','etablissements','financeurs.financable.user','dossier'])->restrictUser()->whereSlug($slug)->first();
 
         return response()->json(['patient'=>$patient]);
     }
