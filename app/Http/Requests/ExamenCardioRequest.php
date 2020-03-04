@@ -13,7 +13,7 @@ class ExamenCardioRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,16 @@ class ExamenCardioRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
+        $rules =  [
+            'nom'=>"required|string|max:20",
+            "date_examen"=>'required|date',
+            "description"=>"required|string|max:255",
         ];
+
+        if ($this->getMethod() == 'POST'){
+            $rules['cardiologie_id']='required|string|exists:cardiologies,slug';
+        }
+
+        return $rules;
     }
 }

@@ -70,14 +70,13 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::put('resultat-labo/{id}/transmettre','Api\ResultatLaboController@transmit');
     Route::put('resultat-imagerie/{id}/transmettre','Api\ResultatImagerieController@transmit');
     Route::put('consultation-medecine/{id}/transmettre','Api\ConsultationMedecineGeneraleController@transmettre');
-    Route::put('consultation-medecine/{id}/reactiver','Api\ConsultationMedecineGeneraleController@reactiver');
-    Route::put('consultation-obstetrique/{id}/reactiver','Api\ConsultationObstetriqueController@reactiver');
-    Route::post('consultation-medecine/{slug}','Api\ConsultationMedecineGeneraleController@update');
+   Route::post('consultation-medecine/{slug}','Api\ConsultationMedecineGeneraleController@update');
     Route::post('consultation-cardiologie/{slug}','Api\CardiologieController@update');
+    Route::put('consultation-cardiologie/{slug}/transmettre','Api\CardiologieController@transmettre');
     Route::put('consultation-obstetrique/{id}/transmettre','Api\ConsultationObstetriqueController@transmettre');
     Route::put('consultation-prenatale/{id}/transmettre','Api\ConsultationPrenantaleController@transmettre');
     Route::put('hospitalisation/{hospitalisation}/transmettre','Api\HospitalisationController@transmettre');
-
+    Route::resource('examen-cardiologie','Api\ExamenCardioController');
 });
 
 
@@ -90,6 +89,12 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], funct
     Route::put('consultation-obstetrique/{consultation_obstetrique}/archiver','Api\ConsultationObstetriqueController@archiver');
     Route::put('consultation-prenatale/{consultation_prenatale}/archiver','Api\ConsultationPrenantaleController@archiver');
     Route::put('ordonance/{ordonance}/archiver','Api\OrdonanceController@archiver');
+    Route::put('consultation-cardiologie/{slug}/archiver','Api\CardiologieController@archiver');
+    Route::put('consultation-cardiologie/{slug}/reactiver','Api\CardiologieController@reactiver');
+    Route::put('consultation-medecine/{id}/reactiver','Api\ConsultationMedecineGeneraleController@reactiver');
+    Route::put('consultation-obstetrique/{id}/reactiver','Api\ConsultationObstetriqueController@reactiver');
+
+
 });
 
 //    Définition des routes accéssible par le patient
