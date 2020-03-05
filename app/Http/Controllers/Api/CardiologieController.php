@@ -12,6 +12,7 @@ use App\Models\ExamenCardio;
 use App\Models\Motif;
 use App\Models\ParametreCommun;
 use App\Models\TraitementActuel;
+use App\Traits\UserTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -19,6 +20,8 @@ use App\Http\Controllers\Controller;
 class CardiologieController extends Controller
 {
     use PersonnalErrors;
+    use UserTrait;
+
     protected $table = 'cardiologies';
 
     /**
@@ -44,11 +47,13 @@ class CardiologieController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param CardiologieRequest $request
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
      */
     public function store(CardiologieRequest $request)
     {
+        $this->verificationDeSpecialite();
 
         $cardiologie = Cardiologie::create($request->except('contributeurs', 'examen_cardio'));
         defineAsAuthor("Cardiologie", $cardiologie->id, 'create', $cardiologie->dossier->patient->user_id);
@@ -138,14 +143,15 @@ class CardiologieController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param CardiologieRequest $request
      * @param string $slug
      * @return \Illuminate\Http\Response
+     * @throws \App\Exceptions\PersonnnalException
      */
     public function update(CardiologieRequest $request, $slug)
     {
         //verification si user peut modifier
-
+        $this->verificationDeSpecialite();
         //Modification de la consultation
         $cardiologie = Cardiologie::whereSlug($slug)->update(
             $request->only(
@@ -220,6 +226,8 @@ class CardiologieController extends Controller
      */
     public function destroy($slug)
     {
+        $this->verificationDeSpecialite();
+
         $cardiologie = Cardiologie::with('dossier')->whereSlug($slug)->first();
         $cardiologie->delete();
         defineAsAuthor("Cardiologie", $cardiologie->id, 'delete', $cardiologie->dossier->patient->user_id);
@@ -236,6 +244,8 @@ class CardiologieController extends Controller
      */
     public function archiver($slug)
     {
+        $this->verificationDeSpecialite();
+
         $this->validatedSlug($slug,$this->table);
 
         $resultat = Cardiologie::with([
@@ -282,6 +292,8 @@ class CardiologieController extends Controller
      */
     public function transmettre($slug)
     {
+        $this->verificationDeSpecialite();
+
         $this->validatedSlug($slug,$this->table);
 
         $resultat = Cardiologie::with(['operationables.contributable',
@@ -310,9 +322,12 @@ class CardiologieController extends Controller
 
     public function reactiver($slug)
     {
+        $this->verificationDeSpecialite();
+
         $this->validatedSlug($slug,$this->table);
 
-        $resultat = Cardiologie::with(['operationables.contributable',
+        $resultat = Cardiologie::with([
+            'operationables.contributable',
             'dossier.resultatsLabo',
             'dossier.hospitalisations',
             'dossier.consultationsObstetrique',
@@ -531,5 +546,13 @@ class CardiologieController extends Controller
           }
         }
 
+    }
+
+    public function verificationDeSpecialite(){
+        $reponse = $this->estIlSpecialisteDe('Cardiologie');
+
+        if ($reponse == false){
+            $this->revealAccesRefuse();
+        }
     }
 }

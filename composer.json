@@ -52,6 +52,7 @@
         },
         "files": [
             "app/Helpers/GeneralHelper.php",
+            "app/Helpers/UserHelper.php",
             "app/helpers.php"
         ],
         "classmap": [
