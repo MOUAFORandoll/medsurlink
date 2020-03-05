@@ -171,7 +171,7 @@
         @endif
         <p class="titre-rapport"><strong>Rapport de consultation</strong></p>
         <br>
-        <p>Honorée Consoeur, Honorée Confrère,</p>
+        <p>Honorée Consoeur, Honoré Confrère,</p>
         <p>J'ai vu en date du <strong>{{\Carbon\Carbon::parse($consultationMedecine->date_consultation)->format('d/m/Y')}}</strong>, pour une consultation de<b> médecine générale</b>, votre patient(e)
             <strong>{{$consultationMedecine->dossier->patient->user->nom}}</strong> né(e) le <strong>{{\Carbon\Carbon::parse($consultationMedecine->dossier->patient->date_de_naissance)->format('d/m/Y')}}</strong>
             pour:
@@ -263,23 +263,32 @@
         @endif
         @if(count($consultationMedecine->dossier->traitements) >0)
             <h4 class="sous-titre-rapport--table">Traitement actuel</h4>
-            <table>
-                <thead>
-                <td class="title-table">Description</td>
-                <td class="title-table">Date prescription</td>
-                </thead>
-                <tbody>
-                <tr></tr>
-                @foreach($consultationMedecine->dossier->traitements as $traiement)
-                    @if($loop->last)
-                        <tr>
-                            <td>{{$traiement->description}}</td>
-                            <td>{{\Carbon\Carbon::parse($traiement->created_at)->format('d/m/Y')}}</td>
-                        </tr>
-                    @endif
-                @endforeach
-                </tbody>
-            </table>
+            <div class="divTable">
+                <div class="divTableBody">
+                    <div class="divTableRow">
+
+                        <div class="divTableCell">
+                            <table>
+                                <thead>
+                                <td class="title-table">Description</td>
+                                <td class="title-table">Date prescription</td>
+                                </thead>
+                                <tbody>
+                                <tr></tr>
+                                @foreach($consultationMedecine->dossier->traitements as $traiement)
+                                    @if($loop->last)
+                                        <tr>
+                                            <td>{{$traiement->description}}</td>
+                                            <td>{{\Carbon\Carbon::parse($traiement->created_at)->format('d/m/Y')}}</td>
+                                        </tr>
+                                    @endif
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         @endif
         <h4 class="sous-titre-rapport">Parametres</h4>
         @if(count($consultationMedecine->parametresCommun)>=1)
