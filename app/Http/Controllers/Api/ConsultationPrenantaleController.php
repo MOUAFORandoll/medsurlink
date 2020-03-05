@@ -152,7 +152,7 @@ class ConsultationPrenantaleController extends Controller
             $resultat->updatePrenatalConsultation();
 
             //Envoi du sms
-            $this->sendSmsToUser($resultat->dossier->patient->user);
+//            $this->sendSmsToUser($resultat->dossier->patient->user);
 
             return response()->json(['resultat'=>$resultat]);
         }
@@ -174,6 +174,8 @@ class ConsultationPrenantaleController extends Controller
         $resultat->save();
         defineAsAuthor("ConsultationPrenatale",$resultat->id,'transmettre');
         $resultat->updatePrenatalConsultation();
+        //Envoi du sms
+        $this->sendSmsToUser($resultat->dossier->patient->user);
         return response()->json(['resultat'=>$resultat]);
 
     }

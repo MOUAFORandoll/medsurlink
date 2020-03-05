@@ -232,7 +232,7 @@ class ConsultationObstetriqueController extends Controller
             $resultat->updateObstetricConsultation();
 
             //Envoi du sms
-            $this->sendSmsToUser($resultat->dossier->patient->user);
+//            $this->sendSmsToUser($resultat->dossier->patient->user);
 
             return response()->json(['resultat'=>$resultat]);
         }
@@ -255,6 +255,8 @@ class ConsultationObstetriqueController extends Controller
         defineAsAuthor("ConsultationObstetrique",$resultat->id,'transmettre');
         $resultat->updateObstetricConsultation();
 
+        //Envoi du sms
+        $this->sendSmsToUser($resultat->dossier->patient->user);
         return response()->json(['resultat'=>$resultat]);
 
     }
