@@ -316,6 +316,10 @@ class CardiologieController extends Controller
 
         defineAsAuthor("Cardiologie",$resultat->id,'transmettre');
         $resultat->updateConsultationCardiologique();
+
+        $user = $resultat->dossier->patient->user;
+        $this->sendSmsToUser($user);
+
         return response()->json(['resultat'=>$resultat]);
 
     }

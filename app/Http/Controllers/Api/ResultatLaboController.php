@@ -181,7 +181,7 @@ class ResultatLaboController extends Controller
             $resultat->save();
             defineAsAuthor("Resultat", $resultat->id,'archive');
             //Envoi du sms
-            $this->sendSmsToUser($resultat->dossier->patient->user);
+//            $this->sendSmsToUser($resultat->dossier->patient->user);
             return response()->json([
                 'resultat' => $resultat
             ]);
@@ -205,7 +205,8 @@ class ResultatLaboController extends Controller
 
         $resultat->passed_at = Carbon::now();
         $resultat->save();
-
+        //Envoi du sms
+        $this->sendSmsToUser($resultat->dossier->patient->user);
         return response()->json([
             'resultat' => $resultat
         ]);

@@ -160,7 +160,7 @@ class OrdonanceController extends Controller
         $ordonance->save();
         defineAsAuthor('Ordonance',$ordonance->id,'archieve',$ordonance->dossier->patient_id);
         //Envoi du sms
-        $this->sendSmsToUser($ordonance->dossier->patient->user);
+//        $this->sendSmsToUser($ordonance->dossier->patient->user);
         return response()->json(['ordonance'=>$ordonance]);
     }
 
@@ -174,7 +174,8 @@ class OrdonanceController extends Controller
         $ordonance->save();
 
         defineAsAuthor('Ordonance',$ordonance->id,'transmettre',$ordonance->dossier->patient_id);
-
+//Envoi du sms
+        $this->sendSmsToUser($ordonance->dossier->patient->user);
         return response()->json(['ordonance'=>$ordonance]);
     }
 }
