@@ -9,6 +9,7 @@ Mot de passe : <strong>{{$password}}</strong><br><br>
 <strong><i>NB :</i> Veuillez modifier votre mot de passe à votre premiere connexion</strong>
 
 {{ config('app.name') }}
+
 <div class="div-logo-mail">
 <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
 </div>
