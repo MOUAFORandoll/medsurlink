@@ -433,41 +433,42 @@ class ConsultationMedecineGeneraleController extends Controller
         //Mises à jour des contributeurs
         $contributeurs = $request->get('contributeurs');
         $contributeurs = explode(",",$contributeurs);
-        foreach ($consultation->operationables as $operation){
-            if (!in_array($operation->contributable->id,$precedentContributeurs)){
-                array_push($precedentContributeurs,$operation->contributable->id);
+        if (!is_null($contributeurs)) {
+            foreach ($consultation->operationables as $operation) {
+                if (!in_array($operation->contributable->id, $precedentContributeurs)) {
+                    array_push($precedentContributeurs, $operation->contributable->id);
+                }
+            }
+
+            $difference = array_diff($contributeurs, $precedentContributeurs);
+            if (!empty($difference)) {
+                foreach ($difference as $contributeur) {
+                    $nouveauContributeur = Contributeurs::create([
+                        'contributable_id' => $contributeur,
+                        'contributable_type' => 'App\User',
+                        'operationable_id' => $consultation->id,
+                        'operationable_type' => 'Consultation'
+
+                    ]);
+                    defineAsAuthor("Consultation", $nouveauContributeur->id, 'Ajout contributeur', $consultation->dossier->patient->user_id);
+                }
+            }
+
+            $difference = array_diff($precedentContributeurs, $contributeurs);
+
+            if (!empty($difference)) {
+                foreach ($difference as $contributeur) {
+                    $contributeur = Contributeurs::where('contributable_id', $contributeur)
+                        ->where('contributable_type', 'App\User')
+                        ->where('operationable_id', $consultation->id)
+                        ->where('operationable_type', 'Consultation')
+                        ->first();
+
+                    $contributeur->delete();
+                    defineAsAuthor("Consultation", $contributeur, 'Retrait du contributeur ' . $contributeur, $consultation->dossier->patient->user_id);
+                }
             }
         }
-
-        $difference = array_diff($contributeurs,$precedentContributeurs);
-        if (!empty($difference)){
-            foreach ($difference as $contributeur){
-                $nouveauContributeur = Contributeurs::create([
-                    'contributable_id'=>$contributeur,
-                    'contributable_type'=>'App\User',
-                    'operationable_id'=>$consultation->id,
-                    'operationable_type'=>'Consultation'
-
-                ]);
-                defineAsAuthor("Consultation",$nouveauContributeur->id,'Ajout contributeur',$consultation->dossier->patient->user_id);
-            }
-        }
-
-        $difference = array_diff($precedentContributeurs,$contributeurs);
-
-        if (!empty($difference)) {
-            foreach ($difference as $contributeur) {
-                $contributeur = Contributeurs::where('contributable_id', $contributeur)
-                    ->where('contributable_type', 'App\User')
-                    ->where('operationable_id', $consultation->id)
-                    ->where('operationable_type', 'Consultation')
-                    ->first();
-
-                $contributeur->delete();
-                defineAsAuthor("Consultation", $contributeur, 'Retrait du contributeur ' . $contributeur, $consultation->dossier->patient->user_id);
-            }
-        }
-
         $file = $consultation->file;
 
         if($request->hasFile('documents')){
