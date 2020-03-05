@@ -3,7 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/emails/Souscripteur/patientAffilated.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/Souscripteur/patientAffilated.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/emails/password/patientPassowrdGenerated.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/password/patientPassowrdGenerated.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/emails/password/reset.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/password/reset.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/emails/setting/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/setting/update.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/rapport.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/storage/fonts/dompdf_font_family_cache.php" beforeDir="false" afterPath="$PROJECT_DIR$/storage/fonts/dompdf_font_family_cache.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -533,7 +539,7 @@
       <workItem from="1583221316168" duration="9273000" />
       <workItem from="1583250846589" duration="2194000" />
       <workItem from="1583307165416" duration="17904000" />
-      <workItem from="1583394998097" duration="6234000" />
+      <workItem from="1583394998097" duration="7893000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>

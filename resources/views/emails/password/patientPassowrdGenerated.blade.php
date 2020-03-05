@@ -1,5 +1,5 @@
 @component('mail::message')
-# Medicalink
+# Medsurlink
 
 Hello <strong>{{ucfirst($user->prenom).'  '.strtoupper($user->nom)}}</strong>,<br>
 Nous espérons vous trouvez bien portant. Voici <strong>vos identifiants</strong> pour accéder à votre compte Medicalink:<br>

@@ -1,5 +1,5 @@
 @component('mail::message')
-# Medicalink
+# Medsurlink
 
 Hello <strong>{{ucfirst($souscripteur->user->prenom).'  '.strtoupper($souscripteur->user->nom)}}</strong>,<br>
 Nous espérons vous trouvez bien portant. Vous avez été désigné comme souscripteur du patient:<br>
