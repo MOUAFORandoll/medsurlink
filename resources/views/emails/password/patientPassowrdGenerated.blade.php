@@ -8,7 +8,6 @@ Numero de dossier : <strong>{{$user->patient->dossier->numero_dossier}}</strong>
 Mot de passe : <strong>{{$password}}</strong><br><br>
 <strong><i>NB :</i> Veuillez modifier votre mot de passe à votre premiere connexion</strong>
 
-Thanks,<br>
 {{ config('app.name') }}
 <div class="div-logo-mail">
 <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">

@@ -7,10 +7,9 @@ Email : <strong> {{$user->email}} </strong><br>
 Mot de passe : <strong>{{$password}}</strong><br><br>
 NB : Veuillez modifier votre mot de passe à votre premiere connexion en cliquant sur <a href="https://www.medsurlink.com/login">mot de passe oublié</a>
 
-Merci<br>
 {{ config('app.name') }}
 <div class="div-logo-mail">
     <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
 </div>
-<a href="https://www.medicasure.com">Medicasure</a>
+<a href="{{ config('app.frontend_url') }}">Medsurlink</a>
 @endcomponent

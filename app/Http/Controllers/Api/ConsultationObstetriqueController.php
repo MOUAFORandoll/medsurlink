@@ -56,15 +56,15 @@ class ConsultationObstetriqueController extends Controller
         $user = Auth::user();
         $serologie = implode(" ",$request->serologie);
         $rccs = implode(" ",$request->rcc);
-        if($user->hasRole('Praticien') || $user->hasRole('Medecin controle')){
-            $specialite  = '';
-            if(!is_null($user->praticien)){
-                $specialite = $user->praticien->specialite->name;
-            }
-            else{
-                $specialite = $user->medecinControle->specialite->name;
-            }
-                        if ($specialite == "Gynéco-Obstétrique"){
+//        if($user->hasRole('Praticien') || $user->hasRole('Medecin controle')){
+//            $specialite  = '';
+//            if(!is_null($user->praticien)){
+//                $specialite = $user->praticien->specialite->name;
+//            }
+//            else{
+//                $specialite = $user->medecinControle->specialite->name;
+//            }
+//                        if ($specialite == "Gynéco-Obstétrique"){
 
                 $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie','rcc')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
 
@@ -86,31 +86,31 @@ class ConsultationObstetriqueController extends Controller
                 ])->whereSlug($consultationObstetrique->slug)->first();
                 return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
 
-            }else{
-                $this->revealAccesRefuse();
-            }
-        }elseif($user->hasRole('Admin')){
-            $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie]);
-
-            defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create',$consultationObstetrique->dossier->patient->user_id);
-
-            $consultationObstetrique = ConsultationObstetrique::with([
-                'consultationPrenatales',
-                'dossier',
-                'dossier.allergies',
-                'dossier.antecedents',
-                'dossier.resultatsLabo',
-                'dossier.hospitalisations',
-                'dossier.consultationsObstetrique',
-                'dossier.consultationsMedecine',
-                'dossier.resultatsImagerie',
-                'dossier.allergies',
-                'dossier.antecedents',
-                'dossier.traitements',
-            ])->whereSlug($consultationObstetrique->slug)->first();
-
-            return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
-        }
+//            }else{
+//                $this->revealAccesRefuse();
+//            }
+//        }elseif($user->hasRole('Admin')){
+//            $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie]);
+//
+//            defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create',$consultationObstetrique->dossier->patient->user_id);
+//
+//            $consultationObstetrique = ConsultationObstetrique::with([
+//                'consultationPrenatales',
+//                'dossier',
+//                'dossier.allergies',
+//                'dossier.antecedents',
+//                'dossier.resultatsLabo',
+//                'dossier.hospitalisations',
+//                'dossier.consultationsObstetrique',
+//                'dossier.consultationsMedecine',
+//                'dossier.resultatsImagerie',
+//                'dossier.allergies',
+//                'dossier.antecedents',
+//                'dossier.traitements',
+//            ])->whereSlug($consultationObstetrique->slug)->first();
+//
+//            return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
+//        }
 
     }
 
