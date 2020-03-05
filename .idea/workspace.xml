@@ -2,39 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Helpers/UserHelper.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Traits/UserTrait.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/cardiologie.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/layouts/rapport.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/layouts/style.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/allergies.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/anamnese.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/antecedents.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/conduiteATenir.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/contributeurs.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/diagnosticList.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/enteteEtablissement.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/examen.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/files.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/generateur.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/modeDeVie.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/motifs.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/parametre.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/presentation.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/presentationMotifs.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/remerciement.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/revisiteurs.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/traitementActuel.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/CardiologieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/CardiologieController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationObstetriqueController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenCardioController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ExamenCardioController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ImprimerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ImprimerController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/emails/Souscripteur/patientAffilated.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/Souscripteur/patientAffilated.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/password/passwordGenerated.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/emails/password/patientPassowrdGenerated.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/password/patientPassowrdGenerated.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/emails/setting/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/setting/update.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/lang/fr/sms.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lang/fr/sms.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -571,7 +540,7 @@
       <workItem from="1583221316168" duration="9273000" />
       <workItem from="1583250846589" duration="2194000" />
       <workItem from="1583307165416" duration="17904000" />
-      <workItem from="1583394998097" duration="3246000" />
+      <workItem from="1583394998097" duration="3853000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
