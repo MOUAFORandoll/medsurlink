@@ -158,17 +158,14 @@ class PatientController extends Controller
      */
     public function update(PatientUpdateRequest $request, $slug)
     {
-//        if (is_null($request->get('nationalite'))){
-//            $this->revealError('nationalite','nationalite field is required');
-//        }
-
         $this->validatedSlug($slug,$this->table);
 
         $patient= Patient::with('user')->whereSlug($slug)->first();
 
-        UserController::updatePersonalInformation($request->except('date_de_naissance','patient','souscripteur_id','sexe'),$patient->user->slug);
+        UserController::updatePersonalInformation($request->except('patient','souscripteur_id','sexe'),$patient->user->slug);
 
         $age = evaluateYearOfOld($request->date_de_naissance);
+
         Patient::whereSlug($slug)->update($request->only([
                 "user_id",
                 "souscripteur_id",
