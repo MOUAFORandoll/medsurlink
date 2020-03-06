@@ -2,18 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/examenCardio.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ImprimerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ImprimerController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/rapport/cardiologie.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/cardiologie.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/rapport/layouts/rapport.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/layouts/rapport.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/rapport/slots/allergies.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/slots/allergies.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/rapport/slots/antecedents.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/slots/antecedents.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/rapport/slots/contributeurs.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/slots/contributeurs.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/rapport/slots/modeDeVie.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/slots/modeDeVie.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/rapport/slots/presentation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/slots/presentation.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/rapport/slots/traitementActuel.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/slots/traitementActuel.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/CardiologieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/CardiologieController.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -551,7 +541,7 @@
       <workItem from="1583250846589" duration="2194000" />
       <workItem from="1583307165416" duration="17904000" />
       <workItem from="1583394998097" duration="14501000" />
-      <workItem from="1583486717727" duration="6618000" />
+      <workItem from="1583486717727" duration="7652000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>

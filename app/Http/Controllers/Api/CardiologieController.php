@@ -53,7 +53,7 @@ class CardiologieController extends Controller
      */
     public function store(CardiologieRequest $request)
     {
-        $this->verificationDeSpecialite();
+//        $this->verificationDeSpecialite();
 
         $cardiologie = Cardiologie::create($request->except('contributeurs', 'examen_cardio'));
         defineAsAuthor("Cardiologie", $cardiologie->id, 'create', $cardiologie->dossier->patient->user_id);
@@ -151,7 +151,8 @@ class CardiologieController extends Controller
     public function update(CardiologieRequest $request, $slug)
     {
         //verification si user peut modifier
-        $this->verificationDeSpecialite();
+//        $this->verificationDeSpecialite();
+
         //Modification de la consultation
         $cardiologie = Cardiologie::whereSlug($slug)->update(
             $request->only(
