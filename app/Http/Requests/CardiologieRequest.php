@@ -27,8 +27,8 @@ class CardiologieRequest extends FormRequest
             "etablissement_id"=>'required|integer|exists:etablissement_exercices,id',
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
             "date_consultation"=>"sometimes|nullable|date",
-            "anamnese"=>"sometimes|nullable|string|min:5",
-            "examen_clinique"=>"sometimes|nullable|string|min:5",
+            "anamnese"=>"sometimes|nullable|string",
+            "examen_clinique"=>"sometimes|nullable|string",
             "facteur_de_risque"=>"sometimes|nullable|string",
             "profession"=>"sometimes|nullable|string",
             "situation_familiale"=>"sometimes|nullable|string",
@@ -39,7 +39,7 @@ class CardiologieRequest extends FormRequest
             "conclusion"=>"sometimes|nullable|string",
             "perimetre_abdominal"=>"sometimes|nullable|string",
             "conduite_a_tenir"=>"sometimes|nullable|string",
-            "rendez_vous"=>"sometimes|nullable|date",
+            "rendez_vous"=>"sometimes|nullable",
             "nbreCigarette"=>"sometimes|nullable|string",
             "nbreAnnee"=>"sometimes|nullable|string",
             "contributeurs.*" => "sometimes|nullable|integer",
@@ -49,7 +49,7 @@ class CardiologieRequest extends FormRequest
             "examen_cardio.*.description"=>"required|string"
         ];
 
-        $rules["traitements"]="sometimes|nullable|string|min:2";
+        $rules["traitements"]="sometimes|nullable|string";
 
         return $rules;
     }
