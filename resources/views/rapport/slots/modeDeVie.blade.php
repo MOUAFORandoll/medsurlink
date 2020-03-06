@@ -4,4 +4,4 @@
 <p class="ml-5">Nombre d'enfants : <strong>{{$consultation->nbre_enfant}}</strong></p>
 <p class="ml-5">Tabac : <strong>{{$consultation->tabac}} UPA</strong></p>
 <p class="ml-5">Alcool : <strong>{{$consultation->alcool}}</strong></p>
-<p class="ml-5">Autres : <strong>{!! $consultation->autres !!}</strong></p>
+<p class="ml-5">Autres : <strong>@if($consultation->autres != 'null') {!! $consultation->autres !!} @endif</strong></p>

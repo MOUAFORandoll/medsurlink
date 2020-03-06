@@ -107,7 +107,7 @@ class ImprimerController extends Controller
     public function cardiologie($slug){
         $this->validatedSlug($slug,'cardiologies');
 
-        $cardiologie = Cardiologie::with([
+        $consultation = Cardiologie::with([
             'operationables.contributable',
             'dossier.resultatsLabo',
             'dossier.hospitalisations',
@@ -124,17 +124,47 @@ class ImprimerController extends Controller
             'files',
             'examenCardios'
         ])->whereSlug($slug)->first();
+        $consultation->updateConsultationCardiologique();
+        $auteur = getAuthor("Cardiologie",$consultation->id,"create");
+        $updateAuteurs = getUpdatedAuthor("Cardiologie",$consultation->id,"update");
 
-        $data = compact('cardiologie');
-        $pdf = PDF::loadView('rapport',$data);
-        $nom  = ucfirst($cardiologie->dossier->patient->user->nom);
-        $prenom = is_null($cardiologie->dossier->patient->user->prenom) ? '' :$cardiologie->dossier->patient->user->prenom;
+        //Détermination de celui qui a généré le rapport initial
+        $generateur = null;
+        if (!is_null($auteur)){
+            if ($auteur->auteurable_type == 'Praticien'){
+                $praticien = Praticien::with('user')->find($auteur->auteurable_id);
+                $generateur = $praticien;
+            }else if($auteur->auteurable_type == 'Medecin controle') {
+                $medecin = MedecinControle::with('user')->find($auteur->auteurable_id);
+                $generateur = $medecin;
+            }
+        }
+
+        //Détermination de deux qui ont revisité le rapport
+        $auteurs = [];
+        $revisiteurs = [];
+        foreach ($updateAuteurs as $item){
+            if ($item->auteurable_id != $auteur->auteurable_id){
+                if (!in_array($item->auteurable_id,$auteurs)){
+                    if ($item->auteurable_type == 'Medecin controle'){
+                        $medecin = MedecinControle::with('user')->find($item->auteurable_id);
+                        array_push($revisiteurs,$medecin);
+                    }
+                    array_push($auteurs,$item->auteurable_id);
+                }
+            }
+        }
+
+        $data = compact('consultation','generateur','revisiteurs');
+        $pdf = PDF::loadView('rapport.cardiologie',$data);
+        $nom  = ucfirst($consultation->dossier->patient->user->nom);
+        $prenom = is_null($consultation->dossier->patient->user->prenom) ? '' :$consultation->dossier->patient->user->prenom;
         $prenom  = ucfirst($prenom);
-        $date= $cardiologie->date_consultation;
-        $path = storage_path().'/app/public/pdf/'.'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
+        $date= $consultation->date_consultation;
+        $path = storage_path().'/app/public/pdf/'.'Cardiologie_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
         $pdf->save($path);
 
-        return  response()->json(['name'=>'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
+        return  response()->json(['name'=>'Cardiologie_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
     }
 
 

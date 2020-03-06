@@ -7,79 +7,70 @@
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
 
     <title>Medsurlink</title>
-    @section('style')
+    @include('.rapport.layouts.style')
 </head>
 <body>
 
-@component('../slots/enteteEtablissement',['etablissement'=>$consultation->etablissement])
-@endcomponent
+@yield('body')
 
-@component('../slots/presentation',[
-                                    'type_consultation'=>'médecine générale',
-                                    'date_consultation'=>$consultation->date_consultation,
-                                    'patient'=>$consultation->dossier->patient,
-                                    'motifs'=>$consultation->motifs])
-@endcomponent
+{{--Exemple d'utilisation de component--}}
+{{--@component('../slots/enteteEtablissement',['etablissement'=>$consultation->etablissement])--}}
+{{--@endcomponent--}}
 
-@component('../motifs',['motifs'=>$consultation->motifs])
-@endcomponent
+{{--@component('../slots/presentation',[--}}
+{{--                                    'type_consultation'=>'médecine générale',--}}
+{{--                                    'date_consultation'=>$consultation->date_consultation,--}}
+{{--                                    'patient'=>$consultation->dossier->patient,--}}
+{{--                                    'motifs'=>$consultation->motifs])--}}
+{{--@endcomponent--}}
 
-@component('../anamnese',['anamnese'=>$consultation->anamese])
-@endcomponent
+{{--@component('../motifs',['motifs'=>$consultation->motifs])--}}
+{{--@endcomponent--}}
 
-@component('../modeDeVie',['consultation'=>$consultation])
-@endcomponent
+{{--@component('../anamnese',['anamnese'=>$consultation->anamese])--}}
+{{--@endcomponent--}}
 
+{{--@component('../modeDeVie',['consultation'=>$consultation])--}}
+{{--@endcomponent--}}
 
-@if(count($consultation->dossier->antecedents) >0)
-    @component('../antecedents',['antecedents'=>$consultation->dossier->antecedents])
-    @endcomponent
-@endif
+{{--@component('../antecedents',['antecedents'=>$consultation->dossier->antecedents])--}}
+{{--@endcomponent--}}
 
-@if(count($consultation->dossier->allergies)>0)
-    @component('../allergies',['allergies'=>$consultation->dossier->allergies])
-    @endcomponent
-@endif
+{{--@component('../allergies',['allergies'=>$consultation->dossier->allergies])--}}
+{{--@endcomponent--}}
 
-@if(count($consultation->dossier->traitements) >0)
-    @component('../traitementActuel',['traitements'=>$consultation->dossier->traitements])
-    @endcomponent
-@endif
+{{--@component('../traitementActuel',['traitements'=>$consultation->dossier->traitements])--}}
+{{--@endcomponent--}}
 
+{{--@component('../parametre',['parametres'=>$consultation->parametresCommun])--}}
+{{--@endcomponent--}}
 
-@component('../parametre',['parametres'=>$consultation->parametresCommun])
-@endcomponent
+{{--@component('../examen',['examen'=>$consultation->examen_clinique,'titre'=>'Examen clinique'])--}}
+{{--@endcomponent--}}
 
-@component('../examen',['examen'=>$consultation->examen_clinique,'titre'=>'Examen clinique'])
-@endcomponent
+{{--@component('../examen',['examen'=>$consultation->examen_complementaire,'titre'=>'Examen(s) complémentaire(s)'])--}}
+{{--@endcomponent--}}
 
-@component('../examen',['examen'=>$consultation->examen_complementaire,'titre'=>'Examen(s) complémentaire(s)'])
-@endcomponent
+{{--@component('../diagnosticList',['conclusions'=>$consultation->conclusions])--}}
+{{--@endcomponent--}}
 
-@component('../diagnosticList',['conclusions'=>$consultation->conclusions])
-@endcomponent
+{{--@component('conduiteATenir',['conduite'=>$consultation->traitement_propose])--}}
+{{--@endcomponent--}}
 
-@component('conduiteATenir',['conduite'=>$consultation->traitement_propose])
-@endcomponent
+{{--@component('../files',['files'=>$consultation->files])--}}
+{{--@endcomponent--}}
 
-@component('../files',['files'=>$consultation->files])
-@endcomponent
+{{--@component('../remerciement')--}}
+{{--@endcomponent--}}
 
+{{--@component('../revisiteurs',['medecins'=>$medecins])--}}
+{{--@endcomponent--}}
 
+{{--@component('../generateur',['generateur'=>$generateur])--}}
+{{--@endcomponent--}}
 
-
-@component('../remerciement')
-@endcomponent
-
-@component('../revisiteurs',['medecins'=>$medecins])
-@endcomponent
-
-@component('../generateur',['generateur'=>$generateur])
-@endcomponent
-
-
-@component('../contributeurs',['contributeurs'=>$consultation->operationables])
-@endcomponent
+{{--@component('../contributeurs',['contributeurs'=>$consultation->operationables])--}}
+{{--@endcomponent--}}
 
 </body>
 </html>
