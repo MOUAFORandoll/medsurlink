@@ -2,10 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/views/rapport/slots/examenCardio.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/UserController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/lang/fr/sms.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/lang/fr/sms.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ImprimerController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ImprimerController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/rapport/cardiologie.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/cardiologie.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/rapport/layouts/rapport.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/layouts/rapport.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/rapport/slots/allergies.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/slots/allergies.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/rapport/slots/antecedents.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/slots/antecedents.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/rapport/slots/contributeurs.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/slots/contributeurs.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/rapport/slots/modeDeVie.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/slots/modeDeVie.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/rapport/slots/presentation.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/slots/presentation.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/rapport/slots/traitementActuel.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/rapport/slots/traitementActuel.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +58,7 @@
         <item name="medicalinkapp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
-        <item name="users: table" type="dbc44a63:MariaImplModel$Table" />
+        <item name="cardiologies: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -543,7 +551,7 @@
       <workItem from="1583250846589" duration="2194000" />
       <workItem from="1583307165416" duration="17904000" />
       <workItem from="1583394998097" duration="14501000" />
-      <workItem from="1583486717727" duration="2040000" />
+      <workItem from="1583486717727" duration="6618000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -672,10 +680,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1583487857246" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1583487663238">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1583489542995">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1583487663238" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1583489542995" />
     <state x="405" y="277" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1582463980420">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

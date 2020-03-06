@@ -1,6 +1,6 @@
-@if(count($consultationMedecine->operationables) >0)
+@if(count($operationables) >0)
     <p>Contributeurs</p>
-    @foreach($consultationMedecine->operationables as $operationable)
+    @foreach($operationables as $operationable)
         @if(!is_null($operationable->contributable))
             <div style="display: inline">
                 @if(!is_null($operationable->contributable->praticien))

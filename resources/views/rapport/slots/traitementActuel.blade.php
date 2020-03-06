@@ -1,8 +1,13 @@
+ @if(count($traitements) >0)
  <h4 class="sous-titre-rapport--table">Traitement actuel</h4>
+ <div class="divTable">
+                 <div class="divTableBody">
+                     <div class="divTableRow">
+
+                         <div class="divTableCell">
         <table>
             <thead>
             <td class="title-table">Description</td>
-            <td class="title-table">Date prescription</td>
             </thead>
             <tbody>
             <tr></tr>
@@ -10,9 +15,13 @@
                 @if($loop->last)
                     <tr>
                         <td>{{$traiement->description}}</td>
-                        <td>{{\Carbon\Carbon::parse($traiement->created_at)->format('d/m/Y')}}</td>
                     </tr>
                 @endif
             @endforeach
             </tbody>
         </table>
+       </div>
+      </div>
+                </div>
+            </div>
+            @endif
