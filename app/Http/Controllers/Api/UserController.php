@@ -11,6 +11,7 @@ use App\Mail\Password\PatientPasswordGenerated;
 use App\Mail\updateSetting;
 use App\Models\Souscripteur;
 use App\Rules\EmailExistRule;
+use App\Traits\SmsTrait;
 use App\User;
 use Carbon\Carbon;
 use http\Env\Response;
@@ -28,6 +29,7 @@ use PHPUnit\Util\Json;
 class UserController extends Controller
 {
     use PersonnalErrors;
+    use SmsTrait;
     /**
      * Display a listing of the resource.
      *
@@ -205,14 +207,29 @@ class UserController extends Controller
     }
 
     public static function updatePersonalInformation($data,$slug){
-//        dd($data);
         $validation = self::personalUpdateValidation($data,$slug);
 
         if ($validation->fails())
             throw new ValidationException($validation,$validation->errors());
 
+        $user = User::findBySlug($slug);
+        if ($user->getRoleNames()->first() == 'Patient'){
+            if ($data['telephone'] != $user->telephone){
+                $password = str_random(10);
+                $code="";
+                $date_naissance = Carbon::parse($data['date_de_naissance'])->year;
+                $code = substr($password,0,5);
+                $password = $date_naissance.$code;
+                $nom = (is_null($data['prenom']) ? "" : ucfirst($data['prenom']) ." ") . "". strtoupper( $data['nom']);
+
+                sendSMS($data['telephone'],trans('sms.accountSecurityUpdated',['nom'=>$nom,'password'=>$code],'fr'));
+                $data['password'] = bcrypt($password);
+            }
+            unset($data['date_de_naissance']);
+        }
         User::whereSlug($slug)->update($data);
         $user = User::findBySlug($slug);
+
         return response()->json(['user'=>$user]);
     }
 
