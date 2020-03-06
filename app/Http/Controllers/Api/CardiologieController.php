@@ -170,11 +170,10 @@ class CardiologieController extends Controller
                 "autres",
                 "conclusion",
                 "conduite_a_tenir",
-                "rendez_vous",
                 "slug",
                 "nbreCigarette",
                 "nbreAnnee"
-            )
+            )+["rendez_vous"=>$request->get('rendez_vous') == 'null' ? null :$request->get('rendez_vous')]
         );
         $cardiologie = Cardiologie::whereSlug($slug)->first();
         defineAsAuthor("Cardiologie", $cardiologie->id, 'update', $cardiologie->dossier->patient->user_id);
@@ -371,7 +370,6 @@ class CardiologieController extends Controller
         }
         $nouveauMotifs = $request->get('motifs');
         $nouveauMotifs = explode(",", $nouveauMotifs);
-
         foreach (array_diff($nouveauMotifs, $ancienMotifs) as $item) {
             $converti = (integer)$item;
             $motif = $item;
@@ -383,6 +381,15 @@ class CardiologieController extends Controller
                 ]);
                 defineAsAuthor("Motif", $motif->id, 'create');
 
+                ActionMotif::create([
+                    "actionable_type" => "Cardiologie",
+                    "actionable_id" => $cardiologie->id,
+                    "motif_id" => $motif
+                ]);
+
+                defineAsAuthor("CardiologieMotif", $cardiologie->id, 'attach and update', $cardiologie->dossier->patient->user_id);
+
+            }else{
                 ActionMotif::create([
                     "actionable_type" => "Cardiologie",
                     "actionable_id" => $cardiologie->id,
@@ -413,18 +420,17 @@ class CardiologieController extends Controller
             $parametreCommun = $cardiologie->parametresCommun->first();
             //Mise a jour du parametre si le parametre existe
             if (!is_null($parametreCommun)){
-                $parametreCommun->update($request->only(
-                        "poids",
-                        "taille",
-                        "bmi",
-                        "ta_systolique",
-                        "ta_diastolique",
-                        "temperature",
-                        "frequence_cardiaque",
-                        "frequence_respiratoire",
-                        "sato2",
-                        "perimetre_abdominal"
-                    )
+                $parametreCommun->update([
+                        "poids"=>$request->get('poids') == 'null' ? 0 :$request->get('poids'),
+                        "taille"=>$request->get('taille') == 'null' ? 0 :$request->get('taille'),
+                        "ta_systolique"=>$request->get('ta_systolique') == 'null' ? 0 :$request->get('ta_systolique'),
+                        "ta_diastolique"=>$request->get('ta_diastolique') == 'null' ? 0 :$request->get('ta_diastolique'),
+                        "temperature"=>$request->get('temperature') == 'null' ? 0 :$request->get('temperature'),
+                        "frequence_cardiaque"=>$request->get('frequence_cardiaque') == 'null' ? 0 :$request->get('frequence_cardiaque'),
+                        "frequence_respiratoire"=>$request->get('frequence_respiratoire') == 'null' ? 0 :$request->get('frequence_respiratoire'),
+                        "sato2"=>$request->get('sato2') == 'null' ? 0 :$request->get('sato2'),
+                        "perimetre_abdominal"=>$request->get('perimetre_abdominal') == 'null' ? 0 :$request->get('perimetre_abdominal')
+                    ]
                     +
                     ["communable_id" => $cardiologie->id, "communable_type" => 'Cardiologie']);
             }else{
@@ -454,7 +460,7 @@ class CardiologieController extends Controller
 
     public function updateBmi($request, ParametreCommun $parametreCommun)
     {
-        if (!is_null($request->get('taille') && !is_null($request->get('poids')))) {
+        if (!is_null($request->get('taille') && !is_null($request->get('poids'))) && $request->get('poids') != 'null' && $request->get('taille') != 'null') {
             $tailleEnMetre = $request->get('taille') * 0.01;
             $bmi = 0;
             if ($tailleEnMetre != 0) {
