@@ -95,7 +95,7 @@ if(!function_exists('formatTelephone'))
         }
 
         // Belgium
-        else if(substr($response, 0, 32) == '32') {
+        else if(substr($response, 0, 2) == '32') {
             $response = substr($response, 2, strlen($response));
         }
 
