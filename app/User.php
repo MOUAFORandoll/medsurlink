@@ -55,7 +55,8 @@ class User extends Authenticatable
         'telephone',
         'password',
         'slug',
-        'adresse'
+        'adresse',
+        'smsEnvoye',
     ];
 
     /**
