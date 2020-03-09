@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'accountCreated'        => 'Hello :nom, Nous espérons vous trouver bien portant. Veuillez cliquer sur ce lien pour accéder à votre compte MEDSURLINK. NB: Votre mot de passe se compose de votre DATE DE NAISSANCE suivi du CODE privé : :password '. config('app.frontend_url'),
-    'accountSecurityUpdated' => 'Hello :nom, Pour des raisons de sécurité, Votre mot de passe a été mise à jour. NB: Votre mot de passe se compose de votre DATE DE NAISSANCE suivi du CODE privé : :password '. config('app.frontend_url'),
-    'accountUpdated'        => 'Hello :nom, Nous espérons vous trouver bien portant. Veuillez cliquer sur ce lien pour accéder au mise à jour de votre compte MEDSURLINK : '. config('app.frontend_url'),
+    'accountCreated'         => 'HELLO :nom,VEUILLEZ CLIQUER SUR CE LIEN POUR ACCEDER A VOTRE COMPTE.VOTRE MOT DE PASSE SE COMPOSE DE VOTRE date de naissance SUIVI DU CODE PRIVE :password '. config('app.frontend_url'),
+    'accountSecurityUpdated' => 'HELLO :nom,POUR DES RAISONS DE SECURITE, VOTRE MOT DE PASSE A ETE MISE A JOUR.LE NOUVEAU SE COMPOSE DE VOTRE date de naissance SUIVI DU CODE PRIVE :password '. config('app.frontend_url'),
+    'accountUpdated'         => 'HELLO :nom,VEUILLEZ CLIQUER SUR CE LIEN POUR ACCEDER A VOS INFORMATIONS MEDICAUX '. config('app.frontend_url'),
 
     ];

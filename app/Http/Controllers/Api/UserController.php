@@ -214,7 +214,8 @@ class UserController extends Controller
 
         $user = User::findBySlug($slug);
         if ($user->getRoleNames()->first() == 'Patient'){
-            if ($data['telephone'] != $user->telephone){
+            $user = User::with('patient')->whereSlug($slug)->first();
+            if ($data['telephone'] != $user->telephone || $data['date_de_naissance'] != $user->patient->date_de_naissance){
                 $password = str_random(10);
                 $code="";
                 $date_naissance = Carbon::parse($data['date_de_naissance'])->year;
@@ -224,6 +225,8 @@ class UserController extends Controller
 
                 sendSMS($data['telephone'],trans('sms.accountSecurityUpdated',['nom'=>$nom,'password'=>$code],'fr'));
                 $data['password'] = bcrypt($password);
+                //Ici on va mettre la restriction en cas de non envoi de sms
+                $data['smsEnvoye'] = $user->smsEnvoye + 1;
             }
             unset($data['date_de_naissance']);
         }
