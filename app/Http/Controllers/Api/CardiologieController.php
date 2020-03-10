@@ -326,7 +326,7 @@ class CardiologieController extends Controller
 
     public function reactiver($slug)
     {
-        $this->verificationDeSpecialite();
+//        $this->verificationDeSpecialite();
 
         $this->validatedSlug($slug,$this->table);
 
