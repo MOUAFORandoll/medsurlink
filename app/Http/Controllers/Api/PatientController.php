@@ -73,7 +73,7 @@ class PatientController extends Controller
         $patient = Patient::create($request->except(['code_postal','quartier','question_id','reponse']) + ['user_id' => $user->id,'age'=>$age]);
 
         //Définition de la question secrete et de la reponse secrete
-//        ReponseSecrete::create($request->only(['question_id','reponse'])+['user_id' => $user->id]);
+       // ReponseSecrete::create($request->only(['question_id','reponse'])+['user_id' => $user->id]);
 
         //Generation du dossier client
         $dossier = DossierMedicalController::genererDossier($patient->user_id);
@@ -136,8 +136,7 @@ class PatientController extends Controller
 
         $patient = Patient::with([
             'souscripteur.user',
-//            'user.questionSecrete',
-            'user',
+            'user.questionSecrete',
             'affiliations',
             'etablissements',
             'financeurs.financable.user',

@@ -12,6 +12,7 @@ use App\Models\ExamenCardio;
 use App\Models\Motif;
 use App\Models\ParametreCommun;
 use App\Models\TraitementActuel;
+use App\Traits\SmsTrait;
 use App\Traits\UserTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,6 +22,7 @@ class CardiologieController extends Controller
 {
     use PersonnalErrors;
     use UserTrait;
+    use SmsTrait;
 
     protected $table = 'cardiologies';
 
