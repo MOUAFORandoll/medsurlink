@@ -244,7 +244,7 @@ class CardiologieController extends Controller
      */
     public function archiver($slug)
     {
-        $this->verificationDeSpecialite();
+//        $this->verificationDeSpecialite();
 
         $this->validatedSlug($slug,$this->table);
 
@@ -292,7 +292,7 @@ class CardiologieController extends Controller
      */
     public function transmettre($slug)
     {
-        $this->verificationDeSpecialite();
+//        $this->verificationDeSpecialite();
 
         $this->validatedSlug($slug,$this->table);
 
