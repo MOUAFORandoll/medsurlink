@@ -11,6 +11,7 @@ use App\Mail\updateSetting;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePatient;
 use App\Models\Patient;
+use App\Models\ReponseSecrete;
 use App\Models\Souscripteur;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
@@ -55,9 +56,7 @@ class PatientController extends Controller
      */
     public function store(patientStoreRequest $request)
     {
-//        if (is_null($request->get('nationalite'))){
-//            $this->revealError('nationalite','nationalite field is required');
-//        }
+
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request,"Patient");
 
@@ -71,7 +70,10 @@ class PatientController extends Controller
 
         $age = evaluateYearOfOld($request->date_de_naissance);
 
-        $patient = Patient::create($request->except(['code_postal','quartier']) + ['user_id' => $user->id,'age'=>$age]);
+        $patient = Patient::create($request->except(['code_postal','quartier','question_id','reponse']) + ['user_id' => $user->id,'age'=>$age]);
+
+        //Définition de la question secrete et de la reponse secrete
+        ReponseSecrete::create($request->only(['question_id','reponse'])+['user_id' => $user->id]);
 
         //Generation du dossier client
         $dossier = DossierMedicalController::genererDossier($patient->user_id);
@@ -182,9 +184,9 @@ class PatientController extends Controller
         try{
 
             if (!is_null($patient->user->email)){
-                    $mail = new updateSetting($patient->user);
-                    Mail::to($patient->user->email)->send($mail);
-                }
+                $mail = new updateSetting($patient->user);
+                Mail::to($patient->user->email)->send($mail);
+            }
 
         }catch (\Swift_TransportException $transportException){
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
