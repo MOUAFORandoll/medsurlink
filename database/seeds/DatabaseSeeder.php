@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             RoleTableSeeder::class,
             UsersTableSeeder::class,
             MotifsTableSeeder::class,
+            QuestionTableSeeder::class,
         ]);
     }
 }
