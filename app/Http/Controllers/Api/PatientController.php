@@ -134,7 +134,14 @@ class PatientController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $patient = Patient::with(['souscripteur.user','user','affiliations','etablissements','financeurs.financable.user','dossier'])->restrictUser()->whereSlug($slug)->first();
+        $patient = Patient::with([
+            'souscripteur.user',
+            'user.questionSecrete',
+            'affiliations',
+            'etablissements',
+            'financeurs.financable.user',
+            'dossier',
+        ])->restrictUser()->whereSlug($slug)->first();
 
         return response()->json(['patient'=>$patient]);
     }
@@ -164,7 +171,7 @@ class PatientController extends Controller
 
         $patient= Patient::with('user')->whereSlug($slug)->first();
 
-        UserController::updatePersonalInformation($request->except('patient','souscripteur_id','sexe'),$patient->user->slug);
+        UserController::updatePersonalInformation($request->except('patient','souscripteur_id','sexe','question_id','reponse'),$patient->user->slug);
 
         $age = evaluateYearOfOld($request->date_de_naissance);
 
@@ -180,6 +187,9 @@ class PatientController extends Controller
             ])+['age'=>$age]);
 
         $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
+
+        //Mise à jour de la question et la reponse secrete
+        ReponseSecrete::where('user_id','=',$patient->user_id)->update($request->only(['question_id','reponse']));
 
         try{
 
