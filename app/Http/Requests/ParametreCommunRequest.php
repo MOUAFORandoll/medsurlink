@@ -25,7 +25,7 @@ class ParametreCommunRequest extends FormRequest
     public function rules()
     {
         return [
-            "consultation_medecine_generale_id"=>"required|integer|exists:consultation_medecine_generales,id",
+            "consultation_medecine_generale_id"=>"sometimes|nullable|integer|exists:consultation_medecine_generales,id",
             "poids"=>"sometimes|nullable|numeric",
             "taille"=>"sometimes|nullable|numeric",
             "bmi"=>"sometimes|nullable|numeric",
@@ -34,7 +34,10 @@ class ParametreCommunRequest extends FormRequest
             "temperature"=>"sometimes|nullable|numeric",
             "frequence_cardiaque"=>"sometimes|nullable|numeric",
             "frequence_respiratoire"=>"sometimes|nullable|numeric",
-            "sato2"=>"sometimes|nullable|numeric"
+            "perimetre_abdominal"=>"sometimes|nullable|numeric",
+            "sato2"=>"sometimes|nullable|numeric",
+            'communable_type'=>"sometimes|nullable|string",
+            'communable_id'=>"sometimes|nullable|integer",
         ];
     }
 

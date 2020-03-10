@@ -83,7 +83,11 @@ class MedecinControleController extends Controller
         foreach ($etablissements as $etablissement){
             $medecin->etablissements()->attach($etablissement);
             defineAsAuthor("MedecinControle",$medecin->user_id,'Add etablissement '.$etablissement);
-
+        }
+        if ($request->get('isMedicasure') == "1"){
+            if (!in_array(4,$etablissements)){
+                $medecin->etablissements()->attach(4);
+            }
         }
         //envoi des informations du compte utilisateurs par mail
         try{

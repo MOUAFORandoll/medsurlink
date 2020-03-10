@@ -29,7 +29,7 @@ class ParametreCommun extends Model
         ];
     }
     public function getConsultationAndTimestampAttribute() {
-        return $this->consultation->slug . ' ' .Carbon::now()->timestamp;
+        return str_random(6). ' ' .Carbon::now()->timestamp;
     }
     protected $fillable = [
         "consultation_medecine_generale_id",
@@ -40,8 +40,12 @@ class ParametreCommun extends Model
         "ta_diastolique",
         "temperature",
         "frequence_cardiaque",
+        "frequence_respiratoire",
         "sato2",
-        'slug'
+        "perimetre_abdominal",
+        'slug',
+        'communable_type',
+        'communable_id',
     ];
 
     public function consultation(){
@@ -52,8 +56,15 @@ class ParametreCommun extends Model
         if (!is_null($this)){
             $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$this->id,"create");
             $this['isAuthor'] = $isAuthor->getOriginalContent();
-            $this['user'] = $this->consultation->dossier->patient->user;
-            $this['dossier'] = $this->consultation->dossier;
+            $consultation = !is_null($this->consultation) ? $this->consultation : $this->communable;
+            $this['user'] = $consultation->dossier->patient->user;
+            $this['dossier'] = $consultation->dossier;
+            $this['consultation']  = $consultation;
+//            $this['consultation']['dossier']  = $consultation->dossier;
         }
+    }
+
+    public function communable(){
+        return $this->morphTo();
     }
 }

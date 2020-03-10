@@ -31,13 +31,15 @@ class PatientUpdateRequest extends FormRequest
 
         return [
             "user_id"=>'sometimes|integer|exists:users,id',
-            "souscripteur_id"=>'required|integer|exists:souscripteurs,user_id',
+            "souscripteur_id"=>'sometimes|integer|exists:souscripteurs,user_id',
             "sexe"=>["required",Rule::in(['M','F'])],
             "date_de_naissance"=>'required|date|before_or_equal:'.Carbon::now()->format('Y-m-d'),
             "code_postal"=>'sometimes|nullable|string',
             "nom_contact"=>'sometimes|nullable|string|min:2',
             "tel_contact"=>'sometimes|nullable|string|min:9',
             "lien_contact"=>'sometimes|nullable|string|min:4',
+            'question_id'=>'required|integer|exists:questions,id',
+            'reponse'=>'required|string|min:3'
       ];
     }
 }

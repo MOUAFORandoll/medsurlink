@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ResultatRequest;
 use App\Models\ResultatImagerie;
+use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 class ResultatImagerieController extends Controller
 {
     use PersonnalErrors;
+    use SmsTrait;
     protected $table = "resultat_imageries";
 
     /**
@@ -181,6 +183,8 @@ class ResultatImagerieController extends Controller
             $resultat->save();
 
             defineAsAuthor("Resultat", $resultat->id,'archive');
+            //Envoi du sms
+//            $this->sendSmsToUser($resultat->dossier->patient->user);
 
             return response()->json([
                 'resultat' => $resultat
@@ -207,7 +211,7 @@ class ResultatImagerieController extends Controller
         $resultat->save();
 
         defineAsAuthor("Resultat", $resultat->id,'transmettre');
-
+        $this->sendSmsToUser($resultat->dossier->patient->user);
         return response()->json([
             'resultat' => $resultat
         ]);

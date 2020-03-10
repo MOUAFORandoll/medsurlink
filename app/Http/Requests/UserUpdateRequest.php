@@ -36,7 +36,7 @@ class UserUpdateRequest extends FormRequest
             'ville' => ['required','string', 'max:255'],
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255',new EmailExistRule($slug,'User')],
+            'email' => ['sometimes','nullable', 'string', 'email', 'max:255',new EmailExistRule($slug,'User')],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'adresse' => ['required', 'string','min:3'],
         ];

@@ -27,7 +27,7 @@ class AddNbreAnneeToConsultationMedecineTable extends Migration
     public function down()
     {
         Schema::table('consultation_medecine_generales', function (Blueprint $table) {
-            //
+            $table->dropColumn(['nbreAnnee','nbreCigarette']);
         });
     }
 }

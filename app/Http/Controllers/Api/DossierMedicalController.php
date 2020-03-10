@@ -120,7 +120,8 @@ class DossierMedicalController extends Controller
                     $query->orderBy('created_at', 'desc');
                 },
                 'resultatsImagerie',
-                'resultatsLabo'
+                'resultatsLabo',
+                'cardiologies'
             ])->whereSlug($slug)->first();
 
             if (!is_null($dossier)) {

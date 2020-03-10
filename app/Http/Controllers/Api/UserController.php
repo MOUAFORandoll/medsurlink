@@ -11,7 +11,9 @@ use App\Mail\Password\PatientPasswordGenerated;
 use App\Mail\updateSetting;
 use App\Models\Souscripteur;
 use App\Rules\EmailExistRule;
+use App\Traits\SmsTrait;
 use App\User;
+use Carbon\Carbon;
 use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -27,6 +29,7 @@ use PHPUnit\Util\Json;
 class UserController extends Controller
 {
     use PersonnalErrors;
+    use SmsTrait;
     /**
      * Display a listing of the resource.
      *
@@ -154,12 +157,17 @@ class UserController extends Controller
             throw new ValidationException($validation,$validation->errors());
 
         $password = str_random(10);
-
+        $code="";
         $email = $request->email;
+        $isMedicasure = $request->get('isMedicasure','0');
 
         if (!is_null($role) && $role == "Patient"){
+            $date_naissance = Carbon::parse($request->date_de_naissance)->year;
+            $code = substr($password,0,5);
+            $password = $date_naissance.$code;
 
-            if(is_null($email)){
+            //Si l'email est null
+            if(is_null($email) && $isMedicasure && !is_null($request->souscripteur_id)){
                 $souscripteur =  Souscripteur::with('user')->where('user_id','=',$request->souscripteur_id)->first();
                 $email = $souscripteur->user->email;
             }
@@ -176,31 +184,55 @@ class UserController extends Controller
             'pays'=>$request->pays,
             'telephone'=>$request->telephone,
             'adresse'=>$request->adresse,
+            'isMedicasure'=>$request->get('isMedicasure','0'),
             'password'=>Hash::make($password)
         ]);
 
-        return response()->json(['user'=>$user,'password'=>$password]);
+        return response()->json(['user'=>$user,'password'=>$password,'code'=>$code]);
     }
 
     public static function sendUserInformationViaMail(User $user,$password){
-
-        $mail = new PasswordGenerated($user,$password);
-        Mail::to($user->email)->send($mail);
+        if (!is_null($user->email)){
+            $mail = new PasswordGenerated($user,$password);
+            Mail::to($user->email)->send($mail);
+        }
     }
     public static function sendUserPatientInformationViaMail(User $user,$password){
-        $mail = new PatientPasswordGenerated($user,$password);
-        Mail::to($user->email)->send($mail);
+        if (!is_null($user)){
+            if (!is_null($user->email)) {
+                $mail = new PatientPasswordGenerated($user, $password);
+                Mail::to($user->email)->send($mail);
+            }
+        }
     }
 
     public static function updatePersonalInformation($data,$slug){
-//        dd($data);
         $validation = self::personalUpdateValidation($data,$slug);
 
         if ($validation->fails())
             throw new ValidationException($validation,$validation->errors());
 
+        $user = User::findBySlug($slug);
+        if ($user->getRoleNames()->first() == 'Patient'){
+            $user = User::with('patient')->whereSlug($slug)->first();
+            if ($data['telephone'] != $user->telephone || $data['date_de_naissance'] != $user->patient->date_de_naissance){
+                $password = str_random(10);
+                $code="";
+                $date_naissance = Carbon::parse($data['date_de_naissance'])->year;
+                $code = substr($password,0,5);
+                $password = $date_naissance.$code;
+                $nom = (is_null($data['prenom']) ? "" : ucfirst($data['prenom']) ." ") . "". strtoupper( $data['nom']);
+
+                sendSMS($data['telephone'],trans('sms.accountSecurityUpdated',['nom'=>$nom,'password'=>$code],'fr'));
+                $data['password'] = bcrypt($password);
+                //Ici on va mettre la restriction en cas de non envoi de sms
+                $data['smsEnvoye'] = $user->smsEnvoye + 1;
+            }
+            unset($data['date_de_naissance']);
+        }
         User::whereSlug($slug)->update($data);
         $user = User::findBySlug($slug);
+
         return response()->json(['user'=>$user]);
     }
 
@@ -215,8 +247,9 @@ class UserController extends Controller
             'ville' => ['required','string', 'max:255'],
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'email' => ['sometimes','nullable', 'string', 'email', 'max:255'],
             'adresse' => ['sometimes','nullable', 'string','min:3'],
+            'isMedicasure' => ['sometimes','nullable', 'string'],
         ];
         $validation = Validator::make($data,$rules);
 
@@ -234,6 +267,7 @@ class UserController extends Controller
             'pays' => ['required','string', 'max:255'],
             'telephone' => ['required','string', 'max:255'],
             'adresse' => ['sometimes','nullable', 'string','min:3'],
+            'isMedicasure' => ['sometimes','nullable', 'string'],
         ];
 //        if(!is_null($role) && $role == "Patient"){
         $rule['email'] = "sometimes|nullable|string|email";

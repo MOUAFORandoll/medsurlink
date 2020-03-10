@@ -30,7 +30,7 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::with(['praticiens','patients.dossier','patients.user'])->get();
+        $etablissements =  EtablissementExercice::with(['praticiens','patients.dossier','patients.user','patients.financeurs'])->get();
 //        foreach ($etablissements as $etablissement){
 //            foreach ($etablissement->patients as $patient) {
 //                $patient['user'] = $patient->user;

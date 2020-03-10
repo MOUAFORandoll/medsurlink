@@ -59,12 +59,14 @@ class ConsutationMedecineRequest extends FormRequest
             $rules["frequence_respiratoire"]="sometimes|nullable|numeric";
             $rules["sato2"]="sometimes|nullable|numeric";
             $rules["traitements"]="sometimes|nullable|string|min:2";
-
+            $rules["documents.*"]="sometimes|file|mimes:jpeg,png,jpg,gif,docx,pdf|max:40960";
         }
 
         elseif ($this->isMethod('PUT')){
             $rules["motifs.*"] = 'sometimes|nullable';
             $rules["date_consultation"]="sometimes|nullable|date";
+            $rules["documents.*"]="sometimes|file|mimes:jpeg,png,jpg,gif,docx,pdf|max:40960";
+
         }
 
         return $rules;

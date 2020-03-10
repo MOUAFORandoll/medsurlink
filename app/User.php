@@ -8,6 +8,7 @@ use App\Models\Gestionnaire;
 use App\Models\MedecinControle;
 use App\Models\Patient;
 use App\Models\Praticien;
+use App\Models\ReponseSecrete;
 use App\Models\Souscripteur;
 use App\Models\Traits\SlugRoutable;
 use App\Notifications\MailResetPasswordNotification;
@@ -44,6 +45,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'nom',
+        'isMedicasure',
         'email',
         'prenom',
         'nationalite',
@@ -54,7 +56,8 @@ class User extends Authenticatable
         'telephone',
         'password',
         'slug',
-        'adresse'
+        'adresse',
+        'smsEnvoye',
     ];
 
     /**
@@ -192,5 +195,9 @@ class User extends Authenticatable
 
     public function contributeurs(){
         return $this->morphMany(Contributeurs::class,'contributable');
+    }
+
+    public function questionSecrete(){
+        return $this->hasOne(ReponseSecrete::class,'user_id','id');
     }
 }
