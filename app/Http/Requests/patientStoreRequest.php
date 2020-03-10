@@ -35,8 +35,8 @@ class patientStoreRequest extends FormRequest
             "tel_contact"=>'sometimes|nullable|string|min:9',
             "lien_contact"=>'sometimes|nullable|string|min:4',
             'etablissement_id.*'=>"required|integer|exists:etablissement_exercices,id",
-//            'question_id'=>'required|integer|exists:questions,id',
-//            'reponse'=>'required|string|min:3'
+            'question_id'=>'required|integer|exists:questions,id',
+            'reponse'=>'required|string|min:3'
         ];
     }
 }
