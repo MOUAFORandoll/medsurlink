@@ -189,7 +189,11 @@ class PatientController extends Controller
         $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
 
         //Mise à jour de la question et la reponse secrete
-        ReponseSecrete::where('user_id','=',$patient->user_id)->update($request->only(['question_id','reponse']));
+        if (is_null($patient->user->questionSecrete) || $patient->user->questionSecrete->isEmpty ){
+            ReponseSecrete::create($request->only(['question_id','reponse'])+['user_id' => $patient->user->id]);
+        }else{
+            ReponseSecrete::where('user_id','=',$patient->user_id)->update($request->only(['question_id','reponse']));
+        }
 
         try{
 
