@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PatientController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Scopes/RestrictConsultationObstetriqueScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictConsultationObstetriqueScope.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Scopes/RestrictResultatScope.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Scopes/RestrictResultatScope.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -537,7 +538,8 @@
       <workItem from="1583486717727" duration="11792000" />
       <workItem from="1583739713118" duration="19226000" />
       <workItem from="1583827609531" duration="16711000" />
-      <workItem from="1583852283743" duration="700000" />
+      <workItem from="1583852283743" duration="3763000" />
+      <workItem from="1583911676446" duration="1399000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>

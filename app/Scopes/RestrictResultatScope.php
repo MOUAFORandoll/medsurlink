@@ -29,7 +29,11 @@ class RestrictResultatScope implements Scope
             if(gettype($userRoles->search('Patient')) == 'integer'){
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 $dossier = $user->patient->dossier;
-                $builder->where('dossier_medical_id','=',$dossier->id)->whereNotNull('archived_at');
+                if ($user->isMedicasure == 0){
+                    $builder;
+                }else {
+                    $builder->where('dossier_medical_id', '=', $dossier->id)->whereNotNull('archived_at');
+                }
             }elseif(gettype($userRoles->search('Souscripteur')) == 'integer'){                return response()->json(Auth::user(),419);
 //                return response()->json(Auth::id(),419);
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
@@ -40,7 +44,11 @@ class RestrictResultatScope implements Scope
                         array_push($dossiers,$patient->dossier->id);
                     }
                 }
-                $builder->whereIn('dossier_medical_id',$dossiers)->whereNotNull('archived_at');
+                if ($user->isMedicasure == 0){
+                    $builder;
+                }else {
+                    $builder->whereIn('dossier_medical_id', $dossiers)->whereNotNull('archived_at');
+                }
             }elseif(gettype($userRoles->search('Medecin controle')) == 'integer'){
 //                $builder->whereNotNull('passed_at');
                 $builder;
