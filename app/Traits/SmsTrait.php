@@ -29,7 +29,7 @@ trait SmsTrait
         if (!is_null($user)){
             try {
 //                $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
-                $nom = substr(strtoupper( $user->nom),0,12);
+                $nom = substr(strtoupper( $user->nom),0,9);
                 sendSMS($user->telephone,trans('sms.accountUpdated',['nom'=>$nom],'fr'),$sender);
             }catch (\Exception $exception){
                 //$exception

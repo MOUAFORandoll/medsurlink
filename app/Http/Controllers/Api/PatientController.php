@@ -101,7 +101,7 @@ class PatientController extends Controller
             //Envoi de sms
             $user = $patient->user;
 //            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
-            $nom = substr(strtoupper( $user->nom),0,12);
+            $nom = substr(strtoupper( $user->nom),0,9);
             $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$code],'fr'));
             //!Envoi de sms
 
@@ -112,7 +112,7 @@ class PatientController extends Controller
             if (!is_null($souscripteur)){
 
                 $user = $souscripteur->user;
-//                $this->sendSmsToUser($user);
+                $this->sendSmsToUser($user);
 
                 $mail = new PatientAffiliated($souscripteur,$patient);
                 Mail::to($souscripteur->user->email)->send($mail);
