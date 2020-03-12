@@ -265,7 +265,7 @@ class PatientController extends Controller
             $this->revealError('question_id','Secret question or answer invalid');
         }
         //Verification de la reponse de securite
-        if ($questionSecrete->reponse != $request->get('reponse')){
+        if (strtoupper($questionSecrete->reponse) != strtoupper($request->get('reponse'))){
             $this->revealError('question_id','Secret question or answer invalid');
         }
 
