@@ -26,8 +26,11 @@ use Illuminate\Validation\ValidationException;
 if (!function_exists('evaluateYearOfOld')){
 
     function evaluateYearOfOld($date_de_naissance){
-        $age = Carbon::today()->diffInYears(Carbon::parse($date_de_naissance));
-        return $age;
+        if (!is_null($date_de_naissance)){
+            $age = Carbon::today()->diffInYears(Carbon::parse($date_de_naissance));
+            return $age;
+        }
+        return 0;
     }
 }
 
