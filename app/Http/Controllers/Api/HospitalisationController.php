@@ -7,11 +7,14 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\HospitalisationRequest;
 use App\Models\Hospitalisation;
 use App\Models\Motif;
+use App\Traits\SmsTrait;
 use Carbon\Carbon;
 
 class HospitalisationController extends Controller
 {
     use PersonnalErrors;
+    use SmsTrait;
+
     protected $table = "hospitalisations";
     /**
      * Display a listing of the resource.
@@ -23,7 +26,7 @@ class HospitalisationController extends Controller
         $hospitalisations = Hospitalisation::with(['dossier','motifs','etablissement'])->get();
 
         foreach ($hospitalisations as $hospitalisation){
-           $hospitalisation->updateHospitalisation();
+            $hospitalisation->updateHospitalisation();
         }
 
         return response()->json(['hospitalisations'=>$hospitalisations]);
@@ -54,25 +57,25 @@ class HospitalisationController extends Controller
         $motifs = $request->get('motifs');
 
         //Insertion des motifs
-                foreach ($motifs as $motif){
+        foreach ($motifs as $motif){
 
-                    $converti = (integer) $motif;
+            $converti = (integer) $motif;
 
-                    if ($converti !== 0){
-                        $hospitalisation->motifs()->attach($motif);
-                        defineAsAuthor("ConsultationMotif", $motif, 'attach',$hospitalisation->dossier->patient->user_id);
-                    }else{
-                        $item =   Motif::create([
-                            "reference"=>'H'.str_random(5),
-                            "description"=>$motif
-                        ]);
+            if ($converti !== 0){
+                $hospitalisation->motifs()->attach($motif);
+                defineAsAuthor("ConsultationMotif", $motif, 'attach',$hospitalisation->dossier->patient->user_id);
+            }else{
+                $item =   Motif::create([
+                    "reference"=>'H'.str_random(5),
+                    "description"=>$motif
+                ]);
 
-                        defineAsAuthor("Motif", $item->id, 'create');
-                        $hospitalisation->motifs()->attach($item->id);
-                        defineAsAuthor("HospitalisationMotif", $item->id, 'attach',$hospitalisation->dossier->patient->user_id);
+                defineAsAuthor("Motif", $item->id, 'create');
+                $hospitalisation->motifs()->attach($item->id);
+                defineAsAuthor("HospitalisationMotif", $item->id, 'attach',$hospitalisation->dossier->patient->user_id);
 
-                    }
-                }
+            }
+        }
 
         $hospitalisation = Hospitalisation::with([
             'dossier',
@@ -271,12 +274,16 @@ class HospitalisationController extends Controller
             'motifs','etablissement'
         ])->whereSlug($slug)->first();
         if (is_null($resultat->passed_at)){
-           $this->revealNonTransmis();
+            $this->revealNonTransmis();
 
         }else{
             $resultat->archived_at = Carbon::now();
             $resultat->save();
             defineAsAuthor("Hospitalisation",$resultat->id,'archive');
+
+            //Envoi du sms
+//            $this->sendSmsToUser($resultat->dossier->patient->user);
+
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -311,6 +318,9 @@ class HospitalisationController extends Controller
         $resultat->save();
 
         defineAsAuthor("Hospitalisation",$resultat->id,'transmettre');
+
+        //Envoi du sms
+        $this->sendSmsToUser($resultat->dossier->patient->user);
 
         return response()->json(['resultat'=>$resultat]);
 

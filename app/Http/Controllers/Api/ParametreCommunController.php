@@ -18,7 +18,7 @@ class ParametreCommunController extends Controller
      */
     public function index()
     {
-        $parametresCommun = ParametreCommun::with('consultation')->get();
+        $parametresCommun = ParametreCommun::all();
 
         foreach($parametresCommun as $parametreCommun){
             $parametreCommun->updateParametreCommun();
@@ -52,7 +52,7 @@ class ParametreCommunController extends Controller
 
         defineAsAuthor("ParametreCommun",$parametreCommun->id,'create',$parametreCommun->consultation->dossier->patient->user_id);
 
-        $parametreCommun = ParametreCommun::with('consultation','consultation.dossier')->whereSlug($parametreCommun->slug)->first();
+        $parametreCommun = ParametreCommun::whereSlug($parametreCommun->slug)->first();
 
         $parametreCommun->updateParametreCommun();
 
@@ -71,7 +71,7 @@ class ParametreCommunController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $parametreCommun = ParametreCommun::with('consultation')->whereSlug($slug)->first();
+        $parametreCommun = ParametreCommun::whereSlug($slug)->first();
 
         $parametreCommun->updateParametreCommun();
 
@@ -109,9 +109,10 @@ class ParametreCommunController extends Controller
 
         ParametreCommun::whereSlug($slug)->update($request->validated());
 
-        $parametreCommun = ParametreCommun::with('consultation','consultation.dossier')->whereSlug($slug)->first();
-
+        $parametreCommun = ParametreCommun::whereSlug($slug)->first();
         $this->updateBmi($request,$parametreCommun);
+
+        $parametreCommun->updateParametreCommun();
 
         return response()->json(['parametreCommun'=>$parametreCommun]);
     }
@@ -127,8 +128,8 @@ class ParametreCommunController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $parametreCommun = ParametreCommun::with('consultation')->whereSlug($slug)->first();
-
+        $parametreCommun = ParametreCommun::whereSlug($slug)->first();
+        $parametreCommun->updateParametreCommun();
         $this->checkIfAuthorized("ParametreCommun",$parametreCommun->id,"create");
         $parametreCommun->delete();
 
@@ -136,6 +137,7 @@ class ParametreCommunController extends Controller
     }
 
     public function  updateBmi($request,ParametreCommun $parametreCommun){
+
         if (!is_null($request->get('taille') && !is_null($request->get('poids')))){
             $tailleEnMetre = $request->get('taille') * 0.01;
             $bmi=0;

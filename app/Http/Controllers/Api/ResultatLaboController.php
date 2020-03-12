@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ResultatRequest;
 use App\Models\ResultatLabo;
+use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Storage;
 class ResultatLaboController extends Controller
 {
     use PersonnalErrors;
+    use SmsTrait;
+
     protected $table = "resultat_labos";
 
     /**
@@ -176,7 +179,9 @@ class ResultatLaboController extends Controller
         } else {
             $resultat->archived_at = Carbon::now();
             $resultat->save();
-
+            defineAsAuthor("Resultat", $resultat->id,'archive');
+            //Envoi du sms
+//            $this->sendSmsToUser($resultat->dossier->patient->user);
             return response()->json([
                 'resultat' => $resultat
             ]);
@@ -200,7 +205,8 @@ class ResultatLaboController extends Controller
 
         $resultat->passed_at = Carbon::now();
         $resultat->save();
-
+        //Envoi du sms
+        $this->sendSmsToUser($resultat->dossier->patient->user);
         return response()->json([
             'resultat' => $resultat
         ]);

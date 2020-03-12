@@ -11,7 +11,10 @@ use App\Mail\updateSetting;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePatient;
 use App\Models\Patient;
+use App\Models\ReponseSecrete;
 use App\Models\Souscripteur;
+use App\Traits\SmsTrait;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
@@ -21,6 +24,7 @@ use Netpok\Database\Support\DeleteRestrictionException;
 class PatientController extends Controller
 {
     use PersonnalErrors;
+    use SmsTrait;
     protected $table = 'patients';
     /**
      * Display a listing of the resource.
@@ -52,21 +56,24 @@ class PatientController extends Controller
      */
     public function store(patientStoreRequest $request)
     {
-//        if (is_null($request->get('nationalite'))){
-//            $this->revealError('nationalite','nationalite field is required');
-//        }
+
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request,"Patient");
 
         $user = $userResponse->getOriginalContent()['user'];
         $password = $userResponse->getOriginalContent()['password'];
-
+        $code = $userResponse->getOriginalContent()['code'];
         //Attribution du rôle patient
         $user->assignRole('Patient');
 
         //Creation du compte patient
+
         $age = evaluateYearOfOld($request->date_de_naissance);
-        $patient = Patient::create($request->except(['code_postal','quartier']) + ['user_id' => $user->id,'age'=>$age]);
+
+        $patient = Patient::create($request->except(['code_postal','quartier','question_id','reponse']) + ['user_id' => $user->id,'age'=>$age]);
+
+        //Définition de la question secrete et de la reponse secrete
+        ReponseSecrete::create($request->only(['question_id','reponse'])+['user_id' => $user->id]);
 
         //Generation du dossier client
         $dossier = DossierMedicalController::genererDossier($patient->user_id);
@@ -90,11 +97,21 @@ class PatientController extends Controller
         //Envoi des informations patient par mail
         $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
         try{
+            //Envoi de sms
+            $user = $patient->user;
+            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+            $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$code],'fr'));
+            //!Envoi de sms
+
             UserController::sendUserPatientInformationViaMail($user,$password);
 
-            $patient = Patient::with('user')->where('user_id','=',$patient->user_id)->first();
+            $patient = Patient::with('user','dossier')->where('user_id','=',$patient->user_id)->first();
             $souscripteur = Souscripteur::with('user')->where('user_id','=',$patient->souscripteur_id)->first();
             if (!is_null($souscripteur)){
+
+                $user = $souscripteur->user;
+                $this->sendSmsToUser($user);
+
                 $mail = new PatientAffiliated($souscripteur,$patient);
                 Mail::to($souscripteur->user->email)->send($mail);
             }
@@ -117,7 +134,14 @@ class PatientController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $patient = Patient::with(['souscripteur.user','user','affiliations','etablissements','financeurs.financable.user'])->restrictUser()->whereSlug($slug)->first();
+        $patient = Patient::with([
+            'souscripteur.user',
+            'user.questionSecrete',
+            'affiliations',
+            'etablissements',
+            'financeurs.financable.user',
+            'dossier',
+        ])->restrictUser()->whereSlug($slug)->first();
 
         return response()->json(['patient'=>$patient]);
     }
@@ -143,17 +167,14 @@ class PatientController extends Controller
      */
     public function update(PatientUpdateRequest $request, $slug)
     {
-//        if (is_null($request->get('nationalite'))){
-//            $this->revealError('nationalite','nationalite field is required');
-//        }
-
         $this->validatedSlug($slug,$this->table);
 
         $patient= Patient::with('user')->whereSlug($slug)->first();
 
-        UserController::updatePersonalInformation($request->except('date_de_naissance','patient','souscripteur_id','sexe'),$patient->user->slug);
+        UserController::updatePersonalInformation($request->except('patient','souscripteur_id','sexe','question_id','reponse'),$patient->user->slug);
 
         $age = evaluateYearOfOld($request->date_de_naissance);
+
         Patient::whereSlug($slug)->update($request->only([
                 "user_id",
                 "souscripteur_id",
@@ -167,10 +188,19 @@ class PatientController extends Controller
 
         $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
 
-        try{
-            $mail = new updateSetting($patient->user);
+        //Mise à jour de la question et la reponse secrete
+        if (is_null($patient->user->questionSecrete) || $patient->user->questionSecrete->isEmpty ){
+            ReponseSecrete::create($request->only(['question_id','reponse'])+['user_id' => $patient->user->id]);
+        }else{
+            ReponseSecrete::where('user_id','=',$patient->user_id)->update($request->only(['question_id','reponse']));
+        }
 
-            Mail::to($patient->user->email)->send($mail);
+        try{
+
+            if (!is_null($patient->user->email)){
+                $mail = new updateSetting($patient->user);
+                Mail::to($patient->user->email)->send($mail);
+            }
 
         }catch (\Swift_TransportException $transportException){
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
