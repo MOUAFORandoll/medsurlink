@@ -8,6 +8,7 @@ use App\Http\Requests\PatientUpdateRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Mail\PatientAffiliated;
 use App\Mail\updateSetting;
+use App\Models\DossierMedical;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePatient;
 use App\Models\Patient;
@@ -99,7 +100,8 @@ class PatientController extends Controller
         try{
             //Envoi de sms
             $user = $patient->user;
-            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+//            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+            $nom = substr(strtoupper( $user->nom),0,20);
             $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$code],'fr'));
             //!Envoi de sms
 
@@ -238,4 +240,47 @@ class PatientController extends Controller
         }
     }
 
+    /**
+     * Fonction permettant de générer un nouveau mot de passe pour un numero de dossier précis
+     * @param Request $request
+     */
+    public function resetPassword(Request $request){
+        $request->validate([
+            'numero_dossier'=>"required|string|exists:dossier_medicals,numero_dossier",
+            'date_de_naissance'=>"required|date",
+            'telephone'=>'required|string|min:9',
+            'question_id'=>'required|integer|exists:questions,id',
+            'reponse'=>'required|string|min:3'
+        ]);
+
+        $dossier = DossierMedical::where('numero_dossier',$request->get('numero_dossier'))->first();
+        $user = $dossier->patient->user;
+        $questionSecrete = $user->questionSecrete;
+        //Verification du numero de telephone
+        if ($user->telephone != $request->get('telephone')){
+            $this->revealError('telephone','Phone invalid');
+        }
+        //Verification de la question de securite
+        if ($questionSecrete->question_id != $request->get('question_id')){
+            $this->revealError('question_id','Secret question or answer invalid');
+        }
+        //Verification de la reponse de securite
+        if ($questionSecrete->reponse != $request->get('reponse')){
+            $this->revealError('question_id','Secret question or answer invalid');
+        }
+
+        $password = str_random(10);
+        $code="";
+        $date_naissance = Carbon::parse($request->get('date_de_naissance'))->year;
+        $code = substr($password,0,5);
+        $password = $date_naissance.$code;
+
+//        $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+        $nom = substr(strtoupper( $user->nom),0,20);
+        $user->password = bcrypt($password);
+        $user->save();
+        sendSMS($request->get('telephone'),trans('sms.accountSecurityUpdated',['nom'=>$nom,'password'=>$code],'fr'));
+
+        return response()->json(['message'=>'Sms envoyé avec succès']);
+    }
 }

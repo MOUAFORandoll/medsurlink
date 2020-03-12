@@ -19,7 +19,9 @@
 
 Route::post('oauth/token', 'Api\AuthController@auth');
 Route::post('password/emailVersion','Auth\ForgotPasswordController@sendResetLinkEmail');
+Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
+Route::get('question','Api\QuestionController@index');
 
 
 Route::middleware(['auth:api'])->group(function () {
@@ -186,7 +188,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('etablissement', 'Api\EtablissementExerciceController')->except(['create', 'store', 'destroy', 'edit']);
     Route::get('user-etablissements', 'Api\EtablissementExerciceController@userEtablissements');
     Route::post('update-password','Api\UserController@updatePassword');
-    Route::get('question','Api\QuestionController@index');
 });
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {
     Route::post('patient','Api\PatientController@store')->name('patient.store');
