@@ -101,7 +101,7 @@ class PatientController extends Controller
             //Envoi de sms
             $user = $patient->user;
 //            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
-            $nom = substr(strtoupper( $user->nom),0,20);
+            $nom = substr(strtoupper( $user->nom),0,9);
             $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$code],'fr'));
             //!Envoi de sms
 
@@ -265,7 +265,7 @@ class PatientController extends Controller
             $this->revealError('question_id','Secret question or answer invalid');
         }
         //Verification de la reponse de securite
-        if ($questionSecrete->reponse != $request->get('reponse')){
+        if (strtoupper($questionSecrete->reponse) != strtoupper($request->get('reponse'))){
             $this->revealError('question_id','Secret question or answer invalid');
         }
 

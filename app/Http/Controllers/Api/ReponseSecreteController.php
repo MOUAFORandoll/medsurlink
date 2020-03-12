@@ -71,9 +71,9 @@ class ReponseSecreteController extends Controller
      */
     public function update(ReponseSecreteRequest $request, $slug)
     {
-        $questionReponse = ReponseSecrete::whereSlug($slug)->first();
-        $questionReponse->whereSlug($slug)->update($request->validated());
-        $questionReponse = ReponseSecrete::with('user','question')->whereSlug($slug)->first();
+        $questionReponse = ReponseSecrete::where('user_id','=',$slug)->first();
+        ReponseSecrete::whereId($questionReponse->id)->update($request->validated());
+        $questionReponse = ReponseSecrete::with('user','question')->where('user_id','=',$slug)->first();
 
         return response()->json(['question'=>$questionReponse]);
     }

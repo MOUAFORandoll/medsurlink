@@ -103,6 +103,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], funct
 Route::group(['middleware' => ['auth:api','role:Admin|Patient']], function () {
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->only('show','index');
     Route::get('{patient}/dossier-medical','Api\DossierMedicalController@dossierByPatientId');
+    Route::put('/secretReset/{slug}','Api\ReponseSecreteController@update');
 
 });
 
