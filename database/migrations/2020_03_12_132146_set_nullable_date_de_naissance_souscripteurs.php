@@ -14,6 +14,7 @@ class SetNullableDateDeNaissanceSouscripteurs extends Migration
     public function up()
     {
         Schema::table('souscripteurs', function (Blueprint $table) {
+            \Illuminate\Support\Facades\DB::connection()->getDoctrineSchemaManager()->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
             $table->date('date_de_naissance')->nullable()->change();
         });
     }
