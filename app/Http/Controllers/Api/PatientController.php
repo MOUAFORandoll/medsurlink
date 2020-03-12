@@ -100,7 +100,8 @@ class PatientController extends Controller
         try{
             //Envoi de sms
             $user = $patient->user;
-            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+//            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+            $nom = substr(strtoupper( $user->nom),0,20);
             $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$code],'fr'));
             //!Envoi de sms
 
@@ -274,8 +275,8 @@ class PatientController extends Controller
         $code = substr($password,0,5);
         $password = $date_naissance.$code;
 
-        $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
-
+//        $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+        $nom = substr(strtoupper( $user->nom),0,20);
         $user->password = bcrypt($password);
         $user->save();
         sendSMS($request->get('telephone'),trans('sms.accountSecurityUpdated',['nom'=>$nom,'password'=>$code],'fr'));
