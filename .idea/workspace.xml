@@ -547,7 +547,8 @@
       <workItem from="1583827609531" duration="16711000" />
       <workItem from="1583852283743" duration="3763000" />
       <workItem from="1583911676446" duration="3378000" />
-      <workItem from="1584034793726" duration="6382000" />
+      <workItem from="1584034793726" duration="7033000" />
+      <workItem from="1584349884820" duration="3753000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -644,10 +645,6 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="518" y="287" key="NewPhpFileDialog/0.0.1366.728@0.0.1366.728" timestamp="1583311668601" />
-    <state x="514" y="74" key="RollbackChangesDialog" timestamp="1575649215715">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="514" y="74" key="RollbackChangesDialog/0.0.1366.728@0.0.1366.728" timestamp="1575649215715" />
     <state x="470" y="79" key="VCS.ChangeListViewerDialog" timestamp="1575882049035">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -680,10 +677,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1583487857246" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1584041183226">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1584353506802">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1584041183226" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1584353506802" />
     <state x="405" y="277" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1582463980420">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
