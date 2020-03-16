@@ -187,7 +187,10 @@ class UserController extends Controller
             'isMedicasure'=>$request->get('isMedicasure','0'),
             'password'=>Hash::make($password)
         ]);
-
+        if (!is_null($role) && $role == "Patient"){
+            $user->smsEnvoye = 1;
+            $user->save();
+        }
         return response()->json(['user'=>$user,'password'=>$password,'code'=>$code]);
     }
 
