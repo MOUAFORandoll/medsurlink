@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
 use App\Scopes\RestrictDossierScope;
+use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -55,6 +56,7 @@ class ConsultationObstetrique extends Model
         "t1",
         "nle_anle",
         "sexe",
+        "creator",
     ];
 
     /**
@@ -86,6 +88,10 @@ class ConsultationObstetrique extends Model
     public function etablissement(){
         return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
     }
+
+    public function author (){
+        return $this->belongsTo(User::class,'creator','id');
+    }
     /**
      * The "booting" method of the model.
      *
@@ -110,6 +116,13 @@ class ConsultationObstetrique extends Model
         $this['user']=$user;
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$this->id,"create");
         $canUpdate = checkIfCanUpdated("ConsultationObstetrique",$this->id,"create");
+        $author = $this->author;
+        if (!is_null($author)){
+//            $this['author']['user'] = $author;
+        }else{
+            unset($this['author']);
+            $this['author'] = getAuthor("ConsultationObstetrique",$this->id,"create");
+        }
         $this['isAuthor']=$isAuthor->getOriginalContent();
         $connectedUser = Auth::user();
         if ($connectedUser->getRoleNames()->first() == 'Praticien'){
