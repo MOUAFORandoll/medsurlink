@@ -124,8 +124,9 @@ class ConsultationMedecineGenerale extends Model
             $canUpdate = checkIfCanUpdated("ConsultationMedecineGenerale",$this->id,"create");
             $author = $this->author;
             if (!is_null($author)){
-                $this['author']['user'] = $author;
+//                $this['author'] = $author;
             }else{
+                unset($this['author']);
                 $this['author'] = getAuthor("ConsultationMedecineGenerale",$this->id,"create");
             }
             $this['isAuthor']=$isAuthor->getOriginalContent();

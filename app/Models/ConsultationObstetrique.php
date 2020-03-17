@@ -118,8 +118,9 @@ class ConsultationObstetrique extends Model
         $canUpdate = checkIfCanUpdated("ConsultationObstetrique",$this->id,"create");
         $author = $this->author;
         if (!is_null($author)){
-            $this['author']['user'] = $author;
+//            $this['author']['user'] = $author;
         }else{
+            unset($this['author']);
             $this['author'] = getAuthor("ConsultationObstetrique",$this->id,"create");
         }
         $this['isAuthor']=$isAuthor->getOriginalContent();

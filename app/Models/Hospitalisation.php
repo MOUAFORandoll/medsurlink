@@ -98,8 +98,9 @@ class Hospitalisation extends Model
             $this['patient']=$patient;
             $author = $this->author;
             if (!is_null($author)){
-                $this['author']['user'] = $author;
+//                $this['author']['user'] = $author;
             }else{
+                unset($this['author']);
                 $this['author'] = getAuthor("Hospitalisation",$this->id,"create");
             }
             $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$this->id,"create");
