@@ -115,22 +115,24 @@ class DossierMedical extends Model
             }
 
             foreach ($this->consultationsObstetrique as $consultation){
-//                $author = $consultation->author;
-//                if (!is_null($author)){
-//                    $consultation['author']['user'] = $author;
-//                }else {
+                $author = $consultation->author;
+                if (!is_null($author)){
+                    $consultation['author'] = [];
+                    $consultation['author']['user'] = $author;
+                }else {
                     $consultation['author'] = getAuthor("ConsultationObstetrique", $consultation->id, "create");
-//                }
+                }
                 $consultation['etablissement'] = $consultation->etablissement;
             }
 
             foreach ($this->consultationsMedecine as $consultation){
-//                $author = $consultation->author;
-//                if (!is_null($author)){
-//                    $consultation['author']['user'] = $author;
-//                }else {
+                $author = $consultation->author;
+                dd($author);
+                if (is_null($author) == false){
+                    $consultation['author']['user'] = $author;
+                }else {
                     $consultation['author'] = getAuthor("ConsultationMedecineGenerale", $consultation->id, "create");
-//                }
+                }
                 $consultation['motifs'] = $consultation->motifs;
                 $consultation['conclusions'] = $consultation->conclusions;
                 $consultation['etablissement'] = $consultation->etablissement;
@@ -138,12 +140,12 @@ class DossierMedical extends Model
 
             foreach ($this->cardiologies as $consultation){
                 $motifs = [];
-//                $author = $consultation->author;
-//                if (!is_null($author)){
-//                    $consultation['author']['user'] = $author;
-//                }else {
+                $author = $consultation->author;
+                if (!is_null($author)){
+                    $consultation['author']['user'] = $author;
+                }else {
                     $consultation['author'] = getAuthor("Cardiologie", $consultation->id, "create");
-//                }
+                }
                 foreach ($consultation->actions as $action){
                     array_push($motifs,$action->motifs);
                 }
@@ -153,12 +155,13 @@ class DossierMedical extends Model
             }
 
             foreach ($this->hospitalisations as $hospitalisation){
-//                $author = $hospitalisation->author;
-//                if (!is_null($author)){
-//                    $hospitalisation['author']['user'] = $author;
-//                }else {
+                $author = $hospitalisation->author;
+                if (!is_null($author)){
+                    $hospitalisation['author'] = [];
+                    $hospitalisation['author']['user'] = $author;
+                }else {
                     $hospitalisation['author'] = getAuthor("Hospitalisation", $hospitalisation->id, "create");
-//                }
+                }
                 $hospitalisation['motifs'] = $hospitalisation->motifs;
             }
         }
