@@ -9,6 +9,7 @@ use App\Models\Hospitalisation;
 use App\Models\Motif;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class HospitalisationController extends Controller
 {
@@ -51,7 +52,8 @@ class HospitalisationController extends Controller
     public function store(HospitalisationRequest $request)
     {
         $hospitalisation = Hospitalisation::create($request->validated());
-
+        $hospitalisation->creator = Auth::id();
+        $hospitalisation->save();
         defineAsAuthor("Hospitalisation",$hospitalisation->id,'create',$hospitalisation->dossier->patient->user_id);
 
         $motifs = $request->get('motifs');

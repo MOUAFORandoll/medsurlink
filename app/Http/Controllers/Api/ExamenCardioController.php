@@ -45,7 +45,7 @@ class ExamenCardioController extends Controller
      */
     public function store(ExamenCardioRequest $request)
     {
-        $this->verificationDeSpecialite();
+//        $this->verificationDeSpecialite();
 
         $cardiologie = Cardiologie::whereSlug($request->get('cardiologie_id'))->first();
         $examenCardio = ExamenCardio::create($request->except('cardiologie_id') + ['cardiologie_id'=>$cardiologie->id]);

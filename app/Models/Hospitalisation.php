@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Traits\SlugRoutable;
 use App\Scopes\RestrictDossierScope;
 use App\Scopes\RestrictHospitalisationScope;
+use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -32,6 +33,7 @@ class Hospitalisation extends Model
         'archieved_at',
         'passed_at',
         'etablissement_id',
+        'creator',
     ];
     use Sluggable;
     use SluggableScopeHelpers;
@@ -72,6 +74,10 @@ class Hospitalisation extends Model
         return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
     }
 
+    public function author (){
+        return $this->belongsTo(User::class,'creator','id');
+    }
+
     /**
      * The "booting" method of the model.
      *
@@ -90,6 +96,12 @@ class Hospitalisation extends Model
             $patient = $this->dossier->patient;
             $this['user']=$user;
             $this['patient']=$patient;
+            $author = $this->author;
+            if (!is_null($author)){
+                $this['author']['user'] = $author;
+            }else{
+                $this['author'] = getAuthor("Hospitalisation",$this->id,"create");
+            }
             $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$this->id,"create");
             $this['isAuthor']=$isAuthor->getOriginalContent();
         }

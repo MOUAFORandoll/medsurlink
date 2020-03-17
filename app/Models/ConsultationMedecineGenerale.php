@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
 use App\Scopes\RestrictDossierScope;
+use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -61,6 +62,7 @@ class ConsultationMedecineGenerale extends Model
         "file",
         "nbreCigarette",
         "nbreAnnee",
+        "creator",
     ];
 
     public function dossier(){
@@ -85,6 +87,10 @@ class ConsultationMedecineGenerale extends Model
 
     public function parametresCommun(){
         return $this->hasMany(ParametreCommun::class,'consultation_medecine_generale_id','id');
+    }
+
+    public function author (){
+        return $this->belongsTo(User::class,'creator','id');
     }
 
     /**
@@ -116,6 +122,12 @@ class ConsultationMedecineGenerale extends Model
             $this['patient']=$patient;
             $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationMedecineGenerale",$this->id,"create");
             $canUpdate = checkIfCanUpdated("ConsultationMedecineGenerale",$this->id,"create");
+            $author = $this->author;
+            if (!is_null($author)){
+                $this['author']['user'] = $author;
+            }else{
+                $this['author'] = getAuthor("ConsultationMedecineGenerale",$this->id,"create");
+            }
             $this['isAuthor']=$isAuthor->getOriginalContent();
             $connectedUser = Auth::user();
             if ($connectedUser->getRoleNames()->first() == 'Praticien'){
