@@ -243,14 +243,14 @@ class UserController extends Controller
             unset($data['date_de_naissance']);
         }
 
-        $response = User::where([
-            ['nom', '=', $data['nom']],
-            ['prenom', '=', $data['prenom']],
-        ])->count();
-
-        if($response > 0) {
-            return response()->json(['user'=> null, 'error' => "Another patient exist with this name"]);
-        }
+//        $response = User::where([
+//            ['nom', '=', $data['nom']],
+//            ['prenom', '=', $data['prenom']],
+//        ])->count();
+//
+//        if($response > 0) {
+//            return response()->json(['user'=> null, 'error' => "Another patient exist with this name"]);
+//        }
 
         User::whereSlug($slug)->update($data);
         $user = User::findBySlug($slug);
