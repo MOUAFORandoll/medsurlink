@@ -179,7 +179,7 @@ class UserController extends Controller
         ])->count();
 
         if($response > 0) {
-            return response()->json(['status'=> false, 'error' => "Another patient exist with this name"]);
+            return response()->json(['user'=> null, 'error' => "Another patient exist with this name"]);
         }
 
         $user = User::create([
@@ -246,7 +246,7 @@ class UserController extends Controller
         ])->count();
 
         if($response > 0) {
-            return response()->json(['status'=> false, 'error' => "Another patient exist with this name"]);
+            return response()->json(['user'=> null, 'error' => "Another patient exist with this name"]);
         }
 
         User::whereSlug($slug)->update($data);
