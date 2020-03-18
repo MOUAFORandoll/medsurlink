@@ -13,6 +13,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/app/Models/Auteur.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Auteur.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" afterDir="false" />
@@ -30,6 +31,8 @@
 =======
       <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exceptions/Handler.php" afterDir="false" />
 >>>>>>> 417b7fe93f1116c678c97d9c6086cff8852f4a2e
+=======
+>>>>>>> abed145ff39b76d62bdd19a2dd96ab8c12f1b191
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -576,7 +579,7 @@
       <workItem from="1584034793726" duration="7033000" />
       <workItem from="1584349884820" duration="5263000" />
       <workItem from="1584436787570" duration="12174000" />
-      <workItem from="1584517220838" duration="9322000" />
+      <workItem from="1584517220838" duration="10982000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
