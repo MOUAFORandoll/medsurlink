@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Mail/Password/PasswordGenerated.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Mail/Password/PasswordGenerated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Mail/Password/PatientPasswordGenerated.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Mail/Password/PatientPasswordGenerated.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Mail/updateSetting.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Mail/updateSetting.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exceptions/Handler.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -552,7 +550,7 @@
       <workItem from="1584034793726" duration="7033000" />
       <workItem from="1584349884820" duration="5263000" />
       <workItem from="1584436787570" duration="12174000" />
-      <workItem from="1584517220838" duration="8305000" />
+      <workItem from="1584517220838" duration="9322000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -669,10 +667,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1583487857246" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1584536328892">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1584548542389">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1584536328892" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1584548542389" />
     <state x="405" y="277" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1582463980420">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
