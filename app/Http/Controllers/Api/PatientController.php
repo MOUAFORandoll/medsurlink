@@ -61,6 +61,10 @@ class PatientController extends Controller
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request,"Patient");
 
+        if($userResponse->getOriginalContent()['user'] == null) {
+            $this->revealError('nom', $userResponse->getOriginalContent()['error']);
+        }
+
         $user = $userResponse->getOriginalContent()['user'];
         $password = $userResponse->getOriginalContent()['password'];
         $code = $userResponse->getOriginalContent()['code'];
@@ -173,7 +177,11 @@ class PatientController extends Controller
 
         $patient= Patient::with('user')->whereSlug($slug)->first();
 
-        UserController::updatePersonalInformation($request->except('patient','souscripteur_id','sexe','question_id','reponse'),$patient->user->slug);
+        $response = UserController::updatePersonalInformation($request->except('patient','souscripteur_id','sexe','question_id','reponse'),$patient->user->slug);
+
+        if($response->getOriginalContent()['user'] == null) {
+            $this->revealError('nom', $response->getOriginalContent()['error']);
+        }
 
         $age = evaluateYearOfOld($request->date_de_naissance);
 
