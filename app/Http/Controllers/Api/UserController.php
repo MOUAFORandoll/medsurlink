@@ -173,10 +173,13 @@ class UserController extends Controller
             }
         }
 
-        $response = User::where('nom', $request->nom)->count();
+        $response = User::where([
+            ['nom', '=', $request->nom],
+            ['prenom', '=', $request->prenom],
+        ])->count();
 
         if($response > 0) {
-            return response()->json(['status'=> false, 'error' => "Another patient exist with this name"]);
+            return response()->json(['user'=> null, 'error' => "Another patient exist with this name"]);
         }
 
         $user = User::create([
@@ -240,10 +243,13 @@ class UserController extends Controller
             unset($data['date_de_naissance']);
         }
 
-        $response = User::where('nom', $data['nom'])->count();
+        $response = User::where([
+            ['nom', '=', $data['nom']],
+            ['prenom', '=', $data['prenom']],
+        ])->count();
 
         if($response > 0) {
-            return response()->json(['status'=> false, 'error' => "Another patient exist with this name"]);
+            return response()->json(['user'=> null, 'error' => "Another patient exist with this name"]);
         }
 
         User::whereSlug($slug)->update($data);
