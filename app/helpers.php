@@ -218,7 +218,7 @@ if (!function_exists('getAuthorId')){
 
 if (!function_exists('getAuthor')) {
     function getAuthor($operationable_type, $operationable_id, $action){
-        $auteur =   \App\Models\Auteur::where('action','=',$action)->where('operationable_type','=',$operationable_type)->where('operationable_id','=',$operationable_id)->first();
+        $auteur =   \App\Models\Auteur::with('user')->where('action','=',$action)->where('operationable_type','=',$operationable_type)->where('operationable_id','=',$operationable_id)->first();
         if (is_null($auteur))
             return null;
         return $auteur;

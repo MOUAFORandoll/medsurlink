@@ -19,6 +19,7 @@ use App\Models\Traitement;
 use App\Models\TraitementActuel;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -69,6 +70,8 @@ class ConsultationMedecineGeneraleController extends Controller
     {
 
         $consultation = ConsultationMedecineGenerale::create($request->except('documents'));
+        $consultation->creator = Auth::id();
+        $consultation->save();
         defineAsAuthor("ConsultationMedecineGenerale", $consultation->id, 'create', $consultation->dossier->patient->user_id);
 
         $consultation = ConsultationMedecineGenerale::with([

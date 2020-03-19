@@ -77,6 +77,7 @@ class ConsultationPrenatale extends Model
             $this['user']=$user;
             $this['dossier']=$dossier;
             $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationPrenatale",$this->id,"create");
+            $this['author'] = getAuthor("ConsultationPrenatale",$this->id,"create");
             $this['isAuthor']=$isAuthor->getOriginalContent();
         }
     }
