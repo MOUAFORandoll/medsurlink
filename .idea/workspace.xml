@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
 <<<<<<< HEAD
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/app/Mail/Password/PasswordGenerated.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Mail/Password/PasswordGenerated.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Mail/Password/PatientPasswordGenerated.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Mail/Password/PatientPasswordGenerated.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Mail/updateSetting.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Mail/updateSetting.php" afterDir="false" />
@@ -33,6 +34,10 @@
 >>>>>>> 417b7fe93f1116c678c97d9c6086cff8852f4a2e
 =======
 >>>>>>> abed145ff39b76d62bdd19a2dd96ab8c12f1b191
+=======
+      <change beforePath="$PROJECT_DIR$/app/Exceptions/Handler.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Exceptions/Handler.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/PraticienController.php" afterDir="false" />
+>>>>>>> e9180bea2cffd32c949fed9b3a769a7973b2185d
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
