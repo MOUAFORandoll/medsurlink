@@ -16,6 +16,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/app/Models/Auteur.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Auteur.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationMedecineGenerale.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/ConsultationObstetrique.php" afterDir="false" />
@@ -43,6 +44,10 @@
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Api/ConsultationMedecineGeneraleController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Models/Cardiologie.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Cardiologie.php" afterDir="false" />
 >>>>>>> 5464330744a7516e2cf77b47ac8834e6bc05db8d
+=======
+      <change beforePath="$PROJECT_DIR$/app/Notifications/MailResetPasswordNotification.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Notifications/MailResetPasswordNotification.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/mail.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/mail.php" afterDir="false" />
+>>>>>>> eca7767c8eb75025b2b287f0436f1f1b3ece5939
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -254,6 +259,7 @@
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -626,18 +632,14 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="423" y="167" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1583332212584" />
-    <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser" timestamp="1584005311238">
+    <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser" timestamp="1584626594656">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1584005311238" />
+    <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1584626594656" />
     <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1583828519775">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1583828519775" />
-    <state x="308" y="0" key="CommitChangelistDialog2" timestamp="1575882019741">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="308" y="0" key="CommitChangelistDialog2/0.0.1366.728@0.0.1366.728" timestamp="1575882019741" />
     <state width="254" height="195" key="DatabaseViewActions_Filter" timestamp="1584005890164">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -682,14 +684,6 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="518" y="287" key="NewPhpFileDialog/0.0.1366.728@0.0.1366.728" timestamp="1583311668601" />
-    <state x="514" y="74" key="RollbackChangesDialog" timestamp="1575649215715">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="514" y="74" key="RollbackChangesDialog/0.0.1366.728@0.0.1366.728" timestamp="1575649215715" />
-    <state x="470" y="79" key="VCS.ChangeListViewerDialog" timestamp="1575882049035">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="470" y="79" key="VCS.ChangeListViewerDialog/0.0.1366.728@0.0.1366.728" timestamp="1575882049035" />
     <state x="275" y="98" key="Vcs.Push.Dialog.v2" timestamp="1577971966765">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -710,18 +704,14 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="92" y="92" width="1182" height="544" key="dock-window-1/0.0.1366.728@0.0.1366.728" timestamp="1580137003684" />
-    <state x="289" y="155" key="git4idea.merge.GitPullDialog" timestamp="1575881922263">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="289" y="155" key="git4idea.merge.GitPullDialog/0.0.1366.728@0.0.1366.728" timestamp="1575881922263" />
     <state x="339" y="162" key="run.anything.popup" timestamp="1583487857246">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1583487857246" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1584019660429">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1584626579268">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1584019660429" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1584626579268" />
     <state x="405" y="277" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1582463980420">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
