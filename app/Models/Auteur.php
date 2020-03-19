@@ -35,7 +35,11 @@ class Auteur extends Model
         return $this->morphTo();
     }
 
-    public function user(){
+    public function patient(){
         return $this->belongsTo(User::class,'patient_id','id');
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class,'user_id','id');
     }
 }

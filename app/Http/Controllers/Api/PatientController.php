@@ -61,6 +61,10 @@ class PatientController extends Controller
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request,"Patient");
 
+        if($userResponse->getOriginalContent()['user'] == null) {
+            $this->revealError('nom', $userResponse->getOriginalContent()['error']);
+        }
+
         $user = $userResponse->getOriginalContent()['user'];
         $password = $userResponse->getOriginalContent()['password'];
         $code = $userResponse->getOriginalContent()['code'];
@@ -101,7 +105,7 @@ class PatientController extends Controller
             //Envoi de sms
             $user = $patient->user;
 //            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
-            $nom = substr(strtoupper( $user->nom),0,20);
+            $nom = substr(strtoupper( $user->nom),0,9);
             $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$code],'fr'));
             //!Envoi de sms
 
@@ -173,7 +177,11 @@ class PatientController extends Controller
 
         $patient= Patient::with('user')->whereSlug($slug)->first();
 
-        UserController::updatePersonalInformation($request->except('patient','souscripteur_id','sexe','question_id','reponse'),$patient->user->slug);
+        $response = UserController::updatePersonalInformation($request->except('patient','souscripteur_id','sexe','question_id','reponse'),$patient->user->slug);
+
+        if($response->getOriginalContent()['user'] == null) {
+            $this->revealError('nom', $response->getOriginalContent()['error']);
+        }
 
         $age = evaluateYearOfOld($request->date_de_naissance);
 
@@ -265,7 +273,7 @@ class PatientController extends Controller
             $this->revealError('question_id','Secret question or answer invalid');
         }
         //Verification de la reponse de securite
-        if ($questionSecrete->reponse != $request->get('reponse')){
+        if (strtoupper($questionSecrete->reponse) != strtoupper($request->get('reponse'))){
             $this->revealError('question_id','Secret question or answer invalid');
         }
 

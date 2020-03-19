@@ -66,25 +66,27 @@ class ConsultationObstetriqueController extends Controller
 //            }
 //                        if ($specialite == "Gynéco-Obstétrique"){
 
-                $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie','rcc')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
+        $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie','rcc')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
+        $consultationObstetrique->creator = Auth::id();
+        $consultationObstetrique->save();
 
-                defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create',$consultationObstetrique->dossier->patient->user_id);
+        defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create',$consultationObstetrique->dossier->patient->user_id);
 
-                $consultationObstetrique = ConsultationObstetrique::with([
-                    'consultationPrenatales',
-                    'dossier',
-                    'dossier.allergies',
-                    'dossier.antecedents',
-                    'dossier.resultatsLabo',
-                    'dossier.hospitalisations',
-                    'dossier.consultationsObstetrique',
-                    'dossier.consultationsMedecine',
-                    'dossier.resultatsImagerie',
-                    'dossier.allergies',
-                    'dossier.antecedents',
-                    'dossier.traitements',
-                ])->whereSlug($consultationObstetrique->slug)->first();
-                return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
+        $consultationObstetrique = ConsultationObstetrique::with([
+            'consultationPrenatales',
+            'dossier',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.traitements',
+        ])->whereSlug($consultationObstetrique->slug)->first();
+        return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
 
 //            }else{
 //                $this->revealAccesRefuse();
@@ -123,7 +125,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function show($slug)
     {
-         $this->validatedSlug($slug,$this->table);
+        $this->validatedSlug($slug,$this->table);
 
         $consultationObstetrique =  ConsultationObstetrique::with([
             'consultationPrenatales',

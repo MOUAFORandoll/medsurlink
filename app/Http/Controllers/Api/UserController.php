@@ -173,6 +173,15 @@ class UserController extends Controller
             }
         }
 
+        $response = User::where([
+            ['nom', '=', $request->nom],
+            ['prenom', '=', $request->prenom],
+        ])->count();
+
+        if($response > 0) {
+            return response()->json(['user'=> null, 'error' => "Another patient exist with this name"]);
+        }
+
         $user = User::create([
             'nom'=>$request->nom,
             'prenom'=>$request->prenom,
@@ -187,7 +196,10 @@ class UserController extends Controller
             'isMedicasure'=>$request->get('isMedicasure','0'),
             'password'=>Hash::make($password)
         ]);
-
+        if (!is_null($role) && $role == "Patient"){
+            $user->smsEnvoye = 1;
+            $user->save();
+        }
         return response()->json(['user'=>$user,'password'=>$password,'code'=>$code]);
     }
 
@@ -221,8 +233,8 @@ class UserController extends Controller
                 $date_naissance = Carbon::parse($data['date_de_naissance'])->year;
                 $code = substr($password,0,5);
                 $password = $date_naissance.$code;
-                $nom = (is_null($data['prenom']) ? "" : ucfirst($data['prenom']) ." ") . "". strtoupper( $data['nom']);
-
+//                $nom = (is_null($data['prenom']) ? "" : ucfirst($data['prenom']) ." ") . "". strtoupper( $data['nom']);
+                $nom = substr(strtoupper( $user->nom),0,9);
                 sendSMS($data['telephone'],trans('sms.accountSecurityUpdated',['nom'=>$nom,'password'=>$code],'fr'));
                 $data['password'] = bcrypt($password);
                 //Ici on va mettre la restriction en cas de non envoi de sms
@@ -230,6 +242,16 @@ class UserController extends Controller
             }
             unset($data['date_de_naissance']);
         }
+
+//        $response = User::where([
+//            ['nom', '=', $data['nom']],
+//            ['prenom', '=', $data['prenom']],
+//        ])->count();
+//
+//        if($response > 0) {
+//            return response()->json(['user'=> null, 'error' => "Another patient exist with this name"]);
+//        }
+
         User::whereSlug($slug)->update($data);
         $user = User::findBySlug($slug);
 
