@@ -66,10 +66,10 @@ class Handler extends ExceptionHandler
             return response()->json(['error'=>$exception->getErrorMessage(),'type'=>'Database or logic'],419);
         }
 
-//        if ($exception instanceof \Swift_TransportException ) {
-//            $responseError = new FormattedErrorResponse('notSendMail',"L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur");
-//            return response()->json(['error'=>$responseError->getArrayError()],419);
-//        }
+        if ($exception instanceof \Swift_TransportException ) {
+            $responseError = new FormattedErrorResponse('notSendMail',"L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur");
+            return response()->json(['error'=>$responseError->getArrayError()],419);
+        }
         return parent::render($request, $exception);
     }
 }
