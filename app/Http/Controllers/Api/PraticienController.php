@@ -165,16 +165,16 @@ class PraticienController extends Controller
         if (!is_null($signature))
             File::delete(public_path().'/storage/'.$signature);
 
-        try{
+//        try{
             $mail = new updateSetting($praticien->user);
 
             Mail::to($praticien->user->email)->send($mail);
 
-        }catch (\Swift_TransportException $transportException){
-            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
-            return response()->json(['particien'=>$praticien, "message"=>$message]);
-
-        }
+//        }catch (\Swift_TransportException $transportException){
+//            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+//            return response()->json(['particien'=>$praticien, "message"=>$message]);
+//
+//        }
 
         return response()->json(['praticien' => $praticien]);
     }
