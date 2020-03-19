@@ -173,15 +173,14 @@ class UserController extends Controller
             }
         }
 
-        $response = User::where([
-            ['nom', '=', $request->nom],
-            ['prenom', '=', $request->prenom],
-        ])->count();
-
-        if($response > 0) {
-            return response()->json(['user'=> null, 'error' => "Another patient exist with this name"]);
-        }
-
+//        $response = User::where([
+//            ['nom', '=', $request->nom],
+//            ['prenom', '=', $request->prenom],
+//        ])->count();
+//
+//        if($response > 0) {
+//            return response()->json(['user'=> null, 'error' => "Another patient exist with this name"]);
+//        }
         $user = User::create([
             'nom'=>$request->nom,
             'prenom'=>$request->prenom,
