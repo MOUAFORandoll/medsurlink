@@ -147,4 +147,6 @@ return [
 
     'attributes' => [],
 
+    'duplicate_patient_name' => 'Un patient existe déja avec ce nom',
+
 ];
