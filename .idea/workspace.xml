@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="1d859b03-4b79-4271-af5c-28bd2899415f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/emails/setting/update.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/emails/setting/update.blade.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,7 +48,7 @@
         <item name="medicalinkApp@localhost" type="feb32156:DbDataSourceImpl" />
         <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
         <item name="medicalinkapp: schema" type="ebfa3cd1:MariaImplModel$Schema" />
-        <item name="hospitalisations: table" type="dbc44a63:MariaImplModel$Table" />
+        <item name="souscripteurs: table" type="dbc44a63:MariaImplModel$Table" />
       </path>
     </expand>
     <select />
@@ -58,7 +59,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feature/affichageGenerateurDeConsultation" />
+        <entry key="$PROJECT_DIR$" value="feature/smsResetPassword" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -210,10 +211,11 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="editor.config.ad.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../website-medsurlink" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources/lang" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="yarn" />
+    <property name="php.override.implement.member.chooser.php.doc" value="NONE" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -546,10 +548,6 @@
       <workItem from="1583827609531" duration="16711000" />
       <workItem from="1583852283743" duration="3763000" />
       <workItem from="1583911676446" duration="3378000" />
-      <workItem from="1584034793726" duration="7033000" />
-      <workItem from="1584349884820" duration="5263000" />
-      <workItem from="1584436787570" duration="12174000" />
-      <workItem from="1584517220838" duration="10982000" />
     </task>
     <task id="LOCAL-00001" summary="Mise a jour gitignore">
       <created>1575882021506</created>
@@ -590,14 +588,14 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="423" y="167" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1583332212584" />
-    <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser" timestamp="1584005311238">
+    <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser" timestamp="1584626594656">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1584005311238" />
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1584449783249">
+    <state x="476" y="79" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1584626594656" />
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1583828519775">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1584449783249" />
+    <state x="413" y="118" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1583828519775" />
     <state width="254" height="195" key="DatabaseViewActions_Filter" timestamp="1584005890164">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -606,14 +604,14 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="427" y="0" key="Diagram.Print.Preview.Dialog/0.0.1366.728@0.0.1366.728" timestamp="1582019913606" />
-    <state x="92" y="92" width="1182" height="544" key="DiffContextDialog" timestamp="1584534567155">
+    <state x="92" y="92" width="1182" height="544" key="DiffContextDialog" timestamp="1577184035509">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="92" y="92" width="1182" height="544" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1584534567155" />
-    <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1584370457679">
+    <state x="92" y="92" width="1182" height="544" key="DiffContextDialog/0.0.1366.728@0.0.1366.728" timestamp="1577184035509" />
+    <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1582712627515">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1584370457679" />
+    <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1582712627515" />
     <state width="905" height="398" key="GridCell.Tab.0.bottom" timestamp="1579524726608">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -666,24 +664,13 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="339" y="162" key="run.anything.popup/0.0.1366.728@0.0.1366.728" timestamp="1583487857246" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1584548542389">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1584636589573">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1584548542389" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1584636589573" />
     <state x="405" y="277" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1582463980420">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="405" y="277" key="vcs.readOnlyHandler.ReadOnlyStatusDialog/0.0.1366.728@0.0.1366.728" timestamp="1582463980420" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/app/Models/Cardiologie.php</url>
-          <line>30</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
