@@ -176,4 +176,6 @@ return [
         'available'             => 'disponible',
         'size'                  => 'taille',
     ],
+
+    'duplicate_patient_name' => 'Another patient exist with this name',
 ];

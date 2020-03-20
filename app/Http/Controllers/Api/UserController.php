@@ -173,13 +173,23 @@ class UserController extends Controller
             }
         }
 
-        $response = User::where([
-            ['nom', '=', $request->nom],
-            ['prenom', '=', $request->prenom],
-        ])->count();
+        // Check if the role is patient in order to perform duplicate patient's name control
+        if($role == "Patient") {
 
-        if($response > 0) {
-            return response()->json(['user'=> null, 'error' => "Another patient exist with this name"]);
+            // Get all patients where the name and surname are the same
+            $response = User::with('patient')->where([
+                ['nom', '=', $request->nom],
+                ['prenom', '=', $request->prenom],
+            ])->count();
+
+            // Check if is greater than zero
+            if($response > 0) {
+                // If so, return an error
+                return response()->json([
+                    'user'=> null,
+                    'error' => trans('validation.duplicate_patient_name')
+                ]);
+            }
         }
 
         $user = User::create([
@@ -223,7 +233,41 @@ class UserController extends Controller
 
         $user = User::findBySlug($slug);
         if ($user->getRoleNames()->first() == 'Patient'){
+
             $user = User::with('patient')->whereSlug($slug)->first();
+
+            // Get all patients where the name and surname are the same
+            if(!is_null($data['nom']) && !is_null($data['prenom'])) {
+                $response = User::with('patient')->where([
+                    ['nom', '=', $data['nom']],
+                    ['prenom', '=', $data['prenom']],
+                ])->count();
+            }
+
+            else if(is_null($data['nom'])) {
+                $response = User::with('patient')->where([
+                    ['nom', '=', $user->nom],
+                    ['prenom', '=', $data['prenom']],
+                ])->count();
+            }
+
+            else {
+                $response = User::with('patient')->where([
+                    ['nom', '=', $data['nom']],
+                    ['prenom', '=', $user->prenom],
+                ])->count();
+            }
+
+            // Check if is greater than zero
+            if($response > 0) {
+                // If so, return an error
+                return response()->json([
+                    'user'=> null,
+                    'error' => trans('validation.duplicate_patient_name')
+                ]);
+            }
+
+
             if ($data['telephone'] != $user->telephone || $data['date_de_naissance'] != $user->patient->date_de_naissance){
                 $password = str_random(10);
                 $code="";
@@ -238,15 +282,6 @@ class UserController extends Controller
                 $data['smsEnvoye'] = $user->smsEnvoye + 1;
             }
             unset($data['date_de_naissance']);
-        }
-
-        $response = User::where([
-            ['nom', '=', $data['nom']],
-            ['prenom', '=', $data['prenom']],
-        ])->count();
-
-        if($response > 0) {
-            return response()->json(['user'=> null, 'error' => "Another patient exist with this name"]);
         }
 
         User::whereSlug($slug)->update($data);
