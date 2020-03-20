@@ -17,6 +17,7 @@ use App\Traits\UserTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CardiologieController extends Controller
 {
@@ -58,6 +59,9 @@ class CardiologieController extends Controller
 //        $this->verificationDeSpecialite();
 
         $cardiologie = Cardiologie::create($request->except('contributeurs', 'examen_cardio'));
+        $cardiologie->creator = Auth::id();
+        $cardiologie->save();
+
         defineAsAuthor("Cardiologie", $cardiologie->id, 'create', $cardiologie->dossier->patient->user_id);
 
         //Enregistrement de motif

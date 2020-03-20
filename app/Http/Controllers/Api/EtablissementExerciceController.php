@@ -9,6 +9,8 @@ use App\Models\EtablissementExercice;
 use App\Models\EtablissementExerciceMedecin;
 use App\Models\EtablissementExercicePatient;
 use App\Models\EtablissementExercicePraticien;
+use App\Models\Patient;
+use App\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
@@ -37,7 +39,11 @@ class EtablissementExerciceController extends Controller
 //                $patient['dossier'] = $patient->dossier;
 //            }
 //        }
-        return response()->json(['etablissements'=>$etablissements]);
+//        return response()->json(['etablissements'=>$etablissements]);
+        dd(trans('validation.duplicate_patient_name'));
+        return response()->json(['etablissements'=>$response = User::has('patient')->get()]);
+
+
     }
 
     /**

@@ -101,6 +101,7 @@ class ResultatImagerieController extends Controller
             ->whereSlug($slug)
             ->first();
         $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$resultat->id,"create");
+        $resultat['author'] = getAuthor("Resultat",$resultat->id,"create");
         $resultat['isAuthor'] = $motifIsAuthor->getOriginalContent();
 
         return response()->json([

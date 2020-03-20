@@ -19,6 +19,7 @@ use App\Models\Traitement;
 use App\Models\TraitementActuel;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -69,6 +70,8 @@ class ConsultationMedecineGeneraleController extends Controller
     {
 
         $consultation = ConsultationMedecineGenerale::create($request->except('documents'));
+        $consultation->creator = Auth::id();
+        $consultation->save();
         defineAsAuthor("ConsultationMedecineGenerale", $consultation->id, 'create', $consultation->dossier->patient->user_id);
 
         $consultation = ConsultationMedecineGenerale::with([
@@ -273,15 +276,18 @@ class ConsultationMedecineGeneraleController extends Controller
                 $consultation->motifs()->attach($motif);
                 defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
             }else{
-                $item =   Motif::create([
-                    "reference"=>$consultation->date_consultation,
-                    "description"=>$motif
-                ]);
+                if ($motif != ""){
 
-                defineAsAuthor("Motif", $item->id, 'create');
-                $consultation->motifs()->attach($item->id);
-                defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
+                    $item =   Motif::create([
+                        "reference"=>$consultation->date_consultation,
+                        "description"=>$motif
+                    ]);
 
+                    defineAsAuthor("Motif", $item->id, 'create');
+                    $consultation->motifs()->attach($item->id);
+                    defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
+
+                }
             }
         }
 
@@ -325,14 +331,18 @@ class ConsultationMedecineGeneraleController extends Controller
             $difference = array_diff($contributeurs, $precedentContributeurs);
             if (!empty($difference)) {
                 foreach ($difference as $contributeur) {
-                    $nouveauContributeur = Contributeurs::create([
-                        'contributable_id' => $contributeur,
-                        'contributable_type' => 'App\User',
-                        'operationable_id' => $consultation->id,
-                        'operationable_type' => 'Consultation'
+                    if ($contributeur !== ""){
 
-                    ]);
-                    defineAsAuthor("Consultation", $nouveauContributeur->id, 'Ajout contributeur', $consultation->dossier->patient->user_id);
+                        $nouveauContributeur = Contributeurs::create([
+                            'contributable_id' => $contributeur,
+                            'contributable_type' => 'App\User',
+                            'operationable_id' => $consultation->id,
+                            'operationable_type' => 'Consultation'
+
+                        ]);
+
+                        defineAsAuthor("Consultation", $nouveauContributeur->id, 'Ajout contributeur', $consultation->dossier->patient->user_id);
+                    }
                 }
             }
 
