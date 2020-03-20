@@ -39,9 +39,7 @@ class EtablissementExerciceController extends Controller
 //                $patient['dossier'] = $patient->dossier;
 //            }
 //        }
-//        return response()->json(['etablissements'=>$etablissements]);
-        dd(trans('validation.duplicate_patient_name'));
-        return response()->json(['etablissements'=>$response = User::has('patient')->get()]);
+        return response()->json(['etablissements'=>$etablissements]);
 
 
     }
