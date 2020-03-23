@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Database\Eloquent\RelationNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 class Handler extends ExceptionHandler
@@ -67,6 +68,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($exception instanceof \Swift_TransportException ) {
+            Log::error($exception->getMessage());
             $responseError = new FormattedErrorResponse('notSendMail',"L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur");
             return response()->json(['error'=>$responseError->getArrayError()],419);
         }
