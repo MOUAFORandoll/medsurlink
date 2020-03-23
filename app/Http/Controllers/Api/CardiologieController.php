@@ -282,6 +282,8 @@ class CardiologieController extends Controller
             $resultat->updateConsultationCardiologique();;
 
             $user = $resultat->dossier->patient->user;
+            informedPatientAndSouscripteurs($resultat->dossier->patient,1);
+
 //            $this->sendSmsToUser($user);
 
             return response()->json(['resultat'=>$resultat]);
@@ -325,6 +327,7 @@ class CardiologieController extends Controller
 
         $user = $resultat->dossier->patient->user;
         $this->sendSmsToUser($user);
+        informedPatientAndSouscripteurs($resultat->dossier->patient,0);
 
         return response()->json(['resultat'=>$resultat]);
 
