@@ -233,6 +233,8 @@ class ConsultationObstetriqueController extends Controller
             defineAsAuthor("ConsultationObstetrique",$resultat->id,'archive');
             $resultat->updateObstetricConsultation();
 
+            informedPatientAndSouscripteurs($resultat->dossier->patient,1);
+
             //Envoi du sms
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
 
@@ -259,6 +261,8 @@ class ConsultationObstetriqueController extends Controller
 
         //Envoi du sms
         $this->sendSmsToUser($resultat->dossier->patient->user);
+        informedPatientAndSouscripteurs($resultat->dossier->patient,0);
+
         return response()->json(['resultat'=>$resultat]);
 
     }

@@ -161,6 +161,8 @@ class OrdonanceController extends Controller
         defineAsAuthor('Ordonance',$ordonance->id,'archieve',$ordonance->dossier->patient_id);
         //Envoi du sms
 //        $this->sendSmsToUser($ordonance->dossier->patient->user);
+        informedPatientAndSouscripteurs($ordonance->dossier->patient,1);
+
         return response()->json(['ordonance'=>$ordonance]);
     }
 
@@ -176,6 +178,8 @@ class OrdonanceController extends Controller
         defineAsAuthor('Ordonance',$ordonance->id,'transmettre',$ordonance->dossier->patient_id);
 //Envoi du sms
         $this->sendSmsToUser($ordonance->dossier->patient->user);
+        informedPatientAndSouscripteurs($ordonance->dossier->patient,0);
+
         return response()->json(['ordonance'=>$ordonance]);
     }
 }

@@ -425,6 +425,8 @@ class ConsultationMedecineGeneraleController extends Controller
             $resultat->updateConsultationMedecine();
 
             $user = $resultat->dossier->patient->user;
+            informedPatientAndSouscripteurs($resultat->dossier->patient,1);
+
 //            $this->sendSmsToUser($user);
 
             return response()->json(['resultat'=>$resultat]);
@@ -452,6 +454,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
         $user = $resultat->dossier->patient->user;
         $this->sendSmsToUser($user);
+        informedPatientAndSouscripteurs($resultat->dossier->patient,0);
 
         return response()->json(['resultat'=>$resultat]);
 

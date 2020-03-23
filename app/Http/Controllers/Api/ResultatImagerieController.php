@@ -186,6 +186,7 @@ class ResultatImagerieController extends Controller
             defineAsAuthor("Resultat", $resultat->id,'archive');
             //Envoi du sms
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
+            informedPatientAndSouscripteurs($resultat->dossier->patient,1);
 
             return response()->json([
                 'resultat' => $resultat
@@ -213,6 +214,8 @@ class ResultatImagerieController extends Controller
 
         defineAsAuthor("Resultat", $resultat->id,'transmettre');
         $this->sendSmsToUser($resultat->dossier->patient->user);
+        informedPatientAndSouscripteurs($resultat->dossier->patient,0);
+
         return response()->json([
             'resultat' => $resultat
         ]);
