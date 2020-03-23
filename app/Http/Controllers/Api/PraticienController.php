@@ -12,6 +12,7 @@ use App\Models\EtablissementExercicePraticien;
 use App\Models\Praticien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -171,6 +172,7 @@ class PraticienController extends Controller
             Mail::to($praticien->user->email)->send($mail);
 
         }catch (\Swift_TransportException $transportException){
+            Log::error($transportException->getMessage());
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
             return response()->json(['particien'=>$praticien, "message"=>$message]);
 
