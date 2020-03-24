@@ -79,16 +79,30 @@ class MedecinControleController extends Controller
         }
         defineAsAuthor("MedecinControle",$medecin->user_id,'create');
 
+        $estDeMedicasure = $request->get('isMedicasure') == "1";
+
         //Ajout des établissements
-        foreach ($etablissements as $etablissement){
-            $medecin->etablissements()->attach($etablissement);
-            defineAsAuthor("MedecinControle",$medecin->user_id,'Add etablissement '.$etablissement);
-        }
-        if ($request->get('isMedicasure') == "1"){
-            if (!in_array(4,$etablissements)){
-                $medecin->etablissements()->attach(4);
+        if (!in_array(0,$etablissements)){
+            foreach ($etablissements as $etablissement){
+                $medecin->etablissements()->attach($etablissement);
+                defineAsAuthor("MedecinControle",$medecin->user_id,'Add etablissement '.$etablissement);
+            }
+
+            if ($estDeMedicasure){
+                if (!in_array(4,$etablissements)){
+                    $medecin->etablissements()->attach(4);
+                    defineAsAuthor("MedecinControle",$medecin->user_id,'Add etablissement 4');
+                }
+            }
+        }else{
+            $etablissements = EtablissementExercice::all();
+            foreach ($etablissements as $etablissement){
+                $medecin->etablissements()->attach($etablissement->id);
+                defineAsAuthor("MedecinControle",$medecin->user_id,'Add etablissement '.$etablissement->id);
             }
         }
+
+
         //envoi des informations du compte utilisateurs par mail
         try{
             UserController::sendUserInformationViaMail($user,$password);
@@ -201,7 +215,7 @@ class MedecinControleController extends Controller
 
     public function addEtablissement(Request $request){
         $validation = Validator::make($request->all(),[
-            'etablissement_exercice_id.*'=>'sometimes|nullable|integer|exists:etablissement_exercices,id',
+            'etablissement_exercice_id.*'=>'sometimes|nullable|integer',
             'medecin_id'=>'required|exists:medecin_controles,slug',
         ]);
 
@@ -212,15 +226,28 @@ class MedecinControleController extends Controller
         $etablissements = $request->get('etablissement_exercice_id');
         $medecin = MedecinControle::whereSlug($request->get('medecin_id'))->first();
 
-        foreach ($etablissements as $etablissementId){
-            $etablissement = EtablissementExercice::find($etablissementId);
-//Je verifie si ce medecin n'est pas encore dans cette etablissement
-            $nbre = EtablissementExerciceMedecin::where('etablissement_id','=',$etablissementId)->where('medecin_controle_id','=',$medecin->user_id)->count();
-            if ($nbre ==0){
+        if (!in_array(0,$etablissements)){
+            foreach ($etablissements as $etablissementId){
+                $etablissement = EtablissementExercice::find($etablissementId);
+                //Je verifie si ce medecin n'est pas encore dans cette etablissement
+                $nbre = EtablissementExerciceMedecin::where('etablissement_id','=',$etablissementId)->where('medecin_controle_id','=',$medecin->user_id)->count();
+                if ($nbre ==0){
+                    $medecin->etablissements()->attach($etablissement->id);
+                    defineAsAuthor("Medecin",$medecin->user_id,'attach');
+                }
+            }
+        }else{
+            foreach ($medecin->etablissements as $etablissement){
+                $medecin->etablissements()->detach($etablissement->id);
+            }
+
+            $etablissements = EtablissementExercice::all();
+            foreach ($etablissements as $etablissement){
                 $medecin->etablissements()->attach($etablissement->id);
-                defineAsAuthor("Medecin",$medecin->user_id,'attach');
+                defineAsAuthor("MedecinControle",$medecin->user_id,'Add etablissement '.$etablissement->id);
             }
         }
+
 
         $medecin = MedecinControle::with('etablissements','specialite','user')->whereUserId($medecin->user_id)->first();
 
