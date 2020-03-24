@@ -173,7 +173,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {
-    Route::resource('souscripteur','Api\SouscripteurController');
+
 
 });
 
@@ -191,14 +191,16 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::post('update-password','Api\UserController@updatePassword');
 });
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {
-    Route::post('patient','Api\PatientController@store')->name('patient.store');
-    Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
-    Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');
-    Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
+
 
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle']], function () {
+    Route::resource('souscripteur','Api\SouscripteurController');
+    Route::post('patient','Api\PatientController@store')->name('patient.store');
+    Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
+    Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');
+    Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::resource('medecin-controle','Api\MedecinControleController')->only(['index']);
     Route::resource('praticien','Api\PraticienController')->only(['index']);
     Route::resource('medicament','Api\MedicamentController')->except(['edit','create']);
