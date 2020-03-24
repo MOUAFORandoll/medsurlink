@@ -193,14 +193,15 @@ class EtablissementExerciceController extends Controller
         }
         else if(gettype($userRoles->search('Medecin controle')) == 'integer'){
             $user = \App\User::with(['medecinControle'])->whereId(Auth::id())->first();
-            //Recuperation des etablissements du praticien
+            //Recuperation des etablissements du medecin controle
             if (!is_null($user->medecinControle)){
-                $etablissements = EtablissementExerciceMedecin::where('medecin_controle_id','=',Auth::id())->get();
+//                $etablissements = EtablissementExerciceMedecin::where('medecin_controle_id','=',Auth::id())->get();
+                $etablissements = EtablissementExercice::all();
                 $etablissementsId = [];
                 foreach ($etablissements as $etablissement){
                     if (!is_null($etablissement))
                     {
-                        array_push($etablissementsId, $etablissement->etablissement_id);
+                        array_push($etablissementsId, $etablissement->id);
                     }
                 }
                 $etablissements = EtablissementExercice::with(['patients'])->whereIn('id',$etablissementsId)->get();
