@@ -64,22 +64,20 @@ class PraticienController extends Controller
 
         $praticien = Praticien::create($request->validated() + ['user_id' => $user->id]);
         //Ajout des établissements
-        if (!in_array(0,$etablissements)) {
-            $praticien->etablissements()->attach($etablissements);
-            if ($request->get('isMedicasure') == "1") {
-                if (!in_array(4, $etablissements)) {
-                    $praticien->etablissements()->attach(4);
-                }
-            }
-            $praticien->save();
-        }else{
+        $estDeMedicasure = $request->get('isMedicasure') == "1";
+
+        if ($estDeMedicasure){
             $etablissements = EtablissementExercice::all();
             foreach ($etablissements as $etablissement){
                 $praticien->etablissements()->attach($etablissement->id);
-                defineAsAuthor("MedecinControle",$praticien->user_id,'Add etablissement '.$etablissement->id);
+                defineAsAuthor("Praticien",$praticien->user_id,'Add etablissement '.$etablissement->id);
+            }
+        }else{
+            foreach (array_diff($etablissements,[0]) as $etablissement){
+                $praticien->etablissements()->attach($etablissement);
+                defineAsAuthor("Praticien",$praticien->user_id,'Add etablissement '.$etablissement);
             }
         }
-
 
         if($request->hasFile('signature')) {
             if ($request->file('signature')->isValid()) {
