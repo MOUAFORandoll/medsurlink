@@ -82,25 +82,27 @@ class MedecinControleController extends Controller
         $estDeMedicasure = $request->get('isMedicasure') == "1";
 
         //Ajout des établissements
-        if (!in_array(0,$etablissements)){
-            foreach ($etablissements as $etablissement){
-                $medecin->etablissements()->attach($etablissement);
-                defineAsAuthor("MedecinControle",$medecin->user_id,'Add etablissement '.$etablissement);
-            }
-
-            if ($estDeMedicasure){
-                if (!in_array(4,$etablissements)){
-                    $medecin->etablissements()->attach(4);
-                    defineAsAuthor("MedecinControle",$medecin->user_id,'Add etablissement 4');
-                }
-            }
-        }else{
+        if ($estDeMedicasure){
             $etablissements = EtablissementExercice::all();
             foreach ($etablissements as $etablissement){
                 $medecin->etablissements()->attach($etablissement->id);
                 defineAsAuthor("MedecinControle",$medecin->user_id,'Add etablissement '.$etablissement->id);
             }
+        }else{
+                foreach (array_diff($etablissements,[0]) as $etablissement){
+                    $medecin->etablissements()->attach($etablissement);
+                    defineAsAuthor("MedecinControle",$medecin->user_id,'Add etablissement '.$etablissement);
+
+
+//            if ($estDeMedicasure){
+//                if (!in_array(4,$etablissements)){
+//                    $medecin->etablissements()->attach(4);
+//                    defineAsAuthor("MedecinControle",$medecin->user_id,'Add etablissement 4');
+//                }
+//            }
+            }
         }
+
 
 
         //envoi des informations du compte utilisateurs par mail
