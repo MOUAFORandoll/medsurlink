@@ -223,7 +223,13 @@ class EtablissementExerciceController extends Controller
                 $etablissements = EtablissementExercice::whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
-        }else{
+        }
+        else if(gettype($userRoles->search('Gestionnaire')) == 'integer'){
+            $etablissements = EtablissementExercice::all();
+            return response()->json(['etablissements'=>$etablissements]);
+
+        }
+        else{
             return response()->json(['etablissements'=>[]]);
 
         }
