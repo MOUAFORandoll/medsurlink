@@ -46,4 +46,8 @@ class Medicament extends Model
         $isAuthor = checkIfIsAuthorOrIsAuthorized('Medicament',$this->id,'create');
         $this['isAuthor']=$isAuthor->getOriginalContent();
     }
+
+    public function prescription(){
+        return $this->hasOne(Prescription::class,'id');
+    }
 }

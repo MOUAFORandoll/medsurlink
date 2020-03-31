@@ -34,4 +34,12 @@ class Prescription extends Model
         return Str::random(10).' '.Carbon::now()->timestamp;
     }
 
+    public function medicament(){
+        return $this->belongsTo(Medicament::class,'medicament_id','id');
+    }
+
+    public function posology(){
+        return $this->belongsTo(Posologie::class,'posologie_id','id');
+    }
+
 }

@@ -34,4 +34,8 @@ class Posologie extends Model
     public function getNameAndTimestampAttribute() {
         return Str::random(10).' '.Carbon::now()->timestamp;
     }
+
+    public function prescription(){
+        return $this->hasOne(Prescription::class,'id');
+    }
 }
