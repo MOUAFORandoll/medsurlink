@@ -19,6 +19,7 @@ class CreatePrescriptionsTable extends Migration
             $table->unsignedBigInteger('posologie_id');
             $table->string('info_comp')->nullable();
             $table->date('date_fin');
+            $table->string('slug')->unique();
             $table->softDeletes();
             $table->timestamps();
 

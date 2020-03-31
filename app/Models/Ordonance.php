@@ -18,6 +18,8 @@ class Ordonance extends Model
         "slug",
         "dossier_medical_id",
         "date_prescription",
+        "praticien_id",
+        "prescription_id",
         "archieved_at",
         "passed_at",
     ];

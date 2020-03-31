@@ -20,6 +20,8 @@ class Medicament extends Model
         "classe_medicamenteuse",
         "forme_et_dosage",
         "conditionement",
+        "nom_specialite",
+        "nom_dci",
         "slug",
     ];
 

@@ -14,11 +14,11 @@ class UpdateMedicamentsTable extends Migration
     public function up()
     {
         Schema::table('medicaments', function (Blueprint $table) {
-            $table->string('nom_commercial')->nullable();
-            $table->string('principe_actif')->nullable();
-            $table->string('classe_medicamenteuse')->nullable();
-            $table->string('forme_et_dosage')->nullable();
-            $table->string('conditionement')->nullable();
+            $table->string('nom_commercial')->nullable()->change();
+            $table->string('principe_actif')->nullable()->change();
+            $table->string('classe_medicamenteuse')->nullable()->change();
+            $table->string('forme_et_dosage')->nullable()->change();
+            $table->string('conditionement')->nullable()->change();
             $table->string('nom_specialite');
             $table->string('nom_dci');
         });
