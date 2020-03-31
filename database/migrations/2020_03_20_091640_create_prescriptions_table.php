@@ -17,6 +17,7 @@ class CreatePrescriptionsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('medicament_id');
             $table->unsignedBigInteger('posologie_id');
+            $table->unsignedBigInteger('ordonance_id');
             $table->string('info_comp')->nullable();
             $table->date('date_fin');
             $table->string('slug')->unique();
@@ -32,6 +33,12 @@ class CreatePrescriptionsTable extends Migration
             $table->foreign('posologie_id')
                 ->references('id')
                 ->on('posologies')
+                ->onDelete('RESTRICT')
+                ->onUpdate('RESTRICT');
+
+            $table->foreign('ordonance_id')
+                ->references('id')
+                ->on('ordonances')
                 ->onDelete('RESTRICT')
                 ->onUpdate('RESTRICT');
         });

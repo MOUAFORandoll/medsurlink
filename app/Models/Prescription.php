@@ -14,6 +14,7 @@ class Prescription extends Model
     use Sluggable;
 
     protected $fillable = [
+        "ordonance_id",
         "medicament_id",
         "posologie_id",
         "info_comp",
@@ -40,6 +41,10 @@ class Prescription extends Model
 
     public function posology(){
         return $this->belongsTo(Posologie::class,'posologie_id','id');
+    }
+
+    public function ordonnance(){
+        return $this->belongsTo(Ordonance::class,'ordonance_id','id');
     }
 
 }
