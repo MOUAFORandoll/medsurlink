@@ -19,8 +19,8 @@ class UpdateMedicamentsTable extends Migration
             $table->string('classe_medicamenteuse')->nullable()->change();
             $table->string('forme_et_dosage')->nullable()->change();
             $table->string('conditionement')->nullable()->change();
-            $table->string('nom_specialite');
-            $table->string('nom_dci');
+            $table->text('nom_specialite');
+            $table->text('nom_dci');
         });
     }
 
