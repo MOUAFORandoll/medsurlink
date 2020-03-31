@@ -59,6 +59,9 @@ if(!function_exists('informedPatientAndSouscripteurs'))
             $send = true;
         }
 
+        if ($transmit == 3)
+            $send = true;
+
         if ($send == true){
             $user = $patient->user;
             informedPatientOfRapport($user);
