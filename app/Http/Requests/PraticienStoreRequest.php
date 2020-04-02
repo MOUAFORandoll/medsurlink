@@ -28,7 +28,7 @@ class PraticienStoreRequest extends FormRequest
         return [
             "profession_id"=>'required|integer|exists:professions,id',
             "specialite_id"=>'required|integer|exists:specialites,id',
-            "numero_ordre"=>'sometimes|nullable|string|min:6',
+            "numero_ordre"=>'sometimes|nullable|string|min:4',
             "civilite"=>["required",Rule::in(['M.','Mme/Mlle.','Dr.','Pr.'])],
         ];
     }
