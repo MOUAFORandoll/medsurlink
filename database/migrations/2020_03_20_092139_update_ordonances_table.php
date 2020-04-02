@@ -15,12 +15,6 @@ class UpdateOrdonancesTable extends Migration
     {
         Schema::table('ordonances', function (Blueprint $table) {
             $table->unsignedBigInteger('praticien_id');
-            $table->unsignedBigInteger('prescription_id');
-            $table->foreign('praticien_id')
-                ->references('user_id')
-                ->on('praticiens')
-                ->onDelete('RESTRICT')
-                ->onUpdate('RESTRICT');
 
             $table->foreign('praticien_id')
                 ->references('user_id')
@@ -38,7 +32,8 @@ class UpdateOrdonancesTable extends Migration
     public function down()
     {
         Schema::table('ordonances', function (Blueprint $table) {
-            //
+            $table->dropForeign('ordonances_praticien_id_foreign');
+            $table->dropColumn('praticien_id');
         });
     }
 }

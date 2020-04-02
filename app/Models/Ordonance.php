@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -18,6 +19,8 @@ class Ordonance extends Model
         "slug",
         "dossier_medical_id",
         "date_prescription",
+        "praticien_id",
+        "prescription_id",
         "archieved_at",
         "passed_at",
     ];
@@ -52,4 +55,9 @@ class Ordonance extends Model
         $isAuthor = checkIfIsAuthorOrIsAuthorized('Ordonance',$this->id,'create');
         $this['isAuthor']=$isAuthor->getOriginalContent();
     }
+
+    public function praticien(){
+        return $this->belongsTo(User::class,'praticien_id','id');
+    }
+
 }

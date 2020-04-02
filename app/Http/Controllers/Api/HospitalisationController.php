@@ -95,6 +95,9 @@ class HospitalisationController extends Controller
             'etablissement'
         ])->whereSlug($hospitalisation->slug)->first();
 
+        $this->sendSmsToUser($hospitalisation->dossier->patient->user);
+        informedPatientAndSouscripteurs($hospitalisation->dossier->patient,3);
+
         return response()->json(['hospitalisation'=>$hospitalisation]);
 
     }

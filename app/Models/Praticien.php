@@ -38,6 +38,7 @@ class Praticien extends Model
         'signature'
 
     ];
+
     public function sluggable()
     {
         return [

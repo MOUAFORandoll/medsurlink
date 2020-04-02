@@ -20,6 +20,7 @@ class CreatePosologiesTable extends Migration
             $table->string('voieAdmin');
             $table->integer('nombre');
             $table->string('par');
+            $table->string('slug')->unique();
             $table->softDeletes();
             $table->timestamps();
         });

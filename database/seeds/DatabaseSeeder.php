@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             MotifsTableSeeder::class,
             QuestionTableSeeder::class,
             ReponsesTableSeeder::class,
+            MedicamentsTableSeeder::class,
         ]);
     }
 }

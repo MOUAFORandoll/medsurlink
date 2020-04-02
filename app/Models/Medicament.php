@@ -20,6 +20,8 @@ class Medicament extends Model
         "classe_medicamenteuse",
         "forme_et_dosage",
         "conditionement",
+        "nom_specialite",
+        "nom_dci",
         "slug",
     ];
 
@@ -43,5 +45,9 @@ class Medicament extends Model
     public function updateMedicament(){
         $isAuthor = checkIfIsAuthorOrIsAuthorized('Medicament',$this->id,'create');
         $this['isAuthor']=$isAuthor->getOriginalContent();
+    }
+
+    public function prescription(){
+        return $this->hasOne(Prescription::class,'id');
     }
 }
