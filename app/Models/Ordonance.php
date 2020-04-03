@@ -20,7 +20,7 @@ class Ordonance extends Model
         "dossier_medical_id",
         "date_prescription",
         "praticien_id",
-        "prescription_id",
+//        "prescription_id",
         "archieved_at",
         "passed_at",
     ];

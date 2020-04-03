@@ -16,7 +16,6 @@ class CreatePrescriptionsTable extends Migration
         Schema::create('prescriptions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('medicament_id');
-            $table->unsignedBigInteger('posologie_id');
             $table->unsignedBigInteger('ordonance_id');
             $table->string('info_comp')->nullable();
             $table->date('date_fin');
@@ -27,12 +26,6 @@ class CreatePrescriptionsTable extends Migration
             $table->foreign('medicament_id')
                 ->references('id')
                 ->on('medicaments')
-                ->onDelete('RESTRICT')
-                ->onUpdate('RESTRICT');
-
-            $table->foreign('posologie_id')
-                ->references('id')
-                ->on('posologies')
                 ->onDelete('RESTRICT')
                 ->onUpdate('RESTRICT');
 

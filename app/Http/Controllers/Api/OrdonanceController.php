@@ -7,10 +7,13 @@ use App\Http\Requests\OrdonanceRequest;
 use App\Models\DossierMedical;
 use App\Models\Ordonance;
 use App\Models\OrdonanceMedicament;
+use App\Models\Posologie;
+use App\Models\Prescription;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class OrdonanceController extends Controller
 {
@@ -47,20 +50,38 @@ class OrdonanceController extends Controller
      */
     public function store(OrdonanceRequest $request)
     {
-        $dossier = DossierMedical::findBySlug($request->get('dossier_medical_id'));
-        $ordonance = Ordonance::create([
-            'date_prescription'=> $request->get('date_prescription'),
-            'dossier_medical_id'=>$dossier->id
-        ]);
+//        $dossier = DossierMedical::findBySlug($request->get('dossier_medical_id'));
+//        //creation de l'ordonnance
+//        $ordonance = Ordonance::create([
+//            'date_prescription'=> $request->get('date_prescription'),
+//            'dossier_medical_id'=>$dossier->id,
+//            'praticien_id'=>Auth::id()
+//        ]);
 
-        defineAsAuthor('Ordonance',$ordonance->id,'create',$ordonance->dossier->patient_id);
-        $medicaments = $request->get('medicaments');
-        $ordonance->medicaments()->attach($medicaments);
-        foreach ($medicaments as $medicament){
-            defineAsAuthor('Ordonance',$ordonance->id,'add medicament '.$medicament);
+        //recuperation des prescriptions
+        $prescriptions = $request->get('prescription');
+
+        foreach ($prescriptions as $item){
+            dd($item['posologie']);
+            //Creation de la prescription
+            $prescription = Prescription::create([
+
+            ]);
+            //Création de la posologie
+            $posologie = Posologie::create($item['posologie']);
+
+            //Creation de la prescription
+
+
         }
-
-        $ordonance =  Ordonance::with('dossier','medicaments')->whereSlug($ordonance->slug)->first();
+//        defineAsAuthor('Ordonance',$ordonance->id,'create',$ordonance->dossier->patient_id);
+//        $medicaments = $request->get('medicaments');
+//        $ordonance->medicaments()->attach($medicaments);
+//        foreach ($medicaments as $medicament){
+//            defineAsAuthor('Ordonance',$ordonance->id,'add medicament '.$medicament);
+//        }
+//
+//        $ordonance =  Ordonance::with('dossier','medicaments')->whereSlug($ordonance->slug)->first();
         return response()->json(['ordonance'=>$ordonance]);
     }
 

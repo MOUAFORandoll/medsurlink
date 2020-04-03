@@ -14,12 +14,13 @@ class Posologie extends Model
     use Sluggable;
 
     protected $fillable = [
-      "dose",
-      "formulation",
-      "voieAdmin",
-      "nombre",
-      "par",
-      "slug",
+        "prescription_id",
+        "dose",
+        "formulation",
+        "voieAdmin",
+        "nombre",
+        "par",
+        "slug",
     ];
 
     public function sluggable()
@@ -36,6 +37,6 @@ class Posologie extends Model
     }
 
     public function prescription(){
-        return $this->hasOne(Prescription::class,'id');
+        return $this->belongsTo(Prescription::class,'prescription_id','id');
     }
 }
