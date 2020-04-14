@@ -106,4 +106,9 @@ class MedicamentController extends Controller
         defineAsAuthor('Medicament',$medicament->id,'delete');
 
     }
+
+    public function search($chaineRecherche){
+        $medicaments = Medicament::where('nom_specialite','like','%'.$chaineRecherche.'%')->orWhere('nom_dci','like','%'.$chaineRecherche.'%')->limit(100)->get();
+        return response()->json(['medicaments'=>$medicaments]);
+    }
 }

@@ -20,7 +20,6 @@ class Ordonance extends Model
         "dossier_medical_id",
         "date_prescription",
         "praticien_id",
-//        "prescription_id",
         "archieved_at",
         "passed_at",
     ];
@@ -47,10 +46,6 @@ class Ordonance extends Model
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }
 
-    public function medicaments(){
-        return $this->belongsToMany(Medicament::class,'ordonance_medicament','ordonance_id','medicament_id');
-    }
-
     public function updateOrdonance(){
         $isAuthor = checkIfIsAuthorOrIsAuthorized('Ordonance',$this->id,'create');
         $this['isAuthor']=$isAuthor->getOriginalContent();
@@ -58,6 +53,10 @@ class Ordonance extends Model
 
     public function praticien(){
         return $this->belongsTo(User::class,'praticien_id','id');
+    }
+
+    public function prescriptions(){
+        return $this->hasMany(Prescription::class,'ordonance_id','id');
     }
 
 }

@@ -56,6 +56,7 @@ class ConsultationObstetriqueController extends Controller
         $user = Auth::user();
         $serologie = implode(" ",$request->serologie);
         $rccs = implode(" ",$request->rcc);
+        $t1 = is_null($request->get('t1')) ? 'Non spécifié': $request->get('t1');
 //        if($user->hasRole('Praticien') || $user->hasRole('Medecin controle')){
 //            $specialite  = '';
 //            if(!is_null($user->praticien)){
@@ -66,7 +67,7 @@ class ConsultationObstetriqueController extends Controller
 //            }
 //                        if ($specialite == "Gynéco-Obstétrique"){
 
-        $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie','rcc')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
+        $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie','rcc','t1')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs,'t1'=>$t1]);
         $consultationObstetrique->creator = Auth::id();
         $consultationObstetrique->save();
 
