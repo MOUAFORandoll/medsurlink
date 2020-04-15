@@ -15,6 +15,7 @@ class CreatePosologiesTable extends Migration
     {
         Schema::create('posologies', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('prescription_id');
             $table->double('dose');
             $table->string('formulation');
             $table->string('voieAdmin');
@@ -23,6 +24,12 @@ class CreatePosologiesTable extends Migration
             $table->string('slug')->unique();
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('prescription_id')
+                ->references('id')
+                ->on('prescriptions')
+                ->onDelete('RESTRICT')
+                ->onUpdate('RESTRICT');
         });
     }
 

@@ -7,10 +7,15 @@ use App\Http\Requests\OrdonanceRequest;
 use App\Models\DossierMedical;
 use App\Models\Ordonance;
 use App\Models\OrdonanceMedicament;
+use App\Models\Posologie;
+use App\Models\Prescription;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
+use http\Client\Curl\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class OrdonanceController extends Controller
 {
@@ -48,19 +53,26 @@ class OrdonanceController extends Controller
     public function store(OrdonanceRequest $request)
     {
         $dossier = DossierMedical::findBySlug($request->get('dossier_medical_id'));
+        //creation de l'ordonnance
         $ordonance = Ordonance::create([
             'date_prescription'=> $request->get('date_prescription'),
-            'dossier_medical_id'=>$dossier->id
+            'dossier_medical_id'=>$dossier->id,
+            'praticien_id'=>Auth::id()
         ]);
+        defineAsAuthor('Ordonance',$ordonance->id,'create');
 
-        defineAsAuthor('Ordonance',$ordonance->id,'create',$ordonance->dossier->patient_id);
-        $medicaments = $request->get('medicaments');
-        $ordonance->medicaments()->attach($medicaments);
-        foreach ($medicaments as $medicament){
-            defineAsAuthor('Ordonance',$ordonance->id,'add medicament '.$medicament);
+        //recuperation des prescriptions
+        $prescriptions = $request->get('prescription');
+
+        foreach ($prescriptions as $item){
+            $pArray = Arr::except($item,'posologie');
+            //Creation de la prescription
+            $prescription = Prescription::create($pArray + ['ordonance_id'=>$ordonance->id]);
+            //Création de la posologie
+            $posologie = Posologie::create($item['posologie'] + ['prescription_id'=>$prescription->id]);
         }
 
-        $ordonance =  Ordonance::with('dossier','medicaments')->whereSlug($ordonance->slug)->first();
+        $ordonance =  Ordonance::with('dossier','prescriptions.medicament')->whereSlug($ordonance->slug)->first();
         return response()->json(['ordonance'=>$ordonance]);
     }
 
@@ -99,7 +111,7 @@ class OrdonanceController extends Controller
     public function update(OrdonanceRequest $request, $slug)
     {
         $this->validatedSlug($slug,$this->table);
-        $ordonance = Ordonance::with('dossier','medicaments')->whereSlug($slug)->first();
+        $ordonance = Ordonance::with('dossier')->whereSlug($slug)->first();
 
         $this->checkIfAuthorized('Ordonance',$ordonance->id,'create');
         $ordonance->date_prescription = $request->get('date_prescription');

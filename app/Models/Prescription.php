@@ -16,7 +16,6 @@ class Prescription extends Model
     protected $fillable = [
         "ordonance_id",
         "medicament_id",
-        "posologie_id",
         "info_comp",
         "date_fin",
         "slug",
@@ -40,7 +39,7 @@ class Prescription extends Model
     }
 
     public function posology(){
-        return $this->belongsTo(Posologie::class,'posologie_id','id');
+        return $this->hasOne(Posologie::class,'prescription_id','id');
     }
 
     public function ordonnance(){

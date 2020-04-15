@@ -204,6 +204,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::resource('medecin-controle','Api\MedecinControleController')->only(['index']);
     Route::resource('praticien','Api\PraticienController')->only(['index']);
     Route::resource('medicament','Api\MedicamentController')->except(['edit','create']);
+    Route::get('medicament/search/{chaineRecherche}','Api\MedicamentController@search')->name('rechercherMedicament');
     Route::resource('ordonance','Api\OrdonanceController')->except(['edit','create']);
     Route::put('ordonance/{ordonance}/transmettre','Api\OrdonanceController@transmettre');
     Route::delete('file/{file}','Api\FileController@destroy');
