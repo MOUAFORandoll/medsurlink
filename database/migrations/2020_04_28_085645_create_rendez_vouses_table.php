@@ -13,11 +13,12 @@ class CreateRendezVousesTable extends Migration
      */
     public function up()
     {
-        Schema::create('rendez_vouses', function (Blueprint $table) {
+        Schema::create('rendez_vous', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->nullableMorphs('sourceable');
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('praticien_id')->nullable();
+            $table->unsignedBigInteger('initiateur');
             $table->text('motifs')->nullable();
             $table->dateTime('date');
             $table->string('statut')->nullable();
@@ -26,12 +27,18 @@ class CreateRendezVousesTable extends Migration
             $table->timestamps();
 
             $table->foreign('patient_id')
-                ->references('user_id')
-                ->on('patients')
+                ->references('id')
+                ->on('users')
                 ->onDelete('RESTRICT')
                 ->onUpdate('RESTRICT');
 
             $table->foreign('praticien_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('RESTRICT')
+                ->onUpdate('RESTRICT');
+
+            $table->foreign('initiateur')
                 ->references('id')
                 ->on('users')
                 ->onDelete('RESTRICT')
@@ -46,6 +53,6 @@ class CreateRendezVousesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rendez_vouses');
+        Schema::dropIfExists('rendez_vous');
     }
 }
