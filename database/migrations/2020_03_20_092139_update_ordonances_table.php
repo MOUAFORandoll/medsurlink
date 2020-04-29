@@ -14,7 +14,7 @@ class UpdateOrdonancesTable extends Migration
     public function up()
     {
         Schema::table('ordonances', function (Blueprint $table) {
-            $table->unsignedBigInteger('praticien_id');
+            $table->unsignedBigInteger('praticien_id')->nullable();
 
             $table->foreign('praticien_id')
                 ->references('user_id')
