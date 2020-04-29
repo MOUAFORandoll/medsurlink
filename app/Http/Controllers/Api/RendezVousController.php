@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 
 class RendezVousController extends Controller
 {
@@ -26,36 +27,37 @@ class RendezVousController extends Controller
         $nbre = $request->get('nbre',15);
         $jour = $request->get('jour',0);
 
-        //Auth::loginUsingId(77);
+        Auth::loginUsingId(77);
         $userId = Auth::id();
         if (!is_null($dateDebut)){
             $dateDebut = Carbon::parse($dateDebut);
         }else{
             $dateDebut = Carbon::now();
         }
+
         //On récupère les rendez entre ces deux dates
-        if ($jour==0) {
-            $dateAvant = $dateDebut->subDays($nbre)->toDateString();
-            $dateApres = $dateDebut->addDays($nbre)->toDateString();
-        } else if ($jour == 1){
-            $dateAvant = $dateDebut->addMonths($nbre)->toDateString();
-            $dateApres = $dateDebut->addMonths($nbre)->toDateString();
-        }else{
-            $dateAvant = $dateDebut->subDays($nbre)->toDateString();
-            $dateApres = $dateDebut->addDays($nbre)->toDateString();
+        if ($jour !=1) {
+            $dateAvant = date('Y-m-d', strtotime($dateDebut. ' - '.$nbre.' days'));
+            $dateApres = date('Y-m-d', strtotime($dateDebut. ' + '.$nbre.' days'));
+        } else{
+            $dateAvant = date('Y-m-d', strtotime($dateDebut. ' - '.$nbre.' months'));
+            $dateApres = date('Y-m-d', strtotime($dateDebut. ' + '.$nbre.' months'));
         }
 
 
         $rdvs = RendezVous::with(['patient','praticien','sourceable','initiateur'])
-            ->where('praticien_id','=',$userId)
-                ->orWhere('patient_id','=',$userId)
-                ->Where('initiateur','=',$userId)
-                ->get();
+                            ->where('praticien_id','=',$userId)
+                            ->orWhere('patient_id','=',$userId)
+                            ->orWhere('initiateur','=',$userId)
+                            ->get();
 
+        $rdvsAvant = $rdvs->where('date','>=',$dateAvant)
+                  ->all();
 
-        $rdvs = $rdvs->where('date','>=',$dateAvant)
-                ->where('date','<=',$dateApres)
-                ->all();
+        $rdvsApres = $rdvs->where('date','>=',$dateApres)
+                  ->all();
+
+        $rdvs = $rdvsAvant+$rdvsApres;
 
         return response()->json(['rdvs'=>$rdvs]);
     }
@@ -78,7 +80,7 @@ class RendezVousController extends Controller
      */
     public function store(RendezVousRequest $request)
     {
-        //Auth::loginUsingId(77);
+//        Auth::loginUsingId(77);
         $rdv = RendezVous::create($request->all()+['initiateur'=>Auth::id()]);
 
         defineAsAuthor("RendezVous", $rdv->id, 'create');
@@ -99,8 +101,8 @@ class RendezVousController extends Controller
         $this->validatedSlug($slug,$this->table);
 
         $rdv = RendezVous::with(['patient','praticien','sourceable','initiateur'])
-                            ->whereSlug($slug)
-                            ->first();
+            ->whereSlug($slug)
+            ->first();
 
         return response()->json(['rdv'=>$rdv]);
     }
@@ -129,13 +131,15 @@ class RendezVousController extends Controller
      */
     public function update(RendezVousRequest $request, $slug)
     {
+//        Auth::loginUsingId(77);
+
         $this->validatedSlug($slug,$this->table);
 
         RendezVous::whereSlug($slug)->update($request->all());
 
         $rdv = RendezVous::with(['patient','praticien','sourceable','initiateur'])
-                ->WhereSlug($slug)
-                ->first();
+            ->WhereSlug($slug)
+            ->first();
 
         defineAsAuthor("RendezVous", $rdv->id, 'update');
 

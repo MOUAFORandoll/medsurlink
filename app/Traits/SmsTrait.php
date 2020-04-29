@@ -37,5 +37,23 @@ trait SmsTrait
         }
     }
 
+    /**
+     * Rappeler des rendez vous à des patients
+     *
+     * @param $user
+     * @param null $sender
+     */
+    function RappelerRdvViaSMSTo($user, $date,$sender = null) {
+        if (!is_null($user)){
+            try {
+
+                $nom = substr(strtoupper( $user->nom),0,9);
+                sendSMS($user->telephone,trans('sms.rappelerRendezVous',['nom'=>$nom,'date'=>$date],'fr'),$sender);
+
+             }catch (\Exception $exception){
+                //$exception
+            }
+        }
+    }
 
 }
