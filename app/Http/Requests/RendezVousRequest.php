@@ -29,7 +29,7 @@ class RendezVousRequest extends FormRequest
             "patient_id"=>'required|integer|exists:users,id',
             "praticien_id"=>'sometimes|nullable|integer|exists:users,id',
             "motifs"=>'sometimes|nullable|string|max:500',
-            "date"=>'required|date_format:Y-m-d\TH:i',
+            "date"=>'required|date_format:Y-m-d H:i',
             "statut"=>'sometimes|nullable|string',
         ];
     }
