@@ -18,6 +18,7 @@ class RendezVousController extends Controller
     protected $table = 'rendez_vous';
     /**
      * Display a listing of the resource.
+     * Retourne les rdv dans l'intervale [$nbre de mois avant $dateDebut, $nbre de mois apres $dateDebut]
      *
      * @return \Illuminate\Http\Response
      */
@@ -25,16 +26,13 @@ class RendezVousController extends Controller
     {
         $dateDebut = $request->get('date_debut');
         $nbre = $request->get('nbre',1);
-//        $jour = $request->get('jour',0);
+        $userId = 77;
 
-//        Auth::loginUsingId(77);
-        $userId = Auth::id();
-        if (!is_null($dateDebut)){
+        try {
             $dateDebut = Carbon::parse($dateDebut);
-        }else{
+        }catch (\Exception $exception){
             $dateDebut = Carbon::now();
         }
-
         //On récupère les rendez entre ces deux dates
 
         $dateAvant = date('Y-m-d', strtotime($dateDebut. ' - '.$nbre.' months'));
@@ -93,8 +91,6 @@ class RendezVousController extends Controller
      */
     public function show($slug)
     {
-        ////Auth::loginUsingId(77);
-
         $this->validatedSlug($slug,$this->table);
 
         $rdv = RendezVous::with(['patient','praticien','sourceable','initiateur'])
@@ -128,7 +124,6 @@ class RendezVousController extends Controller
      */
     public function update(RendezVousRequest $request, $slug)
     {
-//        //Auth::loginUsingId(77);
 
         $this->validatedSlug($slug,$this->table);
 
