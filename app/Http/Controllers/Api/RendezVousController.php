@@ -26,7 +26,7 @@ class RendezVousController extends Controller
     {
         $dateDebut = $request->get('date_debut');
         $nbre = $request->get('nbre',1);
-        $userId = 77;
+        $userId = Auth::id();
 
         try {
             $dateDebut = Carbon::parse($dateDebut);
