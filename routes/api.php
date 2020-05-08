@@ -23,6 +23,7 @@ Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
 Route::get('question','Api\QuestionController@index');
 Route::resource('suivi','Api\SuiviController');
+Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
 
 
 Route::middleware(['auth:api'])->group(function () {
