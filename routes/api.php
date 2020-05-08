@@ -22,9 +22,10 @@ Route::post('password/emailVersion','Auth\ForgotPasswordController@sendResetLink
 Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
 Route::get('question','Api\QuestionController@index');
-Route::resource('suivi','Api\SuiviController');
-Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
 
+// Pour faire rapidement les tests sur suivi en back avec postman
+//Route::resource('suivi','Api\SuiviController');
+//Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/countries', function () {
@@ -154,6 +155,10 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('max-consultation-obs','Api\ConsultationObstetriqueController@genererNumeroGrossesse');
 
     Route::get('latest-operation','Api\AuteurController@latestOperation');
+
+
+    Route::resource('suivi','Api\SuiviController');
+    Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
