@@ -9,13 +9,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
-class Suivi extends Model
+class SpecialiteSuivi extends Model
 {
     use SoftDeletes;
     use Sluggable;
 
+
     protected $fillable = [
-        "dossier_medical_id",
+        "suivi_id",
+        "specialite_id",
         "responsable",
         "motifs",
         "slug",
@@ -40,16 +42,15 @@ class Suivi extends Model
         return Str::random(16).' '.Carbon::now()->timestamp;
     }
 
-    public function dossier(){
-        return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
+    public function suivi(){
+        return $this->belongsTo(Suivi::class,'suivi_id','id');
     }
 
     public function responsable(){
         return $this->belongsTo(User::class,'responsable','id');
     }
 
-    public function specialites(){
-        return $this->hasMany(SpecialiteSuivi::class,'suivi_id','is');
+    public function specialite(){
+        return $this->belongsTo(Specialite::class,'specialite_id','id');
     }
-
 }

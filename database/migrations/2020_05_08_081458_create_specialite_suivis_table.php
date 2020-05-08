@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSuivisTable extends Migration
+class CreateSpecialiteSuivisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,26 @@ class CreateSuivisTable extends Migration
      */
     public function up()
     {
-        Schema::create('suivis', function (Blueprint $table) {
+        Schema::create('specialite_suivis', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('dossier_medical_id');
+            $table->unsignedBigInteger('suivi_id');
             $table->unsignedBigInteger('responsable')->nullable();
+            $table->unsignedBigInteger('specialite_id');
             $table->longText('motifs')->nullable();
             $table->string('slug')->unique();
             $table->string('etat')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
-
-            $table->foreign('dossier_medical_id')
+            $table->foreign('suivi_id')
                 ->references('id')
-                ->on('dossier_medicals')
+                ->on('suivis')
+                ->onUpdate('restrict')
+                ->onDelete('restrict');
+
+            $table->foreign('specialite_id')
+                ->references('id')
+                ->on('specialites')
                 ->onUpdate('restrict')
                 ->onDelete('restrict');
 
@@ -45,6 +51,6 @@ class CreateSuivisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('suivis');
+        Schema::dropIfExists('specialite_suivis');
     }
 }
