@@ -17,6 +17,7 @@ class CreateSuivisTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('dossier_medical_id');
             $table->unsignedBigInteger('responsable')->nullable();
+            $table->unsignedBigInteger('creator')->nullable();
             $table->longText('motifs')->nullable();
             $table->string('slug')->unique();
             $table->string('etat')->nullable();
@@ -31,6 +32,12 @@ class CreateSuivisTable extends Migration
                 ->onDelete('restrict');
 
             $table->foreign('responsable')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('restrict')
+                ->onDelete('restrict');
+
+            $table->foreign('creator')
                 ->references('id')
                 ->on('users')
                 ->onUpdate('restrict')

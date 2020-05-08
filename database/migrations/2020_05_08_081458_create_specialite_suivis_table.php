@@ -18,6 +18,7 @@ class CreateSpecialiteSuivisTable extends Migration
             $table->unsignedBigInteger('suivi_id');
             $table->unsignedBigInteger('responsable')->nullable();
             $table->unsignedBigInteger('specialite_id');
+            $table->unsignedBigInteger('creator')->nullable();
             $table->longText('motifs')->nullable();
             $table->string('slug')->unique();
             $table->string('etat')->nullable();
@@ -37,6 +38,12 @@ class CreateSpecialiteSuivisTable extends Migration
                 ->onDelete('restrict');
 
             $table->foreign('responsable')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('restrict')
+                ->onDelete('restrict');
+
+            $table->foreign('creator')
                 ->references('id')
                 ->on('users')
                 ->onUpdate('restrict')

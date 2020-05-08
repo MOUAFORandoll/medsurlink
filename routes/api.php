@@ -22,7 +22,7 @@ Route::post('password/emailVersion','Auth\ForgotPasswordController@sendResetLink
 Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
 Route::get('question','Api\QuestionController@index');
-//Route::resource('rdvs','Api\RendezVousController');
+Route::resource('suivi','Api\SuiviController');
 
 
 Route::middleware(['auth:api'])->group(function () {
