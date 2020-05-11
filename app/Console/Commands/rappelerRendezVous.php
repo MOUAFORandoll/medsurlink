@@ -43,7 +43,8 @@ class rappelerRendezVous extends Command
     {
         $dateRendezVous = Carbon::tomorrow()->toDateString();
         $rdvs = RendezVous::with('patient')
-            ->whereDate('date',$dateRendezVous)->get();
+            ->whereDate('date',$dateRendezVous)
+            ->where('statut','<>','Annulé')->get();
 
         $personnesARappeler = $rdvs->pluck('patient');
 
