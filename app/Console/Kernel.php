@@ -28,8 +28,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        $schedule->command('sms:rappelez-rdv')
-                 ->dailyAt('03:55');
+        $schedule->command('sms:rappelez-rdv');
+//                 ->dailyAt('03:55');
 //        $schedule->job(RappelRendezVous::class)->dailyAt('03:55');
 
     }
