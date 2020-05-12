@@ -15,6 +15,7 @@ use App\Models\EtablissementExercicePatient;
 use App\Models\Motif;
 use App\Models\ParametreCommun;
 use App\Models\Patient;
+use App\Models\RendezVous;
 use App\Models\Traitement;
 use App\Models\TraitementActuel;
 use App\Traits\SmsTrait;
@@ -69,7 +70,7 @@ class ConsultationMedecineGeneraleController extends Controller
     public function store(ConsutationMedecineRequest $request)
     {
 
-        $consultation = ConsultationMedecineGenerale::create($request->except('documents'));
+        $consultation = ConsultationMedecineGenerale::create($request->except('documents','dateRdv','motifRdv'));
         $consultation->creator = Auth::id();
         $consultation->save();
         defineAsAuthor("ConsultationMedecineGenerale", $consultation->id, 'create', $consultation->dossier->patient->user_id);
@@ -90,6 +91,25 @@ class ConsultationMedecineGeneraleController extends Controller
             'parametresCommun',
             'etablissement'
         ])->find($consultation->id);
+
+
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv','Rendez vous de la consultation du '.$request->get('date_consultation'));
+        $dateRdv = $request->get('dateRdv');
+        if (!is_null($dateRdv) ){
+            if (strlen($dateRdv) >0 && $dateRdv != 'null' ){
+                RendezVous::create([
+                    "sourceable_id"=>$consultation->id,
+                    "sourceable_type"=>'ConsultationMedecineGenerale',
+                    "patient_id"=>$consultation->dossier->patient->user_id,
+                    "praticien_id"=>Auth::id(),
+                    "initiateur"=>Auth::id(),
+                    "motifs"=>$motifRdv,
+                    "date"=>$dateRdv,
+                    "statut"=>'Programmé',
+                ]);
+            }
+        }
 
         $motifs = $request->get('motifs');
         $motifs = explode(",", $motifs);

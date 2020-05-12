@@ -42,7 +42,8 @@ class ConsutationMedecineRequest extends FormRequest
             "alcool"=>"sometimes|nullable|string",
             "autres"=>"sometimes|nullable|string|min:2",
             'etablissement_id'=>'required|integer|exists:etablissement_exercices,id',
-            "contributeurs.*" => "sometimes|nullable|integer"
+            "contributeurs.*" => "sometimes|nullable|integer",
+
         ];
 
         if($this->isMethod('POST'))
@@ -60,6 +61,8 @@ class ConsutationMedecineRequest extends FormRequest
             $rules["sato2"]="sometimes|nullable|numeric";
             $rules["traitements"]="sometimes|nullable|string|min:2";
             $rules["documents.*"]="sometimes|file|mimes:jpeg,png,jpg,gif,docx,pdf|max:40960";
+            $rules["dateRdv"] = "sometimes|nullable|string";
+            $rules["motifRdv"] = "sometimes|nullable|string";
         }
 
         elseif ($this->isMethod('PUT')){
