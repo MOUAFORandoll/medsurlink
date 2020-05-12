@@ -39,7 +39,7 @@ class CardiologieRequest extends FormRequest
             "conclusion"=>"sometimes|nullable|string",
             "perimetre_abdominal"=>"sometimes|nullable|string",
             "conduite_a_tenir"=>"sometimes|nullable|string",
-            "rendez_vous"=>"sometimes|nullable",
+            "rendez_vous"=>"sometimes|nullable|string",
             "nbreCigarette"=>"sometimes|nullable|string",
             "nbreAnnee"=>"sometimes|nullable|string",
             "contributeurs.*" => "sometimes|nullable|integer",
@@ -50,6 +50,11 @@ class CardiologieRequest extends FormRequest
         ];
 
         $rules["traitements"]="sometimes|nullable|string";
+
+        if($this->isMethod('POST'))
+        {
+            $rules["motifRdv"] = "sometimes|nullable|string";
+        }
 
         return $rules;
     }

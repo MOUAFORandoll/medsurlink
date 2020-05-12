@@ -11,6 +11,7 @@ use App\Models\Contributeurs;
 use App\Models\ExamenCardio;
 use App\Models\Motif;
 use App\Models\ParametreCommun;
+use App\Models\RendezVous;
 use App\Models\TraitementActuel;
 use App\Traits\SmsTrait;
 use App\Traits\UserTrait;
@@ -58,11 +59,32 @@ class CardiologieController extends Controller
     {
 //        $this->verificationDeSpecialite();
 
-        $cardiologie = Cardiologie::create($request->except('contributeurs', 'examen_cardio'));
+        $cardiologie = Cardiologie::create($request->except('contributeurs', 'examen_cardio','motifRdv'));
         $cardiologie->creator = Auth::id();
         $cardiologie->save();
 
         defineAsAuthor("Cardiologie", $cardiologie->id, 'create', $cardiologie->dossier->patient->user_id);
+
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('rendez_vous');
+        if (!is_null($dateRdv) ){
+            if (strlen($dateRdv) >0 && $dateRdv != 'null' ){
+                if ($motifRdv == 'null'){
+                    $motifRdv = 'Rendez vous de la consultation de cardiologie du '.$request->get('date_consultation');
+                }
+                RendezVous::create([
+                    "sourceable_id"=>$cardiologie->id,
+                    "sourceable_type"=>'Cardiologie',
+                    "patient_id"=>$cardiologie->dossier->patient->user_id,
+                    "praticien_id"=>Auth::id(),
+                    "initiateur"=>Auth::id(),
+                    "motifs"=>$motifRdv,
+                    "date"=>$dateRdv,
+                    "statut"=>'Programmé',
+                ]);
+            }
+        }
 
         //Enregistrement de motif
         $this->enregistrerMotifs($request, $cardiologie);
