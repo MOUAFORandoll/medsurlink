@@ -28,7 +28,7 @@ class ConsultationObstetriqueRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+         $rules = [
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
             "ddr"=>"required|date|before_or_equal:".Carbon::now()->format('Y-m-d'),
             "serologie.*"=>"sometimes|nullable|string",
@@ -53,6 +53,14 @@ class ConsultationObstetriqueRequest extends FormRequest
             "t1"=>"sometimes|nullable|string",
             "nle_anle"=>"sometimes|nullable|string",
             "sexe"=>"sometimes|nullable|string",
+             "date_creation"=>"sometimes|nullable|date"
         ];
+
+        if($this->isMethod('POST'))
+        {
+            $rules["dateRdv"] = "sometimes|nullable|string";
+            $rules["motifRdv"] = "sometimes|nullable|string";
+        }
+         return $rules;
     }
 }

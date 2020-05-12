@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ConsultationObstetriqueRequest;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\ConsultationObstetrique;
+use App\Models\RendezVous;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -67,7 +68,7 @@ class ConsultationObstetriqueController extends Controller
 //            }
 //                        if ($specialite == "Gynéco-Obstétrique"){
 
-        $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie','rcc','t1')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs,'t1'=>$t1]);
+        $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie','rcc','t1','dateRdv','motifRdv')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs,'t1'=>$t1]);
         $consultationObstetrique->creator = Auth::id();
         $consultationObstetrique->save();
 
@@ -87,6 +88,28 @@ class ConsultationObstetriqueController extends Controller
             'dossier.antecedents',
             'dossier.traitements',
         ])->whereSlug($consultationObstetrique->slug)->first();
+
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('dateRdv');
+        if (!is_null($dateRdv) ){
+            if (strlen($dateRdv) >0 && $dateRdv != 'null' ){
+                if (is_null($motifRdv)){
+                    $motifRdv = 'Rendez vous de la consultation Obstetrique du '.$request->get('date_creation');
+                }
+                RendezVous::create([
+                    "sourceable_id"=>$consultationObstetrique->id,
+                    "sourceable_type"=>'ConsultationObstetrique',
+                    "patient_id"=>$consultationObstetrique->dossier->patient->user_id,
+                    "praticien_id"=>Auth::id(),
+                    "initiateur"=>Auth::id(),
+                    "motifs"=>$motifRdv,
+                    "date"=>$dateRdv,
+                    "statut"=>'Programmé',
+                ]);
+            }
+        }
+
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
 
 //            }else{
