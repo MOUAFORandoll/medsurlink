@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\HospitalisationRequest;
 use App\Models\Hospitalisation;
 use App\Models\Motif;
+use App\Models\RendezVous;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -51,10 +52,31 @@ class HospitalisationController extends Controller
      */
     public function store(HospitalisationRequest $request)
     {
-        $hospitalisation = Hospitalisation::create($request->validated());
+        $hospitalisation = Hospitalisation::create($request->except('motifRdv'));
         $hospitalisation->creator = Auth::id();
         $hospitalisation->save();
         defineAsAuthor("Hospitalisation",$hospitalisation->id,'create',$hospitalisation->dossier->patient->user_id);
+
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('rendez_vous');
+        if (!is_null($dateRdv) ){
+            if (strlen($dateRdv) >0 && $dateRdv != 'null' ){
+                if (is_null($motifRdv) ){
+                    $motifRdv = 'Rendez vous de l\'hospitalisation du '.$request->get('date_entree');
+                }
+                RendezVous::create([
+                    "sourceable_id"=>$hospitalisation->id,
+                    "sourceable_type"=>'Hospitalisation',
+                    "patient_id"=>$hospitalisation->dossier->patient->user_id,
+                    "praticien_id"=>Auth::id(),
+                    "initiateur"=>Auth::id(),
+                    "motifs"=>$motifRdv,
+                    "date"=>$dateRdv,
+                    "statut"=>'Programmé',
+                ]);
+            }
+        }
 
         $motifs = $request->get('motifs');
 
