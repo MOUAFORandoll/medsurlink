@@ -46,15 +46,12 @@ class CardiologieRequest extends FormRequest
             "examen_cardio"=>"sometimes|nullable",
             "examen_cardio.*.nom"=>"required|string",
             "examen_cardio.*.date_examen"=>"required|date",
-            "examen_cardio.*.description"=>"required|string"
+            "examen_cardio.*.description"=>"required|string",
+            "motifRdv"=>"sometimes|nullable|string"
         ];
 
         $rules["traitements"]="sometimes|nullable|string";
 
-        if($this->isMethod('POST'))
-        {
-            $rules["motifRdv"] = "sometimes|nullable|string";
-        }
 
         return $rules;
     }

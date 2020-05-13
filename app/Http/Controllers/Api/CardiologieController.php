@@ -149,7 +149,8 @@ class CardiologieController extends Controller
             'parametresCommun',
             'etablissement',
             'files',
-            'examenCardios'
+            'examenCardios',
+            'rdv'
         ])->whereSlug($slug)->first();
 
         $consultation->updateConsultationCardiologique();
@@ -205,6 +206,8 @@ class CardiologieController extends Controller
         );
         $cardiologie = Cardiologie::whereSlug($slug)->first();
         defineAsAuthor("Cardiologie", $cardiologie->id, 'update', $cardiologie->dossier->patient->user_id);
+
+        $this->updateRdv($cardiologie,$request);
 
         //Enregistrement de motif
         $this->enregistrerMotifs($request, $cardiologie);
@@ -595,6 +598,44 @@ class CardiologieController extends Controller
 
         if ($reponse == false){
             $this->revealAccesRefuse();
+        }
+    }
+
+    public function updateRdv($cardiologie,$request){
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('rendez_vous');
+
+        if ($motifRdv == 'null'){
+            $motifRdv = 'Rendez vous de la consultation de cardiologie du '.$request->get('date_consultation');
+        }
+        //je récupère le rendez vous de la consultation si cela existe
+        $rdv = RendezVous::where('sourceable_id',$cardiologie->id)
+            ->where('sourceable_type','Cardiologie')
+            ->first();
+        if (is_null($rdv)) {
+//            si cela n'existe pas et que on a spécifié la date de rendez vous on crée
+            if (!is_null($dateRdv)) {
+                if (strlen($dateRdv) > 0 && $dateRdv != 'null') {
+
+                    RendezVous::create([
+                        "sourceable_id" => $cardiologie->id,
+                        "sourceable_type" => 'Cardiologie',
+                        "patient_id" => $cardiologie->dossier->patient->user_id,
+                        "praticien_id" => Auth::id(),
+                        "initiateur" => Auth::id(),
+                        "motifs" => $motifRdv,
+                        "date" => $dateRdv,
+                        "statut" => 'Programmé',
+                    ]);
+                }
+            }
+        } else{
+            $rdv->date = $dateRdv;
+            $rdv->motifs = $motifRdv;
+            $rdv->statut = 'Reprogrammé';
+
+            $rdv->save();
         }
     }
 }

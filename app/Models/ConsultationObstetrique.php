@@ -148,6 +148,6 @@ class ConsultationObstetrique extends Model
     }
 
     public function rdv(){
-        return $this->morphMany(RendezVous::class,'sourceable');
+        return $this->morphOne(RendezVous::class,'sourceable');
     }
 }
