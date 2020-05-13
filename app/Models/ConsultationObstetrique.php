@@ -146,4 +146,8 @@ class ConsultationObstetrique extends Model
     public function files(){
         return $this->morphMany(File::class,'fileable');
     }
+
+    public function rdv(){
+        return $this->morphMany(RendezVous::class,'sourceable');
+    }
 }

@@ -103,7 +103,7 @@ class ConsultationMedecineGeneraleController extends Controller
                 }
                 RendezVous::create([
                     "sourceable_id"=>$consultation->id,
-                    "sourceable_type"=>'ConsultationMedecineGenerale',
+                    "sourceable_type"=>'Consultation',
                     "patient_id"=>$consultation->dossier->patient->user_id,
                     "praticien_id"=>Auth::id(),
                     "initiateur"=>Auth::id(),
@@ -247,7 +247,8 @@ class ConsultationMedecineGeneraleController extends Controller
             'conclusions',
             'parametresCommun',
             'etablissement',
-            'files'
+            'files',
+            'rdv'
         ])->whereSlug($slug)->first();
 
         $consultation->updateConsultationMedecine();
@@ -336,10 +337,14 @@ class ConsultationMedecineGeneraleController extends Controller
             }
         }
 
-        ConsultationMedecineGenerale::whereSlug($slug)->update($request->except(['motifs','conclusions','consultation','contributeurs','documents']));
+        ConsultationMedecineGenerale::whereSlug($slug)->update($request->except(['motifs','conclusions','consultation','contributeurs','documents','dateRdv','motifRdv']));
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'update',$consultation->dossier->patient->user_id);
 
-        $consultation = ConsultationMedecineGenerale::with(['operationables.contributable','dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['rdv','operationables.contributable','dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
+
+        //Modification du rendez vous de la consultation ou créattion
+        $this->updateRdv($consultation,$request);
+
         $precedentContributeurs = [];
         //Mises à jour des contributeurs
         $contributeurs = $request->get('contributeurs');
@@ -527,6 +532,46 @@ class ConsultationMedecineGeneraleController extends Controller
 
             defineAsAuthor("File",$file->id,'create');
 
+        }
+    }
+
+    public function updateRdv($consultation,$request){
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('dateRdv');
+
+        //je récupère le rendez vous de la consultation si cela existe
+        $rdv = RendezVous::where('sourceable_id',$consultation->id)
+            ->where('sourceable_type','Consultation')
+            ->first();
+
+        if ($motifRdv == 'null'){
+            $motifRdv = 'Rendez vous de la consultation medecine génerale du '.$request->get('date_consultation');
+        }
+
+        if (is_null($rdv)){
+//            si cela n'existe pas et que on a spécifié la date de rendez vous on crée
+            if (!is_null($dateRdv) ){
+                if (strlen($dateRdv) >0 && $dateRdv != 'null' ){
+
+                    RendezVous::create([
+                        "sourceable_id"=>$consultation->id,
+                        "sourceable_type"=>'Consultation',
+                        "patient_id"=>$consultation->dossier->patient->user_id,
+                        "praticien_id"=>Auth::id(),
+                        "initiateur"=>Auth::id(),
+                        "motifs"=>$motifRdv,
+                        "date"=>$dateRdv,
+                        "statut"=>'Programmé',
+                    ]);
+                }
+            }
+        }
+        else{
+            $rdv->date = $dateRdv;
+            $rdv->motifs = $motifRdv;
+            $rdv->statut = 'Reprogrammé';
+
+            $rdv->save();
         }
     }
 }

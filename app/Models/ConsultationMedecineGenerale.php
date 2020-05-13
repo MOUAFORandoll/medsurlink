@@ -93,6 +93,7 @@ class ConsultationMedecineGenerale extends Model
         return $this->belongsTo(User::class,'creator','id');
     }
 
+
     /**
      * The "booting" method of the model.
      *
@@ -156,5 +157,10 @@ class ConsultationMedecineGenerale extends Model
 
     public function files(){
         return $this->morphMany(File::class,'fileable');
+    }
+
+
+    public function rdv(){
+        return $this->morphOne(RendezVous::class,'sourceable');
     }
 }
