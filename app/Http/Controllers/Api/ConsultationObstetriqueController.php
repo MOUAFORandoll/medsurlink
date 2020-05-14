@@ -166,6 +166,7 @@ class ConsultationObstetriqueController extends Controller
             'dossier.allergies',
             'dossier.antecedents',
             'dossier.traitements',
+            'rdv'
         ])->whereSlug($slug)->first();
         $consultationObstetrique->updateObstetricConsultation();
 
@@ -204,9 +205,44 @@ class ConsultationObstetriqueController extends Controller
         $numeroGrossesse = $consultationObstetrique->numero_grossesse;
         $serologie = implode(" ",$request->serologie);
         $rccs = implode(" ",$request->rcc);
-        ConsultationObstetrique::whereSlug($slug)->update($request->except('serologie','rcc','consultation')+['numero_grossesse'=>$numeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
+        ConsultationObstetrique::whereSlug($slug)->update($request->except('serologie','rcc','consultation','dateRdv','motifRdv')+['numero_grossesse'=>$numeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
 
         $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
+
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('dateRdv');
+        if (is_null($motifRdv)){
+            $motifRdv = 'Rendez vous de la consultation Obstetrique du '.$request->get('date_creation');
+        }
+
+        //je récupère le rendez vous de la consultation si cela existe
+        $rdv = RendezVous::where('sourceable_id',$consultationObstetrique->id)
+            ->where('sourceable_type','ConsultationObstetrique')
+            ->first();
+        if (is_null($rdv)) {
+            if (!is_null($dateRdv)) {
+                if (strlen($dateRdv) > 0 && $dateRdv != 'null') {
+
+                    RendezVous::create([
+                        "sourceable_id" => $consultationObstetrique->id,
+                        "sourceable_type" => 'ConsultationObstetrique',
+                        "patient_id" => $consultationObstetrique->dossier->patient->user_id,
+                        "praticien_id" => Auth::id(),
+                        "initiateur" => Auth::id(),
+                        "motifs" => $motifRdv,
+                        "date" => $dateRdv,
+                        "statut" => 'Programmé',
+                    ]);
+                }
+            }
+        }else{
+            $rdv->date = $dateRdv;
+            $rdv->motifs = $motifRdv;
+            $rdv->statut = 'Reprogrammé';
+
+            $rdv->save();
+        }
 
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
     }
