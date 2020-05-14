@@ -148,7 +148,8 @@ class HospitalisationController extends Controller
             'dossier.antecedents',
             'dossier.traitements',
             'motifs'
-            ,'etablissement'
+            ,'etablissement',
+            'rdv'
         ])->whereSlug($slug)->first();
         $hospitalisation->updateHospitalisation();
 
@@ -183,7 +184,7 @@ class HospitalisationController extends Controller
 
         $this->checkIfAuthorized("Hospitalisation",$hospitalisation->id,"create");
 
-        Hospitalisation::whereSlug($slug)->update($request->except('motifs','hospitalisation'));
+        Hospitalisation::whereSlug($slug)->update($request->except('motifs','hospitalisation','motifRdv'));
 
         $hospitalisation = Hospitalisation::with([
             'dossier',
@@ -200,6 +201,42 @@ class HospitalisationController extends Controller
             'motifs'
             ,'etablissement'
         ])->whereSlug($slug)->first();
+
+
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('rendez_vous');
+
+        //je récupère le rendez vous de la consultation si cela existe
+        $rdv = RendezVous::where('sourceable_id',$hospitalisation->id)
+            ->where('sourceable_type','Hospitalisation')
+            ->first();
+        if (is_null($rdv)) {
+            if (!is_null($dateRdv)) {
+                if (strlen($dateRdv) > 0 && $dateRdv != 'null') {
+                    if (is_null($motifRdv)) {
+                        $motifRdv = 'Rendez vous de l\'hospitalisation du ' . $request->get('date_entree');
+                    }
+                    RendezVous::create([
+                        "sourceable_id" => $hospitalisation->id,
+                        "sourceable_type" => 'Hospitalisation',
+                        "patient_id" => $hospitalisation->dossier->patient->user_id,
+                        "praticien_id" => Auth::id(),
+                        "initiateur" => Auth::id(),
+                        "motifs" => $motifRdv,
+                        "date" => $dateRdv,
+                        "statut" => 'Programmé',
+                    ]);
+                }
+            }
+        }else{
+            $rdv->date = $dateRdv;
+            $rdv->motifs = $motifRdv;
+            $rdv->statut = 'Reprogrammé';
+
+            $rdv->save();
+        }
+
         //Recupération des anciens motifs
         $ancienMotifs = [];
         foreach ($hospitalisation->motifs as $motif){

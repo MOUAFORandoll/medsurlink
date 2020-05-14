@@ -38,13 +38,10 @@ class HospitalisationRequest extends FormRequest
             "examen_clinique"=>"sometimes|nullable|string|min:2",
             "examen_complementaire"=>"sometimes|nullable|string|min:2",
             'etablissement_id'=>'required|integer|exists:etablissement_exercices,id',
-            'motifs.*'=>'required'
+            'motifs.*'=>'required',
+            "motifRdv"=>"sometimes|nullable|string"
         ];
 
-        if($this->isMethod('POST'))
-        {
-            $rules["motifRdv"] = "sometimes|nullable|string";
-        }
 
         return $rules;
     }
