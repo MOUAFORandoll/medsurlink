@@ -76,7 +76,7 @@ class RendezVousController extends Controller
     public function store(RendezVousRequest $request)
     {
 //        //Auth::loginUsingId(77);
-        $rdv = RendezVous::create($request->all()+['initiateur'=>Auth::id()]);
+        $rdv = RendezVous::create($request->all());
 
         defineAsAuthor("RendezVous", $rdv->id, 'create');
 

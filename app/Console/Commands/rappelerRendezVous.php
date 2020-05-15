@@ -42,14 +42,19 @@ class rappelerRendezVous extends Command
     public function handle()
     {
         $dateRendezVous = Carbon::tomorrow()->toDateString();
-        $rdvs = RendezVous::with('patient')
+        $rdvs = RendezVous::with('patient','praticien')
             ->whereDate('date',$dateRendezVous)
             ->where('statut','<>','Annulé')->get();
 
-        $personnesARappeler = $rdvs->pluck('patient');
-
-        foreach ($personnesARappeler as $user){
-            $this->RappelerRdvViaSMSTo($user,$dateRendezVous);
+        foreach ($rdvs as $rdv){
+            $date = Carbon::parse($rdv->date)->format('d/m/Y');
+            $heure = Carbon::parse($rdv->date)->format('H').'h'.Carbon::parse($rdv->date)->format('i');
+            if (!is_null($rdv->nom_medecin)){
+                $praticien = $rdv->nom_medecin;
+            }else{
+                $praticien = $rdv->praticien->nom;
+            }
+            $this->RappelerRdvViaSMSTo($rdv->patient,$praticien,$date,$heure);
         }
 
     }
