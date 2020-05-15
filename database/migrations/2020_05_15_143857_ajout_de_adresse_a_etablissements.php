@@ -14,7 +14,7 @@ class AjoutDeAdresseAEtablissements extends Migration
     public function up()
     {
         Schema::table('etablissement_exercices', function (Blueprint $table) {
-            //
+            $table->string('adresse')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AjoutDeAdresseAEtablissements extends Migration
     public function down()
     {
         Schema::table('etablissement_exercices', function (Blueprint $table) {
-            //
+            $table->dropColumn('adresse');
         });
     }
 }

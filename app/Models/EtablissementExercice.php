@@ -27,7 +27,8 @@ class EtablissementExercice extends Model
         "name",
         "description",
         'slug',
-        'logo'
+        'logo',
+        'adresse'
 
     ];
 

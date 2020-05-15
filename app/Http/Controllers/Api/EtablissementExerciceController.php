@@ -65,6 +65,7 @@ class EtablissementExerciceController extends Controller
         $etablissement = EtablissementExercice::create([
             "name"=> strtoupper($request->name),
             "description"=>$request->description,
+            "adresse"=>$request->get('adresse')
         ]);
 
         if($request->hasFile('logo')) {
@@ -127,6 +128,7 @@ class EtablissementExerciceController extends Controller
         EtablissementExercice::whereSlug($slug)->update([
             "name"=> strtoupper($request->name),
             "description"=>$request->description,
+            "adresse"=>$request->get('adresse')
         ]);
 
         $etablissement = EtablissementExercice::with(['praticiens','patients'])->whereSlug($slug)->first();
