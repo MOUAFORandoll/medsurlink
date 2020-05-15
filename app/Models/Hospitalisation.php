@@ -105,11 +105,7 @@ class Hospitalisation extends Model
             }
             $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$this->id,"create");
             $this['isAuthor']=$isAuthor->getOriginalContent();
-            if (is_null($this->rdv)){
-                $this->rdv=[];
-            }
         }
-
     }
 
     public function rdv(){
