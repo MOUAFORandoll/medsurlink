@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Validator;
 
 class RendezVousController extends Controller
 {
@@ -82,7 +83,13 @@ class RendezVousController extends Controller
         $praticienId = (integer) $praticien;
 
         if ($praticienId !== 0){
-            $rdv = RendezVous::create($request->except('praticien_id') + ['praticien_id'=>$praticienId,'initiateur'=>Auth::id()]);
+            $validator = Validator::make(['praticien_id'=>$praticienId],['praticien_id'=>'required|integer|exists:users,id']);
+
+            if($validator->fails()){
+            return $this->revealError('praticien_id','le praticien spécifié n\'exite pas dans la bd');
+            }else{
+                $rdv = RendezVous::create($request->except('praticien_id') + ['praticien_id'=>$praticienId,'initiateur'=>Auth::id()]);
+            }
         }else{
 
             if ($praticien != ""){
