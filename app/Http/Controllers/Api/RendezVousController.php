@@ -53,6 +53,18 @@ class RendezVousController extends Controller
         $rdvsApres = $rdvs->where('date','>=',$dateApres)
             ->all();
 
+
+        $user = Auth::user();
+
+        if (strpos('medicasure.com',$user->email)){
+            $rdvDesAutres = RendezVous::with(['patient','praticien','sourceable','initiateur'])
+                ->where('praticien_id','<>',$userId)
+                ->get();
+
+            $rdvsApres = $rdvsApres + $rdvDesAutres->where('date','>=',$dateApres)->all();
+            $rdvsAvant = $rdvsAvant + $rdvDesAutres->where('date','>=',$dateAvant)->all();
+        }
+
         $rdvs = $rdvsAvant+$rdvsApres;
 
         return response()->json(['rdvs'=>$rdvs]);
