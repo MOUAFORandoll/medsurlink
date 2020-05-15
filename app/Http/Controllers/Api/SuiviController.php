@@ -51,12 +51,14 @@ class SuiviController extends Controller
 
         //Récupération de la liste des suivi par spécialité
         $specialites = $request->only('specialite');
-
-        foreach ($specialites as $specialite){
-            //Création des suivis par spécialité
-            SpecialiteSuivi::create($specialite[0] + ['suivi_id'=>$suivi->id]);
+        if (!is_null($specialites)){
+            foreach ($specialites as $specialite){
+                if(!empty($specialite)){
+                    //Création des suivis par spécialité
+                    SpecialiteSuivi::create($specialite[0] + ['suivi_id'=>$suivi->id]);
+                }
+            }
         }
-
         $suivi = Suivi::with('dossier.patient.user','responsable','specialites.specialite')->find($suivi->id);
 
         return  response()->json(['suivi'=>$suivi]);
