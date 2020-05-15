@@ -15,6 +15,13 @@ class AjoutNomMedecinARendezVous extends Migration
     {
         Schema::table('rendez_vous', function (Blueprint $table) {
             $table->string('nom_medecin')->nullable();
+            $table->unsignedBigInteger('creator')->nullable();
+
+            $table->foreign('creator')
+                ->references('id')
+                ->on('users')
+                ->onDelete('restrict')
+                ->onUpdate('restrict');
         });
     }
 
@@ -26,7 +33,7 @@ class AjoutNomMedecinARendezVous extends Migration
     public function down()
     {
         Schema::table('rendez_vous', function (Blueprint $table) {
-            $table->dropColumn('nom_medecin');
+            $table->dropColumn('nom_medecin','creator');
         });
     }
 }

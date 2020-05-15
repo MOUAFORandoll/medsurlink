@@ -75,8 +75,21 @@ class RendezVousController extends Controller
      */
     public function store(RendezVousRequest $request)
     {
-//        //Auth::loginUsingId(77);
-        $rdv = RendezVous::create($request->all());
+        Auth::loginUsingId(77);
+        //Récupération du nom du medecin ou bien de l'identifiant du praticien
+        $praticien = $request->get('praticien_id');
+
+        $praticienId = (integer) $praticien;
+
+        if ($praticienId !== 0){
+            $rdv = RendezVous::create($request->except('praticien_id') + ['praticien_id'=>$praticienId,'initiateur'=>Auth::id()]);
+        }else{
+
+            if ($praticien != ""){
+
+                $rdv = RendezVous::create($request->except('praticien_id') + ['nom_medecin'=>$praticien,'initiateur'=>Auth::id()]);
+            }
+        }
 
         defineAsAuthor("RendezVous", $rdv->id, 'create');
 
@@ -127,7 +140,19 @@ class RendezVousController extends Controller
 
         $this->validatedSlug($slug,$this->table);
 
-        RendezVous::whereSlug($slug)->update($request->all());
+        //Récupération du nom du medecin ou bien de l'identifiant du praticien
+        $praticien = $request->get('praticien_id');
+
+        $praticienId = (integer) $praticien;
+
+        if ($praticienId !== 0){
+            RendezVous::whereSlug($slug)->update($request->except('praticien_id') + ['praticien_id'=>$praticienId,'initiateur'=>Auth::id()]);
+        }else{
+            if ($praticien != ""){
+                RendezVous::whereSlug($slug)->update($request->except('praticien_id') + ['nom_medecin'=>$praticien,'initiateur'=>Auth::id()]);
+            }
+        }
+
 
         $rdv = RendezVous::with(['patient','praticien','sourceable','initiateur'])
             ->WhereSlug($slug)

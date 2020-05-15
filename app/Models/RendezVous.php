@@ -28,6 +28,7 @@ class RendezVous extends Model
         "date",
         "statut",
         "slug",
+        "nom_medecin"
     ];
 
     /**

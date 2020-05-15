@@ -26,6 +26,8 @@ Route::get('question','Api\QuestionController@index');
 // Pour faire rapidement les tests sur suivi en back avec postman
 //Route::resource('suivi','Api\SuiviController');
 //Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
+    Route::resource('rdvs','Api\RendezVousController');
+
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/countries', function () {
@@ -161,7 +163,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
-    Route::resource('rdvs','Api\RendezVousController');
+//    Route::resource('rdvs','Api\RendezVousController');
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except('store','update','destroy');
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except('store','update','destroy');
     Route::resource('motif','Api\MotifController')->except('store','update','destroy');
