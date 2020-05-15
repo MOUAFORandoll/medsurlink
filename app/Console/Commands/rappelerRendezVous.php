@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\Rappel;
 use App\Models\RendezVous;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class rappelerRendezVous extends Command
 {
@@ -55,6 +57,11 @@ class rappelerRendezVous extends Command
                 $praticien = $rdv->praticien->nom;
             }
             $this->RappelerRdvViaSMSTo($rdv->patient,$praticien,$date,$heure);
+
+            if (is_null($rdv->nom_medecin)) {
+                $mail = new Rappel($rdv);
+                Mail::to($rdv->praticien->email)->send($mail);
+            }
         }
 
     }
