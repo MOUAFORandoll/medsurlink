@@ -69,7 +69,6 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function store(ConsutationMedecineRequest $request)
     {
-
         $consultation = ConsultationMedecineGenerale::create($request->except('documents','dateRdv','motifRdv'));
         $consultation->creator = Auth::id();
         $consultation->save();
@@ -101,12 +100,14 @@ class ConsultationMedecineGeneraleController extends Controller
                 if ($motifRdv == 'null'){
                     $motifRdv = 'Rendez vous de la consultation medecine génerale du '.$request->get('date_consultation');
                 }
+                $praticien_id = $this->validationPraticien($request->get('praticien_id'));
                 RendezVous::create([
                     "sourceable_id"=>$consultation->id,
                     "sourceable_type"=>'Consultation',
                     "patient_id"=>$consultation->dossier->patient->user_id,
-                    "praticien_id"=>Auth::id(),
+                    "praticien_id"=>((integer) $praticien_id) !==0 ? $praticien_id :null,
                     "initiateur"=>Auth::id(),
+                    "nom_medecin"=>((integer) $praticien_id) !==0 ? null :$praticien_id,
                     "motifs"=>$motifRdv,
                     "date"=>$dateRdv,
                     "statut"=>'Programmé',
@@ -572,6 +573,26 @@ class ConsultationMedecineGeneraleController extends Controller
             $rdv->statut = 'Reprogrammé';
 
             $rdv->save();
+        }
+    }
+
+    public function validationPraticien($praticien){
+
+        $praticienId = (integer) $praticien;
+
+        if ($praticienId !== 0){
+            $validator = Validator::make(['praticien_id'=>$praticienId],['praticien_id'=>'required|integer|exists:users,id']);
+
+            if($validator->fails()){
+                return $this->revealError('praticien_id','le praticien spécifié n\'exite pas dans la bd');
+            }else{
+                return $praticienId;
+            }
+        }else{
+
+            if ($praticien != ""){
+                return $praticien;
+            }
         }
     }
 }

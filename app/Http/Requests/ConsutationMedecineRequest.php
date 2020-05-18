@@ -45,6 +45,7 @@ class ConsutationMedecineRequest extends FormRequest
             "contributeurs.*" => "sometimes|nullable|integer",
             "dateRdv" => "sometimes|nullable|string",
             "motifRdv" => "sometimes|nullable|string",
+            "praticien_id"=>'sometimes|nullable|string',
         ];
 
         if($this->isMethod('POST'))
