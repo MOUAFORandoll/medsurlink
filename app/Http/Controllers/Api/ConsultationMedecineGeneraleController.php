@@ -249,7 +249,7 @@ class ConsultationMedecineGeneraleController extends Controller
             'parametresCommun',
             'etablissement',
             'files',
-            'rdv'
+            'rdv.praticien'
         ])->whereSlug($slug)->first();
 
         $consultation->updateConsultationMedecine();
