@@ -338,7 +338,7 @@ class ConsultationMedecineGeneraleController extends Controller
             }
         }
 
-        ConsultationMedecineGenerale::whereSlug($slug)->update($request->except(['motifs','conclusions','consultation','contributeurs','documents','dateRdv','motifRdv']));
+        ConsultationMedecineGenerale::whereSlug($slug)->update($request->except(['praticien_id','motifs','conclusions','consultation','contributeurs','documents','dateRdv','motifRdv']));
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'update',$consultation->dossier->patient->user_id);
 
         $consultation = ConsultationMedecineGenerale::with(['rdv','operationables.contributable','dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
@@ -539,7 +539,7 @@ class ConsultationMedecineGeneraleController extends Controller
     public function updateRdv($consultation,$request){
         $motifRdv = $request->get('motifRdv');
         $dateRdv = $request->get('dateRdv');
-
+        $praticien_id = $this->validationPraticien($request->get('praticien_id'));
         //je récupère le rendez vous de la consultation si cela existe
         $rdv = RendezVous::where('sourceable_id',$consultation->id)
             ->where('sourceable_type','Consultation')
@@ -558,8 +558,9 @@ class ConsultationMedecineGeneraleController extends Controller
                         "sourceable_id"=>$consultation->id,
                         "sourceable_type"=>'Consultation',
                         "patient_id"=>$consultation->dossier->patient->user_id,
-                        "praticien_id"=>Auth::id(),
+                        "praticien_id"=>((integer) $praticien_id) !==0 ? $praticien_id :null,
                         "initiateur"=>Auth::id(),
+                        "nom_medecin"=>((integer) $praticien_id) !==0 ? null :$praticien_id,
                         "motifs"=>$motifRdv,
                         "date"=>$dateRdv,
                         "statut"=>'Programmé',
@@ -570,6 +571,8 @@ class ConsultationMedecineGeneraleController extends Controller
         else{
             $rdv->date = $dateRdv;
             $rdv->motifs = $motifRdv;
+            $rdv->praticien_id=((integer) $praticien_id) !==0 ? $praticien_id :null;
+            $rdv->nom_medecin=((integer) $praticien_id) !==0 ? null :$praticien_id;
             $rdv->statut = 'Reprogrammé';
 
             $rdv->save();
