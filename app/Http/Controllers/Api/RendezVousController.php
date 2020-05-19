@@ -18,44 +18,39 @@ class RendezVousController extends Controller
     protected $table = 'rendez_vous';
     /**
      * Display a listing of the resource.
+     * Retourne les rdv dans l'intervale [$nbre de mois avant $dateDebut, $nbre de mois apres $dateDebut]
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
         $dateDebut = $request->get('date_debut');
-        $nbre = $request->get('nbre',15);
-        $jour = $request->get('jour',0);
-
-        Auth::loginUsingId(77);
+        $nbre = $request->get('nbre',1);
         $userId = Auth::id();
-        if (!is_null($dateDebut)){
+
+        try {
             $dateDebut = Carbon::parse($dateDebut);
-        }else{
+        }catch (\Exception $exception){
             $dateDebut = Carbon::now();
         }
-
         //On récupère les rendez entre ces deux dates
-        if ($jour !=1) {
-            $dateAvant = date('Y-m-d', strtotime($dateDebut. ' - '.$nbre.' days'));
-            $dateApres = date('Y-m-d', strtotime($dateDebut. ' + '.$nbre.' days'));
-        } else{
-            $dateAvant = date('Y-m-d', strtotime($dateDebut. ' - '.$nbre.' months'));
-            $dateApres = date('Y-m-d', strtotime($dateDebut. ' + '.$nbre.' months'));
-        }
+
+        $dateAvant = date('Y-m-d', strtotime($dateDebut. ' - '.$nbre.' months'));
+        $dateApres = date('Y-m-d', strtotime($dateDebut. ' + '.$nbre.' months'));
+
 
 
         $rdvs = RendezVous::with(['patient','praticien','sourceable','initiateur'])
-                            ->where('praticien_id','=',$userId)
-                            ->orWhere('patient_id','=',$userId)
-                            ->orWhere('initiateur','=',$userId)
-                            ->get();
+            ->where('praticien_id','=',$userId)
+            ->orWhere('patient_id','=',$userId)
+            ->orWhere('initiateur','=',$userId)
+            ->get();
 
         $rdvsAvant = $rdvs->where('date','>=',$dateAvant)
-                  ->all();
+            ->all();
 
         $rdvsApres = $rdvs->where('date','>=',$dateApres)
-                  ->all();
+            ->all();
 
         $rdvs = $rdvsAvant+$rdvsApres;
 
@@ -80,7 +75,7 @@ class RendezVousController extends Controller
      */
     public function store(RendezVousRequest $request)
     {
-//        Auth::loginUsingId(77);
+//        //Auth::loginUsingId(77);
         $rdv = RendezVous::create($request->all()+['initiateur'=>Auth::id()]);
 
         defineAsAuthor("RendezVous", $rdv->id, 'create');
@@ -96,8 +91,6 @@ class RendezVousController extends Controller
      */
     public function show($slug)
     {
-        //Auth::loginUsingId(77);
-
         $this->validatedSlug($slug,$this->table);
 
         $rdv = RendezVous::with(['patient','praticien','sourceable','initiateur'])
@@ -131,7 +124,6 @@ class RendezVousController extends Controller
      */
     public function update(RendezVousRequest $request, $slug)
     {
-//        Auth::loginUsingId(77);
 
         $this->validatedSlug($slug,$this->table);
 

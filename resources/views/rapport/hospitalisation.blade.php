@@ -9,6 +9,7 @@
                                         'patient'=>$hospitalisation->dossier->patient,
                                         'date_entree'=>$hospitalisation->date_entree,
                                         'date_sortie'=>$hospitalisation->date_sortie,
+                                        'diagnostic'=>$hospitalisation->conclusion,
                                         'nomEtablissement'=>$hospitalisation->etablissement->name])
     @endcomponent
 
