@@ -2,10 +2,13 @@
 
 namespace App\Console\Commands;
 
+use App\Mail\Rappel;
+use App\Models\Auteur;
 use App\Models\RendezVous;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
 
 class rappelerRendezVous extends Command
 {
@@ -42,14 +45,30 @@ class rappelerRendezVous extends Command
     public function handle()
     {
         $dateRendezVous = Carbon::tomorrow()->toDateString();
-        $rdvs = RendezVous::with('patient')
-            ->whereDate('date',$dateRendezVous)->get();
+        $rdvs = RendezVous::with('patient','praticien')
+            ->whereDate('date',$dateRendezVous)
+            ->where('statut','<>','Annulé')->get();
 
-        $personnesARappeler = $rdvs->pluck('patient');
+        foreach ($rdvs as $rdv){
+            $date = Carbon::parse($rdv->date)->format('d/m/Y');
+            $heure = Carbon::parse($rdv->date)->format('H').'h'.Carbon::parse($rdv->date)->format('i');
+            if (!is_null($rdv->nom_medecin)){
+                $praticien = $rdv->nom_medecin;
+            }else{
+                $praticien = $rdv->praticien->nom;
+            }
+            $this->RappelerRdvViaSMSTo($rdv->patient,$praticien,$date,$heure);
 
-        foreach ($personnesARappeler as $user){
-            $this->RappelerRdvViaSMSTo($user,$dateRendezVous);
+            if (is_null($rdv->nom_medecin)) {
+                $mail = new Rappel($rdv);
+                Mail::to($rdv->praticien->email)->send($mail);
+            }
         }
-
+        Auteur::create([
+            'user_id'=>1,
+            'auteurable_type'=>'Admin',
+            'operationable_type'=>'Admin',
+            'action'=>'send rappel rdv'
+        ]);
     }
 }

@@ -127,4 +127,8 @@ class Cardiologie extends Model
             }
         }
     }
+
+    public function rdv(){
+        return $this->morphOne(RendezVous::class,'sourceable');
+    }
 }

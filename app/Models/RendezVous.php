@@ -28,8 +28,10 @@ class RendezVous extends Model
         "date",
         "statut",
         "slug",
+        "nom_medecin"
     ];
 
+    protected $hidden = ['initiateur','updated_at'];
     /**
      * Return the sluggable configuration array for this model.
      *
@@ -63,5 +65,18 @@ class RendezVous extends Model
 
     public function sourceable(){
         return $this->morphTo();
+    }
+
+    public function updateRendezVous(){
+        if(!is_null($this)){
+            $rdv = $this;
+            $user =  $rdv->patient;
+            $patient = $user->patient;
+            if (!is_null($patient)){
+                $dossier = $patient->dossier;
+                unset($this->patient['patient']);
+                $this->patient['dossier_medical'] =$dossier;
+            }
+        }
     }
 }

@@ -22,7 +22,11 @@ Route::post('password/emailVersion','Auth\ForgotPasswordController@sendResetLink
 Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
 Route::get('question','Api\QuestionController@index');
-//Route::resource('rdvs','Api\RendezVousController');
+
+// Pour faire rapidement les tests sur suivi en back avec postman
+//Route::resource('suivi','Api\SuiviController');
+//Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
+//    Route::resource('rdvs','Api\RendezVousController');
 
 
 Route::middleware(['auth:api'])->group(function () {
@@ -44,7 +48,6 @@ Route::group(['middleware' => ['auth:api','role:Admin']], function () {
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function () {
     Route::resource('etablissement','Api\EtablissementExerciceController')->except(['create','edit']);
     Route::resource('profession','Api\ProfessionController')->except(['create','edit']);
-    Route::resource('specialite','Api\SpecialiteController')->except(['create','edit']);
     Route::resource('praticien','Api\PraticienController')->except(['create','edit']);
     Route::resource('medecin-controle','Api\MedecinControleController')->except(['create','edit']);
 //    Route::resource('souscripteur','Api\SouscripteurController')->except(['create','edit']);
@@ -153,6 +156,10 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('max-consultation-obs','Api\ConsultationObstetriqueController@genererNumeroGrossesse');
 
     Route::get('latest-operation','Api\AuteurController@latestOperation');
+
+
+    Route::resource('suivi','Api\SuiviController');
+    Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
@@ -199,6 +206,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']],
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle']], function () {
+    Route::resource('specialite','Api\SpecialiteController')->except(['create','edit']);
     Route::resource('souscripteur','Api\SouscripteurController');
     Route::post('patient','Api\PatientController@store')->name('patient.store');
     Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');

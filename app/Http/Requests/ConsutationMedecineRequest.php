@@ -42,7 +42,10 @@ class ConsutationMedecineRequest extends FormRequest
             "alcool"=>"sometimes|nullable|string",
             "autres"=>"sometimes|nullable|string|min:2",
             'etablissement_id'=>'required|integer|exists:etablissement_exercices,id',
-            "contributeurs.*" => "sometimes|nullable|integer"
+            "contributeurs.*" => "sometimes|nullable|integer",
+            "dateRdv" => "sometimes|nullable|string",
+            "motifRdv" => "sometimes|nullable|string",
+            "praticien_id"=>'sometimes|nullable|string',
         ];
 
         if($this->isMethod('POST'))

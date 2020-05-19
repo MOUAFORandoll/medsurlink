@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\IsMedicasure;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Request;
 
-class EtablissementExerciceRequest extends FormRequest
+class SpecialiteSuiviRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +25,11 @@ class EtablissementExerciceRequest extends FormRequest
     public function rules()
     {
         return [
-            "name"=>"required|string|min:3",
-            "description"=>"sometimes|nullable|string",
-            "adresse"=>"sometimes|nullable|string"
+            "suivi_id"=>"required|integer|exists:suivis,id",
+            "specialite_id"=>"required|integer|exists:specialites,id",
+            "motifs"=>"sometimes|nullable|string",
+            "etat"=>"required|nullable|string",
+            "responsable"=>"sometimes|nullable|integer|exists:users,id",
         ];
     }
 }

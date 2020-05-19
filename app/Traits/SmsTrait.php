@@ -43,12 +43,12 @@ trait SmsTrait
      * @param $user
      * @param null $sender
      */
-    function RappelerRdvViaSMSTo($user, $date,$sender = null) {
+    function RappelerRdvViaSMSTo($user,$praticien,$date,$heure,$sender = null) {
         if (!is_null($user)){
             try {
-
-                $nom = substr(strtoupper( $user->nom),0,9);
-                sendSMS($user->telephone,trans('sms.rappelerRendezVous',['nom'=>$nom,'date'=>$date],'fr'),$sender);
+                $nom = strtoupper($user->nom);
+                $praticien = strtoupper($praticien);
+                sendSMS($user->telephone,trans('sms.rappelerRendezVous',['nom'=>$nom,'date'=>$date,'heure'=>$heure,'praticien'=>$praticien],'fr'),$sender);
 
              }catch (\Exception $exception){
                 //$exception

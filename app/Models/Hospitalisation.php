@@ -107,4 +107,8 @@ class Hospitalisation extends Model
             $this['isAuthor']=$isAuthor->getOriginalContent();
         }
     }
+
+    public function rdv(){
+        return $this->morphOne(RendezVous::class,'sourceable');
+    }
 }

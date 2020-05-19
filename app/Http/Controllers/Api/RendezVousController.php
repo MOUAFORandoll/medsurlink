@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\RendezVousRequest;
 use App\Models\RendezVous;
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Validator;
 
 class RendezVousController extends Controller
 {
@@ -52,7 +51,24 @@ class RendezVousController extends Controller
         $rdvsApres = $rdvs->where('date','>=',$dateApres)
             ->all();
 
+        //Ici on récupère les rendez vous des autres praticiens et médécin
+        $user = Auth::user();
+        $roleName = $user->getRoleNames()->first();
+        if ($roleName == 'Praticien' || $roleName == 'Medecin controle' || $roleName == 'Admin'){
+
+            if (strpos($user->email,'@medicasure.com')){
+                $rdvDesAutres = RendezVous::with(['patient','praticien','sourceable','initiateur'])
+                    ->where('praticien_id','<>',$userId)
+                    ->get();
+                $rdvsApres = $rdvsApres + $rdvDesAutres->where('date','>=',$dateApres)->all();
+                $rdvsAvant = $rdvsAvant + $rdvDesAutres->where('date','>=',$dateAvant)->all();
+            }
+        }
         $rdvs = $rdvsAvant+$rdvsApres;
+        foreach ($rdvs as $rdv){
+            $rdv->updateRendezVous();
+        }
+
 
         return response()->json(['rdvs'=>$rdvs]);
     }
@@ -75,8 +91,27 @@ class RendezVousController extends Controller
      */
     public function store(RendezVousRequest $request)
     {
-//        //Auth::loginUsingId(77);
-        $rdv = RendezVous::create($request->all()+['initiateur'=>Auth::id()]);
+//        Auth::loginUsingId(77);
+        //Récupération du nom du medecin ou bien de l'identifiant du praticien
+        $praticien = $request->get('praticien_id');
+
+        $praticienId = (integer) $praticien;
+
+        if ($praticienId !== 0){
+            $validator = Validator::make(['praticien_id'=>$praticienId],['praticien_id'=>'required|integer|exists:users,id']);
+
+            if($validator->fails()){
+                return $this->revealError('praticien_id','le praticien spécifié n\'exite pas dans la bd');
+            }else{
+                $rdv = RendezVous::create($request->except('praticien_id') + ['praticien_id'=>$praticienId,'initiateur'=>Auth::id()]);
+            }
+        }else{
+
+            if ($praticien != ""){
+
+                $rdv = RendezVous::create($request->except('praticien_id') + ['nom_medecin'=>$praticien,'initiateur'=>Auth::id()]);
+            }
+        }
 
         defineAsAuthor("RendezVous", $rdv->id, 'create');
 
@@ -127,7 +162,19 @@ class RendezVousController extends Controller
 
         $this->validatedSlug($slug,$this->table);
 
-        RendezVous::whereSlug($slug)->update($request->all());
+        //Récupération du nom du medecin ou bien de l'identifiant du praticien
+        $praticien = $request->get('praticien_id');
+
+        $praticienId = (integer) $praticien;
+
+        if ($praticienId !== 0){
+            RendezVous::whereSlug($slug)->update($request->except('praticien_id') + ['praticien_id'=>$praticienId,'initiateur'=>Auth::id()]);
+        }else{
+            if ($praticien != ""){
+                RendezVous::whereSlug($slug)->update($request->except('praticien_id') + ['nom_medecin'=>$praticien,'initiateur'=>Auth::id()]);
+            }
+        }
+
 
         $rdv = RendezVous::with(['patient','praticien','sourceable','initiateur'])
             ->WhereSlug($slug)
