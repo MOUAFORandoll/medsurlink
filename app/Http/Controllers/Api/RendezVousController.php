@@ -114,6 +114,7 @@ class RendezVousController extends Controller
         }
 
         defineAsAuthor("RendezVous", $rdv->id, 'create');
+        $rdv->updateRendezVous();
 
         return response()->json(['rdv'=>$rdv]);
     }
