@@ -65,6 +65,10 @@ class RendezVousController extends Controller
             }
         }
         $rdvs = $rdvsAvant+$rdvsApres;
+        foreach ($rdvs as $rdv){
+            $rdv->updateRendezVous();
+        }
+
 
         return response()->json(['rdvs'=>$rdvs]);
     }

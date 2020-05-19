@@ -65,4 +65,17 @@ class RendezVous extends Model
     public function sourceable(){
         return $this->morphTo();
     }
+
+    public function updateRendezVous(){
+        if(!is_null($this)){
+            $rdv = $this;
+            $user =  $rdv->patient;
+            $patient = $user->patient;
+            if (!is_null($patient)){
+                $dossier = $patient->dossier;
+                unset($this->patient['patient']);
+                $this['dossier_medical'] =$dossier;
+            }
+        }
+    }
 }
