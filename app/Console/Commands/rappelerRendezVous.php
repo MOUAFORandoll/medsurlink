@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Mail\Rappel;
+use App\Models\Auteur;
 use App\Models\RendezVous;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
@@ -63,6 +64,11 @@ class rappelerRendezVous extends Command
                 Mail::to($rdv->praticien->email)->send($mail);
             }
         }
-
+        Auteur::create([
+            'user_id'=>1,
+            'auteurable_type'=>'Admin',
+            'operationable_type'=>'Admin',
+            'action'=>'send rappel rdv'
+        ]);
     }
 }
