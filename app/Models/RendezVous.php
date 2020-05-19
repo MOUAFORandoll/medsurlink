@@ -74,7 +74,7 @@ class RendezVous extends Model
             if (!is_null($patient)){
                 $dossier = $patient->dossier;
                 unset($this->patient['patient']);
-                $this['dossier_medical'] =$dossier;
+                $this->patient['dossier_medical'] =$dossier;
             }
         }
     }
