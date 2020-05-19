@@ -114,6 +114,7 @@ class RendezVousController extends Controller
         }
 
         defineAsAuthor("RendezVous", $rdv->id, 'create');
+        $rdv->updateRendezVous();
 
         return response()->json(['rdv'=>$rdv]);
     }
@@ -181,7 +182,7 @@ class RendezVousController extends Controller
             ->first();
 
         defineAsAuthor("RendezVous", $rdv->id, 'update');
-
+        $rdv->updateRendezVous();
         return response()->json(['rdv'=>$rdv]);
     }
 
