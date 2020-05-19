@@ -31,6 +31,7 @@ class RendezVous extends Model
         "nom_medecin"
     ];
 
+    protected $hidden = ['initiateur','updated_at'];
     /**
      * Return the sluggable configuration array for this model.
      *
