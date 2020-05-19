@@ -7,6 +7,7 @@ use App\Models\Cardiologie;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\ConsultationObstetrique;
 use App\Models\DossierMedical;
+use App\Models\Hospitalisation;
 use App\Models\MedecinControle;
 use App\Models\Praticien;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -165,6 +166,59 @@ class ImprimerController extends Controller
         $pdf->save($path);
 
         return  response()->json(['name'=>'Cardiologie_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
+    }
+
+    public function hospitalisation($slug){
+        $this->validatedSlug($slug,'hospitalisations');
+
+        $hospitalisation = Hospitalisation::with([
+            'dossier',
+            'motifs',
+            'etablissement',
+        ])->whereSlug($slug)->first();
+
+        $hospitalisation->updateHospitalisation();
+        $auteur = getAuthor("Hospitalisation",$hospitalisation->id,"create");
+        $updateAuteurs = getUpdatedAuthor("Hospitalisation",$hospitalisation->id,"update");
+
+        //Détermination de celui qui a généré le rapport initial
+        $generateur = null;
+        if (!is_null($auteur)){
+            if ($auteur->auteurable_type == 'Praticien'){
+                $praticien = Praticien::with('user')->find($auteur->auteurable_id);
+                $generateur = $praticien;
+            }else if($auteur->auteurable_type == 'Medecin controle') {
+                $medecin = MedecinControle::with('user')->find($auteur->auteurable_id);
+                $generateur = $medecin;
+            }
+        }
+
+        //Détermination de deux qui ont revisité le rapport
+        $auteurs = [];
+        $revisiteurs = [];
+        foreach ($updateAuteurs as $item){
+            if ($item->auteurable_id != $auteur->auteurable_id){
+                if (!in_array($item->auteurable_id,$auteurs)){
+                    if ($item->auteurable_type == 'Medecin controle'){
+                        $medecin = MedecinControle::with('user')->find($item->auteurable_id);
+                        array_push($revisiteurs,$medecin);
+                    }
+                    array_push($auteurs,$item->auteurable_id);
+                }
+            }
+        }
+
+        $data = compact('hospitalisation','generateur','revisiteurs');
+        $pdf = PDF::loadView('rapport.hospitalisation',$data);
+        $nom  = ucfirst($hospitalisation->dossier->patient->user->nom);
+        $nom =str_replace(' ','_',$nom);
+        $prenom = is_null($hospitalisation->dossier->patient->user->prenom) ? '' :$hospitalisation->dossier->patient->user->prenom;
+        $prenom  = ucfirst($prenom);
+        $date= $hospitalisation->date_entree;
+        $path = storage_path().'/app/public/pdf/'.'Hospitalisation_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
+        $pdf->save($path);
+
+        return  response()->json(['name'=>'Hospitalisation_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
     }
 
 

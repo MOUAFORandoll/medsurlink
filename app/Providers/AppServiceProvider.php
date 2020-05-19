@@ -40,6 +40,7 @@ use App\Models\Patient;
 use App\Models\PatientSouscripteur;
 use App\Models\Praticien;
 use App\Models\Profession;
+use App\Models\RendezVous;
 use App\Models\Resultat;
 use App\Models\ResultatImagerie;
 use App\Models\ResultatLabo;
@@ -72,6 +73,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Relation::morphMap([
+            'RendezVous'=>RendezVous::class,
             'PatientSouscripteur'=>PatientSouscripteur::class,
             'ActionMotif'=>ActionMotif::class,
             'ExamenCardio'=>ExamenCardio::class,

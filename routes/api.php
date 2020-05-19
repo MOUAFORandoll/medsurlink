@@ -22,6 +22,7 @@ Route::post('password/emailVersion','Auth\ForgotPasswordController@sendResetLink
 Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
 Route::get('question','Api\QuestionController@index');
+//Route::resource('rdv','Api\RendezVousController');
 
 
 Route::middleware(['auth:api'])->group(function () {
@@ -155,6 +156,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
+    Route::resource('rdv','Api\RendezVousController');
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except('store','update','destroy');
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except('store','update','destroy');
     Route::resource('motif','Api\MotifController')->except('store','update','destroy');
@@ -182,6 +184,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
     Route::get('imprimer-consultation-medecine/{generale}','Api\ImprimerController@generale');
     Route::get('imprimer-consultation-cardiologie/{cardiologie}','Api\ImprimerController@cardiologie');
+    Route::get('imprimer-rapport-hospitalisation/{hospitalisation}','Api\ImprimerController@hospitalisation');
     Route::get('affiliationRevue/{affiliation}','Api\AffiliationController@show');
     Route::get('patient/{patient}','Api\PatientController@show')->name('patient.show');
     Route::get('patient','Api\PatientController@index')->name('patient.index');
