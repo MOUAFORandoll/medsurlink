@@ -55,11 +55,11 @@ class RendezVousController extends Controller
         $user = Auth::user();
         $roleName = $user->getRoleNames()->first();
         if ($roleName == 'Praticien' || $roleName == 'Medecin controle' || $roleName == 'Admin'){
-            if (strpos('medicasure.com',$user->email)){
+
+            if (strpos($user->email,'medicasure.com')){
                 $rdvDesAutres = RendezVous::with(['patient','praticien','sourceable','initiateur'])
                     ->where('praticien_id','<>',$userId)
                     ->get();
-
                 $rdvsApres = $rdvsApres + $rdvDesAutres->where('date','>=',$dateApres)->all();
                 $rdvsAvant = $rdvsAvant + $rdvDesAutres->where('date','>=',$dateAvant)->all();
             }
