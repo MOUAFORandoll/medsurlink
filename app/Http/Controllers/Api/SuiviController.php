@@ -126,6 +126,7 @@ class SuiviController extends Controller
 
         $suivi = Suivi::whereSlug($slug)->first();
 
+        if (!is_null($suivi))
         $suivi->delete();
 
         return  response()->json(['suivi'=>$suivi]);
