@@ -26,7 +26,7 @@ class SpecialiteSuiviRequest extends FormRequest
     {
         return [
             "suivi_id"=>"required|integer|exists:suivis,id",
-            "specialite_id"=>"required|integer|exists:specialites,id",
+            "specialite_id"=>"required|integer|exists:consultation_types,id",
             "motifs"=>"sometimes|nullable|string",
             "etat"=>"required|nullable|string",
             "responsable"=>"sometimes|nullable|integer|exists:users,id",

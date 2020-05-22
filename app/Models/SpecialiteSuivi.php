@@ -68,6 +68,6 @@ class SpecialiteSuivi extends Model
     }
 
     public function specialite(){
-        return $this->belongsTo(Specialite::class,'specialite_id','id');
+        return $this->belongsTo(ConsultationType::class,'specialite_id','id');
     }
 }

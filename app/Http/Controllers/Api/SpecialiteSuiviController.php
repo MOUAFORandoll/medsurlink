@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\SpecialiteSuiviRequest;
+use App\Models\ConsultationType;
 use App\Models\SpecialiteSuivi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
