@@ -160,6 +160,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
     Route::resource('suivi','Api\SuiviController');
     Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
+    Route::post('suivi-specialites/delete','Api\SpecialiteSuiviController@deleteAllSpecialities');
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
