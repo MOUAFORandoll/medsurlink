@@ -108,4 +108,17 @@ class SpecialiteSuiviController extends Controller
 
         return  response()->json(['specialiteSuivi'=>$specialiteSuivi]);
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  string  $slug
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteAllSpecialities(Request $request)
+    {
+        SpecialiteSuivi::where('suivi_id', $request->id)->delete();
+
+        return  response()->json(['suivi'=> 'done']);
+    }
 }
