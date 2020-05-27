@@ -40,7 +40,9 @@ class RappelRendezVous implements ShouldQueue
     public function handle()
     {
         foreach ($this->personnesARappeler as $user){
-           $this->RappelerRdvViaSMSTo($user,$this->dateRendezVous);
+            if (!is_null($user)){
+                $this->RappelerRdvViaSMSTo($user,$this->dateRendezVous);
+            }
         }
     }
 }

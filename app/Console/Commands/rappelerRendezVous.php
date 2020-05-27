@@ -55,7 +55,11 @@ class rappelerRendezVous extends Command
             if (!is_null($rdv->nom_medecin)){
                 $praticien = $rdv->nom_medecin;
             }else{
-                $praticien = $rdv->praticien->nom;
+                if (!is_null($rdv->praticien)){
+                    $praticien = $rdv->praticien->nom;
+                }else{
+                    $praticien ='';
+                }
             }
             $this->RappelerRdvViaSMSTo($rdv->patient,$praticien,$date,$heure);
 
