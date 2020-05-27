@@ -33,12 +33,6 @@ class EtablissementExerciceController extends Controller
     public function index()
     {
         $etablissements =  EtablissementExercice::with(['praticiens','patients.dossier','patients.user','patients.financeurs'])->get();
-//        foreach ($etablissements as $etablissement){
-//            foreach ($etablissement->patients as $patient) {
-//                $patient['user'] = $patient->user;
-//                $patient['dossier'] = $patient->dossier;
-//            }
-//        }
         return response()->json(['etablissements'=>$etablissements]);
 
 
@@ -143,10 +137,19 @@ class EtablissementExerciceController extends Controller
                 $etablissement->logo = $file;
 
                 $etablissement->save();
+
+
+                if (!is_null($logo)){
+                    //Suppression de l'ancienne sur server
+                    File::delete(public_path().'/storage/'.$logo);
+                }
             }
+        }else{
+            $etablissement->logo = '';
+            $etablissement->save();
         }
-        if (!is_null($logo))
-            File::delete(public_path().'/storage/'.$logo);
+
+
 
         return response()->json(['etablissement'=>$etablissement]);
 
