@@ -252,8 +252,9 @@ class ConsultationMedecineGeneraleController extends Controller
             'rdv.praticien'
         ])->whereSlug($slug)->first();
 
-        $consultation->updateConsultationMedecine();
-
+        if (!is_null($consultation)){
+            $consultation->updateConsultationMedecine();
+        }
         return response()->json(["consultation"=>$consultation]);
 
     }
