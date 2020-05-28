@@ -96,7 +96,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $motifRdv = $request->get('motifRdv');
         $dateRdv = $request->get('dateRdv');
         if (!is_null($dateRdv) ){
-            if (strlen($dateRdv) >0 && $dateRdv != 'null' ){
+            if (strlen($dateRdv) >0 && $dateRdv != 'null' &&  $dateRdv != 'Invalid date' ){
                 if ($motifRdv == 'null'){
                     $motifRdv = 'Rendez vous de la consultation medecine génerale du '.$request->get('date_consultation');
                 }
@@ -552,7 +552,7 @@ class ConsultationMedecineGeneraleController extends Controller
         if (is_null($rdv)){
 //            si cela n'existe pas et que on a spécifié la date de rendez vous on crée
             if (!is_null($dateRdv) ){
-                if (strlen($dateRdv) >0 && $dateRdv != 'null' ){
+                if (strlen($dateRdv) >0 && $dateRdv != 'null' &&  $dateRdv != 'Invalid date'){
 
                     RendezVous::create([
                         "sourceable_id"=>$consultation->id,
