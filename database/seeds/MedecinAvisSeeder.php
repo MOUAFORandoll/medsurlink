@@ -13,7 +13,7 @@ class MedecinAvisSeeder extends Seeder
     {
         $users = \App\User::where('isMedicasure','1')->get();
         foreach ($users as $user){
-            if (!is_null($user->praticien || $user->medecinControle)){
+            if (!is_null($user->praticien) || !is_null($user->medecinControle)){
                 $user->isNotice='1';
                 $user->save();
             }
