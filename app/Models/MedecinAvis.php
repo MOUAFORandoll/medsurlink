@@ -18,6 +18,8 @@ class MedecinAvis extends Model
     protected $fillable = [
         "avis_id",
         "medecin_id",
+        "view",
+        "avis",
         "slug",
     ];
 

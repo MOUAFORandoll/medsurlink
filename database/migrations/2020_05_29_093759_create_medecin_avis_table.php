@@ -18,6 +18,8 @@ class CreateMedecinAvisTable extends Migration
             $table->unsignedBigInteger('avis_id');
             $table->unsignedBigInteger('medecin_id');
             $table->string('slug');
+            $table->boolean('view')->default('0');
+            $table->longText('avis')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
