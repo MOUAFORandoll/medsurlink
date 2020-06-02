@@ -20,6 +20,7 @@ class Avis extends Model
         "objet",
         "description",
         "slug",
+        "creer_lien",
         "creator",
     ];
 

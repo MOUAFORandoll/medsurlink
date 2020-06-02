@@ -28,6 +28,7 @@ class AvisRequest extends FormRequest
             "dossier_medical_id"=>['required','integer','exists:dossier_medicals,id'],
             "objet"=>'required|string',
             "description"=>'required|string',
+            "creer_lien"=>'required|string',
             "medecins.*"=>['sometimes','nullable','integer','exists:users,id',new isNotice]
         ];
     }
