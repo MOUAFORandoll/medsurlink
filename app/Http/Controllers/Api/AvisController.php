@@ -40,7 +40,6 @@ class AvisController extends Controller
      */
     public function store(AvisRequest $request)
     {
-        Auth::loginUsingId(77);
         $avis = Avis::create($request->except('medecins'));
 
         $medecins = $request->get('medecins');
