@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\AvisRequest;
+use App\Mail\AvisDemande;
 use App\Models\Avis;
 use App\Models\MedecinAvis;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class AvisController extends Controller
 {
@@ -40,13 +43,17 @@ class AvisController extends Controller
      */
     public function store(AvisRequest $request)
     {
+        Auth::loginUsingId(77);
         $avis = Avis::create($request->except('medecins'));
 
         $medecins = $request->get('medecins');
         if (!is_null($medecins)){
             foreach ($medecins as $medecin){
                 MedecinAvis::create(['medecin_id'=>$medecin,'avis_id'=>$avis->id]);
-            }
+               $user= User::whereId($medecin)->first();
+               $mail = new AvisDemande($user, $avis);
+               Mail::to($user->email)->send($mail);
+             }
         }
 
         $avis = Avis::with(['dossier.patient.user','medecinAvis.medecin'])->find($avis->id);
@@ -100,6 +107,9 @@ class AvisController extends Controller
             //Ici on va ajouter les nouveau medecin
             foreach (array_diff($nouveauMedecins,$precedentMedecins) as $medecin){
                 MedecinAvis::create(['medecin_id'=>$medecin,'avis_id'=>$avis->id]);
+                $user= User::whereId($medecin)->first();
+                $mail = new AvisDemande($user, $avis);
+                Mail::to($user->email)->send($mail);
             }
             //Ici on va retirer les anciens medecins qui ne sont pas parmis les nouveaux
             foreach (array_diff($precedentMedecins,$nouveauMedecins) as $medecin){
