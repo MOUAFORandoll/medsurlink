@@ -8,6 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class ParametreCommun extends Model
 {
@@ -55,6 +56,19 @@ class ParametreCommun extends Model
     public function updateParametreCommun(){
         if (!is_null($this)){
             $isAuthor = checkIfIsAuthorOrIsAuthorized("ParametreCommun",$this->id,"create");
+            $canUpdate = checkIfCanUpdated("ParametreCommun",$this->id,"create");
+            $connectedUser = Auth::user();
+            if ($connectedUser->getRoleNames()->first() == 'Praticien'){
+                $this['canUpdate']=$canUpdate->getOriginalContent();
+            }elseif ($connectedUser->getRoleNames()->first() == 'Medecin controle'){
+                if ($isAuthor->getOriginalContent() == true)
+                    $this['canUpdate'] = true;
+                else{
+                    $this['canUpdate']=$canUpdate->getOriginalContent() ;
+                }
+            }elseif($connectedUser->getRoleNames()->first() == 'Admin'){
+                $this['canUpdate']=true;
+            }
             $this['isAuthor'] = $isAuthor->getOriginalContent();
             $consultation = !is_null($this->consultation) ? $this->consultation : $this->communable;
             $this['user'] = $consultation->dossier->patient->user;
