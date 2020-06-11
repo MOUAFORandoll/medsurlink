@@ -58,6 +58,7 @@ class User extends Authenticatable
         'slug',
         'adresse',
         'smsEnvoye',
+        'isNotice',
     ];
 
     /**

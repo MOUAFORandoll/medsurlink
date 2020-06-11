@@ -205,6 +205,7 @@ class UserController extends Controller
             'telephone'=>$request->telephone,
             'adresse'=>$request->adresse,
             'isMedicasure'=>$request->get('isMedicasure','0'),
+            'isNotice'=>$request->get('isNotice','0'),
             'password'=>Hash::make($password)
         ]);
         if (!is_null($role) && $role == "Patient"){
@@ -306,6 +307,7 @@ class UserController extends Controller
             'email' => ['sometimes','nullable', 'string', 'email', 'max:255'],
             'adresse' => ['sometimes','nullable', 'string','min:3'],
             'isMedicasure' => ['sometimes','nullable', 'string'],
+            'isNotice' => ['sometimes','nullable', 'string'],
         ];
         $validation = Validator::make($data,$rules);
 
@@ -324,6 +326,7 @@ class UserController extends Controller
             'telephone' => ['required','string', 'max:255'],
             'adresse' => ['sometimes','nullable', 'string','min:3'],
             'isMedicasure' => ['sometimes','nullable', 'string'],
+            'isNotice' => ['sometimes','nullable', 'string'],
         ];
 //        if(!is_null($role) && $role == "Patient"){
         $rule['email'] = "sometimes|nullable|string|email";
