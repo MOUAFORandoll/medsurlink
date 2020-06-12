@@ -31,7 +31,7 @@ class AvisDemande extends Mailable
      */
     public function build()
     {
-        return $this->from('contact@medicasure.com')
+        return $this->from('avismedical@medicasure.com')
                     ->subject('Demande d\'avis médical')
                     ->markdown('emails.avis.demande');
     }

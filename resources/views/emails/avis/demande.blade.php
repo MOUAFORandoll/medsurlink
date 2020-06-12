@@ -1,14 +1,14 @@
 @component('mail::message')
-# Mail de demande d'avis
+# Votre avis médical est requis!
 
-Hello Dr. {{$user->nom}}, nous espérons vous trouvez bien portant.
+Hello Dr. {{$user->nom}}, nous espérons vous trouver bien portant.
 
-Nous aimerions avoir votre avis au sujet d'un de nos patients.
+Nous aimerions avoir votre avis au sujet d'un-e patient-e.
 
-Objet : {{$avis->objet}}
+**Objet** : {{$avis->objet}}
 
-Description : {{$avis->description}}
+**Description** : {{$avis->description}}
 
-{{$avis->creer_lien == '1' ?'NUMERO DE DOSSIER : '. $avis->dossier->numero_dossier :''}}
+https://www.medsurlink.com/medical-advice
 
 @endcomponent
