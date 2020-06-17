@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AvisMedecinRequest;
+use App\Models\Avis;
 use App\Models\MedecinAvis;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AvisMedecinController extends Controller
 {
@@ -66,6 +68,16 @@ class AvisMedecinController extends Controller
         return  response()->json(['avis'=>$avis]);
     }
 
+    public function repondre($aviSlug){
+        $medecin = Auth::id();
+
+        $this->validatedSlug($aviSlug,'avis');
+        $avis = Avis::whereSlug($aviSlug)->first();
+
+        $medecin_avis = MedecinAvis::where('avis_id',$avis->id)->where('medecin_id',$medecin)->first();
+
+        return response()->json(['avis'=>$medecin_avis]);
+    }
     /**
      * Show the form for editing the specified resource.
      *

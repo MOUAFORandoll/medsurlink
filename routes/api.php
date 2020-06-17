@@ -24,8 +24,7 @@ Route::post('password/reset','Api\UserController@reset');
 Route::get('question','Api\QuestionController@index');
 
 // Pour faire rapidement les tests sur suivi en back avec postman
-Route::resource('avis','Api\AvisController');
-Route::resource('avisMedecin','Api\AvisMedecinController');
+//Route::resource('avis','Api\AvisController');
 
 
 
@@ -161,8 +160,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('suivi','Api\SuiviController');
     Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
     Route::post('suivi-specialites/delete','Api\SpecialiteSuiviController@deleteAllSpecialities');
-//    Route::resource('avis','Api\AvisController');
-//    Route::post('avis-medecin/{slug}','Api\AvisMedecinController@store');
+    Route::resource('avis','Api\AvisController');
+    Route::resource('avisMedecin','Api\AvisMedecinController');
+    Route::get('avis-repondre/{avis}','Api\AvisMedecinController@repondre');
 
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
