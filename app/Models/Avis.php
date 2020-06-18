@@ -25,7 +25,6 @@ class Avis extends Model
     ];
 
     protected $hidden = [
-        'creator',
         'deleted_at',
         'updated_at'
     ];

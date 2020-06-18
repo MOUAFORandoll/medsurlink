@@ -21,7 +21,7 @@ class AvisController extends Controller
      */
     public function index()
     {
-        $avis = Avis::with(['dossier.patient.user','medecinAvis.medecin'])->get();
+        $avis = Avis::with(['dossier.patient.user','medecinAvis.medecin','createur'])->get();
         return response()->json(['avis'=>$avis]);
     }
 
@@ -43,7 +43,6 @@ class AvisController extends Controller
      */
     public function store(AvisRequest $request)
     {
-        Auth::loginUsingId(77);
         $avis = Avis::create($request->except('medecins'));
 
         $medecins = $request->get('medecins');
@@ -69,7 +68,7 @@ class AvisController extends Controller
      */
     public function show($slug)
     {
-        $avis = Avis::with(['dossier.patient.user','medecinAvis.medecin'])->whereSlug($slug)->first();
+        $avis = Avis::with(['dossier.patient.user','medecinAvis.medecin','createur'])->whereSlug($slug)->first();
 
         return response()->json(['avis'=>$avis]);
     }
