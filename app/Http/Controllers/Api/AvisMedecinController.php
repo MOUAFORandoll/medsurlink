@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AvisMedecinRequest;
 use App\Models\Avis;
 use App\Models\MedecinAvis;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -48,6 +49,11 @@ class AvisMedecinController extends Controller
 
         $avis->view = $request->view;
         $avis->avis = $request->avis;
+        if (!is_null($request->avis)){
+            if (strlen($request->avis) > 0){
+                $avis->set_opinion_at = Carbon::now()->format('Y-m-d H:i:s');
+            }
+        }
         $avis->save();
 
         return  response()->json(['avis'=>$avis]);
