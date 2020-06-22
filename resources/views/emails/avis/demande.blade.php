@@ -7,7 +7,7 @@ Nous aimerions avoir votre avis au sujet d'un-e patient-e.
 
 **Objet** : {{$avis->objet}}
 
-**Description** : {{$avis->description}}
+**Description** : {!! $avis->description !!}
 
 https://www.medsurlink.com/medical-advice
 
