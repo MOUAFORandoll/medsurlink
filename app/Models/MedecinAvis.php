@@ -20,6 +20,7 @@ class MedecinAvis extends Model
         "medecin_id",
         "view",
         "avis",
+        "set_opinion_at",
         "slug",
     ];
 

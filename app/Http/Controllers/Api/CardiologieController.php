@@ -257,7 +257,7 @@ class CardiologieController extends Controller
      */
     public function destroy($slug)
     {
-        $this->verificationDeSpecialite();
+//        $this->verificationDeSpecialite();
 
         $cardiologie = Cardiologie::with('dossier')->whereSlug($slug)->first();
         $cardiologie->delete();
