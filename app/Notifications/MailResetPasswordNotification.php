@@ -47,7 +47,11 @@ class MailResetPasswordNotification extends Notification
 
         $email = $notifiable->getEmailForPasswordReset();
         $local = "http://localhost:8080";
-        $online = 'https://www.medsurlink.com';
+        if (config('app.env') == 'prod'){
+            $online = 'https://www.medsurlink.com';
+        }else{
+            $online = 'https://www.staging.medsurlink.com';
+        }
         $date = Carbon::now();
         $mail = new MailMessage;
         $users = User::whereEmail($email)->get();
