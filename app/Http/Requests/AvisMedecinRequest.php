@@ -26,6 +26,7 @@ class AvisMedecinRequest extends FormRequest
         return [
             'view'=>'sometimes|nullable|string',
             'avis'=>'sometimes|nullable|string',
+            'statut'=>'sometimes|nullable|string',
         ];
     }
 }

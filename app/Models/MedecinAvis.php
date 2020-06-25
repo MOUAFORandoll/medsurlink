@@ -22,6 +22,7 @@ class MedecinAvis extends Model
         "avis",
         "set_opinion_at",
         "slug",
+        "statut",
     ];
 
     /**

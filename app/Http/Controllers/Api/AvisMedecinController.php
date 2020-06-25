@@ -49,6 +49,7 @@ class AvisMedecinController extends Controller
 
         $avis->view = $request->view;
         $avis->avis = $request->avis;
+        $avis->statut = $request->get('statut','NON VALIDE');
         if (!is_null($request->avis)){
             if (strlen($request->avis) > 0){
                 $avis->set_opinion_at = Carbon::now()->format('Y-m-d H:i:s');
