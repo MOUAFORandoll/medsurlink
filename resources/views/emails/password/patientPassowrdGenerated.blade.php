@@ -2,7 +2,7 @@
 # Medsurlink
 
 Hello <strong>{{ucfirst($user->prenom).'  '.strtoupper($user->nom)}}</strong>,<br>
-Nous espérons vous trouvez bien portant. Voici <strong>vos identifiants</strong> pour accéder à votre compte Medicalink:<br>
+Nous espérons vous trouver bien portant. Voici <strong>vos identifiants</strong> pour accéder à votre compte Medicalink:<br>
 Email : <strong> {{$user->email}} </strong><br>
 Numero de dossier : <strong>{{$user->patient->dossier->numero_dossier}}</strong><br>
 Mot de passe : <strong>{{$password}}</strong><br><br>
