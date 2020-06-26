@@ -165,6 +165,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('avisMedecin/{slug}','Api\AvisMedecinController@show');
     Route::delete('avisMedecin/{slug}','Api\AvisMedecinController@destroy');
     Route::get('avis-repondre/{avis}','Api\AvisMedecinController@repondre');
+    Route::post('avisMedecin/{slug}/nouveauAvis','Api\AvisMedecinController@NouveauAvis');
+
 
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
