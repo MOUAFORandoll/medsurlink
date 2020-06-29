@@ -109,7 +109,6 @@ class AvisMedecinController extends Controller
     }
 
     public function NouveauAvis(AvisMedecinRequest $request,$slug){
-        Auth::loginUsingId(77);
         $this->validatedSlug($slug,'avis');
         $avis = Avis::whereSlug($slug)->first();
 
