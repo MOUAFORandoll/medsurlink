@@ -105,7 +105,7 @@ class SuiviController extends Controller
 //        Ici on modifit uniquement le suivi principal, si on désire modifie le suivi d'une spécialité on modifiera
 //        ce suivi là à part
 
-        Suivi::whereSlug($slug)->update($request->only("dossier_medical_id", "responsable", "motifs", "etat"));
+        Suivi::whereSlug($slug)->update($request->only("dossier_medical_id", "responsable", "motifs", "etat","categorie_id"));
 
         $suivi = Suivi::whereSlug($slug)->first();
 
