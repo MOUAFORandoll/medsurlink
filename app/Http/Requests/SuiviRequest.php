@@ -29,7 +29,7 @@ class SuiviRequest extends FormRequest
             "dossier_medical_id"=>['required','integer','exists:dossier_medicals,id',new IsMedicasure],
             "responsable"=>"sometimes|nullable|integer|exists:users,id",
             "motifs"=>"sometimes|nullable|string",
-            "etat"=>"required|string",
+            "etat"=>"sometimes|nullable|string",
             "specialite.*.specialite_id"=>"required|integer|exists:specialites,id",
             "specialite.*.motifs"=>"sometimes|nullable|string",
             "specialite.*.etat"=>"required|nullable|string",
