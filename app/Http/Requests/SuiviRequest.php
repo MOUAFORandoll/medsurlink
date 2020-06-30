@@ -34,6 +34,7 @@ class SuiviRequest extends FormRequest
             "specialite.*.motifs"=>"sometimes|nullable|string",
             "specialite.*.etat"=>"required|nullable|string",
             "specialite.*.responsable"=>"sometimes|nullable|integer|exists:users,id",
+            "categorie_id"=>'sometimes|nullable|integer|exists:categories,id'
         ];
     }
 }
