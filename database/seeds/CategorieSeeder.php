@@ -12,7 +12,7 @@ class CategorieSeeder extends Seeder
     public function run()
     {
         $categories = [
-            ['nom'=>'PEC','icon'=>'fa-hourglass-half'],
+            ['nom'=>'PEC en attente','icon'=>'fa-hourglass-half'],
             ['nom'=>'consultation','icon'=>'fa-medkit'],
             ['nom'=>'laboratoire','icon'=>'fa-flask'],
             ['nom'=>'imagerie','icon'=>'fa-images'],
