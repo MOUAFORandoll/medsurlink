@@ -22,10 +22,10 @@ class Suivi extends Model
         "slug",
         "etat",
         "creator",
+        'categorie_id'
     ];
 
     protected $hidden = [
-        'created_at',
         'deleted_at',
         'updated_at'
     ];
@@ -73,4 +73,7 @@ class Suivi extends Model
         return $this->hasMany(SpecialiteSuivi::class,'suivi_id','id');
     }
 
+    public function categorie(){
+        return $this->belongsTo(Categories::class,'categorie_id','id');
+    }
 }

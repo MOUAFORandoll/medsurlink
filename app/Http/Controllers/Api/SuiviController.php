@@ -22,7 +22,7 @@ class SuiviController extends Controller
      */
     public function index()
     {
-        $suivis = Suivi::with('dossier.patient.user','responsable','specialites.specialite')->get();
+        $suivis = Suivi::with('categorie','dossier.patient.user','responsable','specialites.specialite')->get();
 
         return  response()->json(['suivis'=>$suivis]);
 
@@ -59,7 +59,7 @@ class SuiviController extends Controller
                 }
             }
         }
-        $suivi = Suivi::with('dossier.patient.user','responsable','specialites.specialite')->find($suivi->id);
+        $suivi = Suivi::with('categorie','dossier.patient.user','responsable','specialites.specialite')->find($suivi->id);
 
         return  response()->json(['suivi'=>$suivi]);
     }
@@ -74,7 +74,7 @@ class SuiviController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $suivi = Suivi::with('dossier.patient.user','responsable','specialites.specialite')
+        $suivi = Suivi::with('categorie','dossier.patient.user','responsable','specialites.specialite')
             ->whereSlug($slug)->first();
 
         return  response()->json(['suivi'=>$suivi]);
@@ -105,7 +105,7 @@ class SuiviController extends Controller
 //        Ici on modifit uniquement le suivi principal, si on désire modifie le suivi d'une spécialité on modifiera
 //        ce suivi là à part
 
-        Suivi::whereSlug($slug)->update($request->only("dossier_medical_id", "responsable", "motifs", "etat"));
+        Suivi::whereSlug($slug)->update($request->only("dossier_medical_id", "responsable", "motifs", "etat","categorie_id"));
 
         $suivi = Suivi::whereSlug($slug)->first();
 

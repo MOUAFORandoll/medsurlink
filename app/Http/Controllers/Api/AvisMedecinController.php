@@ -108,6 +108,19 @@ class AvisMedecinController extends Controller
         //
     }
 
+    public function NouveauAvis(AvisMedecinRequest $request,$slug){
+        $this->validatedSlug($slug,'avis');
+        $avis = Avis::whereSlug($slug)->first();
+
+       $avis =  MedecinAvis::create($request->all() + [
+                "avis_id"=>$avis->id,
+                "medecin_id"=>Auth::id(),
+                "set_opinion_at"=>Carbon::now()->format('Y-m-d H:i:s'),
+            ]);
+
+        return  response()->json(['avis'=>$avis]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *

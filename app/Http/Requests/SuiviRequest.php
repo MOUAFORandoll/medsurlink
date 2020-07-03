@@ -29,10 +29,11 @@ class SuiviRequest extends FormRequest
             "dossier_medical_id"=>['required','integer','exists:dossier_medicals,id',new IsMedicasure],
             "responsable"=>"sometimes|nullable|integer|exists:users,id",
             "motifs"=>"sometimes|nullable|string",
-            "etat"=>"required|string",
-            "specialite.*.specialite_id"=>"required|integer|exists:specialites,id",
+            "etat"=>"sometimes|nullable|string",
+            "categorie_id"=>'sometimes|nullable|integer|exists:categories,id',
+            "specialite.*.specialite_id"=>"sometimes|integer|exists:specialites,id",
             "specialite.*.motifs"=>"sometimes|nullable|string",
-            "specialite.*.etat"=>"required|nullable|string",
+            "specialite.*.etat"=>"sometimes|nullable|string",
             "specialite.*.responsable"=>"sometimes|nullable|integer|exists:users,id",
         ];
     }
