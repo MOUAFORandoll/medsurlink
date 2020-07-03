@@ -57,7 +57,7 @@ class ResultatLaboController extends Controller
 
                 $this->uploadFile($request,$resultat);
 
-                defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
+                defineAsAuthor("ResultatLabo", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
                 return response()->json([
                     'resultat' => $resultat
@@ -73,7 +73,7 @@ class ResultatLaboController extends Controller
         }else{
             $resultat = ResultatLabo::create($request->validated());
 
-            defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
+            defineAsAuthor("ResultatLabo", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
             return response()->json([
                 'resultat' => $resultat
@@ -103,8 +103,8 @@ class ResultatLaboController extends Controller
         $resultat = ResultatLabo::with(['dossier.patient.user','dossier.consultationsMedecine', 'consultation'])
             ->whereSlug($slug)
             ->first();
-        $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$resultat->id,"create");
-        $resultat['author'] = getAuthor("Resultat",$resultat->id,"create");
+        $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("ResultatLabo",$resultat->id,"create");
+        $resultat['author'] = getAuthor("ResultatLabo",$resultat->id,"create");
         $resultat['isAuthor'] = $motifIsAuthor->getOriginalContent();
         return response()->json([
             'resultat' => $resultat
@@ -137,7 +137,7 @@ class ResultatLaboController extends Controller
 
         $resultat = ResultatLabo::findBySlug($slug);
 
-        $this->checkIfAuthorized("Resultat", $resultat->id,"create");
+        $this->checkIfAuthorized("ResultatLabo", $resultat->id,"create");
 
         ResultatLabo::whereSlug($slug)->update($request->validated());
 
@@ -146,12 +146,11 @@ class ResultatLaboController extends Controller
             ->first();
 
         $file = $resultat->file;
-
         if($request->hasFile('file')){
             $this->uploadFile($request,$resultat);
         }
 
-        if (!is_null($file))
+        if (!is_null($file) && $request->hasFile('file'))
             File::delete(public_path().'/storage/'.$file);
 
         return response()->json([
@@ -180,7 +179,7 @@ class ResultatLaboController extends Controller
         } else {
             $resultat->archived_at = Carbon::now();
             $resultat->save();
-            defineAsAuthor("Resultat", $resultat->id,'archive');
+            defineAsAuthor("ResultatLabo", $resultat->id,'archive');
             //Envoi du sms
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
             informedPatientAndSouscripteurs($resultat->dossier->patient,1);
@@ -235,7 +234,7 @@ class ResultatLaboController extends Controller
 
         $resultat = ResultatLabo::with('dossier')->whereSlug($slug)->first();
 
-        $this->checkIfAuthorized("Resultat", $resultat->id,"create");
+        $this->checkIfAuthorized("ResultatLabo", $resultat->id,"create");
 
         $resultat->delete();
         File::delete(public_path().'/storage/'.$resultat->file);
