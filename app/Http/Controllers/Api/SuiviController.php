@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\SuiviRequest;
 use App\Models\SpecialiteSuivi;
 use App\Models\Suivi;
+use App\Models\SuiviToDoList;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class SuiviController extends Controller
      */
     public function index()
     {
-        $suivis = Suivi::with('categorie','dossier.patient.user','responsable','specialites.specialite')->get();
+        $suivis = Suivi::with('toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')->get();
 
         return  response()->json(['suivis'=>$suivis]);
 
@@ -59,6 +60,15 @@ class SuiviController extends Controller
                 }
             }
         }
+        $toDoLists = $request->only('toDoList');
+        if (!is_null($toDoLists)){
+            foreach ($toDoLists['toDoList'] as $toDoList){
+                if(!empty($toDoList)){
+                    //Création des suivis par spécialité
+                    SuiviToDoList::create($toDoList + ['listable_id'=>$suivi->id,'listable_type'=>'Suivi']);
+                }
+            }
+        }
         $suivi = Suivi::with('categorie','dossier.patient.user','responsable','specialites.specialite')->find($suivi->id);
 
         return  response()->json(['suivi'=>$suivi]);
@@ -74,7 +84,7 @@ class SuiviController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $suivi = Suivi::with('categorie','dossier.patient.user','responsable','specialites.specialite')
+        $suivi = Suivi::with('toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')
             ->whereSlug($slug)->first();
 
         return  response()->json(['suivi'=>$suivi]);

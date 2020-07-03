@@ -159,6 +159,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
     Route::resource('categorie','Api\CategorieController');
     Route::resource('suivi','Api\SuiviController');
+    Route::resource('toDoList','Api\ToDoListController');
+    Route::post('toDoList/{slug}/statut','Api\ToDoListController@updateStatut');
     Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
     Route::post('suivi-specialites/delete','Api\SpecialiteSuiviController@deleteAllSpecialities');
     Route::resource('avis','Api\AvisController');

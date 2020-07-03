@@ -46,6 +46,7 @@ use App\Models\ResultatImagerie;
 use App\Models\ResultatLabo;
 use App\Models\Souscripteur;
 use App\Models\Specialite;
+use App\Models\Suivi;
 use App\Models\Traitement;
 use App\User;
 use Illuminate\Database\Eloquent\Relations\Relation;
@@ -118,6 +119,7 @@ class AppServiceProvider extends ServiceProvider
             'Souscripteur'=>Souscripteur::class,
             'Specialite'=>Specialite::class,
             'Traitement'=>Traitement::class,
+            'Suivi'=>Suivi::class
         ]);
     }
 }
