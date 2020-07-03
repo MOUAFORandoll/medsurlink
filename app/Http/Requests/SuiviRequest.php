@@ -35,7 +35,6 @@ class SuiviRequest extends FormRequest
             "specialite.*.motifs"=>"sometimes|nullable|string",
             "specialite.*.etat"=>"sometimes|nullable|string",
             "specialite.*.responsable"=>"sometimes|nullable|integer|exists:users,id",
-
             "toDoList.*.intitule"=>"required|nullable|string",
             "toDoList.*.description"=>"sometimes|nullable|string",
             "toDoList.*.statut"=>"sometimes|nullable|integer|exists:users,id",

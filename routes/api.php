@@ -26,7 +26,9 @@ Route::get('question','Api\QuestionController@index');
 // Pour faire rapidement les tests sur suivi en back avec postman
 //Route::resource('avis','Api\AvisController');
 //Route::post('avisMedecin/{slug}','Api\AvisMedecinController@store');
-//Route::resource('suivi','Api\SuiviController');
+Route::resource('suivi','Api\SuiviController');
+Route::resource('toDoList','Api\ToDoListController');
+Route::post('toDoList/{slug}/statut','Api\ToDoListController@updateStatut');
 
 
 Route::middleware(['auth:api'])->group(function () {
@@ -158,9 +160,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('latest-operation','Api\AuteurController@latestOperation');
 
     Route::resource('categorie','Api\CategorieController');
-    Route::resource('suivi','Api\SuiviController');
-    Route::resource('toDoList','Api\ToDoListController');
-    Route::post('toDoList/{slug}/statut','Api\ToDoListController@updateStatut');
+//    Route::resource('suivi','Api\SuiviController');
     Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
     Route::post('suivi-specialites/delete','Api\SpecialiteSuiviController@deleteAllSpecialities');
     Route::resource('avis','Api\AvisController');
