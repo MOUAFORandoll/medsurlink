@@ -146,12 +146,11 @@ class ResultatLaboController extends Controller
             ->first();
 
         $file = $resultat->file;
-
         if($request->hasFile('file')){
             $this->uploadFile($request,$resultat);
         }
 
-        if (!is_null($file))
+        if (!is_null($file) && $request->hasFile('file'))
             File::delete(public_path().'/storage/'.$file);
 
         return response()->json([

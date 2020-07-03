@@ -152,8 +152,8 @@ class ResultatImagerieController extends Controller
             $this->uploadFile($request,$resultat);
         }
 
-        if (!is_null($file))
-        File::delete(public_path().'/storage/'.$file);
+        if (!is_null($file) && $request->hasFile('file'))
+            File::delete(public_path().'/storage/'.$file);
 
         return response()->json([
             'resultat' => $resultat
