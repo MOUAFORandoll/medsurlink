@@ -76,4 +76,8 @@ class Suivi extends Model
     public function categorie(){
         return $this->belongsTo(Categories::class,'categorie_id','id');
     }
+
+    public function toDoList(){
+        return $this->morphMany(SuiviToDoList::class,'listable');
+    }
 }

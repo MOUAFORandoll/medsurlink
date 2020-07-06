@@ -56,7 +56,7 @@ class CategorieController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $categorie = Categories::with('suivis.dossier.patient.user')->whereSlug($slug)->first();
+        $categorie = Categories::with('suivis.dossier.patient.user','suivis.toDoList')->whereSlug($slug)->first();
 
         return response()->json(['categorie'=>$categorie]);
     }
@@ -85,7 +85,7 @@ class CategorieController extends Controller
 
         Categories::whereSlug($slug)->update($request->all());
 
-        $categorie = Categories::with('suivis.dossier.patient.user')->whereSlug($slug)->first();
+        $categorie = Categories::with('suivis.dossier.patient.user','suivis.toDoList')->whereSlug($slug)->first();
 
         return response()->json(['categorie'=>$categorie]);
     }
