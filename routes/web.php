@@ -27,6 +27,11 @@ Route::get('/public/storage/DossierMedicale/{fileNumber}/Consultation/{consultat
     return response()->file($path);
 });
 
+Route::get('/public/storage/DossierMedicale/{fileNumber}/ConsultationFichier/{consultation}/{image}', function ($fileNumber,$consultation,$image) {
+    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/ConsultationFichier/'.$consultation.'/'.$image;
+    return response()->file($path);
+});
+
 Route::get('/public/storage/DossierMedicale/{fileNumber}/ConsultationGenerale/{image}', function ($fileNumber,$image) {
     $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/ConsultationGenerale/'.$image;
     return response()->file($path);

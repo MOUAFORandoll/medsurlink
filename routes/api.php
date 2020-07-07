@@ -101,6 +101,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], funct
     Route::put('consultation-cardiologie/{slug}/reactiver','Api\CardiologieController@reactiver');
     Route::put('consultation-medecine/{id}/reactiver','Api\ConsultationMedecineGeneraleController@reactiver');
     Route::put('consultation-obstetrique/{id}/reactiver','Api\ConsultationObstetriqueController@reactiver');
+    Route::put('consultation-fichier/{id}/reactiver','Api\ConsultationFichierController@reactiver');
 
 
 });
@@ -205,6 +206,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
     Route::get('imprimer-consultation-medecine/{generale}','Api\ImprimerController@generale');
+//    Route::get('imprimer-consultation-fichier/{fichier}','Api\ImprimerController@manuscrit');
     Route::get('imprimer-consultation-cardiologie/{cardiologie}','Api\ImprimerController@cardiologie');
     Route::get('imprimer-rapport-hospitalisation/{hospitalisation}','Api\ImprimerController@hospitalisation');
     Route::get('affiliationRevue/{affiliation}','Api\AffiliationController@show');

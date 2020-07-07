@@ -25,7 +25,7 @@ class ConsultationFichierRequest extends FormRequest
     {
         return [
             "name"=>'required|string',
-            "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
+            "dossier_medical_id"=>"required|string|exists:dossier_medicals,slug",
             "etablissement_id"=>'required|integer|exists:etablissement_exercices,id',
             "user_id"=>"required|integer|exists:users,id",
         ];

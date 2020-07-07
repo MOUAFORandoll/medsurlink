@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ConsultationFichierRequest;
 use App\Models\ConsultationFichier;
+use App\Models\DossierMedical;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\ConfigurationUrlParser;
 
 class ConsultationFichierController extends Controller
 {
@@ -21,7 +23,9 @@ class ConsultationFichierController extends Controller
      */
     public function index()
     {
-        //
+        $consultations = ConsultationFichier::with(['dossier','etablissement','files'])->get();
+
+        return response()->json(['consultations'=>$consultations]);
     }
 
     /**
@@ -42,13 +46,14 @@ class ConsultationFichierController extends Controller
      */
     public function store(ConsultationFichierRequest $request)
     {
-        $consultation = ConsultationFichier::create($request->all());
+        $dossier = DossierMedical::whereSlug($request->dossier_medical_id)->first();
+        $consultation = ConsultationFichier::create($request->except('dossier_medical_id') + ['dossier_medical_id'=>$dossier->id]);
 
         if ($request->hasFile('documents')) {
             $this->uploadFile($request, $consultation);
         }
 
-        $consultation = ConsultationFichier::with(['dossier','etablissement','files'])->whereSlug($slug)->first();
+        $consultation = ConsultationFichier::with(['dossier','etablissement','files','praticien'])->whereSlug($consultation->slug)->first();
 
         return response()->json(["consultation" => $consultation]);
 
@@ -64,8 +69,8 @@ class ConsultationFichierController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $consultation = ConsultationFichier::with(['dossier','etablissement','files'])->whereSlug($slug)->first();
-
+        $consultation = ConsultationFichier::with(['dossier','etablissement','files','praticien'])->whereSlug($slug)->first();
+        $consultation->updateConsultation();
         return response()->json(['consultation'=>$consultation]);
     }
 
@@ -90,10 +95,12 @@ class ConsultationFichierController extends Controller
     public function update(ConsultationFichierRequest $request, $slug)
     {
         $this->validatedSlug($slug,$this->table);
+        $dossier = DossierMedical::whereSlug($request->dossier_medical_id)->first();
 
-        ConsultationFichier::whereSlug($slug)->update($request->all());
+        ConsultationFichier::whereSlug($slug)->update($request->except('dossier_medical_id') + ['dossier_medical_id'=>$dossier->id]);
 
-        $consultation = ConsultationFichier::with(['dossier','etablissement','files'])->whereSlug($slug)->first();
+        $consultation = ConsultationFichier::with(['dossier','etablissement','files','praticien'])->whereSlug($slug)->first();
+        $consultation->updateConsultation();
 
         return response()->json(['consultation'=>$consultation]);
 
@@ -116,17 +123,21 @@ class ConsultationFichierController extends Controller
             $consultation->delete();
         }
 
+        $consultation->updateConsultation();
         return response()->json(['consultation'=>$consultation]);
     }
 
     public function addFile(Request $request, $slug){
         $this->validatedSlug($slug, $this->table);
 
-        $consultation = ConsultationFichier::with(['dossier'])->whereSlug($slug)->first();
+        $consultation = ConsultationFichier::with(['dossier','etablissement','files','praticien'])->whereSlug($slug)->first();
 
         if ($request->hasFile('documents')) {
             $this->uploadFile($request, $consultation);
         }
+
+        $consultation->updateConsultation();
+        return response()->json(['consultation'=>$consultation]);
     }
 
     /**
@@ -141,7 +152,7 @@ class ConsultationFichierController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $resultat = ConsultationFichier::with(['dossier'])->whereSlug($slug)->first();
+        $resultat = ConsultationFichier::with(['dossier','etablissement','files','praticien'])->whereSlug($slug)->first();
 
         if (is_null($resultat->passed_at)){
             $this->revealNonTransmis();
@@ -149,7 +160,7 @@ class ConsultationFichierController extends Controller
         }else{
             $resultat->archieved_at = Carbon::now();
             $resultat->save();
-
+            $resultat->updateConsultation();
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -166,10 +177,10 @@ class ConsultationFichierController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $resultat = ConsultationFichier::with(['dossier'])->whereSlug($slug)->first();
+        $resultat = ConsultationFichier::with(['dossier','etablissement','files','praticien'])->whereSlug($slug)->first();
         $resultat->passed_at = Carbon::now();
         $resultat->save();
-
+        $resultat->updateConsultation();
         return response()->json(['resultat'=>$resultat]);
 
     }
@@ -178,10 +189,11 @@ class ConsultationFichierController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $resultat = ConsultationFichier::with(['dossier'])->whereSlug($slug)->first();
+        $resultat = ConsultationFichier::with(['dossier','etablissement','files','praticien'])->whereSlug($slug)->first();
         $resultat->passed_at = null;
         $resultat->archieved_at = null;
         $resultat->save();
+        $resultat->updateConsultation();
         return response()->json(['resultat'=>$resultat]);
 
     }
@@ -189,7 +201,7 @@ class ConsultationFichierController extends Controller
 
     public function uploadFile($request, $consultation){
         foreach ($request->documents as $document){
-            $path = $document->storeAs('public/DossierMedicale/' . $consultation->dossier->numero_dossier . '/ConsultationFichier' . $consultation->id,
+            $path = $document->storeAs('public/DossierMedicale/' . $consultation->dossier->numero_dossier . '/ConsultationFichier/' . $consultation->id,
                 $document->getClientOriginalName());
 
             $file = str_replace('public/','',$path);

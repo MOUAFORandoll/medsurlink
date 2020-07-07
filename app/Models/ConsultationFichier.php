@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
@@ -58,5 +59,15 @@ class ConsultationFichier extends Model
 
     public function files(){
         return $this->morphMany(File::class,'fileable');
+    }
+
+    public function praticien(){
+        return $this->belongsTo(User::class,'user_id','id');
+    }
+
+    public function updateConsultation(){
+        if(!is_null($this)){
+           $this['isAuthor'] = ($this->creator == Auth::id() );
+        }
     }
 }
