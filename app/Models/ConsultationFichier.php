@@ -19,6 +19,7 @@ class ConsultationFichier extends Model
         "name",
         "dossier_medical_id",
         "etablissement_id",
+        'date_consultation',
         "user_id",
         "slug",
         "creator",
@@ -68,6 +69,8 @@ class ConsultationFichier extends Model
     public function updateConsultation(){
         if(!is_null($this)){
            $this['isAuthor'] = ($this->creator == Auth::id() );
+           $user  = Auth::user();
+           $this['canUpdate'] = $user->getRoleNames()->first() == 'Medecin controle' || $this['isAuthor'];
         }
     }
 }

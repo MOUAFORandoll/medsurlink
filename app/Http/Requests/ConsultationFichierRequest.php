@@ -28,6 +28,7 @@ class ConsultationFichierRequest extends FormRequest
             "dossier_medical_id"=>"required|string|exists:dossier_medicals,slug",
             "etablissement_id"=>'required|integer|exists:etablissement_exercices,id',
             "user_id"=>"required|integer|exists:users,id",
+            "date_consultation"=>"required|date",
         ];
     }
 }

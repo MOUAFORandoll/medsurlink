@@ -121,7 +121,9 @@ class DossierMedicalController extends Controller
                 },
                 'resultatsImagerie',
                 'resultatsLabo',
-                'cardiologies'
+                'cardiologies',
+                     'consultationsManuscrites.praticien',
+                     'consultationsManuscrites.etablissement',
             ])->whereSlug($slug)->first();
 
             if (!is_null($dossier)) {

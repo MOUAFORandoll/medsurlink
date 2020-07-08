@@ -97,9 +97,14 @@ class ConsultationFichierController extends Controller
         $this->validatedSlug($slug,$this->table);
         $dossier = DossierMedical::whereSlug($request->dossier_medical_id)->first();
 
-        ConsultationFichier::whereSlug($slug)->update($request->except('dossier_medical_id') + ['dossier_medical_id'=>$dossier->id]);
+        ConsultationFichier::whereSlug($slug)->update($request->except('dossier_medical_id','documents') + ['dossier_medical_id'=>$dossier->id]);
 
         $consultation = ConsultationFichier::with(['dossier','etablissement','files','praticien'])->whereSlug($slug)->first();
+
+        if ($request->hasFile('documents')) {
+            $this->uploadFile($request, $consultation);
+        }
+
         $consultation->updateConsultation();
 
         return response()->json(['consultation'=>$consultation]);
