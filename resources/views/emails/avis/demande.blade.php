@@ -9,6 +9,8 @@ Nous aimerions avoir votre avis au sujet d'un-e patient-e.
 
 **Description** : {!! $avis->description !!}
 
+**Niveau d'urgence** : {!! $avis->code_urgence !!}
+
 <div class="div-logo-mail">
     <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
 </div>
