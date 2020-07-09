@@ -29,6 +29,7 @@ class AvisRequest extends FormRequest
             "objet"=>'required|string',
             "description"=>'required|string',
             "creer_lien"=>'required|string',
+            "code_urgence"=>'sometimes|nullable|string',
             "medecins.*"=>['sometimes','nullable','integer','exists:users,id',new isNotice]
         ];
     }
