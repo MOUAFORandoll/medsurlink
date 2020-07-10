@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\SuiviRequest;
+use App\Models\MedecinDeSuivi;
 use App\Models\SpecialiteSuivi;
 use App\Models\Suivi;
 use App\Models\SuiviToDoList;
@@ -77,7 +78,22 @@ class SuiviController extends Controller
                 }
             }
         }
-        $suivi = Suivi::with('toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')->find($suivi->id);
+
+        if ($request->has('praticiens')) {
+            $praticiens = $request->only('praticiens');
+            if (!is_null($praticiens)) {
+                if (gettype($praticiens['praticiens']) == 'array'){
+                    foreach ($praticiens['praticiens'] as $praticien) {
+                        if (!empty($praticien)) {
+                            //Création des suivis par spécialité
+                            MedecinDeSuivi::create(['user_id'=>$praticien['id'],'suivi_id'=>$suivi->id]);
+                        }
+                    }
+                }
+            }
+        }
+
+        $suivi = Suivi::with('praticiens','toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')->find($suivi->id);
 
         return  response()->json(['suivi'=>$suivi]);
     }
@@ -92,7 +108,7 @@ class SuiviController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $suivi = Suivi::with('toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')
+        $suivi = Suivi::with('praticiens','toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')
             ->whereSlug($slug)->first();
 
         return  response()->json(['suivi'=>$suivi]);
@@ -125,8 +141,35 @@ class SuiviController extends Controller
 
         Suivi::whereSlug($slug)->update($request->only("dossier_medical_id", "responsable", "motifs", "etat","categorie_id"));
 
-        $suivi = Suivi::whereSlug($slug)->first();
+        $suivi = Suivi::with('praticiens')->whereSlug($slug)->first();
+        $nouveauPraticiens = [];
+        if ($request->has('praticiens')) {
+            $praticiens = $request->only('praticiens');
+            if (!is_null($praticiens)) {
+                if (gettype($praticiens['praticiens']) == 'array'){
+                    foreach ($praticiens['praticiens'] as $praticien){
+                        array_push($nouveauPraticiens,$praticien['id']);
+                    }
+                    foreach ( $suivi->praticiens as $praticien) {
+                        if (!in_array($praticien->user_id,$nouveauPraticiens)){
+                            $medecin = MedecinDeSuivi::whereId($praticien->id)->first();
+                            $medecin->delete();
+                        }
+                    }
 
+                    foreach ($praticiens['praticiens'] as $praticien) {
+                        if (!empty($praticien)) {
+                            if (!in_array($praticien['id'],(($suivi->praticiens)->pluck('user_id'))->toArray())){
+                                 MedecinDeSuivi::create(['user_id'=>$praticien['id'],'suivi_id'=>$suivi->id]);
+                             }
+                        }
+                    }
+
+                }
+            }
+        }
+
+        $suivi = Suivi::with('praticiens','toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')->find($suivi->id);
         return  response()->json(['suivi'=>$suivi]);
 
 

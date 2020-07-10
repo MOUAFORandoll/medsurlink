@@ -80,4 +80,8 @@ class Suivi extends Model
     public function toDoList(){
         return $this->morphMany(SuiviToDoList::class,'listable');
     }
+
+    public function praticiens(){
+        return $this->hasMany(MedecinDeSuivi::class,'suivi_id','id');
+    }
 }
