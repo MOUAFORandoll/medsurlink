@@ -38,6 +38,8 @@ class SuiviRequest extends FormRequest
             "toDoList.*.intitule"=>"required|nullable|string",
             "toDoList.*.description"=>"sometimes|nullable|string",
             "toDoList.*.statut"=>"sometimes|nullable|integer|exists:users,id",
+            "praticiens.*.id"=>['sometimes','nullable','integer','exists:users,id'],
+
         ];
     }
 }

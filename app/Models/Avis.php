@@ -22,6 +22,7 @@ class Avis extends Model
         "slug",
         "creer_lien",
         "creator",
+        "code_urgence",
     ];
 
     protected $hidden = [

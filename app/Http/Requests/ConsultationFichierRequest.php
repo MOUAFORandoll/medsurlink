@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\isNotice;
 use Illuminate\Foundation\Http\FormRequest;
 
-class AvisRequest extends FormRequest
+class ConsultationFichierRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,12 +24,11 @@ class AvisRequest extends FormRequest
     public function rules()
     {
         return [
-            "dossier_medical_id"=>['required','integer','exists:dossier_medicals,id'],
-            "objet"=>'required|string',
-            "description"=>'required|string',
-            "creer_lien"=>'required|string',
-            "code_urgence"=>'sometimes|nullable|string',
-            "medecins.*"=>['sometimes','nullable','integer','exists:users,id',new isNotice]
+            "name"=>'required|string',
+            "dossier_medical_id"=>"required|string|exists:dossier_medicals,slug",
+            "etablissement_id"=>'required|integer|exists:etablissement_exercices,id',
+            "user_id"=>"required|integer|exists:users,id",
+            "date_consultation"=>"required|date",
         ];
     }
 }

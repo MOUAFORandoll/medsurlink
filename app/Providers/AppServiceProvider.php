@@ -8,6 +8,7 @@ use App\Models\Allergie;
 use App\Models\Antecedent;
 use App\Models\Cardiologie;
 use App\Models\Conclusion;
+use App\Models\ConsultationFichier;
 use App\Models\DossierAllergie;
 use App\Models\ConsultationExamenClinique;
 use App\Models\ConsultationExamenComplementaire;
@@ -119,7 +120,8 @@ class AppServiceProvider extends ServiceProvider
             'Souscripteur'=>Souscripteur::class,
             'Specialite'=>Specialite::class,
             'Traitement'=>Traitement::class,
-            'Suivi'=>Suivi::class
+            'Suivi'=>Suivi::class,
+            'ConsultationFichier'=>ConsultationFichier::class
         ]);
     }
 }

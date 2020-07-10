@@ -74,9 +74,11 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
 //    Définition des routes accéssible par le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle']], function () {
     Route::put('resultat-labo/{id}/transmettre','Api\ResultatLaboController@transmit');
-    Route::put('resultat-imagerie/{id}/transmettre','Api\ResultatImagerieController@transmit');
+    Route::put('resultat-labo/{id}/transmettre','Api\ResultatLaboController@transmit');
+    Route::put('consultation-fichier/{id}/transmettre','Api\ConsultationFichierController@transmettre');
     Route::put('consultation-medecine/{id}/transmettre','Api\ConsultationMedecineGeneraleController@transmettre');
    Route::post('consultation-medecine/{slug}','Api\ConsultationMedecineGeneraleController@update');
+   Route::post('consultation-fichier/{slug}','Api\ConsultationFichierController@update');
     Route::post('consultation-cardiologie/{slug}','Api\CardiologieController@update');
     Route::put('consultation-cardiologie/{slug}/transmettre','Api\CardiologieController@transmettre');
     Route::put('consultation-obstetrique/{id}/transmettre','Api\ConsultationObstetriqueController@transmettre');
@@ -89,6 +91,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
 //    Définition des routes accéssible par le medecin controle
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], function () {
     Route::put('resultat-labo/{resultat}/archiver','Api\ResultatLaboController@archive');
+    Route::put('consultation-fichier/{resultat}/archiver','Api\ConsultationFichierController@archiver');
     Route::put('hospitalisation/{hospitalisation}/archiver','Api\HospitalisationController@archiver');
     Route::put('resultat-imagerie/{resultat}/archiver','Api\ResultatImagerieController@archive');
     Route::put('consultation-medecine/{consultation_medecine}/archiver','Api\ConsultationMedecineGeneraleController@archiver');
@@ -99,6 +102,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], funct
     Route::put('consultation-cardiologie/{slug}/reactiver','Api\CardiologieController@reactiver');
     Route::put('consultation-medecine/{id}/reactiver','Api\ConsultationMedecineGeneraleController@reactiver');
     Route::put('consultation-obstetrique/{id}/reactiver','Api\ConsultationObstetriqueController@reactiver');
+    Route::put('consultation-fichier/{id}/reactiver','Api\ConsultationFichierController@reactiver');
 
 
 });
@@ -139,6 +143,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('parametre-obstetrique','Api\ParametreObstetriqueController')->except(['create','edit']);
     Route::resource('echographie','Api\EchographieController')->except(['create','edit']);
     Route::resource('hospitalisation','Api\HospitalisationController')->except(['create','edit']);
+    Route::resource('consultation-fichier','Api\ConsultationFichierController')->except('create','edit');
 
     Route::post('consultation-medecine-motif/retirer-motif','Api\ConsultationMotifController@removeMotif');
     Route::post('consultation-medecine-motif/ajouter-motif','Api\ConsultationMotifController@ajouterMotif');
@@ -190,6 +195,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('parametre-obstetrique','Api\ParametreObstetriqueController')->except('store','update','destroy');
     Route::resource('echographie','Api\EchographieController')->except('store','update','destroy');
     Route::resource('hospitalisation','Api\HospitalisationController')->except('store','update','destroy');
+    Route::resource('consultation-fichier','Api\ConsultationFichierController')->except('store','update','destroy');
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {
@@ -201,6 +207,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
     Route::get('imprimer-consultation-medecine/{generale}','Api\ImprimerController@generale');
+//    Route::get('imprimer-consultation-fichier/{fichier}','Api\ImprimerController@manuscrit');
     Route::get('imprimer-consultation-cardiologie/{cardiologie}','Api\ImprimerController@cardiologie');
     Route::get('imprimer-rapport-hospitalisation/{hospitalisation}','Api\ImprimerController@hospitalisation');
     Route::get('affiliationRevue/{affiliation}','Api\AffiliationController@show');
