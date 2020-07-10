@@ -24,7 +24,7 @@ class SuiviController extends Controller
      */
     public function index()
     {
-        $suivis = Suivi::with('toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')->get();
+        $suivis = Suivi::with('praticiens','toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')->get();
 
         return  response()->json(['suivis'=>$suivis]);
 
