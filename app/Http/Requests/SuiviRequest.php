@@ -27,7 +27,7 @@ class SuiviRequest extends FormRequest
     {
         return [
             "dossier_medical_id"=>['required','integer','exists:dossier_medicals,id',new IsMedicasure],
-            "responsable"=>"sometimes|nullable|integer|exists:users,id",
+//            "responsable"=>"sometimes|nullable|integer|exists:users,id",
             "motifs"=>"sometimes|nullable|string",
             "etat"=>"sometimes|nullable|string",
             "categorie_id"=>'sometimes|nullable|integer|exists:categories,id',
@@ -38,7 +38,7 @@ class SuiviRequest extends FormRequest
             "toDoList.*.intitule"=>"required|nullable|string",
             "toDoList.*.description"=>"sometimes|nullable|string",
             "toDoList.*.statut"=>"sometimes|nullable|integer|exists:users,id",
-            "praticiens.*.id"=>['sometimes','nullable','integer','exists:users,id'],
+            "responsable.*.id"=>['sometimes','nullable','integer','exists:users,id'],
 
         ];
     }

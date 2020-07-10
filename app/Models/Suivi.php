@@ -17,7 +17,7 @@ class Suivi extends Model
 
     protected $fillable = [
         "dossier_medical_id",
-        "responsable",
+//        "responsable",
         "motifs",
         "slug",
         "etat",
@@ -65,9 +65,9 @@ class Suivi extends Model
         return $this->belongsTo(User::class,'creator','id');
     }
 
-    public function responsable(){
-        return $this->belongsTo(User::class,'responsable','id');
-    }
+//    public function responsable(){
+//        return $this->belongsTo(User::class,'responsable','id');
+//    }
 
     public function specialites(){
         return $this->hasMany(SpecialiteSuivi::class,'suivi_id','id');
@@ -81,7 +81,7 @@ class Suivi extends Model
         return $this->morphMany(SuiviToDoList::class,'listable');
     }
 
-    public function praticiens(){
+    public function responsable(){
         return $this->hasMany(MedecinDeSuivi::class,'suivi_id','id');
     }
 }

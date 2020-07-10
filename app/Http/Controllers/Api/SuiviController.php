@@ -24,7 +24,7 @@ class SuiviController extends Controller
      */
     public function index()
     {
-        $suivis = Suivi::with('praticiens','toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')->get();
+        $suivis = Suivi::with('toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')->get();
 
         return  response()->json(['suivis'=>$suivis]);
 
@@ -79,11 +79,11 @@ class SuiviController extends Controller
             }
         }
 
-        if ($request->has('praticiens')) {
-            $praticiens = $request->only('praticiens');
+        if ($request->has('responsable')) {
+            $praticiens = $request->only('responsable');
             if (!is_null($praticiens)) {
-                if (gettype($praticiens['praticiens']) == 'array'){
-                    foreach ($praticiens['praticiens'] as $praticien) {
+                if (gettype($praticiens['responsable']) == 'array'){
+                    foreach ($praticiens['responsable'] as $praticien) {
                         if (!empty($praticien)) {
                             //Création des suivis par spécialité
                             MedecinDeSuivi::create(['user_id'=>$praticien['id'],'suivi_id'=>$suivi->id]);
@@ -93,7 +93,7 @@ class SuiviController extends Controller
             }
         }
 
-        $suivi = Suivi::with('praticiens','toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')->find($suivi->id);
+        $suivi = Suivi::with('toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')->find($suivi->id);
 
         return  response()->json(['suivi'=>$suivi]);
     }
@@ -108,7 +108,7 @@ class SuiviController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $suivi = Suivi::with('praticiens','toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')
+        $suivi = Suivi::with('toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')
             ->whereSlug($slug)->first();
 
         return  response()->json(['suivi'=>$suivi]);
@@ -139,27 +139,30 @@ class SuiviController extends Controller
 //        Ici on modifit uniquement le suivi principal, si on désire modifie le suivi d'une spécialité on modifiera
 //        ce suivi là à part
 
-        Suivi::whereSlug($slug)->update($request->only("dossier_medical_id", "responsable", "motifs", "etat","categorie_id"));
+        Suivi::whereSlug($slug)->update($request->only("dossier_medical_id", "motifs", "etat","categorie_id"));
 
-        $suivi = Suivi::with('praticiens')->whereSlug($slug)->first();
+        $suivi = Suivi::with('responsable')->whereSlug($slug)->first();
         $nouveauPraticiens = [];
-        if ($request->has('praticiens')) {
-            $praticiens = $request->only('praticiens');
+        if ($request->has('responsable')) {
+            $praticiens = $request->only('responsable');
             if (!is_null($praticiens)) {
-                if (gettype($praticiens['praticiens']) == 'array'){
-                    foreach ($praticiens['praticiens'] as $praticien){
+                if (gettype($praticiens['responsable']) == 'array'){
+                    foreach ($praticiens['responsable'] as $praticien){
                         array_push($nouveauPraticiens,$praticien['id']);
                     }
-                    foreach ( $suivi->praticiens as $praticien) {
+
+
+                    foreach ( $suivi->responsable as $praticien) {
                         if (!in_array($praticien->user_id,$nouveauPraticiens)){
                             $medecin = MedecinDeSuivi::whereId($praticien->id)->first();
                             $medecin->delete();
                         }
                     }
 
-                    foreach ($praticiens['praticiens'] as $praticien) {
+
+                    foreach ($praticiens['responsable'] as $praticien) {
                         if (!empty($praticien)) {
-                            if (!in_array($praticien['id'],(($suivi->praticiens)->pluck('user_id'))->toArray())){
+                            if (!in_array($praticien['id'],(($suivi->responsable)->pluck('user_id'))->toArray())){
                                  MedecinDeSuivi::create(['user_id'=>$praticien['id'],'suivi_id'=>$suivi->id]);
                              }
                         }
@@ -169,7 +172,7 @@ class SuiviController extends Controller
             }
         }
 
-        $suivi = Suivi::with('praticiens','toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')->find($suivi->id);
+        $suivi = Suivi::with('toDoList','categorie','dossier.patient.user','responsable','specialites.specialite')->find($suivi->id);
         return  response()->json(['suivi'=>$suivi]);
 
 
