@@ -463,6 +463,8 @@ class CardiologieController extends Controller
                         "taille"=>$request->get('taille') == 'null' ? 0 :$request->get('taille'),
                         "ta_systolique"=>$request->get('ta_systolique') == 'null' ? 0 :$request->get('ta_systolique'),
                         "ta_diastolique"=>$request->get('ta_diastolique') == 'null' ? 0 :$request->get('ta_diastolique'),
+                        "ta_systolique_d"=>$request->get('ta_systolique_d') == 'null' ? 0 :$request->get('ta_systolique_d'),
+                        "ta_diastolique_d"=>$request->get('ta_diastolique_d') == 'null' ? 0 :$request->get('ta_diastolique_d'),
                         "temperature"=>$request->get('temperature') == 'null' ? 0 :$request->get('temperature'),
                         "frequence_cardiaque"=>$request->get('frequence_cardiaque') == 'null' ? 0 :$request->get('frequence_cardiaque'),
                         "frequence_respiratoire"=>$request->get('frequence_respiratoire') == 'null' ? 0 :$request->get('frequence_respiratoire'),
@@ -479,6 +481,8 @@ class CardiologieController extends Controller
                         "bmi",
                         "ta_systolique",
                         "ta_diastolique",
+                        "ta_systolique_d",
+                        "ta_diastolique_d",
                         "temperature",
                         "frequence_cardiaque",
                         "frequence_respiratoire",
@@ -619,7 +623,7 @@ class CardiologieController extends Controller
             ->first();
         if (is_null($rdv)) {
 //            si cela n'existe pas et que on a spécifié la date de rendez vous on crée
-            if (!is_null($dateRdv)) {
+            if (!is_null($dateRdv) && $dateRdv != 'Invalid date') {
                 if (strlen($dateRdv) > 0 && $dateRdv != 'null') {
 
                     RendezVous::create([
