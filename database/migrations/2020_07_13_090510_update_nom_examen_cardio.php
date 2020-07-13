@@ -14,8 +14,7 @@ class UpdateNomExamenCardio extends Migration
     public function up()
     {
         Schema::table('examen_cardios', function (Blueprint $table) {
-            DB::statement("ALTER TABLE examen_cardios MODIFY COLUMN nom ENUM('Épreuves d\'effort','Echographie trans-œsophagienne','Echographie trans-thoracique','RX Thorax','Echographie','MAPA','Holter','Tilt Test','Biologie') NULL ");
-
+            DB::statement("ALTER TABLE `examen_cardios` CHANGE `nom` `nom` ENUM('Épreuves d\'effort','Echographie trans-œsophagienne','Echographie trans-thoracique','RX Thorax','Echographie','MAPA','Holter','Tilt Test','Biologie','Echographie trans-œsophagienne') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL");
         });
     }
 
@@ -27,7 +26,8 @@ class UpdateNomExamenCardio extends Migration
     public function down()
     {
         Schema::table('examen_cardios', function (Blueprint $table) {
-            //
+            DB::statement("ALTER TABLE `examen_cardios` CHANGE `nom` `nom` ENUM('ECG','RX Thorax','Echographie','MAPA','Holter','Tilt Test','Biologie','Echographie trans-œsophagienne') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL");
+
         });
     }
 }
