@@ -27,7 +27,7 @@ class AddTaDiastoliqueSystoliqueToParametreCommuns extends Migration
     public function down()
     {
         Schema::table('parametre_communs', function (Blueprint $table) {
-            $table->dropColumn('ta_systolique','ta_diastolique');
+            $table->dropColumn('ta_systolique_d','ta_diastolique_d');
         });
     }
 }
