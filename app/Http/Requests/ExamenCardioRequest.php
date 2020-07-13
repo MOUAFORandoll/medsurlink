@@ -24,7 +24,7 @@ class ExamenCardioRequest extends FormRequest
     public function rules()
     {
         $rules =  [
-            'nom'=>"required|string|max:20",
+            'nom'=>"required|string",
             "date_examen"=>'required|date',
             "description"=>"required|string|max:255",
         ];

@@ -59,7 +59,7 @@ class CardiologieController extends Controller
     {
 //        $this->verificationDeSpecialite();
 
-        $cardiologie = Cardiologie::create($request->except('contributeurs', 'examen_cardio','motifRdv'));
+        $cardiologie = Cardiologie::create($request->except('contributeurs', 'examen_cardio','motifRdv','rendez_vous'));
         $cardiologie->creator = Auth::id();
         $cardiologie->save();
 
@@ -69,10 +69,13 @@ class CardiologieController extends Controller
         $motifRdv = $request->get('motifRdv');
         $dateRdv = $request->get('rendez_vous');
         if (!is_null($dateRdv) ){
-            if (strlen($dateRdv) >0 && $dateRdv != 'null' ){
+            if (strlen($dateRdv) >0 && $dateRdv != 'null' && $dateRdv !='Invalid date'){
                 if ($motifRdv == 'null'){
                     $motifRdv = 'Rendez vous de la consultation de cardiologie du '.$request->get('date_consultation');
                 }
+                $cardiologie->rendez_vous = $dateRdv;
+                $cardiologie->save();
+
                 RendezVous::create([
                     "sourceable_id"=>$cardiologie->id,
                     "sourceable_type"=>'Cardiologie',
@@ -202,7 +205,8 @@ class CardiologieController extends Controller
                 "slug",
                 "nbreCigarette",
                 "nbreAnnee"
-            )+["rendez_vous"=>$request->get('rendez_vous') == 'null' ? null :$request->get('rendez_vous')]
+            )+["rendez_vous"=>$request->get('rendez_vous') == 'null' || $request->get('rendez_vous') == 'Invalid date'
+                ? null :$request->get('rendez_vous')]
         );
         $cardiologie = Cardiologie::whereSlug($slug)->first();
         defineAsAuthor("Cardiologie", $cardiologie->id, 'update', $cardiologie->dossier->patient->user_id);
@@ -459,6 +463,8 @@ class CardiologieController extends Controller
                         "taille"=>$request->get('taille') == 'null' ? 0 :$request->get('taille'),
                         "ta_systolique"=>$request->get('ta_systolique') == 'null' ? 0 :$request->get('ta_systolique'),
                         "ta_diastolique"=>$request->get('ta_diastolique') == 'null' ? 0 :$request->get('ta_diastolique'),
+                        "ta_systolique_d"=>$request->get('ta_systolique_d') == 'null' ? 0 :$request->get('ta_systolique_d'),
+                        "ta_diastolique_d"=>$request->get('ta_diastolique_d') == 'null' ? 0 :$request->get('ta_diastolique_d'),
                         "temperature"=>$request->get('temperature') == 'null' ? 0 :$request->get('temperature'),
                         "frequence_cardiaque"=>$request->get('frequence_cardiaque') == 'null' ? 0 :$request->get('frequence_cardiaque'),
                         "frequence_respiratoire"=>$request->get('frequence_respiratoire') == 'null' ? 0 :$request->get('frequence_respiratoire'),
@@ -475,6 +481,8 @@ class CardiologieController extends Controller
                         "bmi",
                         "ta_systolique",
                         "ta_diastolique",
+                        "ta_systolique_d",
+                        "ta_diastolique_d",
                         "temperature",
                         "frequence_cardiaque",
                         "frequence_respiratoire",
@@ -615,7 +623,7 @@ class CardiologieController extends Controller
             ->first();
         if (is_null($rdv)) {
 //            si cela n'existe pas et que on a spécifié la date de rendez vous on crée
-            if (!is_null($dateRdv)) {
+            if (!is_null($dateRdv) && $dateRdv != 'Invalid date') {
                 if (strlen($dateRdv) > 0 && $dateRdv != 'null') {
 
                     RendezVous::create([
