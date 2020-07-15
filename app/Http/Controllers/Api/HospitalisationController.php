@@ -52,7 +52,7 @@ class HospitalisationController extends Controller
      */
     public function store(HospitalisationRequest $request)
     {
-        $hospitalisation = Hospitalisation::create($request->except('motifRdv'));
+        $hospitalisation = Hospitalisation::create($request->except('motifRdv','rendez_vous'));
         $hospitalisation->creator = Auth::id();
         $hospitalisation->save();
         defineAsAuthor("Hospitalisation",$hospitalisation->id,'create',$hospitalisation->dossier->patient->user_id);
@@ -61,7 +61,7 @@ class HospitalisationController extends Controller
         $motifRdv = $request->get('motifRdv');
         $dateRdv = $request->get('rendez_vous');
         if (!is_null($dateRdv) ){
-            if (strlen($dateRdv) >0 && $dateRdv != 'null' ){
+            if (strlen($dateRdv) >0 && $dateRdv != 'null'  && $dateRdv !='Invalid date'){
                 if (is_null($motifRdv) ){
                     $motifRdv = 'Rendez vous de l\'hospitalisation du '.$request->get('date_entree');
                 }
@@ -184,7 +184,7 @@ class HospitalisationController extends Controller
 
         $this->checkIfAuthorized("Hospitalisation",$hospitalisation->id,"create");
 
-        Hospitalisation::whereSlug($slug)->update($request->except('motifs','hospitalisation','motifRdv'));
+        Hospitalisation::whereSlug($slug)->update($request->except('motifs','hospitalisation','motifRdv','rendez_vous'));
 
         $hospitalisation = Hospitalisation::with([
             'dossier',
@@ -213,7 +213,7 @@ class HospitalisationController extends Controller
             ->first();
         if (is_null($rdv)) {
             if (!is_null($dateRdv)) {
-                if (strlen($dateRdv) > 0 && $dateRdv != 'null') {
+                if (strlen($dateRdv) > 0 && $dateRdv != 'null'  && $dateRdv!='Invalid date') {
                     if (is_null($motifRdv)) {
                         $motifRdv = 'Rendez vous de l\'hospitalisation du ' . $request->get('date_entree');
                     }
