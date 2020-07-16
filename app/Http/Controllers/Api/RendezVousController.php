@@ -61,7 +61,7 @@ class RendezVousController extends Controller
                     ->where('praticien_id','<>',$userId)
                     ->get();
                 $rdvsApres = $rdvsApres + $rdvDesAutres->where('date','>=',$dateApres)->all();
-                $rdvsAvant = $rdvsAvant + $rdvDesAutres->where('date','>=',$dateAvant)->all();
+                $rdvsAvant = $rdvsAvant + $rdvDesAutres->where('date','<',$dateAvant)->all();
             }
         }
         $rdvs = $rdvsAvant+$rdvsApres;
