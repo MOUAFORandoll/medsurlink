@@ -422,7 +422,7 @@ class CardiologieController extends Controller
                 ActionMotif::create([
                     "actionable_type" => "Cardiologie",
                     "actionable_id" => $cardiologie->id,
-                    "motif_id" => $motif
+                    "motif_id" => $motif->id
                 ]);
 
                 defineAsAuthor("CardiologieMotif", $cardiologie->id, 'attach and update', $cardiologie->dossier->patient->user_id);
