@@ -172,7 +172,7 @@ class RendezVousController extends Controller
             RendezVous::whereSlug($slug)->update($request->except('praticien_id') + ['praticien_id'=>$praticienId,'initiateur'=>Auth::id()]);
         }else{
             if ($praticien != ""){
-                RendezVous::whereSlug($slug)->update($request->except('praticien_id') + ['nom_medecin'=>$praticien,'initiateur'=>Auth::id()]);
+                RendezVous::whereSlug($slug)->update($request->except('praticien_id') + ['praticien_id'=>null,'nom_medecin'=>$praticien,'initiateur'=>Auth::id()]);
             }
         }
 
