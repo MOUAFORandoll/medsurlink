@@ -124,11 +124,8 @@ class ConsultationFichierController extends Controller
 
         $consultation = ConsultationFichier::with(['dossier'])->whereSlug($slug)->first();
 
-        if (!$consultation){
             $consultation->delete();
-        }
-
-        $consultation->updateConsultation();
+//        $consultation->updateConsultation();
         return response()->json(['consultation'=>$consultation]);
     }
 
