@@ -47,7 +47,31 @@ class ConsultationFichierController extends Controller
     public function store(ConsultationFichierRequest $request)
     {
         $dossier = DossierMedical::whereSlug($request->dossier_medical_id)->first();
-        $consultation = ConsultationFichier::create($request->except('dossier_medical_id') + ['dossier_medical_id'=>$dossier->id]);
+
+        $user_id = $request->user_id;
+        $name = $request->name;
+
+        if (is_null($name) || $name=='null'){
+            $consultation_externe = $request->consultation_externe;
+        }else{
+            $consultation_externe = '';
+        }
+
+        if (is_null($user_id) || $user_id == 'null'){
+            $praticien_externe = $request->praticien_externe;
+        }else{
+            $praticien_externe = '';
+        }
+
+        $consultation = ConsultationFichier::create(
+            $request->except('dossier_medical_id','documents','user_id','praticien_externe','name','consultation_externe')
+            + [
+                'dossier_medical_id'=>$dossier->id,
+                'user_id'=>$user_id,
+                'praticien_externe'=>$praticien_externe,
+                'name'=>$name,
+                'consultation_externe'=>$consultation_externe
+            ]);
 
         if ($request->hasFile('documents')) {
             $this->uploadFile($request, $consultation);
@@ -97,7 +121,30 @@ class ConsultationFichierController extends Controller
         $this->validatedSlug($slug,$this->table);
         $dossier = DossierMedical::whereSlug($request->dossier_medical_id)->first();
 
-        ConsultationFichier::whereSlug($slug)->update($request->except('dossier_medical_id','documents') + ['dossier_medical_id'=>$dossier->id]);
+        $user_id = $request->user_id;
+        $name = $request->name;
+
+        if (is_null($name) && $name == 'null'){
+            $consultation_externe = $request->consultation_externe;
+        }else{
+            $consultation_externe = '';
+        }
+
+        if (is_null($user_id) && $user_id == 'null'){
+            $praticien_externe = $request->praticien_externe;
+        }else{
+            $praticien_externe = '';
+        }
+
+        ConsultationFichier::whereSlug($slug)->update(
+            $request->except('dossier_medical_id','documents','user_id','praticien_externe','name','consultation_externe')
+            + [
+                'dossier_medical_id'=>$dossier->id,
+                'user_id'=>$user_id,
+                'praticien_externe'=>$praticien_externe,
+                'name'=>$name,
+                'consultation_externe'=>$consultation_externe
+            ]);
 
         $consultation = ConsultationFichier::with(['dossier','etablissement','files','praticien'])->whereSlug($slug)->first();
 
@@ -124,7 +171,7 @@ class ConsultationFichierController extends Controller
 
         $consultation = ConsultationFichier::with(['dossier'])->whereSlug($slug)->first();
 
-            $consultation->delete();
+        $consultation->delete();
 //        $consultation->updateConsultation();
         return response()->json(['consultation'=>$consultation]);
     }
