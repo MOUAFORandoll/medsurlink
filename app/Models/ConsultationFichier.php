@@ -25,6 +25,8 @@ class ConsultationFichier extends Model
         "creator",
         "passed_at",
         "archieved_at",
+        'praticien_externe',
+        'consultation_externe'
     ];
 
     protected $hidden = ['creator','created_at','updated_at','deleted_at'];

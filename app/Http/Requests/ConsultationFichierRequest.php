@@ -24,11 +24,13 @@ class ConsultationFichierRequest extends FormRequest
     public function rules()
     {
         return [
-            "name"=>'required|string',
+            "name"=>'sometimes|nullable|string',
             "dossier_medical_id"=>"required|string|exists:dossier_medicals,slug",
             "etablissement_id"=>'required|integer|exists:etablissement_exercices,id',
-            "user_id"=>"required|integer|exists:users,id",
+            "user_id"=>"sometimes|nullable",
             "date_consultation"=>"required|date",
+            "praticien_externe"=>'sometimes|nullable|string',
+            "consultation_externe"=>'sometimes|nullable|string'
         ];
     }
 }
