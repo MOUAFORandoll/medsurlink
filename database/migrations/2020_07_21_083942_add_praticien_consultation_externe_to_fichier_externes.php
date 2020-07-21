@@ -18,7 +18,7 @@ class AddPraticienConsultationExterneToFichierExternes extends Migration
             $table->string('consultation_externe')->nullable();
             $table->dropIndex('consultation_fichiers_user_id_foreign');
             $table->dropForeign('consultation_fichiers_user_id_foreign');
-            $table->string('user_id')->nullable()->change();
+            $table->unsignedBigInteger('user_id')->nullable()->change();
         });
     }
 
