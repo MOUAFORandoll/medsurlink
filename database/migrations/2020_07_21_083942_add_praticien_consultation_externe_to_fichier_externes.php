@@ -16,9 +16,9 @@ class AddPraticienConsultationExterneToFichierExternes extends Migration
         Schema::table('consultation_fichiers', function (Blueprint $table) {
             $table->string('praticien_externe')->nullable();
             $table->string('consultation_externe')->nullable();
-            $table->dropIndex('consultation_fichiers_user_id_index');
-            $table->dropForeign('consultation_fichiers_user_id_foreign');
-            $table->string('user_id')->change();
+            $table->dropIndex('user_id');
+            $table->dropForeign('user_id');
+            $table->string('user_id')->nullable()->change();
         });
     }
 
