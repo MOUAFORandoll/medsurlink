@@ -27,7 +27,9 @@ Route::get('question','Api\QuestionController@index');
 //Route::resource('avis','Api\AvisController');
 //Route::post('avisMedecin/{slug}','Api\AvisMedecinController@store');
 //Route::resource('suivi','Api\SuiviController');
-
+Route::resource('comptable','Api\ComptableController');
+Route::resource('categorie-prestation','Api\CategoriePrestationController');
+Route::resource('prestation','Api\PrestationController');
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/countries', function () {
