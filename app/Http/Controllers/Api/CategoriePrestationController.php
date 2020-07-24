@@ -82,7 +82,7 @@ class CategoriePrestationController extends Controller
     public function update(CategoriePrestationRequest $request, $slug)
     {
         $this->validatedSlug($slug,$this->table);
-        CategoriePrestation::whereSlug($slug)->update($request->all());
+        CategoriePrestation::whereSlug($slug)->update($request->validated());
         $categorie = CategoriePrestation::with('prestations')->whereSlug($slug)->first();
         return  response()->json(['categorie'=>$categorie]);
     }

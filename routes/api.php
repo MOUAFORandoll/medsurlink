@@ -28,7 +28,6 @@ Route::get('question','Api\QuestionController@index');
 //Route::post('avisMedecin/{slug}','Api\AvisMedecinController@store');
 //Route::resource('suivi','Api\SuiviController');
 Route::resource('comptable','Api\ComptableController');
-Route::resource('categorie-prestation','Api\CategoriePrestationController');
 Route::resource('prestation','Api\PrestationController');
 
 Route::middleware(['auth:api'])->group(function () {
@@ -220,8 +219,10 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('user-etablissements', 'Api\EtablissementExerciceController@userEtablissements');
     Route::post('update-password','Api\UserController@updatePassword');
 });
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {
 
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin controle']], function () {
+
+    Route::resource('categorie-prestation','Api\CategoriePrestationController');
 
 });
 

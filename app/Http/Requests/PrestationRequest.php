@@ -26,7 +26,8 @@ class PrestationRequest extends FormRequest
         return [
             'nom'=>'required|string',
             'prix'=>'sometimes|nullable|numeric',
-            'categorie_id'=>'sometimes|nullable|integer|exists:categorie_prestations,id'
+            'categorie_id'=>'sometimes|nullable|integer|exists:categorie_prestations,id',
+            'new_categorie'=>'sometimes|nullable|string'
         ];
     }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CategoriePrestationRequest extends FormRequest
+class EtablissementPrestationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,10 @@ class CategoriePrestationRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom'=>'required|string|unique:categorie_prestations,nom',
+            'etablissement_id'=>'required|exists:etablissement_exercices,id',
+            'prestation_id'=>'required|exists:prestations,id',
+            'prix'=>'required|numeric',
+            'reduction'=>'sometimes|nullable|string',
         ];
     }
 }
