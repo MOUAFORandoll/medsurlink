@@ -24,7 +24,7 @@ class PrestationRequest extends FormRequest
     public function rules()
     {
         return [
-            'nom'=>'required|string',
+            'nom'=>'required|string|unique:prestations,nom',
             'prix'=>'sometimes|nullable|numeric',
             'categorie_id'=>'sometimes|nullable|integer|exists:categorie_prestations,id',
             'new_categorie'=>'sometimes|nullable|string'

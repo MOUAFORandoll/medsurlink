@@ -14,6 +14,7 @@ class EtablissementPrestation extends Model
     use Sluggable;
     use SoftDeletes;
 
+    protected $table = 'etablissement_prestation';
     protected $fillable = [
         'etablissement_id',
         'prestation_id',

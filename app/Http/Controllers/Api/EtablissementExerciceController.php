@@ -32,7 +32,7 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::with(['praticiens','patients.dossier','patients.user','patients.financeurs'])->get();
+        $etablissements =  EtablissementExercice::with(['praticiens','patients.dossier','patients.user','patients.financeurs','prestations'])->get();
         return response()->json(['etablissements'=>$etablissements]);
 
 
@@ -89,7 +89,7 @@ class EtablissementExerciceController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $etablissement = EtablissementExercice::with(['praticiens','patients.dossier','patients.user'])->whereSlug($slug)->first();
+        $etablissement = EtablissementExercice::with(['praticiens','patients.dossier','patients.user','prestations.prestation'])->whereSlug($slug)->first();
 
         return response()->json(['etablissement'=>$etablissement]);
 
@@ -192,7 +192,7 @@ class EtablissementExerciceController extends Controller
                         array_push($etablissementsId, $etablissement->etablissement_id);
                     }
                 }
-                $etablissements = EtablissementExercice::with(['patients'])->whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['patients','prestations'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }
@@ -209,7 +209,7 @@ class EtablissementExerciceController extends Controller
                         array_push($etablissementsId, $etablissement->id);
                     }
                 }
-                $etablissements = EtablissementExercice::with(['patients'])->whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['patients','prestations.prestation'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }

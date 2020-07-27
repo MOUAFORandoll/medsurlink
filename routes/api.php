@@ -223,6 +223,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin controle']], function () {
 
     Route::resource('categorie-prestation','Api\CategoriePrestationController');
+    Route::resource('etablissement-prestation','Api\EtablissementPrestationController');
 
 });
 

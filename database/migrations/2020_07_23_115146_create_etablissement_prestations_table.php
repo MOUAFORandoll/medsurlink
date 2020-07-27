@@ -30,9 +30,15 @@ class CreateEtablissementPrestationsTable extends Migration
                 ->onDelete('RESTRICT')
                 ->onUpdate('RESTRICT');
 
-            $table->foreign('creator')
+            $table->foreign('etablissement_id')
                 ->references('id')
                 ->on('etablissement_exercices')
+                ->onDelete('RESTRICT')
+                ->onUpdate('RESTRICT');
+
+            $table->foreign('creator')
+                ->references('id')
+                ->on('users')
                 ->onDelete('RESTRICT')
                 ->onUpdate('RESTRICT');
         });
