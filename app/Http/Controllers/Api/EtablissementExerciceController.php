@@ -209,7 +209,7 @@ class EtablissementExerciceController extends Controller
                         array_push($etablissementsId, $etablissement->id);
                     }
                 }
-                $etablissements = EtablissementExercice::with(['patients','prestations.prestation'])->whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }
@@ -230,7 +230,8 @@ class EtablissementExerciceController extends Controller
             }
         }
         else if(gettype($userRoles->search('Gestionnaire')) == 'integer'){
-            $etablissements = EtablissementExercice::all();
+            $etablissements = EtablissementExercice::with(['patients.user','prestations.prestation','factures.dossier.patient.user'])->get();
+
             return response()->json(['etablissements'=>$etablissements]);
 
         }

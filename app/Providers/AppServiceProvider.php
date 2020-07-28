@@ -25,6 +25,7 @@ use App\Models\EtablissementExercice;
 use App\Models\ExamenCardio;
 use App\Models\ExamenClinique;
 use App\Models\ExamenComplementaire;
+use App\Models\Facture;
 use App\Models\File;
 use App\Models\Gestionnaire;
 use App\Models\Hospitalisation;
@@ -75,6 +76,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Relation::morphMap([
+            'Facture'=>Facture::class,
             'RendezVous'=>RendezVous::class,
             'PatientSouscripteur'=>PatientSouscripteur::class,
             'ActionMotif'=>ActionMotif::class,

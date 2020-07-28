@@ -28,7 +28,6 @@ Route::get('question','Api\QuestionController@index');
 //Route::post('avisMedecin/{slug}','Api\AvisMedecinController@store');
 //Route::resource('suivi','Api\SuiviController');
 Route::resource('comptable','Api\ComptableController');
-Route::resource('prestation','Api\PrestationController');
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/countries', function () {
@@ -224,6 +223,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
 
     Route::resource('categorie-prestation','Api\CategoriePrestationController');
     Route::resource('etablissement-prestation','Api\EtablissementPrestationController');
+    Route::resource('prestation','Api\PrestationController');
+    Route::resource('facture','Api\FactureController');
+
 
 });
 
