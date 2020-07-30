@@ -24,7 +24,11 @@ class ComptableRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id'=>'required|integer|exists:users,id',
+            'nom'=>'sometimes|nullable|string',
+            'prenom'=>'sometimes|nullable|string',
+            'telephone'=>'sometimes|nullable|string',
+            'email'=>'sometimes|nullable|string|email',
+            'user_id'=>'sometimes|nullable|integer|exists:users,id',
             'etablissement_id'=>'required|exists:etablissement_exercices,id',
             'sexe'=>'sometimes|nullable|string',
         ];

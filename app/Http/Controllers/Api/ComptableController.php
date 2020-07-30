@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ComptableRequest;
+use App\Mail\Password\PasswordGenerated;
 use App\Models\Comptable;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class ComptableController extends Controller
 {
@@ -42,7 +46,23 @@ class ComptableController extends Controller
      */
     public function store(ComptableRequest $request)
     {
-        $comptable = Comptable::create($request->all());
+        $user_id = $request->get('user_id');
+
+        if(is_null($user_id)){
+            $password = str_random(10);
+            $user =  User::create($request->except('user_id','sexe','etablissement_id')+['password'=> Hash::make( $password)]);
+            $mail = new PasswordGenerated($user,$password);
+            Mail::to($user->email)->send($mail);
+            $user_id = $user->id;
+        }else{
+            $user_id = $request->get('user_id');
+        }
+
+        $comptable = Comptable::create([
+            'user_id'=>$user_id,
+            'etablissement_id'=>$request->etablissement_id,
+            'sexe'=>$request->get('sexe','M')
+        ]);
 
         return  response()->json(['comptable'=>$comptable]);
     }
@@ -84,7 +104,13 @@ class ComptableController extends Controller
     {
         $this->validatedSlug($slug, $this->table);
 
-        Comptable::whereSlug($slug)->update($request->all());
+        $user = User::whereId($request->user_id)->first();
+        $user->nom = $request->nom;
+        $user->prenom = $request->prenom;
+        $user->email = $request->email;
+        $user->telephone = $request->telephone;
+        $user->save();
+        Comptable::whereSlug($slug)->update(['sexe'=>$request->sexe]);
 
         $comptable = Comptable::with('user','etablissements')->whereSlug($slug)->first();
 

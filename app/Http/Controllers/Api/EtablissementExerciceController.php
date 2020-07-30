@@ -32,7 +32,7 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::with(['praticiens','patients.dossier','patients.user','patients.financeurs','prestations'])->get();
+        $etablissements =  EtablissementExercice::with(['comptables.user','praticiens.user','patients.dossier','patients.user','patients.financeurs','prestations'])->get();
         return response()->json(['etablissements'=>$etablissements]);
 
 
@@ -89,7 +89,7 @@ class EtablissementExerciceController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $etablissement = EtablissementExercice::with(['praticiens','patients.dossier','patients.user','prestations.prestation'])->whereSlug($slug)->first();
+        $etablissement = EtablissementExercice::with(['praticiens.user','patients.dossier','patients.user','prestations.prestation'])->whereSlug($slug)->first();
 
         return response()->json(['etablissement'=>$etablissement]);
 
@@ -125,7 +125,7 @@ class EtablissementExerciceController extends Controller
             "adresse"=>$request->get('adresse')
         ]);
 
-        $etablissement = EtablissementExercice::with(['praticiens','patients'])->whereSlug($slug)->first();
+        $etablissement = EtablissementExercice::with(['praticiens.user','patients'])->whereSlug($slug)->first();
 
         $logo = $etablissement->logo;
 
@@ -209,7 +209,7 @@ class EtablissementExerciceController extends Controller
                         array_push($etablissementsId, $etablissement->id);
                     }
                 }
-                $etablissements = EtablissementExercice::with(['patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user'])->whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['comptables.user','patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }
@@ -230,7 +230,7 @@ class EtablissementExerciceController extends Controller
             }
         }
         else if(gettype($userRoles->search('Gestionnaire')) == 'integer'){
-            $etablissements = EtablissementExercice::with(['patients.user','prestations.prestation','factures.dossier.patient.user'])->get();
+            $etablissements = EtablissementExercice::with(['comptables.user','patients.user','prestations.prestation','factures.dossier.patient.user'])->get();
 
             return response()->json(['etablissements'=>$etablissements]);
 

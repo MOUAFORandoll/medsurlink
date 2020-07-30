@@ -27,7 +27,6 @@ Route::get('question','Api\QuestionController@index');
 //Route::resource('avis','Api\AvisController');
 //Route::post('avisMedecin/{slug}','Api\AvisMedecinController@store');
 //Route::resource('suivi','Api\SuiviController');
-Route::resource('comptable','Api\ComptableController');
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/countries', function () {
@@ -228,6 +227,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
     Route::post('facture-recouvrement/{facture}','Api\FactureController@mailRecouvrement');
     Route::post('facture-rappel/{facture}','Api\FactureController@rappel');
     Route::resource('facture-prestation','Api\FacturePrestationController');
+    Route::resource('comptable','Api\ComptableController');
 
 
 });

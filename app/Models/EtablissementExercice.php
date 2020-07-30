@@ -78,4 +78,8 @@ class EtablissementExercice extends Model
     public function factures(){
         return $this->hasMany(Facture::class,'etablissement_id','id');
     }
+
+    public function comptables(){
+        return $this->hasMany(Comptable::class,'etablissement_id','id');
+    }
 }

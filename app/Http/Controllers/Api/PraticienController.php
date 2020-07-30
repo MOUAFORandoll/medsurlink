@@ -7,10 +7,12 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\PraticienStoreRequest;
 use App\Http\Requests\PraticienUpdateRequest;
 use App\Mail\updateSetting;
+use App\Models\Comptable;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePraticien;
 use App\Models\Praticien;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -65,16 +67,31 @@ class PraticienController extends Controller
         $praticien = Praticien::create($request->validated() + ['user_id' => $user->id]);
         //Ajout des établissements
         $estDeMedicasure = $request->get('isMedicasure') == "1";
-
-        if ($estDeMedicasure){
+        if ($estDeMedicasure || empty(array_diff([0],$etablissements))){
             $etablissements = EtablissementExercice::all();
             foreach ($etablissements as $etablissement){
                 $praticien->etablissements()->attach($etablissement->id);
                 defineAsAuthor("Praticien",$praticien->user_id,'Add etablissement '.$etablissement->id);
+//                $isComptable = $request->get('isComptable','0');
+//                if($isComptable == '1' || $isComptable == 1){
+//                    Comptable::create([
+//                        'user_id'=>$user->id,
+//                        'etablissement_id'=>$etablissement->id,
+//                        'creator'=>Auth::id()
+//                    ]);
+//                }
             }
         }else{
             foreach (array_diff($etablissements,[0]) as $etablissement){
                 $praticien->etablissements()->attach($etablissement);
+                $isComptable = $request->get('isComptable','0');
+//                if($isComptable == '1' || $isComptable == 1){
+//                    Comptable::create([
+//                        'user_id'=>$user->id,
+//                        'etablissement_id'=>$etablissement,
+//                        'creator'=>Auth::id()
+//                    ]);
+//                }
                 defineAsAuthor("Praticien",$praticien->user_id,'Add etablissement '.$etablissement);
             }
         }
