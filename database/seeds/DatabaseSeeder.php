@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             ReponsesTableSeeder::class,
             MedicamentsTableSeeder::class,
             MedecinAvisSeeder::class,
+            PrestationsCliniqueKutendaMedicalTableSeeder::class,
         ]);
     }
 }
