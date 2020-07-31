@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\FactureRequest;
+use App\Mail\Facture\MailRappel;
+use App\Mail\Facture\MailRecouvrement;
 use App\Models\Facture;
 use App\Models\FacturePrestation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class FactureController extends Controller
 {
@@ -139,6 +142,56 @@ class FactureController extends Controller
 
             defineAsAuthor("File",$file->id,'create');
 
+        }
+    }
+
+    public function rappel($slug){
+
+        $this->validatedSlug($slug,$this->table);
+
+        $facture = Facture::with('dossier.patient.user','files','etablissement','prestations.prestation_etablissement.prestation')
+            ->whereSlug($slug)->first();
+        $souscripteurs = [];
+        if (!is_null($facture)){
+            $souscripteur = $facture->dossier->patient->souscripteur;
+            if (!is_null($souscripteur)){
+                array_push($souscripteurs,$souscripteur);
+            }
+            $financeurs = $facture->dossier->patient->financeurs;
+            foreach ($financeurs as $financeur){
+                array_push($souscripteurs,$financeur->financable);
+            }
+
+            foreach ($souscripteurs as $souscripteur){
+                $mail = new MailRappel($facture,$souscripteur);
+                Mail::to($souscripteur->user->email)->send($mail);
+            }
+        }
+    }
+
+    public function mailRecouvrement($slug){
+        $this->validatedSlug($slug,$this->table);
+
+        $facture = Facture::with('dossier.patient.user','files','etablissement','prestations.prestation_etablissement.prestation')
+            ->whereSlug($slug)->first();
+        $souscripteurs = [];
+        if (!is_null($facture)){
+            $souscripteur = $facture->dossier->patient->souscripteur;
+            if (!is_null($souscripteur)){
+                array_push($souscripteurs,$souscripteur);
+            }
+            $financeurs = $facture->dossier->patient->financeurs;
+            foreach ($financeurs as $financeur){
+                array_push($souscripteurs,$financeur->financable);
+
+            }
+            foreach ($souscripteurs as $souscripteur){
+                $mail = new MailRecouvrement($facture,$souscripteur);
+                Mail::to($souscripteur->user->email)->send($mail);
+            }
+
+            $facture->statut = 'En recouvrement';
+            $facture->save();
         }
     }
 }
