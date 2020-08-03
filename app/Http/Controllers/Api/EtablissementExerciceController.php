@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
+use function foo\func;
 
 /**
  * Class EtablissementExerciceController
@@ -231,6 +232,26 @@ class EtablissementExerciceController extends Controller
         }
         else if(gettype($userRoles->search('Gestionnaire')) == 'integer'){
             $etablissements = EtablissementExercice::with(['comptables.user','patients.user','prestations.prestation','factures.dossier.patient.user'])->get();
+
+            return response()->json(['etablissements'=>$etablissements]);
+
+        }
+        else if(gettype($userRoles->search('Souscripteur')) == 'integer'){
+            $user = \App\User::whereId(Auth::id())->first();
+            $patients = $user->souscripteur->patients;
+            $patientsId = [];
+            foreach ($patients as $patient){
+                if (!is_null($patientsId)){
+                    array_push($patientsId,$patient->user_id);
+                }
+            }
+            $etablissements = EtablissementExercice::with(['comptables.user',
+                'patients'=>function($query)use($patientsId){$query->whereIn('user_id',$patientsId);},
+                'patients.user',
+                'patients.dossier',
+                'prestations.prestation',
+                'factures.dossier.patient.user'=>function($query)use($patientsId){$query->whereIn('id',$patientsId);}])
+                ->get();
 
             return response()->json(['etablissements'=>$etablissements]);
 

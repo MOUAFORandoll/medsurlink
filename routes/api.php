@@ -235,7 +235,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle']], function () {
     Route::resource('specialite','Api\SpecialiteController')->except(['create','edit']);
     Route::resource('consultation-type','Api\ConsultationTypeController')->except(['create','edit']);
-    Route::resource('souscripteur','Api\SouscripteurController');
+    Route::resource('souscripteur','Api\SouscripteurController')->except('show');
     Route::post('patient','Api\PatientController@store')->name('patient.store');
     Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
     Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');
