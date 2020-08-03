@@ -216,6 +216,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('etablissement', 'Api\EtablissementExerciceController')->except(['create', 'store', 'destroy', 'edit']);
     Route::get('user-etablissements', 'Api\EtablissementExerciceController@userEtablissements');
     Route::post('update-password','Api\UserController@updatePassword');
+    Route::resource('facture','Api\FactureController')->only('show');
+
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin controle']], function () {
@@ -223,7 +225,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
     Route::resource('categorie-prestation','Api\CategoriePrestationController');
     Route::resource('etablissement-prestation','Api\EtablissementPrestationController');
     Route::resource('prestation','Api\PrestationController');
-    Route::resource('facture','Api\FactureController');
+    Route::resource('facture','Api\FactureController')->except('show');
     Route::post('facture-recouvrement/{facture}','Api\FactureController@mailRecouvrement');
     Route::post('facture-rappel/{facture}','Api\FactureController@rappel');
     Route::resource('facture-prestation','Api\FacturePrestationController');
