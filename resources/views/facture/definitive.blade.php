@@ -11,6 +11,7 @@
     @component('.facture.slots.prestation',['prestations'=>$facture->prestations])
     @endcomponent
 
+
     <h4 class="sous-titre-rapport--table">Resumé</h4>
     <p>Total hors remise: <strong>{{$facture->total_hors_remise}}</strong></p>
     <p>Remise: <strong>{{$facture->remise}}</strong></p>
