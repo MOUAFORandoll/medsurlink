@@ -13,8 +13,8 @@
 
 
     <h4 class="sous-titre-rapport--table">Resumé</h4>
-    <p>Total hors remise: <strong>{{$facture->total_hors_remise}}</strong></p>
-    <p>Remise: <strong>{{$facture->remise}}</strong></p>
-    <p>Total avec remise: <strong>{{$facture->total_avec_remise}}</strong></p>
+    <p>Total hors remise: <strong>{{$facture->total_hors_remise}}  F CFA</strong></p>
+    <p>Remise: <strong>{{$facture->remise}}  F CFA</strong></p>
+    <p>Total avec remise: <strong>{{$facture->total_avec_remise}}  F CFA</strong></p>
 
 @endsection
