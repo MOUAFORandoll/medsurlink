@@ -231,7 +231,7 @@ class EtablissementExerciceController extends Controller
             }
         }
         else if(gettype($userRoles->search('Gestionnaire')) == 'integer'){
-            $etablissements = EtablissementExercice::with(['comptables.user','patients.user','prestations.prestation','factures.dossier.patient.user'])->get();
+            $etablissements = EtablissementExercice::with(['comptables.user','patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user'])->get();
 
             return response()->json(['etablissements'=>$etablissements]);
 
