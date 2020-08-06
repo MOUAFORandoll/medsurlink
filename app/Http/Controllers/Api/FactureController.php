@@ -10,6 +10,7 @@ use App\Models\Facture;
 use App\Models\FacturePrestation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class FactureController extends Controller
@@ -45,7 +46,7 @@ class FactureController extends Controller
      */
     public function store(FactureRequest $request)
     {
-        $facture = Facture::create($request->except('prestation'));
+        $facture = Facture::create($request->except('prestation')+['creator'=>Auth::id()]);
 
         if ($request->hasFile('documents')) {
             $this->uploadFile($request, $facture);

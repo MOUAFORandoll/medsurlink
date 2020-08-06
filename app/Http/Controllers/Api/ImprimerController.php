@@ -238,4 +238,21 @@ class ImprimerController extends Controller
 
         return  response()->json(['name'=>'Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
     }
+
+    public function factureProforma($slug){
+        $this->validatedSlug($slug,'factures');
+
+        $facture = Facture::whereSlug($slug)->first();
+
+        $data = compact('facture');
+        $pdf = PDF::loadView('facture.proforma',$data);
+        $nom  = ucfirst($facture->dossier->patient->user->nom);
+        $prenom = is_null($facture->dossier->patient->user->prenom) ? '' :$facture->dossier->patient->user->prenom;
+        $prenom  = ucfirst($prenom);
+        $date= $facture->date_facturation;
+        $path = storage_path().'/app/public/pdf/'.'Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
+        $pdf->save($path);
+
+        return  response()->json(['name'=>'Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
+    }
 }

@@ -114,4 +114,7 @@
     .divTableBody {
         display: table-row-group;
     }
+    .noBorder {
+        border:none !important;
+    }
 </style>
