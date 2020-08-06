@@ -22,6 +22,7 @@
                 <p>{{$facture->dossier->patient->user->telephone}}</p>
             </td>
 
+
         </tr>
     </table>
 
