@@ -9,8 +9,12 @@
         <tr class="noBorder">
             <td class="noBorder" rowspan="2" style="width: 50%" valign="top">
                 <p>Date de la Facture : {{\Carbon\Carbon::parse($facture->date_facturation)->format('d/m/Y')}}</p>
-                <p>Référence : {{strtolower(substr($facture->etablissement->name,0,3))}}/{{date('Y')}}/{{strtolower(substr(base64_encode(md5(microtime())),0,2))}}/{{rand(1000,10000)}}</p>
-                <p>Facture émise par : {{\Illuminate\Support\Str::contains($facture->createur->email,'@medicasure') ? 'Medicasure' : 'Prestataire'}}.
+                <p>Référence : {{substr($facture->etablissement->name,0,3)}}/{{date('Y')}}/{{strtolower(substr(base64_encode(md5(microtime())),0,2))}}/{{rand(1000,10000)}}</p>
+                @if(!is_null($facture->createur))
+                 <p>Facture émise par : {{\Illuminate\Support\Str::contains($facture->createur->email,'@medicasure') ? 'Medicasure' : 'Prestataire'}}.
+                @else
+                         Facture émise par : Medicasure
+                @endif
             </td>
             <td class="noBorder "></td>
             <td class="noBorder" valign="top" style="width: 50%; padding-top: 23px; padding-left: 50px">Numéro de Facture : {{date('Y')}}/{{$facture->etablissement_id}}{{$facture->id}}</td>
@@ -42,7 +46,7 @@
             </td>
             <td valign="top"><p>N° compte Afriland (IBAN) </p>
                 <p>CM21 10005 00020 06031161001 44</p>
-                <p>OM : 00 237 674 411 042 </p>
+                <p>OM : #150*47*382085# </p>
                 <p>MOMO: 00 237 674 411 042</p>
             </td>
         </tr>
