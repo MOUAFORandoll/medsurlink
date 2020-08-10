@@ -256,6 +256,19 @@ class EtablissementExerciceController extends Controller
             return response()->json(['etablissements'=>$etablissements]);
 
         }
+        else if(gettype($userRoles->search('Comptable')) == 'integer'){
+            $user = Auth::user();
+            $etablissements = EtablissementExercice::with([
+                'comptables.user'=>function($query)use($user){$query->whereId($user->id);},
+                'patients',
+                'patients.user',
+                'patients.dossier',
+                'prestations.prestation',
+                'factures.dossier.patient.user'])
+                ->get();
+
+            return response()->json(['etablissements'=>$etablissements]);
+        }
         else{
             return response()->json(['etablissements'=>[]]);
 
