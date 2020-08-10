@@ -7,6 +7,7 @@ use App\Models\Affiliation;
 use App\Models\Allergie;
 use App\Models\Antecedent;
 use App\Models\Cardiologie;
+use App\Models\Comptable;
 use App\Models\Conclusion;
 use App\Models\ConsultationFichier;
 use App\Models\DossierAllergie;
@@ -76,6 +77,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         Relation::morphMap([
+            'Comptable'=>Comptable::class,
             'Facture'=>Facture::class,
             'RendezVous'=>RendezVous::class,
             'PatientSouscripteur'=>PatientSouscripteur::class,

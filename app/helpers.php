@@ -102,8 +102,12 @@ if (!function_exists('getStatus')){
             $user = \Illuminate\Support\Facades\Auth::user();
         }
         $auteurable_type = $user->getRoleNames()->first();
-        $auteurable_id = (getStatusUserRole($auteurable_type,$user)->getOriginalContent()['auteurable_user'])->user_id;
-        return response()->json(['auteurable_type'=>$auteurable_type,'auteurable_id'=>$auteurable_id,]);
+        if(!is_null($auteurable_type)){
+            $auteurable_id = (getStatusUserRole($auteurable_type,$user)->getOriginalContent()['auteurable_user'])->user_id;
+            return response()->json(['auteurable_type'=>$auteurable_type,'auteurable_id'=>$auteurable_id,]);
+        }else{
+            return response()->json(['auteurable_type'=>'Comptable','auteurable_id'=>$user->id]);
+        }
     }
 }
 
@@ -174,16 +178,16 @@ if (!function_exists('checkIfCanUpdate')){
     function checkIfCanUpdated($operationable_type, $operationable_id, $action){
         $user = \Illuminate\Support\Facades\Auth::user();
         $nbre  = 0;
-            //Recuperation du role de celui qui a crée l'element
-            $role = getAuthorRole($operationable_type,$operationable_id,$action);
-            $isAuthor = checkIfIsAuthorOrIsAuthorized($operationable_type, $operationable_id, $action);
-            if($isAuthor->getOriginalContent() == false){
-                if (($role == 'Praticien' && $user->getRoleNames()->first() == 'Medecin controle') || ($role == 'Medecin controle' && $user->getRoleNames()->first() == 'Medecin controle') ){
-                    $nbre = 1;
-                }
-            }else{
+        //Recuperation du role de celui qui a crée l'element
+        $role = getAuthorRole($operationable_type,$operationable_id,$action);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized($operationable_type, $operationable_id, $action);
+        if($isAuthor->getOriginalContent() == false){
+            if (($role == 'Praticien' && $user->getRoleNames()->first() == 'Medecin controle') || ($role == 'Medecin controle' && $user->getRoleNames()->first() == 'Medecin controle') ){
                 $nbre = 1;
             }
+        }else{
+            $nbre = 1;
+        }
         if ($nbre>0)
             return response()->json(true);
         return response()->json(false);
