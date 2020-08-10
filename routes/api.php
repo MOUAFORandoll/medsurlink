@@ -28,7 +28,6 @@ Route::get('question','Api\QuestionController@index');
 //Route::post('avisMedecin/{slug}','Api\AvisMedecinController@store');
 //Route::resource('suivi','Api\SuiviController');
 
-
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/countries', function () {
         $countries = countries();
@@ -206,6 +205,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']],
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur']], function () {
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
+    Route::get('imprimer-facture-definitive/{facture}','Api\ImprimerController@factureDefinitive');
+    Route::get('imprimer-facture-proforma/{facture}','Api\ImprimerController@factureProforma');
     Route::get('imprimer-consultation-medecine/{generale}','Api\ImprimerController@generale');
 //    Route::get('imprimer-consultation-fichier/{fichier}','Api\ImprimerController@manuscrit');
     Route::get('imprimer-consultation-cardiologie/{cardiologie}','Api\ImprimerController@cardiologie');
@@ -217,8 +218,20 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('etablissement', 'Api\EtablissementExerciceController')->except(['create', 'store', 'destroy', 'edit']);
     Route::get('user-etablissements', 'Api\EtablissementExerciceController@userEtablissements');
     Route::post('update-password','Api\UserController@updatePassword');
+    Route::resource('facture','Api\FactureController')->only('show');
+
 });
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {
+
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin controle']], function () {
+
+    Route::resource('categorie-prestation','Api\CategoriePrestationController');
+    Route::resource('etablissement-prestation','Api\EtablissementPrestationController');
+    Route::resource('prestation','Api\PrestationController');
+    Route::resource('facture','Api\FactureController')->except('show');
+    Route::post('facture-recouvrement/{facture}','Api\FactureController@mailRecouvrement');
+    Route::post('facture-rappel/{facture}','Api\FactureController@rappel');
+    Route::resource('facture-prestation','Api\FacturePrestationController');
+    Route::resource('comptable','Api\ComptableController');
 
 
 });
@@ -226,7 +239,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']],
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle']], function () {
     Route::resource('specialite','Api\SpecialiteController')->except(['create','edit']);
     Route::resource('consultation-type','Api\ConsultationTypeController')->except(['create','edit']);
-    Route::resource('souscripteur','Api\SouscripteurController');
+    Route::resource('souscripteur','Api\SouscripteurController')->except('show');
     Route::post('patient','Api\PatientController@store')->name('patient.store');
     Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
     Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');

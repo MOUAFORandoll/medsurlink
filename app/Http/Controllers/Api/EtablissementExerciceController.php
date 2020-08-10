@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
+use function foo\func;
 
 /**
  * Class EtablissementExerciceController
@@ -32,7 +33,7 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::with(['praticiens','patients.dossier','patients.user','patients.financeurs'])->get();
+        $etablissements =  EtablissementExercice::with(['comptables.user','praticiens.user','patients.dossier','patients.user','patients.financeurs','prestations'])->get();
         return response()->json(['etablissements'=>$etablissements]);
 
 
@@ -89,7 +90,7 @@ class EtablissementExerciceController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $etablissement = EtablissementExercice::with(['praticiens','patients.dossier','patients.user'])->whereSlug($slug)->first();
+        $etablissement = EtablissementExercice::with(['praticiens.user','patients.dossier','patients.user','prestations.prestation'])->whereSlug($slug)->first();
 
         return response()->json(['etablissement'=>$etablissement]);
 
@@ -125,7 +126,7 @@ class EtablissementExerciceController extends Controller
             "adresse"=>$request->get('adresse')
         ]);
 
-        $etablissement = EtablissementExercice::with(['praticiens','patients'])->whereSlug($slug)->first();
+        $etablissement = EtablissementExercice::with(['praticiens.user','patients'])->whereSlug($slug)->first();
 
         $logo = $etablissement->logo;
 
@@ -192,7 +193,7 @@ class EtablissementExerciceController extends Controller
                         array_push($etablissementsId, $etablissement->etablissement_id);
                     }
                 }
-                $etablissements = EtablissementExercice::with(['patients'])->whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['patients','prestations'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }
@@ -209,7 +210,7 @@ class EtablissementExerciceController extends Controller
                         array_push($etablissementsId, $etablissement->id);
                     }
                 }
-                $etablissements = EtablissementExercice::with(['patients'])->whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['comptables.user','patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }
@@ -230,7 +231,28 @@ class EtablissementExerciceController extends Controller
             }
         }
         else if(gettype($userRoles->search('Gestionnaire')) == 'integer'){
-            $etablissements = EtablissementExercice::all();
+            $etablissements = EtablissementExercice::with(['comptables.user','patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user'])->get();
+
+            return response()->json(['etablissements'=>$etablissements]);
+
+        }
+        else if(gettype($userRoles->search('Souscripteur')) == 'integer'){
+            $user = \App\User::whereId(Auth::id())->first();
+            $patients = $user->souscripteur->patients;
+            $patientsId = [];
+            foreach ($patients as $patient){
+                if (!is_null($patientsId)){
+                    array_push($patientsId,$patient->user_id);
+                }
+            }
+            $etablissements = EtablissementExercice::with(['comptables.user',
+                'patients'=>function($query)use($patientsId){$query->whereIn('user_id',$patientsId);},
+                'patients.user',
+                'patients.dossier',
+                'prestations.prestation',
+                'factures.dossier.patient.user'=>function($query)use($patientsId){$query->whereIn('id',$patientsId);}])
+                ->get();
+
             return response()->json(['etablissements'=>$etablissements]);
 
         }

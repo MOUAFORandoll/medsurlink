@@ -70,4 +70,16 @@ class EtablissementExercice extends Model
     public function patients(){
         return $this->belongsToMany(Patient::class,'etablissement_exercice_patient','etablissement_id','patient_id');
     }
+
+    public function prestations(){
+        return $this->hasMany(EtablissementPrestation::class,'etablissement_id','id');
+    }
+
+    public function factures(){
+        return $this->hasMany(Facture::class,'etablissement_id','id');
+    }
+
+    public function comptables(){
+        return $this->hasMany(Comptable::class,'etablissement_id','id');
+    }
 }
