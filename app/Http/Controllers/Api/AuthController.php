@@ -38,8 +38,8 @@ class AuthController extends AccessTokenController
         $user['isComptable'] = isComptable();
         $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
         $tokenInfo->put('user', $user);
-//        $status = getStatus();
-//        defineAsAuthor($status->getOriginalContent()['auteurable_type'],$status->getOriginalContent()['auteurable_id'],'Connexion');
+        $status = getStatus();
+        defineAsAuthor($status->getOriginalContent()['auteurable_type'],$status->getOriginalContent()['auteurable_id'],'Connexion');
         return $tokenInfo;
     }
 
