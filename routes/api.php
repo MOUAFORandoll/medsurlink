@@ -202,7 +202,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']],
 
 });
 
-Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur','Comptable']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur|Comptable']], function () {
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
     Route::get('imprimer-facture-definitive/{facture}','Api\ImprimerController@factureDefinitive');
@@ -222,7 +222,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
 });
 
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin controle']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin controle|Comptable']], function () {
 
     Route::resource('categorie-prestation','Api\CategoriePrestationController');
     Route::resource('etablissement-prestation','Api\EtablissementPrestationController');
