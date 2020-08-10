@@ -134,7 +134,9 @@ if (!function_exists('getStatusUserRole')){
         elseif ($roleName == "Medecin controle"){
             return response()->json(['auteurable_user'=>$user->medecinControle]);
         }
-
+        elseif ($roleName == "Comptable"){
+            return response()->json(['auteurable_user'=>$user]);
+        }
         elseif ($roleName == "Admin"){
             return response()->json(['auteurable_user'=>$user]);
         }
