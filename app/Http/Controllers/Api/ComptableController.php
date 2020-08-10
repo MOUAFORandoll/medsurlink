@@ -54,6 +54,7 @@ class ComptableController extends Controller
             $mail = new PasswordGenerated($user,$password);
             Mail::to($user->email)->send($mail);
             $user_id = $user->id;
+            $user->assignRole('Comptable');
         }else{
             $user_id = $request->get('user_id');
         }
