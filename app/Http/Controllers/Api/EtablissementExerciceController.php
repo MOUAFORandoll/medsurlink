@@ -259,7 +259,8 @@ class EtablissementExerciceController extends Controller
         else if(gettype($userRoles->search('Comptable')) == 'integer'){
             $user = Auth::user();
             $etablissements = EtablissementExercice::with([
-                'comptables.user'=>function($query)use($user){$query->whereId($user->id);},
+                'comptables'=>function($query)use($user){$query->where('user_id',$user->id);},
+                'comptables.user',
                 'patients',
                 'patients.user',
                 'patients.dossier',
