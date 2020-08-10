@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             MedicamentsTableSeeder::class,
             MedecinAvisSeeder::class,
             PrestationsCliniqueKutendaMedicalTableSeeder::class,
+            ComptableRoleSeeder::class,
         ]);
     }
 }
