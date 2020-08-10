@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\EtablissementExerciceRequest;
+use App\Models\Comptable;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExerciceMedecin;
 use App\Models\EtablissementExercicePatient;
@@ -258,14 +259,25 @@ class EtablissementExerciceController extends Controller
         }
         else if(gettype($userRoles->search('Comptable')) == 'integer'){
             $user = Auth::user();
+            $comptables = Comptable::where('user_id',$user->id)->get();
+
+            $etablissementsId = [];
+
+            foreach ($comptables as $comptable){
+                array_push($etablissementsId,$comptable->etablissement_id);
+            }
+
+
+
             $etablissements = EtablissementExercice::with([
-                'comptables'=>function($query)use($user){$query->where('user_id',$user->id);},
+                'comptables',
                 'comptables.user',
                 'patients',
                 'patients.user',
                 'patients.dossier',
                 'prestations.prestation',
                 'factures.dossier.patient.user'])
+                ->whereIn('id',$etablissementsId)
                 ->get();
 
             return response()->json(['etablissements'=>$etablissements]);
