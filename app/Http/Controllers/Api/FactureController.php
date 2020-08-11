@@ -12,6 +12,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -180,6 +181,7 @@ class FactureController extends Controller
             foreach ($souscripteurs as $souscripteur){
                 $mail = new MailRappel($facture,$souscripteur,$attachPath);
                 Mail::to($souscripteur->user->email)->send($mail);
+                Log::info('envoi de mail de rappel '.$souscripteur->user->email);
             }
         }
     }
@@ -217,6 +219,8 @@ class FactureController extends Controller
             foreach ($souscripteurs as $souscripteur){
                 $mail = new MailRecouvrement($facture,$souscripteur,$attachPath);
                 Mail::to($souscripteur->user->email)->send($mail);
+                Log::info('envoi de mail de recouvrement '.$souscripteur->user->email);
+
             }
 
             $facture->statut = 'En recouvrement';
