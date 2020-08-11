@@ -34,6 +34,7 @@ class MailRappel extends Mailable
     public function build()
     {
         return $this->subject('RAPPEL FACTURES NON RÉGLÉES')
+            ->from('medsurlink@medicasure.com')
             ->bcc('comptabilite@medicasure.com','Comptabilite')
             ->markdown('emails.factures.rappel')
             ->attach(public_path($this->path), [
