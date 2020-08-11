@@ -77,28 +77,6 @@
     'italic' => $rootDir . '/lib/fonts/DejaVuSerif-Italic',
     'normal' => $rootDir . '/lib/fonts/DejaVuSerif',
   ),
-<<<<<<< HEAD
-=======
-  'raleway' => array(
-    '500_italic' => $fontDir . '/raleway-500-italic_c4926c1c974594d2339138a27d5d068d',
-    '600_italic' => $fontDir . '/raleway-600-italic_5df2c2d7047c721016bfcb9e69a2afe6',
-    'bold_italic' => $fontDir . '/raleway-bold-italic_2c01a3c243cbcfb471bdc792cbdd1d60',
-    '800_italic' => $fontDir . '/raleway-800-italic_a9a59c9c9aa782765462b6bc094bb45c',
-    '100' => $fontDir . '/raleway-100_00daf628fe4a08b2dc573bd7c5fd218d',
-    '200' => $fontDir . '/raleway-200_7eb86dc8c54661cb0821b7618fbf4ecd',
-    '300' => $fontDir . '/raleway-300_1d02ca92c7c67f833bbaf13002875b31',
-    'normal' => $fontDir . '/raleway-normal_0074042b603247c612f22f4cabfd1579',
-    '500' => $fontDir . '/raleway-500_0c380974bf89151e0db0e2cc4855da83',
-    '600' => $fontDir . '/raleway-600_68d71a5195b656afb91715b2608fe17a',
-    'bold' => $fontDir . '/raleway-bold_058f2dc67a0c85e493a836b77920d039',
-    '800' => $fontDir . '/raleway-800_75256d97dff2e913a00d019626086026',
-    '100_italic' => $fontDir . '/raleway-100-italic_29ca7ba5f06afbcc79bce5ce861ffb0d',
-    '200_italic' => $fontDir . '/raleway-200-italic_f6564a4d524bd791840967637f55343d',
-    '300_italic' => $fontDir . '/raleway-300-italic_fcfb9f3503ed21f9f177f8d670cfe0fa',
-    'italic' => $fontDir . '/raleway-italic_29862b7d9e45e8081902ceb4ed03b559',
-    '900' => $fontDir . '/raleway-900_6fd87d45925d25571cfacc46ab61086b',
-  ),
->>>>>>> beeff65cfaba7e33f977ac8b2b5d373a8290392d
   'montserrat' => array(
     'italic' => $fontDir . '/montserrat-italic_e1edee9771a00b0a5381ecb87091787d',
     '500_italic' => $fontDir . '/montserrat-500-italic_b21a3828faa2db0485fab2af837126b4',
