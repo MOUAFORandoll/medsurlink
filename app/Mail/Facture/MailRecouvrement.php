@@ -34,6 +34,7 @@ class MailRecouvrement extends Mailable
     {
         return $this->subject('Etat Financier '.strtoupper($this->souscripteur->user->nom).'  '.ucfirst($this->souscripteur->user->prenom).' au '. now()->format('d-m-yy'))
             ->bcc('comptabilite@medicasure.com','Comptabilite')
+            ->from('medsurlink@medicasure.com')
             ->markdown('emails.factures.recouvrement')
             ->attach(public_path($this->path), [
                 'mime' => 'application/pdf',
