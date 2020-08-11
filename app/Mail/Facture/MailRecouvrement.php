@@ -12,15 +12,17 @@ class MailRecouvrement extends Mailable
     use Queueable, SerializesModels;
     public $facture;
     public $souscripteur;
+    public $path;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($facture,$souscripteur)
+    public function __construct($facture,$souscripteur,$path)
     {
         $this->facture = $facture;
         $this->souscripteur = $souscripteur;
+        $this->path = $path;
     }
 
     /**
@@ -30,9 +32,12 @@ class MailRecouvrement extends Mailable
      */
     public function build()
     {
-        return $this->subject('Etat Financier '.strtoupper($this->souscripteur->user->nom).'  '.ucfirst($this->souscripteur->user->prenom).' Souscripteur au '. now()->format('d-m-yy'))
-                    ->cc('comptabilite@medicasure.com')
-                    ->markdown('emails.factures.recouvrement');
+        return $this->subject('Etat Financier '.strtoupper($this->souscripteur->user->nom).'  '.ucfirst($this->souscripteur->user->prenom).' au '. now()->format('d-m-yy'))
+            ->bcc('comptabilite@medicasure.com','Comptabilite')
+            ->markdown('emails.factures.recouvrement')
+            ->attach(public_path($this->path), [
+                'mime' => 'application/pdf',
+            ]);
 
     }
 }

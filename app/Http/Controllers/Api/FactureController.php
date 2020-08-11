@@ -8,10 +8,12 @@ use App\Mail\Facture\MailRappel;
 use App\Mail\Facture\MailRecouvrement;
 use App\Models\Facture;
 use App\Models\FacturePrestation;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class FactureController extends Controller
 {
@@ -153,6 +155,18 @@ class FactureController extends Controller
         $facture = Facture::with('dossier.patient.user','files','etablissement','prestations.prestation_etablissement.prestation')
             ->whereSlug($slug)->first();
         $souscripteurs = [];
+        $data = compact('facture');
+
+        $pdf = PDF::loadView('facture.definitive',$data);
+
+        $nom  = ucfirst($facture->dossier->patient->user->nom);
+        $prenom = is_null($facture->dossier->patient->user->prenom) ? '' :$facture->dossier->patient->user->prenom;
+        $prenom  = ucfirst($prenom);
+        $date= $facture->date_facturation;
+        $attachName = str_replace(' ','_','Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf');
+        $path = storage_path().'/app/public/pdf/'.$attachName;
+        $pdf->save($path);
+        $attachPath = '/storage/pdf/'.$attachName;
         if (!is_null($facture)){
             $souscripteur = $facture->dossier->patient->souscripteur;
             if (!is_null($souscripteur)){
@@ -164,7 +178,7 @@ class FactureController extends Controller
             }
 
             foreach ($souscripteurs as $souscripteur){
-                $mail = new MailRappel($facture,$souscripteur);
+                $mail = new MailRappel($facture,$souscripteur,$attachPath);
                 Mail::to($souscripteur->user->email)->send($mail);
             }
         }
@@ -176,6 +190,20 @@ class FactureController extends Controller
         $facture = Facture::with('dossier.patient.user','files','etablissement','prestations.prestation_etablissement.prestation')
             ->whereSlug($slug)->first();
         $souscripteurs = [];
+
+        // If the contract does not exists, then create it
+        $data = compact('facture');
+
+        $pdf = PDF::loadView('facture.definitive',$data);
+
+        $nom  = ucfirst($facture->dossier->patient->user->nom);
+        $prenom = is_null($facture->dossier->patient->user->prenom) ? '' :$facture->dossier->patient->user->prenom;
+        $prenom  = ucfirst($prenom);
+        $date= $facture->date_facturation;
+        $attachName = str_replace(' ','_','Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf');
+        $path = storage_path().'/app/public/pdf/'.$attachName;
+        $pdf->save($path);
+        $attachPath = '/storage/pdf/'.$attachName;
         if (!is_null($facture)){
             $souscripteur = $facture->dossier->patient->souscripteur;
             if (!is_null($souscripteur)){
@@ -187,7 +215,7 @@ class FactureController extends Controller
 
             }
             foreach ($souscripteurs as $souscripteur){
-                $mail = new MailRecouvrement($facture,$souscripteur);
+                $mail = new MailRecouvrement($facture,$souscripteur,$attachPath);
                 Mail::to($souscripteur->user->email)->send($mail);
             }
 

@@ -12,15 +12,18 @@ class MailRappel extends Mailable
     use Queueable, SerializesModels;
     public $facture;
     public $souscripteur;
+    public $path;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($facture,$souscripteur)
+    public function __construct($facture,$souscripteur,$path)
     {
         $this->facture = $facture;
         $this->souscripteur = $souscripteur;
+        $this->path = $path;
     }
 
     /**
@@ -31,7 +34,10 @@ class MailRappel extends Mailable
     public function build()
     {
         return $this->subject('RAPPEL FACTURES NON RÉGLÉES')
-                    ->cc('comptabilite@medicasure.com')
-                    ->markdown('emails.factures.rappel');
+            ->bcc('comptabilite@medicasure.com','Comptabilite')
+            ->markdown('emails.factures.rappel')
+            ->attach(public_path($this->path), [
+                'mime' => 'application/pdf',
+            ]);
     }
 }
