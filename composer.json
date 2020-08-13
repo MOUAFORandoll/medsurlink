@@ -51,6 +51,7 @@
             "App\\": "app/"
         },
         "files": [
+            "app/Helpers/PrestationHelper.php",
             "app/Helpers/GeneralHelper.php",
             "app/Helpers/UserHelper.php",
             "app/Helpers/MailHelper.php",
