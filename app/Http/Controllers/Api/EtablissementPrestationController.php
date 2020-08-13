@@ -67,7 +67,8 @@ class EtablissementPrestationController extends Controller
         }else{
             $prestation = Prestation::whereId($prestation_id)->where('categorie_id',$categorie_id)->first();
             if (is_null($prestation)){
-                $prestation = Prestation::create(['nom'=>$nom,'categorie_id'=>$categorie_id,'prix'=>$request->prix]);
+                    $prestation = Prestation::whereId($prestation_id)->first();
+                $prestation = Prestation::create(['nom'=>$prestation->nom,'categorie_id'=>$categorie_id,'prix'=>$request->prix]);
             }
 
             $prestation_id = $prestation->id;
@@ -75,6 +76,7 @@ class EtablissementPrestationController extends Controller
         if (!is_null($nom)){
             $prestation = Prestation::whereNom($nom)->where('categorie_id',$categorie_id)->first();
             if (is_null($prestation)){
+
                 $prestation = Prestation::create(['nom'=>$nom,'categorie_id'=>$categorie_id,'prix'=>$request->prix]);
             }
 
