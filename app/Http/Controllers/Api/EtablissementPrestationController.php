@@ -64,18 +64,28 @@ class EtablissementPrestationController extends Controller
 
         if($prestation_id == null || $prestation_id == 'null'){
             $prestation_id = null;
-        }
-
-        if (!is_null($nom)){
-            $prestation = Prestation::whereNom($nom)->first();
+        }else{
+            $prestation = Prestation::whereId($prestation_id)->where('categorie_id',$categorie_id)->first();
             if (is_null($prestation)){
-                $prestation = Prestation::create(['nom'=>$nom,'categorie_id'=>$categorie_id]);
+                    $prestation = Prestation::whereId($prestation_id)->first();
+                $prestation = Prestation::create(['nom'=>$prestation->nom,'categorie_id'=>$categorie_id,'prix'=>$request->prix]);
+            }
+
+            $prestation_id = $prestation->id;
+        }
+        if (!is_null($nom)){
+            $prestation = Prestation::whereNom($nom)->where('categorie_id',$categorie_id)->first();
+            if (is_null($prestation)){
+
+                $prestation = Prestation::create(['nom'=>$nom,'categorie_id'=>$categorie_id,'prix'=>$request->prix]);
             }
 
             $prestation_id = $prestation->id;
         }
 
-
+    if (!checkIfPrestationExist($prestation_id,$request->etablissement_id,$request->prix,$request->reduction)){
+        $this->revealError('prestation_id','Prestation déjà enregistré avec ce prix et cette reduction ');
+    }
         $prestation =  EtablissementPrestation::create([
             'etablissement_id'=>$request->etablissement_id,
             'prestation_id'=>$prestation_id,
