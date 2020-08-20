@@ -461,15 +461,15 @@ class CardiologieController extends Controller
                 $parametreCommun->update([
                         "poids"=>$request->get('poids') == 'null' ? 0 :$request->get('poids'),
                         "taille"=>$request->get('taille') == 'null' ? 0 :$request->get('taille'),
-                        "ta_systolique"=>$request->get('ta_systolique') == 'null' ? 0 :$request->get('ta_systolique'),
-                        "ta_diastolique"=>$request->get('ta_diastolique') == 'null' ? 0 :$request->get('ta_diastolique'),
-                        "ta_systolique_d"=>$request->get('ta_systolique_d') == 'null' ? 0 :$request->get('ta_systolique_d'),
-                        "ta_diastolique_d"=>$request->get('ta_diastolique_d') == 'null' ? 0 :$request->get('ta_diastolique_d'),
+                        "ta_systolique"=>$request->get('ta_systolique') == 'null' ? 0 :$request->get('ta_systolique',0),
+                        "ta_diastolique"=>$request->get('ta_diastolique') == 'null' ? 0 :$request->get('ta_diastolique',0),
+                        "ta_systolique_d"=>$request->get('ta_systolique_d') == 'null' ? 0 :$request->get('ta_systolique_d',0),
+                        "ta_diastolique_d"=>$request->get('ta_diastolique_d') == 'null' ? 0 :$request->get('ta_diastolique_d',0),
                         "temperature"=>$request->get('temperature') == 'null' ? 0 :$request->get('temperature'),
-                        "frequence_cardiaque"=>$request->get('frequence_cardiaque') == 'null' ? 0 :$request->get('frequence_cardiaque'),
-                        "frequence_respiratoire"=>$request->get('frequence_respiratoire') == 'null' ? 0 :$request->get('frequence_respiratoire'),
+                        "frequence_cardiaque"=>$request->get('frequence_cardiaque') == 'null' ? 0 :$request->get('frequence_cardiaque',0),
+                        "frequence_respiratoire"=>$request->get('frequence_respiratoire') == 'null' ? 0 :$request->get('frequence_respiratoire',0),
                         "sato2"=>$request->get('sato2') == 'null' ? 0 :$request->get('sato2'),
-                        "perimetre_abdominal"=>$request->get('perimetre_abdominal') == 'null' ? 0 :$request->get('perimetre_abdominal')
+                        "perimetre_abdominal"=>$request->get('perimetre_abdominal') == 'null' ? 0 :$request->get('perimetre_abdominal',0)
                     ]
                     +
                     ["communable_id" => $cardiologie->id, "communable_type" => 'Cardiologie']);
