@@ -14,7 +14,7 @@
     @component('.rapport.slots.motifs',['motifs'=>$consultation->motifs])
     @endcomponent
 
-    @component('.rapport.slots.anamnese',['anamnese'=>$consultation->anamese])
+    @component('.rapport.slots.anamnese',['anamnese'=>$consultation->anamnese])
     @endcomponent
 
     @component('.rapport.slots.modeDeVie',['consultation'=>$consultation])
