@@ -35,7 +35,7 @@ class AuthController extends AccessTokenController
         $user = $this->getUser($username,$password);
         $user->roles;
         Auth::login($user);
-        $user['isComptable'] = isComptable();
+        $user['isEtablissement'] = isComptable();
         $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
         $tokenInfo->put('user', $user);
         $status = getStatus();
