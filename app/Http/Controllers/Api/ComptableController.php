@@ -25,7 +25,15 @@ class ComptableController extends Controller
     public function index()
     {
         $comptables = Comptable::with('etablissements','user')->get();
-        return response()->json(['comptables'=>$comptables]);
+        $distint = collect([]);
+
+        foreach ($comptables as $comptable){
+
+            if ($distint->firstWhere('user_id',$comptable->user_id)== null){
+                $distint->push($comptable);
+            }
+        }
+        return response()->json(['comptables'=>$distint]);
     }
 
     /**
