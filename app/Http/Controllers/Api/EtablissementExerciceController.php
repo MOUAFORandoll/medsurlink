@@ -257,7 +257,7 @@ class EtablissementExerciceController extends Controller
             return response()->json(['etablissements'=>$etablissements]);
 
         }
-        else if(gettype($userRoles->search('Comptable')) == 'integer'){
+        else if(gettype($userRoles->search('Etablissement')) == 'integer'){
             $user = Auth::user();
             $comptables = Comptable::where('user_id',$user->id)->get();
 
