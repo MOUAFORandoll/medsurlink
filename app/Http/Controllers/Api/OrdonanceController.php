@@ -9,6 +9,7 @@ use App\Models\Ordonance;
 use App\Models\OrdonanceMedicament;
 use App\Models\Posologie;
 use App\Models\Prescription;
+use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use http\Client\Curl\User;
@@ -21,7 +22,7 @@ class OrdonanceController extends Controller
 {
     protected $table = 'ordonances';
     use SmsTrait;
-
+    use DossierTrait;
     use PersonnalErrors;
     /**
      * Display a listing of the resource.
@@ -73,6 +74,7 @@ class OrdonanceController extends Controller
         }
 
         $ordonance =  Ordonance::with('dossier','prescriptions.medicament')->whereSlug($ordonance->slug)->first();
+        $this->updateDossierId($ordonance->dossier->id);
         return response()->json(['ordonance'=>$ordonance]);
     }
 
@@ -141,6 +143,8 @@ class OrdonanceController extends Controller
         }
 
         $ordonance = Ordonance::with('dossier','medicaments')->whereSlug($slug)->first();
+        $this->updateDossierId($ordonance->dossier->id);
+
         return response()->json(['ordonance'=>$ordonance]);
     }
 
@@ -156,6 +160,7 @@ class OrdonanceController extends Controller
         $ordonance = Ordonance::with('dossier','medicaments')->whereSlug($slug)->first();
 
         $this->checkIfAuthorized('Ordonance',$ordonance->id,'create');
+        $this->updateDossierId($ordonance->dossier->id);
 
         $ordonance->delete();
         defineAsAuthor('Ordonance',$ordonance->id,'delete',$ordonance->dossier->patient_id);
@@ -170,6 +175,8 @@ class OrdonanceController extends Controller
         }
         $ordonance->archieved_at = Carbon::now();
         $ordonance->save();
+        $this->updateDossierId($ordonance->dossier->id);
+
         defineAsAuthor('Ordonance',$ordonance->id,'archieve',$ordonance->dossier->patient_id);
         //Envoi du sms
 //        $this->sendSmsToUser($ordonance->dossier->patient->user);
@@ -186,6 +193,7 @@ class OrdonanceController extends Controller
 
         $ordonance->passed = Carbon::now();
         $ordonance->save();
+        $this->updateDossierId($ordonance->dossier->id);
 
         defineAsAuthor('Ordonance',$ordonance->id,'transmettre',$ordonance->dossier->patient_id);
 //Envoi du sms

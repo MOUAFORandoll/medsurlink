@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ConsultationFichierRequest;
 use App\Models\ConsultationFichier;
 use App\Models\DossierMedical;
+use App\Traits\DossierTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,6 +15,8 @@ use Illuminate\Support\ConfigurationUrlParser;
 class ConsultationFichierController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
+
     protected $table = 'consultation_fichiers';
 
     /**
@@ -78,6 +81,7 @@ class ConsultationFichierController extends Controller
         }
 
         $consultation = ConsultationFichier::with(['dossier','etablissement','files','praticien'])->whereSlug($consultation->slug)->first();
+        $this->updateDossierId($consultation->dossier->id);
 
         return response()->json(["consultation" => $consultation]);
 
@@ -153,6 +157,7 @@ class ConsultationFichierController extends Controller
         }
 
         $consultation->updateConsultation();
+        $this->updateDossierId($consultation->dossier->id);
 
         return response()->json(['consultation'=>$consultation]);
 
@@ -173,6 +178,8 @@ class ConsultationFichierController extends Controller
 
         $consultation->delete();
 //        $consultation->updateConsultation();
+        $this->updateDossierId($consultation->dossier->id);
+
         return response()->json(['consultation'=>$consultation]);
     }
 
@@ -186,6 +193,8 @@ class ConsultationFichierController extends Controller
         }
 
         $consultation->updateConsultation();
+        $this->updateDossierId($consultation->dossier->id);
+
         return response()->json(['consultation'=>$consultation]);
     }
 
@@ -210,6 +219,8 @@ class ConsultationFichierController extends Controller
             $resultat->archieved_at = Carbon::now();
             $resultat->save();
             $resultat->updateConsultation();
+            $this->updateDossierId($resultat->dossier->id);
+
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -230,6 +241,8 @@ class ConsultationFichierController extends Controller
         $resultat->passed_at = Carbon::now();
         $resultat->save();
         $resultat->updateConsultation();
+        $this->updateDossierId($resultat->dossier->id);
+
         return response()->json(['resultat'=>$resultat]);
 
     }
@@ -243,6 +256,7 @@ class ConsultationFichierController extends Controller
         $resultat->archieved_at = null;
         $resultat->save();
         $resultat->updateConsultation();
+        $this->updateDossierId($resultat->dossier->id);
         return response()->json(['resultat'=>$resultat]);
 
     }
@@ -262,6 +276,9 @@ class ConsultationFichierController extends Controller
                 'extension'=>$document->getClientOriginalExtension(),
                 'chemin'=>$file,
             ]);
+
+            $this->updateDossierId($consultation->dossier->id);
+
         }
     }
 }

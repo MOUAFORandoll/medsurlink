@@ -18,6 +18,7 @@ use App\Models\Patient;
 use App\Models\RendezVous;
 use App\Models\Traitement;
 use App\Models\TraitementActuel;
+use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +33,8 @@ class ConsultationMedecineGeneraleController extends Controller
 {
     use PersonnalErrors;
     use SmsTrait;
+    use DossierTrait;
+
     protected $table = 'consultation_medecine_generales';
 
     /**
@@ -217,6 +220,7 @@ class ConsultationMedecineGeneraleController extends Controller
         if ($request->hasFile('documents')) {
             $this->uploadFile($request, $consultation);
         }
+        $this->updateDossierId($consultation->dossier->id);
 
         return response()->json(["consultation" => $consultation]);
     }
@@ -401,6 +405,7 @@ class ConsultationMedecineGeneraleController extends Controller
             File::delete(public_path().'/storage/'.$file);
 
         $consultation->updateConsultationMedecine();
+        $this->updateDossierId($consultation->dossier->id);
 
         return response()->json(["consultation"=>$consultation]);
     }
@@ -424,6 +429,8 @@ class ConsultationMedecineGeneraleController extends Controller
         try{
             $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
             $consultation->delete();
+            $this->updateDossierId($consultation->dossier->id);
+
             return response()->json(["consultation"=>$consultation]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
             $this->revealError('deletingError',$deleteRestrictionException->getMessage());
@@ -456,6 +463,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
             $user = $resultat->dossier->patient->user;
             informedPatientAndSouscripteurs($resultat->dossier->patient,1);
+            $this->updateDossierId($resultat->dossier->id);
 
 //            $this->sendSmsToUser($user);
 
@@ -485,6 +493,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $user = $resultat->dossier->patient->user;
         $this->sendSmsToUser($user);
         informedPatientAndSouscripteurs($resultat->dossier->patient,0);
+        $this->updateDossierId($resultat->dossier->id);
 
         return response()->json(['resultat'=>$resultat]);
 
@@ -501,6 +510,8 @@ class ConsultationMedecineGeneraleController extends Controller
 
         defineAsAuthor("ConsultationMedecineGenerale",$resultat->id,'reactiver');
         $resultat->updateConsultationMedecine();
+        $this->updateDossierId($resultat->dossier->id);
+
         return response()->json(['resultat'=>$resultat]);
 
     }
@@ -531,6 +542,7 @@ class ConsultationMedecineGeneraleController extends Controller
                 'extension'=>$document->getClientOriginalExtension(),
                 'chemin'=>$file,
             ]);
+            $this->updateDossierId($consultation->dossier->id);
 
             defineAsAuthor("File",$file->id,'create');
 

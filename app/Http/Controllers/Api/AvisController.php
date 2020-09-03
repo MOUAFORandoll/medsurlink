@@ -6,6 +6,7 @@ use App\Http\Requests\AvisRequest;
 use App\Mail\AvisDemande;
 use App\Models\Avis;
 use App\Models\MedecinAvis;
+use App\Traits\DossierTrait;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Mail;
 
 class AvisController extends Controller
 {
+    use DossierTrait;
+
     /**
      * Display a listing of the resource.
      *
@@ -56,7 +59,7 @@ class AvisController extends Controller
         }
 
         $avis = Avis::with(['dossier.patient.user','medecinAvis.medecin'])->find($avis->id);
-
+        $this->updateDossierId($avis->dossier->id);
         return response()->json(['avis'=>$avis]);
     }
 
@@ -119,6 +122,8 @@ class AvisController extends Controller
 
         $avis = Avis::with(['dossier.patient.user','medecinAvis'])->whereSlug($slug)->first();
 
+        $this->updateDossierId($avis->dossier->id);
+
         return response()->json(['avis'=>$avis]);
     }
 
@@ -133,6 +138,8 @@ class AvisController extends Controller
         $avis = Avis::with(['dossier.patient.user','medecinAvis'])->whereSlug($slug)->first();
         if (!is_null($avis))
             $avis->delete();
+
+        $this->updateDossierId($avis->dossier->id);
 
         return response()->json(['avis'=>$avis]);
     }

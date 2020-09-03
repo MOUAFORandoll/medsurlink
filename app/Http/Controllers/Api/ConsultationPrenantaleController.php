@@ -6,12 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ConsultationPrenataleRequest;
 use App\Models\ConsultationPrenatale;
+use App\Traits\DossierTrait;
 use Carbon\Carbon;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class ConsultationPrenantaleController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
+
     protected  $table = "consultation_prenatales";
     /**
      * Display a listing of the resource.
@@ -50,7 +53,7 @@ class ConsultationPrenantaleController extends Controller
 
         $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->whereSlug($consultationPrenatale->slug)->first();
         $consultationPrenatale->updatePrenatalConsultation();
-
+        $this->updateDossierId($consultationPrenatale->consultationObstetrique->dossier->id);
         defineAsAuthor("ConsultationPrenatale",$consultationPrenatale->id,'create',$consultationPrenatale->consultationObstetrique->dossier->patient->user_id);
 
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
@@ -101,6 +104,8 @@ class ConsultationPrenantaleController extends Controller
         ConsultationPrenatale::whereSlug($slug)->update($request->validated());
         $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->whereSlug($slug)->first();
         $consultationPrenatale->updatePrenatalConsultation();
+        $this->updateDossierId($consultationPrenatale->consultationObstetrique->dossier->id);
+
         return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
     }
 
@@ -122,6 +127,7 @@ class ConsultationPrenantaleController extends Controller
         }
         try{
             $consultationPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->whereSlug($slug)->first();
+            $this->updateDossierId($consultationPrenatale->consultationObstetrique->dossier->id);
             $consultationPrenatale->delete();
             return response()->json(['consultationPrenatale'=>$consultationPrenatale]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
@@ -151,6 +157,7 @@ class ConsultationPrenantaleController extends Controller
             defineAsAuthor("ConsultationPrenatale",$resultat->id,'archive');
             $resultat->updatePrenatalConsultation();
             informedPatientAndSouscripteurs($resultat->dossier->patient,1);
+            $this->updateDossierId($resultat->dossier->id);
 
             //Envoi du sms
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
@@ -175,6 +182,8 @@ class ConsultationPrenantaleController extends Controller
         $resultat->save();
         defineAsAuthor("ConsultationPrenatale",$resultat->id,'transmettre');
         $resultat->updatePrenatalConsultation();
+        $this->updateDossierId($resultat->dossier->id);
+
         //Envoi du sms
         $this->sendSmsToUser($resultat->dossier->patient->user);
         informedPatientAndSouscripteurs($resultat->dossier->patient,0);

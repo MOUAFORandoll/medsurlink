@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ResultatRequest;
 use App\Models\ResultatLabo;
+use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ class ResultatLaboController extends Controller
 {
     use PersonnalErrors;
     use SmsTrait;
+    use DossierTrait;
 
     protected $table = "resultat_labos";
 
@@ -56,7 +58,7 @@ class ResultatLaboController extends Controller
                 $resultat = ResultatLabo::create($request->validated());
 
                 $this->uploadFile($request,$resultat);
-
+                $this->updateDossierId($resultat->dossier->id);
                 defineAsAuthor("ResultatLabo", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
                 return response()->json([
@@ -72,7 +74,7 @@ class ResultatLaboController extends Controller
             );
         }else{
             $resultat = ResultatLabo::create($request->validated());
-
+            $this->updateDossierId($resultat->dossier->id);
             defineAsAuthor("ResultatLabo", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
             return response()->json([
@@ -153,6 +155,8 @@ class ResultatLaboController extends Controller
         if (!is_null($file) && $request->hasFile('file'))
             File::delete(public_path().'/storage/'.$file);
 
+        $this->updateDossierId($resultat->dossier->id);
+
         return response()->json([
             'resultat' => $resultat
         ]);
@@ -179,6 +183,7 @@ class ResultatLaboController extends Controller
         } else {
             $resultat->archived_at = Carbon::now();
             $resultat->save();
+            $this->updateDossierId($resultat->dossier->id);
             defineAsAuthor("ResultatLabo", $resultat->id,'archive');
             //Envoi du sms
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
@@ -207,6 +212,7 @@ class ResultatLaboController extends Controller
 
         $resultat->passed_at = Carbon::now();
         $resultat->save();
+        $this->updateDossierId($resultat->dossier->id);
         //Envoi du sms
         $this->sendSmsToUser($resultat->dossier->patient->user);
         informedPatientAndSouscripteurs($resultat->dossier->patient,0);
@@ -235,7 +241,7 @@ class ResultatLaboController extends Controller
         $resultat = ResultatLabo::with('dossier')->whereSlug($slug)->first();
 
         $this->checkIfAuthorized("ResultatLabo", $resultat->id,"create");
-
+        $this->updateDossierId($resultat->dossier->id);
         $resultat->delete();
         File::delete(public_path().'/storage/'.$resultat->file);
 

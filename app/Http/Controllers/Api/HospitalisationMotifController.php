@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Hospitalisation;
 use App\Models\Motif;
+use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class HospitalisationMotifController extends Controller
 {
+    use DossierTrait;
+
     public function removeMotif(Request $request){
         $validation = Validator::make($request->all(),[
             "hospitalisation_id"=>"required|integer|exists:hospitalisations,id",
@@ -24,6 +27,8 @@ class HospitalisationMotifController extends Controller
         $hospitalisation->motifs()->detach($request->get('motifs'));
 
         $hospitalisation = Hospitalisation::with('motifs')->find($request->get('hospitalisation_id'));
+        $this->updateDossierId($hospitalisation->dossier->id);
+
         return response()->json(['hospitalisation'=>$hospitalisation]);
     }
 
@@ -50,6 +55,7 @@ class HospitalisationMotifController extends Controller
 
         $hospitalisation = Hospitalisation::with('motifs')
             ->find($request->get('hospitalisation'));
+        $this->updateDossierId($hospitalisation->dossier->id);
 
         return response()->json(['hospitalisation' => $hospitalisation]);
     }

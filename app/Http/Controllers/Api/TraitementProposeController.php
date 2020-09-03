@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\TraitementProposeRequest;
 use App\Models\TraitementPropose;
+use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class TraitementProposeController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
+
     protected $table = 'traitement_proposes';
 
     /**
@@ -46,7 +49,7 @@ class TraitementProposeController extends Controller
     public function store(TraitementProposeRequest $request)
     {
         $traitement = TraitementPropose::create($request->validated());
-
+        $this->updateDossierId($traitement->consultation->dossier->id);
         defineAsAuthor("TraitementPropose", $traitement->id,'create',$traitement->consultation->dossier->patient->user_id);
 
         return response()->json([
@@ -105,6 +108,8 @@ class TraitementProposeController extends Controller
         TraitementPropose::whereSlug($slug)->update($request->validated());
         $traitement = TraitementPropose::findBySlug($slug);
 
+        $this->updateDossierId($traitement->consultation->dossier->id);
+
         return response()->json([
             'traitement' => $traitement
         ]);
@@ -122,6 +127,7 @@ class TraitementProposeController extends Controller
         $this->validatedSlug($slug, $this->table);
 
         $traitement = TraitementPropose::findBySlug($slug);
+        $this->updateDossierId($traitement->consultation->dossier->id);
         $traitement->delete();
 
         return response()->json([

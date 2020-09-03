@@ -8,12 +8,15 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\EchographieRequest;
 use App\Models\Echographie;
+use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class EchographieController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
+
     protected $table = "echographies";
     /**
      * Display a listing of the resource.
@@ -51,6 +54,7 @@ class EchographieController extends Controller
     {
 
         $echographie = Echographie::create($request->validated());
+        $this->updateDossierId($echographie->consultation->dossier->id);
 
         defineAsAuthor("Echographie",$echographie->id,'create',$echographie->consultation->dossier->patient->user_id);
 
@@ -105,7 +109,7 @@ class EchographieController extends Controller
         Echographie::whereSlug($slug)->update($request->validated());
 
         $echographie = Echographie::with('consultation')->whereSlug($slug)->first();
-
+        $this->updateDossierId($echographie->consultation->dossier->id);
         return response()->json(['echographie'=>$echographie]);
     }
 
@@ -124,6 +128,7 @@ class EchographieController extends Controller
         $this->checkIfAuthorized("Echographie",$echographie->id,"create");
 
         $echographie = Echographie::with('consultation')->whereSlug($slug)->first();
+        $this->updateDossierId($echographie->consultation->dossier->id);
         $echographie->delete();
 
         return response()->json(['echographie'=>$echographie]);

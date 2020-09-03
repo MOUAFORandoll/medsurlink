@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ToDoListRequest;
 use App\Models\SuiviToDoList;
+use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class ToDoListController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
+
     protected $table = 'suivi_to_do_lists';
     /**
      * Display a listing of the resource.

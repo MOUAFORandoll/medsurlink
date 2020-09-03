@@ -8,6 +8,7 @@ use App\Http\Requests\HospitalisationRequest;
 use App\Models\Hospitalisation;
 use App\Models\Motif;
 use App\Models\RendezVous;
+use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,7 @@ class HospitalisationController extends Controller
 {
     use PersonnalErrors;
     use SmsTrait;
+    use DossierTrait;
 
     protected $table = "hospitalisations";
     /**
@@ -116,6 +118,7 @@ class HospitalisationController extends Controller
             'motifs',
             'etablissement'
         ])->whereSlug($hospitalisation->slug)->first();
+        $this->updateDossierId($hospitalisation->dossier->id);
 
         $this->sendSmsToUser($hospitalisation->dossier->patient->user);
         informedPatientAndSouscripteurs($hospitalisation->dossier->patient,3);
@@ -271,6 +274,7 @@ class HospitalisationController extends Controller
 
             }
         }
+        $this->updateDossierId($hospitalisation->dossier->id);
 
         $hospitalisation->updateHospitalisation();
 
@@ -306,6 +310,8 @@ class HospitalisationController extends Controller
         $hospitalisation->updateHospitalisation();
 
         $this->checkIfAuthorized("Hospitalisation",$hospitalisation->id,"create");
+        $this->updateDossierId($hospitalisation->dossier->id);
+
         $hospitalisation->delete();
 
         return response()->json(['hospitalisation'=>$hospitalisation]);
@@ -343,6 +349,8 @@ class HospitalisationController extends Controller
         }else{
             $resultat->archived_at = Carbon::now();
             $resultat->save();
+            $this->updateDossierId($resultat->dossier->id);
+
             defineAsAuthor("Hospitalisation",$resultat->id,'archive');
 
             //Envoi du sms
@@ -381,6 +389,7 @@ class HospitalisationController extends Controller
 
         $resultat->passed_at = Carbon::now();
         $resultat->save();
+        $this->updateDossierId($resultat->dossier->id);
 
         defineAsAuthor("Hospitalisation",$resultat->id,'transmettre');
 

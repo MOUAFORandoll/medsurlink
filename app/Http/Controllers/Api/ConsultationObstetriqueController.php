@@ -8,6 +8,7 @@ use App\Http\Requests\ConsultationObstetriqueRequest;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\ConsultationObstetrique;
 use App\Models\RendezVous;
+use App\Traits\DossierTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,8 @@ use Netpok\Database\Support\DeleteRestrictionException;
 class ConsultationObstetriqueController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
+
     protected $table =  "consultation_obstetriques";
     /**
      * Display a listing of the resource.
@@ -109,6 +112,8 @@ class ConsultationObstetriqueController extends Controller
                 ]);
             }
         }
+        $this->updateDossierId($consultationObstetrique->dossier->id);
+
 
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
 
@@ -243,7 +248,7 @@ class ConsultationObstetriqueController extends Controller
 
             $rdv->save();
         }
-
+        $this->updateDossierId($consultationObstetrique->dossier->id);
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
     }
 
@@ -266,7 +271,9 @@ class ConsultationObstetriqueController extends Controller
         try{
             $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
             $consultationObstetrique->delete();
+            $this->updateDossierId($consultationObstetrique->dossier->id);
             return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
+
         }catch (DeleteRestrictionException $deleteRestrictionException){
             $this->revealError('deletingError',$deleteRestrictionException->getMessage());
         }
@@ -294,7 +301,7 @@ class ConsultationObstetriqueController extends Controller
             $resultat->updateObstetricConsultation();
 
             informedPatientAndSouscripteurs($resultat->dossier->patient,1);
-
+            $this->updateDossierId($resultat->dossier->id);
             //Envoi du sms
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
 
@@ -318,6 +325,7 @@ class ConsultationObstetriqueController extends Controller
         $resultat->save();
         defineAsAuthor("ConsultationObstetrique",$resultat->id,'transmettre');
         $resultat->updateObstetricConsultation();
+        $this->updateDossierId($resultat->dossier->id);
 
         //Envoi du sms
         $this->sendSmsToUser($resultat->dossier->patient->user);
@@ -338,6 +346,7 @@ class ConsultationObstetriqueController extends Controller
 
         defineAsAuthor("ConsultationObstetrique",$resultat->id,'reactiver');
         $resultat->updateObstetricConsultation();
+        $this->updateDossierId($resultat->dossier->id);
 
         return response()->json(['resultat'=>$resultat]);
 
