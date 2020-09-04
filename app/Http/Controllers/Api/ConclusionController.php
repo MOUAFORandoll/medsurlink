@@ -6,10 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ConclusionRequest;
 use App\Models\Conclusion;
+use App\Traits\DossierTrait;
 
 class ConclusionController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
     protected $table = "conclusions";
 
     /**
@@ -54,6 +56,7 @@ class ConclusionController extends Controller
         defineAsAuthor("Conclusion",$conclusion->id,'create',$conclusion->consultationMedecine->dossier->patient->user_id);
 
         $conclusion->updateConclusionItem();
+        $this->updateDossierId($conclusion->consultationMedecine->dossier->id);
 
         return response()->json(['conclusion'=>$conclusion]);
 
@@ -110,6 +113,7 @@ class ConclusionController extends Controller
         Conclusion::whereSlug($slug)->update($request->validated());
 
         $conclusion = Conclusion::with(['consultationMedecine'])->whereSlug($slug)->first();
+        $this->updateDossierId($conclusion->consultationMedecine->dossier->id);
 
         return response()->json(['conclusion'=>$conclusion]);
     }
@@ -127,6 +131,7 @@ class ConclusionController extends Controller
 
         $conclusion = Conclusion::with(['consultationMedecine'])->whereSlug($slug)->first();
         $conclusion->delete();
+        $this->updateDossierId($conclusion->consultationMedecine->dossier->id);
 
         return response()->json(['conclusion'=>$conclusion]);
     }

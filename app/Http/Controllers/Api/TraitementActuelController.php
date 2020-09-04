@@ -7,12 +7,15 @@ use App\Http\Requests\TraitementActuelRequest;
 use App\Http\Requests\TraitementActuelUpdateRequest;
 use App\Models\DossierMedical;
 use App\Models\TraitementActuel;
+use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class TraitementActuelController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
+
     protected $table = "traitement_actuels";
 
     /**
@@ -70,6 +73,9 @@ class TraitementActuelController extends Controller
         foreach ($dossier->traitements as $traitement){
             $traitement->updateTraitementActuel();
         }
+
+        $this->updateDossierId($dossier->id);
+
         return response()->json([
             'dossier' => $dossier
         ]);
@@ -128,7 +134,7 @@ class TraitementActuelController extends Controller
         TraitementActuel::whereSlug($slug)->update($request->validated());
 
         $traitement = TraitementActuel::with('dossier')->whereSlug($slug)->first();
-
+        $this->updateDossierId($traitement->dossier->id);
         return response()->json([
             'traitement' => $traitement
         ]);
@@ -162,6 +168,9 @@ class TraitementActuelController extends Controller
         foreach ($dossier->traitements as $traitement){
             $traitement->updateTraitementActuel();
         }
+
+        $this->updateDossierId($dossier->id);
+
         return response()->json([
             'dossier' => $dossier
         ]);

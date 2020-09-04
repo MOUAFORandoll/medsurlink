@@ -8,6 +8,7 @@ use App\Models\MedecinDeSuivi;
 use App\Models\SpecialiteSuivi;
 use App\Models\Suivi;
 use App\Models\SuiviToDoList;
+use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,8 @@ use Illuminate\Support\Facades\Auth;
 class SuiviController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
+
     protected $table = 'suivis';
 
     /**
@@ -94,7 +97,7 @@ class SuiviController extends Controller
         }
 
         $suivi = Suivi::with('toDoList','categorie','dossier.patient.user','responsable.praticien','specialites.specialite')->find($suivi->id);
-
+        $this->updateDossierId($suivi->dossier->id);
         return  response()->json(['suivi'=>$suivi]);
     }
 
@@ -173,6 +176,8 @@ class SuiviController extends Controller
         }
 
         $suivi = Suivi::with('toDoList','categorie','dossier.patient.user','responsable.praticien','specialites.specialite')->find($suivi->id);
+        $this->updateDossierId($suivi->dossier->id);
+
         return  response()->json(['suivi'=>$suivi]);
 
 
@@ -190,8 +195,10 @@ class SuiviController extends Controller
 
         $suivi = Suivi::whereSlug($slug)->first();
 
-        if (!is_null($suivi))
+        if (!is_null($suivi)){
+            $this->updateDossierId($suivi->dossier->id);
             $suivi->delete();
+        }
 
         return  response()->json(['suivi'=>$suivi]);
 

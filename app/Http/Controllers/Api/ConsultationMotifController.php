@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\Motif;
+use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class ConsultationMotifController extends Controller
 {
+    use DossierTrait;
     public function removeMotif(Request $request){
         $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
@@ -32,6 +34,8 @@ class ConsultationMotifController extends Controller
 
         if (!is_null($consultation))
             $consultation->updateConsultationMedecine();
+
+        $this->updateDossierId($consultation->dossier->id);
 
         return response()->json(['consultation'=>$consultation]);
     }
@@ -63,6 +67,8 @@ class ConsultationMotifController extends Controller
 
         if (!is_null($consultation))
             $consultation->updateConsultationMedecine();
+
+        $this->updateDossierId($consultation->dossier->id);
 
         return response()->json(['consultation'=>$consultation]);
     }

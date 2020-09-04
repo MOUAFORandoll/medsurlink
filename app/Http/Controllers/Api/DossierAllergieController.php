@@ -38,6 +38,8 @@ class DossierAllergieController extends Controller
             }
         ])->find($request->get('dossier'));
         $dossier->updateDossier();
+        $this->updateDossierId($dossier->id);
+
         return response()->json(['dossier'=>$dossier]);
     }
 
@@ -86,6 +88,8 @@ class DossierAllergieController extends Controller
             }
         ])->find($request->get('dossier'));
         $dossier->updateDossier();
+        $this->updateDossierId($dossier->id);
+
         return response()->json(['dossier'=>$dossier]);
     }
 
@@ -136,6 +140,8 @@ class DossierAllergieController extends Controller
                 $query->orderBy('date', 'desc');
             }
         ])->find($request->get('dossier_medical_id'));
+        $this->updateDossierId($dossier->id);
+
         return response()->json(['dossier'=>$dossier]);
     }
 }

@@ -13,6 +13,7 @@ use App\Models\Motif;
 use App\Models\ParametreCommun;
 use App\Models\RendezVous;
 use App\Models\TraitementActuel;
+use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
 use App\Traits\UserTrait;
 use Carbon\Carbon;
@@ -25,6 +26,7 @@ class CardiologieController extends Controller
     use PersonnalErrors;
     use UserTrait;
     use SmsTrait;
+    use DossierTrait;
 
     protected $table = 'cardiologies';
 
@@ -124,6 +126,8 @@ class CardiologieController extends Controller
             "files",
             "operationables.contributable"
         )->find($cardiologie->id);
+
+        $this->updateDossierId($cardiologie->dossier->id);
 
         return response()->json(['consultation' => $cardiologie]);
 
@@ -250,6 +254,8 @@ class CardiologieController extends Controller
         )->find($cardiologie->id);
 
         $cardiologie->updateConsultationCardiologique();
+        $this->updateDossierId($cardiologie->dossier->id);
+
         return response()->json(['consultation' => $cardiologie]);
     }
 
@@ -265,6 +271,8 @@ class CardiologieController extends Controller
 
         $cardiologie = Cardiologie::with('dossier')->whereSlug($slug)->first();
         $cardiologie->delete();
+        $this->updateDossierId($cardiologie->dossier->id);
+
         defineAsAuthor("Cardiologie", $cardiologie->id, 'delete', $cardiologie->dossier->patient->user_id);
         return response()->json(['consultation' => $cardiologie]);
     }
@@ -312,6 +320,7 @@ class CardiologieController extends Controller
 
             $user = $resultat->dossier->patient->user;
             informedPatientAndSouscripteurs($resultat->dossier->patient,1);
+            $this->updateDossierId($resultat->dossier->id);
 
 //            $this->sendSmsToUser($user);
 
@@ -353,6 +362,8 @@ class CardiologieController extends Controller
 
         defineAsAuthor("Cardiologie",$resultat->id,'transmettre');
         $resultat->updateConsultationCardiologique();
+        $this->updateDossierId($resultat->dossier->id);
+
 
         $user = $resultat->dossier->patient->user;
         $this->sendSmsToUser($user);
@@ -388,6 +399,7 @@ class CardiologieController extends Controller
         $resultat->passed_at = null;
         $resultat->archieved_at = null;
         $resultat->save();
+        $this->updateDossierId($resultat->dossier->id);
 
         defineAsAuthor("Cardiologie",$resultat->id,'reactiver');
         $resultat->updateConsultationCardiologique();

@@ -149,6 +149,7 @@ class UserController extends Controller
         return null;
     }
 
+
     public static function generatedUser($request,$role = null){
 
         $validation = self::personalValidation($request->all(),$role);
@@ -174,24 +175,23 @@ class UserController extends Controller
         }
 
         // Check if the role is patient in order to perform duplicate patient's name control
-        if($role == "Patient") {
-
-            // Get all patients where the name and surname are the same
-            $response = User::with('patient')->where([
-                ['nom', '=', $request->nom],
-                ['prenom', '=', $request->prenom],
-                ['telephone', '=', $request->telephone],
-            ])->count();
-
-            // Check if is greater than zero
-            if($response > 0) {
-                // If so, return an error
-                return response()->json([
-                    'user'=> null,
-                    'error' => trans('validation.duplicate_patient_name')
-                ]);
-            }
-        }
+//        if($role == "Patient") {
+//
+//            // Get all patients where the name and surname are the same
+//            $response = User::with('patient')->where([
+//                ['nom', '=', $request->nom],
+//                ['prenom', '=', $request->prenom],
+//            ])->count();
+//
+//            // Check if is greater than zero
+//            if($response > 0) {
+//                // If so, return an error
+//                return response()->json([
+//                    'user'=> null,
+//                    'error' => trans('validation.duplicate_patient_name')
+//                ]);
+//            }
+//        }
 
         $user = User::create([
             'nom'=>$request->nom,
@@ -262,13 +262,13 @@ class UserController extends Controller
             }
 
             // Check if is greater than zero
-            if($response > 0) {
-                // If so, return an error
-                return response()->json([
-                    'user'=> null,
-                    'error' => trans('validation.duplicate_patient_name')
-                ]);
-            }
+//            if($response > 0) {
+//                // If so, return an error
+//                return response()->json([
+//                    'user'=> null,
+//                    'error' => trans('validation.duplicate_patient_name')
+//                ]);
+//            }
 
 
             if ($data['telephone'] != $user->telephone || $data['date_de_naissance'] != $user->patient->date_de_naissance){

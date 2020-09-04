@@ -6,12 +6,14 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\SpecialiteSuiviRequest;
 use App\Models\ConsultationType;
 use App\Models\SpecialiteSuivi;
+use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class SpecialiteSuiviController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
 
     protected $table = "specialite_suivis";
 
@@ -44,7 +46,7 @@ class SpecialiteSuiviController extends Controller
     public function store(SpecialiteSuiviRequest $request)
     {
         $specialiteSuivi = SpecialiteSuivi::create($request->all());
-
+        $this->updateDossierId($specialiteSuivi->suivi->dossier->id);
         return  response()->json(['specialiteSuivi'=>$specialiteSuivi]);
     }
 
@@ -88,6 +90,7 @@ class SpecialiteSuiviController extends Controller
         SpecialiteSuivi::whereSlug($slug)->update($request->all());
 
         $specialiteSuivi = SpecialiteSuivi::whereSlug($slug)->first();
+        $this->updateDossierId($specialiteSuivi->suivi->dossier->id);
 
         return  response()->json(['specialiteSuivi'=>$specialiteSuivi]);
     }
@@ -103,7 +106,7 @@ class SpecialiteSuiviController extends Controller
         $this->validatedSlug($slug,$this->table);
 
         $specialiteSuivi = SpecialiteSuivi::whereSlug($slug)->first();
-
+        $this->updateDossierId($specialiteSuivi->suivi->dossier->id);
         $specialiteSuivi->delete();
 
         return  response()->json(['specialiteSuivi'=>$specialiteSuivi]);

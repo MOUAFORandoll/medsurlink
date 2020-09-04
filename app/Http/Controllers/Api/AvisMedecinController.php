@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AvisMedecinRequest;
 use App\Models\Avis;
 use App\Models\MedecinAvis;
+use App\Traits\DossierTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 class AvisMedecinController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
+
     protected $table = 'medecin_avis';
     /**
      * Display a listing of the resource.
@@ -56,7 +59,7 @@ class AvisMedecinController extends Controller
             }
         }
         $avis->save();
-
+        $this->updateDossierId($avis->avis->dossier->id);
         return  response()->json(['avis'=>$avis]);
     }
 
@@ -82,6 +85,8 @@ class AvisMedecinController extends Controller
         $avis = Avis::whereSlug($aviSlug)->first();
 
         $medecin_avis = MedecinAvis::where('avis_id',$avis->id)->where('medecin_id',$medecin)->first();
+
+        $this->updateDossierId($avis->dossier->id);
 
         return response()->json(['avis'=>$medecin_avis]);
     }
@@ -118,6 +123,8 @@ class AvisMedecinController extends Controller
                 "set_opinion_at"=>Carbon::now()->format('Y-m-d H:i:s'),
             ]);
 
+        $this->updateDossierId($avis->dossier->id);
+
         return  response()->json(['avis'=>$avis]);
     }
 
@@ -133,6 +140,8 @@ class AvisMedecinController extends Controller
 
         $avis = MedecinAvis::whereSlug($slug)->first();
         $avis->delete();
+
+        $this->updateDossierId($avis->avis->dossier->id);
 
         return  response()->json(['avis'=>$avis]);
     }
