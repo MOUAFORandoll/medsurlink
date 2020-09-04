@@ -263,13 +263,13 @@ class UserController extends Controller
             }
 
             // Check if is greater than zero
-            if($response > 0) {
-                // If so, return an error
-                return response()->json([
-                    'user'=> null,
-                    'error' => trans('validation.duplicate_patient_name')
-                ]);
-            }
+//            if($response > 0) {
+//                // If so, return an error
+//                return response()->json([
+//                    'user'=> null,
+//                    'error' => trans('validation.duplicate_patient_name')
+//                ]);
+//            }
 
 
             if ($data['telephone'] != $user->telephone || $data['date_de_naissance'] != $user->patient->date_de_naissance){
