@@ -149,6 +149,7 @@ class UserController extends Controller
         return null;
     }
 
+
     public static function generatedUser($request,$role = null){
 
         $validation = self::personalValidation($request->all(),$role);

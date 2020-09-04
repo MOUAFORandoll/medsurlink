@@ -122,6 +122,7 @@ class PatientController extends Controller
                 Mail::to($souscripteur->user->email)->send($mail);
             }
 
+
             return response()->json(['patient'=>$patient,"password"=>$password]);
         }catch (\Swift_TransportException $transportException){
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
