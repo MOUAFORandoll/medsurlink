@@ -45,8 +45,8 @@
     {{--            <td valign="top"> <p>Moyen de paiement</p>--}}
     {{--                <p>{{$facture->etablissement->name}}</p>--}}
     {{--            </td>--}}
-    {{--            <td valign="top"><p>N° compte Afriland (IBAN) </p>--}}
-    {{--                <p>CM21 10005 00020 06031161001 44</p>--}}
+    {{--            <td valign="top"><p>N° compte UBA (IBAN) </p>--}}
+    {{--                <p>CM21 10033 05201 01011001676 11</p>--}}
     {{--                <p>OM : 00 237 674 411 042 </p>--}}
     {{--                <p>MOMO: 00 237 674 411 042</p>--}}
     {{--            </td>--}}
