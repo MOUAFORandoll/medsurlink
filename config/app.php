@@ -164,6 +164,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
@@ -172,6 +173,8 @@ return [
         Barryvdh\Snappy\ServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         'Gbrock\Table\Providers\TableServiceProvider',
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+
 
         /*
          * Application Service Providers...
@@ -236,6 +239,7 @@ return [
         'SPDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];
