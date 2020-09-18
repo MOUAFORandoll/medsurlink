@@ -14,6 +14,7 @@ use App\Models\EtablissementExercicePatient;
 use App\Models\Patient;
 use App\Models\ReponseSecrete;
 use App\Models\Souscripteur;
+use App\Models\Suivi;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -82,6 +83,11 @@ class PatientController extends Controller
 
         //Generation du dossier client
         $dossier = DossierMedicalController::genererDossier($patient->user_id);
+        Suivi::create([
+            'dossier_medical_id'=>$patient->dossier->id,
+            'motifs'=>'Prise en charge initiale en attente',
+            'categorie_id'=>'1'
+        ]);
         defineAsAuthor("Patient",$patient->user_id,'create',$patient->user_id);
 
         //Ajout du patient à l'etablissement selectionné
@@ -98,6 +104,7 @@ class PatientController extends Controller
             }
 
         }
+
 
         //Envoi des informations patient par mail
         $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
