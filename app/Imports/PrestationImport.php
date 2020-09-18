@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class PrestationImport implements ToCollection,WithHeadingRow
+class PrestationImport implements ToCollection, WithHeadingRow
 {
     private $etablissementId = 0;
 
@@ -23,7 +23,7 @@ class PrestationImport implements ToCollection,WithHeadingRow
     }
 
     /**
-     * @param Collection $collection
+     * @param Collection $rows
      */
     public function collection(Collection $rows)
     {
