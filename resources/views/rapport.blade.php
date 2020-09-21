@@ -271,7 +271,7 @@
                             <table>
                                 <thead>
                                 <td class="title-table">Description</td>
-{{--                                <td class="title-table">Date prescription</td>--}}
+                                {{--                                <td class="title-table">Date prescription</td>--}}
                                 </thead>
                                 <tbody>
                                 <tr></tr>
@@ -279,7 +279,7 @@
                                     @if($loop->last)
                                         <tr>
                                             <td>{{$traiement->description}}</td>
-{{--                                            <td>{{\Carbon\Carbon::parse($traiement->created_at)->format('d/m/Y')}}</td>--}}
+                                            {{--                                            <td>{{\Carbon\Carbon::parse($traiement->created_at)->format('d/m/Y')}}</td>--}}
                                         </tr>
                                     @endif
                                 @endforeach
@@ -376,9 +376,9 @@
 
 
 <p>Je vous remercie de m'avoir adressé votre patient(e) et vous adresse mes salutations confraternelles.</p>
-
-<p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
-
+@if($consultationMedecine->dossier->patient->user->isMedicasure == '1')
+    <p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
+@endif
 @if(count($medecins) != 0)
     <h4>Medecin(s) ayant revisité votre consultation</h4>
     @foreach($medecins as $medecin)
