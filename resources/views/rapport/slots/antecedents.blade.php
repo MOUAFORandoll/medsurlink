@@ -28,7 +28,7 @@
                                     @if(!is_null($conclusion->description) && $conclusion->description !=='null')
                                         <tr>
                                             <td>Consultation</td>
-                                            <td>{{$conclusion->description}}</td>
+                                            <td>{!! $conclusion->description !!}</td>
                                             <td>{{\Carbon\Carbon::parse($conclusion->updated_at)->format('d/m/Y')}}</td>
                                         </tr>
                                     @endif
@@ -40,7 +40,7 @@
                                 @if(!is_null($cardiologie->conclusion) && $cardiologie->conclusion !=='null')
                                     <tr>
                                         <td>Consultation</td>
-                                        <td>{{$cardiologie->conclusion}}</td>
+                                        <td>{!!  $cardiologie->conclusion !!}</td>
                                         <td>{{\Carbon\Carbon::parse($cardiologie->updated_at)->format('d/m/Y')}}</td>
                                     </tr>
                                 @endif
