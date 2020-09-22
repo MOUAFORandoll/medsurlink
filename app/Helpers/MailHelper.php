@@ -30,14 +30,14 @@ if(!function_exists('informedSouscripteurOfRapport'))
      * @param $user
      * @return \Illuminate\Http\JsonResponse
      */
-    function informedSouscripteurOfRapport($user) {
-        if (!is_null($user->email) && $user->email != 'null'){
+    function informedSouscripteurOfRapport($souscripteur,$patient) {
+        if (!is_null($souscripteur->user->email) && $souscripteur->user->email != 'null'){
             try {
-                $mail = new \App\Mail\InformedSouscripteurOfRapport($user);
-                \Illuminate\Support\Facades\Mail::to($user->email)->send($mail);
+                $mail = new \App\Mail\InformedSouscripteurOfRapport($souscripteur,$patient);
+                \Illuminate\Support\Facades\Mail::to($souscripteur->user->email)->send($mail);
             } catch (\Swift_TransportException $transportException){
                 $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
-                return response()->json(['patient'=>$user, "message"=>$message]);
+                return response()->json(['patient'=>$souscripteur->user, "message"=>$message]);
             }
 
         }
@@ -69,11 +69,11 @@ if(!function_exists('informedPatientAndSouscripteurs'))
 
             foreach ($patient->financeurs as $financeur){
                 if (!is_null($financeur->financable->user)){
-                    informedSouscripteurOfRapport($financeur->financable->user);
+                    informedSouscripteurOfRapport($financeur->financable,$patient);
                 }
             }
             if (!is_null($precedentSouscripteur)){
-                informedSouscripteurOfRapport($precedentSouscripteur->user);
+                informedSouscripteurOfRapport($precedentSouscripteur,$patient);
             }
         }
     }
