@@ -20,7 +20,10 @@
     @component('.rapport.slots.modeDeVie',['consultation'=>$consultation])
     @endcomponent
 
-    @component('.rapport.slots.antecedents',['antecedents'=>$consultation->dossier->antecedents])
+    @component('.rapport.slots.antecedents',[
+    'antecedents'=>$consultation->dossier->antecedents,
+    'dossier'=>$consultation->dossier,
+    'consultation'=>$consultation])
     @endcomponent
 
     @component('.rapport.slots.allergies',['allergies'=>$consultation->dossier->allergies])
