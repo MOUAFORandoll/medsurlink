@@ -52,10 +52,10 @@ if(!function_exists('informedPatientAndSouscripteurs'))
      */
     function informedPatientAndSouscripteurs($patient,$transmit=0) {
         $send  = false;
-        if ($patient->user->isMedicasure == '0' && $transmit == 0){
+        if (($patient->user->isMedicasure == '0' || $patient->user->isMedicasure == 0) && $transmit == 0){
             $send = true;
         }
-        if ($patient->user->isMedicasure == '1' && $transmit == 1){
+        if (($patient->user->isMedicasure == '1' || $patient->user->isMedicasure == 1) && $transmit == 1){
             $send = true;
         }
 
