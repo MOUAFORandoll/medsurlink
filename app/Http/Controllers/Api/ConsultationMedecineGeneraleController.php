@@ -242,7 +242,7 @@ class ConsultationMedecineGeneraleController extends Controller
             'dossier.resultatsLabo',
             'dossier.hospitalisations',
             'dossier.consultationsObstetrique',
-            'dossier.consultationsMedecine',
+            'dossier.consultationsMedecine.conclusions',
             'dossier.resultatsImagerie',
             'dossier.allergies',
             'dossier.antecedents',

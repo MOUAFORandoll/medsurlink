@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Rdv;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class InformedSouscripteurOfRapport extends Mailable
+class RappelSouscripteur extends Mailable
 {
     use Queueable, SerializesModels;
+    public $rdv;
     public $souscripteur;
-    public $patient;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($souscripteur,$patient)
+    public function __construct($rdv,$souscripteur)
     {
+        $this->rdv = $rdv;
         $this->souscripteur = $souscripteur;
-        $this->patient = $patient;
     }
 
     /**
@@ -31,7 +31,9 @@ class InformedSouscripteurOfRapport extends Mailable
      */
     public function build()
     {
-        return $this->subject('Medsurlink - Mise à jour des informations médicales')
-            ->markdown('emails.rapport.informedSouscripteur');
+        return $this->subject('Rendez-vous médical '.strtoupper($this->rdv->patient->nom).'  '.ucfirst($this->rdv->patient->prenom) )
+            ->from('medsurlink@medicasure.com')
+            ->bcc('medsurlink@medicasure.com')
+            ->markdown('emails.Rdv.RappelSouscripteur');
     }
 }
