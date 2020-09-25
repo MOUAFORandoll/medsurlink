@@ -185,7 +185,7 @@ class HospitalisationController extends Controller
 
         $hospitalisation = Hospitalisation::findBySlug($slug);
 
-        $this->checkIfAuthorized("Hospitalisation",$hospitalisation->id,"create");
+//        $this->checkIfAuthorized("Hospitalisation",$hospitalisation->id,"create");
 
         Hospitalisation::whereSlug($slug)->update($request->except('motifs','hospitalisation','motifRdv','rendez_vous'));
 
@@ -354,6 +354,10 @@ class HospitalisationController extends Controller
             defineAsAuthor("Hospitalisation",$resultat->id,'archive');
 
             //Envoi du sms
+            $user = $resultat->dossier->patient->user;
+            if($user->isMedicasure == '1' || $user->isMedicasure == 1 ){
+                $this->sendSmsToUser($user);
+            }
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
             informedPatientAndSouscripteurs($resultat->dossier->patient,1);
 
@@ -394,7 +398,11 @@ class HospitalisationController extends Controller
         defineAsAuthor("Hospitalisation",$resultat->id,'transmettre');
 
         //Envoi du sms
-        $this->sendSmsToUser($resultat->dossier->patient->user);
+        $user = $resultat->dossier->patient->user;
+        if($user->isMedicasure == '1' || $user->isMedicasure == 1 ){
+            $this->sendSmsToUser($user);
+        }
+//        $this->sendSmsToUser($resultat->dossier->patient->user);
         informedPatientAndSouscripteurs($resultat->dossier->patient,0);
 
         return response()->json(['resultat'=>$resultat]);

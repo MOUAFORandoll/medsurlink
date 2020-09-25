@@ -11,6 +11,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Hospitalisation extends Model
 {
@@ -105,6 +106,11 @@ class Hospitalisation extends Model
             }
             $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$this->id,"create");
             $this['isAuthor']=$isAuthor->getOriginalContent();
+
+            $connectedUser = Auth::user();
+            if ($connectedUser->getRoleNames()->first() == 'Medecin controle') {
+                $this['isAuthor'] = true;
+            }
         }
     }
 

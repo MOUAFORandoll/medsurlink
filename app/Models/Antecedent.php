@@ -8,6 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Antecedent extends Model
 {
@@ -46,8 +47,12 @@ class Antecedent extends Model
     public function updateAntecedentItem(){
         if(!is_null($this)) {
             $isAuthor = checkIfIsAuthorOrIsAuthorized("Antecedent", $this->id, "create");
-            $this['user']= $this->dossier->patient->user;
+            $this['user'] = $this->dossier->patient->user;
             $this['isAuthor'] = $isAuthor->getOriginalContent();
+            $connectedUser = Auth::user();
+            if ($connectedUser->getRoleNames()->first() == 'Medecin controle') {
+                $this['isAuthor'] = true;
+            }
         }
     }
 
