@@ -7,6 +7,7 @@ use App\Http\Requests\ConsultationFichierRequest;
 use App\Models\ConsultationFichier;
 use App\Models\DossierMedical;
 use App\Traits\DossierTrait;
+use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,6 +17,7 @@ class ConsultationFichierController extends Controller
 {
     use PersonnalErrors;
     use DossierTrait;
+    use SmsTrait;
 
     protected $table = 'consultation_fichiers';
 
@@ -221,6 +223,12 @@ class ConsultationFichierController extends Controller
             $resultat->updateConsultation();
             $this->updateDossierId($resultat->dossier->id);
 
+            $user = $resultat->dossier->patient->user;
+            informedPatientAndSouscripteurs($resultat->dossier->patient,1);
+            if($user->isMedicasure == '1' || $user->isMedicasure == 1){
+                $this->sendSmsToUser($user);
+            }
+
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -242,7 +250,11 @@ class ConsultationFichierController extends Controller
         $resultat->save();
         $resultat->updateConsultation();
         $this->updateDossierId($resultat->dossier->id);
-
+        $user = $resultat->dossier->patient->user;
+        informedPatientAndSouscripteurs($resultat->dossier->patient,0);
+        if($user->isMedicasure == '0' || $user->isMedicasure == 0){
+            $this->sendSmsToUser($user);
+        }
         return response()->json(['resultat'=>$resultat]);
 
     }
