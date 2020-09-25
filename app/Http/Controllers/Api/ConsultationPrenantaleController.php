@@ -160,6 +160,10 @@ class ConsultationPrenantaleController extends Controller
             $this->updateDossierId($resultat->dossier->id);
 
             //Envoi du sms
+            $user = $resultat->dossier->patient->user;
+            if($user->isMedicasure == '1' || $user->isMedicasure == 1 ){
+                $this->sendSmsToUser($user);
+            }
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
 
             return response()->json(['resultat'=>$resultat]);
@@ -185,7 +189,11 @@ class ConsultationPrenantaleController extends Controller
         $this->updateDossierId($resultat->dossier->id);
 
         //Envoi du sms
-        $this->sendSmsToUser($resultat->dossier->patient->user);
+        $user = $resultat->dossier->patient->user;
+        if($user->isMedicasure == '0' || $user->isMedicasure == 0 ){
+            $this->sendSmsToUser($user);
+        }
+//        $this->sendSmsToUser($resultat->dossier->patient->user);
         informedPatientAndSouscripteurs($resultat->dossier->patient,0);
         return response()->json(['resultat'=>$resultat]);
 

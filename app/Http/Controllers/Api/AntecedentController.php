@@ -118,7 +118,7 @@ class AntecedentController extends Controller
 
         $antecedent = Antecedent::whereSlug($slug)->first();
 
-        $this->checkIfAuthorized("Antecedent",$antecedent->id,"create");
+//        $this->checkIfAuthorized("Antecedent",$antecedent->id,"create");
 
         Antecedent::whereSlug($slug)->update($request->validated());
 
