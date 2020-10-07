@@ -104,6 +104,15 @@ class Patient extends Model
                 foreach ($patients as $patient){
                     array_push($patientsId,$patient->user_id);
                 }
+
+                $patientSouscripteurs = PatientSouscripteur::where('financable_id',Auth::id())->get();
+
+                foreach ($patientSouscripteurs as  $patient){
+                    if (in_array($patient->patient_id,$patientsId)){
+                        array_push($patientsId,$patient->patient_id);
+                    }
+                }
+
                 $builder->whereIn('user_id',$patientsId);
             }
             else{
