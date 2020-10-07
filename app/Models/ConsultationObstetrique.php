@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
+use App\Scopes\RestrictArchievedAt;
 use App\Scopes\RestrictDossierScope;
 use App\User;
 use Carbon\Carbon;
@@ -102,6 +103,7 @@ class ConsultationObstetrique extends Model
         parent::boot();
 
         static::addGlobalScope(new RestrictDossierScope);
+        static::addGlobalScope(new RestrictArchievedAt);
     }
 
     public function updateObstetricConsultation(){

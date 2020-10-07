@@ -212,6 +212,11 @@ class UserController extends Controller
             $user->smsEnvoye = 1;
             $user->save();
         }
+
+        if (!is_null($role) && $role == "Souscripteur"){
+            $user->isMedicasure = 1;
+            $user->save();
+        }
         return response()->json(['user'=>$user,'password'=>$password,'code'=>$code]);
     }
 

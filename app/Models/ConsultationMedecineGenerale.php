@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
+use App\Scopes\RestrictArchievedAt;
 use App\Scopes\RestrictDossierScope;
 use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
@@ -104,6 +106,11 @@ class ConsultationMedecineGenerale extends Model
         parent::boot();
 
         static::addGlobalScope(new RestrictDossierScope);
+        static::addGlobalScope(new RestrictArchievedAt);
+    }
+
+    public function scopePassed($query){
+
     }
 
     public function updateConsultationMedecine(){
@@ -152,7 +159,7 @@ class ConsultationMedecineGenerale extends Model
     }
 
     public function operationables(){
-         return $this->morphMany(Contributeurs::class,'operationable');
+        return $this->morphMany(Contributeurs::class,'operationable');
     }
 
     public function files(){

@@ -181,6 +181,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
     Route::resource('rdvs','Api\RendezVousController');
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except('store','update','destroy');
+    Route::resource('consultation-cardiologie','Api\CardiologieController')->except(['store','update','destroy']);
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except('store','update','destroy');
     Route::resource('motif','Api\MotifController')->except('store','update','destroy');
     Route::resource('allergie','Api\AllergieController')->except('store','update','destroy');
