@@ -59,6 +59,7 @@ class User extends Authenticatable
         'adresse',
         'smsEnvoye',
         'isNotice',
+        'decede',
     ];
 
     /**
