@@ -47,7 +47,7 @@ class SouscripteurController extends Controller
     public function store(SouscripteurStoreRequest $request)
     {
         //Création des informations utilisateurs
-        $userResponse =  UserController::generatedUser($request);
+        $userResponse =  UserController::generatedUser($request,'Souscripteur');
         if ($userResponse->status() == 419)
             return $userResponse;
 

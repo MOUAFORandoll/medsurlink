@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
-use App\Scopes\RestrictDossierScope;
+use App\Scopes\RestrictArchivedAt;
 use App\Scopes\RestrictHospitalisationScope;
 use App\User;
 use Carbon\Carbon;
@@ -31,7 +31,7 @@ class Hospitalisation extends Model
         "examen_clinique",
         "examen_complementaire",
         "traitement_propose",
-        'archieved_at',
+        'archived_at',
         'passed_at',
         'etablissement_id',
         'creator',
@@ -89,6 +89,7 @@ class Hospitalisation extends Model
         parent::boot();
 
         static::addGlobalScope(new RestrictHospitalisationScope);
+        static::addGlobalScope(new RestrictArchivedAt);
     }
 
     public function updateHospitalisation(){

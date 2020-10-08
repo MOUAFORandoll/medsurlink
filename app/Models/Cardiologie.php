@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Scopes\RestrictArchieved;
+use App\Scopes\RestrictArchievedAt;
 use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -34,6 +36,8 @@ class Cardiologie extends Model
         "nbreCigarette",
         "nbreAnnee",
         "creator",
+        'archieved_at',
+        'passed_at',
     ];
     /**
      * Return the sluggable configuration array for this model.
@@ -130,5 +134,15 @@ class Cardiologie extends Model
 
     public function rdv(){
         return $this->morphOne(RendezVous::class,'sourceable');
+    }
+
+    protected static function boot()
+    {
+
+
+        parent::boot();
+
+        static::addGlobalScope(new RestrictArchievedAt);
+
     }
 }

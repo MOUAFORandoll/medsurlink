@@ -4,6 +4,7 @@
 namespace App\Scopes;
 
 
+use App\Models\PatientSouscripteur;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -40,6 +41,14 @@ class RestrictHospitalisationScope implements Scope
                         array_push($dossiers,$patient->dossier->id);
                     }
                 }
+                $patientSouscripteurs = PatientSouscripteur::where('financable_id',Auth::id())->get();
+
+                foreach ($patientSouscripteurs as  $patient){
+                    if (in_array($patient->patients->dossier->id,$dossiers)){
+                        array_push($patientsId,$patient->patients->dossier->id);
+                    }
+                }
+
                 $builder->whereIn('dossier_medical_id',$dossiers);
             }elseif(gettype($userRoles->search('Medecin controle')) == 'integer'){
                 $builder;
