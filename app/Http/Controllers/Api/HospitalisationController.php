@@ -119,10 +119,11 @@ class HospitalisationController extends Controller
             'etablissement'
         ])->whereSlug($hospitalisation->slug)->first();
         $this->updateDossierId($hospitalisation->dossier->id);
-
-        $this->sendSmsToUser($hospitalisation->dossier->patient->user);
-        informedPatientAndSouscripteurs($hospitalisation->dossier->patient,3);
-
+        $user = $hospitalisation->dossier->patient->user;
+        if ($user->decede == 'non') {
+            $this->sendSmsToUser($hospitalisation->dossier->patient->user);
+            informedPatientAndSouscripteurs($hospitalisation->dossier->patient, 3);
+        }
         return response()->json(['hospitalisation'=>$hospitalisation]);
 
     }
@@ -355,12 +356,13 @@ class HospitalisationController extends Controller
 
             //Envoi du sms
             $user = $resultat->dossier->patient->user;
-            if($user->isMedicasure == '1' || $user->isMedicasure == 1 ){
-                $this->sendSmsToUser($user);
-            }
+            if ($user->decede == 'non') {
+                if ($user->isMedicasure == '1' || $user->isMedicasure == 1) {
+                    $this->sendSmsToUser($user);
+                }
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
-            informedPatientAndSouscripteurs($resultat->dossier->patient,1);
-
+                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+            }
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -399,12 +401,13 @@ class HospitalisationController extends Controller
 
         //Envoi du sms
         $user = $resultat->dossier->patient->user;
-        if($user->isMedicasure == '1' || $user->isMedicasure == 1 ){
-            $this->sendSmsToUser($user);
-        }
+        if ($user->decede == 'non') {
+            if ($user->isMedicasure == '1' || $user->isMedicasure == 1) {
+                $this->sendSmsToUser($user);
+            }
 //        $this->sendSmsToUser($resultat->dossier->patient->user);
-        informedPatientAndSouscripteurs($resultat->dossier->patient,0);
-
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+        }
         return response()->json(['resultat'=>$resultat]);
 
     }

@@ -184,7 +184,7 @@ class ResultatImagerieController extends Controller
             ->first();
 
         if (is_null($resultat->passed_at)) {
-           $this->revealNonTransmis();
+            $this->revealNonTransmis();
 
         } else {
             $resultat->archived_at = Carbon::now();
@@ -193,7 +193,10 @@ class ResultatImagerieController extends Controller
             defineAsAuthor("ResultatImagerie", $resultat->id,'archive');
             //Envoi du sms
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
-            informedPatientAndSouscripteurs($resultat->dossier->patient,1);
+            $user = $resultat->dossier->patient->user;
+            if ($user->decede == 'non') {
+                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+            }
             $this->updateDossierId($resultat->dossier->id);
             return response()->json([
                 'resultat' => $resultat
@@ -219,10 +222,12 @@ class ResultatImagerieController extends Controller
         $resultat->passed_at = Carbon::now();
         $resultat->save();
         $this->updateDossierId($resultat->dossier->id);
-        defineAsAuthor("ResultatImagerie", $resultat->id,'transmettre');
-        $this->sendSmsToUser($resultat->dossier->patient->user);
-        informedPatientAndSouscripteurs($resultat->dossier->patient,0);
-
+        $user = $resultat->dossier->patient->user;
+        if ($user->decede == 'non') {
+            defineAsAuthor("ResultatImagerie", $resultat->id, 'transmettre');
+            $this->sendSmsToUser($resultat->dossier->patient->user);
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+        }
         return response()->json([
             'resultat' => $resultat
         ]);

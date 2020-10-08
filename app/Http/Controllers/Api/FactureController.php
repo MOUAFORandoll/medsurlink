@@ -159,29 +159,31 @@ class FactureController extends Controller
         $data = compact('facture');
 
         $pdf = PDF::loadView('facture.definitive',$data);
+        $user = $facture->dossier->patient->user;
+        if ($user->decede == 'non') {
+            $nom = ucfirst($facture->dossier->patient->user->nom);
+            $prenom = is_null($facture->dossier->patient->user->prenom) ? '' : $facture->dossier->patient->user->prenom;
+            $prenom = ucfirst($prenom);
+            $date = $facture->date_facturation;
+            $attachName = str_replace(' ', '_', 'Facture_' . $nom . '_' . $prenom . '_' . $date . '.pdf');
+            $path = storage_path() . '/app/public/pdf/' . $attachName;
+            $pdf->save($path);
+            $attachPath = '/storage/pdf/' . $attachName;
+            if (!is_null($facture)) {
+                $souscripteur = $facture->dossier->patient->souscripteur;
+                if (!is_null($souscripteur)) {
+                    array_push($souscripteurs, $souscripteur);
+                }
+                $financeurs = $facture->dossier->patient->financeurs;
+                foreach ($financeurs as $financeur) {
+                    array_push($souscripteurs, $financeur->financable);
+                }
 
-        $nom  = ucfirst($facture->dossier->patient->user->nom);
-        $prenom = is_null($facture->dossier->patient->user->prenom) ? '' :$facture->dossier->patient->user->prenom;
-        $prenom  = ucfirst($prenom);
-        $date= $facture->date_facturation;
-        $attachName = str_replace(' ','_','Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf');
-        $path = storage_path().'/app/public/pdf/'.$attachName;
-        $pdf->save($path);
-        $attachPath = '/storage/pdf/'.$attachName;
-        if (!is_null($facture)){
-            $souscripteur = $facture->dossier->patient->souscripteur;
-            if (!is_null($souscripteur)){
-                array_push($souscripteurs,$souscripteur);
-            }
-            $financeurs = $facture->dossier->patient->financeurs;
-            foreach ($financeurs as $financeur){
-                array_push($souscripteurs,$financeur->financable);
-            }
-
-            foreach ($souscripteurs as $souscripteur){
-                $mail = new MailRappel($facture,$souscripteur,$attachPath);
-                Mail::to($souscripteur->user->email)->send($mail);
-                Log::info('envoi de mail de rappel '.$souscripteur->user->email);
+                foreach ($souscripteurs as $souscripteur) {
+                    $mail = new MailRappel($facture, $souscripteur, $attachPath);
+                    Mail::to($souscripteur->user->email)->send($mail);
+                    Log::info('envoi de mail de rappel ' . $souscripteur->user->email);
+                }
             }
         }
     }
@@ -197,34 +199,36 @@ class FactureController extends Controller
         $data = compact('facture');
 
         $pdf = PDF::loadView('facture.definitive',$data);
+        $user = $facture->dossier->patient->user;
+        if ($user->decede == 'non') {
+            $nom = ucfirst($facture->dossier->patient->user->nom);
+            $prenom = is_null($facture->dossier->patient->user->prenom) ? '' : $facture->dossier->patient->user->prenom;
+            $prenom = ucfirst($prenom);
+            $date = $facture->date_facturation;
+            $attachName = str_replace(' ', '_', 'Facture_' . $nom . '_' . $prenom . '_' . $date . '.pdf');
+            $path = storage_path() . '/app/public/pdf/' . $attachName;
+            $pdf->save($path);
+            $attachPath = '/storage/pdf/' . $attachName;
+            if (!is_null($facture)) {
+                $souscripteur = $facture->dossier->patient->souscripteur;
+                if (!is_null($souscripteur)) {
+                    array_push($souscripteurs, $souscripteur);
+                }
+                $financeurs = $facture->dossier->patient->financeurs;
+                foreach ($financeurs as $financeur) {
+                    array_push($souscripteurs, $financeur->financable);
 
-        $nom  = ucfirst($facture->dossier->patient->user->nom);
-        $prenom = is_null($facture->dossier->patient->user->prenom) ? '' :$facture->dossier->patient->user->prenom;
-        $prenom  = ucfirst($prenom);
-        $date= $facture->date_facturation;
-        $attachName = str_replace(' ','_','Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf');
-        $path = storage_path().'/app/public/pdf/'.$attachName;
-        $pdf->save($path);
-        $attachPath = '/storage/pdf/'.$attachName;
-        if (!is_null($facture)){
-            $souscripteur = $facture->dossier->patient->souscripteur;
-            if (!is_null($souscripteur)){
-                array_push($souscripteurs,$souscripteur);
+                }
+                foreach ($souscripteurs as $souscripteur) {
+                    $mail = new MailRecouvrement($facture, $souscripteur, $attachPath);
+                    Mail::to($souscripteur->user->email)->send($mail);
+                    Log::info('envoi de mail de recouvrement ' . $souscripteur->user->email);
+
+                }
+
+                $facture->statut = 'En recouvrement';
+                $facture->save();
             }
-            $financeurs = $facture->dossier->patient->financeurs;
-            foreach ($financeurs as $financeur){
-                array_push($souscripteurs,$financeur->financable);
-
-            }
-            foreach ($souscripteurs as $souscripteur){
-                $mail = new MailRecouvrement($facture,$souscripteur,$attachPath);
-                Mail::to($souscripteur->user->email)->send($mail);
-                Log::info('envoi de mail de recouvrement '.$souscripteur->user->email);
-
-            }
-
-            $facture->statut = 'En recouvrement';
-            $facture->save();
         }
     }
 }

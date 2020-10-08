@@ -11,12 +11,14 @@ if(!function_exists('informedPatientOfRapport'))
      */
     function informedPatientOfRapport($user) {
         if (!is_null($user->email) && $user->email != 'null'){
-            try{
-                $mail = new \App\Mail\InformedPatientOfRapport($user);
-                \Illuminate\Support\Facades\Mail::to($user->email)->send($mail);
-            } catch (\Swift_TransportException $transportException){
-                $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
-                return response()->json(['patient'=>$user, "message"=>$message]);
+            if ($user->decede == 'non'){
+                try{
+                    $mail = new \App\Mail\InformedPatientOfRapport($user);
+                    \Illuminate\Support\Facades\Mail::to($user->email)->send($mail);
+                } catch (\Swift_TransportException $transportException){
+                    $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+                    return response()->json(['patient'=>$user, "message"=>$message]);
+                }
             }
         }
     }

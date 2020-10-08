@@ -296,8 +296,9 @@ class PatientController extends Controller
         $nom = substr(strtoupper( $user->nom),0,20);
         $user->password = bcrypt($password);
         $user->save();
-        sendSMS($request->get('telephone'),trans('sms.accountSecurityUpdated',['nom'=>$nom,'password'=>$code],'fr'));
-
+        if ($user->decede == 'non') {
+            sendSMS($request->get('telephone'), trans('sms.accountSecurityUpdated', ['nom' => $nom, 'password' => $code], 'fr'));
+        }
         return response()->json(['message'=>'Sms envoyé avec succès']);
     }
 

@@ -187,8 +187,10 @@ class ResultatLaboController extends Controller
             defineAsAuthor("ResultatLabo", $resultat->id,'archive');
             //Envoi du sms
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
-            informedPatientAndSouscripteurs($resultat->dossier->patient,1);
-
+            $user = $resultat->dossier->patient->user;
+            if ($user->decede == 'non') {
+                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+            }
             return response()->json([
                 'resultat' => $resultat
             ]);
@@ -214,9 +216,11 @@ class ResultatLaboController extends Controller
         $resultat->save();
         $this->updateDossierId($resultat->dossier->id);
         //Envoi du sms
-        $this->sendSmsToUser($resultat->dossier->patient->user);
-        informedPatientAndSouscripteurs($resultat->dossier->patient,0);
-
+        $user = $resultat->dossier->patient->user;
+        if ($user->decede == 'non') {
+            $this->sendSmsToUser($resultat->dossier->patient->user);
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+        }
         return response()->json([
             'resultat' => $resultat
         ]);
