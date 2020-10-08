@@ -206,7 +206,8 @@ class UserController extends Controller
             'adresse'=>$request->adresse,
             'isMedicasure'=>$request->get('isMedicasure','0'),
             'isNotice'=>$request->get('isNotice','0'),
-            'password'=>Hash::make($password)
+            'password'=>Hash::make($password),
+            'decede'=>'non'
         ]);
         if (!is_null($role) && $role == "Patient"){
             $user->smsEnvoye = 1;

@@ -63,26 +63,31 @@ class rappelerRendezVous extends Command
                     $praticien ='';
                 }
             }
-            $this->RappelerRdvViaSMSTo($rdv->patient,$praticien,$date,$heure);
 
-            if (is_null($rdv->nom_medecin)) {
-                $mail = new Rappel($rdv);
-                Mail::to($rdv->praticien->email)->send($mail);
+            if($rdv->patient->decede == 'non'){
+                $this->RappelerRdvViaSMSTo($rdv->patient,$praticien,$date,$heure);
+
+                if (is_null($rdv->nom_medecin)) {
+                    $mail = new Rappel($rdv);
+                    Mail::to($rdv->praticien->email)->send($mail);
+                }
             }
         }
 
         foreach ($rdvs as $rdv){
-            $souscripteur = $rdv->patient->patient->souscripteur;
-            if (!is_null($souscripteur)){
-                $mail = new RappelSouscripteur($rdv,$souscripteur);
-                Mail::to($souscripteur->user->email)->send($mail);
-                Log::info('envoi de mail de rappel au souscripteur'.$souscripteur->user->email);
-            }
-            $financeurs = $rdv->patient->patient->financeurs;
-            foreach ($financeurs as $financeur){
-                $mail = new RappelSouscripteur($rdv,$financeur->financable);
-                Mail::to($financeur->financable->user->email)->send($mail);
-                Log::info('envoi de mail de rappel au souscripteur'.$financeur->financable->user->email);
+            if($rdv->patient->decede == 'non') {
+                $souscripteur = $rdv->patient->patient->souscripteur;
+                if (!is_null($souscripteur)) {
+                    $mail = new RappelSouscripteur($rdv, $souscripteur);
+                    Mail::to($souscripteur->user->email)->send($mail);
+                    Log::info('envoi de mail de rappel au souscripteur' . $souscripteur->user->email);
+                }
+                $financeurs = $rdv->patient->patient->financeurs;
+                foreach ($financeurs as $financeur) {
+                    $mail = new RappelSouscripteur($rdv, $financeur->financable);
+                    Mail::to($financeur->financable->user->email)->send($mail);
+                    Log::info('envoi de mail de rappel au souscripteur' . $financeur->financable->user->email);
+                }
             }
         }
         Auteur::create([

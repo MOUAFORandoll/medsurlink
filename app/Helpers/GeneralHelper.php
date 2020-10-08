@@ -37,11 +37,13 @@ if(!function_exists('sendSmsToUser'))
      */
     function sendSmsToUser($user,$sender = null) {
         if (!is_null($user)){
-            try {
-                $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
-                sendSMS($user->telephone,trans('sms.accountUpdated',['nom'=>$nom],'fr'),$sender);
-            }catch (\Exception $exception){
-                //$exception
+            if ($user->decede == 'non'){
+                try {
+                    $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+                    sendSMS($user->telephone,trans('sms.accountUpdated',['nom'=>$nom],'fr'),$sender);
+                }catch (\Exception $exception){
+                    //$exception
+                }
             }
         }
     }

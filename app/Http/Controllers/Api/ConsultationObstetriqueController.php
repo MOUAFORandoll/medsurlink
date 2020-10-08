@@ -299,15 +299,16 @@ class ConsultationObstetriqueController extends Controller
             $resultat->save();
             defineAsAuthor("ConsultationObstetrique",$resultat->id,'archive');
             $resultat->updateObstetricConsultation();
-
-            informedPatientAndSouscripteurs($resultat->dossier->patient,1);
-            $this->updateDossierId($resultat->dossier->id);
-            //Envoi du sms
             $user = $resultat->dossier->patient->user;
-            if($user->isMedicasure == '1' || $user->isMedicasure == 1 ){
-                $this->sendSmsToUser($user);
-            }
+            if ($user->decede == 'non') {
+                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+                $this->updateDossierId($resultat->dossier->id);
+                //Envoi du sms
 
+                if ($user->isMedicasure == '1' || $user->isMedicasure == 1) {
+                    $this->sendSmsToUser($user);
+                }
+            }
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -332,12 +333,13 @@ class ConsultationObstetriqueController extends Controller
 
         //Envoi du sms
         $user = $resultat->dossier->patient->user;
-        if($user->isMedicasure == '0' || $user->isMedicasure == 0 ){
-            $this->sendSmsToUser($user);
-        }
+        if ($user->decede == 'non') {
+            if ($user->isMedicasure == '0' || $user->isMedicasure == 0) {
+                $this->sendSmsToUser($user);
+            }
 //        $this->sendSmsToUser($resultat->dossier->patient->user);
-        informedPatientAndSouscripteurs($resultat->dossier->patient,0);
-
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+        }
         return response()->json(['resultat'=>$resultat]);
 
     }

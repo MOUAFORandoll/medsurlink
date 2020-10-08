@@ -319,13 +319,14 @@ class CardiologieController extends Controller
             $resultat->updateConsultationCardiologique();;
 
             $user = $resultat->dossier->patient->user;
-            informedPatientAndSouscripteurs($resultat->dossier->patient,1);
-            $this->updateDossierId($resultat->dossier->id);
+            if ($user->decede == 'non'){
+                informedPatientAndSouscripteurs($resultat->dossier->patient,1);
+                $this->updateDossierId($resultat->dossier->id);
 
-            if($user->isMedicasure == '1' || $user->isMedicasure == 1 ){
-                $this->sendSmsToUser($user);
+                if($user->isMedicasure == '1' || $user->isMedicasure == 1 ){
+                    $this->sendSmsToUser($user);
+                }
             }
-
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -368,11 +369,12 @@ class CardiologieController extends Controller
 
 
         $user = $resultat->dossier->patient->user;
-        if($user->isMedicasure == '0' || $user->isMedicasure == 0 ){
-            $this->sendSmsToUser($user);
+        if ($user->decede == 'non') {
+            if ($user->isMedicasure == '0' || $user->isMedicasure == 0) {
+                $this->sendSmsToUser($user);
+            }
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
         }
-        informedPatientAndSouscripteurs($resultat->dossier->patient,0);
-
         return response()->json(['resultat'=>$resultat]);
 
     }
@@ -584,7 +586,7 @@ class CardiologieController extends Controller
             foreach ($cardiologie->operationables as $operationable){
                 if (!is_null($operationable->contributable)){
                     if (!in_array($operationable->contributable->id,$ancienContributeurs)){
-                     array_push($ancienContributeurs,$operationable->contributable->id);
+                        array_push($ancienContributeurs,$operationable->contributable->id);
                     }
                 }
             }
@@ -609,10 +611,10 @@ class CardiologieController extends Controller
         $filtered = array_diff($ancienContributeurs,$contributeurs);
         foreach ($filtered as $filter){
             $contributeurList = Contributeurs::where('operationable_type','Cardiologie')
-            ->where('operationable_id',$cardiologie->id)->where('contributable_id',$filter)->get();
-          foreach ($contributeurList as $item){
-              $item->delete();
-          }
+                ->where('operationable_id',$cardiologie->id)->where('contributable_id',$filter)->get();
+            foreach ($contributeurList as $item){
+                $item->delete();
+            }
         }
 
     }

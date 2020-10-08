@@ -462,13 +462,14 @@ class ConsultationMedecineGeneraleController extends Controller
             $resultat->updateConsultationMedecine();
 
             $user = $resultat->dossier->patient->user;
-            informedPatientAndSouscripteurs($resultat->dossier->patient,1);
-            $this->updateDossierId($resultat->dossier->id);
+            if ($user->decede == 'non') {
+                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+                $this->updateDossierId($resultat->dossier->id);
 
-            if($user->isMedicasure == '1' || $user->isMedicasure == 1 ){
-                $this->sendSmsToUser($user);
+                if ($user->isMedicasure == '1' || $user->isMedicasure == 1) {
+                    $this->sendSmsToUser($user);
+                }
             }
-
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -493,12 +494,13 @@ class ConsultationMedecineGeneraleController extends Controller
         $resultat->updateConsultationMedecine();
 
         $user = $resultat->dossier->patient->user;
-        if($user->isMedicasure == '0' || $user->isMedicasure == 0 ){
-            $this->sendSmsToUser($user);
+        if ($user->decede == 'non') {
+            if ($user->isMedicasure == '0' || $user->isMedicasure == 0) {
+                $this->sendSmsToUser($user);
+            }
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+            $this->updateDossierId($resultat->dossier->id);
         }
-        informedPatientAndSouscripteurs($resultat->dossier->patient,0);
-        $this->updateDossierId($resultat->dossier->id);
-
         return response()->json(['resultat'=>$resultat]);
 
     }

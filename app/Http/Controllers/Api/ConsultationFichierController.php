@@ -224,11 +224,12 @@ class ConsultationFichierController extends Controller
             $this->updateDossierId($resultat->dossier->id);
 
             $user = $resultat->dossier->patient->user;
-            informedPatientAndSouscripteurs($resultat->dossier->patient,1);
-            if($user->isMedicasure == '1' || $user->isMedicasure == 1){
-                $this->sendSmsToUser($user);
+            if ($user->decede == 'non') {
+                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+                if ($user->isMedicasure == '1' || $user->isMedicasure == 1) {
+                    $this->sendSmsToUser($user);
+                }
             }
-
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -251,9 +252,11 @@ class ConsultationFichierController extends Controller
         $resultat->updateConsultation();
         $this->updateDossierId($resultat->dossier->id);
         $user = $resultat->dossier->patient->user;
-        informedPatientAndSouscripteurs($resultat->dossier->patient,0);
-        if($user->isMedicasure == '0' || $user->isMedicasure == 0){
-            $this->sendSmsToUser($user);
+        if ($user->decede == 'non') {
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+            if ($user->isMedicasure == '0' || $user->isMedicasure == 0) {
+                $this->sendSmsToUser($user);
+            }
         }
         return response()->json(['resultat'=>$resultat]);
 

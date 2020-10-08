@@ -16,6 +16,7 @@ use App\Models\ReponseSecrete;
 use App\Models\Souscripteur;
 use App\Models\Suivi;
 use App\Traits\SmsTrait;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -295,8 +296,20 @@ class PatientController extends Controller
         $nom = substr(strtoupper( $user->nom),0,20);
         $user->password = bcrypt($password);
         $user->save();
-        sendSMS($request->get('telephone'),trans('sms.accountSecurityUpdated',['nom'=>$nom,'password'=>$code],'fr'));
-
+        if ($user->decede == 'non') {
+            sendSMS($request->get('telephone'), trans('sms.accountSecurityUpdated', ['nom' => $nom, 'password' => $code], 'fr'));
+        }
         return response()->json(['message'=>'Sms envoyé avec succès']);
+    }
+
+    public function decede(Request $request,$slug){
+        $this->validatedSlug($slug,$this->table);
+        $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
+        $user = User::whereId($patient->user_id)->first();
+
+        $user->decede = $request->get('decede');
+        $user->save();
+        $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
+        return response()->json(['patient'=>$patient]);
     }
 }
