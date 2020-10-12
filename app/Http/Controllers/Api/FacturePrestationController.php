@@ -103,4 +103,20 @@ class FacturePrestationController extends Controller
 
         return response()->json(['facture'=>$facture]);
     }
+
+    public function valider(Request $request,$slug){
+        $this->validatedSlug($slug,$this->table);
+
+        $facture = FacturePrestation::whereSlug($slug)->first();
+
+        if (!is_null($facture)){
+            $facture->statut ='Validé';
+            $facture->save();
+        }
+
+        $facture = Facture::with('dossier.patient.user','files','etablissement','prestations.prestation_etablissement.prestation')
+            ->whereId($facture->facture_id)->first();
+
+        return response()->json(['facture'=>$facture]);
+    }
 }

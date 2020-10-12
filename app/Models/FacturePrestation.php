@@ -18,6 +18,8 @@ class FacturePrestation extends Model
         "facture_id",
         "prestation_id",
         "date_prestation",
+        "statut",
+        "motif",
         "slug",
         "creator",
     ];

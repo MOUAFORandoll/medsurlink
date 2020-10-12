@@ -233,6 +233,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
     Route::post('facture-recouvrement/{facture}','Api\FactureController@mailRecouvrement');
     Route::post('facture-rappel/{facture}','Api\FactureController@rappel');
     Route::resource('facture-prestation','Api\FacturePrestationController');
+    Route::put('valider-prestation/{slug}','Api\FacturePrestationController@valider');
     Route::resource('comptable','Api\ComptableController');
 
 
