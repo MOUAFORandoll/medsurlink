@@ -234,6 +234,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
     Route::post('facture-rappel/{facture}','Api\FactureController@rappel');
     Route::resource('facture-prestation','Api\FacturePrestationController');
     Route::put('valider-prestation/{slug}','Api\FacturePrestationController@valider');
+    Route::put('rejeter-prestation/{slug}','Api\FacturePrestationController@rejeter');
     Route::resource('comptable','Api\ComptableController');
 
 

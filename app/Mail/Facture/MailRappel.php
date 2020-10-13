@@ -13,17 +13,19 @@ class MailRappel extends Mailable
     public $facture;
     public $souscripteur;
     public $path;
+    public $total;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($facture,$souscripteur,$path)
+    public function __construct($facture,$souscripteur,$path,$total)
     {
         $this->facture = $facture;
         $this->souscripteur = $souscripteur;
         $this->path = $path;
+        $this->total = $total;
     }
 
     /**

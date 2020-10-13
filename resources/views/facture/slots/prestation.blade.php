@@ -16,13 +16,15 @@
                         <tbody>
                         <tr></tr>
                         @forelse($prestations as $prestation)
-                            <tr>
-                                <td>{{$prestation->prestation_etablissement->prestation->nom}}</td>
-                                <td>{{\Carbon\Carbon::parse($prestation->date_prestation)->format('d/m/Y')}}</td>
-                                <td>1</td>
-                                <td>{{$prestation->prestation_etablissement->prix}}</td>
-                                <td>{{$prestation->prestation_etablissement->prix}}</td>
-                            </tr>
+                            @if($prestation->statut == 'Validé')
+                                <tr>
+                                    <td>{{$prestation->prestation_etablissement->prestation->nom}}</td>
+                                    <td>{{\Carbon\Carbon::parse($prestation->date_prestation)->format('d/m/Y')}}</td>
+                                    <td>1</td>
+                                    <td>{{$prestation->prestation_etablissement->prix}}</td>
+                                    <td>{{$prestation->prestation_etablissement->prix}}</td>
+                                </tr>
+                            @endif
                         @empty
                             <strong></strong>
                         @endforelse
@@ -30,7 +32,7 @@
                         <tr class="noBorder"><td class="noBorder" colspan="5"></tr>
                         <tr>
                             <td class="title-table" colspan="4">Total à payer</td>
-                            <td colspan="2">{{$facture->total_avec_remise}} F CFA</td>
+                            <td colspan="2">{{$total}} F CFA</td>
                         </tr>
                         </tbody>
                     </table>

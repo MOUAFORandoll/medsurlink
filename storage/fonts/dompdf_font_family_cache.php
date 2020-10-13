@@ -79,7 +79,7 @@
   ),
   'raleway' => array(
     '500_italic' => $fontDir . '/raleway-500-italic_580f48b134386a164310b2b5005bea8c',
-    '600_italic' => $fontDir . '/raleway-600-italic_5df2c2d7047c721016bfcb9e69a2afe6',
+    '600_italic' => $fontDir . '/raleway-600-italic_d41777ad438a1dc6c7240104d12fef7d',
     'bold_italic' => $fontDir . '/raleway-bold-italic_7bc48ce3861a48d1e427adb66ed13b4a',
     '800_italic' => $fontDir . '/raleway-800-italic_1f0b05f9e0d0af7b4e48f67b1ffaffbb',
     '100' => $fontDir . '/raleway-100_0d899723d0ff5d4ca638a91040dcf5c0',
@@ -89,12 +89,12 @@
     '500' => $fontDir . '/raleway-500_7fe8c1abf102789d2072b0028de39a20',
     '600' => $fontDir . '/raleway-600_1c285e130fc4e97cbd01970101450315',
     'bold' => $fontDir . '/raleway-bold_e97413d530311d4acd13f134ad6d4114',
-    '800' => $fontDir . '/raleway-800_75256d97dff2e913a00d019626086026',
+    '800' => $fontDir . '/raleway-800_8ec212262b1c8ba8170a6e957bf2ceb2',
     '100_italic' => $fontDir . '/raleway-100-italic_0535f18db64ee12a2ed62fb2e8a3e613',
     '200_italic' => $fontDir . '/raleway-200-italic_b9c421a46c4eb67eed160e6bc85aafd9',
     '300_italic' => $fontDir . '/raleway-300-italic_2bbf2b5601ee74effa87b6ad0d8686f0',
     'italic' => $fontDir . '/raleway-italic_30c39e8ddbf71ff64134e961d04544aa',
-    '900' => $fontDir . '/raleway-900_6fd87d45925d25571cfacc46ab61086b',
+    '900' => $fontDir . '/raleway-900_c99bc6bfb15f8f13ce61a86f409140c7',
   ),
   'montserrat' => array(
     'italic' => $fontDir . '/montserrat-italic_f7ccae356aa1b1663d9d9af70f07ef97',

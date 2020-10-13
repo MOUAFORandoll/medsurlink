@@ -55,7 +55,7 @@ class FactureController extends Controller
             $this->uploadFile($request, $facture);
         }
 
-       $prestations =  $request->get('prestation');
+        $prestations =  $request->get('prestation');
 
         if ($prestations != 'null' && $prestations != null){
             foreach ($prestations as $prestation){
@@ -155,8 +155,14 @@ class FactureController extends Controller
 
         $facture = Facture::with('dossier.patient.user','files','etablissement','prestations.prestation_etablissement.prestation')
             ->whereSlug($slug)->first();
+        $total = 0;
+        foreach ($facture->prestations as $prestation){
+            if ($prestation->statut == 'Validé'){
+                $total = $total+$prestation->prestation_etablissement->prix - $prestation->prestation_etablissement->reduction;
+            }
+        }
         $souscripteurs = [];
-        $data = compact('facture');
+        $data = compact('facture','total');
 
         $pdf = PDF::loadView('facture.definitive',$data);
         $user = $facture->dossier->patient->user;
@@ -180,7 +186,7 @@ class FactureController extends Controller
                 }
 
                 foreach ($souscripteurs as $souscripteur) {
-                    $mail = new MailRappel($facture, $souscripteur, $attachPath);
+                    $mail = new MailRappel($facture, $souscripteur, $attachPath, $total);
                     Mail::to($souscripteur->user->email)->send($mail);
                     Log::info('envoi de mail de rappel ' . $souscripteur->user->email);
                 }
@@ -194,9 +200,14 @@ class FactureController extends Controller
         $facture = Facture::with('dossier.patient.user','files','etablissement','prestations.prestation_etablissement.prestation')
             ->whereSlug($slug)->first();
         $souscripteurs = [];
-
+        $total = 0;
+        foreach ($facture->prestations as $prestation){
+            if ($prestation->statut == 'Validé'){
+                $total = $total+$prestation->prestation_etablissement->prix - $prestation->prestation_etablissement->reduction;
+            }
+        }
         // If the contract does not exists, then create it
-        $data = compact('facture');
+        $data = compact('facture','total');
 
         $pdf = PDF::loadView('facture.definitive',$data);
         $user = $facture->dossier->patient->user;
@@ -220,7 +231,7 @@ class FactureController extends Controller
 
                 }
                 foreach ($souscripteurs as $souscripteur) {
-                    $mail = new MailRecouvrement($facture, $souscripteur, $attachPath);
+                    $mail = new MailRecouvrement($facture, $souscripteur, $attachPath,$total);
                     Mail::to($souscripteur->user->email)->send($mail);
                     Log::info('envoi de mail de recouvrement ' . $souscripteur->user->email);
 
