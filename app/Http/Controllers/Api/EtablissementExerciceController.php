@@ -211,7 +211,7 @@ class EtablissementExerciceController extends Controller
                         array_push($etablissementsId, $etablissement->id);
                     }
                 }
-                $etablissements = EtablissementExercice::with(['comptables.user','patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user'])->whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['comptables.user','patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user','factures.prestations.prestation_etablissement'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }
