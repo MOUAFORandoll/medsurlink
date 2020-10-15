@@ -174,6 +174,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::delete('avisMedecin/{slug}','Api\AvisMedecinController@destroy');
     Route::get('avis-repondre/{avis}','Api\AvisMedecinController@repondre');
     Route::post('avisMedecin/{slug}/nouveauAvis','Api\AvisMedecinController@NouveauAvis');
+    Route::apiResource('compte-rendu-operatoire','Api\CompteRenduOperatoireController')->except('show');
 
 
 });
@@ -197,6 +198,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('echographie','Api\EchographieController')->except('store','update','destroy');
     Route::resource('hospitalisation','Api\HospitalisationController')->except('store','update','destroy');
     Route::resource('consultation-fichier','Api\ConsultationFichierController')->except('store','update','destroy');
+    Route::get('compte-rendu-operatoire/{compte_rendu_operatoire}','Api\CompteRenduOperatoireController@show');
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {
