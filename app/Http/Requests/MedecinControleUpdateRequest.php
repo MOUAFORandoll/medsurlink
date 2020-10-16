@@ -28,7 +28,7 @@ class MedecinControleUpdateRequest extends FormRequest
     {
         return [
             "specialite_id"=>'required|integer|exists:specialites,id',
-            "numero_ordre"=>'sometimes|nullable|string|min:6',
+            "numero_ordre"=>'sometimes|nullable|string',
             "civilite"=>["required",Rule::in(['M.','Mme/Mlle.','Dr.','Pr.'])],
         ];
     }

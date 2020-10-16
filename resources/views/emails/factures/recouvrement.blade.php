@@ -1,7 +1,7 @@
 @component('mail::message')
 {{$souscripteur->sexe=='M' ? 'Cher Monsieur' : 'Chere Madame'}} {{strtoupper($souscripteur->user->nom).'  '.ucfirst($souscripteur->user->prenom)}} , Bonjour
 
-Veuillez trouver votre état financier auprès de la comptabilité de Medicasure. Le montant que vous nous devez est de: ___{{$facture->total_avec_remise}} FCFA___
+Veuillez trouver votre état financier auprès de la comptabilité de Medicasure. Le montant que vous nous devez est de: ___{{$total}} FCFA___
 
 Si vous avez besoin d’éclaircissements ou si vous avez des questions, n'hésitez pas à prendre un rendez-vous avec un de nos collaborateurs via le lien https://www.medicasure.com/rendez-vous
 

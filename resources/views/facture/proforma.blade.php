@@ -30,7 +30,7 @@
         </tr>
     </table>
 
-    @component('.facture.slots.prestation',['prestations'=>$facture->prestations,'facture'=>$facture])
+    @component('.facture.slots.prestation',['prestations'=>$facture->prestations,'facture'=>$facture,'total'=>$total])
     @endcomponent
 
     {{--    <table style="width: 100%;" cellspacing="0" cellpadding="0" >--}}
