@@ -34,9 +34,10 @@ class CompteRenduOperatoireController extends Controller
      * @param CompteRenduOperatoireRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store($request)
+    public function store(CompteRenduOperatoireRequest $request)
     {
         $compteRendu = CompteRenduOperatoire::create($request->all());
+
         return response()->json(['compteRendu'=>$compteRendu]);
     }
 
@@ -50,7 +51,7 @@ class CompteRenduOperatoireController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $compteRendu = CompteRenduOperatoire::whereSlug($slug)->first();
+        $compteRendu = CompteRenduOperatoire::with('dossier.patient.user','etablissement')->whereSlug($slug)->first();
 
         return response()->json(['compteRendu'=>$compteRendu]);
     }
@@ -62,7 +63,7 @@ class CompteRenduOperatoireController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update($request, $slug)
+    public function update(CompteRenduOperatoireRequest $request, $slug)
     {
         $this->validatedSlug($slug,$this->table);
 
