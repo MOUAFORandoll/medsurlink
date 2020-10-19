@@ -53,6 +53,8 @@ class CompteRenduOperatoireController extends Controller
 
         $compteRendu = CompteRenduOperatoire::with('dossier.patient.user','etablissement')->whereSlug($slug)->first();
 
+        $compteRendu->updateCompteRendu();
+
         return response()->json(['compteRendu'=>$compteRendu]);
     }
 
@@ -70,6 +72,8 @@ class CompteRenduOperatoireController extends Controller
         CompteRenduOperatoire::whereSlug($slug)->update($request->except('compte_rendu_operatoire'));
 
         $compteRendu = CompteRenduOperatoire::whereSlug($slug)->first();
+
+        $compteRendu->updateCompteRendu();
 
         return response()->json(['compteRendu'=>$compteRendu]);
     }

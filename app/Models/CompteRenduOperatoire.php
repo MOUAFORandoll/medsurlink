@@ -77,5 +77,16 @@ class CompteRenduOperatoire extends Model
         return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
     }
 
-
+    public function updateCompteRendu()
+    {
+        $this['isAuthor'] = Auth::id() == $this->creator;
+        $connectedUser = Auth::user();
+        if (Auth::id() == $this->creator){
+            $this['canUpdate'] = true;
+        } elseif ($connectedUser->getRoleNames()->first() == 'Praticien') {
+            $this['canUpdate'] = Auth::id() == $this->creator;
+        } elseif ($connectedUser->getRoleNames()->first() == 'Medecin controle') {
+            $this['canUpdate'] = is_null($this->archieved_at);
+        }
+    }
 }
