@@ -77,14 +77,15 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::put('resultat-labo/{id}/transmettre','Api\ResultatLaboController@transmit');
     Route::put('consultation-fichier/{id}/transmettre','Api\ConsultationFichierController@transmettre');
     Route::put('consultation-medecine/{id}/transmettre','Api\ConsultationMedecineGeneraleController@transmettre');
-   Route::post('consultation-medecine/{slug}','Api\ConsultationMedecineGeneraleController@update');
-   Route::post('consultation-fichier/{slug}','Api\ConsultationFichierController@update');
+    Route::post('consultation-medecine/{slug}','Api\ConsultationMedecineGeneraleController@update');
+    Route::post('consultation-fichier/{slug}','Api\ConsultationFichierController@update');
     Route::post('consultation-cardiologie/{slug}','Api\CardiologieController@update');
     Route::put('consultation-cardiologie/{slug}/transmettre','Api\CardiologieController@transmettre');
     Route::put('consultation-obstetrique/{id}/transmettre','Api\ConsultationObstetriqueController@transmettre');
     Route::put('consultation-prenatale/{id}/transmettre','Api\ConsultationPrenantaleController@transmettre');
     Route::put('hospitalisation/{hospitalisation}/transmettre','Api\HospitalisationController@transmettre');
     Route::resource('examen-cardiologie','Api\ExamenCardioController');
+    Route::resource('groupe-activite','Api\GroupeActiviteController');
 });
 
 
