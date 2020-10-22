@@ -24,14 +24,14 @@ class ActiviteRequest extends FormRequest
     public function rules()
     {
         return [
-            'dossier_medical_id'=>"sometimes|integer|exists:dossier_medicals,id",
-            'nom_activite'=>"sometimes|nullable|string",
-            'groupe_activite'=>"sometimes|nullable|string",
-            'nom_partenaire'=>"sometimes|nullable|string",
-            'description'=>"sometimes|nullable|string",
-            'statut'=>"sometimes|nullable|string",
-            'commentaires'=>"sometimes|nullable|string",
-            'date'=>"sometimes|nullable|string",
+//            'dossier_medical_id'=>"sometimes|integer|exists:dossier_medicals,id",
+//            'nom_activite'=>"sometimes|nullable|string",
+//            'groupe_activite'=>"sometimes|nullable|string",
+//            'nom_partenaire'=>"sometimes|nullable|string",
+//            'description'=>"sometimes|nullable|string",
+//            'statut'=>"sometimes|nullable|string",
+//            'commentaires'=>"sometimes|nullable|string",
+//            'date'=>"sometimes|nullable|string",
         ];
     }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ActiviteRequest;
 use App\Models\Activite;
+use App\Models\ActiviteMission;
+use App\Models\GroupeActivite;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -32,7 +34,14 @@ class ActiviteController extends Controller
      */
     public function store(ActiviteRequest $request)
     {
-        $activite = Activite::create($request->all());
+        $activite = Activite::create(['groupe_id'=>$request->get('groupe_activite')],$request->only('date_cloture','statut'));
+        $missions = $request->get('missions');
+
+        foreach ($missions as $mission){
+            ActiviteMission::create(['activite_id'=>$activite->id]+$mission);
+        }
+
+        $activite = Activite::with('missions.description','createur','groupe')->whereId($activite->id)->first();
 
         return response()->json(['activite'=>$activite]);
     }
@@ -50,6 +59,19 @@ class ActiviteController extends Controller
         $activite = Activite::whereSlug($slug)->first();
 
         return response()->json(['activite'=>$activite]);
+    }
+
+    public function showGroupActivities($slug){
+        $this->validatedSlug($slug,'groupe_activites');
+        $groupe = GroupeActivite::whereSlug($slug)->first();
+        $activites = Activite::with([
+            'missions.description',
+            'createur',
+            'groupe',
+            'missions.createur',
+            'missions.dossier.patient.user'
+        ])->where('groupe_id',$groupe->id)->get();
+        return response()->json(['activites'=>$activites]);
     }
 
     /**

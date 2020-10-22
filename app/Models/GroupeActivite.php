@@ -34,4 +34,8 @@ class GroupeActivite extends Model
     public function getDossierAndTimestampAttribute() {
         return Str::random(10) . ' ' .Carbon::now()->timestamp;
     }
+
+    public function missions(){
+        return $this->hasMany(GroupeActiviteMission::class,'groupe_id','id');
+    }
 }

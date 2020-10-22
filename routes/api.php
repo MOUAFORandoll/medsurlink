@@ -86,6 +86,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::put('hospitalisation/{hospitalisation}/transmettre','Api\HospitalisationController@transmettre');
     Route::resource('examen-cardiologie','Api\ExamenCardioController');
     Route::resource('groupe-activite','Api\GroupeActiviteController');
+    Route::resource('activite','Api\ActiviteController');
+    Route::get('show-groupe-activite/{slug}','Api\ActiviteController@showGroupActivities');
 });
 
 
