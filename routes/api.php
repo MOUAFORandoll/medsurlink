@@ -87,6 +87,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::resource('examen-cardiologie','Api\ExamenCardioController');
     Route::resource('groupe-activite','Api\GroupeActiviteController');
     Route::resource('activite','Api\ActiviteController');
+    Route::put('activite-cloture/{slug}','Api\ActiviteController@cloturer');
     Route::get('show-groupe-activite/{slug}','Api\ActiviteController@showGroupActivities');
 });
 
