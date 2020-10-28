@@ -35,7 +35,7 @@ class ActiviteController extends Controller
      */
     public function store(ActiviteRequest $request)
     {
-        $activite = Activite::create(['groupe_id'=>$request->get('groupe_activite')],$request->only('date_cloture','statut'));
+        $activite = Activite::create(['groupe_id'=>$request->get('groupe_activite')]+$request->only('date_cloture','statut'));
         $missions = $request->get('missions');
 
         foreach ($missions as $mission){
@@ -58,11 +58,11 @@ class ActiviteController extends Controller
         $this->validatedSlug($slug,$this->table);
 
         $activite = Activite::with([
-            'missions.description',
-            'createur',
-            'groupe',
-            'missions.dossier.patient.user',
-            'missions.createur']
+                'missions.description',
+                'createur',
+                'groupe',
+                'missions.dossier.patient.user',
+                'missions.createur']
         )->whereSlug($slug)->first();
 
         return response()->json(['activite'=>$activite]);
@@ -88,13 +88,19 @@ class ActiviteController extends Controller
      * @param  string  $slug
      * @return \Illuminate\Http\Response
      */
-    public function update(ActiviteRequest $request, $slug)
+    public function update(Request $request, $slug)
     {
         $this->validatedSlug($slug,$this->table);
 
-        Activite::whereSlug($slug)->update($request->except('activite'));
+        Activite::whereSlug($slug)->update($request->all());
 
-        $activite = Activite::whereSlug($slug)->first();
+        $activite = Activite::with([
+            'missions.description',
+            'createur',
+            'groupe',
+            'missions.createur',
+            'missions.dossier.patient.user'
+        ])->whereSlug($slug)->first();
 
         return response()->json(['activite'=>$activite]);
     }
@@ -138,5 +144,28 @@ class ActiviteController extends Controller
         $activite->save();
 
         return response()->json(['activite'=>$activite]);
+    }
+
+    public function updateActiviteMission(Request $request,$missionSlug){
+        $this->validatedSlug($missionSlug,'activite_missions');
+
+        $mission = ActiviteMission::whereSlug($missionSlug)->update($request->all());
+
+        $mission = ActiviteMission::with('description','dossier.patient.user','createur')->whereSlug($missionSlug)->first();
+
+        return response()->json(['mission'=>$mission]);
+    }
+
+    public function ajouterMission(Request $request){
+        $mission = ActiviteMission::create($request->all());
+        $mission = ActiviteMission::with('description','dossier.patient.user','createur')->whereSlug($mission->slug)->first();
+        return response()->json(['mission'=>$mission]);
+    }
+
+    public function supprimerMission($slug){
+        $this->validatedSlug($slug,'activite_missions');
+        $mission = ActiviteMission::with('description','dossier.patient.user','createur')->whereSlug($slug)->first();
+        $mission->delete();
+        return response()->json(['mission'=>$mission]);
     }
 }

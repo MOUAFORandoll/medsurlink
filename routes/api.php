@@ -88,6 +88,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::resource('groupe-activite','Api\GroupeActiviteController');
     Route::resource('activite','Api\ActiviteController');
     Route::put('activite-cloture/{slug}','Api\ActiviteController@cloturer');
+    Route::put('activite-mission/{slug}','Api\ActiviteController@updateActiviteMission');
+    Route::put('activite-mission-add','Api\ActiviteController@ajouterMission');
+    Route::delete('activite-mission-delete/{slug}','Api\ActiviteController@supprimerMission');
     Route::get('show-groupe-activite/{slug}','Api\ActiviteController@showGroupActivities');
 });
 
