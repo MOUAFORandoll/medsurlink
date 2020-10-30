@@ -10,6 +10,7 @@ use App\Mail\Password\PasswordGenerated;
 use App\Mail\Password\PatientPasswordGenerated;
 use App\Mail\updateSetting;
 use App\Models\Souscripteur;
+use App\Models\TimeActivite;
 use App\Rules\EmailExistRule;
 use App\Traits\SmsTrait;
 use App\User;
@@ -348,8 +349,11 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
+
         if (Auth::check()) {
             $request->user()->token()->revoke();
+            if ($request->time_slug)
+            TimeActivite::whereSlug($request->time_slug)->update(['stop'=>Carbon::now()->format('H:i')]);
             return response()->json([
                 'message' => 'Successfully logged out',
             ]);

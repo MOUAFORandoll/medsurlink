@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\DossierMedical;
+use App\Models\TimeActivite;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -35,6 +36,11 @@ class AuthController extends AccessTokenController
         $user = $this->getUser($username,$password);
         $user->roles;
         Auth::login($user);
+        $time = TimeActivite::create([
+            'date'=>Carbon::now()->format('Y-m-d'),
+            'start'=>Carbon::now()->format('H:i')
+        ]);
+        $user['time_slug'] = $time->slug;
         $user['isEtablissement'] = isComptable();
         $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
         $tokenInfo->put('user', $user);
