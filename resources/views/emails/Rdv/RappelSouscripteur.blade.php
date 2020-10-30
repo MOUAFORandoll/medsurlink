@@ -4,7 +4,7 @@
 Votre proche {{strtoupper($rdv->patient->nom).'  '.ucfirst($rdv->patient->prenom)}} a un Rendez-vous planifié pour son suivi médical le
 {{\Carbon\Carbon::parse($rdv->date)->format('d/m/Y')}} à {{\Carbon\Carbon::parse($rdv->date)->format('H').'h'.\Carbon\Carbon::parse($rdv->date)->format('i')}}.
 
-N'hésitez pas à prendre contact avec notre service si vous <avez>   </avez> des questions à l'adresse medical@medicasure.com
+N'hésitez pas à prendre contact avec notre service si vous avez des questions à l'adresse medical@medicasure.com
 
 Salutations cordiales.
 

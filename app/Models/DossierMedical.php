@@ -89,6 +89,10 @@ class DossierMedical extends Model
         return $this->hasMany(Cardiologie::class, 'dossier_medical_id');
     }
 
+    public function comptesRenduOperatoire(){
+        return $this->hasMany(CompteRenduOperatoire::class,'dossier_medical_id','id');
+    }
+
     /**
      * The "booting" method of the model.
      *

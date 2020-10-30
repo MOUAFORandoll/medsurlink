@@ -106,6 +106,7 @@ class DossierMedicalController extends Controller
                     $query->orderBy('date', 'desc');
                 },
                 'antecedents',
+                'comptesRenduOperatoire.etablissement',
                 'ordonances',
                 'patient',
                 'patient.user',

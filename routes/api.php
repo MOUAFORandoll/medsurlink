@@ -77,14 +77,21 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::put('resultat-labo/{id}/transmettre','Api\ResultatLaboController@transmit');
     Route::put('consultation-fichier/{id}/transmettre','Api\ConsultationFichierController@transmettre');
     Route::put('consultation-medecine/{id}/transmettre','Api\ConsultationMedecineGeneraleController@transmettre');
-   Route::post('consultation-medecine/{slug}','Api\ConsultationMedecineGeneraleController@update');
-   Route::post('consultation-fichier/{slug}','Api\ConsultationFichierController@update');
+    Route::post('consultation-medecine/{slug}','Api\ConsultationMedecineGeneraleController@update');
+    Route::post('consultation-fichier/{slug}','Api\ConsultationFichierController@update');
     Route::post('consultation-cardiologie/{slug}','Api\CardiologieController@update');
     Route::put('consultation-cardiologie/{slug}/transmettre','Api\CardiologieController@transmettre');
     Route::put('consultation-obstetrique/{id}/transmettre','Api\ConsultationObstetriqueController@transmettre');
     Route::put('consultation-prenatale/{id}/transmettre','Api\ConsultationPrenantaleController@transmettre');
     Route::put('hospitalisation/{hospitalisation}/transmettre','Api\HospitalisationController@transmettre');
     Route::resource('examen-cardiologie','Api\ExamenCardioController');
+    Route::resource('groupe-activite','Api\GroupeActiviteController');
+    Route::resource('activite','Api\ActiviteController');
+    Route::put('activite-cloture/{slug}','Api\ActiviteController@cloturer');
+    Route::put('activite-mission/{slug}','Api\ActiviteController@updateActiviteMission');
+    Route::put('activite-mission-add','Api\ActiviteController@ajouterMission');
+    Route::delete('activite-mission-delete/{slug}','Api\ActiviteController@supprimerMission');
+    Route::get('show-groupe-activite/{slug}','Api\ActiviteController@showGroupActivities');
 });
 
 
@@ -174,6 +181,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::delete('avisMedecin/{slug}','Api\AvisMedecinController@destroy');
     Route::get('avis-repondre/{avis}','Api\AvisMedecinController@repondre');
     Route::post('avisMedecin/{slug}/nouveauAvis','Api\AvisMedecinController@NouveauAvis');
+    Route::apiResource('compte-rendu-operatoire','Api\CompteRenduOperatoireController')->except('show');
 
 
 });
@@ -197,6 +205,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('echographie','Api\EchographieController')->except('store','update','destroy');
     Route::resource('hospitalisation','Api\HospitalisationController')->except('store','update','destroy');
     Route::resource('consultation-fichier','Api\ConsultationFichierController')->except('store','update','destroy');
+    Route::get('compte-rendu-operatoire/{compte_rendu_operatoire}','Api\CompteRenduOperatoireController@show');
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {
