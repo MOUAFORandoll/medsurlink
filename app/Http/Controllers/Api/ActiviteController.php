@@ -23,7 +23,7 @@ class ActiviteController extends Controller
      */
     public function index()
     {
-        $activites = Activite::all();
+        $activites = Activite::with('createur','groupe')->get();
         return  response()->json(['activites'=>$activites]);
     }
 
@@ -168,4 +168,5 @@ class ActiviteController extends Controller
         $mission->delete();
         return response()->json(['mission'=>$mission]);
     }
+
 }

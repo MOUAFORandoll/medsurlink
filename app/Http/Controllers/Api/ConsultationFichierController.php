@@ -130,13 +130,13 @@ class ConsultationFichierController extends Controller
         $user_id = $request->user_id;
         $name = $request->name;
 
-        if (is_null($name) && $name == 'null'){
+        if (is_null($name) || $name == 'null'){
             $consultation_externe = $request->consultation_externe;
         }else{
             $consultation_externe = '';
         }
 
-        if (is_null($user_id) && $user_id == 'null'){
+        if (is_null($user_id) || $user_id == 'null'){
             $praticien_externe = $request->praticien_externe;
         }else{
             $praticien_externe = '';
