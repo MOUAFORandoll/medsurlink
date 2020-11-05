@@ -9,8 +9,8 @@ use Illuminate\Notifications\Notification;
 
 class SmsChannel
 {
-    protected $base_uri = 'smartsms.smartworldafriq.com';
-//    protected $base_uri = 'http://193.105.74.159/api/v3/sendsms/json';
+//    protected $base_uri = 'smartsms.smartworldafriq.com';
+    protected $base_uri = 'http://193.105.74.159/api/v3/sendsms/json';
 
     private $login = 'medsur';
     private $password = 'MediCasure20';
