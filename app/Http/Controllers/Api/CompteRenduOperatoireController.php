@@ -7,12 +7,14 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\CompteRenduOperatoireRequest;
 use App\Models\CompteRenduOperatoire;
 use App\Traits\DossierTrait;
+use App\Traits\SmsTrait;
 use Carbon\Carbon;
 
 class CompteRenduOperatoireController extends Controller
 {
     use PersonnalErrors;
     use DossierTrait;
+    use SmsTrait;
 
     /**
      * @var string
@@ -88,7 +90,7 @@ class CompteRenduOperatoireController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $compteRendu = CompteRenduOperatoire::whereSlug($slug)->first();
+        $compteRendu = CompteRenduOperatoire::with(['dossier','createur'])->whereSlug($slug)->first();
 
         $compteRendu->delete();
 
@@ -125,6 +127,7 @@ class CompteRenduOperatoireController extends Controller
                     $this->sendSmsToUser($user);
                 }
             }
+            $resultat->updateCompteRendu();
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -153,6 +156,7 @@ class CompteRenduOperatoireController extends Controller
             informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
             $this->updateDossierId($resultat->dossier->id);
         }
+        $resultat->updateCompteRendu();
         return response()->json(['resultat'=>$resultat]);
 
     }
@@ -172,7 +176,7 @@ class CompteRenduOperatoireController extends Controller
         $resultat->save();
 
         $this->updateDossierId($resultat->dossier->id);
-
+        $resultat->updateCompteRendu();
         return response()->json(['resultat'=>$resultat]);
 
     }

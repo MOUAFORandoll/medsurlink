@@ -182,6 +182,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('avis-repondre/{avis}','Api\AvisMedecinController@repondre');
     Route::post('avisMedecin/{slug}/nouveauAvis','Api\AvisMedecinController@NouveauAvis');
     Route::apiResource('compte-rendu-operatoire','Api\CompteRenduOperatoireController')->except('show');
+    Route::put('compte-rendu-operatoire/{compte}/transmettre','Api\CompteRenduOperatoireController@transmettre');
+    Route::put('compte-rendu-operatoire/{compte}/archiver','Api\CompteRenduOperatoireController@archiver');
+    Route::put('compte-rendu-operatoire/{compte}/reactivier','Api\CompteRenduOperatoireController@reactiver');
 
 
 });
