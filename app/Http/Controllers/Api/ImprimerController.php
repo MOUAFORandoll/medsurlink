@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Models\Cardiologie;
+use App\Models\CompteRenduOperatoire;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\ConsultationObstetrique;
 use App\Models\DossierMedical;
@@ -12,6 +13,7 @@ use App\Models\Hospitalisation;
 use App\Models\MedecinControle;
 use App\Models\Praticien;
 use Barryvdh\DomPDF\Facade as PDF;
+use Carbon\Carbon;
 use Gbrock\Table\Table;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -255,4 +257,20 @@ class ImprimerController extends Controller
 
         return  response()->json(['name'=>'Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
     }
+
+    public function compteRendu($slug){
+        $this->validatedSlug($slug,'compte_rendu_operatoires');
+
+        $compteRendu = CompteRenduOperatoire::whereSlug($slug)->first();
+        $data = compact('compteRendu');
+        $pdf = PDF::loadView('rapport.compte_rendu',$data);
+        $nom  = ucfirst($compteRendu->dossier->patient->user->nom);
+        $prenom = is_null($compteRendu->dossier->patient->user->prenom) ? '' :$compteRendu->dossier->patient->user->prenom;
+        $prenom  = ucfirst($prenom);
+        $date= Carbon::parse($compteRendu->date_intervention)->format('Y_m_d');
+        $path = storage_path().'/app/public/pdf/'.'Compte_rendu_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
+        $pdf->save($path);
+        return  response()->json(['name'=>'Compte_rendu_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
+    }
+
 }

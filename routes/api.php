@@ -220,6 +220,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
     Route::get('imprimer-facture-definitive/{facture}','Api\ImprimerController@factureDefinitive');
+    Route::get('imprimer-compte-rendu/{compte}','Api\ImprimerController@compteRendu');
     Route::get('imprimer-facture-proforma/{facture}','Api\ImprimerController@factureProforma');
     Route::get('imprimer-consultation-medecine/{generale}','Api\ImprimerController@generale');
 //    Route::get('imprimer-consultation-fichier/{fichier}','Api\ImprimerController@manuscrit');
