@@ -59,5 +59,5 @@
     @endif
 
     <br>
-    <p style="text-align: right">{{\Carbon\Carbon::parse($compteRendu->created_at)->format('d/m/Y')}} : {{\Carbon\Carbon::now()->format('d/m/Y')}}</p>
+    <p style="text-align: right">Date de création : {{\Carbon\Carbon::parse($compteRendu->created_at)->format('d/m/Y')}} - Date d'impression : {{\Carbon\Carbon::now()->format('d/m/Y')}}</p>
 @endsection
