@@ -27,6 +27,9 @@ Route::get('question','Api\QuestionController@index');
 //Route::resource('avis','Api\AvisController');
 //Route::post('avisMedecin/{slug}','Api\AvisMedecinController@store');
 //Route::resource('suivi','Api\SuiviController');
+Route::post('/contrat-prepaye-store','Api\AffiliationSouscripteurController@storeSouscripteur');
+Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
+Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
 
 
 Route::middleware(['auth:api'])->group(function () {
