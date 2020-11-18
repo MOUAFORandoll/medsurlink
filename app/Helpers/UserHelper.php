@@ -129,5 +129,22 @@ if(!function_exists('transformerEnSouscripteurMedicasure')) {
         return $souscripteurMedicasure;
     }
 }
+if(!function_exists('configurerUserMedsurlink')) {
+    function configurerUserMedsurlink($request)
+    {
+        $userInformation['nom']=$request->nom;
+        $userInformation['prenom']=$request->prenom;
+        $userInformation['email']=$request->email;
+        $userInformation['nationalite']=$request->nationalite;
+        $userInformation['quartier']=$request->quartier;
+        $userInformation['code_postal']=$request->code_postal;
+        $userInformation['ville']=$request->ville;
+        $userInformation['pays']=$request->pays;
+        $userInformation['telephone']=$request->telephone;
+        $userInformation['adresse']=$request->adresse;
+
+        return $userInformation;
+    }
+}
 
 
