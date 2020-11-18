@@ -27,9 +27,8 @@ Route::get('question','Api\QuestionController@index');
 //Route::resource('avis','Api\AvisController');
 //Route::post('avisMedecin/{slug}','Api\AvisMedecinController@store');
 //Route::resource('suivi','Api\SuiviController');
-Route::post('/contrat-prepaye-store','Api\AffiliationSouscripteurController@storeSouscripteur');
-Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
-Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
+Route::post('/contrat-prepaye-store','Api\AffiliationSouscripteurController@storeSouscripteur')->middleware('auth.basic.once');
+
 
 
 Route::middleware(['auth:api'])->group(function () {
@@ -193,6 +192,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
+    Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
+    Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
     Route::resource('rdvs','Api\RendezVousController');
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except('store','update','destroy');
     Route::resource('consultation-cardiologie','Api\CardiologieController')->except(['store','update','destroy']);

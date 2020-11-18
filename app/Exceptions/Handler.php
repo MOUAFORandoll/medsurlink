@@ -8,6 +8,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -71,6 +72,17 @@ class Handler extends ExceptionHandler
             Log::error($exception->getMessage());
             $responseError = new FormattedErrorResponse('notSendMail',"L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur");
             return response()->json(['error'=>$responseError->getArrayError()],419);
+        }
+
+        if ($request->is('api/*') || $request->wantsJson())
+        {
+            if($exception instanceof UnauthorizedHttpException){
+                $json = [
+                    'status' => 'failed',
+                    'message' => 'Api authentication failed',
+                ];
+                return response()->json($json, 401);
+            }
         }
         return parent::render($request, $exception);
     }
