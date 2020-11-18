@@ -33,10 +33,9 @@ class AffiliationSouscripteurController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function storeSouscripteur(Request $request)
+    public function storeSouscripteur(Request $request,$cim_id)
     {
-        // Récupération des informations du end point cim.medicasure.com
-        $cim_id = $request->get('cim_id');
+        // Récupération des informations de la commande end point cim.medicasure.com
         $client = new Client();
         $url = 'https://cim.medicasure.com/wp-json/wc/v2/orders/'.$cim_id;
         $res = $client->request('GET', $url, [
@@ -98,6 +97,19 @@ class AffiliationSouscripteurController extends Controller
         }
 
         return $tokenInfo;
+    }
+
+    public function storeSouscripteurRedirect(Request $request,$cim_id)
+    {
+        $token = $this->storeSouscripteur($request,$cim_id);
+        $env = strtolower(config('app.env'));
+        if ($env === 'local')
+            return  redirect('http://localhost:8000/login?token='.$token);
+        else if ($env === 'staging')
+            return  redirect('https://www.staging.medsurlink.com/contrat-prepaye?token='.$token);
+        else
+            return  redirect('https://www.medsurlink.com//contrat-prepaye?token='.$token);
+
     }
 
     /**

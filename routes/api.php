@@ -27,7 +27,7 @@ Route::get('question','Api\QuestionController@index');
 //Route::resource('avis','Api\AvisController');
 //Route::post('avisMedecin/{slug}','Api\AvisMedecinController@store');
 //Route::resource('suivi','Api\SuiviController');
-Route::post('/contrat-prepaye-store','Api\AffiliationSouscripteurController@storeSouscripteur')->middleware('auth.basic.once');
+
 
 
 
