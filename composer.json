@@ -55,6 +55,9 @@
             "app/Helpers/PrestationHelper.php",
             "app/Helpers/GeneralHelper.php",
             "app/Helpers/UserHelper.php",
+            "app/Helpers/CommandeHelper.php",
+            "app/Helpers/PatientHelper.php",
+            "app/Helpers/ContratHelper.php",
             "app/Helpers/MailHelper.php",
             "app/helpers.php",
             "app/Helpers/ComptabiliteHelper.php"
