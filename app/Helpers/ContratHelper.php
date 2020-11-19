@@ -6,7 +6,14 @@ if(!function_exists('genererContrat'))
 {
     function genererContrat($contrat) {
         $client = new Client();
-        $url = 'http://localhost:8001/api/v1.0.1/medsurlink-contrat';
+        $env = strtolower(config('app.env'));
+        if ($env === 'local')
+            $url = 'http://localhost:8001/api/v1.0.1/medsurlink-contrat';
+        else if ($env === 'staging')
+            $url ='https://www.staging.medicasure.com/api/v1.0.0/contrat-prepaye?token=';
+        else
+            $url ='https://www.medicasure.com.com/api/v1.0.0/contrat-prepaye?token=';
+
         $res = $client->request('POST', $url, [
             'auth' => [
                 'EktzFuEm2Hrg92ZfmRzkeNcA2NYEeNVpjVcA4KdPVcyABvFmpUgFAE@medicasure.com',
