@@ -117,4 +117,71 @@
     .noBorder {
         border:none !important;
     }
+    .welcome{
+       background-color: #F0F0F0;
+       border-style: dotted;
+       border-color:#00ADA7;
+       padding: 0px 50px;
+       text-align: center;
+    }
+    .welcom p {
+        margin: 10 px;
+    }
+    .row {
+        height:150px;
+      /*  display: flex;
+        justify-content: space-around;*/
+    }
+    .col-right{
+        float:right;
+        margin-right:0px;
+        width:300px;
+    }
+    .col-left{
+        margin-left:0px;
+        float:left;
+        width:300px;
+    }
+    .container-doc{
+        padding-left:2px;
+        padding-right:2px;
+    }
+    .textVert{
+        color:#00ADA7;
+        font-family: 'Montserrat', sans-serif;
+    }
+    .textDate{
+        line-height: 1.6;
+        font-size:20px;
+        color:#00ADA7;
+    }
+    .textViolet{
+        color:rgb(50, 50, 93);
+    }
+    .textBlack{
+        color:#A1A1A1;
+    }
+    .rubrique-title{
+        background-color: #00ADA7;
+        height:30px;
+        color:#FFF;
+        font-size:14px;
+        text-transform: uppercase;
+        text-align:center;
+    }
+    .date span{
+        color:rgb(50, 50, 93);
+        font-size:20px;
+    }
+    .date p{
+    }
+    .separator{
+        margin:0 auto;
+        width:250px;
+        padding-left: 50px;
+    }
+    .row-flex{
+        display:flex;
+    }
+    @page { size: a4 portrait; }
 </style>

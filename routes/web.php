@@ -1,5 +1,6 @@
 <?php
 use App\Models\ContratIntermediationMedicale;
+use App\Models\CompteRenduOperatoire;
 use Barryvdh\DomPDF\Facade as PDF;
 
 /*
@@ -77,13 +78,20 @@ Route::get('imprimer/contrat/{id}', function ($id) {
     return $pdf->download("Contrat d'intermediation medicale - ".strtoupper($cim->nomPatient)." ".ucfirst($cim->prenomPatient)." - ".ucfirst($cim->typeSouscription).".pdf");
 });
 
+Route::get('/doc', function () {
+    $compteRendu = CompteRenduOperatoire::whereId(2)->first();
+    $data = compact('compteRendu');
+    return view('rapport.compte_rendu', $data);
+});
+/*
 Route::get('{all}', function () {
     return view('dashboard');
 //})->where('all', '^(dashboard).*$');
 })//->middleware('auth','isAdmin')
 ->where('all', '^admin|admin/|admin/.*,dashboard|dashboard/|dashboard/.*$');
-
+*/
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
