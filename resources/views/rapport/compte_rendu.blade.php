@@ -6,7 +6,7 @@
                                                            'typeDeRapport'=>"Compte rendu opératpire"])
     @endcomponent -->
 <div class="container-doc">    
-      <div class="row">
+      <div class="row wrapper-page">
         <div class="col-left">
             @if(!is_null($compteRendu->etablissement->logo)  && $compteRendu->etablissement->logo !=='')
                 <div class="rapport-logo-wrapper">
@@ -19,8 +19,8 @@
             <br>
         </div>
         <div class="col-right">
-            <p style="font-size:20px;text-align:center" class="textVert"><b>COMPTE RENDU OPERATOIRE</b></p>
-            <img style="padding-left:50px" src="{{public_path('images/separator.png')}}" class="logo-rapport" alt="" /> 
+            <p style="" class="textVert" style=""><b style="font-size:18px">COMPTE RENDU OPERATOIRE</b></p>
+            <img style="padding-right:0px" src="{{public_path('images/separator.png')}}" class="logo-rapport" alt="" /> 
         </div>
       </div>
      <div class="welcome" style="marging-top:10px;">
@@ -77,20 +77,20 @@
     </div> 
      <div class="row-flex">
          <div>
-            <p style="text-align:left;font-size:12px">
+            <p style="text-align:left;font-size:10px;font-style: italic;">
             @if($compteRendu->dossier->patient->user->isMedicasure == '1')
             Dossier relu et validé par l'équipe <strong class="textViolet">Medicasure</strong>
             @endif
             </p>
          </div>
          <div classe="date">
-             <p style="text-align: right">
-               <b class="textViolet" style="font-size:12px">Date de création</b>
-               <b class="textDate" style="font-size:15px">: {{\Carbon\Carbon::parse($compteRendu->created_at)->format('d/m/Y')}}</b>
+             <p style="text-align: right;font-style: italic;">
+               <b class="textViolet" style="font-size:9px; ">Date de création</b>
+               <b class="textDate" style="font-size:12px">: {{\Carbon\Carbon::parse($compteRendu->created_at)->format('d/m/Y')}}</b>
              </p>
-             <p style="text-align: right; marging-top:-10px">
-                 <b class="textViolet" style="font-size:12px">Date d'impression</b>
-                 <b class="textDate" style="font-size:15px">: {{\Carbon\Carbon::now()->format('d/m/Y')}}</b>
+             <p style="text-align: right; marging-top:-10px; font-style: italic;">
+                 <b class="textViolet" style="font-size:9px">Date d'impression</b>
+                 <b class="textDate" style="font-size:12px">: {{\Carbon\Carbon::now()->format('d/m/Y')}}</b>
             </p>
          </div>
     </div>
