@@ -11,7 +11,7 @@
         "php": "^7.1.3",
         "barryvdh/laravel-dompdf": "^0.8.5",
         "barryvdh/laravel-snappy": "^0.4.4",
-        "cviebrock/eloquent-sluggable": "4.8",
+        "cviebrock/eloquent-sluggable": "4.8.*",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
         "gbrock/laravel-table": "dev-master",
@@ -56,6 +56,9 @@
             "app/Helpers/PrestationHelper.php",
             "app/Helpers/GeneralHelper.php",
             "app/Helpers/UserHelper.php",
+            "app/Helpers/CommandeHelper.php",
+            "app/Helpers/PatientHelper.php",
+            "app/Helpers/ContratHelper.php",
             "app/Helpers/MailHelper.php",
             "app/helpers.php",
             "app/Helpers/ComptabiliteHelper.php"

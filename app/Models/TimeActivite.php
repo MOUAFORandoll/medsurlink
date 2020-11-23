@@ -19,6 +19,7 @@ class TimeActivite extends Model
         'date',
         'start',
         'stop',
+        'slug',
     ];
 
     /**

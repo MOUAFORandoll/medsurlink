@@ -124,4 +124,12 @@ class Patient extends Model
         }
     }
 
+    public function ajouterSouscripteur($souscripteur_id):void{
+        $financeur = PatientSouscripteur::create([
+            'financable_type'=>'Souscripteur',
+            'financable_id'=>$souscripteur_id,
+            'patient_id'=>$this->user_id
+        ]);
+    }
+
 }

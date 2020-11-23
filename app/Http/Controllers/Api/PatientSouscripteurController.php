@@ -64,7 +64,7 @@ class PatientSouscripteurController extends Controller
         }
 
         $patient = Patient::with(['souscripteur.user','user','affiliations','etablissements','financeurs.financable.user'])->restrictUser()->whereSlug($patient->slug)->first();
-     $user = $patient->user;
+        $user = $patient->user;
         if ($user->decede == 'non') {
             if (!is_null($patient->user->email)) {
                 $mail = new updateSetting($patient->user);
