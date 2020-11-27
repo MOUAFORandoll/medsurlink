@@ -108,7 +108,7 @@ class AffiliationSouscripteurController extends Controller
         else if ($env === 'staging')
             return  redirect('https://www.staging.medsurlink.com/contrat-prepaye?token='.$token);
         else
-            return  redirect('https://www.medsurlink.com//contrat-prepaye?token='.$token);
+            return  redirect('https://www.medsurlink.com/contrat-prepaye?token='.$token);
 
     }
 
