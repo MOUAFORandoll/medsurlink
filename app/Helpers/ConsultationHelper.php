@@ -112,7 +112,7 @@ if(!function_exists('praticienValidation')) {
             $validator = Validator::make(['praticien_id'=>$praticienId],['praticien_id'=>'required|integer|exists:users,id']);
 
             if($validator->fails()){
-                return PersonnalErrors::revealError('praticien_id','le praticien spécifié n\'exite pas dans la bd');
+                return PersonnalErrors::staticRevealError('praticien_id','le praticien spécifié n\'exite pas dans la bd');
             }else{
                 return $praticienId;
             }
@@ -211,7 +211,7 @@ if(!function_exists('canUpdateConsultation')) {
             }elseif ( $role== 'Medecin controle' || $role == 'Admin'){
                 return true;
             }else{
-                PersonnalErrors::revealAccesRefuse();
+                PersonnalErrors::staticRevealAccesRefuse();
             }
         }
     }
@@ -280,7 +280,7 @@ if(!function_exists('archievedConsultation')) {
     function archievedConsultation($resultat)
     {
         if (is_null($resultat->passed_at)){
-            PersonnalErrors::revealNonTransmis();
+            PersonnalErrors::staticRevealNonTransmis();
 
         }else{
             $resultat->archieved_at = Carbon::now();
@@ -291,7 +291,7 @@ if(!function_exists('archievedConsultation')) {
                 informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
 
                 if ($user->isMedicasure == '1' || $user->isMedicasure == 1) {
-                    \App\Traits\SmsTrait::sendSmsToUser($user);
+                    sendSmsToUser($user);
                 }
             }
         }
