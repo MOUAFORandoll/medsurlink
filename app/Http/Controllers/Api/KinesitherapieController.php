@@ -9,6 +9,7 @@ use App\Models\Kinesitherapie;
 use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class KinesitherapieController extends Controller
@@ -43,9 +44,8 @@ class KinesitherapieController extends Controller
     public function store(KinesitherapieRequest $request)
     {
 
-
         // Sauvegarde des informations de la consultation
-        $kinesitherapie = Kinesitherapie::create($request->except(['author','contributeurs','dateRdv','motifRdv','praticien_id']));
+        $kinesitherapie = Kinesitherapie::create(mapExpectValue($request->validated(),['contributeurs','dateRdv','motifRdv','praticien_id']));
 
         // Sauvegarde des contributeurs
         $contributeurs = $request->get('contributeurs');
@@ -110,13 +110,15 @@ class KinesitherapieController extends Controller
     public function update(KinesitherapieRequest $request, $slug)
     {
 
+
         $this->validatedSlug($slug,$this->table);
 
         $kinesitherapie = Kinesitherapie::whereSlug($slug)->first();
 
         if (canUpdateConsultation($kinesitherapie)){
             // Modification de la consultation
-            $kinesitherapie->whereSlug($slug)->update($request->except(['slug','creator','contributeurs','dateRdv','motifRdv','praticien_id']));
+
+            $kinesitherapie->whereSlug($slug)->update(mapExpectValue($request->validated(),['contributeurs','dateRdv','motifRdv','praticien_id']));
 
             // Mise a jour de contributeurs
             $contributeurs = $request->get('contributeurs');
@@ -169,7 +171,6 @@ class KinesitherapieController extends Controller
 
     public function archiver($slug){
 
-
         $this->validatedSlug($slug,$this->table);
 
         $kinesitherapie = Kinesitherapie::whereSlug($slug)->first();
@@ -184,7 +185,6 @@ class KinesitherapieController extends Controller
     }
 
     public function transmettre($slug){
-
 
         $this->validatedSlug($slug,$this->table);
 

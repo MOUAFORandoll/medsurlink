@@ -27,9 +27,9 @@ Route::get('question','Api\QuestionController@index');
 //Route::resource('avis','Api\AvisController');
 //Route::post('avisMedecin/{slug}','Api\AvisMedecinController@store');
 //Route::resource('suivi','Api\SuiviController');
-//    Route::resource('consultation-kinesitherapie','Api\KinesitherapieController');
-//    Route::put('consultation-kinesitherapie/{slug}/transmettre','Api\KinesitherapieController@transmettre');
-//    Route::put('consultation-kinesitherapie/{slug}/archiver','Api\KinesitherapieController@archiver');
+    Route::resource('consultation-kinesitherapie','Api\KinesitherapieController');
+    Route::put('consultation-kinesitherapie/{slug}/transmettre','Api\KinesitherapieController@transmettre');
+    Route::put('consultation-kinesitherapie/{slug}/archiver','Api\KinesitherapieController@archiver');
 //    Route::put('consultation-kinesitherapie/{slug}/reactiver','Api\KinesitherapieController@reactiver');
 
 Route::middleware(['auth:api'])->group(function () {
@@ -83,8 +83,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::post('consultation-medecine/{slug}','Api\ConsultationMedecineGeneraleController@update');
     Route::post('consultation-fichier/{slug}','Api\ConsultationFichierController@update');
     Route::post('consultation-cardiologie/{slug}','Api\CardiologieController@update');
-    Route::post('consultation-kinesitherapie/{slug}','Api\KinesitherapieController@update');
-    Route::put('consultation-kinesitherapie/{slug}/transmettre','Api\KinesitherapieController@transmettre');
+//    Route::post('consultation-kinesitherapie/{slug}','Api\KinesitherapieController@update');
+//    Route::put('consultation-kinesitherapie/{slug}/transmettre','Api\KinesitherapieController@transmettre');
     Route::put('consultation-cardiologie/{slug}/transmettre','Api\CardiologieController@transmettre');
     Route::put('consultation-obstetrique/{id}/transmettre','Api\ConsultationObstetriqueController@transmettre');
     Route::put('consultation-prenatale/{id}/transmettre','Api\ConsultationPrenantaleController@transmettre');
@@ -110,10 +110,10 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], funct
     Route::put('consultation-obstetrique/{consultation_obstetrique}/archiver','Api\ConsultationObstetriqueController@archiver');
     Route::put('consultation-prenatale/{consultation_prenatale}/archiver','Api\ConsultationPrenantaleController@archiver');
     Route::put('ordonance/{ordonance}/archiver','Api\OrdonanceController@archiver');
-    Route::put('consultation-kinesitherapie/{slug}/archiver','Api\KinesitherapieController@archiver');
+//    Route::put('consultation-kinesitherapie/{slug}/archiver','Api\KinesitherapieController@archiver');
     Route::put('consultation-cardiologie/{slug}/archiver','Api\CardiologieController@archiver');
     Route::put('consultation-cardiologie/{slug}/reactiver','Api\CardiologieController@reactiver');
-    Route::put('consultation-kinesitherapie/{slug}/reactiver','Api\KinesitherapieController@reactiver');
+//    Route::put('consultation-kinesitherapie/{slug}/reactiver','Api\KinesitherapieController@reactiver');
     Route::put('consultation-medecine/{id}/reactiver','Api\ConsultationMedecineGeneraleController@reactiver');
     Route::put('consultation-obstetrique/{id}/reactiver','Api\ConsultationObstetriqueController@reactiver');
     Route::put('consultation-fichier/{id}/reactiver','Api\ConsultationFichierController@reactiver');
@@ -142,7 +142,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except(['create','edit']);
     Route::resource('consultation-cardiologie','Api\CardiologieController')->except(['create','edit']);
     Route::resource('consultation-cardiologie','Api\CardiologieController')->except(['create','edit']);
-    Route::resource('consultation-kinesitherapie','Api\KinesitherapieController');
+//    Route::resource('consultation-kinesitherapie','Api\KinesitherapieController');
     Route::resource('motif','Api\MotifController')->except(['create','edit']);
     Route::resource('allergie','Api\AllergieController')->except(['create','edit']);
     Route::resource('antecedent','Api\AntecedentController')->except(['create','edit']);
@@ -203,7 +203,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
     Route::resource('rdvs','Api\RendezVousController');
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except('store','update','destroy');
-    Route::resource('consultation-kinesitherapie','Api\KinesitherapieController')->except('store','update','destroy');
+//    Route::resource('consultation-kinesitherapie','Api\KinesitherapieController')->except('store','update','destroy');
     Route::resource('consultation-cardiologie','Api\CardiologieController')->except(['store','update','destroy']);
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except('store','update','destroy');
     Route::resource('motif','Api\MotifController')->except('store','update','destroy');
