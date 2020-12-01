@@ -10,6 +10,7 @@ use App\Models\ConsultationObstetrique;
 use App\Models\DossierMedical;
 use App\Models\Facture;
 use App\Models\Hospitalisation;
+use App\Models\Kinesitherapie;
 use App\Models\MedecinControle;
 use App\Models\Praticien;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -81,9 +82,8 @@ class ImprimerController extends Controller
 
         $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs');
         $pdf = PDF::loadView('rapport',$data);
-        $nom  = ucfirst($consultationMedecine->dossier->patient->user->nom);
-        $prenom = is_null($consultationMedecine->dossier->patient->user->prenom) ? '' :$consultationMedecine->dossier->patient->user->prenom;
-        $prenom  = ucfirst($prenom);
+        $nom  = patientLastName($consultationMedecine);
+        $prenom = patientFirstName($consultationMedecine);
         $date= $consultationMedecine->date_consultation;
         $path = storage_path().'/app/public/pdf/'.'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
         $pdf->save($path);
@@ -161,9 +161,8 @@ class ImprimerController extends Controller
 
         $data = compact('consultation','generateur','revisiteurs');
         $pdf = PDF::loadView('rapport.cardiologie',$data);
-        $nom  = ucfirst($consultation->dossier->patient->user->nom);
-        $prenom = is_null($consultation->dossier->patient->user->prenom) ? '' :$consultation->dossier->patient->user->prenom;
-        $prenom  = ucfirst($prenom);
+        $nom  = patientLastName($consultation);
+        $prenom = patientFirstName($consultation);
         $date= $consultation->date_consultation;
         $path = storage_path().'/app/public/pdf/'.'Cardiologie_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
         $pdf->save($path);
@@ -213,10 +212,8 @@ class ImprimerController extends Controller
 
         $data = compact('hospitalisation','generateur','revisiteurs');
         $pdf = PDF::loadView('rapport.hospitalisation',$data);
-        $nom  = ucfirst($hospitalisation->dossier->patient->user->nom);
-        $nom =str_replace(' ','_',$nom);
-        $prenom = is_null($hospitalisation->dossier->patient->user->prenom) ? '' :$hospitalisation->dossier->patient->user->prenom;
-        $prenom  = ucfirst($prenom);
+        $nom  = patientLastName($hospitalisation);
+        $prenom = patientFirstName($hospitalisation);
         $date= $hospitalisation->date_entree;
         $path = storage_path().'/app/public/pdf/'.'Hospitalisation_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
         $pdf->save($path);
@@ -231,9 +228,8 @@ class ImprimerController extends Controller
 
         $data = compact('facture');
         $pdf = PDF::loadView('facture.definitive',$data);
-        $nom  = ucfirst($facture->dossier->patient->user->nom);
-        $prenom = is_null($facture->dossier->patient->user->prenom) ? '' :$facture->dossier->patient->user->prenom;
-        $prenom  = ucfirst($prenom);
+        $nom  = patientLastName($facture);
+        $prenom = patientFirstName($facture);
         $date= $facture->date_facturation;
         $path = storage_path().'/app/public/pdf/'.'Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
         $pdf->save($path);
@@ -248,9 +244,8 @@ class ImprimerController extends Controller
 
         $data = compact('facture');
         $pdf = PDF::loadView('facture.proforma',$data);
-        $nom  = ucfirst($facture->dossier->patient->user->nom);
-        $prenom = is_null($facture->dossier->patient->user->prenom) ? '' :$facture->dossier->patient->user->prenom;
-        $prenom  = ucfirst($prenom);
+        $nom  = patientLastName($facture);
+        $prenom = patientFirstName($facture);
         $date= $facture->date_facturation;
         $path = storage_path().'/app/public/pdf/'.'Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
         $pdf->save($path);
@@ -259,20 +254,35 @@ class ImprimerController extends Controller
     }
 
     public function compteRendu($slug){
- 
+
         $this->validatedSlug($slug,'compte_rendu_operatoires');
 
         $compteRendu = CompteRenduOperatoire::whereSlug($slug)->first();
-      
+
         $data = compact('compteRendu');
         $pdf = PDF::loadView('rapport.compte_rendu',$data);
-        $nom  = ucfirst($compteRendu->dossier->patient->user->nom);
-        $prenom = is_null($compteRendu->dossier->patient->user->prenom) ? '' :$compteRendu->dossier->patient->user->prenom;
-        $prenom  = ucfirst($prenom);
-        $date= Carbon::parse($compteRendu->date_intervention)->format('Y_m_d');
+        $nom  = patientLastName($compteRendu);
+        $prenom = patientFirstName($compteRendu);
+        $date= formatRapportDate($compteRendu->date_intervention);
         $path = storage_path().'/app/public/pdf/'.'Compte_rendu_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
         $pdf->save($path);
         return  response()->json(['name'=>'Compte_rendu_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
+    }
+
+    public function kinesitherapie($slug){
+
+        $this->validatedSlug($slug,'kinesitherapies');
+
+        $kinesitherapie = Kinesitherapie::whereSlug($slug)->first();
+
+        $data = compact('kinesitherapie');
+        $pdf = PDF::loadView('rapport.kinesitherapie',$data);
+        $nom  = patientLastName($kinesitherapie);
+        $prenom = patientFirstName($kinesitherapie);
+        $date= formatRapportDate($kinesitherapie->date_consultation);
+        $path = storage_path().'/app/public/pdf/'.'Kinesitherapie_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
+        $pdf->save($path);
+        return  response()->json(['name'=>'Kinesitherapie_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
     }
 
 }

@@ -93,6 +93,10 @@ class DossierMedical extends Model
         return $this->hasMany(CompteRenduOperatoire::class,'dossier_medical_id','id');
     }
 
+    public function kinesitherapies(){
+        return $this->hasMany(Kinesitherapie::class,'dossier_medical_id','id');
+    }
+
     /**
      * The "booting" method of the model.
      *

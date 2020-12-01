@@ -238,6 +238,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 //    Route::get('imprimer-consultation-fichier/{fichier}','Api\ImprimerController@manuscrit');
     Route::get('imprimer-consultation-cardiologie/{cardiologie}','Api\ImprimerController@cardiologie');
     Route::get('imprimer-rapport-hospitalisation/{hospitalisation}','Api\ImprimerController@hospitalisation');
+    Route::get('imprimer-rapport-kinesitherapie/{kinesitherapie}','Api\ImprimerController@kinesitherapie');
     Route::get('affiliationRevue/{affiliation}','Api\AffiliationController@show');
     Route::get('patient/{patient}','Api\PatientController@show')->name('patient.show');
     Route::get('patient','Api\PatientController@index')->name('patient.index');

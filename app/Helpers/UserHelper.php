@@ -147,4 +147,17 @@ if(!function_exists('configurerUserMedsurlink')) {
     }
 }
 
+if(!function_exists('patientLastName')) {
+    function patientLastName($consultation)
+    {
+        return str_replace(' ','_',ucfirst($consultation->dossier->patient->user->nom));
+    }
+}
+if(!function_exists('patientFirstName')) {
+    function patientFirstName($consultation)
+    {
+        return ucfirst(is_null($consultation->dossier->patient->user->prenom) ? '' :$consultation->dossier->patient->user->prenom);
+    }
+}
+
 

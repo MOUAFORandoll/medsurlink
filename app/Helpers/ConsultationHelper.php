@@ -334,3 +334,10 @@ if(!function_exists('reactiverConsultation')) {
         $resultat->save();
     }
 }
+
+if(!function_exists('formatRapportDate')) {
+    function formatRapportDate($date)
+    {
+        return Carbon::parse($date)->format('Y_m_d');
+    }
+}
