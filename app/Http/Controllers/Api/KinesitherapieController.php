@@ -24,8 +24,8 @@ class KinesitherapieController extends Controller
      */
     public function index()
     {
-        Auth::loginUsingId(59);
-        $kinesitherapies = Kinesitherapie::with(['operationables.contributable', 'dossier.patient.user', 'etablissement'])->orderByDateConsultation()->get();
+
+        $kinesitherapies = Kinesitherapie::with(['author','operationables.contributable', 'dossier.patient.user', 'etablissement'])->orderByDateConsultation()->get();
 
         foreach ($kinesitherapies as $consultation) {
             $consultation->updateConsultation();
@@ -42,10 +42,10 @@ class KinesitherapieController extends Controller
      */
     public function store(KinesitherapieRequest $request)
     {
-        Auth::loginUsingId(59);
+
 
         // Sauvegarde des informations de la consultation
-        $kinesitherapie = Kinesitherapie::create($request->except(['creator','contributeurs','dateRdv','motifRdv','praticien_id']));
+        $kinesitherapie = Kinesitherapie::create($request->except(['author','contributeurs','dateRdv','motifRdv','praticien_id']));
 
         // Sauvegarde des contributeurs
         $contributeurs = $request->get('contributeurs');
@@ -81,7 +81,7 @@ class KinesitherapieController extends Controller
     public function show($slug)
     {
 
-        Auth::loginUsingId(59);
+
         $this->validatedSlug($slug,$this->table);
 
         $kinesitherapie = Kinesitherapie::with([
@@ -89,6 +89,7 @@ class KinesitherapieController extends Controller
             'dossier.patient.user',
             'etablissement',
             'files',
+            'author',
             'rdv.praticien'
         ])->whereSlug($slug)->first();
 
@@ -108,7 +109,7 @@ class KinesitherapieController extends Controller
      */
     public function update(KinesitherapieRequest $request, $slug)
     {
-        Auth::loginUsingId(59);
+
 
         $this->validatedSlug($slug,$this->table);
 
@@ -116,7 +117,7 @@ class KinesitherapieController extends Controller
 
         if (canUpdateConsultation($kinesitherapie)){
             // Modification de la consultation
-            $kinesitherapie->whereSlug($slug)->update($request->except(['creator','contributeurs','dateRdv','motifRdv','praticien_id']));
+            $kinesitherapie->whereSlug($slug)->update($request->except(['author','contributeurs','dateRdv','motifRdv','praticien_id']));
 
             // Mise a jour de contributeurs
             $contributeurs = $request->get('contributeurs');
@@ -154,7 +155,7 @@ class KinesitherapieController extends Controller
      */
     public function destroy($slug)
     {
-        Auth::loginUsingId(59);
+
 
         $this->validatedSlug($slug,$this->table);
 
@@ -168,7 +169,7 @@ class KinesitherapieController extends Controller
     }
 
     public function archiver($slug){
-        Auth::loginUsingId(59);
+
 
         $this->validatedSlug($slug,$this->table);
 
@@ -184,7 +185,7 @@ class KinesitherapieController extends Controller
     }
 
     public function transmettre($slug){
-        Auth::loginUsingId(59);
+
 
         $this->validatedSlug($slug,$this->table);
 
@@ -200,7 +201,7 @@ class KinesitherapieController extends Controller
     }
 
     public function reactiver($slug){
-        Auth::loginUsingId(59);
+
 
         $this->validatedSlug($slug,$this->table);
 

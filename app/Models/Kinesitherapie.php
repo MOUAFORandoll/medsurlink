@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Scopes\RestrictArchievedAt;
 use App\Scopes\RestrictDossierScope;
+use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
@@ -58,6 +59,9 @@ class Kinesitherapie extends Model
         return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
     }
 
+    public function author (){
+        return $this->belongsTo(User::class,'creator','id');
+    }
 
     /**
      * The "booting" method of the model.
