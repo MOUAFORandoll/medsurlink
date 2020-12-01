@@ -116,7 +116,7 @@ class KinesitherapieController extends Controller
 
         if (canUpdateConsultation($kinesitherapie)){
             // Modification de la consultation
-            $kinesitherapie->whereSlug($slug)->update($request->except(['author','creator','contributeurs','dateRdv','motifRdv','praticien_id']));
+            $kinesitherapie->whereSlug($slug)->update($request->except(['slug','creator','contributeurs','dateRdv','motifRdv','praticien_id']));
 
             // Mise a jour de contributeurs
             $contributeurs = $request->get('contributeurs');

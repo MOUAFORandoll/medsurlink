@@ -275,7 +275,16 @@ class ImprimerController extends Controller
 
         $kinesitherapie = Kinesitherapie::whereSlug($slug)->first();
 
-        $data = compact('kinesitherapie');
+        //Recuperation des contributeurs de la consultation
+        $cContributeurs = [];
+        foreach($kinesitherapie->operationables as $operationable){
+            array_push($cContributeurs,$operationable['contributable']['id']);
+        }
+
+        $pContributeurs = Praticien::with('user')->whereIn('user_id',$cContributeurs)->get();
+        $mContributeurs = MedecinControle::with('user')->whereIn('user_id',$cContributeurs)->get();
+
+        $data = compact('kinesitherapie','pContributeurs','mContributeurs');
         $pdf = PDF::loadView('rapport.kinesitherapie',$data);
         $nom  = patientLastName($kinesitherapie);
         $prenom = patientFirstName($kinesitherapie);
