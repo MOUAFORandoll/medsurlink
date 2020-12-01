@@ -73,20 +73,20 @@ class AffiliationSouscripteurController extends Controller
         // Authentification de l'utilisateur
         $token = $user->createToken('Commande token')->accessToken;
         $tokenInfo = [];
-        $tokenInfo['token_type']= 'Bearer';
-        $tokenInfo['expires_in']= 86399;
-        $tokenInfo['access_token']= $token;
-        $tokenInfo = collect($tokenInfo);
-        $user->roles;
-        Auth::login($user);
-        $time = TimeActivite::create([
-            'date'=>Carbon::now()->format('Y-m-d'),
-            'start'=>Carbon::now()->format('H:i')
-        ]);
-        $user['time_slug'] = $time->slug;
-        $user['isEtablissement'] = isComptable();
-        $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
-        $tokenInfo->put('user', $user);
+//        $tokenInfo['token_type']= 'Bearer';
+//        $tokenInfo['expires_in']= 86399;
+        $tokenInfo = $token;
+//        $tokenInfo = collect($tokenInfo);
+//        $user->roles;
+//        Auth::login($user);
+//        $time = TimeActivite::create([
+//            'date'=>Carbon::now()->format('Y-m-d'),
+//            'start'=>Carbon::now()->format('H:i')
+//        ]);
+//        $user['time_slug'] = $time->slug;
+//        $user['isEtablissement'] = isComptable();
+//        $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
+//        $tokenInfo->put('user', $user);
 
         // Envoi du mail avec mot de passe souscripteur
         try{
@@ -222,4 +222,8 @@ class AffiliationSouscripteurController extends Controller
 
         return response()->json(['commande'=>$commande]);
     }
+
+
+
+
 }

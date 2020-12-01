@@ -82,4 +82,19 @@ class AuthController extends AccessTokenController
         }
         return $authUser;
     }
+
+    public function userDetails(Request $request){
+
+        $user = $request->user();
+        $user->roles;
+        $time = TimeActivite::create([
+            'date'=>Carbon::now()->format('Y-m-d'),
+            'start'=>Carbon::now()->format('H:i')
+        ]);
+        $user['time_slug'] = $time->slug;
+        $user['isEtablissement'] = isComptable();
+
+
+        return response()->json(['user'=>$user]);
+    }
 }

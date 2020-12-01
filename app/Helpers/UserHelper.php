@@ -1,11 +1,4 @@
 <?php
-/**
- * verifit si l'utilisateur est de la spécialité précisé
- *
- * @param null $user
- * @param string $specialite
- * @return bool
- */
 
 use App\Mail\Password\PasswordGenerated;
 use App\Mail\PatientAffiliated;
@@ -13,6 +6,13 @@ use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * verifit si l'utilisateur est de la spécialité précisé
+ *
+ * @param null $user
+ * @param string $specialite
+ * @return bool
+ */
 if(!function_exists('estIlSpecialisteDe')) {
     function estIlSpecialisteDe($specialite,$user = null)
     {
