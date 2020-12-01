@@ -110,7 +110,6 @@ class KinesitherapieController extends Controller
     public function update(KinesitherapieRequest $request, $slug)
     {
 
-
         $this->validatedSlug($slug,$this->table);
 
         $kinesitherapie = Kinesitherapie::whereSlug($slug)->first();

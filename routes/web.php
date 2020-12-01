@@ -26,38 +26,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/public/storage/DossierMedicale/{fileNumber}/Consultation/{consultation}/{image}', function ($fileNumber,$consultation,$image) {
-    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/Consultation/'.$consultation.'/'.$image;
+Route::get('/public/storage/DossierMedicale/{fileNumber}/{typeConsultation}/{consultation}/{image}/{resource?}', function ($fileNumber,$typeConsultation,$consultation,$image,$resource='') {
+    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/'.$typeConsultation.'/'.$consultation.'/'.$image.($resource ? '/'.$resource :'');
     return response()->file($path);
 });
 
-Route::get('/public/storage/DossierMedicale/{fileNumber}/ConsultationFichier/{consultation}/{image}', function ($fileNumber,$consultation,$image) {
-    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/ConsultationFichier/'.$consultation.'/'.$image;
-    return response()->file($path);
-});
-
-Route::get('/public/storage/DossierMedicale/{fileNumber}/ConsultationGenerale/{image}', function ($fileNumber,$image) {
-    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/ConsultationGenerale/'.$image;
-    return response()->file($path);
-});
-
-Route::get('/public/storage/DossierMedicale/{fileNumber}/Cardiologie/{identifiant}/{resource}', function ($fileNumber,$identifiant,$resource) {
-    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/Cardiologie/'.$identifiant.'/'.$resource;
-    return response()->file($path);
-});
-
-Route::get('/public/storage/Medecin/{fileNumber}/Signature/{image}', function ($fileNumber,$image) {
-    $path = public_path().'/storage/Medecin/'.$fileNumber.'/Signature/'.'/'.$image;
-    return response()->file($path);
-});
-
-Route::get('/public/storage/Praticien/{fileNumber}/Signature/{image}', function ($fileNumber,$image) {
-    $path = public_path().'/storage/Praticien/'.$fileNumber.'/Signature/'.'/'.$image;
-    return response()->file($path);
-});
-
-Route::get('/public/storage/Etablissement/{fileNumber}/Logo/{image}', function ($fileNumber,$image) {
-    $path = public_path().'/storage/Etablissement/'.$fileNumber.'/Logo'.'/'.$image;
+Route::get('/public/storage/{role}/{fileNumber}/{type}/{image}', function ($role,$fileNumber,$type,$image) {
+    $path = public_path().'/storage/'.$role.'/'.$fileNumber.'/'.$type.'/'.'/'.$image;
     return response()->file($path);
 });
 
