@@ -49,7 +49,7 @@ if(!function_exists('peutOnAjouterCommande')) {
 if(!function_exists('laCommandeExisteElle')) {
     function laCommandeExisteElle($commande_id)
     {
-        $commande =  \App\Models\AffiliationSouscripteur::where('cim_id',$commande_id)->first();
+        $commande =  \App\Models\AffiliationSouscripteur::where('cim_id','==',$commande_id)->first();
 
         return $commande != null ;
     }
