@@ -76,7 +76,7 @@ if(!function_exists('bookingAppointment')) {
     function bookingAppointment($consultation, $typeConsultation, $motifRdv, $dateRdv, $praticien_id)
     {
         if (!is_null($dateRdv) ){
-            if (strlen($dateRdv) >0 && $dateRdv != 'null' &&  $dateRdv != 'Invalid date' ){
+            if (strlen($dateRdv) >0 && $dateRdv != 'null' &&  $dateRdv != 'Invalid date' &&  $dateRdv != 'Undefined' ){
                 if ($motifRdv == 'null'){
                     $motifRdv = 'Rendez vous de la consultation '.$typeConsultation.' du '.$consultation->date_consultation;
                 }
@@ -168,7 +168,7 @@ if(!function_exists('updateBookingAppointment')) {
         if (is_null($rdv)){
 //            si cela n'existe pas et que on a spécifié la date de rendez vous on crée
             if (!is_null($dateRdv) ){
-                if (strlen($dateRdv) >0 && $dateRdv != 'null' &&  $dateRdv != 'Invalid date'){
+                if (strlen($dateRdv) >0 && $dateRdv != 'null' &&  $dateRdv != 'Invalid date' &&  $dateRdv != 'Undefined'){
 
                     RendezVous::create([
                         "sourceable_id"=>$consultation->id,
