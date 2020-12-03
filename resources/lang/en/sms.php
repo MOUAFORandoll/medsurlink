@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'accountCreated'        => ':sexe :nom, utilisez vos identifiants pour accéder à votre compte Medsur Compte : :compte  Mot de passe : :password url : www.medsurlink.com',
+    'accountCreated'         => 'ACCEDEZ A VOTRE COMPTE SUR '. config('app.frontend_url').'. IDENTIFIANT (mettre Numero de dossier) VOTRE MOT DE PASSE EST VOTRE annee de naissance SUIVIE DU CODE PRIVE :password ',
+
 ];
