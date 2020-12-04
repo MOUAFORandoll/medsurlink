@@ -122,7 +122,8 @@ class DossierMedicalController extends Controller
                     $query->orderBy('created_at', 'desc');
                 },
                 'resultatsImagerie',
-                'kinesitherapies',
+                'kinesitherapies.etablissement',
+                'kinesitherapies.author',
                 'resultatsLabo',
                 'cardiologies',
                      'consultationsManuscrites.praticien',

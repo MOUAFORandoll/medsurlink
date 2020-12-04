@@ -46,61 +46,64 @@ class AffiliationSouscripteurController extends Controller
                 ]);
 
                 $affiliation = json_decode($res->getBody()->getContents());
-                $request = $affiliation->billing;
-                $line_item = $affiliation->line_items[0];
-                $userInformation = [];
-                $userInformation['nom']=$request->last_name;
-                $userInformation['prenom']=$request->first_name;
-                $userInformation['email']=$request->email;
-                $userInformation['nationalite']=$request->country;
-                $userInformation['quartier']=$request->address_1;
-                $userInformation['code_postal']=$request->postcode;
-                $userInformation['ville']=$request->city;
-                $userInformation['pays']=$request->country;
-                $userInformation['telephone']=$request->phone;
-                $userInformation['adresse']=$request->address_2;
+                if(strtoupper($affiliation->status) == 'COMPLETED' ){
+                    $request = $affiliation->billing;
+                    $line_item = $affiliation->line_items[0];
+                    $userInformation = [];
+                    $userInformation['nom']=$request->last_name;
+                    $userInformation['prenom']=$request->first_name;
+                    $userInformation['email']=$request->email;
+                    $userInformation['nationalite']=$request->country;
+                    $userInformation['quartier']=$request->address_1;
+                    $userInformation['code_postal']=$request->postcode;
+                    $userInformation['ville']=$request->city;
+                    $userInformation['pays']=$request->country;
+                    $userInformation['telephone']=$request->phone;
+                    $userInformation['adresse']=$request->address_2;
 
 
-                // Création du compte utilisateur medsurlink
-                $passwordPatient = substr(bin2hex(random_bytes(10)), 0, 7);
-                $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordPatient,'0');
+                    // Création du compte utilisateur medsurlink
+                    $passwordPatient = substr(bin2hex(random_bytes(10)), 0, 7);
+                    $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordPatient,'0');
 
-                // Assignation du role souscripteur
-                $user->assignRole('Souscripteur');
+                    // Assignation du role souscripteur
+                    $user->assignRole('Souscripteur');
 
-                // Enregistrement des informations personnels du souscripteur
-                $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
+                    // Enregistrement des informations personnels du souscripteur
+                    $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
 
-                // Enregistrement des informations relative aux commandes
-                $commande = enregistrerCommande($user,$line_item,$cim_id);
+                    // Enregistrement des informations relative aux commandes
+                    $commande = enregistrerCommande($user,$line_item,$cim_id);
 
-                // Authentification de l'utilisateur
-                $token = $user->createToken('Commande token')->accessToken;
-                $tokenInfo = [];
-                //        $tokenInfo['token_type']= 'Bearer';
-                //        $tokenInfo['expires_in']= 86399;
-                                $tokenInfo = $token;
-                //        $tokenInfo = collect($tokenInfo);
-                //        $user->roles;
-                //        Auth::login($user);
-                //        $time = TimeActivite::create([
-                //            'date'=>Carbon::now()->format('Y-m-d'),
-                //            'start'=>Carbon::now()->format('H:i')
-                //        ]);
-                //        $user['time_slug'] = $time->slug;
-                //        $user['isEtablissement'] = isComptable();
-                //        $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
-                //        $tokenInfo->put('user', $user);
+                    // Authentification de l'utilisateur
+                    $token = $user->createToken('Commande token')->accessToken;
+                    $tokenInfo = [];
+                    //        $tokenInfo['token_type']= 'Bearer';
+                    //        $tokenInfo['expires_in']= 86399;
+                    $tokenInfo = $token;
+                    //        $tokenInfo = collect($tokenInfo);
+                    //        $user->roles;
+                    //        Auth::login($user);
+                    //        $time = TimeActivite::create([
+                    //            'date'=>Carbon::now()->format('Y-m-d'),
+                    //            'start'=>Carbon::now()->format('H:i')
+                    //        ]);
+                    //        $user['time_slug'] = $time->slug;
+                    //        $user['isEtablissement'] = isComptable();
+                    //        $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
+                    //        $tokenInfo->put('user', $user);
 
-                // Envoi du mail avec mot de passe souscripteur
-                try{
-                    sendUserInformationViaMail($user,$passwordPatient);
-                }catch (\Swift_TransportException $transportException){
-                    $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
-                    return response()->json(['souscripteur'=>$user, "message"=>$message]);
+                    // Envoi du mail avec mot de passe souscripteur
+                    try{
+                        sendUserInformationViaMail($user,$passwordPatient);
+                    }catch (\Swift_TransportException $transportException){
+                        $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+                        return response()->json(['souscripteur'=>$user, "message"=>$message]);
+                    }
+
+                    return response()->json(['reponse'=>$tokenInfo],200) ;
                 }
-
-                return response()->json(['reponse'=>$tokenInfo],200) ;
+                return response()->json(['reponse'=>'Mauvais status de paiement de commande'],404) ;
             }catch ( ClientException $exception){
                 return response()->json(['reponse'=>'Mauvais identifiant de commande'],404) ;
             }
