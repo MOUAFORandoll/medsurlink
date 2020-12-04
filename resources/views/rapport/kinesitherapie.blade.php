@@ -51,7 +51,7 @@
         @endcomponent
 
         @component('.rapport.slots.rubrique',['titre'=>"Motif du rendez-vous",
-                                                'valeur'=>dateFormat($kinesitherapie->rdv->motifs)])
+                                                'valeur'=>$kinesitherapie->rdv->motifs])
         @endcomponent
 
         @component('.rapport.slots.rubrique',['titre'=>"Nom du médecin",
