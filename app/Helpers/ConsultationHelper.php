@@ -158,7 +158,7 @@ if(!function_exists('updateBookingAppointment')) {
         $praticien_id = praticienValidation($praticien_id);
         //je récupère le rendez vous de la consultation si cela existe
         $rdv = RendezVous::where('sourceable_id',$consultation->id)
-            ->where('sourceable_type','Consultation')
+            ->where('sourceable_type',$typeConsultation)
             ->first();
 
         if ($motifRdv == 'null'){
