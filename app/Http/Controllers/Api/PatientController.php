@@ -109,22 +109,24 @@ class PatientController extends Controller
 
         //Envoi des informations patient par mail
         $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
+        $identifiant = $patient->dossier->numero_dossier;
         try{
             //Envoi de sms
             $user = $patient->user;
 //            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
             $nom = substr(strtoupper( $user->nom),0,9);
-            $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$code],'fr'));
+            $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$code,'identifiant'=>$identifiant],'fr'));
             //!Envoi de sms
 
             UserController::sendUserPatientInformationViaMail($user,$password);
 
             $patient = Patient::with('user','dossier')->where('user_id','=',$patient->user_id)->first();
             $souscripteur = Souscripteur::with('user')->where('user_id','=',$patient->souscripteur_id)->first();
+
             if (!is_null($souscripteur)){
 
                 $user = $souscripteur->user;
-                $this->sendSmsToUser($user);
+                $this->sendSmsToUser($user,null,$identifiant);
 
                 $mail = new PatientAffiliated($souscripteur,$patient);
                 Mail::to($souscripteur->user->email)->send($mail);
