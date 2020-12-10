@@ -11,7 +11,7 @@ class DictionnaireSeeder extends Seeder
      */
     public function run()
     {
-        $regions = [A
+        $regions = [
             'Extrême-Nord',
             'Nord',
             'Adamaoua',
@@ -23,5 +23,33 @@ class DictionnaireSeeder extends Seeder
             'Nord-Ouest',
             'Sud-Ouest',
         ];
+
+        $categoriePartenaires = [
+            'Hôpital Publique',
+            'Hôpital Privé',
+            'Hôpital Confessionnel',
+            'Clinique',
+            'Centre de santé ',
+            'Laboratoire d’analyse',
+            'Pharmacie',
+            'Centre d’imagerie',
+            'Cabinet de soins',
+        ];
+
+        foreach ($regions as $region){
+            \App\Models\Dictionnaire::create([
+               'fr_description'=>$region,
+               'en_description'=>$region,
+               'reference'=>'regions',
+            ]);
+        }
+
+        foreach ($categoriePartenaires as $category){
+            \App\Models\Dictionnaire::create([
+               'fr_description'=>$category,
+               'en_description'=>$category,
+               'reference'=>'partenaire',
+            ]);
+        }
     }
 }
