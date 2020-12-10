@@ -31,7 +31,7 @@ Route::get('question','Api\QuestionController@index');
 //    Route::put('consultation-kinesitherapie/{slug}/transmettre','Api\KinesitherapieController@transmettre');
 //    Route::put('consultation-kinesitherapie/{slug}/archiver','Api\KinesitherapieController@archiver');
 //    Route::put('consultation-kinesitherapie/{slug}/reactiver','Api\KinesitherapieController@reactiver');
-Route::resource('partenaire','Api\PartenaireController');
+//Route::resource('partenaire','Api\PartenaireController');
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/countries', function () {
@@ -103,7 +103,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
 
 //    Définition des routes accéssible par le medecin controle
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], function () {
-//    Route::resource('partenaire','Api\PartenaireController');
+    Route::resource('partenaire','Api\PartenaireController');
     Route::put('resultat-labo/{resultat}/archiver','Api\ResultatLaboController@archive');
     Route::put('consultation-fichier/{resultat}/archiver','Api\ConsultationFichierController@archiver');
     Route::put('hospitalisation/{hospitalisation}/archiver','Api\HospitalisationController@archiver');

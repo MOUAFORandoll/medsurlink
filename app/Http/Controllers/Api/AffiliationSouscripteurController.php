@@ -121,7 +121,7 @@ class AffiliationSouscripteurController extends Controller
 
         $env = strtolower(config('app.env'));
         if ($token->getStatusCode() == 200){
-            $updatePath += $reponse;
+            $updatePath = $updatePath.$reponse;
         }else{
             $updatePath = 'erreur='.$reponse;
         }
