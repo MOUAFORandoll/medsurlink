@@ -29,7 +29,7 @@ class PartenaireRequest extends FormRequest
             "nom"=>"sometimes|nullable|string",
             "localisation"=>"sometimes|nullable|string",
             "telephone"=>"sometimes|nullable|string",
-            "email"=>"sometimes|nullable|string|email",
+            "email"=>"sometimes|nullable|email",
             "contact"=>"sometimes|nullable|string",
         ];
     }
