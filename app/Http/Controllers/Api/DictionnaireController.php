@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Dictionnaire;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -31,12 +32,13 @@ class DictionnaireController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $search
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($search)
     {
-        //
+        $dictionnaires = Dictionnaire::whereReference(strtolower($search))->get();
+        return response()->json(['dictionnaires'=>$dictionnaires]);
     }
 
     /**
