@@ -78,6 +78,8 @@ class PartenaireController extends Controller
      */
     public function destroy($slug)
     {
+        $this->validatedSlug($slug,$this->table);
+
         $partenaire = Partenaire::whereSlug($slug)->first();
 
         $partenaire->delete();
