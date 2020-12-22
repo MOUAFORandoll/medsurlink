@@ -283,8 +283,31 @@ class ImprimerController extends Controller
 
         $pContributeurs = Praticien::with('user')->whereIn('user_id',$cContributeurs)->get();
         $mContributeurs = MedecinControle::with('user')->whereIn('user_id',$cContributeurs)->get();
+        $updateAuteurs = getUpdatedAuthor("Kinesitherapie",$kinesitherapie->id,"update");
+        $medecins = [];
+        $auteurs = [];
+        $praticien = Praticien::where('user_id',$kinesitherapie->creator)->first();
+        if ($praticien){
+            $praticiens = $praticien;
+            $signature = $praticien->signature;
+        }else{
+            $medecin = MedecinControle::where('user_id',$kinesitherapie->creator)->first();
+            $praticiens = $medecin;
+            $signature = $medecin->signature;
+        }
 
-        $data = compact('kinesitherapie','pContributeurs','mContributeurs');
+        foreach ($updateAuteurs as $item){
+            if ($item->auteurable_id != $kinesitherapie->creator){
+                if (!in_array($item->auteurable_id,$auteurs)){
+                    if ($item->auteurable_type == 'Medecin controle'){
+                        $medecin = MedecinControle::with('user')->find($item->auteurable_id);
+                        array_push($medecins,$medecin);
+                    }
+                    array_push($auteurs,$item->auteurable_id);
+                }
+            }
+        }
+        $data = compact('kinesitherapie','pContributeurs','mContributeurs','medecins','praticiens','signature');
         $pdf = PDF::loadView('rapport.kinesitherapie',$data);
         $nom  = patientLastName($kinesitherapie);
         $prenom = patientFirstName($kinesitherapie);

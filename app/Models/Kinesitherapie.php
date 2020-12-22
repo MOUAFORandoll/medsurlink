@@ -107,7 +107,7 @@ class Kinesitherapie extends Model
             if ($this['isAuthor'] == true)
                 $this['canUpdate'] = is_null($this->archieved_at);
             else{
-                $this['canUpdate']=$this['isAuthor'] && !is_null($this->passed_at) && is_null($this->archieved_at);
+                $this['canUpdate']= !is_null($this->passed_at) && is_null($this->archieved_at);
             }
         }elseif($connectedUser->getRoleNames()->first() == 'Admin'){
             $this['canUpdate']=true;

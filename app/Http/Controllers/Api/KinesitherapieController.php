@@ -119,6 +119,7 @@ class KinesitherapieController extends Controller
             // Modification de la consultation
 
             $kinesitherapie->whereSlug($slug)->update(mapExpectValue($request->validated(),['contributeurs','dateRdv','motifRdv','praticien_id']));
+            defineAsAuthor("Kinesitherapie",$kinesitherapie->id,'update',$kinesitherapie->dossier->patient->user_id);
 
             // Mise a jour de contributeurs
             $contributeurs = $request->get('contributeurs');
