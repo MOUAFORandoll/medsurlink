@@ -43,7 +43,7 @@ class MedecinAvis extends Model
         return Str::random(16).' '.Carbon::now()->timestamp;
     }
 
-    public function avis(){
+    public function avisMedecin(){
         return $this->belongsTo(Avis::class,'avis_id','id');
     }
 

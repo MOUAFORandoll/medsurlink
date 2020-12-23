@@ -59,7 +59,7 @@ class AvisMedecinController extends Controller
             }
         }
         $avis->save();
-        $this->updateDossierId($avis->avis->dossier->id);
+        $this->updateDossierId($avis->avisMedecin->dossier->id);
         return  response()->json(['avis'=>$avis]);
     }
 
@@ -85,6 +85,8 @@ class AvisMedecinController extends Controller
         $avis = Avis::whereSlug($aviSlug)->first();
 
         $medecin_avis = MedecinAvis::where('avis_id',$avis->id)->where('medecin_id',$medecin)->first();
+        $medecin_avis->view = 1;
+        $medecin_avis->save();
 
         $this->updateDossierId($avis->dossier->id);
 
@@ -123,7 +125,7 @@ class AvisMedecinController extends Controller
                 "set_opinion_at"=>Carbon::now()->format('Y-m-d H:i:s'),
             ]);
 
-        $this->updateDossierId($avis->dossier->id);
+        $this->updateDossierId($avis->avisMedecin->dossier->id);
 
         return  response()->json(['avis'=>$avis]);
     }
@@ -141,7 +143,7 @@ class AvisMedecinController extends Controller
         $avis = MedecinAvis::whereSlug($slug)->first();
         $avis->delete();
 
-        $this->updateDossierId($avis->avis->dossier->id);
+        $this->updateDossierId($avis->avisMedecin->dossier->id);
 
         return  response()->json(['avis'=>$avis]);
     }
