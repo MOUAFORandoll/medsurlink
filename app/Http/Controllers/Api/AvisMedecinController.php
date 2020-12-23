@@ -85,8 +85,6 @@ class AvisMedecinController extends Controller
         $avis = Avis::whereSlug($aviSlug)->first();
 
         $medecin_avis = MedecinAvis::where('avis_id',$avis->id)->where('medecin_id',$medecin)->first();
-        $medecin_avis->view = 1;
-        $medecin_avis->save();
 
         $this->updateDossierId($avis->dossier->id);
 
