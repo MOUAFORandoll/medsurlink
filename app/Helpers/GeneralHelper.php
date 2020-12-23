@@ -2,6 +2,7 @@
 
 use App\SMS;
 use App\Notifications\SendSMS;
+use Illuminate\Support\Arr;
 
 if(!function_exists('sendSMS'))
 {
@@ -63,6 +64,18 @@ if(!function_exists('getFullNameWithoutAccent'))
 
         $string_without_accent = str_replace($search, $replace, $string_with_accent);
         return $string_without_accent;
+    }
+}
+
+if(!function_exists('mapExpectValue'))
+{
+    /**
+     * @param $string_with_accent
+     * @return string
+     */
+    function mapExpectValue($arrayList,$unNeedArray)
+    {
+      return Arr::except($arrayList,$unNeedArray);
     }
 }
 

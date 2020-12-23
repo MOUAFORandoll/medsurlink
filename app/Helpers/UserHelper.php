@@ -1,11 +1,4 @@
 <?php
-/**
- * verifit si l'utilisateur est de la spécialité précisé
- *
- * @param null $user
- * @param string $specialite
- * @return bool
- */
 
 use App\Mail\Password\PasswordGenerated;
 use App\Mail\PatientAffiliated;
@@ -13,6 +6,13 @@ use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
+/**
+ * verifit si l'utilisateur est de la spécialité précisé
+ *
+ * @param null $user
+ * @param string $specialite
+ * @return bool
+ */
 if(!function_exists('estIlSpecialisteDe')) {
     function estIlSpecialisteDe($specialite,$user = null)
     {
@@ -144,6 +144,19 @@ if(!function_exists('configurerUserMedsurlink')) {
         $userInformation['adresse']=$request->adresse;
 
         return $userInformation;
+    }
+}
+
+if(!function_exists('patientLastName')) {
+    function patientLastName($consultation)
+    {
+        return str_replace(' ','_',ucfirst($consultation->dossier->patient->user->nom));
+    }
+}
+if(!function_exists('patientFirstName')) {
+    function patientFirstName($consultation)
+    {
+        return ucfirst(is_null($consultation->dossier->patient->user->prenom) ? '' :$consultation->dossier->patient->user->prenom);
     }
 }
 

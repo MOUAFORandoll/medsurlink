@@ -211,6 +211,7 @@ class ConsultationObstetriqueController extends Controller
         $serologie = implode(" ",$request->serologie);
         $rccs = implode(" ",$request->rcc);
         ConsultationObstetrique::whereSlug($slug)->update($request->except('serologie','rcc','consultation','dateRdv','motifRdv')+['numero_grossesse'=>$numeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
+        defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'update',$consultationObstetrique->dossier->patient->user_id);
 
         $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
 

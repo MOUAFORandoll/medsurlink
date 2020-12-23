@@ -39,6 +39,7 @@ class DossierMedicalController extends Controller
             'patient',
             'patient.user',
             'consultationsMedecine',
+            'kinesitherapies',
             'consultationsObstetrique',
             'traitements'=> function ($query) {
                 $query->orderBy('created_at', 'desc');
@@ -121,6 +122,8 @@ class DossierMedicalController extends Controller
                     $query->orderBy('created_at', 'desc');
                 },
                 'resultatsImagerie',
+                'kinesitherapies.etablissement',
+                'kinesitherapies.author',
                 'resultatsLabo',
                 'cardiologies',
                      'consultationsManuscrites.praticien',
@@ -244,6 +247,7 @@ class DossierMedicalController extends Controller
             'patient',
             'ordonances',
             'consultationsMedecine',
+            'kinesitherapies',
             'consultationsObstetrique',
             'consultationsObstetrique.echographies',
             'hospitalisations'=> function ($query) {

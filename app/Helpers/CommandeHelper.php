@@ -45,6 +45,17 @@ if(!function_exists('peutOnAjouterCommande')) {
         return $commande->nombre_restant > 0;
     }
 }
+
+if(!function_exists('laCommandeExisteElle')) {
+    function laCommandeExisteElle($commande_id)
+    {
+        $commande =  \App\Models\AffiliationSouscripteur::where('cim_id','==',$commande_id)->first();
+
+        return $commande != null ;
+    }
+}
+
+
 if(!function_exists('transformerCommande')) {
     function transformerCommande($commande,$request,$pays)
     {

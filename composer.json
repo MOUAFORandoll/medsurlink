@@ -60,6 +60,8 @@
             "app/Helpers/PatientHelper.php",
             "app/Helpers/ContratHelper.php",
             "app/Helpers/MailHelper.php",
+            "app/Helpers/ConsultationHelper.php",
+            "app/Helpers/RapportHelper.php",
             "app/helpers.php",
             "app/Helpers/ComptabiliteHelper.php"
         ],

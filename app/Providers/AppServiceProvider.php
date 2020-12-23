@@ -32,6 +32,7 @@ use App\Models\Gestionnaire;
 use App\Models\Hospitalisation;
 use App\Models\HospitalisationExamClin;
 use App\Models\HospitalisationExamCom;
+use App\Models\Kinesitherapie;
 use App\Models\MedecinControle;
 use App\Models\Medicament;
 use App\Models\Motif;
@@ -78,6 +79,7 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         Relation::morphMap([
             'Comptable'=>Comptable::class,
+            'Kinesitherapie'=>Kinesitherapie::class,
             'Facture'=>Facture::class,
             'RendezVous'=>RendezVous::class,
             'PatientSouscripteur'=>PatientSouscripteur::class,
