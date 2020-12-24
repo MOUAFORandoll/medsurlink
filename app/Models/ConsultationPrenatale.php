@@ -9,6 +9,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Netpok\Database\Support\RestrictSoftDeletes;
 use App\Scopes\RestrictConsultationObstetriqueScope;
 
@@ -81,6 +82,10 @@ class ConsultationPrenatale extends Model
             $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationPrenatale",$this->id,"create");
             $this['author'] = getAuthor("ConsultationPrenatale",$this->id,"create");
             $this['isAuthor']=$isAuthor->getOriginalContent();
+            $connectedUser = Auth::user();
+            if ($connectedUser->getRoleNames()->first() == 'Medecin controle'){
+                $this['isAuthor']=true;
+            }
         }
     }
 }
