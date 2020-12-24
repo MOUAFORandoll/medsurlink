@@ -142,8 +142,10 @@ class ConsultationMedecineGenerale extends Model
             if ($connectedUser->getRoleNames()->first() == 'Praticien'){
                 $this['canUpdate']=$canUpdate->getOriginalContent() && is_null($this->passed_at) && is_null($this->archieved_at);
             }elseif ($connectedUser->getRoleNames()->first() == 'Medecin controle'){
-                if ($isAuthor->getOriginalContent() == true)
+                $this['isAuthor']=true;
+                if ($isAuthor->getOriginalContent() == true){
                     $this['canUpdate'] = is_null($this->archieved_at);
+                }
                 else{
                     $this['canUpdate']=$canUpdate->getOriginalContent() && !is_null($this->passed_at) && is_null($this->archieved_at);
                 }
