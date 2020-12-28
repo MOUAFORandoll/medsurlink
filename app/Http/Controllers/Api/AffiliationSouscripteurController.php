@@ -103,12 +103,12 @@ class AffiliationSouscripteurController extends Controller
 
                     return response()->json(['reponse'=>$tokenInfo],200) ;
                 }
-                return response()->json(['reponse'=>'Mauvais status de paiement de commande'],404) ;
+                return response()->json(['reponse'=>'error_bad_payment'],404) ;
             }catch ( ClientException $exception){
-                return response()->json(['reponse'=>'Mauvais identifiant de commande'],404) ;
+                return response()->json(['reponse'=>'error_bad_command'],404) ;
             }
         }else{
-            return response()->json(['reponse'=>'La commande existe déjà'],404) ;
+            return response()->json(['reponse'=>'error_exist'],404) ;
         }
 
     }
@@ -121,17 +121,16 @@ class AffiliationSouscripteurController extends Controller
 
         $env = strtolower(config('app.env'));
         if ($token->getStatusCode() == 200){
-            $updatePath = $updatePath.$reponse;
+            $updatePath = 'status=success?'.$updatePath.$reponse;
         }else{
-            $updatePath = 'erreur='.$reponse;
+            $updatePath = 'status='.$reponse.'?'.$updatePath;
         }
         if ($env === 'local')
-            return  redirect('http://localhost:8000/login?'.$updatePath);
+            return  redirect('http://localhost:8000/contrat-prepaye?'.$updatePath);
         else if ($env === 'staging')
             return  redirect('https://www.staging.medsurlink.com/contrat-prepaye?'.$updatePath);
         else
             return  redirect('https://www.medsurlink.com/contrat-prepaye?'.$updatePath);
-
     }
 
     /**
