@@ -62,9 +62,9 @@ class AffiliationSouscripteurController extends Controller
                     $userInformation['adresse']=$request->address_2;
 
 
-                    // Création du compte utilisateur medsurlink
-                    $passwordPatient = substr(bin2hex(random_bytes(10)), 0, 7);
-                    $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordPatient,'0');
+                    // Création du compte utilisateur medsurlink du souscripteur
+                    $passwordSouscripteur = substr(bin2hex(random_bytes(10)), 0, 7);
+                    $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordSouscripteur,'0');
 
                     // Assignation du role souscripteur
                     $user->assignRole('Souscripteur');
@@ -75,40 +75,24 @@ class AffiliationSouscripteurController extends Controller
                     // Enregistrement des informations relative aux commandes
                     $commande = enregistrerCommande($user,$line_item,$cim_id);
 
-                    // Authentification de l'utilisateur
-                    $token = $user->createToken('Commande token')->accessToken;
-                    $tokenInfo = [];
-                    //        $tokenInfo['token_type']= 'Bearer';
-                    //        $tokenInfo['expires_in']= 86399;
-                    $tokenInfo = $token;
-                    //        $tokenInfo = collect($tokenInfo);
-                    //        $user->roles;
-                    //        Auth::login($user);
-                    //        $time = TimeActivite::create([
-                    //            'date'=>Carbon::now()->format('Y-m-d'),
-                    //            'start'=>Carbon::now()->format('H:i')
-                    //        ]);
-                    //        $user['time_slug'] = $time->slug;
-                    //        $user['isEtablissement'] = isComptable();
-                    //        $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
-                    //        $tokenInfo->put('user', $user);
+                    //Definition des identifiants pour connexion
+                    $tokenInfo =$passwordSouscripteur.'medsur'. $request->email;
 
                     // Envoi du mail avec mot de passe souscripteur
                     try{
-                        sendUserInformationViaMail($user,$passwordPatient);
+                        sendUserInformationViaMail($user,$passwordSouscripteur);
                     }catch (\Swift_TransportException $transportException){
                         $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
-                        return response()->json(['souscripteur'=>$user, "message"=>$message]);
+                        return response()->json(['reponse'=>$tokenInfo,'souscripteur'=>$user, "message"=>$message]);
                     }
-
                     return response()->json(['reponse'=>$tokenInfo],200) ;
                 }
-                return response()->json(['reponse'=>'Mauvais status de paiement de commande'],404) ;
+                return response()->json(['reponse'=>'error_bad_payment'],404) ;
             }catch ( ClientException $exception){
-                return response()->json(['reponse'=>'Mauvais identifiant de commande'],404) ;
+                return response()->json(['reponse'=>'error_bad_command'],404) ;
             }
         }else{
-            return response()->json(['reponse'=>'La commande existe déjà'],404) ;
+            return response()->json(['reponse'=>'error_exist'],404) ;
         }
 
     }
@@ -121,17 +105,16 @@ class AffiliationSouscripteurController extends Controller
 
         $env = strtolower(config('app.env'));
         if ($token->getStatusCode() == 200){
-            $updatePath = $updatePath.$reponse;
+            $updatePath = 'status=success&'.$updatePath.$reponse;
         }else{
-            $updatePath = 'erreur='.$reponse;
+            $updatePath = 'status='.$reponse.'&'.$updatePath;
         }
         if ($env === 'local')
-            return  redirect('http://localhost:8000/login?'.$updatePath);
+            return  redirect('http://localhost:8080/contrat-prepaye?'.$updatePath);
         else if ($env === 'staging')
             return  redirect('https://www.staging.medsurlink.com/contrat-prepaye?'.$updatePath);
         else
             return  redirect('https://www.medsurlink.com/contrat-prepaye?'.$updatePath);
-
     }
 
     /**
