@@ -36,64 +36,64 @@ class AffiliationSouscripteurController extends Controller
      */
     public function storeSouscripteur(Request $request,$cim_id)
     {
-//        if (!laCommandeExisteElle($cim_id)){
-        // Récupération des informations de la commande end point cim.medicasure.com
-        try {
-            $client = new Client();
-            $url = 'https://cim.medicasure.com/wp-json/wc/v2/orders/'.$cim_id;
-            $res = $client->request('GET', $url, [
-                'auth' => ['ck_52c5cdaefeb263227e25090df598e4b74a027c03', 'cs_97ea123ce8c28d6b69cc4bd3088cd9cd173c68a6']
-            ]);
+        if (!laCommandeExisteElle($cim_id)){
+            // Récupération des informations de la commande end point cim.medicasure.com
+            try {
+                $client = new Client();
+                $url = 'https://cim.medicasure.com/wp-json/wc/v2/orders/'.$cim_id;
+                $res = $client->request('GET', $url, [
+                    'auth' => ['ck_52c5cdaefeb263227e25090df598e4b74a027c03', 'cs_97ea123ce8c28d6b69cc4bd3088cd9cd173c68a6']
+                ]);
 
-            $affiliation = json_decode($res->getBody()->getContents());
-//                if(strtoupper($affiliation->status) == 'COMPLETED' ){
-            $request = $affiliation->billing;
-            $line_item = $affiliation->line_items[0];
-            $userInformation = [];
-            $userInformation['nom']=$request->last_name;
-            $userInformation['prenom']=$request->first_name;
-            $userInformation['email']=$request->email;
-            $userInformation['nationalite']=$request->country;
-            $userInformation['quartier']=$request->address_1;
-            $userInformation['code_postal']=$request->postcode;
-            $userInformation['ville']=$request->city;
-            $userInformation['pays']=$request->country;
-            $userInformation['telephone']=$request->phone;
-            $userInformation['adresse']=$request->address_2;
+                $affiliation = json_decode($res->getBody()->getContents());
+                if(strtoupper($affiliation->status) == 'COMPLETED' ){
+                    $request = $affiliation->billing;
+                    $line_item = $affiliation->line_items[0];
+                    $userInformation = [];
+                    $userInformation['nom']=$request->last_name;
+                    $userInformation['prenom']=$request->first_name;
+                    $userInformation['email']=$request->email;
+                    $userInformation['nationalite']=$request->country;
+                    $userInformation['quartier']=$request->address_1;
+                    $userInformation['code_postal']=$request->postcode;
+                    $userInformation['ville']=$request->city;
+                    $userInformation['pays']=$request->country;
+                    $userInformation['telephone']=$request->phone;
+                    $userInformation['adresse']=$request->address_2;
 
 
-            // Création du compte utilisateur medsurlink du souscripteur
-            $passwordSouscripteur = substr(bin2hex(random_bytes(10)), 0, 7);
-            $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordSouscripteur,'0');
+                    // Création du compte utilisateur medsurlink du souscripteur
+                    $passwordSouscripteur = substr(bin2hex(random_bytes(10)), 0, 7);
+                    $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordSouscripteur,'0');
 
-            // Assignation du role souscripteur
-            $user->assignRole('Souscripteur');
+                    // Assignation du role souscripteur
+                    $user->assignRole('Souscripteur');
 
-            // Enregistrement des informations personnels du souscripteur
-            $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
+                    // Enregistrement des informations personnels du souscripteur
+                    $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
 
-            // Enregistrement des informations relative aux commandes
-            $commande = enregistrerCommande($user,$line_item,$cim_id);
+                    // Enregistrement des informations relative aux commandes
+                    $commande = enregistrerCommande($user,$line_item,$cim_id);
 
-            $tokenInfo =$passwordSouscripteur.'medsur'. $request->email;
+                    //Definition des identifiants pour connexion
+                    $tokenInfo =$passwordSouscripteur.'medsur'. $request->email;
 
-            // Envoi du mail avec mot de passe souscripteur
-            try{
-                sendUserInformationViaMail($user,$passwordSouscripteur);
-            }catch (\Swift_TransportException $transportException){
-                $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
-                return response()->json(['reponse'=>$tokenInfo,'souscripteur'=>$user, "message"=>$message]);
+                    // Envoi du mail avec mot de passe souscripteur
+                    try{
+                        sendUserInformationViaMail($user,$passwordSouscripteur);
+                    }catch (\Swift_TransportException $transportException){
+                        $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+                        return response()->json(['reponse'=>$tokenInfo,'souscripteur'=>$user, "message"=>$message]);
+                    }
+                    return response()->json(['reponse'=>$tokenInfo],200) ;
+                }
+                return response()->json(['reponse'=>'error_bad_payment'],404) ;
+            }catch ( ClientException $exception){
+                return response()->json(['reponse'=>'error_bad_command'],404) ;
             }
-
-            return response()->json(['reponse'=>$tokenInfo],200) ;
-//                }
-//                return response()->json(['reponse'=>'error_bad_payment'],404) ;
-        }catch ( ClientException $exception){
-            return response()->json(['reponse'=>'error_bad_command'],404) ;
+        }else{
+            return response()->json(['reponse'=>'error_exist'],404) ;
         }
-//        }else{
-//            return response()->json(['reponse'=>'error_exist'],404) ;
-//        }
 
     }
 
