@@ -110,7 +110,7 @@
         @foreach($mContributeurs as $medecin)
             @if(!is_null($medecin->user))
                 <div style="display: inline">
-                    @if(!is_null($medecin->signature))
+                    @if(!is_null($medecin->signature) && strlen($signature)>0)
                         <div>
                             <img width="300px" height="auto" src={{public_path('/storage/'.$medecin->signature)}} />
                         </div>
@@ -129,7 +129,7 @@
         @foreach($pContributeurs as $praticien)
             @if(!is_null($praticien->user))
                 <div style="display: inline">
-                    @if(!is_null($praticien->signature))
+                    @if(!is_null($praticien->signature) && strlen($signature)>0)
                         <div>
                             <img width="300px" height="auto" src={{public_path('/storage/'.$praticien->signature)}} />
                         </div>
