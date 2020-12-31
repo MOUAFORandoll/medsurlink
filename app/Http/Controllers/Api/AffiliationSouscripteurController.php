@@ -49,6 +49,7 @@ class AffiliationSouscripteurController extends Controller
                 if(strtoupper($affiliation->status) == 'COMPLETED' ){
                     $request = $affiliation->billing;
                     $line_item = $affiliation->line_items[0];
+                    $date_paiement = $affiliation->date_paid;
                     $userInformation = [];
                     $userInformation['nom']=$request->last_name;
                     $userInformation['prenom']=$request->first_name;
@@ -73,7 +74,7 @@ class AffiliationSouscripteurController extends Controller
                     $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
 
                     // Enregistrement des informations relative aux commandes
-                    $commande = enregistrerCommande($user,$line_item,$cim_id);
+                    $commande = enregistrerCommande($user,$line_item,$cim_id,$date_paiement);
 
                     //Definition des identifiants pour connexion
                     $tokenInfo =$passwordSouscripteur.'medsur'. $request->email;
@@ -133,54 +134,57 @@ class AffiliationSouscripteurController extends Controller
 
         // Récupération des informations relatifs au souscripteur
         $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
+        if ($commande){
+            if ($commande->nombre_restant > 0){
+                // Récupération des informations nécessaire pour la création du compte utilisateur medsurlink
+                $userInformation = configurerUserMedsurlink($request);
 
-        if ($commande->nombre_restant > 0){
-            // Récupération des informations nécessaire pour la création du compte utilisateur medsurlink
-            $userInformation = configurerUserMedsurlink($request);
+                // Création du compte utilisateur du patient medsurlink
+                $passwordPatient = substr(bin2hex(random_bytes(10)), 0, 7);
+                $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordPatient,'1');
 
-            // Création du compte utilisateur du patient medsurlink
-            $passwordPatient = substr(bin2hex(random_bytes(10)), 0, 7);
-            $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordPatient,'1');
+                // Enregistrement des informations personnels du patient
+                $patient = Patient::create([
+                    'user_id' => $user->id,
+                    'sexe'=>$request->sexe,
+                    'date_de_naissance'=>$request->date_de_naissance
+                ]);
 
-            // Enregistrement des informations personnels du patient
-            $patient = Patient::create([
-                'user_id' => $user->id,
-                'sexe'=>$request->sexe,
-                'date_de_naissance'=>$request->date_de_naissance
-            ]);
+                // Assignation du role patient
+                $user->assignRole('Patient');
 
-            // Assignation du role patient
-            $user->assignRole('Patient');
+                //Génération du dossier médical
+                $dossier = genererDossierMedical($patient->user_id);
 
-            //Génération du dossier médical
-            $dossier = genererDossierMedical($patient->user_id);
+                //Ajout du patient à la liste de suivi
+                $suivi = ajouterPatientAuSuivi($dossier->id,1);
 
-            //Ajout du patient à la liste de suivi
-            $suivi = ajouterPatientAuSuivi($dossier->id,1);
+                // Ajout du souscripteur à la liste des souscripteurs du patient
+                $patient->ajouterSouscripteur($souscripteur_id);
 
-            // Ajout du souscripteur à la liste des souscripteurs du patient
-            $patient->ajouterSouscripteur($souscripteur_id);
+                // Réduction du nombre de commande restante
+                $commande = reduireCommandeRestante($request->commande_id);
 
-            // Réduction du nombre de commande restante
-            $commande = reduireCommandeRestante($request->commande_id);
+                // Génération du contrat
+                $patientMedicasure = transformerEnAffilieMedicasure($patient);
+                $souscripteurMedicasure = transformerEnSouscripteurMedicasure($souscripteur);
+                $detailContrat = transformerCommande($commande,$request,$souscripteur->user->pays);
+                genererContrat($detailContrat+$souscripteurMedicasure+$patientMedicasure);
 
-            // Génération du contrat
-            $patientMedicasure = transformerEnAffilieMedicasure($patient);
-            $souscripteurMedicasure = transformerEnSouscripteurMedicasure($souscripteur);
-            $detailContrat = transformerCommande($commande,$request,$souscripteur->user->pays);
-            genererContrat($detailContrat+$souscripteurMedicasure+$patientMedicasure);
+                // Envoi sms et mail de creation de compte au patient
+                sendUserInformationViaSms($user,$passwordPatient);
+                sendUserInformationViaMail($user,$passwordPatient);
 
-            // Envoi sms et mail de creation de compte au patient
-            sendUserInformationViaSms($user,$passwordPatient);
-            sendUserInformationViaMail($user,$passwordPatient);
-
-            // Envoi sms et mail de mise à jour de compte au souscripteur
-            notifierMiseAJourCompte($souscripteur,$patient);
+                // Envoi sms et mail de mise à jour de compte au souscripteur
+                notifierMiseAJourCompte($souscripteur,$patient);
 
 
-            return response()->json(['patient'=>$patient]);
+                return response()->json(['patient'=>$patient]);
+            }else{
+                $this->revealError('commande_restant','Commande restant égale 0, vous ne pouvez plus ajouter de patients');
+            }
         }else{
-            $this->revealError('commande_restant','Commande restant égale 0, vous ne pouvez plus ajouter de patients');
+            $this->revealError('commande_not_definie','La commande dont l\'identifiant a été transmis n\'existe pas');
         }
     }
 

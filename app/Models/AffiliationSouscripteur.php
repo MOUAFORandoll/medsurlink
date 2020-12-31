@@ -20,6 +20,7 @@ class AffiliationSouscripteur extends Model
         'nombre_paye',
         'nombre_restant',
         'montant',
+        'date_paiement',
         'slug',
     ];
 
