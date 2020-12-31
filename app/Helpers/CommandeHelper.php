@@ -60,6 +60,7 @@ if(!function_exists('laCommandeExisteElle')) {
 if(!function_exists('transformerCommande')) {
     function transformerCommande($commande,$request,$pays)
     {
+        $montant = round($commande->montant / $commande->nombre_paye,2);
         $detailContrat['typeSouscription']=$commande->type_contrat ? $commande->type_contrat:'Annuelle';
         $detailContrat['typeSouscription']='Annuelle';
         $detailContrat['plaintes']=$request->plaintes;
@@ -67,8 +68,8 @@ if(!function_exists('transformerCommande')) {
         $detailContrat['nom_pere']=$request->nom_pere;
         $detailContrat['nom_mere']=$request->nom_mere;
         $detailContrat['canal']=$request->canal;
-        $detailContrat['dateSignature']=$request->date_signature;
-        $detailContrat['montantSouscription']=$request->montant_souscription;
+        $detailContrat['dateSignature']=$commande->date_paiement;
+        $detailContrat['montantSouscription']=$montant.'';
         $detailContrat['paye_par_affilie']='non';
         $detailContrat['renouvelle']='non';
         $detailContrat['decede']='non';
