@@ -69,7 +69,7 @@ if(!function_exists('transformerCommande')) {
         $detailContrat['nom_mere']=$request->nom_mere;
         $detailContrat['canal']=$request->canal;
         $detailContrat['dateSignature']=$commande->date_paiement;
-        $detailContrat['montantSouscription']=$montant;
+        $detailContrat['montantSouscription']=$montant.'';
         $detailContrat['paye_par_affilie']='non';
         $detailContrat['renouvelle']='non';
         $detailContrat['decede']='non';
