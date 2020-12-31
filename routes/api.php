@@ -33,7 +33,6 @@ Route::get('question','Api\QuestionController@index');
 //    Route::put('consultation-kinesitherapie/{slug}/reactiver','Api\KinesitherapieController@reactiver');
 //Route::resource('partenaire','Api\PartenaireController');
 Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
-Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
 
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/countries', function () {
@@ -204,7 +203,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
 //    Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
-//    Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
+    Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
     Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
     Route::resource('rdvs','Api\RendezVousController');
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except('store','update','destroy');
