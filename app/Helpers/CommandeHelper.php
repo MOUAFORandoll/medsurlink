@@ -1,7 +1,7 @@
 <?php
 
 if(!function_exists('enregistrerCommande')) {
-    function enregistrerCommande($souscripteur,$commande,$cim_id)
+    function enregistrerCommande($souscripteur,$commande,$cim_id,$date_paiement)
     {
         $commande =  \App\Models\AffiliationSouscripteur::create([
             'user_id'=>$souscripteur->id,
@@ -9,7 +9,8 @@ if(!function_exists('enregistrerCommande')) {
             'nombre_paye'=>$commande->quantity,
             'nombre_restant'=>$commande->quantity,
             'montant'=>$commande->price,
-            'cim_id'=>$cim_id
+            'cim_id'=>$cim_id,
+            'date_paiement'=>$date_paiement ? \Carbon\Carbon::parse($date_paiement)->toDateTimeString() : null
         ]);
 
         return $commande;
@@ -72,6 +73,7 @@ if(!function_exists('transformerCommande')) {
         $detailContrat['renouvelle']='non';
         $detailContrat['decede']='non';
         $detailContrat['paysSouscription']= $pays == 'Cameroun' ? 'Cameroon' :  $pays;
+        $detailContrat['date_paiement']= $commande->date_paiement;
 
         return $detailContrat;
     }

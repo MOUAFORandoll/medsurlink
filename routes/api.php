@@ -149,7 +149,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('motif','Api\MotifController')->except(['create','edit']);
     Route::resource('allergie','Api\AllergieController')->except(['create','edit']);
     Route::resource('antecedent','Api\AntecedentController')->except(['create','edit']);
-    Route::resource('traitement','Api\TraitementController')->except(['create','edit']);
+//    Route::resource('traitement','Api\TraitementController')->except(['create','edit']);
     Route::resource('traitement-actuel','Api\TraitementActuelController')->except(['create','edit']);
     Route::resource('traitement-propose','Api\TraitementProposeController')->except(['create','edit']);
     Route::resource('parametre-commun','Api\ParametreCommunController')->except(['create','edit']);
@@ -289,4 +289,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::delete('file/{file}','Api\FileController@destroy');
     Route::resource('financeur','Api\PatientSouscripteurController');
     Route::post('financeur/retirer','Api\PatientSouscripteurController@retirer');
+});
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Souscripteur']], function () {
+    Route::resource('souscripteur','Api\SouscripteurController')->only('update');
 });
