@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Models\Patient;
+use App\Models\ReponseSecrete;
 use App\Models\Souscripteur;
 use App\Models\TimeActivite;
 use Carbon\Carbon;
@@ -12,6 +13,7 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Psy\Util\Json;
 
 class AffiliationSouscripteurController extends Controller
@@ -132,6 +134,16 @@ class AffiliationSouscripteurController extends Controller
         // Recupération des informations relative à la commande
         $commande =  \App\Models\AffiliationSouscripteur::whereId($commande_id)->first();
 
+       $validator = Validator::make($request->all(),[
+           'question_id'=>'required|integer|exists:questions,id',
+           'reponse'=>'required|string',
+           'commande_id'=>'required|integer|exists:affiliation_souscripteurs,id'
+        ]);
+
+       if ($validator->fails()){
+           return  response()->json($validator->errors()->all(),400);
+       }
+
         // Récupération des informations relatifs au souscripteur
         $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
         if ($commande){
@@ -149,6 +161,9 @@ class AffiliationSouscripteurController extends Controller
                     'sexe'=>$request->sexe,
                     'date_de_naissance'=>$request->date_de_naissance
                 ]);
+
+                // Enregistrement des informations de question secrete et reponse secrete
+                ReponseSecrete::create(['reponse'=>$request->reponse,'question_id'=>$request->question_id,'user_id'=>$user->id]);
 
                 // Assignation du role patient
                 $user->assignRole('Patient');
