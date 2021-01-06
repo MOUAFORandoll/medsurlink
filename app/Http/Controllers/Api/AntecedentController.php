@@ -141,7 +141,7 @@ class AntecedentController extends Controller
 
         $antecedent = Antecedent::whereSlug($slug)->first();
 
-        $this->checkIfAuthorized("Antecedent",$antecedent->id,"create");
+        //$this->checkIfAuthorized("Antecedent",$antecedent->id,"create");
 
         $antecedent = Antecedent::with('dossier')->whereSlug($slug)->first();
         $antecedent->delete();
