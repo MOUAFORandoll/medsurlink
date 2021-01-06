@@ -48,7 +48,8 @@ class AffiliationSouscripteurController extends Controller
                 ]);
 
                 $affiliation = json_decode($res->getBody()->getContents());
-                if(strtoupper($affiliation->status) == 'COMPLETED' ){
+//                if(strtoupper($affiliation->status) == 'COMPLETED' ){
+                if(strtoupper($affiliation->status) != 'FAILED' ){
                     $request = $affiliation->billing;
                     $line_item = $affiliation->line_items[0];
                     $date_paiement = $affiliation->date_paid;
