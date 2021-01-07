@@ -50,7 +50,7 @@ class Antecedent extends Model
             $this['user'] = $this->dossier->patient->user;
             $this['isAuthor'] = $isAuthor->getOriginalContent();
             $connectedUser = Auth::user();
-            if ($connectedUser->getRoleNames()->first() == 'Medecin controle') {
+            if ($connectedUser->getRoleNames()->first() == 'Medecin controle' || $connectedUser->getRoleNames()->first() == 'Praticien') {
                 $this['isAuthor'] = true;
             }
         }
