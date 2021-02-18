@@ -28,7 +28,17 @@ if(!function_exists('reduireCommandeRestante')) {
         return $commande;
     }
 }
+if(!function_exists('increaseCommandeRestante')) {
+    function increaseCommandeRestante($id)
+    {
+        $commande =  \App\Models\AffiliationSouscripteur::where("user_id",$id)->first();
 
+        $commande->nombre_restant+=1;
+        $commande->save();
+
+        return $commande;
+    }
+}
 if(!function_exists('resteDeCommande')) {
     function resteDeCommande($souscripteur_id)
     {
