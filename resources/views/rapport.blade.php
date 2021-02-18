@@ -224,30 +224,30 @@
                                 @empty
                                     <strong></strong>
                                 @endforelse
-                                @foreach($consultationMedecine->dossier->consultationsMedecine as $consultation)
-                                    @if(\Carbon\Carbon::parse($consultation->updated_at)->lessThan($consultationMedecine->updated_at))
-                                        @foreach($consultation->conclusions as $conclusion)
-                                            @if(!is_null($conclusion->description) && $conclusion->description !=='null')
-                                                <tr>
-                                                    <td>Consultation</td>
-                                                    <td>{!!  $conclusion->description !!}</td>
-                                                    <td>{{\Carbon\Carbon::parse($conclusion->updated_at)->format('d/m/Y')}}</td>
-                                                </tr>
-                                            @endif
-                                        @endforeach
-                                    @endif
-                                @endforeach
-                                @foreach($consultationMedecine->dossier->cardiologies as $cardiologie)
-                                    @if(\Carbon\Carbon::parse($cardiologie->updated_at)->lessThan($consultationMedecine->updated_at))
-                                        @if(!is_null($cardiologie->conclusion) && $cardiologie->conclusion !=='null')
-                                            <tr>
-                                                <td>Consultation</td>
-                                                <td>{!!  $cardiologie->conclusion !!}</td>
-                                                <td>{{\Carbon\Carbon::parse($cardiologie->updated_at)->format('d/m/Y')}}</td>
-                                            </tr>
-                                        @endif
-                                    @endif
-                                    @endforeach
+{{--                                @foreach($consultationMedecine->dossier->consultationsMedecine as $consultation)--}}
+{{--                                    @if(\Carbon\Carbon::parse($consultation->updated_at)->lessThan($consultationMedecine->updated_at))--}}
+{{--                                        @foreach($consultation->conclusions as $conclusion)--}}
+{{--                                            @if(!is_null($conclusion->description) && $conclusion->description !=='null')--}}
+{{--                                                <tr>--}}
+{{--                                                    <td>Consultation</td>--}}
+{{--                                                    <td>{!!  $conclusion->description !!}</td>--}}
+{{--                                                    <td>{{\Carbon\Carbon::parse($conclusion->updated_at)->format('d/m/Y')}}</td>--}}
+{{--                                                </tr>--}}
+{{--                                            @endif--}}
+{{--                                        @endforeach--}}
+{{--                                    @endif--}}
+{{--                                @endforeach--}}
+{{--                                @foreach($consultationMedecine->dossier->cardiologies as $cardiologie)--}}
+{{--                                    @if(\Carbon\Carbon::parse($cardiologie->updated_at)->lessThan($consultationMedecine->updated_at))--}}
+{{--                                        @if(!is_null($cardiologie->conclusion) && $cardiologie->conclusion !=='null')--}}
+{{--                                            <tr>--}}
+{{--                                                <td>Consultation</td>--}}
+{{--                                                <td>{!!  $cardiologie->conclusion !!}</td>--}}
+{{--                                                <td>{{\Carbon\Carbon::parse($cardiologie->updated_at)->format('d/m/Y')}}</td>--}}
+{{--                                            </tr>--}}
+{{--                                        @endif--}}
+{{--                                    @endif--}}
+{{--                                    @endforeach--}}
                                 </tbody>
                             </table>
 

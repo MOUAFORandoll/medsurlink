@@ -76,4 +76,12 @@ class Souscripteur extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
 
+    public function updatePatientDossier(){
+        if ($this->financeurs){
+            foreach ($this->financeurs as $financeur){
+                $this->patients->push($financeur->patients);
+            }
+        }
+    }
+
 }

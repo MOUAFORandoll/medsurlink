@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Models\Allergie;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\DossierMedical;
+use App\Traits\DossierTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 class DossierAllergieController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
     public function retirerAllergie(Request $request){
         $validation = Validator::make($request->all(),[
             "dossier"=>"required|integer|exists:dossier_medicals,id",
