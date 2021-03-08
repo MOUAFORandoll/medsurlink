@@ -2,8 +2,8 @@
 # Medsurlink
 
 Bonjour <strong>{{ucfirst($user->prenom).'  '.strtoupper($user->nom)}}</strong>,<br>
-Nous espérons vous trouver bien portant. <br>
-Merci d'avoir souscrit à notre service d'affiliation Santé.<br>  <strong>Vos identifiants</strong> pour accéder à votre compte Medicalink :<br>
+Votre paiement a été bien effectué. <br>
+Retrouvez ci-dessous <strong>Vos identifiants</strong> pour accéder à votre compte Medicalink :<br>
 Email : <strong> {{$user->email}} </strong><br>
 Mot de passe : <strong>{{$password}}</strong><br><br>
 NB : Veuillez modifier votre mot de passe à votre premiere connexion en cliquant sur <a href="https://www.medsurlink.com/setting">paramètres</a>
