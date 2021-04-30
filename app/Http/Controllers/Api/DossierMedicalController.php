@@ -266,7 +266,46 @@ class DossierMedicalController extends Controller
 
         return response()->json(['dossier'=>$dossier]);
     }
+    public function dossierMyPatient(){
+        //$validator = Validator::make(compact('patient_id'),'exists:dossier_medicals,patient_id');
+        //if ($validator->fails()){
+          //  return response()->json(compact($validator->errors()->getMessages()),422);
+        //}
 
+        $dossiers = DossierMedical::with([
+            'allergies'=> function ($query) {
+                $query->orderBy('date', 'desc');
+            },
+            'antecedents',
+            'ordonances',
+            'patient',
+            'patient.user',
+            'consultationsMedecine'=> function ($query) {
+                $query->where('creator','=',Auth::id())->with('dossier.patient.user');
+            },
+            'hospitalisations'=> function ($query) {
+                $query->where('creator','=',Auth::id())->with('dossier.patient.user');
+            },
+            'cardiologies'=> function ($query) {
+                $query->where('creator','=',Auth::id())->with('dossier.patient.user');
+            },
+            'kinesitherapies'=> function ($query) {
+                $query->where('creator','=',Auth::id())->with('dossier.patient.user');
+            },
+            'consultationsObstetrique'=> function ($query) {
+                $query->where('creator','=',Auth::id())->with('dossier.patient.user');
+            },
+            'traitements'=> function ($query) {
+                $query->orderBy('created_at', 'desc');
+            }
+        ])->get();
+        foreach ($dossiers as $dossier){
+            if (!is_null($dossier)){
+                $dossier->updateDossier();
+            }
+        }
+        return response()->json(['dossiers'=>$dossiers]);
+    }
     public function checkIfUserAuthorized(DossierMedical $dossier)
     {
         $patientEtablissementId = EtablissementExercicePatient::where('patient_id', '=', $dossier->patient->user_id)->get('id');

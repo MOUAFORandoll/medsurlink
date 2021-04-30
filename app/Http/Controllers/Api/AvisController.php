@@ -24,7 +24,7 @@ class AvisController extends Controller
      */
     public function index()
     {
-        $avis = Avis::with(['dossier.patient.user','medecinAvis.medecin','createur'])->get();
+        $avis = Avis::with(['dossier.patient.user','medecinAvis.medecin','createur','consultationFichier'])->get();
         return response()->json(['avis'=>$avis]);
     }
 
