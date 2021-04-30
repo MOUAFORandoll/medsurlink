@@ -267,10 +267,6 @@ class DossierMedicalController extends Controller
         return response()->json(['dossier'=>$dossier]);
     }
     public function dossierMyPatient(){
-        //$validator = Validator::make(compact('patient_id'),'exists:dossier_medicals,patient_id');
-        //if ($validator->fails()){
-          //  return response()->json(compact($validator->errors()->getMessages()),422);
-        //}
 
         $dossiers = DossierMedical::with([
             'allergies'=> function ($query) {
@@ -295,11 +291,14 @@ class DossierMedicalController extends Controller
             'consultationsObstetrique'=> function ($query) {
                 $query->where('creator','=',Auth::id())->with('dossier.patient.user');
             },
+            'avis'=> function ($query) {
+                $query->where('creator','=',Auth::id())->with('dossier.patient.user');
+            },
             'traitements'=> function ($query) {
                 $query->orderBy('created_at', 'desc');
             }
-        ])->get();
-        foreach ($dossiers as $dossier){
+        ])->limit(1)->get();
+        foreach ($dossiers as $dossier){ 
             if (!is_null($dossier)){
                 $dossier->updateDossier();
             }
