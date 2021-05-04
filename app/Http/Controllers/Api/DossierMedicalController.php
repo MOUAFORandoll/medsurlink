@@ -9,7 +9,14 @@ use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePatient;
 use App\Models\EtablissementExercicePraticien;
 use App\Models\Patient;
+use App\Models\ConsultationMedecineGenerale;
+use App\Models\Hospitalisation;
+use App\Models\Cardiologie;
+use App\Models\ConsultationObstetrique;
+use App\Models\MedecinAvis;
+use App\Models\Avis;
 use Carbon\Carbon;
+use App\Models\Kinesitherapie;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use MongoDB\Driver\Session;
@@ -268,41 +275,22 @@ class DossierMedicalController extends Controller
     }
     public function dossierMyPatient(){
 
-        $dossiers = DossierMedical::with([
-            'allergies'=> function ($query) {
-                $query->orderBy('date', 'desc');
-            },
-            'antecedents',
-            'ordonances',
-            'patient',
-            'patient.user',
-            'consultationsMedecine'=> function ($query) {
-                $query->where('creator','=',Auth::id())->with('dossier.patient.user');
-            },
-            'hospitalisations'=> function ($query) {
-                $query->where('creator','=',Auth::id())->with('dossier.patient.user');
-            },
-            'cardiologies'=> function ($query) {
-                $query->where('creator','=',Auth::id())->with('dossier.patient.user');
-            },
-            'kinesitherapies'=> function ($query) {
-                $query->where('creator','=',Auth::id())->with('dossier.patient.user');
-            },
-            'consultationsObstetrique'=> function ($query) {
-                $query->where('creator','=',Auth::id())->with('dossier.patient.user');
-            },
-            'avis'=> function ($query) {
-                $query->where('creator','=',Auth::id())->with('dossier.patient.user');
-            },
-            'traitements'=> function ($query) {
-                $query->orderBy('created_at', 'desc');
-            }
-        ])->limit(1)->get();
-        foreach ($dossiers as $dossier){ 
-            if (!is_null($dossier)){
-                $dossier->updateDossier();
-            }
-        }
+        $dossiers = Array(
+            'consultationsMedecine'=> 
+              ConsultationMedecineGenerale::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+            'hospitalisations'=> 
+                Hospitalisation::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+            'cardiologies'=>
+                Cardiologie::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+            'kinesitherapies'=> 
+                Kinesitherapie::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+            'consultationsObstetrique'=>
+                ConsultationObstetrique::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+            'avis'=> Avis::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+            'mesAvis'=>MedecinAvis::with([
+                    'avisMedecin.dossier.patient.user',
+                ])->where('medecin_id','=',Auth::id())->get(),
+        );
         return response()->json(['dossiers'=>$dossiers]);
     }
     public function checkIfUserAuthorized(DossierMedical $dossier)
