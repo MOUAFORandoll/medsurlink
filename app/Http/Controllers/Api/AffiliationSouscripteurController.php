@@ -120,7 +120,97 @@ class AffiliationSouscripteurController extends Controller
         else
             return  redirect('https://www.medsurlink.com/contrat-prepaye/add?'.$updatePath);
     }
+    public function souscripteurRedirect(Request $request,$cim_id)
+    {
+        //$token = $this->storeSouscripteur($request,$souscripteur_id);
+        
+        // Récupération des informations relatifs au souscripteur
+        $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
+        $updatePath = 'token=';
+        //$reponse = $token->getOriginalContent()['reponse'];
 
+        $env = strtolower(config('app.env'));
+        if ($token->getStatusCode() == 200){
+            $updatePath = 'status=success&'.$updatePath.$souscripteur->user->token;
+        }else{
+            $updatePath = 'status='.$reponse.'&'.$updatePath;
+        }
+        if ($env === 'local')
+            return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
+        else if ($env === 'staging')
+            return  redirect('https://www.staging.medsurlink.com/contrat-prepaye/add?'.$updatePath);
+        else
+            return  redirect('https://www.medsurlink.com/contrat-prepaye/add?'.$updatePath);
+    }
+        /**
+     * Enregistrement d'un patient avant le paiement
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \App\Exceptions\PersonnnalException
+     */
+    public function storePatientBeforePayment(Request $request)
+    {
+        $souscripteur_id = $request->souscripteur_id;
+
+       $validator = Validator::make($request->all(),[
+           'question_id'=>'required|integer|exists:questions,id',
+           'reponse'=>'required|string',
+        ]);
+
+       if ($validator->fails()){
+           return  response()->json($validator->errors()->all(),400);
+       }
+        try {
+                // Récupération des informations relatifs au souscripteur
+                $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
+                // Récupération des informations nécessaire pour la création du compte utilisateur medsurlink
+                $userInformation = configurerUserMedsurlink($request);
+
+                // Création du compte utilisateur du patient medsurlink
+                $passwordPatient = substr(bin2hex(random_bytes(10)), 0, 7);
+                $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordPatient,'1');
+
+                // Enregistrement des informations personnels du patient
+                $patient = Patient::create([
+                    'user_id' => $user->id,
+                    'sexe'=>$request->sexe,
+                    'date_de_naissance'=>$request->date_de_naissance
+                ]);
+
+                // Enregistrement des informations de question secrete et reponse secrete
+                ReponseSecrete::create(['reponse'=>$request->reponse,'question_id'=>$request->question_id,'user_id'=>$user->id]);
+
+                // Assignation du role patient
+                $user->assignRole('Patient');
+
+                //Génération du dossier médical
+                $dossier = genererDossierMedical($patient->user_id);
+
+                //Ajout du patient à la liste de suivi
+                $suivi = ajouterPatientAuSuivi($dossier->id,1);
+
+                // Ajout du souscripteur à la liste des souscripteurs du patient
+                $patient->ajouterSouscripteur($souscripteur_id);
+
+                // Génération du contrat
+                $patientMedicasure = transformerEnAffilieMedicasure($patient);
+                $souscripteurMedicasure = transformerEnSouscripteurMedicasure($souscripteur);
+               // $detailContrat = transformerCommande($commande,$request,$souscripteur->user->pays);
+               // genererContrat($detailContrat+$souscripteurMedicasure+$patientMedicasure);
+
+                // Envoi sms et mail de creation de compte au patient
+                //sendUserInformationViaSms($user,$passwordPatient);
+                //sendUserInformationViaMail($user,$passwordPatient);
+
+                // Envoi sms et mail de mise à jour de compte au souscripteur
+                //notifierMiseAJourCompte($souscripteur,$patient);
+
+                return response()->json(['patient'=>$patient]);
+
+            }catch ( ClientException $exception){
+                return response()->json(['error'=>'error_bad_request'],404) ;
+            }
+    }
     /**
      * Enregistrement d'un patient grace à une commande prépayé
      * @param Request $request
@@ -248,7 +338,15 @@ class AffiliationSouscripteurController extends Controller
         return response()->json(['commande'=>$commande]);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addAffiliationRestante($id){
+        $commande = increaseCommandeRestante($id);
 
+        return response()->json(['commande'=>$commande]);
+    }
 
 
 }

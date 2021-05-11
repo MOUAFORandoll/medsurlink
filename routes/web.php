@@ -21,6 +21,8 @@ header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Autho
 
 Route::get('/contrat-prepaye-store/{cim_id}/redirect','Api\AffiliationSouscripteurController@storeSouscripteurRedirect');
 //Route::get('/contrat-prepaye-store/{cim_id}/redirect','Api\AffiliationSouscripteurController@storeSouscripteurRedirect')->middleware('auth.basic.once');
+Route::get('/redirect-mesurlink/redirect/{email}','Api\MedicasureController@storeSouscripteurRedirect');
+Route::resource('medicasure/souscripteur','Api\MedicasureController');
 
 Route::get('/', function () {
     return view('welcome');

@@ -151,6 +151,14 @@ class PatientController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
+        /*$patient = Patient::with([
+            'souscripteur.user',
+            'user.questionSecrete',
+            'affiliations',
+            'etablissements',
+            'financeurs.financable.user',
+            'dossier',
+        ])->restrictUser()->whereSlug($slug)->first();*/
         $patient = Patient::with([
             'souscripteur.user',
             'user.questionSecrete',
@@ -158,8 +166,7 @@ class PatientController extends Controller
             'etablissements',
             'financeurs.financable.user',
             'dossier',
-        ])->restrictUser()->whereSlug($slug)->first();
-
+        ])->whereSlug($slug)->first();
         return response()->json(['patient'=>$patient]);
     }
 

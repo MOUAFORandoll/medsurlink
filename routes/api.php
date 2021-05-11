@@ -1,5 +1,6 @@
 <?php
-
+use Psy\Util\Json;
+use Illuminate\Http\Request;
 /**-- Headers --**/
 //header('Access-Control-Allow-Origin:  *');
 //header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
@@ -18,6 +19,7 @@
 */
 
 Route::post('oauth/token', 'Api\AuthController@auth');
+Route::post('oauth/redirect/token', 'Api\AuthController@authAfterRedirect');
 Route::post('password/emailVersion','Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
@@ -132,12 +134,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient']], function () {
 
 });
 
-//  Définition des routes accéssible a la fois par le patient, le medecin controle et le souscripteur
-Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur']], function () {
-
-
-});
-
 //  Définition des routes accéssible a la fois par le medecin controle et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien']], function () {
     Route::resource('etablissement','Api\EtablissementExerciceController')->except(['create','store','destroy','edit']);
@@ -204,7 +200,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
 //    Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
     Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
+    Route::post('/contrat-prepaye-store-patient-unpaid','Api\AffiliationSouscripteurController@storePatientBeforePayment');
     Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
+    Route::post('/commande-restante/add/{id}','Api\AffiliationSouscripteurController@addAffiliationRestante');
     Route::resource('rdvs','Api\RendezVousController');
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except('store','update','destroy');
     Route::resource('consultation-kinesitherapie','Api\KinesitherapieController')->except('store','update','destroy');
@@ -235,6 +233,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']],
 
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur|Etablissement']], function () {
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
+    Route::get('dossiers-mes-patient','Api\DossierMedicalController@dossierMyPatient');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
     Route::get('imprimer-facture-definitive/{facture}','Api\ImprimerController@factureDefinitive');
     Route::get('imprimer-compte-rendu/{compte}','Api\ImprimerController@compteRendu');
@@ -293,3 +292,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Souscripteur']], function () {
     Route::resource('souscripteur','Api\SouscripteurController')->only('update');
 });
+// store souscripteur from medicasure
+Route::resource('medicasure/souscripteur','Api\MedicasureController');
+

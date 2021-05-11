@@ -54,7 +54,7 @@ if(!function_exists('genererCompteMedsurlink')) {
             'adresse'=>$userInformation['adresse'],
             'isMedicasure'=>$isMedicasure ,
             'isNotice'=>'0',
-            'password'=>Hash::make($password),
+            'password'=>$isMedicasure == "1" ? $password : Hash::make($password),
             'decede'=>'non'
         ]);
 

@@ -68,4 +68,8 @@ class Avis extends Model
     public function medecinAvis(){
         return $this->hasMany(MedecinAvis::class,'avis_id','id');
     }
+
+    public function consultationFichier(){
+        return $this->hasMany(ConsultationFichier::class,'dossier_medical_id','dossier_medical_id');
+    }
 }
