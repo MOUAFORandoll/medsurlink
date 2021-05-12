@@ -103,7 +103,11 @@ if (!function_exists('getStatus')){
         }
         $auteurable_type = $user->getRoleNames()->first();
         if(!is_null($auteurable_type)){
-            $auteurable_id = (getStatusUserRole($auteurable_type,$user)->getOriginalContent()['auteurable_user'])->user_id;
+            $status = getStatusUserRole($auteurable_type,$user)->getOriginalContent()['auteurable_user'];
+            if($status==null){
+                return null;
+            }
+            $auteurable_id = $status->user_id;
             return response()->json(['auteurable_type'=>$auteurable_type,'auteurable_id'=>$auteurable_id,]);
         }else{
             return response()->json(['auteurable_type'=>'Comptable','auteurable_id'=>$user->id]);
