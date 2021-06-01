@@ -128,6 +128,18 @@ class AvisMedecinController extends Controller
         return  response()->json(['avis'=>$avis]);
     }
 
+
+    public function getAvisFromDossier(AvisMedecinRequest $request,$dossier){
+
+        $avis = Avis::whereHas("medecinAvis",function($query){
+            $query->where("statut","VALIDE");
+        })
+        ->with(["medecinAvis.medecin","medecinAvis"=>function($query){
+            $query->where("statut","VALIDE");
+        }])
+        ->where("dossier_medical_id",$dossier)->get();
+         return  response()->json(['avis'=>$avis]);
+    }
     /**
      * Remove the specified resource from storage.
      *

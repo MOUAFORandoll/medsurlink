@@ -7,6 +7,7 @@ use App\Models\DossierMedical;
 use App\Models\Gestionnaire;
 use App\Models\MedecinControle;
 use App\Models\Patient;
+use App\Models\Association;
 use App\Models\Praticien;
 use App\Models\ReponseSecrete;
 use App\Models\Souscripteur;
@@ -170,7 +171,9 @@ class User extends Authenticatable
     public function praticien(){
         return $this->hasOne(Praticien::class,'user_id','id');
     }
-
+    public function association(){
+        return $this->hasOne(Association::class,'responsable','id');
+    }
     public function patient(){
         return $this->hasOne(Patient::class,'user_id','id');
     }

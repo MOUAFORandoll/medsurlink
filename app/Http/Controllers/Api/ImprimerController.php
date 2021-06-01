@@ -9,6 +9,7 @@ use App\Models\ConsultationMedecineGenerale;
 use App\Models\ConsultationObstetrique;
 use App\Models\DossierMedical;
 use App\Models\Facture;
+use App\Models\FactureAvis;
 use App\Models\Hospitalisation;
 use App\Models\Kinesitherapie;
 use App\Models\MedecinControle;
@@ -228,6 +229,25 @@ class ImprimerController extends Controller
 
         $data = compact('facture');
         $pdf = PDF::loadView('facture.definitive',$data);
+        $nom  = patientLastName($facture);
+        $prenom = patientFirstName($facture);
+        $date= $facture->date_facturation;
+        $path = storage_path().'/app/public/pdf/'.'Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
+        $pdf->save($path);
+
+        return  response()->json(['name'=>'Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
+    }
+
+    public function factureAvisDefinitive($slug){
+        $this->validatedSlug($slug,'facture_avis');
+
+        $facture = FactureAvis::whereSlug($slug)->first();
+        $total = 0;
+        foreach($facture->factureDetail as $item){
+            $total += $item->total_montant;
+        }
+        $data = compact('facture','total');
+        $pdf = PDF::loadView('facture.facture_avis',$data);
         $nom  = patientLastName($facture);
         $prenom = patientFirstName($facture);
         $date= $facture->date_facturation;
