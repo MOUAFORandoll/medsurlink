@@ -226,8 +226,11 @@ class ImprimerController extends Controller
         $this->validatedSlug($slug,'factures');
 
         $facture = Facture::whereSlug($slug)->first();
-
-        $data = compact('facture');
+        $total = 0;
+        foreach($facture->prestations as $item){
+            $total += $item->prix;
+        }
+        $data = compact('facture','total');
         $pdf = PDF::loadView('facture.definitive',$data);
         $nom  = patientLastName($facture);
         $prenom = patientFirstName($facture);

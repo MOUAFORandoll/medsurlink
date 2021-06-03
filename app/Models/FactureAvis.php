@@ -59,7 +59,7 @@ class FactureAvis extends Model
     }
 
     public function factureDetail(){
-        return $this->hasMany(factureAvisDetail::class,'facture_avis_id','id');
+        return $this->hasMany(FactureAvisDetail::class,'facture_avis_id','id');
     }
     public function createur(){
         return $this->belongsTo(User::class,'creator','id');
