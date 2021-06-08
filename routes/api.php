@@ -186,6 +186,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('avis','Api\AvisController');
     Route::post('avisMedecin/{slug}','Api\AvisMedecinController@store');
     Route::get('avisMedecin/{slug}','Api\AvisMedecinController@show');
+    Route::get('avis/patient/{dossier}','Api\AvisMedecinController@getAvisFromDossier');
     Route::delete('avisMedecin/{slug}','Api\AvisMedecinController@destroy');
     Route::get('avis-repondre/{avis}','Api\AvisMedecinController@repondre');
     Route::post('avisMedecin/{slug}/nouveauAvis','Api\AvisMedecinController@NouveauAvis');
@@ -236,6 +237,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('dossiers-mes-patient','Api\DossierMedicalController@dossierMyPatient');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
     Route::get('imprimer-facture-definitive/{facture}','Api\ImprimerController@factureDefinitive');
+    Route::get('imprimer-facture-avis-definitive/{facture}','Api\ImprimerController@factureAvisDefinitive');
     Route::get('imprimer-compte-rendu/{compte}','Api\ImprimerController@compteRendu');
     Route::get('imprimer-facture-proforma/{facture}','Api\ImprimerController@factureProforma');
     Route::get('imprimer-consultation-medecine/{generale}','Api\ImprimerController@generale');
@@ -281,6 +283,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::resource('medecin-controle','Api\MedecinControleController')->only(['index']);
     Route::resource('praticien','Api\PraticienController')->only(['index']);
+    Route::resource('association','Api\AssociationController');
+    Route::resource('facture-avis','Api\FactureAvisController');
     Route::resource('medicament','Api\MedicamentController')->except(['edit','create']);
     Route::get('medicament/search/{chaineRecherche}','Api\MedicamentController@search')->name('rechercherMedicament');
     Route::resource('ordonance','Api\OrdonanceController')->except(['edit','create']);

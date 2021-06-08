@@ -79,6 +79,10 @@ class EtablissementExercice extends Model
         return $this->hasMany(Facture::class,'etablissement_id','id');
     }
 
+    public function factureAvis(){
+        return $this->hasMany(FactureAvis::class,'etablissement_id','id');
+    }
+
     public function comptables(){
         return $this->hasMany(Comptable::class,'etablissement_id','id');
     }

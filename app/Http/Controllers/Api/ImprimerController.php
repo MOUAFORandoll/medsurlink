@@ -9,6 +9,7 @@ use App\Models\ConsultationMedecineGenerale;
 use App\Models\ConsultationObstetrique;
 use App\Models\DossierMedical;
 use App\Models\Facture;
+use App\Models\FactureAvis;
 use App\Models\Hospitalisation;
 use App\Models\Kinesitherapie;
 use App\Models\MedecinControle;
@@ -225,9 +226,31 @@ class ImprimerController extends Controller
         $this->validatedSlug($slug,'factures');
 
         $facture = Facture::whereSlug($slug)->first();
-
-        $data = compact('facture');
+        $total = 0;
+        foreach($facture->prestations as $item){
+            $total += $item->prix;
+        }
+        $data = compact('facture','total');
         $pdf = PDF::loadView('facture.definitive',$data);
+        $nom  = patientLastName($facture);
+        $prenom = patientFirstName($facture);
+        $date= $facture->date_facturation;
+        $path = storage_path().'/app/public/pdf/'.'Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
+        $pdf->save($path);
+
+        return  response()->json(['name'=>'Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
+    }
+
+    public function factureAvisDefinitive($slug){
+        $this->validatedSlug($slug,'facture_avis');
+
+        $facture = FactureAvis::whereSlug($slug)->first();
+        $total = 0;
+        foreach($facture->factureDetail as $item){
+            $total += $item->total_montant;
+        }
+        $data = compact('facture','total');
+        $pdf = PDF::loadView('facture.facture_avis',$data);
         $nom  = patientLastName($facture);
         $prenom = patientFirstName($facture);
         $date= $facture->date_facturation;
@@ -258,9 +281,9 @@ class ImprimerController extends Controller
         $this->validatedSlug($slug,'compte_rendu_operatoires');
 
         $compteRendu = CompteRenduOperatoire::whereSlug($slug)->first();
-
         $data = compact('compteRendu');
         $pdf = PDF::loadView('rapport.compte_rendu',$data);
+        //dd($compteRendu->etablissement);
         $nom  = patientLastName($compteRendu);
         $prenom = patientFirstName($compteRendu);
         $date= formatRapportDate($compteRendu->date_intervention);

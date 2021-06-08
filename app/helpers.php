@@ -103,7 +103,11 @@ if (!function_exists('getStatus')){
         }
         $auteurable_type = $user->getRoleNames()->first();
         if(!is_null($auteurable_type)){
-            $auteurable_id = (getStatusUserRole($auteurable_type,$user)->getOriginalContent()['auteurable_user'])->user_id;
+            $status = getStatusUserRole($auteurable_type,$user)->getOriginalContent()['auteurable_user'];
+            if($status==null){
+                return null;
+            }
+            $auteurable_id = $status->user_id;
             return response()->json(['auteurable_type'=>$auteurable_type,'auteurable_id'=>$auteurable_id,]);
         }else{
             return response()->json(['auteurable_type'=>'Comptable','auteurable_id'=>$user->id]);
@@ -138,6 +142,9 @@ if (!function_exists('getStatusUserRole')){
             return response()->json(['auteurable_user'=>$user]);
         }
         elseif ($roleName == "Admin"){
+            return response()->json(['auteurable_user'=>$user]);
+        }
+        elseif ($roleName == "Association"){
             return response()->json(['auteurable_user'=>$user]);
         }
     }
@@ -264,7 +271,10 @@ if (!function_exists('getUser')){
             $medecinControle = \App\Models\MedecinControle::whereSlug($slug)->first();
             return response()->json(['user'=>$medecinControle->user]);
         }
-
+        elseif ($roleName == "Association"){
+            $association = \App\Models\Association::whereSlug($slug)->first();
+            return response()->json(['user'=>$association->userResponsable]);
+        }
         elseif ($roleName == "Admin"){
             $user = \App\User::find(1);
             return response()->json(['user'=>$user]);

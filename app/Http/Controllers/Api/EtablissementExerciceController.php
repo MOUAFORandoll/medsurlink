@@ -211,7 +211,7 @@ class EtablissementExerciceController extends Controller
                         array_push($etablissementsId, $etablissement->id);
                     }
                 }
-                $etablissements = EtablissementExercice::with(['comptables.user','patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user','factures.prestations.prestation_etablissement'])->whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['comptables.user','patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user','factureAvis.dossier.patient.user','factureAvis.factureDetail','factures.prestations.prestation_etablissement'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }
@@ -251,7 +251,9 @@ class EtablissementExerciceController extends Controller
                 'patients.user',
                 'patients.dossier',
                 'prestations.prestation',
-                'factures.dossier.patient.user'=>function($query)use($patientsId){$query->whereIn('id',$patientsId);}])
+                'factures.dossier.patient.user'=>function($query)use($patientsId){$query->whereIn('id',$patientsId);},
+                'factureAvis.dossier.patient.user'=>function($query)use($patientsId){$query->whereIn('id',$patientsId);}
+                ])
                 ->get();
 
             return response()->json(['etablissements'=>$etablissements]);
@@ -276,7 +278,8 @@ class EtablissementExerciceController extends Controller
                 'patients.user',
                 'patients.dossier',
                 'prestations.prestation',
-                'factures.dossier.patient.user'])
+                'factures.dossier.patient.user',
+                'facturesAvis.dossier.patient.user'])
                 ->whereIn('id',$etablissementsId)
                 ->get();
 

@@ -146,6 +146,12 @@
         left:0px;
         width:50%;
     }
+    .logo-left{
+        margin-left:0px;
+        position:relative;
+        left:0px;
+        width:50%;
+    }
     .container-doc{
         padding-left:2px;
         padding-right:2px;

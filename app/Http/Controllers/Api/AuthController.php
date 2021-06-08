@@ -44,7 +44,12 @@ class AuthController extends AccessTokenController
         $user['isEtablissement'] = isComptable();
         $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
         $tokenInfo->put('user', $user);
+        $user_id = $user->id;
+
         $status = getStatus();
+        if($status == null){
+            return response()->json(['message'=>"Compte suspendu"],422);
+        }
         defineAsAuthor($status->getOriginalContent()['auteurable_type'],$status->getOriginalContent()['auteurable_id'],'Connexion');
         return $tokenInfo;
     }

@@ -8,9 +8,9 @@
 <div class="container-doc">    
       <div class="row wrapper-page">
         <div class="col-left">
-            @if(!is_null($compteRendu->etablissement->logo)  && $compteRendu->etablissement->logo !=='')
-                <div class="rapport-logo-wrapper">
-                    <img src="{{public_path('/storage/'.$etablissement->logo)}}" class="logo-rapport" alt="" />
+        @if(!is_null($compteRendu->etablissement->logo)  && $compteRendu->etablissement->logo !=='')
+                <div class="rapport-logo-wrapper logo-left" >
+                    <img src="{{public_path('/storage/'.$compteRendu->etablissement->logo)}}" class="logo-rapport" alt="" width="100" height="100" />
                 </div>
             @endif
             <p style="" class="textVert"><b>{{$compteRendu->etablissement->name}}</b></p>
