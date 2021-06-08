@@ -281,9 +281,9 @@ class ImprimerController extends Controller
         $this->validatedSlug($slug,'compte_rendu_operatoires');
 
         $compteRendu = CompteRenduOperatoire::whereSlug($slug)->first();
-
         $data = compact('compteRendu');
         $pdf = PDF::loadView('rapport.compte_rendu',$data);
+        //dd($compteRendu->etablissement);
         $nom  = patientLastName($compteRendu);
         $prenom = patientFirstName($compteRendu);
         $date= formatRapportDate($compteRendu->date_intervention);
