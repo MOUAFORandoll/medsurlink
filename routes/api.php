@@ -234,6 +234,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']],
 
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur|Etablissement']], function () {
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
+    Route::resource('medecin-patient','Api\PatientMedecinController');
     Route::get('dossiers-mes-patient','Api\DossierMedicalController@dossierMyPatient');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
     Route::get('imprimer-facture-definitive/{facture}','Api\ImprimerController@factureDefinitive');

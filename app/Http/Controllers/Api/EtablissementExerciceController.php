@@ -34,7 +34,7 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::with(['comptables.user','praticiens.user','patients.dossier','patients.user','patients.financeurs','prestations'])->get();
+        $etablissements =  EtablissementExercice::with(['comptables.user','praticiens.user','patients.dossier','patients.medecinReferent.medecinControles.user','patients.user','patients.financeurs','prestations'])->get();
         return response()->json(['etablissements'=>$etablissements]);
 
 
@@ -211,7 +211,7 @@ class EtablissementExerciceController extends Controller
                         array_push($etablissementsId, $etablissement->id);
                     }
                 }
-                $etablissements = EtablissementExercice::with(['comptables.user','patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user','factureAvis.dossier.patient.user','factureAvis.factureDetail','factures.prestations.prestation_etablissement'])->whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['comptables.user','patients.user','patients.dossier','patients.medecinReferent.medecinControles.user','prestations.prestation','factures.dossier.patient.user','factureAvis.dossier.patient.user','factureAvis.factureDetail','factures.prestations.prestation_etablissement'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }

@@ -118,6 +118,7 @@ class DossierMedicalController extends Controller
                 'ordonances',
                 'patient',
                 'patient.user',
+                'patient.medecinReferent.medecinControles.user',
                 'patient.souscripteur.user',
                 'consultationsMedecine',
                 'consultationsObstetrique',
