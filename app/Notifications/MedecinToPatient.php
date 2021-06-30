@@ -49,7 +49,7 @@ class MedecinToPatient extends Notification
     public function toSlack($notifiable)
     {
         return (new SlackMessage)
-                    ->from($this->sender, ':ghost:')
+                    ->from($this->sender)
                     ->content($this->message);
     }
 }
