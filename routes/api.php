@@ -300,3 +300,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
 // store souscripteur from medicasure
 Route::resource('medicasure/souscripteur','Api\MedicasureController');
 
+Route::post('payment-prestation','Api\PaymentController@paymentPrestation');
+Route::get('payment-prestation/{id}','Api\PaymentController@getPayment');
+Route::post('payment-statut/{id}','Api\PaymentController@NotifierPaiement');
+Route::resource('payment','Api\PaymentController');
