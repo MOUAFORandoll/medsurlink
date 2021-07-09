@@ -64,7 +64,7 @@ class PaymentController extends Controller
             "method" =>"stripe",
             "statut" =>"NON PAYE",
             "slug" => $request->souscripteur_id,
-            "motif" => "paiement souscription"
+            "motif" => "Paiement des prestations médicales"
         ]);
         //$url = '/payment/prestation/'.$payment->id);
         return  response()->json(['url'=>$payment]);

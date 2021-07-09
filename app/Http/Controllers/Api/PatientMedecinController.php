@@ -58,7 +58,7 @@ class PatientMedecinController extends Controller
 
             $patient = Patient::where("user_id",$request->patient_id)->first();
             $medecin = User::whereId($request->medecin_control_id)->first();
-            $message = $medecin->nom." a été affecté au patient ".$patient->user->nom." comme médecin referent";
+            $message = "@".$medecin->nom." a été affecté au patient ".$patient->user->nom." comme médecin referent";
             $patientMedecin->notify(new MedecinToPatient($message,null));
         }
         return response()->json(['patient'=>$patientMedecin]);
