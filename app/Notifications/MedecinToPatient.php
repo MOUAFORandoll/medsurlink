@@ -50,6 +50,7 @@ class MedecinToPatient extends Notification
     {
         return (new SlackMessage)
                     ->from($this->sender)
-                    ->content($this->message);
+                    ->content($this->message)
+                    ->linkNames();
     }
 }

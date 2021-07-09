@@ -100,7 +100,44 @@ class AffiliationSouscripteurController extends Controller
         }
 
     }
+    /**
+     * Enregistrement d'un souscripteur à partir des informations de la commande sur CIM.MEDICASURE.COM
+     * et authentification
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getSouscripteurFromCIM(Request $request)
+    {
 
+            try {
+                $client = new Client();
+                $url = 'https://cim.medicasure.com/wp-json/wc/v2/orders';
+                $res = $client->request('GET', $url, [
+                    'auth' => ['ck_52c5cdaefeb263227e25090df598e4b74a027c03', 'cs_97ea123ce8c28d6b69cc4bd3088cd9cd173c68a6']
+                ]);
+
+                $affiliations = json_decode($res->getBody()->getContents());
+                $payments = [];
+                foreach($affiliations as $affiliation) {
+                    $payments[] = array(
+                        'nom'=> $affiliation->billing->last_name,
+                        'prenom'=> $affiliation->billing->first_name,
+                        'email'=> $affiliation->billing->email,
+                        'pays'=> $affiliation->billing->country,
+                        'telephone'=> $affiliation->billing->phone,
+                        'amount'=> $affiliation->line_items[0]->price,
+                        'name'=> $affiliation->line_items[0]->name,
+                        'method' => $affiliation->payment_method,
+                        'status' => $affiliation->status,
+                        'date' => $affiliation->date_paid);
+                }
+                return response()->json(['payments'=>$payments]);
+            }catch ( ClientException $exception){
+                return response()->json(['reponse'=>'error_bad_command'],404) ;
+            }
+
+    }
     public function storeSouscripteurRedirect(Request $request,$cim_id)
     {
         $token = $this->storeSouscripteur($request,$cim_id);
