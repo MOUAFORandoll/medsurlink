@@ -35,6 +35,7 @@ class Payment extends Model
         "souscripteur_id",
         "patient_id",
         "date_payment",
+        "date_facturation",
         "statut",
         "method",
         'slug'

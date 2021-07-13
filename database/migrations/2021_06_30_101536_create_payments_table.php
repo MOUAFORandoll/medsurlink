@@ -17,7 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('souscripteur_id');
             $table->unsignedBigInteger('patient_id');
-            $table->smallInteger('amount');
+            $table->string('amount');
             $table->date('date_payment')->nullable();
             $table->string('method');
             $table->string('motif');
