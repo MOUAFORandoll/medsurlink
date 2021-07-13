@@ -61,6 +61,7 @@ class PaymentController extends Controller
             "patient_id" => $request->patient_id,
             "souscripteur_id" => $request->souscripteur_id,
             "amount" => $request->amount,
+            "date_facturation" => $request->date_facturation,
             "method" =>"stripe",
             "statut" =>"NON PAYE",
             "slug" => $request->souscripteur_id,
@@ -80,7 +81,12 @@ class PaymentController extends Controller
         Stripe::setApiKey('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');
         //Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
         $payment = Payment::whereId($request->get('id'))->first();
-        //dd($payment->patients->user->nom);
+        $prix = $payment->amount/$euroFranc;
+        if ($prix < 500){
+
+            $prix = $prix*100;
+            $prix = floor($prix);
+        }
         $session =   Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
@@ -89,7 +95,7 @@ class PaymentController extends Controller
                     'product_data' => [
                         'name' => 'Paiement des prestations sur '.$payment->patients->user->nom.' '.$payment->patients->user->prenom,
                     ],
-                    'unit_amount' => $payment->amount*100,
+                    'unit_amount' => $prix,
                 ],
                 'quantity' => 1,
             ]],
@@ -142,9 +148,16 @@ class PaymentController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(PaymentUpdateRequest $request, $slug)
+    public function update(Request $request, $id)
     {
-        $this->validatedSlug($slug,$this->table);
+        $payment = Payment::whereId($id)->first();
+        $payment->patient_id = $request->patient_id;
+        $payment->souscripteur_id = $request->souscripteur_id;
+        $payment->amount = $request->amount;
+        $payment->update();
+        $payment = Payment::whereId($id)->first();
+
+        return response()->json(['payment'=>$payment]);
 
     }
 
@@ -155,9 +168,11 @@ class PaymentController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function destroy($slug)
+    public function destroy($id)
     {
-        $this->validatedSlug($slug,$this->table);
+        $payments = Payment::with(['souscripteur.user','patients.user'])->whereId($id)->first();
+        $payments->delete();
+        return response()->json(['payment'=>$payments]);
     }
     public function NotifierPaiement(Request $request,$slug){
 
