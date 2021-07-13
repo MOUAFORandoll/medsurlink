@@ -193,7 +193,10 @@ class UserController extends Controller
 //                ]);
 //            }
 //        }
-
+        $slack = "";
+        if( !is_null($request->slack)){
+            $slack = $request->slack;
+        }
         $user = User::create([
             'nom'=>$request->nom,
             'prenom'=>$request->prenom,
@@ -205,6 +208,7 @@ class UserController extends Controller
             'pays'=>$request->pays,
             'telephone'=>$request->telephone,
             'adresse'=>$request->adresse,
+            'slack' => $slack,
             'isMedicasure'=>$request->get('isMedicasure','0'),
             'isNotice'=>$request->get('isNotice','0'),
             'password'=>Hash::make($password),
@@ -315,6 +319,7 @@ class UserController extends Controller
             'adresse' => ['sometimes','nullable', 'string','min:3'],
             'isMedicasure' => ['sometimes','nullable', 'string'],
             'isNotice' => ['sometimes','nullable', 'string'],
+            'slack' => ['sometimes','nullable', 'string'],
         ];
         $validation = Validator::make($data,$rules);
 
@@ -334,6 +339,7 @@ class UserController extends Controller
             'adresse' => ['sometimes','nullable', 'string','min:3'],
             'isMedicasure' => ['sometimes','nullable', 'string'],
             'isNotice' => ['sometimes','nullable', 'string'],
+            'slack' => ['sometimes','nullable', 'string'],
         ];
 //        if(!is_null($role) && $role == "Patient"){
         $rule['email'] = "sometimes|nullable|string|email";
