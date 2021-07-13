@@ -58,8 +58,13 @@ class PatientMedecinController extends Controller
 
             $patient = Patient::where("user_id",$request->patient_id)->first();
             $medecin = User::whereId($request->medecin_control_id)->first();
-            $message = "@".$medecin->nom." a été affecté au patient ".$patient->user->nom." comme médecin referent";
-            $patientMedecin->notify(new MedecinToPatient($message,null));
+            $message = "<@".$medecin->slack."> a été affecté au patient ".$patient->user->nom." comme médecin referent";
+            // Send notification to affilié channel
+            $patientMedecin->setSlackChannel('affilie')
+            ->notify(new MedecinToPatient($message,null));
+            // Send notification to appel channel
+            $patientMedecin->setSlackChannel('appel')
+            ->notify(new MedecinToPatient($message,null));
         }
         return response()->json(['patient'=>$patientMedecin]);
     }
@@ -128,8 +133,13 @@ class PatientMedecinController extends Controller
             $patientMedecin->delete();
             $patient = Patient::where("user_id",$patientMedecin->patient_id)->first();
             $medecin = User::whereId($patientMedecin->medecin_control_id)->first();
-            $message = $medecin->nom." a été retiré au patient ".$patient->user->nom." comme médecin referent";
-            $patientMedecin->notify(new MedecinToPatient($message,null));
+            $message = "<@".$medecin->slack."> a été retiré au patient ".$patient->user->nom." comme médecin referent";
+                        // Send notification to affilié channel
+            $patientMedecin->setSlackChannel('affilie')
+            ->notify(new MedecinToPatient($message,null));
+            // Send notification to appel channel
+            $patientMedecin->setSlackChannel('appel')
+            ->notify(new MedecinToPatient($message,null));
             return response()->json(['patientMedecin'=>$patientMedecin]);
         }else{
             return response()->json(['error'=>"Erreur de suppression"]);

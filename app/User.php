@@ -60,6 +60,7 @@ class User extends Authenticatable
         'adresse',
         'smsEnvoye',
         'isNotice',
+        'slack',
         'decede',
     ];
 
