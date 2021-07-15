@@ -61,7 +61,9 @@ class Souscripteur extends Model
     public function patients(){
         return $this->hasMany(Patient::class,'souscripteur_id','user_id');
     }
-
+    public function affiliation(){
+        return $this->hasMany(AffiliationSouscripteur::class,'user_id','user_id');
+    }
     public function auteurs()
     {
         return $this->morphMany(Auteur::class, 'auteurable');
