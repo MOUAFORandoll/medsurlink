@@ -37,4 +37,8 @@ class AffiliationSouscripteur extends Model
     public function getGenerateSlugAttribute() {
         return Str::random(20).' '.Carbon::now()->timestamp;
     }
+
+    public function souscripteur(){
+        return $this->belongsTo(Souscripteur::class,'user_id','user_id');
+    }
 }
