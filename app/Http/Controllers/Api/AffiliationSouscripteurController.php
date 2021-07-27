@@ -138,6 +138,9 @@ class AffiliationSouscripteurController extends Controller
             }
 
     }
+    public function rappelSouscripteurAffiliation(){
+        
+    }
     public function storeSouscripteurRedirect(Request $request,$cim_id)
     {
         $token = $this->storeSouscripteur($request,$cim_id);
