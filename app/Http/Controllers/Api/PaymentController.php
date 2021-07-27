@@ -82,20 +82,22 @@ class PaymentController extends Controller
         //Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
         $payment = Payment::whereId($request->get('id'))->first();
         $prix = $payment->amount/$euroFranc;
-        if ($prix < 500){
+       /* if ($prix < 500){
 
             $prix = $prix*100;
             $prix = floor($prix);
-        }
+        }*/
+        $prix = number_format($prix, 2, '.', '');
+        //dd($prix);
         $session =   Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
                 'price_data' => [
-                    'currency' => 'EUR',
+                    'currency' => 'XAF',
                     'product_data' => [
                         'name' => 'Paiement des prestations sur '.$payment->patients->user->nom.' '.$payment->patients->user->prenom,
                     ],
-                    'unit_amount' => $prix,
+                    'unit_amount' => $payment->amount,
                 ],
                 'quantity' => 1,
             ]],
