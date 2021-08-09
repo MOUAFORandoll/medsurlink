@@ -2,9 +2,9 @@
 use Psy\Util\Json;
 use Illuminate\Http\Request;
 /**-- Headers --**/
-//header('Access-Control-Allow-Origin:  *');
-//header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
-//header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
+header('Access-Control-Allow-Origin:  *');
+header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
+header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
 
 
 /*
