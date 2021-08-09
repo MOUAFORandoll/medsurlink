@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class ExamenClinicSeesder extends Seeder
+class ExamenClinicSeeder extends Seeder
 {
     /**
      * Run the database seeds.
