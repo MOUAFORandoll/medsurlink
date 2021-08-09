@@ -72,9 +72,11 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function store(ConsutationMedecineRequest $request)
     {
+        //dd($request->except('documents','dateRdv','motifRdv'));
         $consultation = ConsultationMedecineGenerale::create($request->except('documents','dateRdv','motifRdv'));
         $consultation->creator = Auth::id();
         $consultation->save();
+        //dd($request->except('documents','dateRdv','motifRdv'));
         defineAsAuthor("ConsultationMedecineGenerale", $consultation->id, 'create', $consultation->dossier->patient->user_id);
 
         $consultation = ConsultationMedecineGenerale::with([

@@ -307,3 +307,7 @@ Route::post('payment-prestation','Api\PaymentController@paymentPrestation');
 Route::get('payment-prestation/{id}','Api\PaymentController@getPayment');
 Route::post('payment-statut/{id}','Api\PaymentController@NotifierPaiement');
 Route::resource('payment','Api\PaymentController');
+Route::get('snomed-icd/map/{string}','Api\SnomedIcdController@find');
+
+Route::get('anamnese','Api\AnamneseController@index');
+Route::get('examen-clinic','Api\ExamenClinicController@index');
