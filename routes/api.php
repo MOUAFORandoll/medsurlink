@@ -2,10 +2,11 @@
 use Psy\Util\Json;
 use Illuminate\Http\Request;
 /**-- Headers --**/
+/* 
 header('Access-Control-Allow-Origin:  *');
 header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
 header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
-
+ */
 
 /*
 |--------------------------------------------------------------------------
@@ -308,6 +309,5 @@ Route::get('payment-prestation/{id}','Api\PaymentController@getPayment');
 Route::post('payment-statut/{id}','Api\PaymentController@NotifierPaiement');
 Route::resource('payment','Api\PaymentController');
 Route::get('snomed-icd/map/{string}','Api\SnomedIcdController@find');
-
 Route::get('anamnese','Api\AnamneseController@index');
 Route::get('examen-clinic','Api\ExamenClinicController@index');

@@ -32,19 +32,39 @@ class SnomedIcdController extends Controller
     public function find($string)
     {
         $snomed = new Snomed();
+        $url = "https://mapping.ihtsdotools.org/mapping/record/project/id/12?ancestorId=&relationshipName=&relationshipValue=&query=".$searchTerm."&excludeDescendants=false";
 
-        //Find a concept by a string (e.g. "heart attack")
-        //echo $snomed->getConceptByString('Heart Attack');
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         
-        //Find/get a description by a description SCTID (e.g. "679406011")
-        //echo $snomed->getDescriptionById('679406011');
+        $headers = array(
+           "Authorization: guest",
+           "Content-Type: application/json",
+        );
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         
-        //Find/get a concept by a concept SCTID (e.g. "109152007")
-        //echo $snomed->getConceptBySCTID('109152007');
+        $data = <<<DATA
+        {
+            "startIndex": 0,
+            "maxResults": 50,
+            "sortField": null,
+            "queryRestriction": ""
+        }
+        DATA;
         
-        //Find a concept by a string (e.g. "heart") but only in the Procedures semantic tag
-        $data = $snomed->getConceptByStringInProceduresSemanticTag($string);
-        $data = json_decode($data);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        
+        //for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        
+        $resp = curl_exec($curl);
+        curl_close($curl);
+       // dd($resp);
+
+        $data = json_decode($resp);
         return response()->json($data);
     }
 
