@@ -32,7 +32,7 @@ class SnomedIcdController extends Controller
     public function find($string)
     {
         $snomed = new Snomed();
-        $url = "https://mapping.ihtsdotools.org/mapping/record/project/id/12?ancestorId=&relationshipName=&relationshipValue=&query=".$searchTerm."&excludeDescendants=false";
+        $url = "https://mapping.ihtsdotools.org/mapping/record/project/id/12?ancestorId=&relationshipName=&relationshipValue=&query=".$string."&excludeDescendants=false";
 
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_URL, $url);
