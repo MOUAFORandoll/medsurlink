@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 class AnamneseController extends Controller
 {
-    protected $table = 'anamneses';
+
     /**
      * Display a listing of the resource.
      *

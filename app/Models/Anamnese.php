@@ -12,7 +12,7 @@ class Anamnese extends Model
 {
     use Sluggable;
     use SoftDeletes;
-
+    protected $table = 'anamneses';
     protected $fillable = [
         "fr_description",
         "en_description",
