@@ -6,7 +6,9 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ToDoListRequest;
 use App\Models\Snomed;
 use App\Traits\DossierTrait;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use GuzzleHttp\Exception\ClientException;
 use App\Http\Controllers\Controller;
 
 class SnomedIcdController extends Controller
@@ -31,40 +33,38 @@ class SnomedIcdController extends Controller
      */
     public function find($string)
     {
-        $snomed = new Snomed();
+        //$snomed = new Snomed();
+        $client = new Client();
         $url = "https://mapping.ihtsdotools.org/mapping/record/project/id/12?ancestorId=&relationshipName=&relationshipValue=&query=".$string."&excludeDescendants=false";
 
-        $curl = curl_init($url);
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        
-        $headers = array(
-           "Authorization: guest",
-           "Content-Type: application/json",
-        );
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        
-        $data = <<<DATA
-        {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => $url,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => '',
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => 'POST',
+          CURLOPT_POSTFIELDS =>'{
             "startIndex": 0,
             "maxResults": 50,
             "sortField": null,
             "queryRestriction": ""
-        }
-        DATA;
+        }',
+          CURLOPT_HTTPHEADER => array(
+            'Authorization: guest',
+            'Content-Type: application/json'
+          ),
+        ));
         
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        $response = curl_exec($curl);
         
-        //for debug only!
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        
-        $resp = curl_exec($curl);
         curl_close($curl);
-       // dd($resp);
 
-        $data = json_decode($resp);
+        $data = json_decode($response);
         return response()->json($data);
     }
 
