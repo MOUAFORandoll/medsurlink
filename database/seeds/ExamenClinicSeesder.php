@@ -195,7 +195,7 @@ class ExamenClinicSeeder extends Seeder
             \App\Models\ExamenClinic::create([
                'fr_description'=>$category,
                'en_description'=>$category,
-               'reference'=>'Ostéoarticulaire',
+               'reference'=>'Ostéo-articulaire',
             ]);
         }
         foreach ($neurologique as $category){
