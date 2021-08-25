@@ -79,7 +79,8 @@ class ConsultationMedecineGenerale extends Model
         "lipide",
         "glucide",
         "examens",
-        "anamneses"
+        "anamneses",
+        "anthropometrie"
     ];
 
     public function dossier(){

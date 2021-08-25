@@ -16,7 +16,6 @@ class AnamnesesSeeder extends Seeder
             'Fièvre',
             'Asthénie',
             'Sueurs nocturnes',
-            'Sueurs nocturnes',
             'Transpiration',
             'Prise de poids',
             'Perte de poids',
@@ -46,7 +45,7 @@ class AnamnesesSeeder extends Seeder
             'Dyspnée',
             'Toux',
             'Douleur thoracique',
-            'Expecthoration',
+            'Expectoration',
             'Hémoptysie',
             'Tabagisme'
         ];
@@ -153,7 +152,7 @@ class AnamnesesSeeder extends Seeder
             \App\Models\Anamnese::create([
                'fr_description'=>$category,
                'en_description'=>$category,
-               'reference'=>'Ostéoarticulaire',
+               'reference'=>'Ostéo-articulaire',
             ]);
         }
         foreach ($neurologique as $category){

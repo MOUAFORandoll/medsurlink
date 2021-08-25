@@ -15,7 +15,7 @@ class ExamenClinicSeeder extends Seeder
             'Bon état général',
             'Etat général diminué',
             'Etat général altéré',
-            'Norphohydraté',
+            'Normohydraté',
             'Normocoloré'
         ];
 
@@ -92,7 +92,7 @@ class ExamenClinicSeeder extends Seeder
             'Déformation',
             'Lasègue positif',
             'Lasègue controlatéral positif',
-            'Signe dela sonnette positive',
+            'Signe dela sonnette positif',
             'Lasègue inversé positif'
         ];
         $neurologique = [
@@ -118,18 +118,18 @@ class ExamenClinicSeeder extends Seeder
             'Epreuve doigt-nez positive',
             'Perte de force',
             'Déficit sensitif',
-            'Paires crânienne 1 pathologique',
-            'Paires crânienne 2 pathologique',
-            'Paires crânienne 3 pathologique',
-            'Paires crânienne 4 pathologique',
-            'Paires crânienne 5 pathologique',
-            'Paires crânienne 6 pathologique',
-            'Paires crânienne 7 pathologique',
-            'Paires crânienne 8 pathologique',
-            'Paires crânienne 9 pathologique',
-            'Paires crânienne 10 pathologique',
-            'Paires crânienne 11 pathologique',
-            'Paires crânienne 12 pathologique',
+            'Paire crânienne 1 pathologique',
+            'Paire crânienne 2 pathologique',
+            'Paire crânienne 3 pathologique',
+            'Paire crânienne 4 pathologique',
+            'Paire crânienne 5 pathologique',
+            'Paire crânienne 6 pathologique',
+            'Paire crânienne 7 pathologique',
+            'Paire crânienne 8 pathologique',
+            'Paire crânienne 9 pathologique',
+            'Paire crânienne 10 pathologique',
+            'Paire crânienne 11 pathologique',
+            'Paire crânienne 12 pathologique',
         ];
         $dermatologique = [
             'Desquamation',
