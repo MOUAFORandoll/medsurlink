@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             AnamnesesSeeder::class,
             ExamenClinicSeeder::class,
             ExamenComplementaireSeeder::class,
+            OtherComplementaireSeeder::class,
         ]);
     }
 }

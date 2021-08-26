@@ -314,3 +314,4 @@ Route::get('snomed-icd/map/{string}','Api\SnomedIcdController@find');
 Route::get('anamnese','Api\AnamneseController@index');
 Route::get('examen-clinic','Api\ExamenClinicController@index');
 Route::get('examen-complementaire','Api\ExamenComplementaireController@index');
+Route::get('other-complementaire','Api\OtherComplementaireController@index');
