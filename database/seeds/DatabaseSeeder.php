@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             PrestationsCliniqueKutendaMedicalTableSeeder::class,
             ComptableRoleSeeder::class,
             AnamnesesSeeder::class,
-            ExamenClinicSeeder::class
+            ExamenClinicSeeder::class,
+            ExamenComplementaireSeeder::class,
         ]);
     }
 }
