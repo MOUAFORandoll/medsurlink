@@ -45,7 +45,6 @@ class AuthController extends AccessTokenController
         $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
         $tokenInfo->put('user', $user);
         $user_id = $user->id;
-
         $status = getStatus();
         if($status == null){
             return response()->json(['message'=>"Compte suspendu"],422);
