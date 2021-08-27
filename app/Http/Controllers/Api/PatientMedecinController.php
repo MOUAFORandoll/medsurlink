@@ -26,7 +26,8 @@ class PatientMedecinController extends Controller
      */
     public function index()
     {
-        //
+        $patients = PatientMedecinControle::with(['medecinControles.user','patients.user','patients.dossier'])->get();
+        return response()->json(['patients'=>$patients]);
     }
 
     /**
@@ -55,7 +56,7 @@ class PatientMedecinController extends Controller
                 "medecin_control_id" => $m['id'],
                 "creator" => Auth::id(),
             ]);
-
+            //dd($patientMedecin);
             $patient = Patient::where("user_id",$request->patient_id)->first();
             $medecin = User::whereId($request->medecin_control_id)->first();
             $message = "<@".$medecin->slack."> a été affecté au patient ".$patient->user->nom." comme médecin referent";
@@ -129,8 +130,10 @@ class PatientMedecinController extends Controller
         //$request->validated();
 
         $patientMedecin = PatientMedecinControle::where("medecin_control_id",$id)->first();
+
         if($patientMedecin){
             $patientMedecin->delete();
+            //dd($patientMedecin);
             $patient = Patient::where("user_id",$patientMedecin->patient_id)->first();
             $medecin = User::whereId($patientMedecin->medecin_control_id)->first();
             $message = "<@".$medecin->slack."> a été retiré au patient ".$patient->user->nom." comme médecin referent";

@@ -1,11 +1,13 @@
 <?php
 use Psy\Util\Json;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 /**-- Headers --**/
-//header('Access-Control-Allow-Origin:  *');
-//header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
-//header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
-
+/* 
+header('Access-Control-Allow-Origin:  *');
+header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
+header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
+ */
 
 /*
 |--------------------------------------------------------------------------
@@ -278,6 +280,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle']], function () {
     Route::put('patient-decede/{patient}','Api\PatientController@decede');
+    Route::get('patient-with-medecin-control','Api\PatientController@getPatientWithMedecin');
     Route::resource('specialite','Api\SpecialiteController')->except(['create','edit']);
     Route::resource('consultation-type','Api\ConsultationTypeController')->except(['create','edit']);
     Route::resource('souscripteur','Api\SouscripteurController')->except('show');
@@ -307,3 +310,8 @@ Route::post('payment-prestation','Api\PaymentController@paymentPrestation');
 Route::get('payment-prestation/{id}','Api\PaymentController@getPayment');
 Route::post('payment-statut/{id}','Api\PaymentController@NotifierPaiement');
 Route::resource('payment','Api\PaymentController');
+Route::get('snomed-icd/map/{string}','Api\SnomedIcdController@find');
+Route::get('anamnese','Api\AnamneseController@index');
+Route::get('examen-clinic','Api\ExamenClinicController@index');
+Route::get('examen-complementaire','Api\ExamenComplementaireController@index');
+Route::get('other-complementaire','Api\OtherComplementaireController@index');

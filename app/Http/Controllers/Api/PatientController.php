@@ -321,4 +321,9 @@ class PatientController extends Controller
         $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
         return response()->json(['patient'=>$patient]);
     }
+    public function getPatientWithMedecin()
+    {
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->get();
+        return response()->json(['patients'=>$patients]);
+    }
 }
