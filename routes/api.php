@@ -315,3 +315,8 @@ Route::get('anamnese','Api\AnamneseController@index');
 Route::get('examen-clinic','Api\ExamenClinicController@index');
 Route::get('examen-complementaire','Api\ExamenComplementaireController@index');
 Route::get('other-complementaire','Api\OtherComplementaireController@index');
+
+Route::group(['middleware' => ['auth:api','role:Gestionnaire']], function () {
+    Route::resource('avis','Api\AvisController');
+    Route::resource('rdvs','Api\RendezVousController');
+});
