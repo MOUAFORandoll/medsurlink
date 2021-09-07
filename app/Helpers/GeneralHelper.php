@@ -49,7 +49,28 @@ if(!function_exists('sendSmsToUser'))
         }
     }
 }
-
+if(!function_exists('_group_by'))
+{
+    /**
+     * Group array by key
+     *
+     * @param $array
+     * @param $key
+     */
+    function _group_by($array, $key) {
+        $return = array();
+        foreach($array as $val) {
+            $return[$val[$key]][] = $val;
+        }
+        return $return;
+    }
+}
+if(!function_exists('isJSON'))
+{
+    function isJSON($string){
+        return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
+    }
+}
 if(!function_exists('getFullNameWithoutAccent'))
 {
     /**
