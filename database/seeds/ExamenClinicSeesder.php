@@ -92,7 +92,7 @@ class ExamenClinicSeeder extends Seeder
             'Déformation',
             'Lasègue positif',
             'Lasègue controlatéral positif',
-            'Signe dela sonnette positif',
+            'Signe de la sonnette positif',
             'Lasègue inversé positif'
         ];
         $neurologique = [

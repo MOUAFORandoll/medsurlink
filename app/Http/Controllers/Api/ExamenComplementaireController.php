@@ -13,7 +13,7 @@ class ExamenComplementaireController extends Controller
     {    
         $othercomplementaire = OtherComplementaire::get()->toArray();
         $examencomplementaire = ExamenComplementaire::get()->toArray();
-        $fusion = array_merge($othercomplementaire,$examencomplementaire);
+        $fusion = array_merge($examencomplementaire,$othercomplementaire);
         return response()->json([
             'examencomplementaire'=>$fusion
         ]);
