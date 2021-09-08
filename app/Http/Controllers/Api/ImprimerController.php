@@ -39,6 +39,7 @@ class ImprimerController extends Controller
     }
 
     public function generale($slug){
+
         $this->validatedSlug($slug,'consultation_medecine_generales');
 
         $consultationMedecine = ConsultationMedecineGenerale::with('operationables.contributable','files')->whereSlug($slug)->first();
@@ -81,11 +82,51 @@ class ImprimerController extends Controller
         $pContributeurs = Praticien::with('user')->whereIn('user_id',$cContributeurs)->get();
         $mContributeurs = MedecinControle::with('user')->whereIn('user_id',$cContributeurs)->get();
 
-        $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs');
+        if(isJSON($consultationMedecine->examen_complementaire)){
+            $examen_complementaire = _group_by(json_decode($consultationMedecine->examen_complementaire, true),"reference");
+        }else if(is_array($consultationMedecine->examen_complementaire)){
+            $examen_complementaire = _group_by($consultationMedecine->examen_complementaire,"reference");
+        }else if(is_string($consultationMedecine->examen_complementaire)){
+            $examen_complementaire = $consultationMedecine->examen_complementaire;
+        }else{
+            $examen_complementaire = null;
+        }
+
+
+        if(isJSON($consultationMedecine->examens)){
+            $examen_clinique = _group_by(json_decode($consultationMedecine->examens, true),"reference");
+        }else if(is_array($consultationMedecine->examens)){
+            $examen_clinique = _group_by($consultationMedecine->examens,"reference");
+        }else if(is_string($consultationMedecine->examens)){
+            $examen_clinique = $consultationMedecine->examens;
+        }else{
+            $examen_clinique = null;
+        }
+
+        if(!is_null($consultationMedecine->examens)){
+           $examen_clinique = _group_by(is_array($consultationMedecine->examens)?$consultationMedecine->examens:json_decode($consultationMedecine->examens, true),"reference");
+        }
+
+        if(!is_null($consultationMedecine->anamneses)){
+          $anamneses = _group_by(is_array($consultationMedecine->anamneses)?$consultationMedecine->anamneses:json_decode($consultationMedecine->anamneses, true),"reference");
+        }else{
+            $anamneses = null;
+        }
+
+        if(!is_null($consultationMedecine->diasgnostic)){
+          $diasgnostic = is_array($consultationMedecine->diasgnostic)?$consultationMedecine->diasgnostic:json_decode($consultationMedecine->diasgnostic, true);
+        }else{
+            $diasgnostic = null;
+        }
+
+        //dd($diasgnostic);
+        $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs','examen_complementaire','examen_clinique','anamneses','diasgnostic');
         $pdf = PDF::loadView('rapport',$data);
+
         $nom  = patientLastName($consultationMedecine);
         $prenom = patientFirstName($consultationMedecine);
         $date= $consultationMedecine->date_consultation;
+
         $path = storage_path().'/app/public/pdf/'.'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
         $pdf->save($path);
 
