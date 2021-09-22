@@ -100,8 +100,9 @@ class ImprimerController extends Controller
         }else if(is_string($consultationMedecine->examens)){
             $examen_clinique = $consultationMedecine->examens;
         }else{
-            $examen_clinique = null;
+            $examen_clinique = $consultationMedecine->examens;
         }
+        //dd($consultationMedecine);
 
         if(!is_null($consultationMedecine->examens)){
            $examen_clinique = _group_by(is_array($consultationMedecine->examens)?$consultationMedecine->examens:json_decode($consultationMedecine->examens, true),"reference");
@@ -112,6 +113,7 @@ class ImprimerController extends Controller
         }else{
             $anamneses = null;
         }
+        // dd($consultationMedecine);
 
         if(!is_null($consultationMedecine->diasgnostic)){
           $diasgnostic = is_array($consultationMedecine->diasgnostic)?$consultationMedecine->diasgnostic:json_decode($consultationMedecine->diasgnostic, true);
