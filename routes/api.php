@@ -252,6 +252,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('affiliationRevue/{affiliation}','Api\AffiliationController@show');
     Route::get('patient/{patient}','Api\PatientController@show')->name('patient.show');
     Route::get('patient','Api\PatientController@index')->name('patient.index');
+    Route::get('patient/search/{value}','Api\PatientController@specialList')->name('patient.specialList');
     Route::get('souscripteur/{souscripteur}','Api\SouscripteurController@show')->name('souscripteur.show');
     Route::get('souscripteur/rappel/{souscripteur}','Api\SouscripteurController@rappelAffilie');
     Route::get('souscripteur/list/cim','Api\SouscripteurController@cim');

@@ -171,6 +171,30 @@ class PatientController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  string  $value
+     * @return \Illuminate\Http\Response
+     */
+
+    public function specialList($value)
+    {
+        $result=[];
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','financeurs.financable'])->restrictUser()->get();
+        foreach($patients as $p){
+            if(strpos(strtolower($p->user->nom),strtolower($value)) || 
+            strpos(strtolower($p->user->prenom),strtolower($value)) || 
+            strpos(strtolower($p->user->nom),strtolower($value)) || 
+            strpos(strtolower($p->dossier->numero_dossier),strtolower($value)) || 
+            strpos(strtolower($p->age),strtolower($value)) ||
+            strpos(strtolower($p->user->email),strtolower($value))) 
+            array_push($result,$p);
+        }
+        return $result;
+        
+    }
+
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
