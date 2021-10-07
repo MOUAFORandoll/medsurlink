@@ -80,7 +80,8 @@ class ConsultationMedecineGenerale extends Model
         "glucide",
         "examens",
         "anamneses",
-        "anthropometrie"
+        "anthropometrie",
+        "information"
     ];
 
     public function dossier(){
