@@ -13,7 +13,7 @@ class AddInformationSupplementaireToConsultationMedecineGeneraleTable extends Mi
      */
     public function up()
     {
-        Schema::table('consultation_medecine_generale', function (Blueprint $table) {
+        Schema::table('consultation_medecine_generales', function (Blueprint $table) {
             $table->string('information')->nullable();
         });
     }
@@ -25,7 +25,7 @@ class AddInformationSupplementaireToConsultationMedecineGeneraleTable extends Mi
      */
     public function down()
     {
-        Schema::table('consultation_medecine_generale', function (Blueprint $table) {
+        Schema::table('consultation_medecine_generales', function (Blueprint $table) {
             //
         });
     }

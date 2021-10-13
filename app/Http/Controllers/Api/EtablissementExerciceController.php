@@ -34,7 +34,7 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::with([/*'comptables.user','praticiens.user',*/'patients.dossier','patients.medecinReferent.medecinControles.user'/*,'patients.user','patients.financeurs','prestations'*/])->get();
+        $etablissements =  EtablissementExercice::with(['comptables.user','praticiens.user','patients.dossier','patients.medecinReferent.medecinControles.user','patients.user','patients.financeurs','prestations'])->get();
         return response()->json(['etablissements'=>$etablissements]);
 
 
