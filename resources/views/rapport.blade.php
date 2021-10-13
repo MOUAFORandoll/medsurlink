@@ -349,7 +349,7 @@
                         @foreach($consultationMedecine->dossier->traitements as $traiement)
                         @if($loop->last)
                             <div>
-                                <span>{{$traiement->description}}</span>
+                                <span>{!!$traiement->description!!}</span>
                             </div>
                         @endif
                     @endforeach
@@ -366,8 +366,9 @@
                     <div class="column">{!!$key!!}</div>
                     <div class="column">
                         @foreach($parametre as $ref)
-                            <span class="p">{!!$ref['fr_description']!!}</span>
+                            <span class="p">{!!$ref['fr_description']!!} -</span>
                         @endforeach
+
                     </div>
                 </div>
                 @endforeach
@@ -387,7 +388,7 @@
                     <div class="column">{!!$key!!}</div>
                     <div class="column">
                         @foreach($parametre as $ref)
-                            <span class="p">{!!$ref['fr_description']!!}</span>
+                            <span class="p">{!!$ref['fr_description']!!} -</span> 
                         @endforeach
                     </div>
                 </div>
@@ -407,7 +408,7 @@
                     <div class="column">{!!$key!!}</div>
                     <div class="column">
                         @foreach($parametre as $ref)
-                            <span class="p">{!!$ref['fr_description']!!},</span>
+                            <span class="p">{!!$ref['fr_description']!!} -</span>
                         @endforeach
                     </div>
                 </div>
@@ -424,8 +425,8 @@
             @if($diasgnostic != 'null')
                 @foreach($diasgnostic as $parametre)
                 <div class="row">
-                    <div class="column" style="width: 20%">{!!$parametre['targetId']!!}</div>
-                    <div class="column" style="width: 80%"><p class="p">{!!$parametre['targetName']!!}</p></div>
+                    <div class="column" style="width: 20%">{!!$parametre['code']!!}</div>
+                    <div class="column" style="width: 80%"><p class="p">{!!$parametre['title']!!}</p></div>
                 </div>
                 @endforeach
             @endif
