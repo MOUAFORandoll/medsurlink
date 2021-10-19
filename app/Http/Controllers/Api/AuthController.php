@@ -21,36 +21,52 @@ class AuthController extends AccessTokenController
     public function auth(ServerRequestInterface $request)
     {
 
-        $tokenResponse = parent::issueToken($request);
-        $token = $tokenResponse->getContent();
-
-        // $tokenInfo will contain the usual Laravel Passort token response.
-        $tokenInformation = json_decode($token, true);
-        $tokenInfo = collect($tokenInformation);
-        if ($tokenInfo->has('error'))
-            return response()->json(['message'=>$tokenInfo->get('message')],401);
-
         // Then we just add the user to the response before returning it.
         $username = $request->getParsedBody()['username'];
         $password = $request->getParsedBody()['password'];
         $user = $this->getUser($username,$password);
-        $user->roles;
-        Auth::login($user);
-        $time = TimeActivite::create([
-            'date'=>Carbon::now()->format('Y-m-d'),
-            'start'=>Carbon::now()->format('H:i')
-        ]);
-        $user['time_slug'] = $time->slug;
-        $user['isEtablissement'] = isComptable();
-        $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
-        $tokenInfo->put('user', $user);
-        $user_id = $user->id;
-        $status = getStatus();
-        if($status == null){
-            return response()->json(['message'=>"Compte suspendu"],422);
+        // $test=[];
+        // if($user==new User())
+        // return "true";
+        // return $user;
+        if(!($user==new User())){
+            // return "ici";
+            $user->roles;
+            Auth::login($user);
+
+            $tokenResponse = parent::issueToken($request);
+            $token = $tokenResponse->getContent();
+
+            // $tokenInfo will contain the usual Laravel Passort token response.
+            $tokenInformation = json_decode($token, true);
+            $tokenInfo = collect($tokenInformation);
+            if ($tokenInfo->has('error')){
+                // return "ici";
+                return response()->json(['message'=>$tokenInfo->get('message')],401);
+            }
+            
+
+        
+            $time = TimeActivite::create([
+                'date'=>Carbon::now()->format('Y-m-d'),
+                'start'=>Carbon::now()->format('H:i')
+            ]);
+            $user['time_slug'] = $time->slug;
+            $user['isEtablissement'] = isComptable();
+            $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
+            $tokenInfo->put('user', $user);
+            $user_id = $user->id;
+
+            $status = getStatus();
+            if($status == null){
+                return response()->json(['message'=>"Compte suspendu"],422);
+            }
+            defineAsAuthor($status->getOriginalContent()['auteurable_type'],$status->getOriginalContent()['auteurable_id'],'Connexion');
+            return $tokenInfo;
         }
-        defineAsAuthor($status->getOriginalContent()['auteurable_type'],$status->getOriginalContent()['auteurable_id'],'Connexion');
-        return $tokenInfo;
+        else
+        return response()->json(['message'=>"The user credentials were incorrect."],401);
+        
     }
     public function authAfterRedirect(ServerRequestInterface $request)
     {
@@ -120,6 +136,7 @@ class AuthController extends AccessTokenController
         //Verification de l'existence de l'adresse email
         $validator = Validator::make(compact('username'),['username'=>['exists:users,email']]);
         if($validator->fails()){
+            
             //Verification de l'existence du numero de dossier
             if (strlen($username)<=9){
                 $numero_dossier = $username;
@@ -127,17 +144,23 @@ class AuthController extends AccessTokenController
                 if (!is_null($dossier)){
                     $user = User::whereId($dossier->patient_id)->first();
                     $user['dossier'] = $dossier->slug;
+                    
                     return $user;
                 }
-                return [];
+                return null;
             }
-            return [];
+            return null;
         }
 
         $users = User::where('email', $username)->get();
+        // return $users;
         $authUser = new User();
+        // if($authUser==new User())
+        // return "vide";
+        // return $authUser;
         foreach ($users as $user){
             if(Hash::check($password,$user->password)){
+                
                 $authUser = $user;
                 $dossier = DB::table('dossier_medicals')->where('patient_id','=',$authUser->id)->first();
                 if(!is_null($dossier)){
