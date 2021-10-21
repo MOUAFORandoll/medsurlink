@@ -231,8 +231,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {
-
-
+    Route::get('/get-commande-from-cim','Api\AffiliationSouscripteurController@getSouscripteurFromCIM');
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur|Etablissement']], function () {
