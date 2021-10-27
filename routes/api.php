@@ -239,6 +239,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
     Route::resource('medecin-patient','Api\PatientMedecinController');
     Route::get('dossiers-mes-patient','Api\DossierMedicalController@dossierMyPatient');
+    Route::get('dossiers-mes-patient/search/{value}','Api\DossierMedicalController@dossierMyPatientSpecial')->name('dossiers-mes-patient.dossierMyPatientSpecial');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
     Route::get('imprimer-facture-definitive/{facture}','Api\ImprimerController@factureDefinitive');
     Route::get('imprimer-facture-avis-definitive/{facture}','Api\ImprimerController@factureAvisDefinitive');
