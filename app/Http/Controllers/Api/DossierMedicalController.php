@@ -274,6 +274,7 @@ class DossierMedicalController extends Controller
 
         return response()->json(['dossier'=>$dossier]);
     }
+
     public function dossierMyPatient(){
 
         $dossiers = Array(
@@ -294,6 +295,133 @@ class DossierMedicalController extends Controller
         );
         return response()->json(['dossiers'=>$dossiers]);
     }
+
+    public function dossierMyPatientSpecial($value){
+        $result=Array(
+            'consultationsMedecine'=>[],
+            'hospitalisations'=>[],
+            'cardiologies'=>[],
+            'kinesitherapies'=>[],
+            'consultationsObstetrique'=>[],
+            'avis'=>[],
+            'mesAvis'=>[]);
+        $dossiers = Array(
+            'consultationsMedecine'=> 
+              ConsultationMedecineGenerale::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+            'hospitalisations'=> 
+                Hospitalisation::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+            'cardiologies'=>
+                Cardiologie::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+            'kinesitherapies'=> 
+                Kinesitherapie::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+            'consultationsObstetrique'=>
+                ConsultationObstetrique::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+            'avis'=> Avis::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+            'mesAvis'=>MedecinAvis::with([
+                    'avisMedecin.dossier.patient.user',
+                ])->where('medecin_id','=',Auth::id())->get(),
+        );
+        foreach($dossiers['consultationsMedecine'] as $p){
+            if($p->dossier->patient->user!=null){
+                if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
+            array_push($result['consultationsMedecine'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['consultationsMedecine'],$p);
+            }
+            
+        }
+        foreach($dossiers['hospitalisations'] as $p){
+            if($p->dossier->patient->user!=null){
+                if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
+            array_push($result['hospitalisations'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['hospitalisations'],$p);
+            }
+            
+        }
+        foreach($dossiers['cardiologies'] as $p){
+            if($p->dossier->patient->user!=null){
+                if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
+            array_push($result['cardiologies'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['cardiologies'],$p);
+            }
+            
+        }
+        foreach($dossiers['kinesitherapies'] as $p){
+            if($p->dossier->patient->user!=null){
+                if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
+            array_push($result['kinesitherapies'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['kinesitherapies'],$p);
+            }
+            
+        }
+        foreach($dossiers['consultationsObstetrique'] as $p){
+            if($p->dossier->patient->user!=null){
+                if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
+            array_push($result['consultationsObstetrique'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['consultationsObstetrique'],$p);
+            }
+            
+        }
+        foreach($dossiers['avis'] as $p){
+            if($p->dossier->patient->user!=null){
+                if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
+            array_push($result['avis'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['avis'],$p);
+            }
+            
+        }
+        foreach($dossiers['mesAvis'] as $p){
+            if($p->dossier->patient->user!=null){
+                if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
+            array_push($result['mesAvis'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['mesAvis'],$p);
+            }
+            
+        }
+        return response()->json(['dossiers'=>$result]);
+    }
+
     public function checkIfUserAuthorized(DossierMedical $dossier)
     {
         $patientEtablissementId = EtablissementExercicePatient::where('patient_id', '=', $dossier->patient->user_id)->get('id');

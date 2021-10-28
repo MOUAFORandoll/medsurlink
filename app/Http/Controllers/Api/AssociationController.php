@@ -28,6 +28,35 @@ class AssociationController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  string  $value
+     * @return \Illuminate\Http\Response
+     */
+
+    // public function specialList($value)
+    // {
+    //     $result=[];
+    //     $associations = Association::with(['user'])->restrictUser()->get();
+
+    //     // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
+    //     // return $patients;
+    //     foreach($associations as $p){
+    //         if($p->user!=null){
+    //             if(strpos(strtolower($p->responsable->nom),strtolower($value)) || 
+    //         strpos(strtolower($p->user->prenom),strtolower($value)) || 
+    //         strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+    //         strpos(strtolower(strval($p->age)),strtolower($value)) ||
+    //         strpos(strtolower($p->user->email),strtolower($value))) 
+    //         array_push($result,$p);
+    //         }
+            
+    //     }
+    //     return $result;
+        
+    // }
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
