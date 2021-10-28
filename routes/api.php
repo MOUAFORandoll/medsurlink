@@ -181,6 +181,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
     Route::resource('categorie','Api\CategorieController');
     Route::resource('suivi','Api\SuiviController');
+    Route::get('suivi/search/{value}','Api\SuiviController@search')->name('suivi.search');
     Route::resource('toDoList','Api\ToDoListController');
     Route::post('toDoList/{slug}/statut','Api\ToDoListController@updateStatut');
     Route::resource('suivi-specialite','Api\SpecialiteSuiviController');

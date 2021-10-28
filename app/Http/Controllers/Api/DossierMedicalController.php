@@ -324,77 +324,98 @@ class DossierMedicalController extends Controller
         foreach($dossiers['consultationsMedecine'] as $p){
             if($p->dossier->patient->user!=null){
                 if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
-            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
             strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
             array_push($result['consultationsMedecine'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['consultationsMedecine'],$p);
             }
             
         }
         foreach($dossiers['hospitalisations'] as $p){
             if($p->dossier->patient->user!=null){
                 if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
-            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
             strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
             array_push($result['hospitalisations'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['hospitalisations'],$p);
             }
             
         }
         foreach($dossiers['cardiologies'] as $p){
             if($p->dossier->patient->user!=null){
                 if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
-            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
             strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
             array_push($result['cardiologies'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['cardiologies'],$p);
             }
             
         }
         foreach($dossiers['kinesitherapies'] as $p){
             if($p->dossier->patient->user!=null){
                 if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
-            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
             strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
             array_push($result['kinesitherapies'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['kinesitherapies'],$p);
             }
             
         }
         foreach($dossiers['consultationsObstetrique'] as $p){
             if($p->dossier->patient->user!=null){
                 if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
-            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
             strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
             array_push($result['consultationsObstetrique'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['consultationsObstetrique'],$p);
             }
             
         }
         foreach($dossiers['avis'] as $p){
             if($p->dossier->patient->user!=null){
                 if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
-            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
             strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
             array_push($result['avis'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['avis'],$p);
             }
             
         }
         foreach($dossiers['mesAvis'] as $p){
             if($p->dossier->patient->user!=null){
                 if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value)) || 
-            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)) ||
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) ||
             strpos(strtolower($p->dossier->patient->user->email),strtolower($value)))
             array_push($result['mesAvis'],$p);
+            }
+            else{
+                if(strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
+                strpos(strtolower(strval($p->dossier->patient->age)),strtolower($value)))
+                array_push($result['mesAvis'],$p);
             }
             
         }
