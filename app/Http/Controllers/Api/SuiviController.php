@@ -43,7 +43,7 @@ class SuiviController extends Controller
         $result=[];
         $suivis = Suivi::with('toDoList','categorie','dossier.patient.user','responsable.praticien','specialites.specialite')->get();
         foreach($suivis as $p){
-            if($p->dossier != null && $p->dossier->patient->user != null){
+            if($p->dossier != null && $p->dossier->patient !=null && $p->dossier->patient->user != null){
                 if( 
             strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) || 
             strpos(strtolower(strval($p->dossier->patient->user->nom)),strtolower($value))) 
