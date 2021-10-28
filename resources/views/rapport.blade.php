@@ -497,7 +497,7 @@
     @endforeach
 @endif
 <div style="display: inline">
-    @if(!is_null($praticiens->user))
+    @if(!empty($praticiens->user))
         <p>Généré par <b>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</b></p>
         @if(!is_null($praticiens->numero_ordre))
             @if($praticiens->numero_ordre != 'null' && strlen($praticiens->numero_ordre ) >0)
