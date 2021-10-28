@@ -50,7 +50,7 @@ class SuiviController extends Controller
             array_push($result,$p);
             }
             else{
-                if(strpos(strtolower($p->motifs),strtolower($value))) 
+                if($p->motifs !=null && strpos(strtolower($p->motifs),strtolower($value))) 
                 array_push($result,$p);
             }
             
