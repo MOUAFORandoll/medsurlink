@@ -187,17 +187,23 @@ class PatientController extends Controller
         foreach($patients as $p){
             
             if($p->user!=null){
-                if(strpos(strtolower($p->user->nom),strtolower($value)) || 
-            strpos(strtolower($p->user->prenom),strtolower($value)) ||
-            strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
-                    strpos(strtolower(strval($p->age)),strtolower($value)) ||
-            strpos(strtolower($p->user->email),strtolower($value))) 
-            array_push($result,$p);
+                
+                if(strpos(strtolower($p->user->nom),strtolower($value))!==false || 
+            strpos(strtolower($p->user->prenom),strtolower($value))!==false ||
+            strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false || 
+                    strpos(strtolower(strval($p->age)),strtolower($value))!==false ||
+            strpos(strtolower($p->user->email),strtolower($value))!==false) {
+                // return $p;
+                array_push($result,$p);
+                // return $result;
+            }
+            
+            
             }
             else{
                 if(
-                    strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value)) || 
-                    strpos(strtolower(strval($p->age)),strtolower($value))) 
+                    strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false || 
+                    strpos(strtolower(strval($p->age)),strtolower($value))!==false) 
                     array_push($result,$p);
             }
             
