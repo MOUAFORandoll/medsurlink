@@ -45,12 +45,12 @@ class SuiviController extends Controller
         foreach($suivis as $p){
             if($p->dossier != null && $p->dossier->patient !=null && $p->dossier->patient->user != null){
                 if( 
-            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value)) || 
-            strpos(strtolower(strval($p->dossier->patient->user->nom)),strtolower($value))) 
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value))!==false || 
+            strpos(strtolower(strval($p->dossier->patient->user->nom)),strtolower($value))!==false) 
             array_push($result,$p);
             }
             else{
-                if($p->motifs !=null && strpos(strtolower($p->motifs),strtolower($value))) 
+                if($p->motifs !=null && strpos(strtolower($p->motifs),strtolower($value))!==false) 
                 array_push($result,$p);
             }
             
