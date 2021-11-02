@@ -321,6 +321,7 @@ class DossierMedicalController extends Controller
                     'avisMedecin.dossier.patient.user',
                 ])->where('medecin_id','=',Auth::id())->get(),
         );
+        // return $dossiers;
         foreach($dossiers['consultationsMedecine'] as $p){
             if($p->dossier->patient->user!=null){
                 if(strpos(strtolower($p->dossier->patient->user->nom),strtolower($value))!==false || 
