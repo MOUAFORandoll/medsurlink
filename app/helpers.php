@@ -147,6 +147,9 @@ if (!function_exists('getStatusUserRole')){
         elseif ($roleName == "Association"){
             return response()->json(['auteurable_user'=>$user]);
         }
+        elseif ($roleName == "Assistante"){
+            return response()->json(['auteurable_user'=>$user->assistante]);
+        }
     }
 }
 
@@ -282,6 +285,10 @@ if (!function_exists('getUser')){
         elseif ($roleName == "User"){
             $user = \App\User::findBySlug($slug);
             return response()->json(['user'=>$user]);
+        }
+        elseif ($roleName == "Assistante"){
+            $assistante = \App\Models\Assistante::whereSlug($slug)->first();
+            return response()->json(['user'=>$assistante->user]);
         }
     }
 }

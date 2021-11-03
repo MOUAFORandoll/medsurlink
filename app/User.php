@@ -6,6 +6,7 @@ use App\Models\Contributeurs;
 use App\Models\DossierMedical;
 use App\Models\Gestionnaire;
 use App\Models\MedecinControle;
+use App\Models\Assistante;
 use App\Models\Patient;
 use App\Models\Association;
 use App\Models\Praticien;
@@ -73,6 +74,7 @@ class User extends Authenticatable
         'gestionnaire',
         'souscripteur',
         'medecinControle',
+        'assistante',
     ];
 
     /**
@@ -186,6 +188,9 @@ class User extends Authenticatable
     }
     public function medecinControle(){
         return $this->hasOne(MedecinControle::class,'user_id','id');
+    }
+    public function assistante(){
+        return $this->hasOne(Assistante::class,'user_id','id');
     }
 
     /**
