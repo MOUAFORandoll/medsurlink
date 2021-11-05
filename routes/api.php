@@ -181,6 +181,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
     Route::resource('categorie','Api\CategorieController');
     Route::resource('suivi','Api\SuiviController');
+    Route::get('suivi/search/{value}','Api\SuiviController@search')->name('suivi.search');
     Route::resource('toDoList','Api\ToDoListController');
     Route::post('toDoList/{slug}/statut','Api\ToDoListController@updateStatut');
     Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
@@ -238,6 +239,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
     Route::resource('medecin-patient','Api\PatientMedecinController');
     Route::get('dossiers-mes-patient','Api\DossierMedicalController@dossierMyPatient');
+    Route::get('dossiers-mes-patient/search/{value}','Api\DossierMedicalController@dossierMyPatientSpecial')->name('dossiers-mes-patient.dossierMyPatientSpecial');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
     Route::get('imprimer-facture-definitive/{facture}','Api\ImprimerController@factureDefinitive');
     Route::get('imprimer-facture-avis-definitive/{facture}','Api\ImprimerController@factureAvisDefinitive');
@@ -252,6 +254,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('patient/{patient}','Api\PatientController@show')->name('patient.show');
     Route::get('patient','Api\PatientController@index')->name('patient.index');
     Route::get('patient/search/{value}','Api\PatientController@specialList')->name('patient.specialList');
+    Route::get('patient/doctor/{value}','Api\PatientController@PatientsDoctor')->name('patient.PatientsDoctor');
     Route::get('souscripteur/{souscripteur}','Api\SouscripteurController@show')->name('souscripteur.show');
     Route::get('souscripteur/rappel/{souscripteur}','Api\SouscripteurController@rappelAffilie');
     Route::get('souscripteur/list/cim','Api\SouscripteurController@cim');

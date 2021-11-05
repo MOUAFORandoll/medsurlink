@@ -36,7 +36,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with(['souscripteur','dossier','user','affiliations','financeurs.financable'])->restrictUser()->get();
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->get();
         return response()->json(['patients'=>$patients]);
     }
 
@@ -180,15 +180,72 @@ class PatientController extends Controller
     public function specialList($value)
     {
         $result=[];
-        $patients = Patient::with(['souscripteur','dossier','user','affiliations','financeurs.financable'])->restrictUser()->get();
+        $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->get();
+
+        // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
+        // return $patients;
         foreach($patients as $p){
-            if(strpos(strtolower($p->user->nom),strtolower($value)) || 
-            strpos(strtolower($p->user->prenom),strtolower($value)) || 
-            strpos(strtolower($p->user->nom),strtolower($value)) || 
-            strpos(strtolower($p->dossier->numero_dossier),strtolower($value)) || 
-            strpos(strtolower($p->age),strtolower($value)) ||
-            strpos(strtolower($p->user->email),strtolower($value))) 
-            array_push($result,$p);
+            
+            if($p->user!=null){
+                
+                if(strpos(strtolower($p->user->nom),strtolower($value))!==false || 
+            strpos(strtolower($p->user->prenom),strtolower($value))!==false ||
+            strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false || 
+                    strpos(strtolower(strval($p->age)),strtolower($value))!==false ||
+            strpos(strtolower($p->user->email),strtolower($value))!==false) {
+                // return $p;
+                array_push($result,$p);
+                // return $result;
+            }
+            
+            
+            }
+            else{
+                if(
+                    strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false || 
+                    strpos(strtolower(strval($p->age)),strtolower($value))!==false) 
+                    array_push($result,$p);
+            }
+            
+        }
+        return $result;
+        
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $value
+     * @return \Illuminate\Http\Response
+     */
+
+    public function PatientsDoctor($value)
+    {
+        // return $value;
+        $result=[];
+        $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->get();
+
+        // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
+        // return $patients;
+        foreach($patients as $p){
+            // if($p->user_id==629
+                
+                if(isset($p->medecinReferent)){
+                    // return "true";
+                    foreach($p->medecinReferent as $d){
+                        
+                        if($d->medecinControles!=null && $d->medecinControles->user!=null){
+                            if($d->medecinControles->user->id==$value){
+                                array_push($result,$p);
+                            }
+                            
+                        }
+                    }
+                }
+            // }
+            // return "true";
+            
+            
         }
         return $result;
         

@@ -34,6 +34,34 @@ class SuiviController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search($value)
+    {
+        $result=[];
+        $suivis = Suivi::with('toDoList','categorie','dossier.patient.user','responsable.praticien','specialites.specialite')->get();
+        foreach($suivis as $p){
+            if($p->dossier != null && $p->dossier->patient !=null && $p->dossier->patient->user != null){
+                if( 
+            strpos(strtolower($p->dossier->patient->user->prenom),strtolower($value))!==false || 
+            strpos(strtolower(strval($p->dossier->patient->user->nom)),strtolower($value))!==false) 
+            array_push($result,$p);
+            }
+            else{
+                if($p->motifs !=null && strpos(strtolower($p->motifs),strtolower($value))!==false) 
+                array_push($result,$p);
+            }
+            
+        }
+
+        return  response()->json(['suivis'=>$result]);
+
+
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
