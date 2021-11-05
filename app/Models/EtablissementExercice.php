@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Traits\SlugRoutable;
-use App\Scopes\RestrictEtablissementScope;
 use Carbon\Carbon;
-use Cviebrock\EloquentSluggable\Sluggable;
-use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+use App\Models\Assistante;
+use App\Models\Traits\SlugRoutable;
 use Illuminate\Database\Eloquent\Model;
+use App\Scopes\RestrictEtablissementScope;
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Netpok\Database\Support\RestrictSoftDeletes;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 
 class EtablissementExercice extends Model
 {
@@ -85,5 +86,8 @@ class EtablissementExercice extends Model
 
     public function comptables(){
         return $this->hasMany(Comptable::class,'etablissement_id','id');
+    }
+    public function assistantes(){
+        return $this->hasMany(Assistante::class,'etablissement_id','id');
     }
 }
