@@ -255,6 +255,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('patient','Api\PatientController@index')->name('patient.index');
     Route::get('patient/search/{value}','Api\PatientController@specialList')->name('patient.specialList');
     Route::get('patient/doctor/{value}','Api\PatientController@PatientsDoctor')->name('patient.PatientsDoctor');
+    Route::get('count_patient/doctor/{value}','Api\PatientController@CountPatientsDoctor')->name('patient.CountPatientsDoctor');
+    Route::get('patient/doctor/{value}/{limit}','Api\PatientController@FirstPatientsDoctor')->name('patient.FirstPatientsDoctor');
+    Route::get('patient/doctor/{value}/{limit}/{page}','Api\PatientController@NextPatientsDoctor')->name('patient.NextPatientsDoctor');
     Route::get('souscripteur/{souscripteur}','Api\SouscripteurController@show')->name('souscripteur.show');
     Route::get('souscripteur/rappel/{souscripteur}','Api\SouscripteurController@rappelAffilie');
     Route::get('souscripteur/list/cim','Api\SouscripteurController@cim');
@@ -285,6 +288,12 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante']], function () {
     Route::put('patient-decede/{patient}','Api\PatientController@decede');
     Route::get('patient-with-medecin-control','Api\PatientController@getPatientWithMedecin');
+    Route::get('first_patient-with-medecin-control/{limit}','Api\PatientController@getFirstPatientWithMedecin');
+    Route::get('next_patient-with-medecin-control/{limit}/{page}','Api\PatientController@getNextPatientWithMedecin');
+    // Route::get('10patient-with-medecin-control','Api\PatientController@get10PatientWithMedecin');
+    // Route::get('15patient-with-medecin-control','Api\PatientController@get15PatientWithMedecin');
+    // Route::get('100patient-with-medecin-control','Api\PatientController@get100PatientWithMedecin');
+    Route::get('number_patient-with-medecin-control','Api\PatientController@getCountPatientWithMedecin');
     Route::resource('specialite','Api\SpecialiteController')->except(['create','edit']);
     Route::resource('consultation-type','Api\ConsultationTypeController')->except(['create','edit']);
     Route::resource('souscripteur','Api\SouscripteurController')->except('show');
