@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AssistanteRequest;
-use App\Mail\Password\PasswordGenerated;
+use App\Mail\Password\AssistantGenerated;
 use App\Models\Assistante;
 use App\User;
 use Illuminate\Http\Request;
@@ -59,7 +59,7 @@ class AssistanteController extends Controller
         if(is_null($user_id)){
             $password = str_random(10);
             $user =  User::create($request->except('user_id','sexe','etablissement_id')+['password'=> Hash::make( $password)]);
-            $mail = new PasswordGenerated($user,$password);
+            $mail = new AssistantGenerated($user,$password);
             Mail::to($user->email)->send($mail);
             $user_id = $user->id;
             $user->assignRole('Assistante');
