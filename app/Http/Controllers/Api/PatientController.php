@@ -251,6 +251,109 @@ class PatientController extends Controller
         
     }
 
+    public function CountPatientsDoctor($value)
+    {
+        // return $value;
+        $result=[];
+        $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->get();
+
+        // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
+        // return $patients;
+        foreach($patients as $p){
+            // if($p->user_id==629
+                
+                if(isset($p->medecinReferent)){
+                    // return "true";
+                    foreach($p->medecinReferent as $d){
+                        
+                        if($d->medecinControles!=null && $d->medecinControles->user!=null){
+                            if($d->medecinControles->user->id==$value){
+                                array_push($result,$p);
+                            }
+                            
+                        }
+                    }
+                }
+            // }
+            // return "true";
+            
+            
+        }
+        return count($result);
+        
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $value
+     * @return \Illuminate\Http\Response
+     */
+
+    public function FirstPatientsDoctor($value, $limit)
+    {
+        // return $value;
+        $result=[];
+        $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->get();
+
+        // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
+        // return $patients;
+        foreach($patients as $p){
+            // if($p->user_id==629
+                
+                if(isset($p->medecinReferent)){
+                    // return "true";
+                    foreach($p->medecinReferent as $d){
+                        
+                        if($d->medecinControles!=null && $d->medecinControles->user!=null){
+                            if($d->medecinControles->user->id==$value){
+                                array_push($result,$p);
+                            }
+                            
+                        }
+                    }
+                }
+            // }
+            // return "true";
+            
+            
+        }
+        return array_slice($result, 0, $limit);
+        
+    }
+
+    public function NextPatientsDoctor($value, $limit, $page)
+    {
+        // return $value;
+        $result=[];
+        $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->get();
+
+        // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
+        // return $patients;
+        foreach($patients as $p){
+            // if($p->user_id==629
+                
+                if(isset($p->medecinReferent)){
+                    // return "true";
+                    foreach($p->medecinReferent as $d){
+                        
+                        if($d->medecinControles!=null && $d->medecinControles->user!=null){
+                            if($d->medecinControles->user->id==$value){
+                                array_push($result,$p);
+                            }
+                            
+                        }
+                    }
+                }
+            // }
+            // return "true";
+            
+            
+        }
+        return array_slice($result, ($page-1)*$limit, $limit);
+        
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -406,5 +509,41 @@ class PatientController extends Controller
     {
         $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->get();
         return response()->json(['patients'=>$patients]);
+    }
+
+    public function getFirstPatientWithMedecin($limit)
+    {
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->take($limit)->get();
+        return response()->json(['patients'=>$patients]);
+    }
+
+    public function getNextPatientWithMedecin($limit, $page)
+    {
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->limit($limit)->offset(($page - 1) * $limit)->get();
+        return response()->json(['patients'=>$patients]);
+    }
+
+    // public function get10PatientWithMedecin()
+    // {
+    //     $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->take(10)->get();
+    //     return response()->json(['patients'=>$patients]);
+    // }
+
+    // public function get15PatientWithMedecin()
+    // {
+    //     $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->take(15)->get();
+    //     return response()->json(['patients'=>$patients]);
+    // }
+
+    // public function get100PatientWithMedecin()
+    // {
+    //     $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->take(100)->get();
+    //     return response()->json(['patients'=>$patients]);
+    // }
+
+    public function getCountPatientWithMedecin()
+    {
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->count();
+        return response()->json(['count'=>$patients]);
     }
 }
