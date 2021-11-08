@@ -507,19 +507,19 @@ class PatientController extends Controller
     }
     public function getPatientWithMedecin()
     {
-        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->get();
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->whereHas('user', function($q) {$q->where('isMedicasure', '=', 1)->where('decede', '=', 'non');})->get();
         return response()->json(['patients'=>$patients]);
     }
 
     public function getFirstPatientWithMedecin($limit)
     {
-        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->take($limit)->get();
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->whereHas('user', function($q) {$q->where('isMedicasure', '=', 1)->where('decede', '=', 'non');})->take($limit)->get();
         return response()->json(['patients'=>$patients]);
     }
 
     public function getNextPatientWithMedecin($limit, $page)
     {
-        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->limit($limit)->offset(($page - 1) * $limit)->get();
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->whereHas('user', function($q) {$q->where('isMedicasure', '=', 1)->where('decede', '=', 'non');})->limit($limit)->offset(($page - 1) * $limit)->get();
         return response()->json(['patients'=>$patients]);
     }
 
@@ -543,7 +543,7 @@ class PatientController extends Controller
 
     public function getCountPatientWithMedecin()
     {
-        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->count();
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->whereHas('user', function($q) {$q->where('isMedicasure', '=', 1)->where('decede', '=', 'non');})->count();
         return response()->json(['count'=>$patients]);
     }
 }
