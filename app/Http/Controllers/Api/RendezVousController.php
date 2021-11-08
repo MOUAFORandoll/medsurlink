@@ -54,7 +54,7 @@ class RendezVousController extends Controller
         //Ici on récupère les rendez vous des autres praticiens et médécin
         $user = Auth::user();
         $roleName = $user->getRoleNames()->first();
-        if ($roleName == 'Praticien' || $roleName == 'Medecin controle' || $roleName == 'Admin' || $roleName == 'Gestionnaire'){
+        if ($roleName == 'Praticien' || $roleName == 'Medecin controle' || $roleName == 'Admin' || $roleName == 'Gestionnaire' || $roleName == 'Assistante'){
 
             if (strpos($user->email,'@medicasure.com')){
                 $rdvDesAutres = RendezVous::with(['patient','praticien','sourceable','initiateur'])
