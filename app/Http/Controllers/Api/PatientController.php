@@ -180,35 +180,43 @@ class PatientController extends Controller
     public function specialList($value)
     {
         $result=[];
-        $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->get();
-
+        $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])
+                            ->restrictUser()
+                            ->whereHas('user', function($q) use ($value) {$q->where('nom', 'like', '%' .$value.'%')
+                                                                            ->orwhere('prenom', 'like', '%' .$value.'%')
+                                                                            ->orwhere('email', 'like', '%' .$value.'%')
+                                                                            ;})
+                            ->orwhereHas('dossier', function($q) use ($value) {$q->where('numero_dossier', 'like', '%' .$value.'%');})
+                            ->orwhere('age', 'like', '%' .$value.'%')
+                            ->get();
+        return $patients;
         // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
         // return $patients;
-        foreach($patients as $p){
+        // foreach($patients as $p){
             
-            if($p->user!=null){
+        //     if($p->user!=null){
                 
-                if(strpos(strtolower($p->user->nom),strtolower($value))!==false || 
-            strpos(strtolower($p->user->prenom),strtolower($value))!==false ||
-            strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false || 
-                    strpos(strtolower(strval($p->age)),strtolower($value))!==false ||
-            strpos(strtolower($p->user->email),strtolower($value))!==false) {
-                // return $p;
-                array_push($result,$p);
-                // return $result;
-            }
+        //         if(strpos(strtolower($p->user->nom),strtolower($value))!==false || 
+        //     strpos(strtolower($p->user->prenom),strtolower($value))!==false ||
+        //     strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false || 
+        //             strpos(strtolower(strval($p->age)),strtolower($value))!==false ||
+        //     strpos(strtolower($p->user->email),strtolower($value))!==false) {
+        //         // return $p;
+        //         array_push($result,$p);
+        //         // return $result;
+        //     }
             
             
-            }
-            else{
-                if(
-                    strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false || 
-                    strpos(strtolower(strval($p->age)),strtolower($value))!==false) 
-                    array_push($result,$p);
-            }
+        //     }
+        //     else{
+        //         if(
+        //             strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false || 
+        //             strpos(strtolower(strval($p->age)),strtolower($value))!==false) 
+        //             array_push($result,$p);
+        //     }
             
-        }
-        return $result;
+        // }
+        // return $result;
         
     }
 
