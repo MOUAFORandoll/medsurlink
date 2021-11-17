@@ -77,7 +77,7 @@ class PatientController extends Controller
 
         $age = evaluateYearOfOld($request->date_de_naissance);
 
-        $patient = Patient::create($request->except(['code_postal','quartier','question_id','reponse']) + ['user_id' => $user->id,'age'=>$age]);
+        $patient = Patient::create($request->except(['code_postal','quartier']) + ['user_id' => $user->id,'age'=>$age]);
 
         //Définition de la question secrete et de la reponse secrete
         ReponseSecrete::create($request->only(['question_id','reponse'])+['user_id' => $user->id]);
@@ -467,8 +467,8 @@ class PatientController extends Controller
             'numero_dossier'=>"required|string|exists:dossier_medicals,numero_dossier",
             'date_de_naissance'=>"required|date",
             'telephone'=>'required|string|min:9',
-            'question_id'=>'required|integer|exists:questions,id',
-            'reponse'=>'required|string|min:3'
+            'question_id'=>'integer|nullable',
+            'reponse'=>'nullable|string|min:3'
         ]);
 
         $dossier = DossierMedical::where('numero_dossier',$request->get('numero_dossier'))->first();
