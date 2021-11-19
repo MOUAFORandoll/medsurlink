@@ -31,7 +31,6 @@ class CreatePrescriptionValidationTable extends Migration
             $table->foreign('medecin_id')->references('id')->on('users')->onUpdate('RESTRICT')->onDelete('RESTRICT');
             $table->foreign('souscripteur_id')->references('user_id')->on('souscripteurs')->onDelete('RESTRICT')->onUpdate('RESTRICT');
             $table->foreign('motif_consultation_id')->references('id')->on('motifs')->onDelete('RESTRICT')->onUpdate('RESTRICT');
-            $table->foreign('examen_complementaire_id')->references('id')->on('examen_complementaire')->onDelete('RESTRICT')->onUpdate('RESTRICT');
         });
     }
 
