@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ConduiteTenir extends Model
 {
+    protected $table = 'cat';
+
     protected $fillable = [
         'conduite_a_tenir',
         'medecin_id',

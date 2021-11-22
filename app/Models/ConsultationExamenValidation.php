@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class ConsultationExamenValidation extends Model
 {
+    protected $table = 'consultation_examen_validation';
+
     protected $fillable = [
         'souscripteur_id',
         'examen_complementaire_id',
