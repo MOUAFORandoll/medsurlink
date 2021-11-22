@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCatTable extends Migration
+class CreatePrescriptionValidationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,20 +13,24 @@ class CreateCatTable extends Migration
      */
     public function up()
     {
-        Schema::create('cat', function (Blueprint $table) {
+        Schema::create('prescription_validation', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('conduite_a_tenir');
+            $table->unsignedBigInteger('souscripteur_id');
+            $table->unsignedBigInteger('traitement_propose');
             $table->unsignedBigInteger('medecin_id');
             $table->unsignedBigInteger('medecin_control_id');
-            $table->unsignedBigInteger('motif_consultation_id');
+            $table->unsignedBigInteger('ligne_de_temps_id');
             $table->boolean('etat_validation_medecin');
+            $table->boolean('etat_validation_souscripteur');
             $table->date('date_validation_medecin');
+            $table->date('date_validation_souscripteur');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('medecin_control_id')->references('user_id')->on('medecin_controles')->onDelete('RESTRICT')->onUpdate('RESTRICT');
             $table->foreign('medecin_id')->references('id')->on('users')->onUpdate('RESTRICT')->onDelete('RESTRICT');
-            $table->foreign('motif_consultation_id')->references('id')->on('motifs')->onDelete('RESTRICT')->onUpdate('RESTRICT');
+            $table->foreign('souscripteur_id')->references('user_id')->on('souscripteurs')->onDelete('RESTRICT')->onUpdate('RESTRICT');
+            $table->foreign('ligne_de_temps_id')->references('id')->on('ligne_de_temps')->onDelete('RESTRICT')->onUpdate('RESTRICT');
         });
     }
 
@@ -37,6 +41,6 @@ class CreateCatTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cat');
+        Schema::dropIfExists('prescription_validation');
     }
 }
