@@ -17,11 +17,13 @@ class CreateLigneDeTempsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('dossier_medical_id');
             $table->boolean('etat');
+            $table->unsignedBigInteger('motif_consultation_id');
             $table->date('date_consultation');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('dossier_medical_id')->references('id')->on('dossier_medicals')->onDelete('RESTRICT')->onUpdate('RESTRICT');
+            $table->foreign('motif_consultation_id')->references('id')->on('motifs')->onDelete('RESTRICT')->onUpdate('RESTRICT');
         });
     }
 
