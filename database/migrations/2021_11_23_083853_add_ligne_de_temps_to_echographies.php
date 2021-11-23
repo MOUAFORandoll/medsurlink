@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddLigneDeTempsToConsultationMedecineGeneraleTable extends Migration
+class AddLigneDeTempsToEchographies extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddLigneDeTempsToConsultationMedecineGeneraleTable extends Migration
      */
     public function up()
     {
-        Schema::table('consultation_medecine_generales', function (Blueprint $table) {
+        Schema::table('echographies', function (Blueprint $table) {
             $table->unsignedBigInteger('ligne_de_temps_id')->nullable();
             $table->foreign('ligne_de_temps_id')->references('id')->on('ligne_de_temps')->onDelete('RESTRICT')->onUpdate('RESTRICT');
         });
@@ -26,7 +26,7 @@ class AddLigneDeTempsToConsultationMedecineGeneraleTable extends Migration
      */
     public function down()
     {
-        Schema::table('consultation_medecine_generale', function (Blueprint $table) {
+        Schema::table('echographies', function (Blueprint $table) {
             $table->unsignedBigInteger('ligne_de_temps_id');
         });
     }
