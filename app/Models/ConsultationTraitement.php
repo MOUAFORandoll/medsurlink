@@ -13,5 +13,6 @@ class ConsultationTraitement extends Model
         "consultation_medecine_generale_id",
         "traitement_id",
         "date",
+        "ligne_de_temps_id"
     ];
 }

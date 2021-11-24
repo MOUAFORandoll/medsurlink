@@ -13,10 +13,10 @@ class PrescriptionValidation extends Model
         'traitement_propose',
         'medecin_id',
         'medecin_control_id',
-        'motif_consultation_id',
         'etat_validation_medecin',
         'etat_validation_medecin',
         'date_validation_medecin',
         'date_validation_souscripteur',
+        "ligne_de_temps_id"
     ];
 }

@@ -14,5 +14,6 @@ class DiagnosticValidation extends Model
         'medecin_control_id',
         'etat_validation_medecin',
         'date_validation_medecin',
+        'ligne_de_temps_id',
     ];
 }

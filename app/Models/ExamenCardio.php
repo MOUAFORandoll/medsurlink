@@ -19,6 +19,7 @@ class ExamenCardio extends Model
         "date_examen",
         "description",
         "slug",
+        "ligne_de_temps_id"
     ];
 
     public function sluggable()
