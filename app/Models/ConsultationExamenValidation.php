@@ -13,10 +13,14 @@ class ConsultationExamenValidation extends Model
         'examen_complementaire_id',
         'medecin_id',
         'medecin_control_id',
-        'motif_consultation_id',
+        'ligne_de_temps_id',
         'etat_validation_medecin',
         'etat_validation_souscripteur',
         'date_validation_medecin',
         'date_validation_souscripteur',
     ];
+
+    public function ligneDeTemps(){
+        return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
+    }
 }

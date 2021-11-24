@@ -38,6 +38,7 @@ class Cardiologie extends Model
         "creator",
         'archieved_at',
         'passed_at',
+        "ligne_de_temps_id",
     ];
     /**
      * Return the sluggable configuration array for this model.
@@ -58,6 +59,10 @@ class Cardiologie extends Model
 
     public function operationables(){
         return $this->morphMany(Contributeurs::class,'operationable');
+    }
+
+    public function ligneDeTemps(){
+        return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
     }
 
     public function dossier(){

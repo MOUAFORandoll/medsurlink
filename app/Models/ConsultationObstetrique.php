@@ -58,6 +58,7 @@ class ConsultationObstetrique extends Model
         "nle_anle",
         "sexe",
         "creator",
+        "ligne_de_temps_id"
     ];
 
     /**
@@ -92,6 +93,9 @@ class ConsultationObstetrique extends Model
 
     public function author (){
         return $this->belongsTo(User::class,'creator','id');
+    }
+    public function ligneDeTemps(){
+        return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
     }
     /**
      * The "booting" method of the model.

@@ -81,7 +81,8 @@ class ConsultationMedecineGenerale extends Model
         "examens",
         "anamneses",
         "anthropometrie",
-        "information"
+        "information",
+        "ligne_de_temps_id"
     ];
 
     public function dossier(){
@@ -112,7 +113,9 @@ class ConsultationMedecineGenerale extends Model
         return $this->belongsTo(User::class,'creator','id');
     }
 
-
+    public function ligneDeTemps(){
+        return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
+    }
     /**
      * The "booting" method of the model.
      *
