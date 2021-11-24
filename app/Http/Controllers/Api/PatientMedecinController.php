@@ -58,7 +58,6 @@ class PatientMedecinController extends Controller
             ]);
             //dd($patientMedecin);
             $patient = Patient::where("user_id",$request->patient_id)->first();
-            dd($patient);
             $medecin = User::whereId($request->medecin_control_id)->first();
             $message = "<@".$medecin->slack."> a été affecté au patient ".$patient->user->nom. " " .$patient->user->prenom." comme médecin referent";
             // Send notification to affilié channel
