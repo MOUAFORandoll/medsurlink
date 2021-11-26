@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ExamenEtablissementPrix;
 
-class ExamenEtablissementPrix extends Controller
+class ExamenEtablissementPrixController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,8 @@ class ExamenEtablissementPrix extends Controller
      */
     public function index()
     {
-        //
+        $examen_prix = ExamenEtablissementPrix::with(['examenComplementaire','otherExamenComplementaire','etablissement'])->get();
+        return response()->json(['examen_prix'=>$examen_prix]);
     }
 
     /**
@@ -35,7 +37,15 @@ class ExamenEtablissementPrix extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //dd($request->get('etablissement_exercices_id'));
+        $examen_prix =  ExamenEtablissementPrix::create([
+            'etablissement_exercices_id' =>$request->etablissement_exercices_id,
+            'examen_complementaire_id' =>$request->examen_complementaire_id,
+            'other_complementaire_id' =>$request->other_complementaire_id,
+            'prix' =>$request->prix,
+        ]);
+
+        return  response()->json(['examen_prix'=>$examen_prix]);
     }
 
     /**
@@ -46,7 +56,8 @@ class ExamenEtablissementPrix extends Controller
      */
     public function show($id)
     {
-        //
+        $examen_prix = ExamenEtablissementPrix::whereId($id)->with(['examenComplementaire','otherExamenComplementaire','etablissement'])->first();
+        return response()->json(['examen_prix'=>$examen_prix]);
     }
 
     /**
@@ -69,7 +80,12 @@ class ExamenEtablissementPrix extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        ExamenEtablissementPrix::whereId($id)->update(['prix'=>$request->get('prix')]);
+
+        $examen_prix = ExamenEtablissementPrix::whereId($id)->first();
+
+        return  response()->json(['examen_prix'=>$examen_prix]);
     }
 
     /**

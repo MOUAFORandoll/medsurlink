@@ -298,6 +298,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::resource('consultation-type','Api\ConsultationTypeController')->except(['create','edit']);
     Route::resource('souscripteur','Api\SouscripteurController')->except('show');
     Route::post('patient','Api\PatientController@store')->name('patient.store');
+    Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
     Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
     Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
@@ -336,6 +337,8 @@ Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin c
 
 // trajet patient
 Route::resource('ligne-temps','Api\LigneDeTempsController');
+Route::resource('examen-prix','Api\ExamenEtablissementPrixController');
 /*Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin controle|Assistante']], function () {
     Route::resource('ligne-temps','Api\LigneDeTempsController');
 });*/
+Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');

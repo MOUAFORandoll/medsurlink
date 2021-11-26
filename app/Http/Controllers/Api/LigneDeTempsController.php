@@ -44,12 +44,6 @@ class LigneDeTempsController extends Controller
         $contributeurs = $request->get('contributeurs');
         addContributors($contributeurs,$ligneDeTemps,'LigneDeTemps');
 
-        // Ajout du patient à l'établissement si celui n'était pas encore
-        //updatePatientInstitution($request->get('etablissement_id'),$ligneDeTemps);
-
-        // Mise à jour dossier medical
-        //$this->updateDossierId($ligneDeTemps->dossier->id);
-
         return response()->json(["ligne_temps" => $ligneDeTemps]);
     }
 
@@ -97,13 +91,6 @@ class LigneDeTempsController extends Controller
 
             $ligneDeTemps->whereId($id)->update($request->validated());
             defineAsAuthor("LigneDeTemps",$ligneDeTemps->id,'update',$ligneDeTemps->dossier->patient->user_id);
-
-            // Mise a jour de contributeurs
-            // $contributeurs = $request->get('contributeurs');
-            // updateConsultationContributors($contributeurs,$ligneDeTemps,'LigneDeTemps');
-
-            // Mise à jour de dossier medical
-            // $this->updateDossierId($ligneDeTemps->dossier->id);
 
             return response()->json(["ligne_temps" => $ligneDeTemps]);
         }

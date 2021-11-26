@@ -23,4 +23,10 @@ class ConsultationExamenValidation extends Model
     public function ligneDeTemps(){
         return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
     }
+    public function examenComplementaire(){
+        return $this->belongsTo(ExamenComplementaire::class,'examen_complementaire_id','id');
+    }
+    public function otherExamenComplementaire(){
+        return $this->belongsTo(OtherComplementaire::class,'examen_complementaire_id','id');
+    }
 }
