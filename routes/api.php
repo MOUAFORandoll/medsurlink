@@ -103,6 +103,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::put('activite-mission-add','Api\ActiviteController@ajouterMission');
     Route::delete('activite-mission-delete/{slug}','Api\ActiviteController@supprimerMission');
     Route::get('show-groupe-activite/{slug}','Api\ActiviteController@showGroupActivities');
+    Route::get('activite-ama/patient/{id}','Api\ActiviteController@getMissionAma');
 });
 
 
@@ -313,6 +314,14 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::delete('file/{file}','Api\FileController@destroy');
     Route::resource('financeur','Api\PatientSouscripteurController');
     Route::post('financeur/retirer','Api\PatientSouscripteurController@retirer');
+
+        // trajet patient
+    Route::resource('ligne-temps','Api\LigneDeTempsController');
+    Route::get('ligne-temps/dossier/{id}','Api\LigneDeTempsController@ligneDeTempsByDossier');
+    Route::resource('examen-prix','Api\ExamenEtablissementPrixController');
+    Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
+    Route::get('patient/{id}/contrat-medicasure','Api\LigneDeTempsController@patientContrat');
+    Route::get('trajet-patient/dossier/{id}','Api\LigneDeTempsController@getTrajetPatient');
 });
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Souscripteur|Assistante']], function () {
     Route::resource('souscripteur','Api\SouscripteurController')->only('update');
@@ -333,12 +342,7 @@ Route::get('other-complementaire','Api\OtherComplementaireController@index');
 Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin controle|Assistante']], function () {
     Route::resource('avis','Api\AvisController');
     Route::resource('rdvs','Api\RendezVousController');
+
 });
 
-// trajet patient
-Route::resource('ligne-temps','Api\LigneDeTempsController');
-Route::resource('examen-prix','Api\ExamenEtablissementPrixController');
-/*Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin controle|Assistante']], function () {
-    Route::resource('ligne-temps','Api\LigneDeTempsController');
-});*/
-Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
+

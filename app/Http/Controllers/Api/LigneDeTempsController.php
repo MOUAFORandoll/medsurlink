@@ -4,7 +4,18 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\LigneDeTempsRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ActiviteMission;
+use App\Models\Antecedent;
+use App\Models\Avis;
+use App\Models\Cardiologie;
+use App\Models\CompteRenduOperatoire;
+use App\Models\ConsultationFichier;
+use App\Models\ConsultationMedecineGenerale;
+use App\Models\ConsultationObstetrique;
+use App\Models\DossierMedical;
 use App\Models\LigneDeTemps;
+use App\Models\Patient;
+use Illuminate\Support\Facades\Auth;
 
 class LigneDeTempsController extends Controller
 {
@@ -65,6 +76,29 @@ class LigneDeTempsController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function ligneDeTempsByDossier($id)
+    {
+
+        $dossier = DossierMedical::whereSlug($id)->first();
+
+        $ligneDeTemps = LigneDeTemps::with([
+            'motif',
+            'dossier',
+            'prescriptionValidation',
+            'consultationObstetrique',
+            'cardiologie',
+            'consultationGeneral',
+            'kenesitherapie'
+        ])->where("dossier_medical_id",$dossier->id)->get();
+
+        return response()->json(["ligne_temps" => $ligneDeTemps]);
+    }
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -73,6 +107,56 @@ class LigneDeTempsController extends Controller
     public function edit($id)
     {
         //
+    }
+
+    /**
+     * get patient contrat from medicasure.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+    */
+    public function patientContrat($id)
+    {
+       $patient = Patient::where("user_id",$id)->first();
+       $contrat = getContrat($patient->user);
+       return response()->json($contrat);
+    }
+
+    /**
+     * get trajet patient .
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+    */
+    public function getTrajetPatient($id)
+    {
+        //Auth::loginUsingId(1);
+        $dossier = DossierMedical::whereSlug($id)
+         ->with(
+            "resultatsImagerie",
+            "resultatsLabo",
+            "hospitalisations",
+            "consultationsObstetrique",
+            "consultationsMedecine",
+            "allergies",
+            "antecedents",
+            "traitements",
+            "ordonances",
+            "cardiologies",
+            "comptesRenduOperatoire",
+            "kinesitherapies",
+            "avis",
+            "consultationsManuscrites")->first();
+
+       $patient = Patient::where('user_id', DossierMedical::whereSlug($id)->first()->patient_id)
+       ->with([
+           "medecinReferent",
+           "payments",
+           "dossier",
+           "rendezVous"])->first();
+        $contrat = getContrat($patient->user);
+       //dd($patient->dossier->id);
+       return response()->json(["cim" => $contrat,"dossier"=>$dossier,"patient"=>$patient]);
     }
 
     /**

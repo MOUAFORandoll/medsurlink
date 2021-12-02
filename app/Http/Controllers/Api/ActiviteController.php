@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ActiviteRequest;
 use App\Models\Activite;
+use App\Models\ActivitesAma;
 use App\Models\ActiviteMission;
 use App\Models\GroupeActivite;
 use Carbon\Carbon;
@@ -160,6 +161,14 @@ class ActiviteController extends Controller
         $mission = ActiviteMission::create($request->all());
         $mission = ActiviteMission::with('description','dossier.patient.user','createur')->whereSlug($mission->slug)->first();
         return response()->json(['mission'=>$mission]);
+    }
+
+    public function getMissionAma($id){
+        $mission = ActivitesAma::with([
+            'activites' => function($query) use ($id) {
+            $query->where('patient_id', '=',$id);}
+            ])->get();
+        return response()->json(['activites'=>$mission]);
     }
 
     public function supprimerMission($slug){
