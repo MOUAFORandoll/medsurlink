@@ -32,7 +32,7 @@ if(!function_exists('getContrat'))
         $client = new Client();
         $env = strtolower(config('app.env'));
         if ($env === 'local')
-            $url = 'http://localhost:8000/api/v1.0.0/get-contrat-by-name';
+            $url = 'http://localhost:8001/api/v1.0.0/get-contrat-by-name';
         else if ($env === 'staging')
             $url ='https://www.staging.medicasure.com/api/v1.0.0/get-contrat-by-name';
         else
