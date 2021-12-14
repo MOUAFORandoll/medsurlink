@@ -711,4 +711,9 @@ class PatientController extends Controller
         $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->whereHas('user', function($q) {$q->where('isMedicasure', '=', 1)->where('decede', '=', 'non');})->count();
         return response()->json(['count'=>$patients]);
     }
+    public function searchPatients(Request $request)
+    {
+        $data = User::with(['patient','patient.dossier'])->where('nom', 'LIKE','%'.$request->keyword.'%')->get();
+        return response()->json($data);
+    }
 }

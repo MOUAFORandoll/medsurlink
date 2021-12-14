@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ConsultationExamenValidation;
+use App\Models\ConsultationMedecineGenerale;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ConsultationExamenValidationController extends Controller
 {
@@ -15,10 +18,49 @@ class ConsultationExamenValidationController extends Controller
      */
     public function index()
     {
-        $examen_validation = ConsultationExamenValidation::with(['examenComplementaire','otherExamenComplementaire','etablissement'])->get();
+        $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])->whereNull('etat_validation_medecin')->distinct()->get(['consultation_general_id']);
         return response()->json(['examen_validation'=>$examen_validation]);
     }
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getListExamenToValidate($slug)
+    {
+        $consultation = ConsultationMedecineGenerale::whereSlug($slug)->first();
+        $etablissement = $consultation->etablissement_id;
+        $examen_validation = ConsultationExamenValidation::with(['examenComplementaire','etablissement','examenComplementaire.examenComplementairePrix' => function ($query) use ($etablissement) {
+            $query->where('etablissement_exercices_id', '=', $etablissement);
+        }])->where('consultation_general_id', '=', $consultation->id)->get();
+        return response()->json(['examen_validation'=>$examen_validation]);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getExamenValidationSouscripteur()
+    {
+        //$examen_validation = ConsultationExamenValidation::with(['examenComplementaire'])->where('souscripteur_id', '=',Auth::id())->get();
+        //return response()->json(['examen_validation'=>$examen_validation]);
+        $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
+        ->whereNull('etat_validation_souscripteur')
+        ->where('souscripteur_id', '=',Auth::id())
+        ->distinct()
+        ->get(['consultation_general_id']);
+        return response()->json(['examen_validation'=>$examen_validation]);
+    }
+    /**
+     * Count nomber of validation.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getCountInvalidation()
+    {
+        $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])->whereNull('etat_validation_medecin')->distinct()->get(['consultation_general_id']);;
+        return response()->json(['examen_validation'=>$examen_validation->count()]);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -51,7 +93,45 @@ class ConsultationExamenValidationController extends Controller
 
         return  response()->json(['examen_validation'=>$examen_validation]);
     }
-
+    /**
+     * Update medecin validation.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function setEtatValidationMedecin(Request $request)
+    {
+       // dd($request->get('examens'));
+        $examen_validation = ConsultationExamenValidation::whereIn('id',$request->get('examens'))->get();
+        foreach($examen_validation as $examen){
+            $examen->etat_validation_medecin = 1;
+            $examen->medecin_control_id = Auth::id();
+            $examen->date_validation_medecin = Carbon::now();
+            $examen->save();
+        }
+        ConsultationExamenValidation::whereNotIn('id',$request->get('examens'))
+        ->update([
+            'etat_validation_medecin' => 0,
+        ]);
+        return  response()->json(['examen_validation'=>$examen_validation]);
+    }
+    /**
+     * Update medecin validation.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function setEtatValidationSouscripteur(Request $request)
+    {
+       // dd($request->get('examens'));
+        $examen_validation = ConsultationExamenValidation::whereIn('id',$request->get('examens'))->get();
+        foreach($examen_validation as $examen){
+            $examen->etat_validation_souscripteur = 1;
+            $examen->date_validation_souscripteur = Carbon::now();
+            $examen->save();
+        }
+        return  response()->json(['examen_validation'=>$examen_validation]);
+    }
     /**
      * Display the specified resource.
      *

@@ -10,12 +10,10 @@ use App\Models\ExamenComplementaire;
 class ExamenComplementaireController extends Controller
 {
     public function index()
-    {    
-        $othercomplementaire = OtherComplementaire::get()->toArray();
-        $examencomplementaire = ExamenComplementaire::get()->toArray();
-        $fusion = array_merge($examencomplementaire,$othercomplementaire);
+    {
+        $examencomplementaire = ExamenComplementaire::all();
         return response()->json([
-            'examencomplementaire'=>$fusion
+            'examencomplementaire'=>$examencomplementaire
         ]);
     }
 }

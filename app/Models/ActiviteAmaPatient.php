@@ -60,9 +60,11 @@ class ActiviteAmaPatient extends Model
     public function createur(){
         return $this->belongsTo(User::class,'creator','id');
     }
-
+    public function updatedBy(){
+        return $this->belongsTo(User::class,'updated_by','id');
+    }
     public function patient(){
-        return $this->hasMany(User::class,'patient_id','id');
+        return $this->belongsTo(User::class,'patient_id','id');
     }
 
 }

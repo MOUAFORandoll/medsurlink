@@ -13,6 +13,7 @@ use App\Models\Contributeurs;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePatient;
 use App\Models\Motif;
+use App\Models\ConsultationExamenValidation;
 use App\Models\ParametreCommun;
 use App\Models\Patient;
 use App\Models\RendezVous;
@@ -28,6 +29,8 @@ use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
 use Psy\Util\Json;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use App\Message;
+use App\Events\MessageCreated;
 
 class ConsultationMedecineGeneraleController extends Controller
 {
@@ -119,6 +122,31 @@ class ConsultationMedecineGeneraleController extends Controller
                 ]);
             }
         }
+        $examens = $request->get('examen_complementaire');
+        //$examens_validation = array();
+        foreach (json_decode($examens) as $examen) {
+            //dd($examen->id);
+            $validation =  ConsultationExamenValidation::create([
+                'examen_complementaire_id'=>$examen->id,
+                'medecin_id'=>Auth::id(),
+                'souscripteur_id'=>$consultation->dossier->patient->souscripteur->user_id,
+                'consultation_general_id' => $consultation->id,
+                'etablissement'=>$request->get('etablissement_id'),
+                'ligne_de_temps_id'=>$request->get('ligne_de_temps_id'),
+            ]);
+            //array_push($examens_validation,$validation);
+        }
+        //dd($consultation->dossier->patient->medecinReferent);
+        $message = Message::create([
+            'body' => $examens,
+            'sender_id' => Auth::id(),
+            //'receiver_id' => $consultation->dossier->patient->medecinReferent->medecin_control_id,
+            'receiver_id' => Auth::id(),
+            'type' => 'Validation Examen'
+        ]);
+
+        /*broadcast(new MessageCreated($message))
+                ->toOthers();*/
 
         $motifs = $request->get('motifs');
         $motifs = explode(",", $motifs);

@@ -33,7 +33,9 @@ class ExamenComplementaire extends Model
             ]
         ];
     }
-
+    public function examenComplementairePrix(){
+        return $this->hasMany(ExamenEtablissementPrix::class,'examen_complementaire_id','id');
+    }
     public function getDossierAndTimestampAttribute() {
         return Str::random(10) . ' ' .Carbon::now()->timestamp;
     }
