@@ -179,7 +179,7 @@ class ActiviteController extends Controller
        // return response()->json(['activites'=>$mission]);
     }
     public function getListMission(){
-        $mission = ActivitesAma::all();
+        $mission = ActivitesAma::where('type','MANUELLE')->get();
         return response()->json(['activites'=>$mission]);
     }
     public function supprimerMission($slug){
