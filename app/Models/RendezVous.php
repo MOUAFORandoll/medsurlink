@@ -28,7 +28,8 @@ class RendezVous extends Model
         "date",
         "statut",
         "slug",
-        "nom_medecin"
+        "nom_medecin",
+        "ligne_de_temps_id"
     ];
 
     protected $hidden = ['initiateur','updated_at'];

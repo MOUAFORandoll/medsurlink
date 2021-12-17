@@ -8,7 +8,7 @@ if(!function_exists('paiementMomo'))
         $client = new Client();
         $env = strtolower(config('app.env'));
         if ($env === 'local')
-            $url = 'http://localhost:8001/api/v1.0.0/momo/paid';
+            $url = 'http://localhost:8000/api/v1.0.0/momo/paid';
         else if ($env === 'staging')
             $url ='https://www.staging.medicasure.com/api/v1.0.1/momo/paid';
         else
@@ -41,7 +41,7 @@ if(!function_exists('paiementOM'))
         $client = new Client();
         $env = strtolower(config('app.env'));
         if ($env === 'local')
-            $url = 'http://localhost:8001/api/v1.0.0/om/paid';
+            $url = 'http://localhost:8000/api/v1.0.0/om/paid';
         else if ($env === 'staging')
             $url ='https://www.staging.medicasure.com/api/v1.0.1/om/paid';
         else

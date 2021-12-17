@@ -15,7 +15,7 @@ class ExamenEtablissementPrixController extends Controller
      */
     public function index()
     {
-        $examen_prix = ExamenEtablissementPrix::with(['examenComplementaire','otherExamenComplementaire','etablissement'])->get();
+        $examen_prix = ExamenEtablissementPrix::with(['examenComplementaire','etablissement'])->get();
         return response()->json(['examen_prix'=>$examen_prix]);
     }
 
@@ -41,7 +41,7 @@ class ExamenEtablissementPrixController extends Controller
         $examen_prix =  ExamenEtablissementPrix::create([
             'etablissement_exercices_id' =>$request->etablissement_exercices_id,
             'examen_complementaire_id' =>$request->examen_complementaire_id,
-            'other_complementaire_id' =>$request->other_complementaire_id,
+            // 'other_complementaire_id' =>$request->other_complementaire_id,
             'prix' =>$request->prix,
         ]);
 
@@ -56,7 +56,7 @@ class ExamenEtablissementPrixController extends Controller
      */
     public function show($id)
     {
-        $examen_prix = ExamenEtablissementPrix::whereId($id)->with(['examenComplementaire','otherExamenComplementaire','etablissement'])->first();
+        $examen_prix = ExamenEtablissementPrix::whereId($id)->with(['examenComplementaire','etablissement'])->first();
         return response()->json(['examen_prix'=>$examen_prix]);
     }
 
