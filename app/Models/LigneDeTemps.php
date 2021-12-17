@@ -22,7 +22,6 @@ class LigneDeTemps extends Model
     public function dossier(){
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }
-
     public function  motif(){
         return $this->belongsTo(Motif::class,'motif_consultation_id','id');
     }
@@ -30,7 +29,7 @@ class LigneDeTemps extends Model
         return $this->belongsTo(Kinesitherapie::class,'ligne_de_temps_id','id');
     }
     public function  consultationGeneral(){
-        return $this->belongsTo(ConsultationMedecineGenerale::class,'ligne_de_temps_id','id');
+        return $this->hasMany(ConsultationMedecineGenerale::class,'ligne_de_temps_id','id');
     }
     public function  cardiologie(){
         return $this->belongsTo(Cardiologie::class,'ligne_de_temps_id','id');
@@ -40,5 +39,8 @@ class LigneDeTemps extends Model
     }
     public function  prescriptionValidation(){
         return $this->belongsTo(PrescriptionValidation::class,'ligne_de_temps_id','id');
+    }
+    public function  validations(){
+        return $this->hasMany(ConsultationExamenValidation::class,'ligne_de_temps_id','id');
     }
 }

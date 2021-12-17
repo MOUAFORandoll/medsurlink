@@ -7,6 +7,7 @@ use App\Http\Requests\ActiviteRequest;
 use App\Models\Activite;
 use App\Models\ActivitesAma;
 use App\Models\ActiviteMission;
+use App\Models\ActiviteAmaPatient;
 use App\Models\GroupeActivite;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -164,13 +165,23 @@ class ActiviteController extends Controller
     }
 
     public function getMissionAma($id){
-        $mission = ActivitesAma::with([
-            'activites' => function($query) use ($id) {
-            $query->where('patient_id', '=',$id);}
-            ])->get();
+        $mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->get();
         return response()->json(['activites'=>$mission]);
     }
-
+    public function saveMissions(Request $request){
+        dd($request);
+        //$mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->get();
+       // return response()->json(['activites'=>$mission]);
+    }
+    public function createMissions(Request $request){
+        dd($request);
+        //$mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->get();
+       // return response()->json(['activites'=>$mission]);
+    }
+    public function getListMission(){
+        $mission = ActivitesAma::all();
+        return response()->json(['activites'=>$mission]);
+    }
     public function supprimerMission($slug){
         $this->validatedSlug($slug,'activite_missions');
         $mission = ActiviteMission::with('description','dossier.patient.user','createur')->whereSlug($slug)->first();

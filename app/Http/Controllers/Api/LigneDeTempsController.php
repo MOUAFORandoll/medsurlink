@@ -93,7 +93,8 @@ class LigneDeTempsController extends Controller
             'consultationObstetrique',
             'cardiologie',
             'consultationGeneral',
-            'kenesitherapie'
+            'kenesitherapie',
+            'validations'
         ])->where("dossier_medical_id",$dossier->id)->get();
 
         return response()->json(["ligne_temps" => $ligneDeTemps]);
@@ -138,6 +139,7 @@ class LigneDeTempsController extends Controller
             "hospitalisations",
             "consultationsObstetrique",
             "consultationsMedecine",
+            "consultationsMedecine.validations",
             "allergies",
             "antecedents",
             "traitements",

@@ -13,15 +13,13 @@ class ConsultationExamenValidation extends Model
         'examen_complementaire_id',
         'medecin_id',
         'medecin_control_id',
-<<<<<<< HEAD
+        "etablissement_id",
         'ligne_de_temps_id',
-=======
->>>>>>> d6be2799fd64fb28c1cef67a41fe9690960bf331
         'etat_validation_medecin',
         'etat_validation_souscripteur',
         'date_validation_medecin',
         'date_validation_souscripteur',
-        'ligne_de_temps_id'
+        'consultation_general_id'
     ];
 
     public function ligneDeTemps(){
@@ -30,7 +28,10 @@ class ConsultationExamenValidation extends Model
     public function examenComplementaire(){
         return $this->belongsTo(ExamenComplementaire::class,'examen_complementaire_id','id');
     }
-    public function otherExamenComplementaire(){
-        return $this->belongsTo(OtherComplementaire::class,'examen_complementaire_id','id');
+    public function etablissement(){
+        return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
+    }
+    public function consultation(){
+        return $this->belongsTo(ConsultationMedecineGenerale::class,'consultation_general_id','id');
     }
 }

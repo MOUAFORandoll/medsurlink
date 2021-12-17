@@ -116,6 +116,9 @@ class ConsultationMedecineGenerale extends Model
     public function ligneDeTemps(){
         return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
     }
+    public function  validations(){
+        return $this->hasMany(ConsultationExamenValidation::class,'consultation_general_id','id');
+    }
     /**
      * The "booting" method of the model.
      *

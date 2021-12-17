@@ -192,7 +192,10 @@ class User extends Authenticatable
     public function assistante(){
         return $this->hasOne(Assistante::class,'user_id','id');
     }
-
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
     /**
      * Send the password reset notification.
      *
