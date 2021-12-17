@@ -331,12 +331,14 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::resource('ligne-temps','Api\LigneDeTempsController');
     Route::get('ligne-temps/dossier/{id}','Api\LigneDeTempsController@ligneDeTempsByDossier');
     Route::resource('examen-prix','Api\ExamenEtablissementPrixController');
+    Route::post('examen-prix/etablissement/save','Api\ExamenEtablissementPrixController@storeMultiple');
     Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
     Route::get('patient/{id}/contrat-medicasure','Api\LigneDeTempsController@patientContrat');
     Route::get('trajet-patient/dossier/{id}','Api\LigneDeTempsController@getTrajetPatient');
 });
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Souscripteur|Assistante']], function () {
     Route::resource('souscripteur','Api\SouscripteurController')->only('update');
+    Route::get('examen-complementaire/etablissement/{id}','Api\ExamenEtablissementPrixController@getByEtablissement');
 });
 // store souscripteur from medicasure
 Route::resource('medicasure/souscripteur','Api\MedicasureController');
@@ -349,6 +351,7 @@ Route::get('snomed-icd/map/{string}','Api\SnomedIcdController@find');
 Route::get('anamnese','Api\AnamneseController@index');
 Route::get('examen-clinic','Api\ExamenClinicController@index');
 Route::get('examen-complementaire','Api\ExamenComplementaireController@index');
+
 Route::get('other-complementaire','Api\OtherComplementaireController@index');
 
 Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin controle|Assistante']], function () {

@@ -123,14 +123,16 @@ class ConsultationExamenValidationController extends Controller
      */
     public function setEtatValidationSouscripteur(Request $request)
     {
-       // dd($request->get('examens'));
-        $examen_validation = ConsultationExamenValidation::whereIn('id',$request->get('examens'))->get();
-        foreach($examen_validation as $examen){
-            $examen->etat_validation_souscripteur = 1;
-            $examen->date_validation_souscripteur = Carbon::now();
-            $examen->save();
+
+        $examens = $request->get('examens');
+        //$examen_validation = $request->get('examens');
+        foreach($examens as $examen){
+            $query = ConsultationExamenValidation::whereId($examen['id'])->first();
+            $query->etat_validation_souscripteur = 1;
+            $query->date_validation_souscripteur = Carbon::now();
+            $query->save();
         }
-        return  response()->json(['examen_validation'=>$examen_validation]);
+        return  response()->json(['examen_validation'=>true]);
     }
     /**
      * Display the specified resource.

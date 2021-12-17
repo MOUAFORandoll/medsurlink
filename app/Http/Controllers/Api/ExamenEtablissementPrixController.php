@@ -47,7 +47,26 @@ class ExamenEtablissementPrixController extends Controller
 
         return  response()->json(['examen_prix'=>$examen_prix]);
     }
-
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeMultiple(Request $request)
+    {
+        //dd($request->get('examen_complementaire'));
+        $examens = $request->get('examen_complementaire');
+        foreach($examens as $examen){
+            //dd($examen);
+            ExamenEtablissementPrix::create([
+                'etablissement_exercices_id' =>$request->get('etablissement_id'),
+                'examen_complementaire_id' =>$examen['id'],
+                'prix' =>$examen['prix'],
+            ]);
+        }
+        return  response()->json(['statut'=>true]);
+    }
     /**
      * Display the specified resource.
      *
@@ -59,7 +78,17 @@ class ExamenEtablissementPrixController extends Controller
         $examen_prix = ExamenEtablissementPrix::whereId($id)->with(['examenComplementaire','otherExamenComplementaire','etablissement'])->first();
         return response()->json(['examen_prix'=>$examen_prix]);
     }
-
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getByEtablissement($id)
+    {
+        $examen_prix = ExamenEtablissementPrix::where('etablissement_exercices_id',$id)->with(['examenComplementaire','etablissement'])->get();
+        return response()->json(['examen_prix'=>$examen_prix]);
+    }
     /**
      * Show the form for editing the specified resource.
      *

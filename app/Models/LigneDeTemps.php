@@ -40,4 +40,7 @@ class LigneDeTemps extends Model
     public function  prescriptionValidation(){
         return $this->belongsTo(PrescriptionValidation::class,'ligne_de_temps_id','id');
     }
+    public function  validations(){
+        return $this->hasMany(ConsultationExamenValidation::class,'ligne_de_temps_id','id');
+    }
 }
