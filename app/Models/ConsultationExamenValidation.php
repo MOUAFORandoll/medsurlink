@@ -13,11 +13,15 @@ class ConsultationExamenValidation extends Model
         'examen_complementaire_id',
         'medecin_id',
         'medecin_control_id',
+<<<<<<< HEAD
         'ligne_de_temps_id',
+=======
+>>>>>>> d6be2799fd64fb28c1cef67a41fe9690960bf331
         'etat_validation_medecin',
         'etat_validation_souscripteur',
         'date_validation_medecin',
         'date_validation_souscripteur',
+        'ligne_de_temps_id'
     ];
 
     public function ligneDeTemps(){

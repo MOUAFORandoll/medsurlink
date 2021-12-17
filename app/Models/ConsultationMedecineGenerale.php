@@ -82,7 +82,7 @@ class ConsultationMedecineGenerale extends Model
         "anamneses",
         "anthropometrie",
         "information",
-        "ligne_de_temps_id"
+        "ligne_de_temps_id",
     ];
 
     public function dossier(){

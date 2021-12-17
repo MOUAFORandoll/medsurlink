@@ -13,6 +13,7 @@ class ExamenEtablissementPrix extends Model
         'examen_complementaire_id',
         'other_complementaire_id',
         'prix',
+        'ligne_de_temps_id'
     ];
     public function etablissement(){
         return $this->belongsTo(EtablissementExercice::class,'etablissement_exercices_id','id');

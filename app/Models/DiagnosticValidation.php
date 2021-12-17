@@ -16,6 +16,7 @@ class DiagnosticValidation extends Model
         'ligne_de_temps_id',
         'etat_validation_medecin',
         'date_validation_medecin',
+        'ligne_de_temps_id',
     ];
     public function ligneDeTemps(){
         return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
