@@ -373,7 +373,8 @@
                 </div>
                 @endforeach
             @endif
-        @else
+        @endif
+        @if(!is_null($anamese))
         <h4 class="sous-titre-rapport">Anamnèse</h4>
         <div class="row">
             {!!$consultationMedecine->anamese!!}
