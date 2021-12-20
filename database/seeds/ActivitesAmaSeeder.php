@@ -17,9 +17,6 @@ class ActivitesAmaSeeder extends Seeder
             'Encodage des RDV du Patient selon Procédure adéquate',
             'Gestion de l’alerte médicale selon Procédure adéquate',
             'Transmission éventuelle d’un lien du Dossier médical en externe',
-            'Vérification de l’existence de l’affilié dans « Suivi des Patients » - « PEC »',
-            'Vérification de l’existence d’un rendez-vous dont le motif est « 2ème Consultation Médecine générale préventive planifié a la création du patient »'
-
         ];
         $manuelles = [
             'Réception d’une alerte médicale venant de l’affilié',
