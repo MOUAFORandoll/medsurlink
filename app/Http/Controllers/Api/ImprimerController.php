@@ -83,12 +83,11 @@ class ImprimerController extends Controller
         $mContributeurs = MedecinControle::with('user')->whereIn('user_id',$cContributeurs)->get();
 
         if(isJSON($consultationMedecine->examen_complementaire)){
-            dd($consultationMedecine->examen_complementaire);
             $examen_complementaire = _group_by(json_decode($consultationMedecine->examen_complementaire, true),"reference");
         }else if(is_array($consultationMedecine->examen_complementaire)){
             $examen_complementaire = _group_by($consultationMedecine->examen_complementaire,"reference");
-        }else if(is_string($consultationMedecine->examen_complementaire)){
-            $examen_complementaire = $consultationMedecine->examen_complementaire;
+        }else if(is_string($consultationMedecine->complementaire)){
+            $complementaire = $consultationMedecine->complementaire;
         }else{
             $examen_complementaire = null;
         }
@@ -121,6 +120,12 @@ class ImprimerController extends Controller
             $anamese = $consultationMedecine->anamese;
         }
 
+        if(!is_null($consultationMedecine->complementaire)){
+            $complementaire = $consultationMedecine->complementaire;
+        }else{
+            $complementaire = $consultationMedecine->complementaire;
+        }
+
             
 
         // if(is_string($consultationMedecine->anamneses)){
@@ -137,7 +142,7 @@ class ImprimerController extends Controller
         }
 
         //dd($diasgnostic);
-        $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs','examen_complementaire','examen_clinique','anamneses','diasgnostic','anamese');
+        $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs','examen_complementaire','examen_clinique','anamneses','diasgnostic','anamese','complementaire');
         $pdf = PDF::loadView('rapport',$data);
 
         $nom  = patientLastName($consultationMedecine);

@@ -62,6 +62,7 @@ class ConsultationMedecineGenerale extends Model
         'slug',
         "examen_clinique",
         "examen_complementaire",
+        "complementaire",
         'traitement_propose',
         "profession",
         "situation_familiale",
