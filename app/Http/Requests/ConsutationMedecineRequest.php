@@ -29,6 +29,7 @@ class ConsutationMedecineRequest extends FormRequest
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
             "conclusions"=>"sometimes|nullable|string|min:2",
             "anamese"=>"sometimes|nullable|string|min:5",
+            "complementaire"=>"sometimes|nullable|string|min:5",
             "mode_de_vie"=>"sometimes|nullable|string|min:5",
             "examen_clinique"=>"sometimes|nullable|string|min:2",
             "examen_complementaire"=>"sometimes|nullable|string|min:2",

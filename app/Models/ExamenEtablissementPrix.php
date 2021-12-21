@@ -13,5 +13,6 @@ class ExamenEtablissementPrix extends Model
         'examen_complementaire_id',
         'other_complementaire_id',
         'prix',
+        'ligne_de_temps_id'
     ];
 }

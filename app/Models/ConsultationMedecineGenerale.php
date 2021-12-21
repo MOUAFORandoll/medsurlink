@@ -62,6 +62,7 @@ class ConsultationMedecineGenerale extends Model
         'slug',
         "examen_clinique",
         "examen_complementaire",
+        "complementaire",
         'traitement_propose',
         "profession",
         "situation_familiale",
@@ -81,7 +82,8 @@ class ConsultationMedecineGenerale extends Model
         "examens",
         "anamneses",
         "anthropometrie",
-        "information"
+        "information",
+        "ligne_de_temps_id",
     ];
 
     public function dossier(){

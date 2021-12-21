@@ -373,7 +373,8 @@
                 </div>
                 @endforeach
             @endif
-        @else
+        @endif
+        @if(!is_null($anamese))
         <h4 class="sous-titre-rapport">Anamnèse</h4>
         <div class="row">
             {!!$consultationMedecine->anamese!!}
@@ -394,7 +395,8 @@
                 </div>
                 @endforeach
             @endif
-            @else
+        @endif
+        @if(!is_null($examen_clinique))
             <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4>
             <div class="row">
                 {!!$consultationMedecine->examen_clinique!!}
@@ -413,9 +415,11 @@
                     </div>
                 </div>
                 @endforeach
-            @else
+            @endif
+            @if(!is_null($complementaire))
+                <h4 class="sous-titre-rapport">Examen(s) complémentaire(s)</h4>
                 <div class="row">
-                    {!!$examen_complementaire!!}
+                    {!!$consultationMedecine->complementaire!!}
                 </div>
             @endif
         @endif

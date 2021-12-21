@@ -38,6 +38,7 @@ class Cardiologie extends Model
         "creator",
         'archieved_at',
         'passed_at',
+        "ligne_de_temps_id"
     ];
     /**
      * Return the sluggable configuration array for this model.

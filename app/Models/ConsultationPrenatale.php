@@ -51,6 +51,7 @@ class ConsultationPrenatale extends Model
         'slug',
         "examen_clinique",
         "examen_complementaire",
+        "ligne_de_temps_id"
     ];
 
     public function parametresObstetrique(){

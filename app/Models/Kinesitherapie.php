@@ -32,6 +32,7 @@ class Kinesitherapie extends Model
       "slug",
       "archieved_at",
       "passed_at",
+      "ligne_de_temps_id"
     ];
 
     /**

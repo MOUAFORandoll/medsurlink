@@ -35,6 +35,7 @@ class Hospitalisation extends Model
         'passed_at',
         'etablissement_id',
         'creator',
+        "ligne_de_temps_id"
     ];
     use Sluggable;
     use SluggableScopeHelpers;

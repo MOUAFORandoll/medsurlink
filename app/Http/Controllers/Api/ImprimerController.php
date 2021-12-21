@@ -86,19 +86,21 @@ class ImprimerController extends Controller
             $examen_complementaire = _group_by(json_decode($consultationMedecine->examen_complementaire, true),"reference");
         }else if(is_array($consultationMedecine->examen_complementaire)){
             $examen_complementaire = _group_by($consultationMedecine->examen_complementaire,"reference");
-        }else if(is_string($consultationMedecine->examen_complementaire)){
-            $examen_complementaire = $consultationMedecine->examen_complementaire;
+        }else if(is_string($consultationMedecine->complementaire)){
+            $complementaire = $consultationMedecine->complementaire;
         }else{
             $examen_complementaire = null;
         }
 
 
-        if(isJSON($consultationMedecine->examens)){
+        if(isJSON($consultationMedecine->examen_clinique)){
+            // dd($consultationMedecine->examen_clinique);
             $examen_clinique = _group_by(json_decode($consultationMedecine->examens, true),"reference");
         }else if(is_array($consultationMedecine->examens)){
             $examen_clinique = _group_by($consultationMedecine->examens,"reference");
         }else if(is_string($consultationMedecine->examens)){
-            $examen_clinique = $consultationMedecine->examens;
+            $examen_clinique = $consultationMedecine->examen_clinique;
+            // dd($examen_clinique);
         }else{
             $examen_clinique = $consultationMedecine->examens;
         }
@@ -110,9 +112,27 @@ class ImprimerController extends Controller
 
         if(!is_null($consultationMedecine->anamneses)){
           $anamneses = _group_by(is_array($consultationMedecine->anamneses)?$consultationMedecine->anamneses:json_decode($consultationMedecine->anamneses, true),"reference");
-        }else{
-            $anamneses = null;
         }
+
+        if(!is_null($consultationMedecine->anamese)){
+            $anamese = $consultationMedecine->anamese;
+        }else{
+            $anamese = $consultationMedecine->anamese;
+        }
+
+        if(!is_null($consultationMedecine->complementaire)){
+            $complementaire = $consultationMedecine->complementaire;
+        }else{
+            $complementaire = $consultationMedecine->complementaire;
+        }
+
+            
+
+        // if(is_string($consultationMedecine->anamneses)){
+        //     $anamneses = $consultationMedecine->anamneses;
+        // }else{
+        //     $anamneses = $consultationMedecine->anamneses;
+        // }
         // dd($consultationMedecine);
 
         if(!is_null($consultationMedecine->diasgnostic)){
@@ -122,7 +142,7 @@ class ImprimerController extends Controller
         }
 
         //dd($diasgnostic);
-        $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs','examen_complementaire','examen_clinique','anamneses','diasgnostic');
+        $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs','examen_complementaire','examen_clinique','anamneses','diasgnostic','anamese','complementaire');
         $pdf = PDF::loadView('rapport',$data);
 
         $nom  = patientLastName($consultationMedecine);

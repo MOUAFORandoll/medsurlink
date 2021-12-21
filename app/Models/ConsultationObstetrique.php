@@ -58,6 +58,7 @@ class ConsultationObstetrique extends Model
         "nle_anle",
         "sexe",
         "creator",
+        "ligne_de_temps_id",
     ];
 
     /**
