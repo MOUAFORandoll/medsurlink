@@ -395,7 +395,8 @@
                 </div>
                 @endforeach
             @endif
-            @else
+        @endif
+        @if(!is_null($examens))
             <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4>
             <div class="row">
                 {!!$consultationMedecine->examen_clinique!!}

@@ -83,6 +83,7 @@ class ImprimerController extends Controller
         $mContributeurs = MedecinControle::with('user')->whereIn('user_id',$cContributeurs)->get();
 
         if(isJSON($consultationMedecine->examen_complementaire)){
+            dd($consultationMedecine->examen_complementaire);
             $examen_complementaire = _group_by(json_decode($consultationMedecine->examen_complementaire, true),"reference");
         }else if(is_array($consultationMedecine->examen_complementaire)){
             $examen_complementaire = _group_by($consultationMedecine->examen_complementaire,"reference");
@@ -93,13 +94,14 @@ class ImprimerController extends Controller
         }
 
 
-        if(isJSON($consultationMedecine->examens)){
+        if(isJSON($consultationMedecine->examen_clinique)){
             // dd($consultationMedecine->examen_clinique);
             $examen_clinique = _group_by(json_decode($consultationMedecine->examens, true),"reference");
         }else if(is_array($consultationMedecine->examens)){
             $examen_clinique = _group_by($consultationMedecine->examens,"reference");
         }else if(is_string($consultationMedecine->examens)){
-            $examen_clinique = $consultationMedecine->examens;
+            $examen_clinique = $consultationMedecine->examen_clinique;
+            // dd($examen_clinique);
         }else{
             $examen_clinique = $consultationMedecine->examens;
         }
