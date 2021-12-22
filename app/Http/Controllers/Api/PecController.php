@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Pec;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class PecController extends Controller
 {
@@ -45,6 +46,7 @@ class PecController extends Controller
             'etablissement_id'=>'integer|nullable'
         ]);
         $pec = new Pec;
+        $pec->creator = Auth::id();
         $pec->patient_id = $request->patient_id;
         $pec->etablissement_id = $request->etablissement_id;
         $pec->save();
