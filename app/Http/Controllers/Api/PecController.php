@@ -16,7 +16,8 @@ class PecController extends Controller
      */
     public function index()
     {
-        //
+        $pecs = Pec::with('etablissements','user')->get();
+        return  response()->json(['pec'=>$pecs]);
     }
 
     /**

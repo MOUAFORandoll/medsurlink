@@ -103,7 +103,11 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::put('activite-mission-add','Api\ActiviteController@ajouterMission');
     Route::post('/activite-ama/save','Api\ActiviteController@saveMissions');
     Route::post('/activite-ama/create','Api\ActiviteController@createMissions');
-    Route::post('/activite-pec/pec','Api\PecController@store');
+    // Route::resource('/activite-pec','Api\PecController');
+    Route::post('/activite-pec','Api\PecController@store');
+    Route::get('/activite-pec-list','Api\PecController@index');
+    // Route::post('/activite-pec/list','Api\PecController@index')->name('index');
+    // Route::resource('activite-pec','Api\AssistanteController');
 
     Route::get('/chat', 'Api\ChatController@index')->name('chat');
     Route::get('/message', 'Api\MessageController@index')->name('message.index');
