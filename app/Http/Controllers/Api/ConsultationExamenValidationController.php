@@ -30,7 +30,7 @@ class ConsultationExamenValidationController extends Controller
     {
         $consultation = ConsultationMedecineGenerale::whereSlug($slug)->first();
         $etablissement = $consultation->etablissement_id;
-        $examen_validation = ConsultationExamenValidation::with(['examenComplementaire','etablissement','examenComplementaire.examenComplementairePrix' => function ($query) use ($etablissement) {
+        $examen_validation = ConsultationExamenValidation::with(['consultation.dossier.patient.user','examenComplementaire','etablissement','examenComplementaire.examenComplementairePrix' => function ($query) use ($etablissement) {
             $query->where('etablissement_exercices_id', '=', $etablissement);
         }])->where('consultation_general_id', '=', $consultation->id)->get();
         return response()->json(['examen_validation'=>$examen_validation]);
@@ -89,6 +89,7 @@ class ConsultationExamenValidationController extends Controller
             'etat_validation_souscripteur'=>$request->get('etat_validation_souscripteur'),
             'date_validation_medecin'=>$request->get('date_validation_medecin'),
             'date_validation_souscripteur'=>$request->get('date_validation_souscripteur'),
+            'version'=>1
         ]);
 
         return  response()->json(['examen_validation'=>$examen_validation]);
@@ -125,12 +126,22 @@ class ConsultationExamenValidationController extends Controller
     {
 
         $examens = $request->get('examens');
-        //$examen_validation = $request->get('examens');
-        foreach($examens as $examen){
-            $query = ConsultationExamenValidation::whereId($examen['id'])->first();
-            $query->etat_validation_souscripteur = 1;
-            $query->date_validation_souscripteur = Carbon::now();
-            $query->save();
+        $examens_id = array_column($examens, 'id');
+        if(count($examens) > 0){
+            $examen_validation = ConsultationExamenValidation::where("consultation_general_id",$examens[0]['consultation'])->get();
+            foreach($examen_validation as $examen){
+                if(in_array($examen->id, $examens_id)){
+                    $examen->etat_validation_souscripteur = 1;
+                    $examen->version = $examen->version+1;
+                    $examen->date_validation_souscripteur = Carbon::now();
+                    $examen->save();
+                }else{
+                    $examen->etat_validation_souscripteur = 0;
+                    $examen->version = $examen->version+1;
+                    $examen->date_validation_souscripteur = Carbon::now();
+                    $examen->save();
+                }
+            }
         }
         return  response()->json(['examen_validation'=>true]);
     }

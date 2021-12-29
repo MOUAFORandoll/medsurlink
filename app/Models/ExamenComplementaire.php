@@ -12,7 +12,7 @@ class ExamenComplementaire extends Model
 {
     use Sluggable;
     use SoftDeletes;
-    protected $table = 'examen_complementaires';
+    protected $table = 'examen_complementaire';
     protected $fillable = [
         "fr_description",
         "en_description",
