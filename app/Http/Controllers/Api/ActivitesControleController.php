@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\ActivitesMedecinReferent;
 
-class ActivitesMedecinReferentController extends Controller
+class ActivitesControleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +15,7 @@ class ActivitesMedecinReferentController extends Controller
      */
     public function index()
     {
-        $medref = ActivitesMedecinReferent::with('etablissements','user')->get();
-        return  response()->json([
-            'pec' => $medref,
-        ]);
+        //
     }
 
     /**
@@ -32,11 +28,6 @@ class ActivitesMedecinReferentController extends Controller
         //
     }
 
-    public function getListActivites(){
-        $mission = ActivitesMedecinReferent::where('type','MANUELLE')->get();
-        return response()->json(['activites'=>$mission]);
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -45,16 +36,28 @@ class ActivitesMedecinReferentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'commentaire'=>'integer|nullable',
+            'activite_id'=>'integer|required'
+        ]);
+        $med = new ActivitesControleController;
+        $med->creator = Auth::id();
+        $med->activite_id = $request->activite_id;
+        $med->statut = $request->statut;
+        $med->commentaire = $request->commentaire;
+        $med->date_cloture = $request->date_cloture;
+        $med->save();
+
+        return response()->json(['medReferent'=>$med]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\ActivitesMedecinReferent  $activitesMedecinReferent
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(ActivitesMedecinReferent $activitesMedecinReferent)
+    public function show($id)
     {
         //
     }
@@ -62,10 +65,10 @@ class ActivitesMedecinReferentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\ActivitesMedecinReferent  $activitesMedecinReferent
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(ActivitesMedecinReferent $activitesMedecinReferent)
+    public function edit($id)
     {
         //
     }
@@ -74,10 +77,10 @@ class ActivitesMedecinReferentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\ActivitesMedecinReferent  $activitesMedecinReferent
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ActivitesMedecinReferent $activitesMedecinReferent)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -85,10 +88,10 @@ class ActivitesMedecinReferentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\ActivitesMedecinReferent  $activitesMedecinReferent
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ActivitesMedecinReferent $activitesMedecinReferent)
+    public function destroy($id)
     {
         //
     }

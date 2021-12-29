@@ -13,6 +13,7 @@ class Pec extends Model
         "patient_id",
         "etablissement_id",
         "creator",
+        "date_cloture"
     ];
 
     public function createur(){

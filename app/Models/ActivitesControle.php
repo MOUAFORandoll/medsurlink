@@ -8,18 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ActivitesMedecinReferent extends Model
+class ActivitesControle extends Model
 {
     use Sluggable;
     use SoftDeletes;
 
-    protected $table = 'activites_medecin_referent';
+    protected $table = 'activites_controle';
     protected $fillable = [
-        "fr_description",
-        "en_description",
-        "slug",
-        "creator",
-        "date_cloture"
+        'activite_id',
+        'creator',
+        'commentaire',
+        'statut',
+        'date_cloture',
+        'slug',
     ];
 
     public function sluggable()

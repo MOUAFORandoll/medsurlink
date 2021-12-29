@@ -50,6 +50,7 @@ class PecController extends Controller
         $pec->creator = Auth::id();
         $pec->patient_id = $request->patient_id;
         $pec->etablissement_id = $request->etablissement_id;
+        $pec->date_cloture = $request->date_cloture;
         $pec->save();
 
         return response()->json(['pec'=>$pec]);
