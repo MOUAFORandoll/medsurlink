@@ -15,11 +15,10 @@ class ActivitesMedecinReferent extends Model
 
     protected $table = 'activites_medecin_referent';
     protected $fillable = [
-        "fr_description",
-        "en_description",
+        "description_fr",
+        "description_en",
+        "type", 
         "slug",
-        "creator",
-        "date_cloture"
     ];
 
     public function sluggable()

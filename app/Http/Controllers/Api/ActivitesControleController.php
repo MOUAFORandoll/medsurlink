@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\ActivitesControle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -37,17 +38,17 @@ class ActivitesControleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'commentaire'=>'integer|nullable',
+            'commentaire'=>'string|nullable',
             'activite_id'=>'integer|required'
         ]);
-        $med = new ActivitesControleController;
+        $med = new ActivitesControle;
         $med->creator = Auth::id();
         $med->activite_id = $request->activite_id;
         $med->statut = $request->statut;
         $med->commentaire = $request->commentaire;
         $med->date_cloture = $request->date_cloture;
         $med->save();
-
+        
         return response()->json(['medReferent'=>$med]);
     }
 
