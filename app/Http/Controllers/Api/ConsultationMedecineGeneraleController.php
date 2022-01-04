@@ -366,6 +366,7 @@ class ConsultationMedecineGeneraleController extends Controller
                     'examen_complementaire_id'=>$examen->id,
                     'medecin_id'=>Auth::id(),
                     'souscripteur_id'=>Auth::id(),
+                    'version' => $examen->version+1,
                     'consultation_general_id' => $consultation->id,
                     'etablissement_id'=>$request->get('etablissement_id'),
                     'ligne_de_temps_id'=>$request->get('ligne_de_temps_id'),

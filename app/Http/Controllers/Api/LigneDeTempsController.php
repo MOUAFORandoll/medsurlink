@@ -137,10 +137,10 @@ class LigneDeTempsController extends Controller
         //Auth::loginUsingId(1);
         $dossier = DossierMedical::whereSlug($id)
          ->with(
-            "resultatsImagerie",
-            "resultatsLabo",
-            "hospitalisations",
-            "consultationsObstetrique",
+            // "resultatsImagerie",
+            // "resultatsLabo",
+            // "hospitalisations",
+            // "consultationsObstetrique",
             "consultationsMedecine",
             "consultationsMedecine.validations.examenComplementaire.examenComplementairePrix",
             // "traitements",
@@ -149,7 +149,8 @@ class LigneDeTempsController extends Controller
             // "comptesRenduOperatoire",
             // "kinesitherapies",
             "avis",
-            "consultationsManuscrites")->first();
+            // "consultationsManuscrites"
+            )->first();
 
        $patient = Patient::where('user_id', DossierMedical::whereSlug($id)->first()->patient_id)
        ->with([
