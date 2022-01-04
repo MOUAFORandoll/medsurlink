@@ -14,7 +14,9 @@ class ActivitesMedecinReferentSeeder extends Seeder
         $automatiques = [
             'Télé – (Hétéro) – consultation',
             'Encodage de la Téléconsultation dans Medsurlink',
-            '2ème Catégorisation du cas PEC du Cas selon Algorithme',
+            '2ème Catégorisation du cas PEC du Cas selon Algorithme « Très urgent » = 5/5',
+            '2ème Catégorisation du cas PEC du Cas selon Algorithme « Urgent » = 3-4/5',
+            '2ème Catégorisation du cas PEC du Cas selon Algorithme « Normal » = 1-2/5',
             'Mise à jour du rapport dans Medsurlink',
             'Encodage des RDV du Patient',
             'Contrôle des rapports médicaux des Médecins 1ère ligne et Validation (Archivage)',
