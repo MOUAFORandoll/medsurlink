@@ -18,7 +18,10 @@ class ConsultationExamenValidationController extends Controller
      */
     public function index()
     {
-        $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])->whereNull('etat_validation_medecin')->distinct()->get(['consultation_general_id']);
+        $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
+        //->whereNull('etat_validation_medecin')
+        ->distinct()
+        ->get(['consultation_general_id']);
         return response()->json(['examen_validation'=>$examen_validation]);
     }
     /**
@@ -45,7 +48,7 @@ class ConsultationExamenValidationController extends Controller
         //$examen_validation = ConsultationExamenValidation::with(['examenComplementaire'])->where('souscripteur_id', '=',Auth::id())->get();
         //return response()->json(['examen_validation'=>$examen_validation]);
         $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
-        ->whereNull('etat_validation_souscripteur')
+        //->whereNull('etat_validation_souscripteur')
         ->where('souscripteur_id', '=',Auth::id())
         ->distinct()
         ->get(['consultation_general_id']);
@@ -58,7 +61,10 @@ class ConsultationExamenValidationController extends Controller
      */
     public function getCountInvalidation()
     {
-        $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])->whereNull('etat_validation_medecin')->distinct()->get(['consultation_general_id']);;
+        $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
+        //->whereNull('etat_validation_medecin')
+        ->distinct()
+        ->get(['consultation_general_id']);;
         return response()->json(['examen_validation'=>$examen_validation->count()]);
     }
     /**

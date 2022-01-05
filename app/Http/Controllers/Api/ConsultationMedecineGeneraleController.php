@@ -354,7 +354,16 @@ class ConsultationMedecineGeneraleController extends Controller
         }
 
         $examens = json_decode($request->get('examen_complementaire'));
-
+        // $last_validation = ConsultationExamenValidation::where([
+        //     ["consultation_general_id", $consultation->id],
+        // ])->orderBy('version','DESC')
+        // ->first();
+        // $version =0;
+        // if($last_validation->etat_validation_medecin==null){
+        //     $version = $last_validation->version;
+        // }else{
+        //     $version = $last_validation->version+1;
+        // }
         foreach ($examens as $examen) {
            $item = ConsultationExamenValidation::where([
                 ["consultation_general_id", $consultation->id],
@@ -366,7 +375,7 @@ class ConsultationMedecineGeneraleController extends Controller
                     'examen_complementaire_id'=>$examen->id,
                     'medecin_id'=>Auth::id(),
                     'souscripteur_id'=>Auth::id(),
-                    'version' => $examen->version+1,
+                    //'version' => $version,
                     'consultation_general_id' => $consultation->id,
                     'etablissement_id'=>$request->get('etablissement_id'),
                     'ligne_de_temps_id'=>$request->get('ligne_de_temps_id'),
