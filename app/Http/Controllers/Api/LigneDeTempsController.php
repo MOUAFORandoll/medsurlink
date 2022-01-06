@@ -92,12 +92,7 @@ class LigneDeTempsController extends Controller
         $ligneDeTemps = LigneDeTemps::with([
             'motif',
             'dossier',
-            'prescriptionValidation',
-            'consultationObstetrique',
-            'cardiologie',
-            'consultationGeneral',
-            'kenesitherapie',
-            'validations'
+            'validations.examenComplementaire.examenComplementairePrix'
         ])->where("dossier_medical_id",$dossier->id)->get();
 
         return response()->json(["ligne_temps" => $ligneDeTemps]);
