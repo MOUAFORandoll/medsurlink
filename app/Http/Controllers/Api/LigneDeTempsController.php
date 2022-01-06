@@ -1,21 +1,25 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use App\Http\Requests\LigneDeTempsRequest;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\ActiviteMission;
-use App\Models\Antecedent;
 use App\Models\Avis;
-use App\Models\Cardiologie;
-use App\Models\CompteRenduOperatoire;
-use App\Models\ConsultationFichier;
-use App\Models\ConsultationMedecineGenerale;
-use App\Models\ConsultationObstetrique;
-use App\Models\DossierMedical;
-use App\Models\LigneDeTemps;
 use App\Models\Patient;
+use App\Models\Antecedent;
+use App\Models\RendezVous;
+use App\Models\Cardiologie;
+use App\Models\LigneDeTemps;
+use Illuminate\Http\Request;
+use App\Models\DossierMedical;
+use App\Models\ActiviteMission;
+use App\Models\ActivitesControle;
+use App\Models\ActiviteAmaPatient;
+use App\Models\ConsultationFichier;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Models\CompteRenduOperatoire;
+use App\Models\ConsultationObstetrique;
+use App\Http\Requests\LigneDeTempsRequest;
+use App\Models\ConsultationExamenValidation;
+use App\Models\ConsultationMedecineGenerale;
 
 class LigneDeTempsController extends Controller
 {
@@ -26,6 +30,13 @@ class LigneDeTempsController extends Controller
      */
     public function index()
     {
+        $ligneTemps = LigneDeTemps::with(['dossier','motif'])->get();
+        return response()->json(['ligne_temps'=>$ligneTemps]);
+    }
+
+    public function ligneDeTemps($id)
+    {
+        $dossier = DossierMedical::whereSlug($id)->first();
         $ligneTemps = LigneDeTemps::with(['dossier','motif'])->get();
         return response()->json(['ligne_temps'=>$ligneTemps]);
     }
@@ -134,21 +145,20 @@ class LigneDeTempsController extends Controller
         //Auth::loginUsingId(1);
         $dossier = DossierMedical::whereSlug($id)
          ->with(
-            "resultatsImagerie",
-            "resultatsLabo",
-            "hospitalisations",
-            "consultationsObstetrique",
+            // "resultatsImagerie",
+            // "resultatsLabo",
+            // "hospitalisations",
+            // "consultationsObstetrique",
             "consultationsMedecine",
-            "consultationsMedecine.validations",
-            "allergies",
-            "antecedents",
-            "traitements",
-            "ordonances",
-            "cardiologies",
-            "comptesRenduOperatoire",
-            "kinesitherapies",
+            "consultationsMedecine.validations.examenComplementaire.examenComplementairePrix",
+            // "traitements",
+            // "ordonances",
+            // "cardiologies",
+            // "comptesRenduOperatoire",
+            // "kinesitherapies",
             "avis",
-            "consultationsManuscrites")->first();
+            // "consultationsManuscrites"
+            )->first();
 
        $patient = Patient::where('user_id', DossierMedical::whereSlug($id)->first()->patient_id)
        ->with([
@@ -156,9 +166,27 @@ class LigneDeTempsController extends Controller
            "payments",
            "dossier",
            "rendezVous"])->first();
+        $examen_validation_assureur = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
+           ->whereNotNull('etat_validation_medecin')
+           ->where('medecin_control_id', '=',Auth::id())
+           ->distinct()
+           ->get();
+        $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
+           ->whereNotNull('etat_validation_souscripteur')
+           ->where('medecin_control_id', '=',Auth::id())
+           ->distinct()
+           ->get();
+        $activites = ActiviteAmaPatient::with(['activitesAma','patient','patient.rendezVous','patient.medecinReferent.medecinControles','updatedBy','createur'])->where('patient_id',$patient->user_id)->get();
+        $activitesmed = ActivitesControle::with(['createur','ActivitesMedecinReferent']);
+        //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
+        $rendezVous = RendezVous::where('patient_id',$patient->user_id)->get();
+        $array = array('activitesmedReferent' =>$activitesmed,'rendez_vous' =>$rendezVous,'activite_ama' =>  $activites,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
+        
+
         $contrat = getContrat($patient->user);
+
        //dd($patient->dossier->id);
-       return response()->json(["cim" => $contrat,"dossier"=>$dossier,"patient"=>$patient]);
+       return response()->json(["cim" => $contrat,"dossier"=>$dossier,"patient"=>$patient,'activites'=> $array]);
     }
 
     /**

@@ -33,4 +33,8 @@ class ActivitesMedecinReferent extends Model
     public function getDossierAndTimestampAttribute() {
         return Str::random(10) . ' ' .Carbon::now()->timestamp;
     }
+
+    public function activites(){
+        return $this->hasMany(ActivitesControle::class,'activite_id','id');
+    }
 }

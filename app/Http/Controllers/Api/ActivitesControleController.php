@@ -16,7 +16,8 @@ class ActivitesControleController extends Controller
      */
     public function index()
     {
-        //
+        $activitesmed = ActivitesControle::with('createur','ActivitesMedecinReferent')->get();
+        return  response()->json(['activitesmed'=>$activitesmed]);
     }
 
     /**
