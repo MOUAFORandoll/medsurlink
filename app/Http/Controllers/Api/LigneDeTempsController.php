@@ -7,14 +7,10 @@ use App\Models\Antecedent;
 use App\Models\RendezVous;
 use App\Models\Cardiologie;
 use App\Models\LigneDeTemps;
-use Illuminate\Http\Request;
 use App\Models\DossierMedical;
-use App\Models\ActiviteMission;
-use App\Models\ActivitesControle;
 use App\Models\ActiviteAmaPatient;
-use App\Models\ConsultationFichier;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use App\Models\CompteRenduOperatoire;
 use App\Models\ConsultationObstetrique;
 use App\Http\Requests\LigneDeTempsRequest;
@@ -100,12 +96,7 @@ class LigneDeTempsController extends Controller
         $ligneDeTemps = LigneDeTemps::with([
             'motif',
             'dossier',
-            'prescriptionValidation',
-            'consultationObstetrique',
-            'cardiologie',
-            'consultationGeneral',
-            'kenesitherapie',
-            'validations'
+            'validations.examenComplementaire.examenComplementairePrix'
         ])->where("dossier_medical_id",$dossier->id)->get();
 
         return response()->json(["ligne_temps" => $ligneDeTemps]);
@@ -177,11 +168,10 @@ class LigneDeTempsController extends Controller
            ->distinct()
            ->get();
         $activites = ActiviteAmaPatient::with(['activitesAma','patient','patient.rendezVous','patient.medecinReferent.medecinControles','updatedBy','createur'])->where('patient_id',$patient->user_id)->get();
-        $activitesmed = ActivitesControle::with(['createur','ActivitesMedecinReferent']);
         //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
         $rendezVous = RendezVous::where('patient_id',$patient->user_id)->get();
-        $array = array('activitesmedReferent' =>$activitesmed,'rendez_vous' =>$rendezVous,'activite_ama' =>  $activites,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
-        
+        $array = array('rendez_vous' =>$rendezVous,'activite_ama' =>  $activites,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
+
 
         $contrat = getContrat($patient->user);
 

@@ -19,7 +19,8 @@ class ConsultationExamenValidation extends Model
         'etat_validation_souscripteur',
         'date_validation_medecin',
         'date_validation_souscripteur',
-        'consultation_general_id'
+        'consultation_general_id',
+        'version'
     ];
 
     public function ligneDeTemps(){

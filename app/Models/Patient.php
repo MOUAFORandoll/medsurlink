@@ -68,7 +68,9 @@ class Patient extends Model
     public function dossier(){
         return $this->hasOne(DossierMedical::class,'patient_id','user_id');
     }
-
+    public function activitesAma(){
+        return $this->hasMany(ActiviteAmaPatient::class,'patient_id','id');
+    }
     public function auteurs()
     {
         return $this->morphMany(Auteur::class, 'auteurable');

@@ -8,6 +8,7 @@ use App\Models\Activite;
 use App\Models\ActivitesAma;
 use App\Models\ActiviteMission;
 use App\Models\ActiviteAmaPatient;
+use App\Models\PatientMedecinControle;
 use App\Models\GroupeActivite;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -168,15 +169,21 @@ class ActiviteController extends Controller
         $mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->get();
         return response()->json(['activites'=>$mission]);
     }
+    public function getMissionAmaByPatient($id){
+        $mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->where('patient_id',$id)->get();
+        $medecin_referent = PatientMedecinControle::with(['medecinControles','patients','createur'])->where('patient_id',$id)->get();
+        $medecin_referent = PatientMedecinControle::with(['medecinControles','patients','createur'])->where('patient_id',$id)->get();
+        return response()->json(['activites'=>$mission]);
+    }
     public function saveMissions(Request $request){
         dd($request);
         //$mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->get();
        // return response()->json(['activites'=>$mission]);
     }
     public function createMissions(Request $request){
-        dd($request);
-        //$mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->get();
-       // return response()->json(['activites'=>$mission]);
+        $mission = ActiviteAmaPatient::create($request->all());
+        $mission = ActiviteAmaPatient::with('activitesAma','patient','updatedBy','createur')->whereSlug($mission->slug)->first();
+        return response()->json(['mission'=>$mission]);
     }
     public function getListMission(){
         $mission = ActivitesAma::where('type','MANUELLE')->get();

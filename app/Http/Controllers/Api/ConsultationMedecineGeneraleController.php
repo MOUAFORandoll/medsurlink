@@ -129,22 +129,23 @@ class ConsultationMedecineGeneraleController extends Controller
             $validation =  ConsultationExamenValidation::create([
                 'examen_complementaire_id'=>$examen->id,
                 'medecin_id'=>Auth::id(),
+                'version'=>0,
                 //'souscripteur_id'=>$consultation->dossier->patient->souscripteur_id,
                 'souscripteur_id'=>Auth::id(),
                 'consultation_general_id' => $consultation->id,
-                'etablissement'=>$request->get('etablissement_id'),
+                'etablissement_id'=>$request->get('etablissement_id'),
                 'ligne_de_temps_id'=>$request->get('ligne_de_temps_id'),
             ]);
             //array_push($examens_validation,$validation);
         }
         //dd($consultation->dossier->patient->medecinReferent);
-        $message = Message::create([
+        /*$message = Message::create([
             'body' => $examens,
             'sender_id' => Auth::id(),
             //'receiver_id' => $consultation->dossier->patient->medecinReferent->medecin_control_id,
             'receiver_id' => Auth::id(),
             'type' => 'Validation Examen'
-        ]);
+        ]);*/
 
         /*broadcast(new MessageCreated($message))
                 ->toOthers();*/
@@ -349,6 +350,36 @@ class ConsultationMedecineGeneraleController extends Controller
                     defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
 
                 }
+            }
+        }
+
+        $examens = json_decode($request->get('examen_complementaire'));
+        // $last_validation = ConsultationExamenValidation::where([
+        //     ["consultation_general_id", $consultation->id],
+        // ])->orderBy('version','DESC')
+        // ->first();
+        // $version =0;
+        // if($last_validation->etat_validation_medecin==null){
+        //     $version = $last_validation->version;
+        // }else{
+        //     $version = $last_validation->version+1;
+        // }
+        foreach ($examens as $examen) {
+           $item = ConsultationExamenValidation::where([
+                ["consultation_general_id", $consultation->id],
+                ["examen_complementaire_id", $examen->id]
+            ])->first();
+
+            if($item == null){
+                ConsultationExamenValidation::create([
+                    'examen_complementaire_id'=>$examen->id,
+                    'medecin_id'=>Auth::id(),
+                    'souscripteur_id'=>Auth::id(),
+                    //'version' => $version,
+                    'consultation_general_id' => $consultation->id,
+                    'etablissement_id'=>$request->get('etablissement_id'),
+                    'ligne_de_temps_id'=>$request->get('ligne_de_temps_id'),
+                ]);
             }
         }
 

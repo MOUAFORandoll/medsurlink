@@ -64,7 +64,7 @@ class ActiviteAmaPatient extends Model
         return $this->belongsTo(User::class,'updated_by','id');
     }
     public function patient(){
-        return $this->belongsTo(User::class,'patient_id','id');
+        return $this->belongsTo(Patient::class,'patient_id','user_id');
     }
 
 }
