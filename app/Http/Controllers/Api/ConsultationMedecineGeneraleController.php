@@ -31,6 +31,7 @@ use Psy\Util\Json;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use App\Message;
 use App\Events\MessageCreated;
+use App\Models\VersionValidation;
 
 class ConsultationMedecineGeneraleController extends Controller
 {
@@ -139,13 +140,15 @@ class ConsultationMedecineGeneraleController extends Controller
             //array_push($examens_validation,$validation);
         }
         //dd($consultation->dossier->patient->medecinReferent);
-        /*$message = Message::create([
-            'body' => $examens,
-            'sender_id' => Auth::id(),
-            //'receiver_id' => $consultation->dossier->patient->medecinReferent->medecin_control_id,
-            'receiver_id' => Auth::id(),
-            'type' => 'Validation Examen'
-        ]);*/
+        VersionValidation::create([
+            'montant_prestation' => 0,
+            'montant_medecin' => 0,
+            'montant_souscripteur' => 0,
+            'montant_total' => 0,
+            'plus_value' => 0,
+            'consultation_general_id' => $consultation->id,
+            'version' => 0
+        ]);
 
         /*broadcast(new MessageCreated($message))
                 ->toOthers();*/

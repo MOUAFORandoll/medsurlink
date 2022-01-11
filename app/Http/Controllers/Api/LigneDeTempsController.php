@@ -92,7 +92,8 @@ class LigneDeTempsController extends Controller
         $ligneDeTemps = LigneDeTemps::with([
             'motif',
             'dossier',
-            'validations.examenComplementaire.examenComplementairePrix'
+            'validations.examenComplementaire.examenComplementairePrix',
+            'validations.consultation.versionValidation',
         ])->where("dossier_medical_id",$dossier->id)->get();
 
         return response()->json(["ligne_temps" => $ligneDeTemps]);
@@ -158,7 +159,7 @@ class LigneDeTempsController extends Controller
            ->where('medecin_control_id', '=',Auth::id())
            ->distinct()
            ->get();
-        $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
+        $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])
            ->whereNotNull('etat_validation_souscripteur')
            ->where('medecin_control_id', '=',Auth::id())
            ->distinct()

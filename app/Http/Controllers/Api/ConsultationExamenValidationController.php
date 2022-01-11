@@ -8,7 +8,7 @@ use App\Models\ConsultationExamenValidation;
 use App\Models\ConsultationMedecineGenerale;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\VersionValidation;
 class ConsultationExamenValidationController extends Controller
 {
     /**
@@ -108,18 +108,17 @@ class ConsultationExamenValidationController extends Controller
      */
     public function setEtatValidationMedecin(Request $request)
     {
-       // dd($request->get('examens'));
-        $examen_validation = ConsultationExamenValidation::whereIn('id',$request->get('examens'))->get();
-        foreach($examen_validation as $examen){
-            $examen->etat_validation_medecin = 1;
-            $examen->medecin_control_id = Auth::id();
-            $examen->date_validation_medecin = Carbon::now();
-            $examen->save();
+        //dd($request->get('examens'));
+
+        foreach($request->get('examens') as $examen){
+            $examen_validation = ConsultationExamenValidation::where('id',$examen['id'])->first();
+            $examen_validation->etat_validation_medecin = $examen['etat'];
+            $examen_validation->medecin_control_id = Auth::id();
+            //$examen_validation->version = $examen_validation->version+1;
+            $examen_validation->date_validation_medecin = Carbon::now();
+            $examen_validation->save();
         }
-        ConsultationExamenValidation::whereNotIn('id',$request->get('examens'))
-        ->update([
-            'etat_validation_medecin' => 0,
-        ]);
+
         return  response()->json(['examen_validation'=>$examen_validation]);
     }
     /**
@@ -131,12 +130,23 @@ class ConsultationExamenValidationController extends Controller
     public function setEtatValidationSouscripteur(Request $request)
     {
 
+        $totalPrestation = 0;
+        $montant_medecin = 0;
+        $montant_souscripteur = 0;
+        $montant_total = 0;
+        $plus_value = 0;
         $examens = $request->get('examens');
         $examens_id = array_column($examens, 'id');
         if(count($examens) > 0){
-            $examen_validation = ConsultationExamenValidation::where("consultation_general_id",$examens[0]['consultation'])->get();
+            $consultation = ConsultationMedecineGenerale::whereId($examens[0]['consultation'])->first();
+            $etablissement = $consultation->etablissement_id;
+            $examen_validation = ConsultationExamenValidation::with(['examenComplementaire','etablissement','examenComplementaire.examenComplementairePrix' => function ($query) use ($etablissement) {
+                $query->where('etablissement_exercices_id', '=', $etablissement);
+            }])->where('consultation_general_id', '=', $consultation->id)->get();
+
             foreach($examen_validation as $examen){
                 if(in_array($examen->id, $examens_id)){
+                    $montant_souscripteur += $examen->examenComplementaire->examenComplementairePrix[0]->prix;
                     $examen->etat_validation_souscripteur = 1;
                     $examen->version = $examen->version+1;
                     $examen->date_validation_souscripteur = Carbon::now();
@@ -147,8 +157,25 @@ class ConsultationExamenValidationController extends Controller
                     $examen->date_validation_souscripteur = Carbon::now();
                     $examen->save();
                 }
+                $totalPrestation += $examen->examenComplementaire->examenComplementairePrix[0]->prix;;
+                if($examen->etat_validation_medecin == 1){
+                    $montant_medecin += $examen->examenComplementaire->examenComplementairePrix[0]->prix;;
+                }
+                if($examen->etat_validation_medecin == 1 && $examen->etat_validation_souscripteur == 1){
+                    $montant_total += $examen->examenComplementaire->examenComplementairePrix[0]->prix;;
+                }
             }
+            $plus_value = $montant_total;
+            $version_validation = VersionValidation::where("consultation_general_id",$examens[0]['consultation'])
+            ->first();
+            $version_validation->plus_value = $plus_value;
+            $version_validation->montant_total = $montant_total;
+            $version_validation->montant_medecin = $montant_medecin;
+            $version_validation->montant_souscripteur = $montant_souscripteur;
+            $version_validation->version = $version_validation->version+1;
+            $version_validation->save();
         }
+
         return  response()->json(['examen_validation'=>true]);
     }
     /**
