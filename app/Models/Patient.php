@@ -83,6 +83,10 @@ class Patient extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
 
+    public function medecinReferent(){
+        return $this->hasMany(PatientMedecinControle::class,'patient_id','user_id');
+    }
+
     public function etablissements(){
         return $this->belongsToMany(EtablissementExercice::class,'etablissement_exercice_patient','patient_id','etablissement_id');
     }
@@ -108,7 +112,7 @@ class Patient extends Model
                 $patientSouscripteurs = PatientSouscripteur::where('financable_id',Auth::id())->get();
 
                 foreach ($patientSouscripteurs as  $patient){
-                    if (in_array($patient->patient_id,$patientsId)){
+                    if (!in_array($patient->patient_id,$patientsId)){
                         array_push($patientsId,$patient->patient_id);
                     }
                 }

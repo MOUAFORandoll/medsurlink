@@ -96,7 +96,9 @@ class DossierMedical extends Model
     public function kinesitherapies(){
         return $this->hasMany(Kinesitherapie::class,'dossier_medical_id','id');
     }
-
+    public function avis(){
+        return $this->hasMany(Avis::class,'dossier_medical_id','id');
+    }
     /**
      * The "booting" method of the model.
      *

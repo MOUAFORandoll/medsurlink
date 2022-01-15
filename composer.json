@@ -14,8 +14,9 @@
         "cviebrock/eloquent-sluggable": "4.8.*",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
+        "florianv/swap": "^4.3",
         "gbrock/laravel-table": "dev-master",
-        "guzzlehttp/guzzle": "6.5.2",
+        "guzzlehttp/guzzle": "^6.5",
         "h4cc/wkhtmltoimage-amd64": "0.12.x",
         "h4cc/wkhtmltoimage-i386": "0.12.x",
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
@@ -23,10 +24,13 @@
         "kobalazs/laravel-restrict-soft-deletes": "dev-master",
         "laravel/framework": "5.8.*",
         "laravel/passport": "^7.3",
+        "laravel/slack-notification-channel": "^2.3",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "^3.1",
+        "phpoffice/phpspreadsheet": "^1.14",
         "rinvex/countries": "^5.0",
-        "spatie/laravel-permission": "^2.37"
+        "spatie/laravel-permission": "^2.37",
+        "stripe/stripe-php": "^7.87"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",
@@ -62,6 +66,7 @@
             "app/Helpers/ConsultationHelper.php",
             "app/Helpers/RapportHelper.php",
             "app/helpers.php",
+            "app/Helpers/PaiementHelper.php",
             "app/Helpers/ComptabiliteHelper.php"
         ],
         "classmap": [

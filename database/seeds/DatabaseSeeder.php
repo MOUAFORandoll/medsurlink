@@ -22,6 +22,10 @@ class DatabaseSeeder extends Seeder
             MedecinAvisSeeder::class,
             PrestationsCliniqueKutendaMedicalTableSeeder::class,
             ComptableRoleSeeder::class,
+            AnamnesesSeeder::class,
+            ExamenClinicSeeder::class,
+            ExamenComplementaireSeeder::class,
+            OtherComplementaireSeeder::class,
         ]);
     }
 }

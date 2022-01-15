@@ -96,7 +96,7 @@ class AllergieController extends Controller
 
         $allergie = Allergie::findBySlug($slug);
 
-        $this->checkIfAuthorized("Allergie",$allergie->id,"create");
+       // $this->checkIfAuthorized("Allergie",$allergie->id,"create");
 
         Allergie::whereSlug($slug)->update($request->validated());
 
@@ -119,7 +119,7 @@ class AllergieController extends Controller
 
         $allergie = Allergie::findBySlug($slug);
 
-        $this->checkIfAuthorized("Allergie",$allergie->id,"create");
+        //$this->checkIfAuthorized("Allergie",$allergie->id,"create");
 
         $allergie->delete();
 

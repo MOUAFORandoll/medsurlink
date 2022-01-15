@@ -1,10 +1,13 @@
 <?php
-
+use Psy\Util\Json;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 /**-- Headers --**/
-//header('Access-Control-Allow-Origin:  *');
-//header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
-//header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
-
+/* 
+header('Access-Control-Allow-Origin:  *');
+header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
+header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
+ */
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +21,7 @@
 */
 
 Route::post('oauth/token', 'Api\AuthController@auth');
+Route::post('oauth/redirect/token', 'Api\AuthController@authAfterRedirect');
 Route::post('password/emailVersion','Auth\ForgotPasswordController@sendResetLinkEmail');
 Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
@@ -50,7 +54,7 @@ Route::group(['middleware' => ['auth:api','role:Admin']], function () {
     Route::resource('user', 'Api\UserController')->except(['create','edit']);
 });
 //        Définition des routes accéssible par le gestionnaire
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Assistante']], function () {
     Route::resource('etablissement','Api\EtablissementExerciceController')->except(['create','edit']);
     Route::resource('profession','Api\ProfessionController')->except(['create','edit']);
     Route::resource('praticien','Api\PraticienController')->except(['create','edit']);
@@ -77,7 +81,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire']], function 
 });
 
 //    Définition des routes accéssible par le praticien
-Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle|Assistante']], function () {
     Route::put('resultat-labo/{id}/transmettre','Api\ResultatLaboController@transmit');
     Route::put('resultat-labo/{id}/transmettre','Api\ResultatLaboController@transmit');
     Route::put('consultation-fichier/{id}/transmettre','Api\ConsultationFichierController@transmettre');
@@ -103,7 +107,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
 
 
 //    Définition des routes accéssible par le medecin controle
-Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Assistante']], function () {
     Route::resource('partenaire','Api\PartenaireController');
     Route::put('resultat-labo/{resultat}/archiver','Api\ResultatLaboController@archive');
     Route::put('consultation-fichier/{resultat}/archiver','Api\ConsultationFichierController@archiver');
@@ -132,14 +136,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient']], function () {
 
 });
 
-//  Définition des routes accéssible a la fois par le patient, le medecin controle et le souscripteur
-Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur']], function () {
-
-
-});
-
 //  Définition des routes accéssible a la fois par le medecin controle et le praticien
-Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Assistante']], function () {
     Route::resource('etablissement','Api\EtablissementExerciceController')->except(['create','store','destroy','edit']);
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except(['create','edit']);
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except(['create','edit']);
@@ -149,7 +147,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('motif','Api\MotifController')->except(['create','edit']);
     Route::resource('allergie','Api\AllergieController')->except(['create','edit']);
     Route::resource('antecedent','Api\AntecedentController')->except(['create','edit']);
-    Route::resource('traitement','Api\TraitementController')->except(['create','edit']);
+//    Route::resource('traitement','Api\TraitementController')->except(['create','edit']);
     Route::resource('traitement-actuel','Api\TraitementActuelController')->except(['create','edit']);
     Route::resource('traitement-propose','Api\TraitementProposeController')->except(['create','edit']);
     Route::resource('parametre-commun','Api\ParametreCommunController')->except(['create','edit']);
@@ -183,6 +181,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
     Route::resource('categorie','Api\CategorieController');
     Route::resource('suivi','Api\SuiviController');
+    Route::get('suivi/search/{value}','Api\SuiviController@search')->name('suivi.search');
     Route::resource('toDoList','Api\ToDoListController');
     Route::post('toDoList/{slug}/statut','Api\ToDoListController@updateStatut');
     Route::resource('suivi-specialite','Api\SpecialiteSuiviController');
@@ -190,6 +189,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('avis','Api\AvisController');
     Route::post('avisMedecin/{slug}','Api\AvisMedecinController@store');
     Route::get('avisMedecin/{slug}','Api\AvisMedecinController@show');
+    Route::get('avis/patient/{dossier}','Api\AvisMedecinController@getAvisFromDossier');
     Route::delete('avisMedecin/{slug}','Api\AvisMedecinController@destroy');
     Route::get('avis-repondre/{avis}','Api\AvisMedecinController@repondre');
     Route::post('avisMedecin/{slug}/nouveauAvis','Api\AvisMedecinController@NouveauAvis');
@@ -201,10 +201,13 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
-Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien|Assistante']], function () {
 //    Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
     Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
+    Route::post('/contrat-prepaye-store-patient-unpaid','Api\AffiliationSouscripteurController@storePatientBeforePayment');
     Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
+    Route::get('/get-commande-from-cim','Api\AffiliationSouscripteurController@getSouscripteurFromCIM');
+    Route::post('/commande-restante/add/{id}','Api\AffiliationSouscripteurController@addAffiliationRestante');
     Route::resource('rdvs','Api\RendezVousController');
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except('store','update','destroy');
     Route::resource('consultation-kinesitherapie','Api\KinesitherapieController')->except('store','update','destroy');
@@ -228,15 +231,18 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::get('user-details','Api\AuthController@userDetails');
 });
 
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien']], function () {
-
-
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Assistante']], function () {
+    Route::get('/get-commande-from-cim','Api\AffiliationSouscripteurController@getSouscripteurFromCIM');
 });
 
-Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur|Etablissement']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur|Etablissement|Assistante']], function () {
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
+    Route::resource('medecin-patient','Api\PatientMedecinController');
+    Route::get('dossiers-mes-patient','Api\DossierMedicalController@dossierMyPatient');
+    Route::get('dossiers-mes-patient/search/{value}','Api\DossierMedicalController@dossierMyPatientSpecial')->name('dossiers-mes-patient.dossierMyPatientSpecial');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
     Route::get('imprimer-facture-definitive/{facture}','Api\ImprimerController@factureDefinitive');
+    Route::get('imprimer-facture-avis-definitive/{facture}','Api\ImprimerController@factureAvisDefinitive');
     Route::get('imprimer-compte-rendu/{compte}','Api\ImprimerController@compteRendu');
     Route::get('imprimer-facture-proforma/{facture}','Api\ImprimerController@factureProforma');
     Route::get('imprimer-consultation-medecine/{generale}','Api\ImprimerController@generale');
@@ -247,7 +253,14 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('affiliationRevue/{affiliation}','Api\AffiliationController@show');
     Route::get('patient/{patient}','Api\PatientController@show')->name('patient.show');
     Route::get('patient','Api\PatientController@index')->name('patient.index');
+    Route::get('patient/search/{value}','Api\PatientController@specialList')->name('patient.specialList');
+    Route::get('patient/doctor/{value}','Api\PatientController@PatientsDoctor')->name('patient.PatientsDoctor');
+    Route::get('count_patient/doctor/{value}','Api\PatientController@CountPatientsDoctor')->name('patient.CountPatientsDoctor');
+    Route::get('patient/doctor/{value}/{limit}','Api\PatientController@FirstPatientsDoctor')->name('patient.FirstPatientsDoctor');
+    Route::get('patient/doctor/{value}/{limit}/{page}','Api\PatientController@NextPatientsDoctor')->name('patient.NextPatientsDoctor');
     Route::get('souscripteur/{souscripteur}','Api\SouscripteurController@show')->name('souscripteur.show');
+    Route::get('souscripteur/rappel/{souscripteur}','Api\SouscripteurController@rappelAffilie');
+    Route::get('souscripteur/list/cim','Api\SouscripteurController@cim');
     Route::resource('etablissement', 'Api\EtablissementExerciceController')->except(['create', 'store', 'destroy', 'edit']);
     Route::get('user-etablissements', 'Api\EtablissementExerciceController@userEtablissements');
     Route::post('update-password','Api\UserController@updatePassword');
@@ -255,7 +268,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 
 });
 
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin controle|Etablissement']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin controle|Etablissement|Assistante']], function () {
     Route::post('import_csv','Api\CsvFileController@csv_import');
     Route::resource('categorie-prestation','Api\CategoriePrestationController');
     Route::resource('etablissement-prestation','Api\EtablissementPrestationController');
@@ -267,12 +280,20 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
     Route::put('valider-prestation/{slug}','Api\FacturePrestationController@valider');
     Route::put('rejeter-prestation/{slug}','Api\FacturePrestationController@rejeter');
     Route::resource('comptable','Api\ComptableController');
+    Route::resource('assistante','Api\AssistanteController');
 
 
 });
 
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante']], function () {
     Route::put('patient-decede/{patient}','Api\PatientController@decede');
+    Route::get('patient-with-medecin-control','Api\PatientController@getPatientWithMedecin');
+    Route::get('first_patient-with-medecin-control/{limit}','Api\PatientController@getFirstPatientWithMedecin');
+    Route::get('next_patient-with-medecin-control/{limit}/{page}','Api\PatientController@getNextPatientWithMedecin');
+    // Route::get('10patient-with-medecin-control','Api\PatientController@get10PatientWithMedecin');
+    // Route::get('15patient-with-medecin-control','Api\PatientController@get15PatientWithMedecin');
+    // Route::get('100patient-with-medecin-control','Api\PatientController@get100PatientWithMedecin');
+    Route::get('number_patient-with-medecin-control','Api\PatientController@getCountPatientWithMedecin');
     Route::resource('specialite','Api\SpecialiteController')->except(['create','edit']);
     Route::resource('consultation-type','Api\ConsultationTypeController')->except(['create','edit']);
     Route::resource('souscripteur','Api\SouscripteurController')->except('show');
@@ -282,6 +303,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::resource('medecin-controle','Api\MedecinControleController')->only(['index']);
     Route::resource('praticien','Api\PraticienController')->only(['index']);
+    Route::resource('association','Api\AssociationController');
+    Route::resource('facture-avis','Api\FactureAvisController');
     Route::resource('medicament','Api\MedicamentController')->except(['edit','create']);
     Route::get('medicament/search/{chaineRecherche}','Api\MedicamentController@search')->name('rechercherMedicament');
     Route::resource('ordonance','Api\OrdonanceController')->except(['edit','create']);
@@ -289,4 +312,24 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::delete('file/{file}','Api\FileController@destroy');
     Route::resource('financeur','Api\PatientSouscripteurController');
     Route::post('financeur/retirer','Api\PatientSouscripteurController@retirer');
+});
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Souscripteur|Assistante']], function () {
+    Route::resource('souscripteur','Api\SouscripteurController')->only('update');
+});
+// store souscripteur from medicasure
+Route::resource('medicasure/souscripteur','Api\MedicasureController');
+
+Route::post('payment-prestation','Api\PaymentController@paymentPrestation');
+Route::get('payment-prestation/{id}','Api\PaymentController@getPayment');
+Route::post('payment-statut/{id}','Api\PaymentController@NotifierPaiement');
+Route::resource('payment','Api\PaymentController');
+Route::get('snomed-icd/map/{string}','Api\SnomedIcdController@find');
+Route::get('anamnese','Api\AnamneseController@index');
+Route::get('examen-clinic','Api\ExamenClinicController@index');
+Route::get('examen-complementaire','Api\ExamenComplementaireController@index');
+Route::get('other-complementaire','Api\OtherComplementaireController@index');
+
+Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin controle|Assistante']], function () {
+    Route::resource('avis','Api\AvisController');
+    Route::resource('rdvs','Api\RendezVousController');
 });

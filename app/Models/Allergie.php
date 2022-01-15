@@ -8,6 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use function GuzzleHttp\Psr7\str;
 
 class Allergie extends Model
@@ -46,8 +47,10 @@ class Allergie extends Model
 
     public function updateAllergyItem(){
         if(!is_null($this)) {
-            $isAuthor = checkIfIsAuthorOrIsAuthorized("Allergie", $this->id, "create");
-            $this['isAuthor'] = $isAuthor->getOriginalContent();
+            $connectedUser = Auth::user();
+            if ($connectedUser->getRoleNames()->first() == 'Medecin controle' || $connectedUser->getRoleNames()->first() == 'Praticien') {
+                $this['isAuthor'] = true;
+            }
             $this['dossier'] = $this->dossiers->first();
             if (!is_null($this->dossiers->first())) {
                 $this['patient'] = $this->dossiers->first()->patient;

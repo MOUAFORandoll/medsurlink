@@ -9,6 +9,7 @@ use App\Models\ConsultationMedecineGenerale;
 use App\Models\ConsultationObstetrique;
 use App\Models\DossierMedical;
 use App\Models\Facture;
+use App\Models\FactureAvis;
 use App\Models\Hospitalisation;
 use App\Models\Kinesitherapie;
 use App\Models\MedecinControle;
@@ -38,6 +39,7 @@ class ImprimerController extends Controller
     }
 
     public function generale($slug){
+
         $this->validatedSlug($slug,'consultation_medecine_generales');
 
         $consultationMedecine = ConsultationMedecineGenerale::with('operationables.contributable','files')->whereSlug($slug)->first();
@@ -51,12 +53,12 @@ class ImprimerController extends Controller
         if (!is_null($auteur)){
             if ($auteur->auteurable_type == 'Praticien'){
                 $praticien = Praticien::with('user')->find($auteur->auteurable_id);
-                $praticiens = $praticien;
-                $signature = $praticien->signature;
+                $praticiens = $praticien ?? '';
+                $signature = $praticien->signature ?? '';
             }else if($auteur->auteurable_type == 'Medecin controle') {
                 $medecin = MedecinControle::with('user')->find($auteur->auteurable_id);
-                $praticiens = $medecin;
-                $signature = $medecin->signature;
+                $praticiens = $medecin ?? '';
+                $signature = $medecin->signature ?? '';
             }
         }
 
@@ -80,11 +82,73 @@ class ImprimerController extends Controller
         $pContributeurs = Praticien::with('user')->whereIn('user_id',$cContributeurs)->get();
         $mContributeurs = MedecinControle::with('user')->whereIn('user_id',$cContributeurs)->get();
 
-        $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs');
+        if(isJSON($consultationMedecine->examen_complementaire)){
+            $examen_complementaire = _group_by(json_decode($consultationMedecine->examen_complementaire, true),"reference");
+        }else if(is_array($consultationMedecine->examen_complementaire)){
+            $examen_complementaire = _group_by($consultationMedecine->examen_complementaire,"reference");
+        }else if(is_string($consultationMedecine->complementaire)){
+            $complementaire = $consultationMedecine->complementaire;
+        }else{
+            $examen_complementaire = null;
+        }
+
+
+        if(isJSON($consultationMedecine->examen_clinique)){
+            // dd($consultationMedecine->examen_clinique);
+            $examen_clinique = _group_by(json_decode($consultationMedecine->examens, true),"reference");
+        }else if(is_array($consultationMedecine->examens)){
+            $examen_clinique = _group_by($consultationMedecine->examens,"reference");
+        }else if(is_string($consultationMedecine->examens)){
+            $examen_clinique = $consultationMedecine->examen_clinique;
+            // dd($examen_clinique);
+        }else{
+            $examen_clinique = $consultationMedecine->examens;
+        }
+        //dd($consultationMedecine);
+
+        if(!is_null($consultationMedecine->examens)){
+           $examen_clinique = _group_by(is_array($consultationMedecine->examens)?$consultationMedecine->examens:json_decode($consultationMedecine->examens, true),"reference");
+        }
+
+        if(!is_null($consultationMedecine->anamneses)){
+          $anamneses = _group_by(is_array($consultationMedecine->anamneses)?$consultationMedecine->anamneses:json_decode($consultationMedecine->anamneses, true),"reference");
+        }
+
+        if(!is_null($consultationMedecine->anamese)){
+            $anamese = $consultationMedecine->anamese;
+        }else{
+            $anamese = $consultationMedecine->anamese;
+        }
+
+        if(!is_null($consultationMedecine->complementaire)){
+            $complementaire = $consultationMedecine->complementaire;
+        }else{
+            $complementaire = $consultationMedecine->complementaire;
+        }
+
+            
+
+        // if(is_string($consultationMedecine->anamneses)){
+        //     $anamneses = $consultationMedecine->anamneses;
+        // }else{
+        //     $anamneses = $consultationMedecine->anamneses;
+        // }
+        // dd($consultationMedecine);
+
+        if(!is_null($consultationMedecine->diasgnostic)){
+          $diasgnostic = is_array($consultationMedecine->diasgnostic)?$consultationMedecine->diasgnostic:json_decode($consultationMedecine->diasgnostic, true);
+        }else{
+            $diasgnostic = null;
+        }
+
+        //dd($diasgnostic);
+        $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs','examen_complementaire','examen_clinique','anamneses','diasgnostic','anamese','complementaire');
         $pdf = PDF::loadView('rapport',$data);
+
         $nom  = patientLastName($consultationMedecine);
         $prenom = patientFirstName($consultationMedecine);
         $date= $consultationMedecine->date_consultation;
+
         $path = storage_path().'/app/public/pdf/'.'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
         $pdf->save($path);
 
@@ -225,9 +289,31 @@ class ImprimerController extends Controller
         $this->validatedSlug($slug,'factures');
 
         $facture = Facture::whereSlug($slug)->first();
-
-        $data = compact('facture');
+        $total = 0;
+        foreach($facture->prestations as $item){
+            $total += $item->prix;
+        }
+        $data = compact('facture','total');
         $pdf = PDF::loadView('facture.definitive',$data);
+        $nom  = patientLastName($facture);
+        $prenom = patientFirstName($facture);
+        $date= $facture->date_facturation;
+        $path = storage_path().'/app/public/pdf/'.'Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
+        $pdf->save($path);
+
+        return  response()->json(['name'=>'Facture_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
+    }
+
+    public function factureAvisDefinitive($slug){
+        $this->validatedSlug($slug,'facture_avis');
+
+        $facture = FactureAvis::whereSlug($slug)->first();
+        $total = 0;
+        foreach($facture->factureDetail as $item){
+            $total += $item->total_montant;
+        }
+        $data = compact('facture','total');
+        $pdf = PDF::loadView('facture.facture_avis',$data);
         $nom  = patientLastName($facture);
         $prenom = patientFirstName($facture);
         $date= $facture->date_facturation;
@@ -258,9 +344,9 @@ class ImprimerController extends Controller
         $this->validatedSlug($slug,'compte_rendu_operatoires');
 
         $compteRendu = CompteRenduOperatoire::whereSlug($slug)->first();
-
         $data = compact('compteRendu');
         $pdf = PDF::loadView('rapport.compte_rendu',$data);
+        //dd($compteRendu->etablissement);
         $nom  = patientLastName($compteRendu);
         $prenom = patientFirstName($compteRendu);
         $date= formatRapportDate($compteRendu->date_intervention);

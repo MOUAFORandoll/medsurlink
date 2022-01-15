@@ -24,9 +24,9 @@ class ReponseSecreteRequest extends FormRequest
     public function rules()
     {
         return [
-            'question_id'=>'required|integer|exists:questions,id',
+            'question_id'=>'integer|exists:questions,id',
             'user_id'=>'required|integer|exists:users,id',
-            'reponse'=>'required|string|min:3'
+            'reponse'=>'string|existsmin:3'
         ];
     }
 }

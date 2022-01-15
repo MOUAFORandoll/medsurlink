@@ -193,7 +193,10 @@ class UserController extends Controller
 //                ]);
 //            }
 //        }
-
+        $slack = "";
+        if( !is_null($request->slack)){
+            $slack = $request->slack;
+        }
         $user = User::create([
             'nom'=>$request->nom,
             'prenom'=>$request->prenom,
@@ -205,6 +208,7 @@ class UserController extends Controller
             'pays'=>$request->pays,
             'telephone'=>$request->telephone,
             'adresse'=>$request->adresse,
+            'slack' => $slack,
             'isMedicasure'=>$request->get('isMedicasure','0'),
             'isNotice'=>$request->get('isNotice','0'),
             'password'=>Hash::make($password),
@@ -248,25 +252,23 @@ class UserController extends Controller
 
             $user = User::with('patient')->whereSlug($slug)->first();
 
+            $response = 0;
+
             // Get all patients where the name and surname are the same
-            if(!is_null($data['nom']) && !is_null($data['prenom'])) {
+            if
+            (   !is_null($data['nom'])
+                && !is_null($data['prenom'])
+
+                // Check if the name or the surname has changed
+                && (
+                    $data['nom'] != $user->nom
+                    || $data['prenom'] != $user->prenom
+                )
+            ) {
                 $response = User::with('patient')->where([
                     ['nom', '=', $data['nom']],
                     ['prenom', '=', $data['prenom']],
-                ])->count();
-            }
-
-            else if(is_null($data['nom'])) {
-                $response = User::with('patient')->where([
-                    ['nom', '=', $user->nom],
-                    ['prenom', '=', $data['prenom']],
-                ])->count();
-            }
-
-            else {
-                $response = User::with('patient')->where([
-                    ['nom', '=', $data['nom']],
-                    ['prenom', '=', $user->prenom],
+                    ['telephone', '=', $data['telephone']],
                 ])->count();
             }
 
@@ -317,6 +319,7 @@ class UserController extends Controller
             'adresse' => ['sometimes','nullable', 'string','min:3'],
             'isMedicasure' => ['sometimes','nullable', 'string'],
             'isNotice' => ['sometimes','nullable', 'string'],
+            'slack' => ['sometimes','nullable', 'string'],
         ];
         $validation = Validator::make($data,$rules);
 
@@ -336,6 +339,7 @@ class UserController extends Controller
             'adresse' => ['sometimes','nullable', 'string','min:3'],
             'isMedicasure' => ['sometimes','nullable', 'string'],
             'isNotice' => ['sometimes','nullable', 'string'],
+            'slack' => ['sometimes','nullable', 'string'],
         ];
 //        if(!is_null($role) && $role == "Patient"){
         $rule['email'] = "sometimes|nullable|string|email";

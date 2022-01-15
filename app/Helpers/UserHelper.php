@@ -54,7 +54,7 @@ if(!function_exists('genererCompteMedsurlink')) {
             'adresse'=>$userInformation['adresse'],
             'isMedicasure'=>$isMedicasure ,
             'isNotice'=>'0',
-            'password'=>Hash::make($password),
+            'password'=>$isMedicasure == "1" ? $password : Hash::make($password),
             'decede'=>'non'
         ]);
 
@@ -105,7 +105,7 @@ if(!function_exists('transformerEnAffilieMedicasure')) {
         $patientMedicasure['nomAffilie']  = $patient->user->nom;
         $patientMedicasure['prenomAffilie'] = $patient->user->prenom;
         $patientMedicasure['telephoneAffilie1'] = $patient->user->telephone;
-        $patientMedicasure['sexeAffilie'] = $patient->sexe;
+        $patientMedicasure['sexeAffilie'] = strtoupper($patient->sexe) == 'F' ? 'Mme' :'M';
         $patientMedicasure['villeResidenceAffilie'] = $patient->user->ville;
         $patientMedicasure['dateNaissanceAffilie'] = $patient->date_de_naissance;
         $patientMedicasure['adresse_affilie'] = $patient->user->adresse;
@@ -120,7 +120,7 @@ if(!function_exists('transformerEnSouscripteurMedicasure')) {
         $souscripteurMedicasure['nomSouscripteur']  = $souscripteur->user->nom;
         $souscripteurMedicasure['prenomSouscripteur'] = $souscripteur->user->prenom;
         $souscripteurMedicasure['telephoneSouscripeur1'] = $souscripteur->user->telephone;
-        $souscripteurMedicasure['sexeSouscripteur'] = $souscripteur->sexe ? $souscripteur->sexe :'M';
+        $souscripteurMedicasure['sexeSouscripteur'] = strtoupper($souscripteur->sexe) == 'F' ? 'Mme' :'M';
         $souscripteurMedicasure['emailSouscripteur1'] = $souscripteur->user->email;
         $souscripteurMedicasure['villeResidenceSouscripteur'] = $souscripteur->user->ville;
         $souscripteurMedicasure['paysResidenceSouscripteur'] = $souscripteur->user->pays;

@@ -43,6 +43,15 @@ class ConsultationMedecineGenerale extends Model
      */
     protected $restrictDeletes = [];
 
+    protected $casts = [
+        'diasgnostic' => 'array',
+        'nutrition' => 'array',
+        'lipide' => 'array',
+        'glucide' => 'array',
+        'examens' => 'array',
+        'anamneses' => 'array',
+    ];
+
     protected $fillable = [
         "dossier_medical_id",
         "date_consultation",
@@ -53,6 +62,7 @@ class ConsultationMedecineGenerale extends Model
         'slug',
         "examen_clinique",
         "examen_complementaire",
+        "complementaire",
         'traitement_propose',
         "profession",
         "situation_familiale",
@@ -65,6 +75,15 @@ class ConsultationMedecineGenerale extends Model
         "nbreCigarette",
         "nbreAnnee",
         "creator",
+        "diasgnostic",
+        "nutrition",
+        "lipide",
+        "glucide",
+        "examens",
+        "anamneses",
+        "anthropometrie",
+        "information",
+        "ligne_de_temps_id",
     ];
 
     public function dossier(){
@@ -172,4 +191,61 @@ class ConsultationMedecineGenerale extends Model
     public function rdv(){
         return $this->morphOne(RendezVous::class,'sourceable');
     }
+  /*
+   public function setDiasgnosticAttribute($value)
+    {
+        $diasgnostic = [];
+
+
+
+        $this->attributes['diasgnostic'] = json_encode($diasgnostic);
+    }
+   public function setNutritionAttribute($value)
+    {
+        $nutrition = [];
+
+        foreach ($value as $array_item) {
+            if (!is_null($array_item['key'])) {
+                $nutrition[] = $array_item;
+            }
+        }
+
+        $this->attributes['nutrition'] = json_encode($nutrition);
+    }
+    public function setLipideAttribute($value)
+    {
+        $lipide = [];
+
+        foreach ($value as $array_item) {
+            if (!is_null($array_item['key'])) {
+                $lipide[] = $array_item;
+            }
+        }
+
+        $this->attributes['lipide'] = json_encode($lipide);
+    }
+    public function setGlucideAttribute($value)
+    {
+        $glucide = [];
+       $value = json_decode($value);
+        foreach ($value as $array_item) {
+            if (!is_null($array_item['key'])) {
+                $glucide[] = $array_item;
+            }
+        }
+
+        $this->attributes['glucide'] = json_encode($glucide);
+    }
+    public function setExamensAttribute($value)
+    {
+        $examens = [];
+
+        foreach ($value as $array_item) {
+            if (!is_null($array_item['key'])) {
+                $examens[] = $array_item;
+            }
+        }
+
+        $this->attributes['examens'] = json_encode($examens);
+    }*/
 }
