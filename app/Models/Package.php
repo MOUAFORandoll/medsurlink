@@ -12,22 +12,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Package extends Model
 {
     use SoftDeletes;
-    use Sluggable;
-    use SluggableScopeHelpers;
-    use SlugRoutable;
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'ReferenceAndTimestamp'
-            ]
-        ];
-    }
+
+    protected $table = 'offres_packages';
 
     protected $fillable = [
         "description_fr",
@@ -35,5 +21,10 @@ class Package extends Model
         'montant',
         'items'
     ];
-
+    public  function  offres(){
+        return $this->belongTo(Offre::class,'offre_id','id');
+    }
+    public  function  items(){
+        return $this->hasMany(OffrePackageItem::class,'package_id','id');
+    }
 }

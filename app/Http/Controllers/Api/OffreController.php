@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Offre;
 
-class MotifController extends Controller
+class OffreController extends Controller
 {
     use PersonnalErrors;
     protected $table = "offres";
@@ -19,7 +19,7 @@ class MotifController extends Controller
      */
     public function index()
     {
-        $offres = Offre::all();
+        $offres = Offre::with(["packages","packages.items.item"])->get();
 
 
         return response()->json(['offres'=>$offres]);
