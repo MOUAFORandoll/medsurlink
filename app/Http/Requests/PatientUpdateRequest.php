@@ -38,8 +38,8 @@ class PatientUpdateRequest extends FormRequest
             "nom_contact"=>'sometimes|nullable|string|min:2',
             "tel_contact"=>'sometimes|nullable|string|min:9',
             "lien_contact"=>'sometimes|nullable|string|min:4',
-            'question_id'=>'required|integer|exists:questions,id',
-            'reponse'=>'required|string|min:3'
+            'question_id'=>'nullable|integer|exists:questions,id',
+            'reponse'=>'nullable|string|min:3'
       ];
     }
 }

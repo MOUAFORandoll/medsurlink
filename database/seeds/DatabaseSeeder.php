@@ -12,11 +12,21 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            PermissionTableSeeder::class,
-            RoleTableSeeder::class,
-            UsersTableSeeder::class,
-            MotifsTableSeeder::class,
-            QuestionTableSeeder::class,
+            // PermissionTableSeeder::class,
+            // RoleTableSeeder::class,
+            // UsersTableSeeder::class,
+            // MotifsTableSeeder::class,
+            // QuestionTableSeeder::class,
+            // ReponsesTableSeeder::class,
+            // MedicamentsTableSeeder::class,
+            // MedecinAvisSeeder::class,
+            // PrestationsCliniqueKutendaMedicalTableSeeder::class,
+            // ComptableRoleSeeder::class,
+            // AnamnesesSeeder::class,
+            // ExamenClinicSeeder::class,
+            // ExamenComplementaireSeeder::class,
+            // OtherComplementaireSeeder::class,
+            OffrePackageSeeder::class,
         ]);
     }
 }

@@ -26,7 +26,8 @@ class EtablissementExerciceRequest extends FormRequest
     {
         return [
             "name"=>"required|string|min:3",
-            "description"=>"sometimes|nullable|string"
+            "description"=>"sometimes|nullable|string",
+            "adresse"=>"sometimes|nullable|string"
         ];
     }
 }

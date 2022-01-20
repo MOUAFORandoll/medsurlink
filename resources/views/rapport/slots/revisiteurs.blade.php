@@ -1,5 +1,5 @@
 @if(count($medecins) != 0)
-    <h4>Medecin(s) ayant revisité(s) votre consultation</h4>
+    <h4>Medecin(s) ayant revisité votre consultation</h4>
     @foreach($medecins as $medecin)
         @if(!is_null($medecin->user))
             <div style="display: inline">

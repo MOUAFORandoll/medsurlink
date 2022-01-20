@@ -6,12 +6,14 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AntecedentRequest;
 use App\Models\Antecedent;
 use App\Models\DossierMedical;
+use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class AntecedentController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
     protected $table = "antecedents";
 
     /**
@@ -65,8 +67,9 @@ class AntecedentController extends Controller
                 $query->orderBy('created_at', 'desc');
             }
         ])->whereId($antecedent->dossier_medical_id)->first();
-
+        $this->updateDossierId($dossier->id);
         $dossier->updateDossier();
+
 
         return response()->json(['dossier'=>$dossier]);
 //        return response()->json(['antecedent'=>$antecedent]);
@@ -115,11 +118,13 @@ class AntecedentController extends Controller
 
         $antecedent = Antecedent::whereSlug($slug)->first();
 
-        $this->checkIfAuthorized("Antecedent",$antecedent->id,"create");
+//        $this->checkIfAuthorized("Antecedent",$antecedent->id,"create");
 
         Antecedent::whereSlug($slug)->update($request->validated());
 
         $antecedent = Antecedent::with('dossier')->whereSlug($slug)->first();
+
+        $this->updateDossierId($antecedent->dossier->id);
 
         return response()->json(['antecedent'=>$antecedent]);
     }
@@ -136,7 +141,7 @@ class AntecedentController extends Controller
 
         $antecedent = Antecedent::whereSlug($slug)->first();
 
-        $this->checkIfAuthorized("Antecedent",$antecedent->id,"create");
+        //$this->checkIfAuthorized("Antecedent",$antecedent->id,"create");
 
         $antecedent = Antecedent::with('dossier')->whereSlug($slug)->first();
         $antecedent->delete();
@@ -153,6 +158,8 @@ class AntecedentController extends Controller
                 $query->orderBy('created_at', 'desc');
             }
         ])->whereId($antecedent->dossier_medical_id)->first();
+
+        $this->updateDossierId($dossier->id);
 
         $dossier->updateDossier();
 

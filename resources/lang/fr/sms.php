@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'accountCreated'         => 'HELLO :nom,VEUILLEZ CLIQUER SUR CE LIEN POUR ACCEDER A VOTRE COMPTE.VOTRE MOT DE PASSE SE COMPOSE DE VOTRE date de naissance SUIVI DU CODE PRIVE :password '. config('app.frontend_url'),
-    'accountSecurityUpdated' => 'HELLO :nom,POUR DES RAISONS DE SECURITE, VOTRE MOT DE PASSE A ETE MISE A JOUR. LE NOUVEAU SE COMPOSE DE VOTRE date de naissance SUIVI DU CODE PRIVE :password '. config('app.frontend_url'),
-    'accountUpdated'         => 'HELLO :nom,VEUILLEZ CLIQUER SUR CE LIEN POUR ACCEDER A VOS INFORMATIONS MEDICALES '. config('app.frontend_url'),
+    'accountCreated'         => 'ACCEDEZ A VOTRE COMPTE SUR '. config('app.frontend_url').'. IDENTIFIANT :identifiant VOTRE MOT DE PASSE EST VOTRE annee de naissance SUIVIE DU CODE PRIVE :password ',
+    'accountSecurityUpdated' => ':nom,VOTRE NOUVEAU MOT DE PASSE SE COMPOSE DE VOTRE annee de naissance SUIVIE DU CODE PRIVE :password '. config('app.frontend_url'),
+    'accountUpdated'         => ':nom,CLIQUEZ SUR '. config('app.frontend_url').' ET ACCEDEZ A VOS INFORMATIONS MEDICALES',
+    'rappelerRendezVous'     => ':nom,RAPPEL DU RDV DU :date A :heure AVEC LE MEDECIN MEDICASURE :praticien',
     ];

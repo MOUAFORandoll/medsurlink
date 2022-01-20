@@ -7,11 +7,14 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\PraticienStoreRequest;
 use App\Http\Requests\PraticienUpdateRequest;
 use App\Mail\updateSetting;
+use App\Models\Comptable;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePraticien;
 use App\Models\Praticien;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
@@ -63,15 +66,35 @@ class PraticienController extends Controller
 
         $praticien = Praticien::create($request->validated() + ['user_id' => $user->id]);
         //Ajout des établissements
-        $praticien->etablissements()->attach($etablissements);
-        if ($request->get('isMedicasure') == "1"){
-            if (!in_array(4,$etablissements)){
-                $praticien->etablissements()->attach(4);
+        $estDeMedicasure = $request->get('isMedicasure') == "1";
+        if ($estDeMedicasure || empty(array_diff([0],$etablissements))){
+            $etablissements = EtablissementExercice::all();
+            foreach ($etablissements as $etablissement){
+                $praticien->etablissements()->attach($etablissement->id);
+                defineAsAuthor("Praticien",$praticien->user_id,'Add etablissement '.$etablissement->id);
+//                $isComptable = $request->get('isComptable','0');
+//                if($isComptable == '1' || $isComptable == 1){
+//                    Comptable::create([
+//                        'user_id'=>$user->id,
+//                        'etablissement_id'=>$etablissement->id,
+//                        'creator'=>Auth::id()
+//                    ]);
+//                }
+            }
+        }else{
+            foreach (array_diff($etablissements,[0]) as $etablissement){
+                $praticien->etablissements()->attach($etablissement);
+                $isComptable = $request->get('isComptable','0');
+//                if($isComptable == '1' || $isComptable == 1){
+//                    Comptable::create([
+//                        'user_id'=>$user->id,
+//                        'etablissement_id'=>$etablissement,
+//                        'creator'=>Auth::id()
+//                    ]);
+//                }
+                defineAsAuthor("Praticien",$praticien->user_id,'Add etablissement '.$etablissement);
             }
         }
-        $praticien->save();
-
-
 
         if($request->hasFile('signature')) {
             if ($request->file('signature')->isValid()) {
@@ -171,6 +194,7 @@ class PraticienController extends Controller
             Mail::to($praticien->user->email)->send($mail);
 
         }catch (\Swift_TransportException $transportException){
+            Log::error($transportException->getMessage());
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
             return response()->json(['particien'=>$praticien, "message"=>$message]);
 
@@ -199,7 +223,7 @@ class PraticienController extends Controller
 
     public function addEtablissement(Request $request){
         $validation = Validator::make($request->all(),[
-            'etablissement_exercice_id.*'=>'sometimes|nullable|integer|exists:etablissement_exercices,id',
+            'etablissement_exercice_id.*'=>'sometimes|nullable|integer',
             'praticien_id'=>'required|exists:praticiens,slug',
         ]);
 
@@ -209,17 +233,27 @@ class PraticienController extends Controller
 
         $etablissements = $request->get('etablissement_exercice_id');
         $praticien = Praticien::whereSlug($request->get('praticien_id'))->first();
+        if (!in_array(0,$etablissements)) {
+            foreach ($etablissements as $etablissementId) {
+                $etablissement = EtablissementExercice::find($etablissementId);
+                //Je verifie si ce praticien n'est pas encore dans cette etablissement
+                $nbre = EtablissementExercicePraticien::where('etablissement_id', '=', $etablissementId)->where('praticien_id', '=', $praticien->user_id)->count();
+                if ($nbre == 0) {
+                    $praticien->etablissements()->attach($etablissement->id);
+                    defineAsAuthor("Praticien", $praticien->user_id, 'attach');
+                }
+            }
+        }else{
+            foreach ($praticien->etablissements as $etablissement){
+                $praticien->etablissements()->detach($etablissement->id);
+            }
 
-        foreach ($etablissements as $etablissementId){
-            $etablissement = EtablissementExercice::find($etablissementId);
-//Je verifie si ce praticien n'est pas encore dans cette etablissement
-            $nbre = EtablissementExercicePraticien::where('etablissement_id','=',$etablissementId)->where('praticien_id','=',$praticien->user_id)->count();
-            if ($nbre ==0){
+            $etablissements = EtablissementExercice::all();
+            foreach ($etablissements as $etablissement){
                 $praticien->etablissements()->attach($etablissement->id);
-                defineAsAuthor("Praticien",$praticien->user_id,'attach');
+                defineAsAuthor("Praticien",$praticien->user_id,'Add etablissement '.$etablissement->id);
             }
         }
-
         $praticien = Praticien::with('etablissements','specialite','user')->whereUserId($praticien->user_id)->first();
 
         return response()->json(['praticien'=>$praticien]);

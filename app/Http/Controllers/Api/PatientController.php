@@ -8,12 +8,15 @@ use App\Http\Requests\PatientUpdateRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Mail\PatientAffiliated;
 use App\Mail\updateSetting;
+use App\Models\DossierMedical;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePatient;
 use App\Models\Patient;
 use App\Models\ReponseSecrete;
 use App\Models\Souscripteur;
+use App\Models\Suivi;
 use App\Traits\SmsTrait;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -26,6 +29,41 @@ class PatientController extends Controller
     use PersonnalErrors;
     use SmsTrait;
     protected $table = 'patients';
+        /**
+     * @OA\Post(
+     *      path="/v1/patients",
+     *      operationId="getUserList",
+     *      tags={"Patient"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Get list of patient",
+     *      description="Returns list of users",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
+     */
     /**
      * Display a listing of the resource.
      *
@@ -33,7 +71,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = Patient::with(['souscripteur','dossier','user','affiliations','financeurs.financable'])->restrictUser()->get();
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->get();
         return response()->json(['patients'=>$patients]);
     }
 
@@ -60,6 +98,10 @@ class PatientController extends Controller
         //Creation de l'utilisateur dans la table user et génération du mot de passe
         $userResponse =  UserController::generatedUser($request,"Patient");
 
+        if($userResponse->getOriginalContent()['user'] == null) {
+            $this->revealError('nom', $userResponse->getOriginalContent()['error']);
+        }
+
         $user = $userResponse->getOriginalContent()['user'];
         $password = $userResponse->getOriginalContent()['password'];
         $code = $userResponse->getOriginalContent()['code'];
@@ -70,13 +112,18 @@ class PatientController extends Controller
 
         $age = evaluateYearOfOld($request->date_de_naissance);
 
-        $patient = Patient::create($request->except(['code_postal','quartier','question_id','reponse']) + ['user_id' => $user->id,'age'=>$age]);
+        $patient = Patient::create($request->except(['code_postal','quartier']) + ['user_id' => $user->id,'age'=>$age]);
 
         //Définition de la question secrete et de la reponse secrete
         ReponseSecrete::create($request->only(['question_id','reponse'])+['user_id' => $user->id]);
 
         //Generation du dossier client
         $dossier = DossierMedicalController::genererDossier($patient->user_id);
+        Suivi::create([
+            'dossier_medical_id'=>$patient->dossier->id,
+            'motifs'=>'Prise en charge initiale en attente',
+            'categorie_id'=>'1'
+        ]);
         defineAsAuthor("Patient",$patient->user_id,'create',$patient->user_id);
 
         //Ajout du patient à l'etablissement selectionné
@@ -94,27 +141,32 @@ class PatientController extends Controller
 
         }
 
+
         //Envoi des informations patient par mail
         $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
+        $identifiant = $patient->dossier->numero_dossier;
         try{
             //Envoi de sms
             $user = $patient->user;
-            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
-            $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$code],'fr'));
+//            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+            $nom = substr(strtoupper( $user->nom),0,9);
+            $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$code,'identifiant'=>$identifiant],'fr'));
             //!Envoi de sms
 
             UserController::sendUserPatientInformationViaMail($user,$password);
 
             $patient = Patient::with('user','dossier')->where('user_id','=',$patient->user_id)->first();
             $souscripteur = Souscripteur::with('user')->where('user_id','=',$patient->souscripteur_id)->first();
+
             if (!is_null($souscripteur)){
 
                 $user = $souscripteur->user;
-                $this->sendSmsToUser($user);
+                $this->sendSmsToUser($user,null,$identifiant);
 
                 $mail = new PatientAffiliated($souscripteur,$patient);
                 Mail::to($souscripteur->user->email)->send($mail);
             }
+
 
             return response()->json(['patient'=>$patient,"password"=>$password]);
         }catch (\Swift_TransportException $transportException){
@@ -134,6 +186,14 @@ class PatientController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
+        /*$patient = Patient::with([
+            'souscripteur.user',
+            'user.questionSecrete',
+            'affiliations',
+            'etablissements',
+            'financeurs.financable.user',
+            'dossier',
+        ])->restrictUser()->whereSlug($slug)->first();*/
         $patient = Patient::with([
             'souscripteur.user',
             'user.questionSecrete',
@@ -141,9 +201,200 @@ class PatientController extends Controller
             'etablissements',
             'financeurs.financable.user',
             'dossier',
-        ])->restrictUser()->whereSlug($slug)->first();
-
+        ])->whereSlug($slug)->first();
         return response()->json(['patient'=>$patient]);
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $value
+     * @return \Illuminate\Http\Response
+     */
+
+    public function specialList($value)
+    {
+        $result=[];
+        $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])
+                            ->restrictUser()
+                            ->whereHas('user', function($q) use ($value) {$q->where('nom', 'like', '%' .$value.'%')
+                                                                            ->orwhere('prenom', 'like', '%' .$value.'%')
+                                                                            ->orwhere('email', 'like', '%' .$value.'%')
+                                                                            ;})
+                            ->orwhereHas('dossier', function($q) use ($value) {$q->where('numero_dossier', 'like', '%' .$value.'%');})
+                            ->orwhere('age', 'like', '%' .$value.'%')
+                            ->get();
+        return $patients;
+        // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
+        // return $patients;
+        // foreach($patients as $p){
+
+        //     if($p->user!=null){
+
+        //         if(strpos(strtolower($p->user->nom),strtolower($value))!==false ||
+        //     strpos(strtolower($p->user->prenom),strtolower($value))!==false ||
+        //     strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false ||
+        //             strpos(strtolower(strval($p->age)),strtolower($value))!==false ||
+        //     strpos(strtolower($p->user->email),strtolower($value))!==false) {
+        //         // return $p;
+        //         array_push($result,$p);
+        //         // return $result;
+        //     }
+
+
+        //     }
+        //     else{
+        //         if(
+        //             strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false ||
+        //             strpos(strtolower(strval($p->age)),strtolower($value))!==false)
+        //             array_push($result,$p);
+        //     }
+
+        // }
+        // return $result;
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $value
+     * @return \Illuminate\Http\Response
+     */
+
+    public function PatientsDoctor($value)
+    {
+        // return $value;
+        $result=[];
+        $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->get();
+
+        // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
+        // return $patients;
+        foreach($patients as $p){
+            // if($p->user_id==629
+
+                if(isset($p->medecinReferent)){
+                    // return "true";
+                    foreach($p->medecinReferent as $d){
+
+                        if($d->medecinControles!=null && $d->medecinControles->user!=null){
+                            if($d->medecinControles->user->id==$value){
+                                array_push($result,$p);
+                            }
+
+                        }
+                    }
+                }
+            // }
+            // return "true";
+
+
+        }
+        return $result;
+
+    }
+
+    public function CountPatientsDoctor($value)
+    {
+        // return $value;
+        $result=[];
+        $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->get();
+
+        // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
+        // return $patients;
+        foreach($patients as $p){
+            // if($p->user_id==629
+
+                if(isset($p->medecinReferent)){
+                    // return "true";
+                    foreach($p->medecinReferent as $d){
+
+                        if($d->medecinControles!=null && $d->medecinControles->user!=null){
+                            if($d->medecinControles->user->id==$value){
+                                array_push($result,$p);
+                            }
+
+                        }
+                    }
+                }
+            // }
+            // return "true";
+
+
+        }
+        return count($result);
+
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  string  $value
+     * @return \Illuminate\Http\Response
+     */
+
+    public function FirstPatientsDoctor($value, $limit)
+    {
+        // return $value;
+        $result=[];
+        $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->get();
+
+        // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
+        // return $patients;
+        foreach($patients as $p){
+            // if($p->user_id==629
+
+                if(isset($p->medecinReferent)){
+                    // return "true";
+                    foreach($p->medecinReferent as $d){
+
+                        if($d->medecinControles!=null && $d->medecinControles->user!=null){
+                            if($d->medecinControles->user->id==$value){
+                                array_push($result,$p);
+                            }
+
+                        }
+                    }
+                }
+            // }
+            // return "true";
+
+
+        }
+        return array_slice($result, 0, $limit);
+
+    }
+
+    public function NextPatientsDoctor($value, $limit, $page)
+    {
+        // return $value;
+        $result=[];
+        $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->get();
+
+        // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
+        // return $patients;
+        foreach($patients as $p){
+            // if($p->user_id==629
+
+                if(isset($p->medecinReferent)){
+                    // return "true";
+                    foreach($p->medecinReferent as $d){
+
+                        if($d->medecinControles!=null && $d->medecinControles->user!=null){
+                            if($d->medecinControles->user->id==$value){
+                                array_push($result,$p);
+                            }
+
+                        }
+                    }
+                }
+            // }
+            // return "true";
+
+
+        }
+        return array_slice($result, ($page-1)*$limit, $limit);
+
     }
 
     /**
@@ -171,7 +422,11 @@ class PatientController extends Controller
 
         $patient= Patient::with('user')->whereSlug($slug)->first();
 
-        UserController::updatePersonalInformation($request->except('patient','souscripteur_id','sexe','question_id','reponse'),$patient->user->slug);
+        $response = UserController::updatePersonalInformation($request->except('patient','souscripteur_id','sexe','question_id','reponse'),$patient->user->slug);
+
+        if($response->getOriginalContent()['user'] == null) {
+            $this->revealError('nom', $response->getOriginalContent()['error']);
+        }
 
         $age = evaluateYearOfOld($request->date_de_naissance);
 
@@ -238,4 +493,100 @@ class PatientController extends Controller
         }
     }
 
+    /**
+     * Fonction permettant de générer un nouveau mot de passe pour un numero de dossier précis
+     * @param Request $request
+     */
+    public function resetPassword(Request $request){
+        $request->validate([
+            'numero_dossier'=>"required|string|exists:dossier_medicals,numero_dossier",
+            'date_de_naissance'=>"required|date",
+            'telephone'=>'required|string|min:9',
+            'question_id'=>'integer|nullable',
+            'reponse'=>'nullable|string|min:3'
+        ]);
+
+        $dossier = DossierMedical::where('numero_dossier',$request->get('numero_dossier'))->first();
+        $user = $dossier->patient->user;
+        $questionSecrete = $user->questionSecrete;
+        //Verification du numero de telephone
+        if ($user->telephone != $request->get('telephone')){
+            $this->revealError('telephone','Phone invalid');
+        }
+        //Verification de la question de securite
+        if ($questionSecrete->question_id != $request->get('question_id')){
+            $this->revealError('question_id','Secret question or answer invalid');
+        }
+        //Verification de la reponse de securite
+        if (strtoupper($questionSecrete->reponse) != strtoupper($request->get('reponse'))){
+            $this->revealError('question_id','Secret question or answer invalid');
+        }
+
+        $password = str_random(10);
+        $code="";
+        $date_naissance = Carbon::parse($request->get('date_de_naissance'))->year;
+        $code = substr($password,0,5);
+        $password = $date_naissance.$code;
+
+//        $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+        $nom = substr(strtoupper( $user->nom),0,20);
+        $user->password = bcrypt($password);
+        $user->save();
+        if ($user->decede == 'non') {
+            sendSMS($request->get('telephone'), trans('sms.accountSecurityUpdated', ['nom' => $nom, 'password' => $code], 'fr'));
+        }
+        return response()->json(['message'=>'Sms envoyé avec succès']);
+    }
+
+    public function decede(Request $request,$slug){
+        $this->validatedSlug($slug,$this->table);
+        $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
+        $user = User::whereId($patient->user_id)->first();
+
+        $user->decede = $request->get('decede');
+        $user->save();
+        $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
+        return response()->json(['patient'=>$patient]);
+    }
+    public function getPatientWithMedecin()
+    {
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->whereHas('user', function($q) {$q->where('isMedicasure', '=', 1)->where('decede', '=', 'non');})->get();
+        return response()->json(['patients'=>$patients]);
+    }
+
+    public function getFirstPatientWithMedecin($limit)
+    {
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->whereHas('user', function($q) {$q->where('isMedicasure', '=', 1)->where('decede', '=', 'non');})->take($limit)->get();
+        return response()->json(['patients'=>$patients]);
+    }
+
+    public function getNextPatientWithMedecin($limit, $page)
+    {
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->whereHas('user', function($q) {$q->where('isMedicasure', '=', 1)->where('decede', '=', 'non');})->limit($limit)->offset(($page - 1) * $limit)->get();
+        return response()->json(['patients'=>$patients]);
+    }
+
+    // public function get10PatientWithMedecin()
+    // {
+    //     $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->take(10)->get();
+    //     return response()->json(['patients'=>$patients]);
+    // }
+
+    // public function get15PatientWithMedecin()
+    // {
+    //     $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->take(15)->get();
+    //     return response()->json(['patients'=>$patients]);
+    // }
+
+    // public function get100PatientWithMedecin()
+    // {
+    //     $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->take(100)->get();
+    //     return response()->json(['patients'=>$patients]);
+    // }
+
+    public function getCountPatientWithMedecin()
+    {
+        $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->whereHas('user', function($q) {$q->where('isMedicasure', '=', 1)->where('decede', '=', 'non');})->count();
+        return response()->json(['count'=>$patients]);
+    }
 }

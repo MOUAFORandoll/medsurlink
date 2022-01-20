@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ResultatRequest;
 use App\Models\ResultatImagerie;
+use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
@@ -15,6 +16,8 @@ class ResultatImagerieController extends Controller
 {
     use PersonnalErrors;
     use SmsTrait;
+    use DossierTrait;
+
     protected $table = "resultat_imageries";
 
     /**
@@ -54,8 +57,9 @@ class ResultatImagerieController extends Controller
             if ($request->file('file')->isValid()) {
                 $resultat = ResultatImagerie::create($request->validated());
                 $this->uploadFile($request,$resultat);
+                $this->updateDossierId($resultat->dossier->id);
 
-                defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
+                defineAsAuthor("ResultatImagerie", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
                 return response()->json([
                     'resultat' => $resultat
@@ -70,7 +74,8 @@ class ResultatImagerieController extends Controller
             );
         }else{
             $resultat = ResultatImagerie::create($request->validated());
-            defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
+            $this->updateDossierId($resultat->dossier->id);
+            defineAsAuthor("ResultatImagerie", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
             return response()->json([
                 'resultat' => $resultat
@@ -100,7 +105,8 @@ class ResultatImagerieController extends Controller
         $resultat = ResultatImagerie::with(['dossier.patient.user','dossier.consultationsMedecine', 'consultation'])
             ->whereSlug($slug)
             ->first();
-        $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$resultat->id,"create");
+        $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("ResultatImagerie",$resultat->id,"create");
+        $resultat['author'] = getAuthor("ResultatImagerie",$resultat->id,"create");
         $resultat['isAuthor'] = $motifIsAuthor->getOriginalContent();
 
         return response()->json([
@@ -137,7 +143,7 @@ class ResultatImagerieController extends Controller
 
         $resultat = ResultatImagerie::findBySlug($slug);
 
-        $this->checkIfAuthorized("Resultat", $resultat->id,"create");
+        $this->checkIfAuthorized("ResultatImagerie", $resultat->id,"create");
 
         ResultatImagerie::whereSlug($slug)->update($request->validated());
 
@@ -151,8 +157,10 @@ class ResultatImagerieController extends Controller
             $this->uploadFile($request,$resultat);
         }
 
-        if (!is_null($file))
-        File::delete(public_path().'/storage/'.$file);
+        if (!is_null($file) && $request->hasFile('file'))
+            File::delete(public_path().'/storage/'.$file);
+
+        $this->updateDossierId($resultat->dossier->id);
 
         return response()->json([
             'resultat' => $resultat
@@ -176,16 +184,20 @@ class ResultatImagerieController extends Controller
             ->first();
 
         if (is_null($resultat->passed_at)) {
-           $this->revealNonTransmis();
+            $this->revealNonTransmis();
 
         } else {
             $resultat->archived_at = Carbon::now();
             $resultat->save();
 
-            defineAsAuthor("Resultat", $resultat->id,'archive');
+            defineAsAuthor("ResultatImagerie", $resultat->id,'archive');
             //Envoi du sms
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
-
+            $user = $resultat->dossier->patient->user;
+            if ($user->decede == 'non') {
+                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+            }
+            $this->updateDossierId($resultat->dossier->id);
             return response()->json([
                 'resultat' => $resultat
             ]);
@@ -209,9 +221,13 @@ class ResultatImagerieController extends Controller
 
         $resultat->passed_at = Carbon::now();
         $resultat->save();
-
-        defineAsAuthor("Resultat", $resultat->id,'transmettre');
-        $this->sendSmsToUser($resultat->dossier->patient->user);
+        $this->updateDossierId($resultat->dossier->id);
+        $user = $resultat->dossier->patient->user;
+        if ($user->decede == 'non') {
+            defineAsAuthor("ResultatImagerie", $resultat->id, 'transmettre');
+            $this->sendSmsToUser($resultat->dossier->patient->user);
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+        }
         return response()->json([
             'resultat' => $resultat
         ]);
@@ -232,8 +248,8 @@ class ResultatImagerieController extends Controller
 
         $resultat = ResultatImagerie::with('dossier')->whereSlug($slug)->first();
 
-        $this->checkIfAuthorized("Resultat", $resultat->id,"create");
-
+        $this->checkIfAuthorized("ResultatImagerie", $resultat->id,"create");
+        $this->updateDossierId($resultat->dossier->id);
         $resultat->delete();
         File::delete(public_path().'/storage/'.$resultat->file);
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ExamenCardioRequest;
 use App\Models\Cardiologie;
 use App\Models\ExamenCardio;
+use App\Traits\DossierTrait;
 use App\Traits\UserTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,6 +15,8 @@ class ExamenCardioController extends Controller
 {
     use PersonnalErrors;
     use UserTrait;
+    use DossierTrait;
+
     protected $table = 'examen_cardios';
 
     /**
@@ -45,13 +48,14 @@ class ExamenCardioController extends Controller
      */
     public function store(ExamenCardioRequest $request)
     {
-        $this->verificationDeSpecialite();
+//        $this->verificationDeSpecialite();
 
         $cardiologie = Cardiologie::whereSlug($request->get('cardiologie_id'))->first();
         $examenCardio = ExamenCardio::create($request->except('cardiologie_id') + ['cardiologie_id'=>$cardiologie->id]);
         defineAsAuthor("ExamenCardio", $examenCardio->id, 'create', $cardiologie->dossier->patient->user_id);
 
         $examen = ExamenCardio::with('cardiologie')->whereSlug($examenCardio->slug)->first();
+        $this->updateDossierId($examen->cardiologie->dossier->id);
         $examen->updateExamen();
         return  response()->json(['examen'=>$examen]);
     }
@@ -97,6 +101,8 @@ class ExamenCardioController extends Controller
         ExamenCardio::whereSlug($slug)->update($request->validated());
         $examen = ExamenCardio::with('cardiologie')->whereSlug($slug)->first();
         $examen->updateExamen();
+        $this->updateDossierId($examen->cardiologie->dossier->id);
+
         defineAsAuthor("ExamenCardio", $examen->id, 'update', $examen->cardiologie->dossier->patient->user_id);
         return  response()->json(['examen'=>$examen]);
     }
@@ -113,6 +119,7 @@ class ExamenCardioController extends Controller
 
         $examen = ExamenCardio::with('cardiologie')->whereSlug($slug)->first();
         $examen->updateExamen();
+        $this->updateDossierId($examen->cardiologie->dossier->id);
         $examen->delete();
         defineAsAuthor("ExamenCardio", $examen->id, 'update', $examen->cardiologie->dossier->patient->user_id);
         return  response()->json(['examen'=>$examen]);

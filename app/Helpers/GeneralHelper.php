@@ -2,6 +2,7 @@
 
 use App\SMS;
 use App\Notifications\SendSMS;
+use Illuminate\Support\Arr;
 
 if(!function_exists('sendSMS'))
 {
@@ -37,16 +38,39 @@ if(!function_exists('sendSmsToUser'))
      */
     function sendSmsToUser($user,$sender = null) {
         if (!is_null($user)){
-            try {
-                $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
-                sendSMS($user->telephone,trans('sms.accountUpdated',['nom'=>$nom],'fr'),$sender);
-            }catch (\Exception $exception){
-                //$exception
+            if ($user->decede == 'non'){
+                try {
+                    $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+                    sendSMS($user->telephone,trans('sms.accountUpdated',['nom'=>$nom],'fr'),$sender);
+                }catch (\Exception $exception){
+                    //$exception
+                }
             }
         }
     }
 }
-
+if(!function_exists('_group_by'))
+{
+    /**
+     * Group array by key
+     *
+     * @param $array
+     * @param $key
+     */
+    function _group_by($array, $key) {
+        $return = array();
+        foreach($array as $val) {
+            $return[$val[$key]][] = $val;
+        }
+        return $return;
+    }
+}
+if(!function_exists('isJSON'))
+{
+    function isJSON($string){
+        return is_string($string) && is_array(json_decode($string, true)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
+    }
+}
 if(!function_exists('getFullNameWithoutAccent'))
 {
     /**
@@ -61,6 +85,18 @@ if(!function_exists('getFullNameWithoutAccent'))
 
         $string_without_accent = str_replace($search, $replace, $string_with_accent);
         return $string_without_accent;
+    }
+}
+
+if(!function_exists('mapExpectValue'))
+{
+    /**
+     * @param $string_with_accent
+     * @return string
+     */
+    function mapExpectValue($arrayList,$unNeedArray)
+    {
+      return Arr::except($arrayList,$unNeedArray);
     }
 }
 

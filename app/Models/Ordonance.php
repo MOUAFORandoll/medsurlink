@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Ordonance extends Model
 {
@@ -18,6 +20,7 @@ class Ordonance extends Model
         "slug",
         "dossier_medical_id",
         "date_prescription",
+        "praticien_id",
         "archieved_at",
         "passed_at",
     ];
@@ -44,12 +47,21 @@ class Ordonance extends Model
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }
 
-    public function medicaments(){
-        return $this->belongsToMany(Medicament::class,'ordonance_medicament','ordonance_id','medicament_id');
-    }
-
     public function updateOrdonance(){
         $isAuthor = checkIfIsAuthorOrIsAuthorized('Ordonance',$this->id,'create');
         $this['isAuthor']=$isAuthor->getOriginalContent();
+        $connectedUser = Auth::user();
+        if ($connectedUser->getRoleNames()->first() == 'Medecin controle'){
+            $this['isAuthor']=true;
+        }
     }
+
+    public function praticien(){
+        return $this->belongsTo(User::class,'praticien_id','id');
+    }
+
+    public function prescriptions(){
+        return $this->hasMany(Prescription::class,'ordonance_id','id');
+    }
+
 }

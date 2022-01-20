@@ -38,6 +38,7 @@ class Praticien extends Model
         'signature'
 
     ];
+
     public function sluggable()
     {
         return [
@@ -46,9 +47,11 @@ class Praticien extends Model
             ]
         ];
     }
+
     public function etablissements(){
         return $this->belongsToMany(EtablissementExercice::class,'etablissement_exercice_praticien','praticien_id','etablissement_id');
     }
+
     public function specialite(){
         return $this->belongsTo(Specialite::class,'specialite_id','id');
     }

@@ -34,12 +34,14 @@ class HospitalisationRequest extends FormRequest
             "conclusion"=>"sometimes|nullable|string",
             "avis"=>"sometimes|nullable|string",
             "traitement_sortie"=>"sometimes|nullable|string",
-            "rendez_vous"=>"sometimes|nullable|date|after_or_equal:date_sortie",
+            "rendez_vous"=>"sometimes|nullable",
             "examen_clinique"=>"sometimes|nullable|string|min:2",
             "examen_complementaire"=>"sometimes|nullable|string|min:2",
             'etablissement_id'=>'required|integer|exists:etablissement_exercices,id',
-            'motifs.*'=>'required'
+            'motifs.*'=>'required',
+            "motifRdv"=>"sometimes|nullable|string"
         ];
+
 
         return $rules;
     }

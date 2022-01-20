@@ -105,7 +105,7 @@ class ParametreCommunController extends Controller
 
         $parametreCommun = ParametreCommun::findBySlug($slug);
 
-        $this->checkIfAuthorized("ParametreCommun",$parametreCommun->id,"create");
+//        $this->checkIfAuthorized("ParametreCommun",$parametreCommun->id,"create");
 
         ParametreCommun::whereSlug($slug)->update($request->validated());
 

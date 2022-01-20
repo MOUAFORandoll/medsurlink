@@ -47,7 +47,11 @@ class MailResetPasswordNotification extends Notification
 
         $email = $notifiable->getEmailForPasswordReset();
         $local = "http://localhost:8080";
-        $online = 'https://www.medsurlink.com';
+        if (config('app.env') == 'prod'){
+            $online = 'https://www.medsurlink.com';
+        }else{
+            $online = 'https://www.staging.medsurlink.com';
+        }
         $date = Carbon::now();
         $mail = new MailMessage;
         $users = User::whereEmail($email)->get();
@@ -79,7 +83,7 @@ class MailResetPasswordNotification extends Notification
         }
         if (count($users)>0) {
             $token = $this->token;
-            $mail->from('no-reply@medicasure.com');
+            $mail->from('no-reply@medsurlink.com');
             $mail->subject(Lang::getFromJson('Reset Password Notification'));
             $mail->line(Lang::getFromJson('You are receiving this email because we received a password reset request for your account.'));
 

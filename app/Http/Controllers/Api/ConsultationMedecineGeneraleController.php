@@ -15,10 +15,13 @@ use App\Models\EtablissementExercicePatient;
 use App\Models\Motif;
 use App\Models\ParametreCommun;
 use App\Models\Patient;
+use App\Models\RendezVous;
 use App\Models\Traitement;
 use App\Models\TraitementActuel;
+use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -30,6 +33,8 @@ class ConsultationMedecineGeneraleController extends Controller
 {
     use PersonnalErrors;
     use SmsTrait;
+    use DossierTrait;
+
     protected $table = 'consultation_medecine_generales';
 
     /**
@@ -67,8 +72,11 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function store(ConsutationMedecineRequest $request)
     {
-
-        $consultation = ConsultationMedecineGenerale::create($request->except('documents'));
+        //dd($request->except('documents','dateRdv','motifRdv'));
+        $consultation = ConsultationMedecineGenerale::create($request->except('documents','dateRdv','motifRdv'));
+        $consultation->creator = Auth::id();
+        $consultation->save();
+        //dd($request->except('documents','dateRdv','motifRdv'));
         defineAsAuthor("ConsultationMedecineGenerale", $consultation->id, 'create', $consultation->dossier->patient->user_id);
 
         $consultation = ConsultationMedecineGenerale::with([
@@ -87,6 +95,30 @@ class ConsultationMedecineGeneraleController extends Controller
             'parametresCommun',
             'etablissement'
         ])->find($consultation->id);
+
+
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('dateRdv');
+        if (!is_null($dateRdv) ){
+            if (strlen($dateRdv) >0 && $dateRdv != 'null' &&  $dateRdv != 'Invalid date' ){
+                if ($motifRdv == 'null'){
+                    $motifRdv = 'Rendez vous de la consultation medecine génerale du '.$request->get('date_consultation');
+                }
+                $praticien_id = $this->validationPraticien($request->get('praticien_id'));
+                RendezVous::create([
+                    "sourceable_id"=>$consultation->id,
+                    "sourceable_type"=>'Consultation',
+                    "patient_id"=>$consultation->dossier->patient->user_id,
+                    "praticien_id"=>((integer) $praticien_id) !==0 ? $praticien_id :null,
+                    "initiateur"=>Auth::id(),
+                    "nom_medecin"=>((integer) $praticien_id) !==0 ? null :$praticien_id,
+                    "motifs"=>$motifRdv,
+                    "date"=>$dateRdv,
+                    "statut"=>'Programmé',
+                ]);
+            }
+        }
 
         $motifs = $request->get('motifs');
         $motifs = explode(",", $motifs);
@@ -190,6 +222,7 @@ class ConsultationMedecineGeneraleController extends Controller
         if ($request->hasFile('documents')) {
             $this->uploadFile($request, $consultation);
         }
+        $this->updateDossierId($consultation->dossier->id);
 
         return response()->json(["consultation" => $consultation]);
     }
@@ -211,7 +244,7 @@ class ConsultationMedecineGeneraleController extends Controller
             'dossier.resultatsLabo',
             'dossier.hospitalisations',
             'dossier.consultationsObstetrique',
-            'dossier.consultationsMedecine',
+            'dossier.consultationsMedecine.conclusions',
             'dossier.resultatsImagerie',
             'dossier.allergies',
             'dossier.antecedents',
@@ -221,11 +254,13 @@ class ConsultationMedecineGeneraleController extends Controller
             'conclusions',
             'parametresCommun',
             'etablissement',
-            'files'
+            'files',
+            'rdv.praticien'
         ])->whereSlug($slug)->first();
 
-        $consultation->updateConsultationMedecine();
-
+        if (!is_null($consultation)){
+            $consultation->updateConsultationMedecine();
+        }
         return response()->json(["consultation"=>$consultation]);
 
     }
@@ -273,15 +308,18 @@ class ConsultationMedecineGeneraleController extends Controller
                 $consultation->motifs()->attach($motif);
                 defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
             }else{
-                $item =   Motif::create([
-                    "reference"=>$consultation->date_consultation,
-                    "description"=>$motif
-                ]);
+                if ($motif != ""){
 
-                defineAsAuthor("Motif", $item->id, 'create');
-                $consultation->motifs()->attach($item->id);
-                defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
+                    $item =   Motif::create([
+                        "reference"=>$consultation->date_consultation,
+                        "description"=>$motif
+                    ]);
 
+                    defineAsAuthor("Motif", $item->id, 'create');
+                    $consultation->motifs()->attach($item->id);
+                    defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
+
+                }
             }
         }
 
@@ -307,10 +345,14 @@ class ConsultationMedecineGeneraleController extends Controller
             }
         }
 
-        ConsultationMedecineGenerale::whereSlug($slug)->update($request->except(['motifs','conclusions','consultation','contributeurs','documents']));
+        ConsultationMedecineGenerale::whereSlug($slug)->update($request->except(['praticien_id','motifs','conclusions','consultation','contributeurs','documents','dateRdv','motifRdv']));
         defineAsAuthor("ConsultationMedecineGenerale",$consultation->id,'update',$consultation->dossier->patient->user_id);
 
-        $consultation = ConsultationMedecineGenerale::with(['operationables.contributable','dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
+        $consultation = ConsultationMedecineGenerale::with(['rdv','operationables.contributable','dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
+
+        //Modification du rendez vous de la consultation ou créattion
+        $this->updateRdv($consultation,$request);
+
         $precedentContributeurs = [];
         //Mises à jour des contributeurs
         $contributeurs = $request->get('contributeurs');
@@ -325,14 +367,18 @@ class ConsultationMedecineGeneraleController extends Controller
             $difference = array_diff($contributeurs, $precedentContributeurs);
             if (!empty($difference)) {
                 foreach ($difference as $contributeur) {
-                    $nouveauContributeur = Contributeurs::create([
-                        'contributable_id' => $contributeur,
-                        'contributable_type' => 'App\User',
-                        'operationable_id' => $consultation->id,
-                        'operationable_type' => 'Consultation'
+                    if ($contributeur !== ""){
 
-                    ]);
-                    defineAsAuthor("Consultation", $nouveauContributeur->id, 'Ajout contributeur', $consultation->dossier->patient->user_id);
+                        $nouveauContributeur = Contributeurs::create([
+                            'contributable_id' => $contributeur,
+                            'contributable_type' => 'App\User',
+                            'operationable_id' => $consultation->id,
+                            'operationable_type' => 'Consultation'
+
+                        ]);
+
+                        defineAsAuthor("Consultation", $nouveauContributeur->id, 'Ajout contributeur', $consultation->dossier->patient->user_id);
+                    }
                 }
             }
 
@@ -361,6 +407,7 @@ class ConsultationMedecineGeneraleController extends Controller
             File::delete(public_path().'/storage/'.$file);
 
         $consultation->updateConsultationMedecine();
+        $this->updateDossierId($consultation->dossier->id);
 
         return response()->json(["consultation"=>$consultation]);
     }
@@ -384,6 +431,8 @@ class ConsultationMedecineGeneraleController extends Controller
         try{
             $consultation = ConsultationMedecineGenerale::with(['dossier','motifs','traitements','conclusions','parametresCommun'])->whereSlug($slug)->first();
             $consultation->delete();
+            $this->updateDossierId($consultation->dossier->id);
+
             return response()->json(["consultation"=>$consultation]);
         }catch (DeleteRestrictionException $deleteRestrictionException){
             $this->revealError('deletingError',$deleteRestrictionException->getMessage());
@@ -415,8 +464,14 @@ class ConsultationMedecineGeneraleController extends Controller
             $resultat->updateConsultationMedecine();
 
             $user = $resultat->dossier->patient->user;
-//            $this->sendSmsToUser($user);
+            if ($user->decede == 'non') {
+                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+                $this->updateDossierId($resultat->dossier->id);
 
+                if ($user->isMedicasure == '1' || $user->isMedicasure == 1) {
+                    $this->sendSmsToUser($user);
+                }
+            }
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -441,8 +496,13 @@ class ConsultationMedecineGeneraleController extends Controller
         $resultat->updateConsultationMedecine();
 
         $user = $resultat->dossier->patient->user;
-        $this->sendSmsToUser($user);
-
+        if ($user->decede == 'non') {
+            if ($user->isMedicasure == '0' || $user->isMedicasure == 0) {
+                $this->sendSmsToUser($user);
+            }
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+            $this->updateDossierId($resultat->dossier->id);
+        }
         return response()->json(['resultat'=>$resultat]);
 
     }
@@ -458,6 +518,8 @@ class ConsultationMedecineGeneraleController extends Controller
 
         defineAsAuthor("ConsultationMedecineGenerale",$resultat->id,'reactiver');
         $resultat->updateConsultationMedecine();
+        $this->updateDossierId($resultat->dossier->id);
+
         return response()->json(['resultat'=>$resultat]);
 
     }
@@ -488,9 +550,73 @@ class ConsultationMedecineGeneraleController extends Controller
                 'extension'=>$document->getClientOriginalExtension(),
                 'chemin'=>$file,
             ]);
+            $this->updateDossierId($consultation->dossier->id);
 
             defineAsAuthor("File",$file->id,'create');
 
+        }
+    }
+
+    public function updateRdv($consultation,$request){
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('dateRdv');
+        $praticien_id = $this->validationPraticien($request->get('praticien_id'));
+        //je récupère le rendez vous de la consultation si cela existe
+        $rdv = RendezVous::where('sourceable_id',$consultation->id)
+            ->where('sourceable_type','Consultation')
+            ->first();
+
+        if ($motifRdv == 'null'){
+            $motifRdv = 'Rendez vous de la consultation medecine génerale du '.$request->get('date_consultation');
+        }
+
+        if (is_null($rdv)){
+//            si cela n'existe pas et que on a spécifié la date de rendez vous on crée
+            if (!is_null($dateRdv) ){
+                if (strlen($dateRdv) >0 && $dateRdv != 'null' &&  $dateRdv != 'Invalid date'){
+
+                    RendezVous::create([
+                        "sourceable_id"=>$consultation->id,
+                        "sourceable_type"=>'Consultation',
+                        "patient_id"=>$consultation->dossier->patient->user_id,
+                        "praticien_id"=>((integer) $praticien_id) !==0 ? $praticien_id :null,
+                        "initiateur"=>Auth::id(),
+                        "nom_medecin"=>((integer) $praticien_id) !==0 ? null :$praticien_id,
+                        "motifs"=>$motifRdv,
+                        "date"=>$dateRdv,
+                        "statut"=>'Programmé',
+                    ]);
+                }
+            }
+        }
+        else{
+            $rdv->date = $dateRdv;
+            $rdv->motifs = $motifRdv;
+            $rdv->praticien_id=((integer) $praticien_id) !==0 ? $praticien_id :null;
+            $rdv->nom_medecin=((integer) $praticien_id) !==0 ? null :$praticien_id;
+            $rdv->statut = 'Reprogrammé';
+
+            $rdv->save();
+        }
+    }
+
+    public function validationPraticien($praticien){
+
+        $praticienId = (integer) $praticien;
+
+        if ($praticienId !== 0){
+            $validator = Validator::make(['praticien_id'=>$praticienId],['praticien_id'=>'required|integer|exists:users,id']);
+
+            if($validator->fails()){
+                return $this->revealError('praticien_id','le praticien spécifié n\'exite pas dans la bd');
+            }else{
+                return $praticienId;
+            }
+        }else{
+
+            if ($praticien != ""){
+                return $praticien;
+            }
         }
     }
 }

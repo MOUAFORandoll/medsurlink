@@ -7,6 +7,8 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ConsultationObstetriqueRequest;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\ConsultationObstetrique;
+use App\Models\RendezVous;
+use App\Traits\DossierTrait;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +17,8 @@ use Netpok\Database\Support\DeleteRestrictionException;
 class ConsultationObstetriqueController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
+
     protected $table =  "consultation_obstetriques";
     /**
      * Display a listing of the resource.
@@ -56,6 +60,7 @@ class ConsultationObstetriqueController extends Controller
         $user = Auth::user();
         $serologie = implode(" ",$request->serologie);
         $rccs = implode(" ",$request->rcc);
+        $t1 = is_null($request->get('t1')) ? 'Non spécifié': $request->get('t1');
 //        if($user->hasRole('Praticien') || $user->hasRole('Medecin controle')){
 //            $specialite  = '';
 //            if(!is_null($user->praticien)){
@@ -66,25 +71,51 @@ class ConsultationObstetriqueController extends Controller
 //            }
 //                        if ($specialite == "Gynéco-Obstétrique"){
 
-                $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie','rcc')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
+        $consultationObstetrique =  ConsultationObstetrique::create($request->except('serologie','rcc','t1','dateRdv','motifRdv')+['numero_grossesse'=>$maxNumeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs,'t1'=>$t1]);
+        $consultationObstetrique->creator = Auth::id();
+        $consultationObstetrique->save();
 
-                defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create',$consultationObstetrique->dossier->patient->user_id);
+        defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'create',$consultationObstetrique->dossier->patient->user_id);
 
-                $consultationObstetrique = ConsultationObstetrique::with([
-                    'consultationPrenatales',
-                    'dossier',
-                    'dossier.allergies',
-                    'dossier.antecedents',
-                    'dossier.resultatsLabo',
-                    'dossier.hospitalisations',
-                    'dossier.consultationsObstetrique',
-                    'dossier.consultationsMedecine',
-                    'dossier.resultatsImagerie',
-                    'dossier.allergies',
-                    'dossier.antecedents',
-                    'dossier.traitements',
-                ])->whereSlug($consultationObstetrique->slug)->first();
-                return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
+        $consultationObstetrique = ConsultationObstetrique::with([
+            'consultationPrenatales',
+            'dossier',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.resultatsLabo',
+            'dossier.hospitalisations',
+            'dossier.consultationsObstetrique',
+            'dossier.consultationsMedecine',
+            'dossier.resultatsImagerie',
+            'dossier.allergies',
+            'dossier.antecedents',
+            'dossier.traitements',
+        ])->whereSlug($consultationObstetrique->slug)->first();
+
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('dateRdv');
+        if (!is_null($dateRdv) ){
+            if (strlen($dateRdv) >0 && $dateRdv != 'null' ){
+                if (is_null($motifRdv)){
+                    $motifRdv = 'Rendez vous de la consultation Obstetrique du '.$request->get('date_creation');
+                }
+                RendezVous::create([
+                    "sourceable_id"=>$consultationObstetrique->id,
+                    "sourceable_type"=>'ConsultationObstetrique',
+                    "patient_id"=>$consultationObstetrique->dossier->patient->user_id,
+                    "praticien_id"=>Auth::id(),
+                    "initiateur"=>Auth::id(),
+                    "motifs"=>$motifRdv,
+                    "date"=>$dateRdv,
+                    "statut"=>'Programmé',
+                ]);
+            }
+        }
+        $this->updateDossierId($consultationObstetrique->dossier->id);
+
+
+        return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
 
 //            }else{
 //                $this->revealAccesRefuse();
@@ -123,7 +154,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function show($slug)
     {
-         $this->validatedSlug($slug,$this->table);
+        $this->validatedSlug($slug,$this->table);
 
         $consultationObstetrique =  ConsultationObstetrique::with([
             'consultationPrenatales',
@@ -140,6 +171,7 @@ class ConsultationObstetriqueController extends Controller
             'dossier.allergies',
             'dossier.antecedents',
             'dossier.traitements',
+            'rdv'
         ])->whereSlug($slug)->first();
         $consultationObstetrique->updateObstetricConsultation();
 
@@ -178,10 +210,46 @@ class ConsultationObstetriqueController extends Controller
         $numeroGrossesse = $consultationObstetrique->numero_grossesse;
         $serologie = implode(" ",$request->serologie);
         $rccs = implode(" ",$request->rcc);
-        ConsultationObstetrique::whereSlug($slug)->update($request->except('serologie','rcc','consultation')+['numero_grossesse'=>$numeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
+        ConsultationObstetrique::whereSlug($slug)->update($request->except('serologie','rcc','consultation','dateRdv','motifRdv')+['numero_grossesse'=>$numeroGrossesse,'serologie'=>$serologie,'rcc'=>$rccs]);
+        defineAsAuthor("ConsultationObstetrique",$consultationObstetrique->id,'update',$consultationObstetrique->dossier->patient->user_id);
 
         $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
 
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('dateRdv');
+        if (is_null($motifRdv)){
+            $motifRdv = 'Rendez vous de la consultation Obstetrique du '.$request->get('date_creation');
+        }
+
+        //je récupère le rendez vous de la consultation si cela existe
+        $rdv = RendezVous::where('sourceable_id',$consultationObstetrique->id)
+            ->where('sourceable_type','ConsultationObstetrique')
+            ->first();
+        if (is_null($rdv)) {
+            if (!is_null($dateRdv)) {
+                if (strlen($dateRdv) > 0 && $dateRdv != 'null') {
+
+                    RendezVous::create([
+                        "sourceable_id" => $consultationObstetrique->id,
+                        "sourceable_type" => 'ConsultationObstetrique',
+                        "patient_id" => $consultationObstetrique->dossier->patient->user_id,
+                        "praticien_id" => Auth::id(),
+                        "initiateur" => Auth::id(),
+                        "motifs" => $motifRdv,
+                        "date" => $dateRdv,
+                        "statut" => 'Programmé',
+                    ]);
+                }
+            }
+        }else{
+            $rdv->date = $dateRdv;
+            $rdv->motifs = $motifRdv;
+            $rdv->statut = 'Reprogrammé';
+
+            $rdv->save();
+        }
+        $this->updateDossierId($consultationObstetrique->dossier->id);
         return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
     }
 
@@ -204,7 +272,9 @@ class ConsultationObstetriqueController extends Controller
         try{
             $consultationObstetrique =  ConsultationObstetrique::with(['consultationPrenatales','echographies','dossier'])->whereSlug($slug)->first();
             $consultationObstetrique->delete();
+            $this->updateDossierId($consultationObstetrique->dossier->id);
             return response()->json(['consultationObstetrique'=>$consultationObstetrique]);
+
         }catch (DeleteRestrictionException $deleteRestrictionException){
             $this->revealError('deletingError',$deleteRestrictionException->getMessage());
         }
@@ -230,10 +300,16 @@ class ConsultationObstetriqueController extends Controller
             $resultat->save();
             defineAsAuthor("ConsultationObstetrique",$resultat->id,'archive');
             $resultat->updateObstetricConsultation();
+            $user = $resultat->dossier->patient->user;
+            if ($user->decede == 'non') {
+                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+                $this->updateDossierId($resultat->dossier->id);
+                //Envoi du sms
 
-            //Envoi du sms
-//            $this->sendSmsToUser($resultat->dossier->patient->user);
-
+                if ($user->isMedicasure == '1' || $user->isMedicasure == 1) {
+                    $this->sendSmsToUser($user);
+                }
+            }
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -254,9 +330,17 @@ class ConsultationObstetriqueController extends Controller
         $resultat->save();
         defineAsAuthor("ConsultationObstetrique",$resultat->id,'transmettre');
         $resultat->updateObstetricConsultation();
+        $this->updateDossierId($resultat->dossier->id);
 
         //Envoi du sms
-        $this->sendSmsToUser($resultat->dossier->patient->user);
+        $user = $resultat->dossier->patient->user;
+        if ($user->decede == 'non') {
+            if ($user->isMedicasure == '0' || $user->isMedicasure == 0) {
+                $this->sendSmsToUser($user);
+            }
+//        $this->sendSmsToUser($resultat->dossier->patient->user);
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+        }
         return response()->json(['resultat'=>$resultat]);
 
     }
@@ -272,6 +356,7 @@ class ConsultationObstetriqueController extends Controller
 
         defineAsAuthor("ConsultationObstetrique",$resultat->id,'reactiver');
         $resultat->updateObstetricConsultation();
+        $this->updateDossierId($resultat->dossier->id);
 
         return response()->json(['resultat'=>$resultat]);
 

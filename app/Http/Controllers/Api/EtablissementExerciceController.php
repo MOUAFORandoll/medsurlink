@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\User;
+use function foo\func;
+use App\Models\Patient;
+use App\Models\Comptable;
+use App\Models\Assistante;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\PersonnalErrors;
-use App\Http\Requests\EtablissementExerciceRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use App\Models\EtablissementExercice;
+use Illuminate\Support\Facades\Validator;
 use App\Models\EtablissementExerciceMedecin;
 use App\Models\EtablissementExercicePatient;
 use App\Models\EtablissementExercicePraticien;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Traits\PersonnalErrors;
+use App\Http\Requests\EtablissementExerciceRequest;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 /**
@@ -30,14 +35,10 @@ class EtablissementExerciceController extends Controller
      */
     public function index()
     {
-        $etablissements =  EtablissementExercice::with(['praticiens','patients.dossier','patients.user','patients.financeurs'])->get();
-//        foreach ($etablissements as $etablissement){
-//            foreach ($etablissement->patients as $patient) {
-//                $patient['user'] = $patient->user;
-//                $patient['dossier'] = $patient->dossier;
-//            }
-//        }
+        $etablissements =  EtablissementExercice::with(['comptables.user','assistantes.user','praticiens.user','patients.dossier','patients.medecinReferent.medecinControles.user','patients.user','patients.financeurs','prestations'])->get();
         return response()->json(['etablissements'=>$etablissements]);
+
+
     }
 
     /**
@@ -61,6 +62,7 @@ class EtablissementExerciceController extends Controller
         $etablissement = EtablissementExercice::create([
             "name"=> strtoupper($request->name),
             "description"=>$request->description,
+            "adresse"=>$request->get('adresse')
         ]);
 
         if($request->hasFile('logo')) {
@@ -90,7 +92,7 @@ class EtablissementExerciceController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $etablissement = EtablissementExercice::with(['praticiens','patients.dossier','patients.user'])->whereSlug($slug)->first();
+        $etablissement = EtablissementExercice::with(['praticiens.user','patients.dossier','patients.user','prestations.prestation'])->whereSlug($slug)->first();
 
         return response()->json(['etablissement'=>$etablissement]);
 
@@ -123,9 +125,10 @@ class EtablissementExerciceController extends Controller
         EtablissementExercice::whereSlug($slug)->update([
             "name"=> strtoupper($request->name),
             "description"=>$request->description,
+            "adresse"=>$request->get('adresse')
         ]);
 
-        $etablissement = EtablissementExercice::with(['praticiens','patients'])->whereSlug($slug)->first();
+        $etablissement = EtablissementExercice::with(['praticiens.user','patients'])->whereSlug($slug)->first();
 
         $logo = $etablissement->logo;
 
@@ -137,10 +140,19 @@ class EtablissementExerciceController extends Controller
                 $etablissement->logo = $file;
 
                 $etablissement->save();
+
+
+                if (!is_null($logo)){
+                    //Suppression de l'ancienne sur server
+                    File::delete(public_path().'/storage/'.$logo);
+                }
             }
+        }else{
+            $etablissement->logo = '';
+            $etablissement->save();
         }
-        if (!is_null($logo))
-            File::delete(public_path().'/storage/'.$logo);
+
+
 
         return response()->json(['etablissement'=>$etablissement]);
 
@@ -183,23 +195,24 @@ class EtablissementExerciceController extends Controller
                         array_push($etablissementsId, $etablissement->etablissement_id);
                     }
                 }
-                $etablissements = EtablissementExercice::with(['patients'])->whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['patients','prestations'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }
         else if(gettype($userRoles->search('Medecin controle')) == 'integer'){
             $user = \App\User::with(['medecinControle'])->whereId(Auth::id())->first();
-            //Recuperation des etablissements du praticien
+            //Recuperation des etablissements du medecin controle
             if (!is_null($user->medecinControle)){
-                $etablissements = EtablissementExerciceMedecin::where('medecin_controle_id','=',Auth::id())->get();
+//                $etablissements = EtablissementExerciceMedecin::where('medecin_controle_id','=',Auth::id())->get();
+                $etablissements = EtablissementExercice::all();
                 $etablissementsId = [];
                 foreach ($etablissements as $etablissement){
                     if (!is_null($etablissement))
                     {
-                        array_push($etablissementsId, $etablissement->etablissement_id);
+                        array_push($etablissementsId, $etablissement->id);
                     }
                 }
-                $etablissements = EtablissementExercice::with(['patients'])->whereIn('id',$etablissementsId)->get();
+                $etablissements = EtablissementExercice::with(['comptables.user','assistantes.user','patients.user','patients.dossier','patients.medecinReferent.medecinControles.user','prestations.prestation','factures.dossier.patient.user','factureAvis.dossier.patient.user','factureAvis.factureDetail','factures.prestations.prestation_etablissement'])->whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
         }
@@ -218,7 +231,74 @@ class EtablissementExerciceController extends Controller
                 $etablissements = EtablissementExercice::whereIn('id',$etablissementsId)->get();
                 return response()->json(['etablissements'=>$etablissements]);
             }
-        }else{
+        }
+        else if(gettype($userRoles->search('Gestionnaire')) == 'integer'){
+            $etablissements = EtablissementExercice::with(['comptables.user','assistantes.user','patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user'])->get();
+
+            return response()->json(['etablissements'=>$etablissements]);
+
+        }
+        else if(gettype($userRoles->search('Assistante')) == 'integer'){
+            $etablissements = EtablissementExercice::with(['comptables.user','assistantes.user','patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user'])->get();
+
+            return response()->json(['etablissements'=>$etablissements]);
+
+        }
+        else if(gettype($userRoles->search('Souscripteur')) == 'integer'){
+            $user = \App\User::whereId(Auth::id())->first();
+            $patients = $user->souscripteur->patients;
+            $patientsId = [];
+            foreach ($patients as $patient){
+                if (!is_null($patientsId)){
+                    array_push($patientsId,$patient->user_id);
+                }
+            }
+            $etablissements = EtablissementExercice::with(['comptables.user','assistantes.user',
+                'patients'=>function($query)use($patientsId){$query->whereIn('user_id',$patientsId);},
+                'patients.user',
+                'patients.dossier',
+                'prestations.prestation',
+                'factures.dossier.patient.user'=>function($query)use($patientsId){$query->whereIn('id',$patientsId);},
+                'factureAvis.dossier.patient.user'=>function($query)use($patientsId){$query->whereIn('id',$patientsId);}
+                ])
+                ->get();
+
+            return response()->json(['etablissements'=>$etablissements]);
+
+        }
+        else if(gettype($userRoles->search('Etablissement')) == 'integer'){
+            $user = Auth::user();
+            $comptables = Comptable::where('user_id',$user->id)->get();
+            $assistantes = Assistante::where('user_id',$user->id)->get();
+
+            $etablissementsId = [];
+
+            foreach ($comptables as $comptable){
+                array_push($etablissementsId,$comptable->etablissement_id);
+            }
+            foreach ($assistantes as $assistante){
+                array_push($etablissementsId,$assistante->etablissement_id);
+            }
+
+
+
+            $etablissements = EtablissementExercice::with([
+                'comptables',
+                'comptables.user',
+                'assistantes',
+                'assistantes.user',
+                'patients',
+                'patients.user',
+                'patients.dossier',
+                'prestations.prestation',
+                'factures.dossier.patient.user',
+                'facturesAvis.dossier.patient.user'])
+                ->whereIn('id',$etablissementsId)
+                ->get();
+
+            return response()->json(['etablissements'=>$etablissements]);
+        }
+        else{
             return response()->json(['etablissements'=>[]]);
 
         }

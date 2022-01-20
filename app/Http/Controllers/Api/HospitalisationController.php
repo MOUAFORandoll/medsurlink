@@ -7,13 +7,17 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\HospitalisationRequest;
 use App\Models\Hospitalisation;
 use App\Models\Motif;
+use App\Models\RendezVous;
+use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class HospitalisationController extends Controller
 {
     use PersonnalErrors;
     use SmsTrait;
+    use DossierTrait;
 
     protected $table = "hospitalisations";
     /**
@@ -50,9 +54,31 @@ class HospitalisationController extends Controller
      */
     public function store(HospitalisationRequest $request)
     {
-        $hospitalisation = Hospitalisation::create($request->validated());
-
+        $hospitalisation = Hospitalisation::create($request->except('motifRdv','rendez_vous'));
+        $hospitalisation->creator = Auth::id();
+        $hospitalisation->save();
         defineAsAuthor("Hospitalisation",$hospitalisation->id,'create',$hospitalisation->dossier->patient->user_id);
+
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('rendez_vous');
+        if (!is_null($dateRdv) ){
+            if (strlen($dateRdv) >0 && $dateRdv != 'null'  && $dateRdv !='Invalid date'){
+                if (is_null($motifRdv) ){
+                    $motifRdv = 'Rendez vous de l\'hospitalisation du '.$request->get('date_entree');
+                }
+                RendezVous::create([
+                    "sourceable_id"=>$hospitalisation->id,
+                    "sourceable_type"=>'Hospitalisation',
+                    "patient_id"=>$hospitalisation->dossier->patient->user_id,
+                    "praticien_id"=>Auth::id(),
+                    "initiateur"=>Auth::id(),
+                    "motifs"=>$motifRdv,
+                    "date"=>$dateRdv,
+                    "statut"=>'Programmé',
+                ]);
+            }
+        }
 
         $motifs = $request->get('motifs');
 
@@ -92,7 +118,12 @@ class HospitalisationController extends Controller
             'motifs',
             'etablissement'
         ])->whereSlug($hospitalisation->slug)->first();
-
+        $this->updateDossierId($hospitalisation->dossier->id);
+        $user = $hospitalisation->dossier->patient->user;
+        if ($user->decede == 'non') {
+            $this->sendSmsToUser($hospitalisation->dossier->patient->user);
+            informedPatientAndSouscripteurs($hospitalisation->dossier->patient, 3);
+        }
         return response()->json(['hospitalisation'=>$hospitalisation]);
 
     }
@@ -121,7 +152,8 @@ class HospitalisationController extends Controller
             'dossier.antecedents',
             'dossier.traitements',
             'motifs'
-            ,'etablissement'
+            ,'etablissement',
+            'rdv'
         ])->whereSlug($slug)->first();
         $hospitalisation->updateHospitalisation();
 
@@ -154,9 +186,9 @@ class HospitalisationController extends Controller
 
         $hospitalisation = Hospitalisation::findBySlug($slug);
 
-        $this->checkIfAuthorized("Hospitalisation",$hospitalisation->id,"create");
+//        $this->checkIfAuthorized("Hospitalisation",$hospitalisation->id,"create");
 
-        Hospitalisation::whereSlug($slug)->update($request->except('motifs','hospitalisation'));
+        Hospitalisation::whereSlug($slug)->update($request->except('motifs','hospitalisation','motifRdv','rendez_vous'));
 
         $hospitalisation = Hospitalisation::with([
             'dossier',
@@ -173,6 +205,42 @@ class HospitalisationController extends Controller
             'motifs'
             ,'etablissement'
         ])->whereSlug($slug)->first();
+
+
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('rendez_vous');
+
+        //je récupère le rendez vous de la consultation si cela existe
+        $rdv = RendezVous::where('sourceable_id',$hospitalisation->id)
+            ->where('sourceable_type','Hospitalisation')
+            ->first();
+        if (is_null($rdv)) {
+            if (!is_null($dateRdv)) {
+                if (strlen($dateRdv) > 0 && $dateRdv != 'null'  && $dateRdv!='Invalid date') {
+                    if (is_null($motifRdv)) {
+                        $motifRdv = 'Rendez vous de l\'hospitalisation du ' . $request->get('date_entree');
+                    }
+                    RendezVous::create([
+                        "sourceable_id" => $hospitalisation->id,
+                        "sourceable_type" => 'Hospitalisation',
+                        "patient_id" => $hospitalisation->dossier->patient->user_id,
+                        "praticien_id" => Auth::id(),
+                        "initiateur" => Auth::id(),
+                        "motifs" => $motifRdv,
+                        "date" => $dateRdv,
+                        "statut" => 'Programmé',
+                    ]);
+                }
+            }
+        }else{
+            $rdv->date = $dateRdv;
+            $rdv->motifs = $motifRdv;
+            $rdv->statut = 'Reprogrammé';
+
+            $rdv->save();
+        }
+
         //Recupération des anciens motifs
         $ancienMotifs = [];
         foreach ($hospitalisation->motifs as $motif){
@@ -207,6 +275,7 @@ class HospitalisationController extends Controller
 
             }
         }
+        $this->updateDossierId($hospitalisation->dossier->id);
 
         $hospitalisation->updateHospitalisation();
 
@@ -242,6 +311,8 @@ class HospitalisationController extends Controller
         $hospitalisation->updateHospitalisation();
 
         $this->checkIfAuthorized("Hospitalisation",$hospitalisation->id,"create");
+        $this->updateDossierId($hospitalisation->dossier->id);
+
         $hospitalisation->delete();
 
         return response()->json(['hospitalisation'=>$hospitalisation]);
@@ -279,11 +350,19 @@ class HospitalisationController extends Controller
         }else{
             $resultat->archived_at = Carbon::now();
             $resultat->save();
+            $this->updateDossierId($resultat->dossier->id);
+
             defineAsAuthor("Hospitalisation",$resultat->id,'archive');
 
             //Envoi du sms
+            $user = $resultat->dossier->patient->user;
+            if ($user->decede == 'non') {
+                if ($user->isMedicasure == '1' || $user->isMedicasure == 1) {
+                    $this->sendSmsToUser($user);
+                }
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
-
+                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+            }
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -316,12 +395,19 @@ class HospitalisationController extends Controller
 
         $resultat->passed_at = Carbon::now();
         $resultat->save();
+        $this->updateDossierId($resultat->dossier->id);
 
         defineAsAuthor("Hospitalisation",$resultat->id,'transmettre');
 
         //Envoi du sms
-        $this->sendSmsToUser($resultat->dossier->patient->user);
-
+        $user = $resultat->dossier->patient->user;
+        if ($user->decede == 'non') {
+            if ($user->isMedicasure == '1' || $user->isMedicasure == 1) {
+                $this->sendSmsToUser($user);
+            }
+//        $this->sendSmsToUser($resultat->dossier->patient->user);
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+        }
         return response()->json(['resultat'=>$resultat]);
 
     }

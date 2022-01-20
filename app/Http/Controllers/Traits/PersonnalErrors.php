@@ -22,6 +22,19 @@ trait PersonnalErrors
         }
     }
 
+ /**
+     * @param $field
+     * @param $message
+     * @throws PersonnnalException
+     */
+    public function staticRevealError($field, $message){
+        if (strlen($message)>0){
+            $personnnalException = new PersonnnalException($message);
+            $personnnalException->setField($field);
+            throw $personnnalException;
+        }
+    }
+
     /**
      * @param $slug
      * @param $table
@@ -72,12 +85,35 @@ trait PersonnalErrors
         $accessRefuse = "Vous n'êtes pas autorisé à effectuer cette action";
         $this->revealError('accessRefuse',$accessRefuse);
     }
+
+    /**
+     * @throws PersonnnalException
+     */
+    public function staticRevealAccesRefuse(){
+        $accessRefuse = "Vous n'êtes pas autorisé à effectuer cette action";
+        if (strlen($accessRefuse)>0){
+            $personnnalException = new PersonnnalException($accessRefuse);
+            $personnnalException->setField('accessRefuse');
+            throw $personnnalException;
+        }
+    }
     /**
      * @throws PersonnnalException
      */
     public function revealNonTransmis(){
         $nonTransmis = "Ce resultat n'a pas encoré été transmis";
         $this->revealError('nonTransmis',$nonTransmis);
+    }
+ /**
+     * @throws PersonnnalException
+     */
+    public static function staticRevealNonTransmis(){
+        $nonTransmis = "Ce resultat n'a pas encoré été transmis";
+        if (strlen($nonTransmis)>0){
+            $personnnalException = new PersonnnalException($nonTransmis);
+            $personnnalException->setField('nonTransmis');
+            throw $personnnalException;
+        }
     }
 
     public function revealDuplicateDossier($numeroDossier){

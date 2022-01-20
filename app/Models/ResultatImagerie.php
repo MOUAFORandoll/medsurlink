@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
+use App\Scopes\RestrictArchivedAt;
 use App\Scopes\RestrictResultatScope;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -74,5 +75,7 @@ class ResultatImagerie extends Model
         parent::boot();
 
         static::addGlobalScope(new RestrictResultatScope);
+        static::addGlobalScope(new RestrictArchivedAt);
+
     }
 }

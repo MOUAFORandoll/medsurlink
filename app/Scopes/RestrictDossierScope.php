@@ -4,6 +4,7 @@
 namespace App\Scopes;
 
 
+use App\Models\PatientSouscripteur;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -46,6 +47,13 @@ class RestrictDossierScope implements Scope
                             array_push($dossiers,$patient->dossier->id);
                         }
                     }
+                $patientSouscripteurs = PatientSouscripteur::where('financable_id',Auth::id())->get();
+
+                foreach ($patientSouscripteurs as  $patient){
+                    if (in_array($patient->patients->dossier->id,$dossiers)){
+                        array_push($patientsId,$patient->patients->dossier->id);
+                    }
+                }
                 if ($user->isMedicasure == 0){
                     $builder;
                 }else {

@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Scopes\RestrictArchieved;
+use App\Scopes\RestrictArchievedAt;
+use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
@@ -32,6 +35,10 @@ class Cardiologie extends Model
         "slug",
         "nbreCigarette",
         "nbreAnnee",
+        "creator",
+        'archieved_at',
+        'passed_at',
+        "ligne_de_temps_id"
     ];
     /**
      * Return the sluggable configuration array for this model.
@@ -78,6 +85,10 @@ class Cardiologie extends Model
         return $this->hasMany(ExamenCardio::class,'cardiologie_id','id');
     }
 
+    public function author (){
+        return $this->belongsTo(User::class,'creator','id');
+    }
+
     public function updateConsultationCardiologique(){
         if(!is_null($this)){
             $user = $this->dossier->patient->user;
@@ -99,6 +110,13 @@ class Cardiologie extends Model
             $this['patient']=$patient;
             $isAuthor = checkIfIsAuthorOrIsAuthorized("Cardiologie",$this->id,"create");
             $canUpdate = checkIfCanUpdated("Cardiologie",$this->id,"create");
+            $author = $this->author;
+            if (!is_null($author)){
+//                $this['author']['user'] = $author;
+            }else {
+                unset($this['author']);
+                $this['author'] = getAuthor("Cardiologie", $this->id, "create");
+            }
             $this['isAuthor']=$isAuthor->getOriginalContent();
             $connectedUser = Auth::user();
             if ($connectedUser->getRoleNames()->first() == 'Praticien'){
@@ -113,5 +131,19 @@ class Cardiologie extends Model
                 $this['canUpdate']=true;
             }
         }
+    }
+
+    public function rdv(){
+        return $this->morphOne(RendezVous::class,'sourceable');
+    }
+
+    protected static function boot()
+    {
+
+
+        parent::boot();
+
+        static::addGlobalScope(new RestrictArchievedAt);
+
     }
 }

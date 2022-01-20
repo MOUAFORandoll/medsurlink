@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ResultatRequest;
 use App\Models\ResultatLabo;
+use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ class ResultatLaboController extends Controller
 {
     use PersonnalErrors;
     use SmsTrait;
+    use DossierTrait;
 
     protected $table = "resultat_labos";
 
@@ -56,8 +58,8 @@ class ResultatLaboController extends Controller
                 $resultat = ResultatLabo::create($request->validated());
 
                 $this->uploadFile($request,$resultat);
-
-                defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
+                $this->updateDossierId($resultat->dossier->id);
+                defineAsAuthor("ResultatLabo", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
                 return response()->json([
                     'resultat' => $resultat
@@ -72,8 +74,8 @@ class ResultatLaboController extends Controller
             );
         }else{
             $resultat = ResultatLabo::create($request->validated());
-
-            defineAsAuthor("Resultat", $resultat->id,'create',$resultat->dossier->patient->user_id);
+            $this->updateDossierId($resultat->dossier->id);
+            defineAsAuthor("ResultatLabo", $resultat->id,'create',$resultat->dossier->patient->user_id);
 
             return response()->json([
                 'resultat' => $resultat
@@ -103,7 +105,8 @@ class ResultatLaboController extends Controller
         $resultat = ResultatLabo::with(['dossier.patient.user','dossier.consultationsMedecine', 'consultation'])
             ->whereSlug($slug)
             ->first();
-        $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("Resultat",$resultat->id,"create");
+        $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("ResultatLabo",$resultat->id,"create");
+        $resultat['author'] = getAuthor("ResultatLabo",$resultat->id,"create");
         $resultat['isAuthor'] = $motifIsAuthor->getOriginalContent();
         return response()->json([
             'resultat' => $resultat
@@ -136,7 +139,7 @@ class ResultatLaboController extends Controller
 
         $resultat = ResultatLabo::findBySlug($slug);
 
-        $this->checkIfAuthorized("Resultat", $resultat->id,"create");
+        $this->checkIfAuthorized("ResultatLabo", $resultat->id,"create");
 
         ResultatLabo::whereSlug($slug)->update($request->validated());
 
@@ -145,13 +148,14 @@ class ResultatLaboController extends Controller
             ->first();
 
         $file = $resultat->file;
-
         if($request->hasFile('file')){
             $this->uploadFile($request,$resultat);
         }
 
-        if (!is_null($file))
+        if (!is_null($file) && $request->hasFile('file'))
             File::delete(public_path().'/storage/'.$file);
+
+        $this->updateDossierId($resultat->dossier->id);
 
         return response()->json([
             'resultat' => $resultat
@@ -179,9 +183,14 @@ class ResultatLaboController extends Controller
         } else {
             $resultat->archived_at = Carbon::now();
             $resultat->save();
-            defineAsAuthor("Resultat", $resultat->id,'archive');
+            $this->updateDossierId($resultat->dossier->id);
+            defineAsAuthor("ResultatLabo", $resultat->id,'archive');
             //Envoi du sms
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
+            $user = $resultat->dossier->patient->user;
+            if ($user->decede == 'non') {
+                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+            }
             return response()->json([
                 'resultat' => $resultat
             ]);
@@ -205,8 +214,13 @@ class ResultatLaboController extends Controller
 
         $resultat->passed_at = Carbon::now();
         $resultat->save();
+        $this->updateDossierId($resultat->dossier->id);
         //Envoi du sms
-        $this->sendSmsToUser($resultat->dossier->patient->user);
+        $user = $resultat->dossier->patient->user;
+        if ($user->decede == 'non') {
+            $this->sendSmsToUser($resultat->dossier->patient->user);
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+        }
         return response()->json([
             'resultat' => $resultat
         ]);
@@ -230,8 +244,8 @@ class ResultatLaboController extends Controller
 
         $resultat = ResultatLabo::with('dossier')->whereSlug($slug)->first();
 
-        $this->checkIfAuthorized("Resultat", $resultat->id,"create");
-
+        $this->checkIfAuthorized("ResultatLabo", $resultat->id,"create");
+        $this->updateDossierId($resultat->dossier->id);
         $resultat->delete();
         File::delete(public_path().'/storage/'.$resultat->file);
 

@@ -7,16 +7,22 @@ use App\Http\Requests\OrdonanceRequest;
 use App\Models\DossierMedical;
 use App\Models\Ordonance;
 use App\Models\OrdonanceMedicament;
+use App\Models\Posologie;
+use App\Models\Prescription;
+use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
+use http\Client\Curl\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class OrdonanceController extends Controller
 {
     protected $table = 'ordonances';
     use SmsTrait;
-
+    use DossierTrait;
     use PersonnalErrors;
     /**
      * Display a listing of the resource.
@@ -48,19 +54,27 @@ class OrdonanceController extends Controller
     public function store(OrdonanceRequest $request)
     {
         $dossier = DossierMedical::findBySlug($request->get('dossier_medical_id'));
+        //creation de l'ordonnance
         $ordonance = Ordonance::create([
             'date_prescription'=> $request->get('date_prescription'),
-            'dossier_medical_id'=>$dossier->id
+            'dossier_medical_id'=>$dossier->id,
+            'praticien_id'=>Auth::id()
         ]);
+        defineAsAuthor('Ordonance',$ordonance->id,'create');
 
-        defineAsAuthor('Ordonance',$ordonance->id,'create',$ordonance->dossier->patient_id);
-        $medicaments = $request->get('medicaments');
-        $ordonance->medicaments()->attach($medicaments);
-        foreach ($medicaments as $medicament){
-            defineAsAuthor('Ordonance',$ordonance->id,'add medicament '.$medicament);
+        //recuperation des prescriptions
+        $prescriptions = $request->get('prescription');
+
+        foreach ($prescriptions as $item){
+            $pArray = Arr::except($item,'posologie');
+            //Creation de la prescription
+            $prescription = Prescription::create($pArray + ['ordonance_id'=>$ordonance->id]);
+            //Création de la posologie
+            $posologie = Posologie::create($item['posologie'] + ['prescription_id'=>$prescription->id]);
         }
 
-        $ordonance =  Ordonance::with('dossier','medicaments')->whereSlug($ordonance->slug)->first();
+        $ordonance =  Ordonance::with('dossier','prescriptions.medicament')->whereSlug($ordonance->slug)->first();
+        $this->updateDossierId($ordonance->dossier->id);
         return response()->json(['ordonance'=>$ordonance]);
     }
 
@@ -99,7 +113,7 @@ class OrdonanceController extends Controller
     public function update(OrdonanceRequest $request, $slug)
     {
         $this->validatedSlug($slug,$this->table);
-        $ordonance = Ordonance::with('dossier','medicaments')->whereSlug($slug)->first();
+        $ordonance = Ordonance::with('dossier')->whereSlug($slug)->first();
 
         $this->checkIfAuthorized('Ordonance',$ordonance->id,'create');
         $ordonance->date_prescription = $request->get('date_prescription');
@@ -129,6 +143,8 @@ class OrdonanceController extends Controller
         }
 
         $ordonance = Ordonance::with('dossier','medicaments')->whereSlug($slug)->first();
+        $this->updateDossierId($ordonance->dossier->id);
+
         return response()->json(['ordonance'=>$ordonance]);
     }
 
@@ -144,6 +160,7 @@ class OrdonanceController extends Controller
         $ordonance = Ordonance::with('dossier','medicaments')->whereSlug($slug)->first();
 
         $this->checkIfAuthorized('Ordonance',$ordonance->id,'create');
+        $this->updateDossierId($ordonance->dossier->id);
 
         $ordonance->delete();
         defineAsAuthor('Ordonance',$ordonance->id,'delete',$ordonance->dossier->patient_id);
@@ -158,9 +175,15 @@ class OrdonanceController extends Controller
         }
         $ordonance->archieved_at = Carbon::now();
         $ordonance->save();
+        $this->updateDossierId($ordonance->dossier->id);
+
         defineAsAuthor('Ordonance',$ordonance->id,'archieve',$ordonance->dossier->patient_id);
         //Envoi du sms
 //        $this->sendSmsToUser($ordonance->dossier->patient->user);
+        $user = $ordonance->dossier->patient->user;
+        if ($user->decede == 'non') {
+            informedPatientAndSouscripteurs($ordonance->dossier->patient, 1);
+        }
         return response()->json(['ordonance'=>$ordonance]);
     }
 
@@ -172,10 +195,15 @@ class OrdonanceController extends Controller
 
         $ordonance->passed = Carbon::now();
         $ordonance->save();
+        $this->updateDossierId($ordonance->dossier->id);
 
         defineAsAuthor('Ordonance',$ordonance->id,'transmettre',$ordonance->dossier->patient_id);
 //Envoi du sms
-        $this->sendSmsToUser($ordonance->dossier->patient->user);
+        $user = $ordonance->dossier->patient->user;
+        if ($user->decede == 'non') {
+            $this->sendSmsToUser($ordonance->dossier->patient->user);
+            informedPatientAndSouscripteurs($ordonance->dossier->patient, 0);
+        }
         return response()->json(['ordonance'=>$ordonance]);
     }
 }

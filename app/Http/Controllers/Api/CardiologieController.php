@@ -11,18 +11,22 @@ use App\Models\Contributeurs;
 use App\Models\ExamenCardio;
 use App\Models\Motif;
 use App\Models\ParametreCommun;
+use App\Models\RendezVous;
 use App\Models\TraitementActuel;
+use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
 use App\Traits\UserTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class CardiologieController extends Controller
 {
     use PersonnalErrors;
     use UserTrait;
     use SmsTrait;
+    use DossierTrait;
 
     protected $table = 'cardiologies';
 
@@ -57,8 +61,35 @@ class CardiologieController extends Controller
     {
 //        $this->verificationDeSpecialite();
 
-        $cardiologie = Cardiologie::create($request->except('contributeurs', 'examen_cardio'));
+        $cardiologie = Cardiologie::create($request->except('contributeurs', 'examen_cardio','motifRdv','rendez_vous'));
+        $cardiologie->creator = Auth::id();
+        $cardiologie->save();
+
         defineAsAuthor("Cardiologie", $cardiologie->id, 'create', $cardiologie->dossier->patient->user_id);
+
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('rendez_vous');
+        if (!is_null($dateRdv) ){
+            if (strlen($dateRdv) >0 && $dateRdv != 'null' && $dateRdv !='Invalid date'){
+                if ($motifRdv == 'null'){
+                    $motifRdv = 'Rendez vous de la consultation de cardiologie du '.$request->get('date_consultation');
+                }
+                $cardiologie->rendez_vous = $dateRdv;
+                $cardiologie->save();
+
+                RendezVous::create([
+                    "sourceable_id"=>$cardiologie->id,
+                    "sourceable_type"=>'Cardiologie',
+                    "patient_id"=>$cardiologie->dossier->patient->user_id,
+                    "praticien_id"=>Auth::id(),
+                    "initiateur"=>Auth::id(),
+                    "motifs"=>$motifRdv,
+                    "date"=>$dateRdv,
+                    "statut"=>'Programmé',
+                ]);
+            }
+        }
 
         //Enregistrement de motif
         $this->enregistrerMotifs($request, $cardiologie);
@@ -96,6 +127,8 @@ class CardiologieController extends Controller
             "operationables.contributable"
         )->find($cardiologie->id);
 
+        $this->updateDossierId($cardiologie->dossier->id);
+
         return response()->json(['consultation' => $cardiologie]);
 
     }
@@ -113,7 +146,7 @@ class CardiologieController extends Controller
             'dossier.resultatsLabo',
             'dossier.hospitalisations',
             'dossier.consultationsObstetrique',
-            'dossier.consultationsMedecine',
+            'dossier.consultationsMedecine.conclusions',
             'dossier.resultatsImagerie',
             'dossier.allergies',
             'dossier.antecedents',
@@ -123,7 +156,8 @@ class CardiologieController extends Controller
             'parametresCommun',
             'etablissement',
             'files',
-            'examenCardios'
+            'examenCardios',
+            'rdv'
         ])->whereSlug($slug)->first();
 
         $consultation->updateConsultationCardiologique();
@@ -175,10 +209,13 @@ class CardiologieController extends Controller
                 "slug",
                 "nbreCigarette",
                 "nbreAnnee"
-            )+["rendez_vous"=>$request->get('rendez_vous') == 'null' ? null :$request->get('rendez_vous')]
+            )+["rendez_vous"=>$request->get('rendez_vous') == 'null' || $request->get('rendez_vous') == 'Invalid date'
+                ? null :$request->get('rendez_vous')]
         );
         $cardiologie = Cardiologie::whereSlug($slug)->first();
         defineAsAuthor("Cardiologie", $cardiologie->id, 'update', $cardiologie->dossier->patient->user_id);
+
+        $this->updateRdv($cardiologie,$request);
 
         //Enregistrement de motif
         $this->enregistrerMotifs($request, $cardiologie);
@@ -217,6 +254,8 @@ class CardiologieController extends Controller
         )->find($cardiologie->id);
 
         $cardiologie->updateConsultationCardiologique();
+        $this->updateDossierId($cardiologie->dossier->id);
+
         return response()->json(['consultation' => $cardiologie]);
     }
 
@@ -228,10 +267,12 @@ class CardiologieController extends Controller
      */
     public function destroy($slug)
     {
-        $this->verificationDeSpecialite();
+//        $this->verificationDeSpecialite();
 
         $cardiologie = Cardiologie::with('dossier')->whereSlug($slug)->first();
         $cardiologie->delete();
+        $this->updateDossierId($cardiologie->dossier->id);
+
         defineAsAuthor("Cardiologie", $cardiologie->id, 'delete', $cardiologie->dossier->patient->user_id);
         return response()->json(['consultation' => $cardiologie]);
     }
@@ -278,8 +319,14 @@ class CardiologieController extends Controller
             $resultat->updateConsultationCardiologique();;
 
             $user = $resultat->dossier->patient->user;
-//            $this->sendSmsToUser($user);
+            if ($user->decede == 'non'){
+                informedPatientAndSouscripteurs($resultat->dossier->patient,1);
+                $this->updateDossierId($resultat->dossier->id);
 
+                if($user->isMedicasure == '1' || $user->isMedicasure == 1 ){
+                    $this->sendSmsToUser($user);
+                }
+            }
             return response()->json(['resultat'=>$resultat]);
         }
     }
@@ -318,10 +365,16 @@ class CardiologieController extends Controller
 
         defineAsAuthor("Cardiologie",$resultat->id,'transmettre');
         $resultat->updateConsultationCardiologique();
+        $this->updateDossierId($resultat->dossier->id);
+
 
         $user = $resultat->dossier->patient->user;
-        $this->sendSmsToUser($user);
-
+        if ($user->decede == 'non') {
+            if ($user->isMedicasure == '0' || $user->isMedicasure == 0) {
+                $this->sendSmsToUser($user);
+            }
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+        }
         return response()->json(['resultat'=>$resultat]);
 
     }
@@ -352,6 +405,7 @@ class CardiologieController extends Controller
         $resultat->passed_at = null;
         $resultat->archieved_at = null;
         $resultat->save();
+        $this->updateDossierId($resultat->dossier->id);
 
         defineAsAuthor("Cardiologie",$resultat->id,'reactiver');
         $resultat->updateConsultationCardiologique();
@@ -386,7 +440,7 @@ class CardiologieController extends Controller
                 ActionMotif::create([
                     "actionable_type" => "Cardiologie",
                     "actionable_id" => $cardiologie->id,
-                    "motif_id" => $motif
+                    "motif_id" => $motif->id
                 ]);
 
                 defineAsAuthor("CardiologieMotif", $cardiologie->id, 'attach and update', $cardiologie->dossier->patient->user_id);
@@ -425,13 +479,15 @@ class CardiologieController extends Controller
                 $parametreCommun->update([
                         "poids"=>$request->get('poids') == 'null' ? 0 :$request->get('poids'),
                         "taille"=>$request->get('taille') == 'null' ? 0 :$request->get('taille'),
-                        "ta_systolique"=>$request->get('ta_systolique') == 'null' ? 0 :$request->get('ta_systolique'),
-                        "ta_diastolique"=>$request->get('ta_diastolique') == 'null' ? 0 :$request->get('ta_diastolique'),
+                        "ta_systolique"=>$request->get('ta_systolique') == 'null' ? 0 :$request->get('ta_systolique',0),
+                        "ta_diastolique"=>$request->get('ta_diastolique') == 'null' ? 0 :$request->get('ta_diastolique',0),
+                        "ta_systolique_d"=>$request->get('ta_systolique_d') == 'null' || $request->get('ta_systolique_d') == 'undefined'  ? 0 :$request->get('ta_systolique_d',0),
+                        "ta_diastolique_d"=>$request->get('ta_diastolique_d') == 'null' || $request->get('ta_diastolique_d') == 'undefined' ? 0 :$request->get('ta_diastolique_d',0),
                         "temperature"=>$request->get('temperature') == 'null' ? 0 :$request->get('temperature'),
-                        "frequence_cardiaque"=>$request->get('frequence_cardiaque') == 'null' ? 0 :$request->get('frequence_cardiaque'),
-                        "frequence_respiratoire"=>$request->get('frequence_respiratoire') == 'null' ? 0 :$request->get('frequence_respiratoire'),
+                        "frequence_cardiaque"=>$request->get('frequence_cardiaque') == 'null' ? 0 :$request->get('frequence_cardiaque',0),
+                        "frequence_respiratoire"=>$request->get('frequence_respiratoire') == 'null' ? 0 :$request->get('frequence_respiratoire',0),
                         "sato2"=>$request->get('sato2') == 'null' ? 0 :$request->get('sato2'),
-                        "perimetre_abdominal"=>$request->get('perimetre_abdominal') == 'null' ? 0 :$request->get('perimetre_abdominal')
+                        "perimetre_abdominal"=>$request->get('perimetre_abdominal') == 'null' ? 0 :$request->get('perimetre_abdominal',0)
                     ]
                     +
                     ["communable_id" => $cardiologie->id, "communable_type" => 'Cardiologie']);
@@ -443,6 +499,8 @@ class CardiologieController extends Controller
                         "bmi",
                         "ta_systolique",
                         "ta_diastolique",
+                        "ta_systolique_d",
+                        "ta_diastolique_d",
                         "temperature",
                         "frequence_cardiaque",
                         "frequence_respiratoire",
@@ -528,7 +586,7 @@ class CardiologieController extends Controller
             foreach ($cardiologie->operationables as $operationable){
                 if (!is_null($operationable->contributable)){
                     if (!in_array($operationable->contributable->id,$ancienContributeurs)){
-                     array_push($ancienContributeurs,$operationable->contributable->id);
+                        array_push($ancienContributeurs,$operationable->contributable->id);
                     }
                 }
             }
@@ -553,10 +611,10 @@ class CardiologieController extends Controller
         $filtered = array_diff($ancienContributeurs,$contributeurs);
         foreach ($filtered as $filter){
             $contributeurList = Contributeurs::where('operationable_type','Cardiologie')
-            ->where('operationable_id',$cardiologie->id)->where('contributable_id',$filter)->get();
-          foreach ($contributeurList as $item){
-              $item->delete();
-          }
+                ->where('operationable_id',$cardiologie->id)->where('contributable_id',$filter)->get();
+            foreach ($contributeurList as $item){
+                $item->delete();
+            }
         }
 
     }
@@ -566,6 +624,44 @@ class CardiologieController extends Controller
 
         if ($reponse == false){
             $this->revealAccesRefuse();
+        }
+    }
+
+    public function updateRdv($cardiologie,$request){
+        //Creation du rendez vous si les information sont renseignées
+        $motifRdv = $request->get('motifRdv');
+        $dateRdv = $request->get('rendez_vous');
+
+        if ($motifRdv == 'null'){
+            $motifRdv = 'Rendez vous de la consultation de cardiologie du '.$request->get('date_consultation');
+        }
+        //je récupère le rendez vous de la consultation si cela existe
+        $rdv = RendezVous::where('sourceable_id',$cardiologie->id)
+            ->where('sourceable_type','Cardiologie')
+            ->first();
+        if (is_null($rdv)) {
+//            si cela n'existe pas et que on a spécifié la date de rendez vous on crée
+            if (!is_null($dateRdv) && $dateRdv != 'Invalid date') {
+                if (strlen($dateRdv) > 0 && $dateRdv != 'null') {
+
+                    RendezVous::create([
+                        "sourceable_id" => $cardiologie->id,
+                        "sourceable_type" => 'Cardiologie',
+                        "patient_id" => $cardiologie->dossier->patient->user_id,
+                        "praticien_id" => Auth::id(),
+                        "initiateur" => Auth::id(),
+                        "motifs" => $motifRdv,
+                        "date" => $dateRdv,
+                        "statut" => 'Programmé',
+                    ]);
+                }
+            }
+        } else{
+            $rdv->date = $dateRdv;
+            $rdv->motifs = $motifRdv;
+            $rdv->statut = 'Reprogrammé';
+
+            $rdv->save();
         }
     }
 }

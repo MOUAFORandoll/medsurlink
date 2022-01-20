@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\SouscripteurStoreRequest;
 use App\Http\Requests\SouscripteurUpdateRequest;
 use App\Mail\updateSetting;
+use App\Mail\RappelAffiliation;
 use App\Models\Souscripteur;
 use Illuminate\Support\Facades\Mail;
 use Netpok\Database\Support\DeleteRestrictionException;
@@ -23,7 +24,7 @@ class SouscripteurController extends Controller
      */
     public function index()
     {
-        $souscripteurs = Souscripteur::with('patients','user','financeurs.patients')->get();
+        $souscripteurs = Souscripteur::with('patients','user','financeurs.patients','affiliation')->get();
         return response()->json(['souscripteurs'=>$souscripteurs]);
     }
 
@@ -47,7 +48,7 @@ class SouscripteurController extends Controller
     public function store(SouscripteurStoreRequest $request)
     {
         //Création des informations utilisateurs
-        $userResponse =  UserController::generatedUser($request);
+        $userResponse =  UserController::generatedUser($request,'Souscripteur');
         if ($userResponse->status() == 419)
             return $userResponse;
 
@@ -87,8 +88,9 @@ class SouscripteurController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $souscripteur = Souscripteur::with('user','patients.user','patients.dossier','financeurs.patients')->whereSlug($slug)->first();
+        $souscripteur = Souscripteur::with('user','patients.user','patients.dossier','financeurs.patients.user','financeurs.patients.dossier','affiliation')->whereSlug($slug)->first();
 
+        $souscripteur->updatePatientDossier();
         return response()->json(['souscripteur'=>$souscripteur]);
 
     }
@@ -103,7 +105,38 @@ class SouscripteurController extends Controller
     {
         //
     }
+    /**
+     * Show the form for rappel the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function rappelAffilie($slug)
+    {
+        $this->validatedSlug($slug,$this->table);
+        $souscripteur= Souscripteur::with('user')->whereSlug($slug)->first();
+        try{
+            $mail = new RappelAffiliation($souscripteur);
+            Mail::to($souscripteur->user->email)->send($mail);
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['souscripteur'=>$souscripteur, "message"=>$message]);
 
+        }
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function cim()
+    {
+        $souscripteurs = Souscripteur::with('patients','user','financeurs.patients','affiliation')
+        ->join('affiliation_souscripteurs', function ($join) {
+            $join->on('souscripteurs.user_id', '=', 'affiliation_souscripteurs.user_id');
+        })->get();
+        return response()->json(['souscripteurs'=>$souscripteurs]);
+    }
     /**
      * Update the specified resource in storage.
      *
@@ -125,8 +158,6 @@ class SouscripteurController extends Controller
         if (!is_null($request->date_de_naissance)){
             $age = evaluateYearOfOld($request->date_de_naissance);
         }
-
-        $age = evaluateYearOfOld($request->date_de_naissance);
 
         Souscripteur::whereSlug($slug)->update($request->only(['sexe','date_de_naissance'])+['age'=>$age]);
 

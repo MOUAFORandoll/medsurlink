@@ -32,12 +32,14 @@
             /*}*/
 
         td,
-        th {
+        th,hr {
             border: 1px solid #dee2e6;
-            padding: 0.5em;
+            padding: 0.2em;
 
         }
-
+        hr {
+            border: 1px solid #dee2e6;
+        }
         th{
             font-weight:700;
         }
@@ -58,12 +60,12 @@
         }
 
         .sous-titre-rapport::after{
-            content:"";
+            /* content:""; */
             display:block;
             width:60%;
-            height:0.5px;
+            /* height:0.5px; */
             font-weight: 600;
-            background-color:#dee2e6;
+            /* background-color:#dee2e6; */
             /* margin:0 auto;*/
             margin-top:3em;
         }
@@ -105,7 +107,7 @@
         .divTableHead {
             /*border: 1px solid #999999;*/
             display: table-cell;
-            padding: 3px 10px;
+           /* padding: 3px 10px;*/
         }
 
         .divTableHeading {
@@ -123,6 +125,26 @@
         .divTableBody {
             display: table-row-group;
         }
+        .column {
+            float: left;
+            width: 50%;
+        }
+        .row{
+            border-bottom: 1px solid #dee2e6;
+        }
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+            width: 100%;
+        }
+        .row p{
+            font-size: 12px;
+        }
+        .p{
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -137,7 +159,7 @@
     @if(count($dossier->allergies) >0)
         <div class="justify-content-center"> Allergies Information </div>
         @forelse($dossier->allergies as $allergie)
-            <table>
+            <table style="width: 100%">
                 <thead>
                 <td class="title-table">Description</td>
                 <td class="title-table">Date debut</td>
@@ -176,7 +198,7 @@
             <strong>{{$consultationMedecine->dossier->patient->user->nom}}</strong> né(e) le <strong>{{\Carbon\Carbon::parse($consultationMedecine->dossier->patient->date_de_naissance)->format('d/m/Y')}}</strong>
             pour:
             @forelse($consultationMedecine->motifs as $motif)
-                <strong>{{$motif->description}},</strong>
+                {{-- <strong>{{$motif->description}},</strong> --}}
             @empty
                 <strong></strong>
             @endforelse
@@ -189,25 +211,46 @@
             <strong></strong>
         @endforelse
 
-        <h4 class="sous-titre-rapport">Anamnèse</h4>
-        <p>{!! $consultationMedecine->anamese !!}</p>
 
         <h4 class="sous-titre-rapport">Mode de vie</h4>
-        <p class="ml-5">Profession : <strong>{{$consultationMedecine->profession}}</strong></p>
-        <p class="ml-5">Situation familiale : <strong>{{$consultationMedecine->situation_familiale}}</strong></p>
-        <p class="ml-5">Nombre d'enfants : <strong>{{$consultationMedecine->nbre_enfant}}</strong></p>
-        <p class="ml-5">Tabac : <strong>{{$consultationMedecine->tabac}} UPA</strong></p>
-        <p class="ml-5">Alcool : <strong>{{$consultationMedecine->alcool}}</strong></p>
-        <p class="ml-5">Autres : <strong>{!! $consultationMedecine->autres !!}</strong></p>
+        <div class="divTable">
+            <div class="divTableBody">
+                <div class="divTableRow">
 
-        @if(count($consultationMedecine->dossier->antecedents) >0)
-            <h4 class="sous-titre-rapport--table">Antédédents</h4>
+                    <div>
+                        <table style="width: 100%">
+
+                            <tbody>
+                                <tr>
+                                    <td>Profession </td>
+                                    <td>Situation familiale </td>
+                                    <td>Nombre d'enfants </td>
+                                    <td>Tabac </td>
+                                    <td>Alcool </td>
+                                    <td>Autres </td>
+                                </tr>
+                                <tr>
+                                    <td><span>{{$consultationMedecine->profession}}</span></td>
+                                    <td><span>{{$consultationMedecine->situation_familiale}}</span></td>
+                                    <td><span>{{$consultationMedecine->nbre_enfant}}</span></td>
+                                    <td><span>{{$consultationMedecine->tabac}} UPA</span></td>
+                                    <td><span>{{$consultationMedecine->alcool}}</span></td>
+                                    <td><span>{!! $consultationMedecine->autres !!}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+{{--        @if(count($consultationMedecine->dossier->antecedents) >0)--}}
+            <h4 class="sous-titre-rapport">Antédédents</h4>
             <div class="divTable">
                 <div class="divTableBody">
                     <div class="divTableRow">
 
                         <div class="divTableCell">
-                            <table>
+                            <table style="width: 100%">
                                 <thead>
                                 <td class="title-table">Type</td>
                                 <td class="title-table">Description</td>
@@ -224,6 +267,30 @@
                                 @empty
                                     <strong></strong>
                                 @endforelse
+{{--                                @foreach($consultationMedecine->dossier->consultationsMedecine as $consultation)--}}
+{{--                                    @if(\Carbon\Carbon::parse($consultation->updated_at)->lessThan($consultationMedecine->updated_at))--}}
+{{--                                        @foreach($consultation->conclusions as $conclusion)--}}
+{{--                                            @if(!is_null($conclusion->description) && $conclusion->description !=='null')--}}
+{{--                                                <tr>--}}
+{{--                                                    <td>Consultation</td>--}}
+{{--                                                    <td>{!!  $conclusion->description !!}</td>--}}
+{{--                                                    <td>{{\Carbon\Carbon::parse($conclusion->updated_at)->format('d/m/Y')}}</td>--}}
+{{--                                                </tr>--}}
+{{--                                            @endif--}}
+{{--                                        @endforeach--}}
+{{--                                    @endif--}}
+{{--                                @endforeach--}}
+{{--                                @foreach($consultationMedecine->dossier->cardiologies as $cardiologie)--}}
+{{--                                    @if(\Carbon\Carbon::parse($cardiologie->updated_at)->lessThan($consultationMedecine->updated_at))--}}
+{{--                                        @if(!is_null($cardiologie->conclusion) && $cardiologie->conclusion !=='null')--}}
+{{--                                            <tr>--}}
+{{--                                                <td>Consultation</td>--}}
+{{--                                                <td>{!!  $cardiologie->conclusion !!}</td>--}}
+{{--                                                <td>{{\Carbon\Carbon::parse($cardiologie->updated_at)->format('d/m/Y')}}</td>--}}
+{{--                                            </tr>--}}
+{{--                                        @endif--}}
+{{--                                    @endif--}}
+{{--                                    @endforeach--}}
                                 </tbody>
                             </table>
 
@@ -231,82 +298,25 @@
                     </div>
                 </div>
             </div>
-        @endif
-        @if(count($consultationMedecine->dossier->allergies)>0)
-            <h4 class="sous-titre-rapport--table">Allergies</h4>
-            <div class="divTable">
-                <div class="divTableBody">
-                    <div class="divTableRow">
-
-                        <div class="divTableCell">
-                            <table>
-                                <thead>
-                                <td class="title-table">Description</td>
-                                {{--            <td>Date debut</td>--}}
-                                </thead>
-                                <tbody>
-                                <tr></tr>
-                                @forelse($consultationMedecine->dossier->allergies as $allergie)
-                                    <tr>
-                                        <td>{{$allergie->description}}</td>
-                                        {{--                    <td>{{\Carbon\Carbon::parse($allergie->date)->format('d/m/Y')}}</td>--}}
-                                    </tr>
-                                @empty
-                                    <strong></strong>
-                                @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
-        @if(count($consultationMedecine->dossier->traitements) >0)
-            <h4 class="sous-titre-rapport--table">Traitement actuel</h4>
-            <div class="divTable">
-                <div class="divTableBody">
-                    <div class="divTableRow">
-
-                        <div class="divTableCell">
-                            <table>
-                                <thead>
-                                <td class="title-table">Description</td>
-{{--                                <td class="title-table">Date prescription</td>--}}
-                                </thead>
-                                <tbody>
-                                <tr></tr>
-                                @foreach($consultationMedecine->dossier->traitements as $traiement)
-                                    @if($loop->last)
-                                        <tr>
-                                            <td>{{$traiement->description}}</td>
-{{--                                            <td>{{\Carbon\Carbon::parse($traiement->created_at)->format('d/m/Y')}}</td>--}}
-                                        </tr>
-                                    @endif
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
+{{--        @endif--}}
+      <div>
         <h4 class="sous-titre-rapport">Parametres</h4>
         @if(count($consultationMedecine->parametresCommun)>=1)
+        <div class="row" >
             @foreach($consultationMedecine->parametresCommun as $parametre)
                 @if($loop->first)
-                    <p>Poids (kg) : <strong>{{$parametre->poids}}</strong> </p>
-                    <p>Taille (cm): <strong>{{$parametre->taille}}</strong></p>
-                    <p>Bmi (kg/m²): <strong>{{$parametre->bmi}}</strong></p>
-                    <p>TA Systolique (mmHg) : <strong>{{$parametre->ta_systolique}}</strong></p>
-                    <p>TA Diastolique (mmHg) : <strong>{{$parametre->ta_diastolique}}</strong></p>
-                    <p>Température (°C): <strong>{{$parametre->temperature}}</strong></p>
-                    <p>Fréquence cardiaque (bpm) : <strong>{{$parametre->frequence_cardiaque}}</strong></p>
-                    <p>Fréquence respiratoire (cpm) : <strong>{{$parametre->frequence_respiratoire}}</strong></p>
-                    <p>sato2 (%) : <strong>{{$parametre->sato2}}</strong></p>
+                            <div class="list">Poids (kg) : <strong>{{$parametre->poids}}</strong> </div>
+                            <div class="list">Taille (cm): <strong>{{$parametre->taille}}</strong></div>
+                            <div class="list">Bmi (kg/m²): <strong>{{$parametre->bmi}}</strong></div>
+                            <div class="list">TA Systolique (mmHg) : <strong>{{$parametre->ta_systolique}}</strong></div>
+                            <div class="list">TA Diastolique (mmHg) : <strong>{{$parametre->ta_diastolique}}</strong></div>
+                            <div class="list">Température (°C): <strong>{{$parametre->temperature}}</strong></div>
+                            <div class="list">Fréquence cardiaque (bpm) : <strong>{{$parametre->frequence_cardiaque}}</strong></div>
+                            <div class="list">Fréquence respiratoire (cpm) : <strong>{{$parametre->frequence_respiratoire}}</strong></div>
+                            <div class="list">sato2 (%) : <strong>{{$parametre->sato2}}</strong></div>
                 @endif
-
-
             @endforeach
+        </div>
         @else
             <p>Poids (kg) :</p>
             <p>Taille (cm): </p>
@@ -318,29 +328,118 @@
             <p>Fréquence respiratoire (cpm) : </p>
             <p>sato2 (%) : </p>
         @endif
+    </div>
+        @if(count($consultationMedecine->dossier->allergies)>0)
 
+                            <h4 class="sous-titre-rapport">Allergies</h4>
+                            @forelse($consultationMedecine->dossier->allergies as $allergie)
+                            <span> {{$allergie->description}}, </span>
+                            @empty
+                                <strong></strong>
+                            @endforelse
 
+        @endif
+         @if(count($consultationMedecine->dossier->traitements) >0)
 
+            <div class="divTable">
+                <h4 class="sous-titre-rapport">Traitement actuel</h4>
+                <div class="divTableBody">
+                    <div class="divTableRow">
 
-        @if(!is_null($consultationMedecine->examen_clinique) )
-            <h4 class="sous-titre-rapport">Examen clinique</h4>
-            @if($consultationMedecine->examen_clinique != 'null')
-                <p>{!!$consultationMedecine->examen_clinique!!}</p>
-            @endif
+                        @foreach($consultationMedecine->dossier->traitements as $traiement)
+                        @if($loop->last)
+                            <div>
+                                <span>{!!$traiement->description!!}</span>
+                            </div>
+                        @endif
+                    @endforeach
+                    </div>
+                </div>
+            </div>
         @endif
 
-        @if(!is_null($consultationMedecine->examen_complementaire))
+        @if(!is_null($anamneses))
+            <h4 class="sous-titre-rapport">Anamnèse</h4>
+            @if($anamneses != 'null')
+                @foreach($anamneses as $key => $parametre)
+                <div class="row">
+                    <div class="column">{!!$key!!}</div>
+                    <div class="column">
+                        @foreach($parametre as $ref)
+                            <span class="p">{!!$ref['fr_description']!!} -</span>
+                        @endforeach
+
+                    </div>
+                </div>
+                @endforeach
+            @endif
+        @endif
+        @if(!is_null($anamese))
+        {{-- <h4 class="sous-titre-rapport">Anamnèse</h4> --}}
+        <div class="row">
+            {!!$consultationMedecine->anamese!!}
+        </div>
+        @endif
+
+        @if(!is_null($examen_clinique))
+            <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4>
+            @if($examen_clinique != 'null' && is_array($examen_clinique))
+                @foreach($examen_clinique as $key => $parametre)
+                <div class="row">
+                    <div class="column">{!!$key!!}</div>
+                    <div class="column">
+                        @foreach($parametre as $ref)
+                            <span class="p">{!!$ref['fr_description']!!} -</span> 
+                        @endforeach
+                    </div>
+                </div>
+                @endforeach
+            @endif
+        @endif
+        @if(!is_null($examen_clinique))
+            {{-- <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4> --}}
+            <div class="row">
+                {!!$consultationMedecine->examen_clinique!!}
+            </div>
+        @endif
+        @if(!is_null($examen_complementaire))
             <h4 class="sous-titre-rapport">Examen(s) complémentaire(s)</h4>
-            @if($consultationMedecine->examen_complementaire != 'null')
-                <p>{!!$consultationMedecine->examen_complementaire!!}</p>
+            @if($examen_complementaire != 'null' && is_array($examen_complementaire))
+                @foreach($examen_complementaire as $key => $parametre)
+                <div class="row">
+                    <div class="column">{!!$key!!}</div>
+                    <div class="column">
+                        @foreach($parametre as $ref)
+                            <span class="p">{!!$ref['fr_description']!!} -</span>
+                        @endforeach
+                    </div>
+                </div>
+                @endforeach
+            @endif
+            @if(!is_null($complementaire))
+                {{-- <h4 class="sous-titre-rapport">Examen(s) complémentaire(s)</h4> --}}
+                <div class="row">
+                    {!!$consultationMedecine->complementaire!!}
+                </div>
             @endif
         @endif
 
+        @if(!is_null($diasgnostic))
+            <h4 class="sous-titre-rapport">Diagnostic ICD</h4>
+            @if($diasgnostic != 'null')
+                @foreach($diasgnostic as $parametre)
+                <div class="row">
+                    <div class="column" style="width: 20%">{!!$parametre['code']!!}</div>
+                    <div class="column" style="width: 80%"><p class="p">{!!$parametre['title']!!}</p></div>
+                </div>
+                @endforeach
+            @endif
+        @endif
 
         @if(!is_object(collect($consultationMedecine->conclusions->toArray())->first()))
             @if(!is_null($consultationMedecine->conclusions->first()))
                 <h4 class="sous-titre-rapport">Diagnostic</h4>
-                <p>{!!($consultationMedecine->conclusions->first())->description!!}</p>
+                <p class="p">{!!($consultationMedecine->conclusions->first())->description!!}</p>
             @endif
         @endif
 
@@ -353,7 +452,7 @@
         @endif
 
         @if((!is_null($consultationMedecine->file) && $consultationMedecine->file != 'null') || count($consultationMedecine->files)>0)
-            <p>Consulter les pièces jointes</p>
+            <h4 class="sous-titre-rapport">Consulter les pièces jointes</h4>
             @if(!is_null($consultationMedecine->file) && $consultationMedecine->file != 'null')
                 <a href="{{config('app.url')}}/public/storage/{{$consultationMedecine->file}}">{{(explode("/",$consultationMedecine->file))[count(explode("/",$consultationMedecine->file)) - 1]}}</a><br>
             @endif
@@ -374,13 +473,13 @@
 @isset($resultatImagerie)
 @endisset
 
-
+<h4></h4>
 <p>Je vous remercie de m'avoir adressé votre patient(e) et vous adresse mes salutations confraternelles.</p>
-
-<p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
-
+@if($consultationMedecine->dossier->patient->user->isMedicasure == '1')
+    <p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
+@endif
 @if(count($medecins) != 0)
-    <h4>Medecin(s) ayant revisité(s) votre consultation</h4>
+    <h4 class="sous-titre-rapport">Medecin(s) ayant revisité votre consultation</h4>
     @foreach($medecins as $medecin)
         @if(!is_null($medecin->user))
             <div style="display: inline">
@@ -402,7 +501,7 @@
     @endforeach
 @endif
 <div style="display: inline">
-    @if(!is_null($praticiens->user))
+    @if(!empty($praticiens->user))
         <p>Généré par <b>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</b></p>
         @if(!is_null($praticiens->numero_ordre))
             @if($praticiens->numero_ordre != 'null' && strlen($praticiens->numero_ordre ) >0)
@@ -421,7 +520,7 @@
     @endisset
 </div>
 @if(count($consultationMedecine->operationables) >0)
-    <p>Contributeurs</p>
+    <h4 class="sous-titre-rapport">Contributeurs</h4>
     @foreach($mContributeurs as $medecin)
         @if(!is_null($medecin->user))
             <div style="display: inline">

@@ -24,7 +24,8 @@ class Echographie extends Model
         "biometrie",
         "annexe",
         "description",
-        'slug'
+        'slug',
+        "ligne_de_temps_id"
     ];
     use Sluggable;
     use SluggableScopeHelpers;

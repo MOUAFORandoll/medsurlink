@@ -4,6 +4,7 @@
 namespace App\Scopes;
 
 use App\Http\Controllers\Traits\Autorisation;
+use App\Models\PatientSouscripteur;
 use Firebase\JWT\JWT;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -28,7 +29,9 @@ class RestrictPatientScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-$element = DB::table('oauth_access_tokens')->whereId($this->getBearerToken())->first();
+        if (Auth::check()){
+
+            $element = DB::table('oauth_access_tokens')->whereId($this->getBearerToken())->first();
             $user = Auth::user();
 
             $userRoles = $user->getRoleNames();
@@ -45,15 +48,22 @@ $element = DB::table('oauth_access_tokens')->whereId($this->getBearerToken())->f
                 $patientsId = [];
 
                 foreach ($patients as $patient){
-                        array_push($patientsId,$patient->user_id);
+                    array_push($patientsId,$patient->user_id);
                 }
+
+                $patientSouscripteurs = PatientSouscripteur::where('financable_id',Auth::id())->get();
+
+                foreach ($patientSouscripteurs as  $patient){
+                    if (!in_array($patient->patient_id,$patientsId)){
+                        array_push($patientsId,$patient->patient_id);
+                    }
+                }
+
                 $builder->whereIn('patient_id',$patientsId);
             }
             else{
 
             }
-//        }else{
-//            throw new UnauthorizedException("Veuillez vous authentifier",401);
-//        }
+        }
     }
 }

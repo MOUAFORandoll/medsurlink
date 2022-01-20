@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\Traitement;
+use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 class ConsultationTraitementController extends Controller
 {
     use PersonnalErrors;
+    use DossierTrait;
+
     public function retirerTraitement(Request $request){
         $validation = Validator::make($request->all(),[
             "consultation"=>"required|integer|exists:consultation_medecine_generales,id",
@@ -28,6 +31,8 @@ class ConsultationTraitementController extends Controller
         $consultation->traitements()->detach($request->get('traitements'));
 
         $consultation = ConsultationMedecineGenerale::with(['examensClinique','traitements','examensComplementaire','traitements'])->find($request->get('consultation'));
+        $this->updateDossierId($consultation->dossier->id);
+
         return response()->json(['consultation'=>$consultation]);
     }
 
@@ -69,6 +74,7 @@ class ConsultationTraitementController extends Controller
         defineAsAuthor("ConsultationTraitement",$consultation->id,'attach', $consultation->dossier->patient->user_id);
 
         $consultation->updateConsultationMedecine();
+        $this->updateDossierId($consultation->dossier->id);
 
         return response()->json(['consultation'=>$consultation]);
     }

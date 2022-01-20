@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
+use App\Scopes\RestrictArchievedAt;
 use App\Scopes\RestrictDossierScope;
+use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
@@ -55,6 +57,8 @@ class ConsultationObstetrique extends Model
         "t1",
         "nle_anle",
         "sexe",
+        "creator",
+        "ligne_de_temps_id",
     ];
 
     /**
@@ -86,6 +90,10 @@ class ConsultationObstetrique extends Model
     public function etablissement(){
         return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
     }
+
+    public function author (){
+        return $this->belongsTo(User::class,'creator','id');
+    }
     /**
      * The "booting" method of the model.
      *
@@ -96,6 +104,7 @@ class ConsultationObstetrique extends Model
         parent::boot();
 
         static::addGlobalScope(new RestrictDossierScope);
+        static::addGlobalScope(new RestrictArchievedAt);
     }
 
     public function updateObstetricConsultation(){
@@ -110,11 +119,19 @@ class ConsultationObstetrique extends Model
         $this['user']=$user;
         $isAuthor = checkIfIsAuthorOrIsAuthorized("ConsultationObstetrique",$this->id,"create");
         $canUpdate = checkIfCanUpdated("ConsultationObstetrique",$this->id,"create");
+        $author = $this->author;
+        if (!is_null($author)){
+//            $this['author']['user'] = $author;
+        }else{
+            unset($this['author']);
+            $this['author'] = getAuthor("ConsultationObstetrique",$this->id,"create");
+        }
         $this['isAuthor']=$isAuthor->getOriginalContent();
         $connectedUser = Auth::user();
         if ($connectedUser->getRoleNames()->first() == 'Praticien'){
             $this['canUpdate']=$canUpdate->getOriginalContent() && is_null($this->passed_at) && is_null($this->archieved_at);
         }elseif ($connectedUser->getRoleNames()->first() == 'Medecin controle'){
+            $this['isAuthor']=true;
             if ($isAuthor->getOriginalContent() == true)
                 $this['canUpdate'] = is_null($this->archieved_at);
             else{
@@ -132,5 +149,9 @@ class ConsultationObstetrique extends Model
 
     public function files(){
         return $this->morphMany(File::class,'fileable');
+    }
+
+    public function rdv(){
+        return $this->morphOne(RendezVous::class,'sourceable');
     }
 }

@@ -30,7 +30,7 @@ class updateSetting extends Mailable
      */
     public function build()
     {
-        return $this->from('no-reply@medicasure.com')
+        return $this->from('no-reply@medsurlink.com')
             ->subject(config('app.name').'  - Mise à jour des informations du compte')
             ->markdown('emails.setting.update');
     }

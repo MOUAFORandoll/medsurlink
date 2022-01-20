@@ -26,8 +26,11 @@ use Illuminate\Validation\ValidationException;
 if (!function_exists('evaluateYearOfOld')){
 
     function evaluateYearOfOld($date_de_naissance){
-        $age = Carbon::today()->diffInYears(Carbon::parse($date_de_naissance));
-        return $age;
+        if (!is_null($date_de_naissance)){
+            $age = Carbon::today()->diffInYears(Carbon::parse($date_de_naissance));
+            return $age;
+        }
+        return 0;
     }
 }
 
@@ -99,8 +102,16 @@ if (!function_exists('getStatus')){
             $user = \Illuminate\Support\Facades\Auth::user();
         }
         $auteurable_type = $user->getRoleNames()->first();
-        $auteurable_id = (getStatusUserRole($auteurable_type,$user)->getOriginalContent()['auteurable_user'])->user_id;
-        return response()->json(['auteurable_type'=>$auteurable_type,'auteurable_id'=>$auteurable_id,]);
+        if(!is_null($auteurable_type)){
+            $status = getStatusUserRole($auteurable_type,$user)->getOriginalContent()['auteurable_user'];
+            if($status==null){
+                return null;
+            }
+            $auteurable_id = $status->user_id;
+            return response()->json(['auteurable_type'=>$auteurable_type,'auteurable_id'=>$auteurable_id,]);
+        }else{
+            return response()->json(['auteurable_type'=>'Comptable','auteurable_id'=>$user->id]);
+        }
     }
 }
 
@@ -127,9 +138,17 @@ if (!function_exists('getStatusUserRole')){
         elseif ($roleName == "Medecin controle"){
             return response()->json(['auteurable_user'=>$user->medecinControle]);
         }
-
+        elseif ($roleName == "Etablissement"){
+            return response()->json(['auteurable_user'=>$user]);
+        }
         elseif ($roleName == "Admin"){
             return response()->json(['auteurable_user'=>$user]);
+        }
+        elseif ($roleName == "Association"){
+            return response()->json(['auteurable_user'=>$user]);
+        }
+        elseif ($roleName == "Assistante"){
+            return response()->json(['auteurable_user'=>$user->assistante]);
         }
     }
 }
@@ -171,16 +190,16 @@ if (!function_exists('checkIfCanUpdate')){
     function checkIfCanUpdated($operationable_type, $operationable_id, $action){
         $user = \Illuminate\Support\Facades\Auth::user();
         $nbre  = 0;
-            //Recuperation du role de celui qui a crée l'element
-            $role = getAuthorRole($operationable_type,$operationable_id,$action);
-            $isAuthor = checkIfIsAuthorOrIsAuthorized($operationable_type, $operationable_id, $action);
-            if($isAuthor->getOriginalContent() == false){
-                if (($role == 'Praticien' && $user->getRoleNames()->first() == 'Medecin controle') || ($role == 'Medecin controle') ){
-                    $nbre = 1;
-                }
-            }else{
+        //Recuperation du role de celui qui a crée l'element
+        $role = getAuthorRole($operationable_type,$operationable_id,$action);
+        $isAuthor = checkIfIsAuthorOrIsAuthorized($operationable_type, $operationable_id, $action);
+        if($isAuthor->getOriginalContent() == false){
+            if (($role == 'Praticien' && $user->getRoleNames()->first() == 'Medecin controle') || ($role == 'Medecin controle' && $user->getRoleNames()->first() == 'Medecin controle') ){
                 $nbre = 1;
             }
+        }else{
+            $nbre = 1;
+        }
         if ($nbre>0)
             return response()->json(true);
         return response()->json(false);
@@ -215,7 +234,7 @@ if (!function_exists('getAuthorId')){
 
 if (!function_exists('getAuthor')) {
     function getAuthor($operationable_type, $operationable_id, $action){
-        $auteur =   \App\Models\Auteur::where('action','=',$action)->where('operationable_type','=',$operationable_type)->where('operationable_id','=',$operationable_id)->first();
+        $auteur =   \App\Models\Auteur::with('user')->where('action','=',$action)->where('operationable_type','=',$operationable_type)->where('operationable_id','=',$operationable_id)->first();
         if (is_null($auteur))
             return null;
         return $auteur;
@@ -255,7 +274,10 @@ if (!function_exists('getUser')){
             $medecinControle = \App\Models\MedecinControle::whereSlug($slug)->first();
             return response()->json(['user'=>$medecinControle->user]);
         }
-
+        elseif ($roleName == "Association"){
+            $association = \App\Models\Association::whereSlug($slug)->first();
+            return response()->json(['user'=>$association->userResponsable]);
+        }
         elseif ($roleName == "Admin"){
             $user = \App\User::find(1);
             return response()->json(['user'=>$user]);
@@ -263,6 +285,10 @@ if (!function_exists('getUser')){
         elseif ($roleName == "User"){
             $user = \App\User::findBySlug($slug);
             return response()->json(['user'=>$user]);
+        }
+        elseif ($roleName == "Assistante"){
+            $assistante = \App\Models\Assistante::whereSlug($slug)->first();
+            return response()->json(['user'=>$assistante->user]);
         }
     }
 }

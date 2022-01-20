@@ -1,5 +1,6 @@
 <?php
 use App\Models\ContratIntermediationMedicale;
+use App\Models\CompteRenduOperatoire;
 use Barryvdh\DomPDF\Facade as PDF;
 
 /*
@@ -18,37 +19,22 @@ header('Access-Control-Allow-Origin:  *');
 header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
 header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
 
+Route::get('/contrat-prepaye-store/{cim_id}/redirect','Api\AffiliationSouscripteurController@storeSouscripteurRedirect');
+//Route::get('/contrat-prepaye-store/{cim_id}/redirect','Api\AffiliationSouscripteurController@storeSouscripteurRedirect')->middleware('auth.basic.once');
+Route::get('/redirect-mesurlink/redirect/{email}','Api\MedicasureController@storeSouscripteurRedirect');
+Route::resource('medicasure/souscripteur','Api\MedicasureController');
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/public/storage/DossierMedicale/{fileNumber}/Consultation/{consultation}/{image}', function ($fileNumber,$consultation,$image) {
-    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/Consultation/'.$consultation.'/'.$image;
+Route::get('/public/storage/DossierMedicale/{fileNumber}/{typeConsultation}/{consultation}/{image}/{resource?}', function ($fileNumber,$typeConsultation,$consultation,$image,$resource='') {
+    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/'.$typeConsultation.'/'.$consultation.'/'.$image.($resource ? '/'.$resource :'');
     return response()->file($path);
 });
 
-Route::get('/public/storage/DossierMedicale/{fileNumber}/ConsultationGenerale/{image}', function ($fileNumber,$image) {
-    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/ConsultationGenerale/'.$image;
-    return response()->file($path);
-});
-
-Route::get('/public/storage/DossierMedicale/{fileNumber}/Cardiologie/{identifiant}/{resource}', function ($fileNumber,$identifiant,$resource) {
-    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/Cardiologie/'.$identifiant.'/'.$resource;
-    return response()->file($path);
-});
-
-Route::get('/public/storage/Medecin/{fileNumber}/Signature/{image}', function ($fileNumber,$image) {
-    $path = public_path().'/storage/Medecin/'.$fileNumber.'/Signature/'.'/'.$image;
-    return response()->file($path);
-});
-
-Route::get('/public/storage/Praticien/{fileNumber}/Signature/{image}', function ($fileNumber,$image) {
-    $path = public_path().'/storage/Praticien/'.$fileNumber.'/Signature/'.'/'.$image;
-    return response()->file($path);
-});
-
-Route::get('/public/storage/Etablissement/{fileNumber}/Logo/{image}', function ($fileNumber,$image) {
-    $path = public_path().'/storage/Etablissement/'.$fileNumber.'/Logo'.'/'.$image;
+Route::get('/public/storage/{role}/{fileNumber}/{type}/{image}', function ($role,$fileNumber,$type,$image) {
+    $path = public_path().'/storage/'.$role.'/'.$fileNumber.'/'.$type.'/'.'/'.$image;
     return response()->file($path);
 });
 
@@ -72,13 +58,20 @@ Route::get('imprimer/contrat/{id}', function ($id) {
     return $pdf->download("Contrat d'intermediation medicale - ".strtoupper($cim->nomPatient)." ".ucfirst($cim->prenomPatient)." - ".ucfirst($cim->typeSouscription).".pdf");
 });
 
+Route::get('/doc', function () {
+    $compteRendu = CompteRenduOperatoire::whereId(2)->first();
+    $data = compact('compteRendu');
+    return view('rapport.compte_rendu', $data);
+});
+/*
 Route::get('{all}', function () {
     return view('dashboard');
 //})->where('all', '^(dashboard).*$');
 })//->middleware('auth','isAdmin')
 ->where('all', '^admin|admin/|admin/.*,dashboard|dashboard/|dashboard/.*$');
+*/
 
+//Auth::routes();
 
-Auth::routes();
+//Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/home', 'HomeController@index')->name('home');

@@ -6,6 +6,7 @@ namespace App\Scopes;
 
 use App\Models\EtablissementExercicePatient;
 use App\Models\EtablissementExercicePraticien;
+use App\Models\PatientSouscripteur;
 use App\Models\Praticien;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -52,6 +53,15 @@ class RestrictEtablissementScope implements Scope
                         array_push($patientsId,$patient->user_id);
                     }
                 }
+
+                $patientSouscripteurs = PatientSouscripteur::where('financable_id',Auth::id())->get();
+
+                foreach ($patientSouscripteurs as  $patient){
+                    if (in_array($patient->patient_id,$patientsId)){
+                        array_push($patientsId,$patient->patient_id);
+                    }
+                }
+
                 $etablissements = EtablissementExercicePatient::whereIn('patient_id',$patientsId)->get();
                 $etablissementsId = [];
                 foreach ($etablissements as $etablissement){

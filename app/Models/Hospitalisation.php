@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use App\Models\Traits\SlugRoutable;
-use App\Scopes\RestrictDossierScope;
+use App\Scopes\RestrictArchivedAt;
 use App\Scopes\RestrictHospitalisationScope;
+use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Hospitalisation extends Model
 {
@@ -29,9 +31,11 @@ class Hospitalisation extends Model
         "examen_clinique",
         "examen_complementaire",
         "traitement_propose",
-        'archieved_at',
+        'archived_at',
         'passed_at',
         'etablissement_id',
+        'creator',
+        "ligne_de_temps_id"
     ];
     use Sluggable;
     use SluggableScopeHelpers;
@@ -72,6 +76,10 @@ class Hospitalisation extends Model
         return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
     }
 
+    public function author (){
+        return $this->belongsTo(User::class,'creator','id');
+    }
+
     /**
      * The "booting" method of the model.
      *
@@ -82,6 +90,7 @@ class Hospitalisation extends Model
         parent::boot();
 
         static::addGlobalScope(new RestrictHospitalisationScope);
+        static::addGlobalScope(new RestrictArchivedAt);
     }
 
     public function updateHospitalisation(){
@@ -90,8 +99,24 @@ class Hospitalisation extends Model
             $patient = $this->dossier->patient;
             $this['user']=$user;
             $this['patient']=$patient;
+            $author = $this->author;
+            if (!is_null($author)){
+//                $this['author']['user'] = $author;
+            }else{
+                unset($this['author']);
+                $this['author'] = getAuthor("Hospitalisation",$this->id,"create");
+            }
             $isAuthor = checkIfIsAuthorOrIsAuthorized("Hospitalisation",$this->id,"create");
             $this['isAuthor']=$isAuthor->getOriginalContent();
+
+            $connectedUser = Auth::user();
+            if ($connectedUser->getRoleNames()->first() == 'Medecin controle') {
+                $this['isAuthor'] = true;
+            }
         }
+    }
+
+    public function rdv(){
+        return $this->morphOne(RendezVous::class,'sourceable');
     }
 }

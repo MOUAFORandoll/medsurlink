@@ -10,6 +10,7 @@ use App\Mail\Password\PasswordGenerated;
 use App\Mail\Password\PatientPasswordGenerated;
 use App\Mail\updateSetting;
 use App\Models\Souscripteur;
+use App\Models\TimeActivite;
 use App\Rules\EmailExistRule;
 use App\Traits\SmsTrait;
 use App\User;
@@ -149,6 +150,7 @@ class UserController extends Controller
         return null;
     }
 
+
     public static function generatedUser($request,$role = null){
 
         $validation = self::personalValidation($request->all(),$role);
@@ -173,6 +175,28 @@ class UserController extends Controller
             }
         }
 
+        // Check if the role is patient in order to perform duplicate patient's name control
+//        if($role == "Patient") {
+//
+//            // Get all patients where the name and surname are the same
+//            $response = User::with('patient')->where([
+//                ['nom', '=', $request->nom],
+//                ['prenom', '=', $request->prenom],
+//            ])->count();
+//
+//            // Check if is greater than zero
+//            if($response > 0) {
+//                // If so, return an error
+//                return response()->json([
+//                    'user'=> null,
+//                    'error' => trans('validation.duplicate_patient_name')
+//                ]);
+//            }
+//        }
+        $slack = "";
+        if( !is_null($request->slack)){
+            $slack = $request->slack;
+        }
         $user = User::create([
             'nom'=>$request->nom,
             'prenom'=>$request->prenom,
@@ -184,10 +208,21 @@ class UserController extends Controller
             'pays'=>$request->pays,
             'telephone'=>$request->telephone,
             'adresse'=>$request->adresse,
+            'slack' => $slack,
             'isMedicasure'=>$request->get('isMedicasure','0'),
-            'password'=>Hash::make($password)
+            'isNotice'=>$request->get('isNotice','0'),
+            'password'=>Hash::make($password),
+            'decede'=>'non'
         ]);
+        if (!is_null($role) && $role == "Patient"){
+            $user->smsEnvoye = 1;
+            $user->save();
+        }
 
+        if (!is_null($role) && $role == "Souscripteur"){
+            $user->isMedicasure = 1;
+            $user->save();
+        }
         return response()->json(['user'=>$user,'password'=>$password,'code'=>$code]);
     }
 
@@ -214,15 +249,47 @@ class UserController extends Controller
 
         $user = User::findBySlug($slug);
         if ($user->getRoleNames()->first() == 'Patient'){
+
             $user = User::with('patient')->whereSlug($slug)->first();
+
+            $response = 0;
+
+            // Get all patients where the name and surname are the same
+            if
+            (   !is_null($data['nom'])
+                && !is_null($data['prenom'])
+
+                // Check if the name or the surname has changed
+                && (
+                    $data['nom'] != $user->nom
+                    || $data['prenom'] != $user->prenom
+                )
+            ) {
+                $response = User::with('patient')->where([
+                    ['nom', '=', $data['nom']],
+                    ['prenom', '=', $data['prenom']],
+                    ['telephone', '=', $data['telephone']],
+                ])->count();
+            }
+
+            // Check if is greater than zero
+//            if($response > 0) {
+//                // If so, return an error
+//                return response()->json([
+//                    'user'=> null,
+//                    'error' => trans('validation.duplicate_patient_name')
+//                ]);
+//            }
+
+
             if ($data['telephone'] != $user->telephone || $data['date_de_naissance'] != $user->patient->date_de_naissance){
                 $password = str_random(10);
                 $code="";
                 $date_naissance = Carbon::parse($data['date_de_naissance'])->year;
                 $code = substr($password,0,5);
                 $password = $date_naissance.$code;
-                $nom = (is_null($data['prenom']) ? "" : ucfirst($data['prenom']) ." ") . "". strtoupper( $data['nom']);
-
+//                $nom = (is_null($data['prenom']) ? "" : ucfirst($data['prenom']) ." ") . "". strtoupper( $data['nom']);
+                $nom = substr(strtoupper( $user->nom),0,9);
                 sendSMS($data['telephone'],trans('sms.accountSecurityUpdated',['nom'=>$nom,'password'=>$code],'fr'));
                 $data['password'] = bcrypt($password);
                 //Ici on va mettre la restriction en cas de non envoi de sms
@@ -230,6 +297,7 @@ class UserController extends Controller
             }
             unset($data['date_de_naissance']);
         }
+
         User::whereSlug($slug)->update($data);
         $user = User::findBySlug($slug);
 
@@ -250,6 +318,8 @@ class UserController extends Controller
             'email' => ['sometimes','nullable', 'string', 'email', 'max:255'],
             'adresse' => ['sometimes','nullable', 'string','min:3'],
             'isMedicasure' => ['sometimes','nullable', 'string'],
+            'isNotice' => ['sometimes','nullable', 'string'],
+            'slack' => ['sometimes','nullable', 'string'],
         ];
         $validation = Validator::make($data,$rules);
 
@@ -268,6 +338,8 @@ class UserController extends Controller
             'telephone' => ['required','string', 'max:255'],
             'adresse' => ['sometimes','nullable', 'string','min:3'],
             'isMedicasure' => ['sometimes','nullable', 'string'],
+            'isNotice' => ['sometimes','nullable', 'string'],
+            'slack' => ['sometimes','nullable', 'string'],
         ];
 //        if(!is_null($role) && $role == "Patient"){
         $rule['email'] = "sometimes|nullable|string|email";
@@ -281,8 +353,11 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
+
         if (Auth::check()) {
             $request->user()->token()->revoke();
+            if ($request->time_slug)
+            TimeActivite::whereSlug($request->time_slug)->update(['stop'=>Carbon::now()->format('H:i')]);
             return response()->json([
                 'message' => 'Successfully logged out',
             ]);
