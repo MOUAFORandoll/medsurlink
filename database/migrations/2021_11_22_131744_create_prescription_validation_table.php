@@ -20,6 +20,9 @@ class CreatePrescriptionValidationTable extends Migration
             $table->unsignedBigInteger('medecin_id');
             $table->unsignedBigInteger('medecin_control_id');
             $table->unsignedBigInteger('ligne_de_temps_id');
+            $table->string('diagnostic_code');
+            $table->string('diagnostic_libelle');
+            $table->string('consultation_general_id');
             $table->boolean('etat_validation_medecin');
             $table->boolean('etat_validation_souscripteur');
             $table->date('date_validation_medecin');

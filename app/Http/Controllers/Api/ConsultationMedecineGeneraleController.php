@@ -13,6 +13,7 @@ use App\Models\Contributeurs;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePatient;
 use App\Models\Motif;
+use App\Models\ConsultationExamenValidation;
 use App\Models\ParametreCommun;
 use App\Models\Patient;
 use App\Models\RendezVous;
@@ -28,6 +29,9 @@ use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
 use Psy\Util\Json;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use App\Message;
+use App\Events\MessageCreated;
+use App\Models\VersionValidation;
 
 class ConsultationMedecineGeneraleController extends Controller
 {
@@ -119,6 +123,35 @@ class ConsultationMedecineGeneraleController extends Controller
                 ]);
             }
         }
+        $examens = $request->get('examen_complementaire');
+        //$examens_validation = array();
+        foreach (json_decode($examens) as $examen) {
+            //dd($consultation->dossier->patient->souscripteur_id);
+            $validation =  ConsultationExamenValidation::create([
+                'examen_complementaire_id'=>$examen->id,
+                'medecin_id'=>Auth::id(),
+                'version'=>0,
+                //'souscripteur_id'=>$consultation->dossier->patient->souscripteur_id,
+                'souscripteur_id'=>Auth::id(),
+                'consultation_general_id' => $consultation->id,
+                'etablissement_id'=>$request->get('etablissement_id'),
+                'ligne_de_temps_id'=>$request->get('ligne_de_temps_id'),
+            ]);
+            //array_push($examens_validation,$validation);
+        }
+        //dd($consultation->dossier->patient->medecinReferent);
+        VersionValidation::create([
+            'montant_prestation' => 0,
+            'montant_medecin' => 0,
+            'montant_souscripteur' => 0,
+            'montant_total' => 0,
+            'plus_value' => 0,
+            'consultation_general_id' => $consultation->id,
+            'version' => 0
+        ]);
+
+        /*broadcast(new MessageCreated($message))
+                ->toOthers();*/
 
         $motifs = $request->get('motifs');
         $motifs = explode(",", $motifs);
@@ -320,6 +353,36 @@ class ConsultationMedecineGeneraleController extends Controller
                     defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
 
                 }
+            }
+        }
+
+        $examens = json_decode($request->get('examen_complementaire'));
+        // $last_validation = ConsultationExamenValidation::where([
+        //     ["consultation_general_id", $consultation->id],
+        // ])->orderBy('version','DESC')
+        // ->first();
+        // $version =0;
+        // if($last_validation->etat_validation_medecin==null){
+        //     $version = $last_validation->version;
+        // }else{
+        //     $version = $last_validation->version+1;
+        // }
+        foreach ($examens as $examen) {
+           $item = ConsultationExamenValidation::where([
+                ["consultation_general_id", $consultation->id],
+                ["examen_complementaire_id", $examen->id]
+            ])->first();
+
+            if($item == null){
+                ConsultationExamenValidation::create([
+                    'examen_complementaire_id'=>$examen->id,
+                    'medecin_id'=>Auth::id(),
+                    'souscripteur_id'=>Auth::id(),
+                    //'version' => $version,
+                    'consultation_general_id' => $consultation->id,
+                    'etablissement_id'=>$request->get('etablissement_id'),
+                    'ligne_de_temps_id'=>$request->get('ligne_de_temps_id'),
+                ]);
             }
         }
 

@@ -23,6 +23,7 @@ class Ordonance extends Model
         "praticien_id",
         "archieved_at",
         "passed_at",
+        "ligne_de_temps_id"
     ];
     protected $dates = [
         "date_prescription",
@@ -38,7 +39,9 @@ class Ordonance extends Model
             ]
         ];
     }
-
+    public function ligneDeTemps(){
+        return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
+    }
     public function getDossierAndTimestampAttribute() {
         return $this->dossier->slug.''.Carbon::now()->timestamp;
     }

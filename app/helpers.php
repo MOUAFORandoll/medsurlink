@@ -185,7 +185,7 @@ if (!function_exists('checkIfIsAuthorOrIsAuthorized')){
     }
 }
 
-if (!function_exists('checkIfCanUpdate')){
+if (!function_exists('checkIfCanUpdated')){
 
     function checkIfCanUpdated($operationable_type, $operationable_id, $action){
         $user = \Illuminate\Support\Facades\Auth::user();

@@ -18,10 +18,12 @@ use App\Models\Suivi;
 use App\Traits\SmsTrait;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class PatientController extends Controller
@@ -85,6 +87,161 @@ class PatientController extends Controller
         //
     }
 
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function medicasureStorePatient(Request $request)
+    {
+        $data = (object) $request->json()->all();
+        Log::info(json_encode($data->original['cim']));
+        $cim = (object) $data->original['cim'];
+        $souscripteurUser = new User();
+        $souscripteurUser->nom = $cim->nomSouscripteur;
+        $souscripteurUser->prenom = $cim->prenomSouscripteur;
+        $souscripteurUser->email = $cim->emailSouscripteur1;
+        $souscripteurUser->nationalite = $cim->paysResidenceSouscripteur;
+        $souscripteurUser->ville = $cim->villeResidenceSouscripteur;
+        $souscripteurUser->telephone = $cim->telephoneSouscripeur1;
+        $souscripteurUser->quartier = $cim->adresse_affilie;
+        $souscripteurUser->code_postal = null;
+        $souscripteurUser->adresse = null;
+        $souscripteurUser->slack = null;
+        $souscripteurUser->isMedicasure = 1;
+        $souscripteurUser->isNotice = 1;
+        $souscripteurUser->password = null;
+        $souscripteurUser->decede = "non";
+        $userResponse =  UserController::generatedUserFromMedicasure($souscripteurUser,'Souscripteur');
+        if ($userResponse->status() == 419)
+            return $userResponse;
+
+        $userSouscripteur = $userResponse->getOriginalContent()['user'];
+        $passwordSouscripteur = $userResponse->getOriginalContent()['password'];
+        $userSouscripteur->assignRole('Souscripteur');
+
+        //Creation du compte souscripteurs
+        $age = 0;
+
+        if (!is_null($cim->dateNaissanceSouscripteur)){
+            $age = evaluateYearOfOld($cim->bornAroundSouscripteur);
+        }
+
+        $souscripteur = Souscripteur::create((array)$souscripteurUser + ['user_id' => $userSouscripteur->id,'age'=>$age]);
+        Log::info("souscripteur créé");
+        Log::info(json_encode($souscripteur));
+        //defineAsAuthor("Souscripteur",$souscripteur->user_id,'create');
+
+        //envoi des informations du compte utilisateurs par mail
+        try{
+            UserController::sendUserInformationViaMail($userSouscripteur,$passwordSouscripteur);
+            //return response()->json(['souscripteur'=>$souscripteur]);
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            //return response()->json(['souscripteur'=>$souscripteur, "message"=>$message]);
+        }
+
+        //Creation de l'utilisateur dans la table user et génération du mot de passe
+        $patientUser = new User();
+        $patientUser->nom = $cim->nomAffilie;
+        $patientUser->prenom = $cim->prenomAffilie;
+        $patientUser->email = $cim->emailSouscripteur1;
+        $patientUser->nationalite = null;
+        $patientUser->ville = $cim->villeResidenceAffilie;
+        $patientUser->telephone = $cim->telephoneAffilie1;
+        $patientUser->quartier = null;
+        $patientUser->pays = null;
+        $patientUser->code_postal = null;
+        $patientUser->adresse = null;
+        $patientUser->slack = null;
+        $patientUser->isMedicasure = 1;
+        $patientUser->isNotice = 1;
+        $patientUser->password = null;
+        $patientUser->decede = "non";
+        $patientUser->souscripteur_id = $souscripteur->id;
+        $patientResponse =  UserController::generatedUserFromMedicasure($patientUser,"Patient");
+
+        if($patientResponse->getOriginalContent()['user'] == null) {
+            $this->revealError('nom', $patientResponse->getOriginalContent()['error']);
+        }
+
+        $patientUser = $patientResponse->getOriginalContent()['user'];
+        $patientPassword = $patientResponse->getOriginalContent()['password'];
+        $patientCode = $patientResponse->getOriginalContent()['code'];
+        //Attribution du rôle patient
+        $patientUser->assignRole('Patient');
+
+        //Creation du compte patient
+
+        $age = evaluateYearOfOld($cim->dateNaissanceAffilie);
+
+        $patient = Patient::create((array)$patientUser + ['user_id' => $patientUser->id,'age'=>'44','date_de_naissance'=>'2020-08-10']);
+
+        //Définition de la question secrete et de la reponse secrete
+        //ReponseSecrete::create($cim->only(['question_id','reponse'])+['user_id' => $patientUser->id]);
+
+        //Generation du dossier client
+        $dossier = DossierMedicalController::genererDossier($patient->user_id);
+        Suivi::create([
+            'dossier_medical_id'=>$patient->dossier->id,
+            'motifs'=>'Prise en charge initiale en attente',
+            'categorie_id'=>'1'
+        ]);
+        //defineAsAuthor("Patient",$patient->user_id,'create',$patient->user_id);
+
+        //Ajout du patient à l'etablissement selectionné
+        $etablissements = [4];
+        Auth::loginUsingId(1);
+        foreach ($etablissements as $etablissementId){
+            //Je verifie si ce patient n'est pas encore dans cette etablissement
+            $nbre = EtablissementExercicePatient::where('etablissement_id','=',$etablissementId)->where('patient_id','=',$patient->user_id)->count();
+            if ($nbre ==0){
+                $etablissement = EtablissementExercice::find($etablissementId);
+
+                $etablissement->patients()->attach($patient->user_id);
+
+                //defineAsAuthor("Patient",$patient->user_id,'add to etablissement id'.$etablissement->id,$patient->user_id);
+            }
+
+        }
+        //Envoi des informations patient par mail
+        $patient = Patient::with(['dossier','affiliations'])->restrictUser()->whereSlug($patient->slug)->first();
+        $identifiant = $patient->dossier->numero_dossier;
+        try{
+            //Envoi de sms
+            $user = $patient->user;
+//            $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
+            $nom = substr(strtoupper( $user->nom),0,9);
+            $this->sendSMS($user->telephone,trans('sms.accountCreated',['nom'=>$nom,'password'=>$patientCode,'identifiant'=>$identifiant],'fr'));
+            //!Envoi de sms
+
+            UserController::sendUserPatientInformationViaMail($patientUser,$patientPassword);
+
+            $patient = Patient::with('user','dossier')->where('user_id','=',$patient->user_id)->first();
+            $souscripteur = Souscripteur::with('user')->where('user_id','=',$patient->souscripteur_id)->first();
+
+            if (!is_null($souscripteur)){
+
+                $user = $souscripteur->user;
+                $this->sendSmsToUser($user,null,$identifiant);
+
+                $mail = new PatientAffiliated($souscripteur,$patient);
+                Mail::to($souscripteur->user->email)->send($mail);
+            }
+
+
+            return response()->json(['patient'=>$patient,"password"=>$patientPassword]);
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            return response()->json(['patient'=>$patient, "message"=>$message]);
+        }
+        Log::info('patient create from medicasure');
+
+       //$this->store($cim);
+
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -588,5 +745,10 @@ class PatientController extends Controller
     {
         $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->whereHas('user', function($q) {$q->where('isMedicasure', '=', 1)->where('decede', '=', 'non');})->count();
         return response()->json(['count'=>$patients]);
+    }
+    public function searchPatients(Request $request)
+    {
+        $data = User::with(['patient','patient.dossier'])->where('nom', 'LIKE','%'.$request->keyword.'%')->get();
+        return response()->json($data);
     }
 }

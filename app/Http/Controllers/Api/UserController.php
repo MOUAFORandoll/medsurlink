@@ -174,25 +174,6 @@ class UserController extends Controller
                 $email = $souscripteur->user->email;
             }
         }
-
-        // Check if the role is patient in order to perform duplicate patient's name control
-//        if($role == "Patient") {
-//
-//            // Get all patients where the name and surname are the same
-//            $response = User::with('patient')->where([
-//                ['nom', '=', $request->nom],
-//                ['prenom', '=', $request->prenom],
-//            ])->count();
-//
-//            // Check if is greater than zero
-//            if($response > 0) {
-//                // If so, return an error
-//                return response()->json([
-//                    'user'=> null,
-//                    'error' => trans('validation.duplicate_patient_name')
-//                ]);
-//            }
-//        }
         $slack = "";
         if( !is_null($request->slack)){
             $slack = $request->slack;
@@ -225,7 +206,56 @@ class UserController extends Controller
         }
         return response()->json(['user'=>$user,'password'=>$password,'code'=>$code]);
     }
+    public static function generatedUserFromMedicasure($request,$role = null){
 
+        $password = str_random(10);
+        $code="";
+        $email = $request->email;
+        $isMedicasure = $request->get('isMedicasure','0');
+
+        if (!is_null($role) && $role == "Patient"){
+            $date_naissance = Carbon::parse($request->date_de_naissance)->year;
+            $code = substr($password,0,5);
+            $password = $date_naissance.$code;
+
+            //Si l'email est null
+            if(is_null($email) && $isMedicasure && !is_null($request->souscripteur_id)){
+                $souscripteur =  Souscripteur::with('user')->where('user_id','=',$request->souscripteur_id)->first();
+                $email = $souscripteur->user->email;
+            }
+        }
+        $slack = "";
+        if( !is_null($request->slack)){
+            $slack = $request->slack;
+        }
+        $user = User::create([
+            'nom'=>$request->nom,
+            'prenom'=>$request->prenom,
+            'email'=>$email,
+            'nationalite'=>$request->nationalite,
+            'quartier'=>$request->quartier,
+            'code_postal'=>$request->code_postal,
+            'ville'=>$request->ville,
+            'pays'=>$request->pays,
+            'telephone'=>$request->telephone,
+            'adresse'=>$request->adresse,
+            'slack' => $slack,
+            'isMedicasure'=>$request->isMedicasure,
+            'isNotice'=>0,
+            'password'=>Hash::make($password),
+            'decede'=>'non'
+        ]);
+        if (!is_null($role) && $role == "Patient"){
+            $user->smsEnvoye = 1;
+            $user->save();
+        }
+
+        if (!is_null($role) && $role == "Souscripteur"){
+            $user->isMedicasure = 1;
+            $user->save();
+        }
+        return response()->json(['user'=>$user,'password'=>$password,'code'=>$code]);
+    }
     public static function sendUserInformationViaMail(User $user,$password){
         if (!is_null($user->email)){
             $mail = new PasswordGenerated($user,$password);

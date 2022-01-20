@@ -12,8 +12,12 @@ class ConduiteTenir extends Model
         'conduite_a_tenir',
         'medecin_id',
         'medecin_control_id',
-        'motif_consultation_id',
+        'ligne_de_temps_id',
         'etat_validation_medecin',
         'date_validation_medecin',
     ];
+
+    public function ligneDeTemps(){
+        return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
+    }
 }

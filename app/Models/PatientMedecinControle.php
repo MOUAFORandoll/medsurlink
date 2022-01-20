@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\MedecinToPatient;
+use App\User;
 
 class PatientMedecinControle extends Model
 {
@@ -81,7 +82,9 @@ class PatientMedecinControle extends Model
 
         return $this;
     }
-
+    public function createur(){
+        return $this->belongsTo(User::class,'creator','id');
+    }
     public function patients(){
         return $this->belongsTo(Patient::class,'patient_id','user_id');
     }

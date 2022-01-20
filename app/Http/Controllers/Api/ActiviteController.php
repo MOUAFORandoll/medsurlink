@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ActiviteRequest;
 use App\Models\Activite;
+use App\Models\ActivitesAma;
 use App\Models\ActiviteMission;
+use App\Models\ActiviteAmaPatient;
+use App\Models\PatientMedecinControle;
 use App\Models\GroupeActivite;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -162,6 +165,30 @@ class ActiviteController extends Controller
         return response()->json(['mission'=>$mission]);
     }
 
+    public function getMissionAma($id){
+        $mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->get();
+        return response()->json(['activites'=>$mission]);
+    }
+    public function getMissionAmaByPatient($id){
+        $mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->where('patient_id',$id)->get();
+        $medecin_referent = PatientMedecinControle::with(['medecinControles','patients','createur'])->where('patient_id',$id)->get();
+        $medecin_referent = PatientMedecinControle::with(['medecinControles','patients','createur'])->where('patient_id',$id)->get();
+        return response()->json(['activites'=>$mission]);
+    }
+    public function saveMissions(Request $request){
+        dd($request);
+        //$mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->get();
+       // return response()->json(['activites'=>$mission]);
+    }
+    public function createMissions(Request $request){
+        $mission = ActiviteAmaPatient::create($request->all());
+        $mission = ActiviteAmaPatient::with('activitesAma','patient','updatedBy','createur')->whereSlug($mission->slug)->first();
+        return response()->json(['mission'=>$mission]);
+    }
+    public function getListMission(){
+        $mission = ActivitesAma::all();
+        return response()->json(['activites'=>$mission]);
+    }
     public function supprimerMission($slug){
         $this->validatedSlug($slug,'activite_missions');
         $mission = ActiviteMission::with('description','dossier.patient.user','createur')->whereSlug($slug)->first();

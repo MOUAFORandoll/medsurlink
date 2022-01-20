@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\DiagnosticValidation;
 
 class DiagnosticValidationController extends Controller
 {
@@ -14,7 +15,8 @@ class DiagnosticValidationController extends Controller
      */
     public function index()
     {
-        //
+        $diagnostics = DiagnosticValidation::with(['medecinControl','medecin','diagnostic'])->get();
+        return response()->json(['diagnostic'=>$diagnostics]);
     }
 
     /**
@@ -35,7 +37,14 @@ class DiagnosticValidationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $examen_prix =  DiagnosticValidation::create([
+            'etablissement_exercices_id' =>$request->etablissement_exercices_id,
+            'examen_complementaire_id' =>$request->examen_complementaire_id,
+            'other_complementaire_id' =>$request->other_complementaire_id,
+            'prix' =>$request->prix,
+        ]);
+
+        return  response()->json(['examen_prix'=>$examen_prix]);
     }
 
     /**
