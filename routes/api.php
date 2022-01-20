@@ -2,7 +2,6 @@
 use Psy\Util\Json;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 header('Access-Control-Allow-Origin:  *');
 header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
 header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token, x-csrf-token');
@@ -359,5 +358,22 @@ Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin c
 
 });
 
-Route::get('/livesearch', 'Api\PatientController@searchPatients');
-Route::get('/mission/list', 'Api\ActiviteController@getListMission');
+Route::resource('offres','Api\OffreController');
+
+Route::prefix('paiement')->group(function () {
+    //Ici nous mettons en place des routes pour initier les paiement venant d'ailleurs
+    Route::post('/momo/paid','Api\MomoController@momoPaidByCustomer');
+    Route::post('/momo/paymentStatus','Api\MomoController@momoPayementStatusByCustomer');
+    Route::post('/om/paid','Api\OmController@omPaidByCustomer');
+    Route::post('/om/paymentStatus','Api\OmController@omPayementStatusByCustomer');
+    Route::post('/stripe-paiement','Api\StripeContrtoller@stripePaidByCustomer');
+    Route::post('/stripe-renouvellement','Api\StripeContrtoller@renouvellementPaiement');
+    Route::get('/stripe-paiement-success/{slug}','Api\StripeContrtoller@NotifierPaiement');
+    Route::get('/stripe-paiement-cancel', function () {
+        return response()->json(
+            [
+                'paiement' => "Cancel"
+            ]
+        );
+    });
+});

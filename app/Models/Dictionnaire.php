@@ -37,4 +37,7 @@ class Dictionnaire extends Model
     public function getDossierAndTimestampAttribute() {
         return Str::random(10) . ' ' .Carbon::now()->timestamp;
     }
+    public  function  packages(){
+        return $this->hasMany(OffrePackageItem::class,'key','id');
+    }
 }

@@ -71,7 +71,7 @@ Route::get('{all}', function () {
 ->where('all', '^admin|admin/|admin/.*,dashboard|dashboard/|dashboard/.*$');
 */
 
-Auth::routes();
+//Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
 

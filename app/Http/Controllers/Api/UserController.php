@@ -282,25 +282,23 @@ class UserController extends Controller
 
             $user = User::with('patient')->whereSlug($slug)->first();
 
+            $response = 0;
+
             // Get all patients where the name and surname are the same
-            if(!is_null($data['nom']) && !is_null($data['prenom'])) {
+            if
+            (   !is_null($data['nom'])
+                && !is_null($data['prenom'])
+
+                // Check if the name or the surname has changed
+                && (
+                    $data['nom'] != $user->nom
+                    || $data['prenom'] != $user->prenom
+                )
+            ) {
                 $response = User::with('patient')->where([
                     ['nom', '=', $data['nom']],
                     ['prenom', '=', $data['prenom']],
-                ])->count();
-            }
-
-            else if(is_null($data['nom'])) {
-                $response = User::with('patient')->where([
-                    ['nom', '=', $user->nom],
-                    ['prenom', '=', $data['prenom']],
-                ])->count();
-            }
-
-            else {
-                $response = User::with('patient')->where([
-                    ['nom', '=', $data['nom']],
-                    ['prenom', '=', $user->prenom],
+                    ['telephone', '=', $data['telephone']],
                 ])->count();
             }
 

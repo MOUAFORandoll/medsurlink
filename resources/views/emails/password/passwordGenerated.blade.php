@@ -14,5 +14,5 @@ NB : Veuillez modifier votre mot de passe à votre premiere connexion en cliquan
     <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
 </div>
 
-<a href="{{ config('app.frontend_url') }}">Medsurlink</a>
+<a href="{{ config('app.frontend_url') }}"> Medsurlink </a>
 @endcomponent

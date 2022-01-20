@@ -31,6 +31,41 @@ class PatientController extends Controller
     use PersonnalErrors;
     use SmsTrait;
     protected $table = 'patients';
+        /**
+     * @OA\Post(
+     *      path="/v1/patients",
+     *      operationId="getUserList",
+     *      tags={"Patient"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Get list of patient",
+     *      description="Returns list of users",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
+     */
     /**
      * Display a listing of the resource.
      *
