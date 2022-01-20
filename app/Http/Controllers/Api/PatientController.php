@@ -29,6 +29,41 @@ class PatientController extends Controller
     use PersonnalErrors;
     use SmsTrait;
     protected $table = 'patients';
+        /**
+     * @OA\Post(
+     *      path="/v1/patients",
+     *      operationId="getUserList",
+     *      tags={"Patient"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Get list of patient",
+     *      description="Returns list of users",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
+     */
     /**
      * Display a listing of the resource.
      *
@@ -193,31 +228,31 @@ class PatientController extends Controller
         // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->get();
         // return $patients;
         // foreach($patients as $p){
-            
+
         //     if($p->user!=null){
-                
-        //         if(strpos(strtolower($p->user->nom),strtolower($value))!==false || 
+
+        //         if(strpos(strtolower($p->user->nom),strtolower($value))!==false ||
         //     strpos(strtolower($p->user->prenom),strtolower($value))!==false ||
-        //     strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false || 
+        //     strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false ||
         //             strpos(strtolower(strval($p->age)),strtolower($value))!==false ||
         //     strpos(strtolower($p->user->email),strtolower($value))!==false) {
         //         // return $p;
         //         array_push($result,$p);
         //         // return $result;
         //     }
-            
-            
+
+
         //     }
         //     else{
         //         if(
-        //             strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false || 
-        //             strpos(strtolower(strval($p->age)),strtolower($value))!==false) 
+        //             strpos(strtolower(strval($p->dossier->numero_dossier)),strtolower($value))!==false ||
+        //             strpos(strtolower(strval($p->age)),strtolower($value))!==false)
         //             array_push($result,$p);
         //     }
-            
+
         // }
         // return $result;
-        
+
     }
 
     /**
@@ -237,26 +272,26 @@ class PatientController extends Controller
         // return $patients;
         foreach($patients as $p){
             // if($p->user_id==629
-                
+
                 if(isset($p->medecinReferent)){
                     // return "true";
                     foreach($p->medecinReferent as $d){
-                        
+
                         if($d->medecinControles!=null && $d->medecinControles->user!=null){
                             if($d->medecinControles->user->id==$value){
                                 array_push($result,$p);
                             }
-                            
+
                         }
                     }
                 }
             // }
             // return "true";
-            
-            
+
+
         }
         return $result;
-        
+
     }
 
     public function CountPatientsDoctor($value)
@@ -269,26 +304,26 @@ class PatientController extends Controller
         // return $patients;
         foreach($patients as $p){
             // if($p->user_id==629
-                
+
                 if(isset($p->medecinReferent)){
                     // return "true";
                     foreach($p->medecinReferent as $d){
-                        
+
                         if($d->medecinControles!=null && $d->medecinControles->user!=null){
                             if($d->medecinControles->user->id==$value){
                                 array_push($result,$p);
                             }
-                            
+
                         }
                     }
                 }
             // }
             // return "true";
-            
-            
+
+
         }
         return count($result);
-        
+
     }
 
     /**
@@ -308,26 +343,26 @@ class PatientController extends Controller
         // return $patients;
         foreach($patients as $p){
             // if($p->user_id==629
-                
+
                 if(isset($p->medecinReferent)){
                     // return "true";
                     foreach($p->medecinReferent as $d){
-                        
+
                         if($d->medecinControles!=null && $d->medecinControles->user!=null){
                             if($d->medecinControles->user->id==$value){
                                 array_push($result,$p);
                             }
-                            
+
                         }
                     }
                 }
             // }
             // return "true";
-            
-            
+
+
         }
         return array_slice($result, 0, $limit);
-        
+
     }
 
     public function NextPatientsDoctor($value, $limit, $page)
@@ -340,26 +375,26 @@ class PatientController extends Controller
         // return $patients;
         foreach($patients as $p){
             // if($p->user_id==629
-                
+
                 if(isset($p->medecinReferent)){
                     // return "true";
                     foreach($p->medecinReferent as $d){
-                        
+
                         if($d->medecinControles!=null && $d->medecinControles->user!=null){
                             if($d->medecinControles->user->id==$value){
                                 array_push($result,$p);
                             }
-                            
+
                         }
                     }
                 }
             // }
             // return "true";
-            
-            
+
+
         }
         return array_slice($result, ($page-1)*$limit, $limit);
-        
+
     }
 
     /**

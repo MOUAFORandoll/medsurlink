@@ -9,30 +9,18 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PaymentOffre
+class PaymentOffre extends Model
 {
     use SoftDeletes;
-    use Sluggable;
-    use SluggableScopeHelpers;
-    use SlugRoutable;
-    /**
-     * Return the sluggable configuration array for this model.
-     *
-     * @return array
-     */
-    public function sluggable()
-    {
-        return [
-            'slug' => [
-                'source' => 'ReferenceAndTimestamp'
-            ]
-        ];
-    }
+
+    protected $table = "offres_payments";
 
     protected $fillable = [
         "date_payment",
         "montant",
-        'status'
+        'status',
+        'commande_id',
+        'souscripteur_id'
     ];
 
 }
