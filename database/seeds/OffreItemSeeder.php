@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class OffrePackageSeeder extends Seeder
+class OffreItemSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -56,7 +56,7 @@ class OffrePackageSeeder extends Seeder
                'en_description'=>$category,
                'reference'=>'CIM URGENCE',
             ]);
-           $packages =  \App\Models\Package::all();
+           $packages =  \App\Models\Package::where("offre_id",1)->get();
             foreach ($packages as $package){
                 \App\Models\OffrePackageItem::create([
                     'key'=>$result->id,
@@ -72,7 +72,7 @@ class OffrePackageSeeder extends Seeder
                'en_description'=>$category,
                'reference'=>'CIM PREVENTION',
             ]);
-            $packages =  \App\Models\Package::all();
+            $packages =  \App\Models\Package::where("offre_id",2)->get();
             foreach ($packages as $package){
                 \App\Models\OffrePackageItem::create([
                     'key'=>$result->id,
@@ -88,7 +88,7 @@ class OffrePackageSeeder extends Seeder
                'en_description'=>$category,
                'reference'=>'GROSSESSE',
             ]);
-            $packages =  \App\Models\Package::all();
+            $packages =  \App\Models\Package::where("offre_id",3)->get();
             foreach ($packages as $package){
                 \App\Models\OffrePackageItem::create([
                     'key'=>$result->id,

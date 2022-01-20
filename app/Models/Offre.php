@@ -37,4 +37,7 @@ class Offre extends Model
     public  function  packages(){
         return $this->hasMany(Package::class,'offre_id','id');
     }
+    public  function  items(){
+        return $this->hasMany(Dictionnaire::class,'reference','slug');
+    }
 }
