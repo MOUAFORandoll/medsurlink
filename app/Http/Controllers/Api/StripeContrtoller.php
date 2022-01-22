@@ -16,6 +16,9 @@ use Stripe\Stripe;
 use Swap\Builder;
 use App\Models\CommandePackage;
 use App\Models\PaymentOffre;
+use App\Models\Souscripteur;
+use App\Models\AffiliationSouscripteur;
+use App\User;
 class StripeContrtoller extends Controller
 {
     public function procederAuPaiement(Request $request){
@@ -65,13 +68,29 @@ class StripeContrtoller extends Controller
         // $euroFranc = $swap->latest('EUR/XAF')->getValue();
         //Stripe::setApiKey('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');
         Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
-        dd(Auth::id());
+
         $commande =  CommandePackage::create([
             "date_commande" => Carbon::now()->toDateTimeString(),
             'quantite' =>$request->get('quantite'),
             'offres_packages_id' =>$request->get('package_id'),
-            'souscripteur_id' => Auth::id()
+            'souscripteur_id' => $request->get('souscripteur_id'),
         ]);
+        PaymentOffre::create([
+            "date_payment" => Carbon::now()->toDateTimeString(),
+            "montant" => $request->get('quantite') * $request->get('amount'),
+            'status' => 'EN ATTENTE',
+            'commande_id' =>$commande->id,
+            'souscripteur_id' => $request->get('souscripteur_id'),
+        ]);
+        AffiliationSouscripteur::create([
+            'user_id'=>$request->get('souscripteur_id'),
+            'type_contrat'=>$commande->offres_packages_id,
+            'nombre_paye'=>$request->get('quantite'),
+            'nombre_restant'=>$request->get('quantite'),
+            'montant'=>$request->get('amount'),
+            'cim_id'=>$commande->id,
+            'date_paiement'=>null,
+           ]);
         $session =   Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
@@ -89,6 +108,94 @@ class StripeContrtoller extends Controller
             'cancel_url' => url('api/paiement/stripe-paiement-cancel'),
         ]);
         return response()->json([ 'id' => $session->id]);
+    }
+    public function paiementFromMedicasure(Request $request){
+        // $swap = (new Builder())
+        //     ->add('fixer', ['access_key' => '6725eecbfab360915787d6dabfc326c9'])
+        //     ->add('currency_layer', ['access_key' => '6725eecbfab360915787d6dabfc326c9', 'enterprise' => false])
+        //     ->build();
+        // $euroFranc = $swap->latest('EUR/XAF')->getValue();
+        //Stripe::setApiKey('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');
+        Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
+        //dd($request);
+
+            $userInformation = [];
+            $userInformation['nom']=$request->get("name");
+            $userInformation['prenom']=$request->get("prenom");
+            $userInformation['email']=$request->get("email");
+            $userInformation['nationalite']=$request->get("pays");
+            $userInformation['quartier']="";
+            $userInformation['code_postal']="";
+            $userInformation['ville']="";
+            $userInformation['pays']=$request->get("pays");
+            $userInformation['telephone']=$request->get("telephone");
+            $userInformation['adresse']="";
+
+            //dd($userInformation);
+            // Création du compte utilisateur medsurlink du souscripteur
+            $passwordSouscripteur = substr(bin2hex(random_bytes(10)), 0, 7);
+            $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordSouscripteur,'0');
+
+            // Assignation du role souscripteur
+            $user->assignRole('Souscripteur');
+
+            // Enregistrement des informations personnels du souscripteur
+            $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
+
+            //Definition des identifiants pour connexion
+            $tokenInfo =$passwordSouscripteur.'medsur'. $request->email;
+
+
+
+        $commande =  CommandePackage::create([
+            "date_commande" => Carbon::now()->toDateTimeString(),
+            'quantite' =>$request->get('quantite'),
+            'offres_packages_id' =>$request->get('package_id'),
+            'souscripteur_id' => $souscripteur->user_id,
+        ]);
+        PaymentOffre::create([
+            "date_payment" => Carbon::now()->toDateTimeString(),
+            "montant" => $request->get('quantite') * $request->get('amount'),
+            'status' => 'EN ATTENTE',
+            'commande_id' =>$commande->id,
+            'souscripteur_id' => $souscripteur->user_id,
+        ]);
+        AffiliationSouscripteur::create([
+            'user_id'=>$souscripteur->user_id,
+            'type_contrat'=>$commande->offres_packages_id,
+            'nombre_paye'=>$request->get('quantite'),
+            'nombre_restant'=>$request->get('quantite'),
+            'montant'=>$request->get('amount'),
+            'cim_id'=>$commande->id,
+            'date_paiement'=>null,
+           ]);
+        $session =   Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'EUR',
+                    'product_data' => [
+                        'name' => 'Intermediation médicale',
+                    ],
+                    'unit_amount' => $request->get('amount'),
+                ],
+                'quantity' =>$request->get('quantite'),
+            ]],
+            'mode' => 'payment',
+            'success_url' => url('api/paiement/stripe-paiement-success/'.$commande->id),
+            'cancel_url' => url('api/paiement/stripe-paiement-cancel'),
+        ]);
+
+       // Envoi du mail avec mot de passe souscripteur
+        try{
+            sendUserInformationViaMail($user,$passwordSouscripteur);
+        }catch (\Swift_TransportException $transportException){
+            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+            //return response()->json(['reponse'=>$tokenInfo,'souscripteur'=>$user, "message"=>$message]);
+        }
+        //return response()->json(['reponse'=>$tokenInfo],200) ;
+
+        return response()->json([ 'id' => $session->id,'token'=>$tokenInfo]);
     }
     /*public function renouvellementPaiement(Request $request){
         $swap = (new Builder())
@@ -130,14 +237,30 @@ class StripeContrtoller extends Controller
                 "reponse"=>Json::encode($request->all()),
             ]);
 
-            PaymentOffre::create([
-                "date_payment" => Carbon::now()->toDateTimeString(),
-                "montant" => 0,
-                'status' => 'SUCCESS',
-                'commande_id' =>$slug,
-                'souscripteur_id' => Auth::id()
-            ]);
-            return response()->json([ 'paiement' => "SUCCESS"]);
+           $payment = PaymentOffre::where("commande_id",$slug)->first();
+           $payment->status = "SUCCESS";
+           $payment->save();
+           $affiliation = AffiliationSouscripteur::where("cim_id",$slug)->first();
+           $affiliation->date_paiement = Carbon::now()->toDateTimeString();
+           $affiliation->save();
+           return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
     }
+    public function notifAndRedirectToAccount(Request $request,$slug){
 
+        NotificationPaiement::create([
+            "type"=>'Stripe',
+            "code_contrat"=>$slug,
+            "pay_token"=>'',
+            "statut"=>'Success',
+            "reponse"=>Json::encode($request->all()),
+        ]);
+
+       $payment = PaymentOffre::where("commande_id",$slug)->first();
+       $payment->status = "SUCCESS";
+       $payment->save();
+       $affiliation = AffiliationSouscripteur::where("cim_id",$slug)->first();
+       $affiliation->date_paiement = Carbon::now()->toDateTimeString();
+       $affiliation->save();
+       return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+}
 }

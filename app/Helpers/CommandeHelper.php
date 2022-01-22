@@ -42,7 +42,7 @@ if(!function_exists('increaseCommandeRestante')) {
 if(!function_exists('resteDeCommande')) {
     function resteDeCommande($souscripteur_id)
     {
-        $commande =  \App\Models\AffiliationSouscripteur::where('user_id',$souscripteur_id)->get();
+        $commande =  \App\Models\AffiliationSouscripteur::where('user_id',$souscripteur_id)->orderBy('created_at', 'desc')->first();
 
         return $commande;
     }
