@@ -410,7 +410,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @OA\UPDATE(
+     * @OA\Put(
      *      path="/consultation-medecine/{slug} ", 
      *      operationId="UpdateConsultationMedecineGeneraleList",
      *      tags={"ConsultationMedecineGenerale"},

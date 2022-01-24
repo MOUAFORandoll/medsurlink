@@ -661,7 +661,7 @@ class PatientController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @OA\UPDATE(
+     * @OA\Put(
      *      path="patient/{patient}",
      *      operationId="Update user",
      *      tags={"Patient"},

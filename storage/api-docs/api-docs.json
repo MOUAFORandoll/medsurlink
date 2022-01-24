@@ -66,6 +66,175 @@
                 }
             }
         },
+        "/consultation-medecine": {
+            "get": {
+                "tags": [
+                    "ConsultationMedecineGenerale"
+                ],
+                "summary": "Get list of consultation medecine generale",
+                "description": "Returns list of consultation medecine generale",
+                "operationId": "GetConsultationMedecineGeneraleList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "ConsultationMedecineGenerale"
+                ],
+                "summary": "Store consultation medecine generale",
+                "description": "Returns consultation medecine generale",
+                "operationId": "StoreConsultationMedecineGeneraleList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/consultation-medecine/{slug} ": {
+            "get": {
+                "tags": [
+                    "ConsultationMedecineGenerale"
+                ],
+                "summary": "Show consultation medecine generale",
+                "description": "Returns consultation medecine generale",
+                "operationId": "ShowConsultationMedecineGeneraleList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "ConsultationMedecineGenerale"
+                ],
+                "summary": "Update consultation medecine generale",
+                "description": "Returns consultation medecine generale",
+                "operationId": "UpdateConsultationMedecineGeneraleList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "ConsultationMedecineGenerale"
+                ],
+                "summary": "Delete consultation medecine generale",
+                "description": "Returns list of consultation medecine generale",
+                "operationId": "DeleteConsultationMedecineGeneraleList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/patient": {
             "get": {
                 "tags": [
@@ -168,6 +337,39 @@
                     }
                 ]
             },
+            "put": {
+                "tags": [
+                    "Patient"
+                ],
+                "summary": "Update user",
+                "description": "Returns user update",
+                "operationId": "Update user",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
             "delete": {
                 "tags": [
                     "Patient"
@@ -239,26 +441,6 @@
         }
     },
     "components": {
-        "responses": {
-            "200": {
-                "description": "Successful operation",
-                "content": {
-                    "application/json": {}
-                }
-            },
-            "401": {
-                "description": "Unauthenticated"
-            },
-            "403": {
-                "description": "Forbidden"
-            },
-            "400": {
-                "description": "Bad Request"
-            },
-            "404": {
-                "description": "not found"
-            }
-        },
         "securitySchemes": {
             "passport": {
                 "type": "oauth2",
