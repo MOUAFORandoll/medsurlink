@@ -43,7 +43,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Display a listing of the resource.
-     * @OA\GET(
+     * @OA\get(
      *      path="/consultation-medecine",
      *      operationId="GetConsultationMedecineGeneraleList",
      *      tags={"ConsultationMedecineGenerale"},
@@ -103,7 +103,7 @@ class ConsultationMedecineGeneraleController extends Controller
     /**
      * Store a newly created resource in storage.
       * Display a listing of the resource.
-     * @OA\POST(
+     * @OA\Post(
      *      path="/consultation-medecine",
      *      operationId="StoreConsultationMedecineGeneraleList",
      *      tags={"ConsultationMedecineGenerale"},
@@ -329,7 +329,7 @@ class ConsultationMedecineGeneraleController extends Controller
      * Display the specified resource.
       * Store a newly created resource in storage.
       * Display a listing of the resource.
-     * @OA\GET(
+     * @OA\get(
      *      path="/consultation-medecine/{slug} ", 
      *      operationId="ShowConsultationMedecineGeneraleList",
      *      tags={"ConsultationMedecineGenerale"},
@@ -608,7 +608,7 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     * @OA\DELETE(
+     * @OA\Delete(
      *      path="/consultation-medecine/{slug} ", 
      *      operationId="DeleteConsultationMedecineGeneraleList",
      *      tags={"ConsultationMedecineGenerale"},
