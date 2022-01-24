@@ -66,7 +66,7 @@
                 }
             }
         },
-        "/v1/patients": {
+        "/patient": {
             "get": {
                 "tags": [
                     "Patient"
@@ -99,44 +99,7 @@
                         "passport": []
                     }
                 ]
-            }
-        },
-        "/v1/patients/medicasureStorePatient": {
-            "post": {
-                "tags": [
-                    "Patient"
-                ],
-                "summary": "Store patient",
-                "description": "Returns user",
-                "operationId": "storeUser to medicasure",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
-                    "403": {
-                        "description": "Forbidden"
-                    },
-                    "400": {
-                        "description": "Bad Request"
-                    },
-                    "404": {
-                        "description": "not found"
-                    }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
-            }
-        },
-        "/v1/patient": {
+            },
             "post": {
                 "tags": [
                     "Patient"
@@ -170,9 +133,132 @@
                     }
                 ]
             }
+        },
+        "patient/{patient}": {
+            "get": {
+                "tags": [
+                    "Patient"
+                ],
+                "summary": "Show user",
+                "description": "Returns user",
+                "operationId": "showUser",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Patient"
+                ],
+                "summary": "Delete user",
+                "description": "Returns user delete",
+                "operationId": "Delete user",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/v1/patient/search/{value}": {
+            "get": {
+                "tags": [
+                    "Patient"
+                ],
+                "summary": "Search user",
+                "description": "Returns user",
+                "operationId": "SearchUser",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
         }
     },
     "components": {
+        "responses": {
+            "200": {
+                "description": "Successful operation",
+                "content": {
+                    "application/json": {}
+                }
+            },
+            "401": {
+                "description": "Unauthenticated"
+            },
+            "403": {
+                "description": "Forbidden"
+            },
+            "400": {
+                "description": "Bad Request"
+            },
+            "404": {
+                "description": "not found"
+            }
+        },
         "securitySchemes": {
             "passport": {
                 "type": "oauth2",

@@ -33,7 +33,7 @@ class PatientController extends Controller
     protected $table = 'patients';
         /**
      * @OA\Get(
-     *      path="/v1/patients",
+     *      path="/patient",
      *      operationId="getUserList",
      *      tags={"Patient"},
      * security={
@@ -87,41 +87,7 @@ class PatientController extends Controller
         //
     }
 
-        /**
-     * Store a newly created resource in storage.
-     * * @OA\Post(
-     *      path="/v1/patients/medicasureStorePatient",
-     *      operationId="storeUser to medicasure",
-     *      tags={"Patient"},
-     * security={
-     *  {"passport": {}},
-     *   },
-     *      summary="Store patient",
-     *      description="Returns user",
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\MediaType(
-     *           mediaType="application/json",
-     *      )
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      ),
-     *      @OA\Response(
-     *          response=403,
-     *          description="Forbidden"
-     *      ),
-     * @OA\Response(
-     *      response=400,
-     *      description="Bad Request"
-     *   ),
-     * @OA\Response(
-     *      response=404,
-     *      description="not found"
-     *   ),
-     *  )
+    /**
      * @param Request $request
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
@@ -277,7 +243,7 @@ class PatientController extends Controller
     /**
      * Store a newly created resource in storage.
      * * @OA\Post(
-     *      path="/v1/patient",
+     *      path="/patient",
      *      operationId="storeUser to medsurlink",
      *      tags={"Patient"},
      * security={
@@ -399,7 +365,40 @@ class PatientController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     ** Store a newly created resource in storage.
+     * * @OA\Get(
+     *      path="patient/{patient}", 
+     *      operationId="showUser",
+     *      tags={"Patient"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Show user",
+     *      description="Returns user",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -429,6 +428,40 @@ class PatientController extends Controller
     /**
      * Display the specified resource.
      *
+     ** Store a newly created resource in storage.
+     * * @OA\Get(
+     *      path="/v1/patient/search/{value}",
+     *      operationId="SearchUser",
+     *      tags={"Patient"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Search user",
+     *      description="Returns user",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param  string  $value
      * @return \Illuminate\Http\Response
      */
@@ -478,7 +511,6 @@ class PatientController extends Controller
 
     /**
      * Display the specified resource.
-     *
      * @param  string  $value
      * @return \Illuminate\Http\Response
      */
@@ -548,8 +580,6 @@ class PatientController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
      * @param  string  $value
      * @return \Illuminate\Http\Response
      */
@@ -631,7 +661,39 @@ class PatientController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+     * @OA\UPDATE(
+     *      path="patient/{patient}",
+     *      operationId="Update user",
+     *      tags={"Patient"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Update user",
+     *      description="Returns user update",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param PatientUpdateRequest $request
      * @param $slug
      * @return \Illuminate\Http\Response
@@ -689,7 +751,39 @@ class PatientController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     * @OA\DELETE(
+     *      path="patient/{patient}",
+     *      operationId="Delete user",
+     *      tags={"Patient"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Delete user",
+     *      description="Returns user delete",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param $slug
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
