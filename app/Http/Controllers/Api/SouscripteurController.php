@@ -19,7 +19,39 @@ class SouscripteurController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
+     * @OA\Get(
+     *      path="/souscripteur",
+     *      operationId="getSouscripteurList",
+     *      tags={"Souscripteur"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Get list of souscripteur",
+     *      description="Returns list of users",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -37,12 +69,45 @@ class SouscripteurController extends Controller
     {
         //
     }
+
     public function storeSouscripteur(SouscripteurStoreRequest $request){
         $this->store($request);
     }
     /**
      * Store a newly created resource in storage.
-     *
+     * @OA\Post(
+     *      path="souscripteur/{souscripteur}",
+     *      operationId="StoreSouscripteurList",
+     *      tags={"Souscripteur"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Store souscripteur",
+     *      description="Returns souscripteur",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param SouscripteurStoreRequest $request
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
@@ -82,7 +147,39 @@ class SouscripteurController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     * @OA\Get(
+     *      path="souscripteur/{souscripteur}",
+     *      operationId="ShowSouscripteurList",
+     *      tags={"Souscripteur"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Show souscripteur",
+     *      description="Returns souscripteur",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -141,7 +238,39 @@ class SouscripteurController extends Controller
     }
     /**
      * Update the specified resource in storage.
-     *
+     * @OA\Put(
+     *      path="souscripteur/{souscripteur}",
+     *      operationId="UpdateSouscripteurList",
+     *      tags={"Souscripteur"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Show souscripteur",
+     *      description="Returns souscripteur",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param SouscripteurUpdateRequest $request
      * @param $slug
      * @return \Illuminate\Http\Response
@@ -183,7 +312,39 @@ class SouscripteurController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     * @OA\Delete(
+     *      path="souscripteur/{souscripteur}",
+     *      operationId="DeleteSouscripteurList",
+     *      tags={"Souscripteur"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Delete souscripteur",
+     *      description="Delete a souscripteur",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
