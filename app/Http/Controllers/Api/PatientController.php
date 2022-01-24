@@ -243,9 +243,6 @@ class PatientController extends Controller
      *      path="/patient",
      *      operationId="storeUser to medsurlink",
      *      tags={"Patient"},
-     * security={
-     *  {"passport": {}},
-     *   },
      *      summary="Store patient",
      *      description="Returns user",
      *      @OA\Response(
@@ -367,9 +364,6 @@ class PatientController extends Controller
      *      path="patient/{patient}", 
      *      operationId="showUser",
      *      tags={"Patient"},
-     * security={
-     *  {"passport": {}},
-     *   },
      *      summary="Show user",
      *      description="Returns user",
      *      @OA\Response(
@@ -430,9 +424,6 @@ class PatientController extends Controller
      *      path="patient/search/{value}",
      *      operationId="SearchUser",
      *      tags={"Patient"},
-     * security={
-     *  {"passport": {}},
-     *   },
      *      summary="Search user",
      *      description="Returns user",
      *      @OA\Response(
@@ -662,9 +653,6 @@ class PatientController extends Controller
      *      path="patient/{patient}",
      *      operationId="Update user",
      *      tags={"Patient"},
-     * security={
-     *  {"passport": {}},
-     *   },
      *      summary="Update user",
      *      description="Returns user update",
      *      @OA\Response(
@@ -752,9 +740,6 @@ class PatientController extends Controller
      *      path="patient/{patient}",
      *      operationId="Delete user",
      *      tags={"Patient"},
-     * security={
-     *  {"passport": {}},
-     *   },
      *      summary="Delete user",
      *      description="Returns user delete",
      *      @OA\Response(
