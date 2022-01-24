@@ -736,12 +736,7 @@
                     "404": {
                         "description": "not found"
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             },
             "post": {
                 "tags": [
