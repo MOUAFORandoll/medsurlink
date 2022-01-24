@@ -20,7 +20,7 @@ class AuthController extends AccessTokenController
 {
     /**
      * @OA\Post(
-     ** path="/v1/login",
+     ** path="/login",
      *   tags={"Login"},
      *   summary="Login",
      *   operationId="login",

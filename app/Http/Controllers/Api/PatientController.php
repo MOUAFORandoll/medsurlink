@@ -430,7 +430,7 @@ class PatientController extends Controller
      *
      ** Store a newly created resource in storage.
      * * @OA\Get(
-     *      path="/v1/patient/search/{value}",
+     *      path="patient/search/{value}",
      *      operationId="SearchUser",
      *      tags={"Patient"},
      * security={
