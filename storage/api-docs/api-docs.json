@@ -14,7 +14,7 @@
     },
     "servers": [
         {
-            "url": "http://my-default-host.com",
+            "url": "http://127.0.0.1:8001/api",
             "description": "Demo API Server"
         }
     ],
@@ -67,13 +67,83 @@
             }
         },
         "/v1/patients": {
-            "post": {
+            "get": {
                 "tags": [
                     "Patient"
                 ],
                 "summary": "Get list of patient",
                 "description": "Returns list of users",
                 "operationId": "getUserList",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/v1/patients/medicasureStorePatient": {
+            "post": {
+                "tags": [
+                    "Patient"
+                ],
+                "summary": "Store patient",
+                "description": "Returns user",
+                "operationId": "storeUser to medicasure",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/v1/patient": {
+            "post": {
+                "tags": [
+                    "Patient"
+                ],
+                "summary": "Store patient",
+                "description": "Returns user",
+                "operationId": "storeUser to medsurlink",
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -111,9 +181,9 @@
                 "scheme": "https",
                 "flows": {
                     "password": {
-                        "authorizationUrl": "localhost/oauth/authorize",
-                        "tokenUrl": "localhost/oauth/token",
-                        "refreshUrl": "localhost/token/refresh",
+                        "authorizationUrl": "http://localhost/oauth/authorize",
+                        "tokenUrl": "http://localhost/oauth/token",
+                        "refreshUrl": "http://localhost/token/refresh",
                         "scopes": []
                     }
                 }

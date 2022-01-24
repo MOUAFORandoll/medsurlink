@@ -32,7 +32,7 @@ class PatientController extends Controller
     use SmsTrait;
     protected $table = 'patients';
         /**
-     * @OA\Post(
+     * @OA\Get(
      *      path="/v1/patients",
      *      operationId="getUserList",
      *      tags={"Patient"},
@@ -89,7 +89,39 @@ class PatientController extends Controller
 
         /**
      * Store a newly created resource in storage.
-     *
+     * * @OA\Post(
+     *      path="/v1/patients/medicasureStorePatient",
+     *      operationId="storeUser to medicasure",
+     *      tags={"Patient"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Store patient",
+     *      description="Returns user",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param Request $request
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
@@ -244,7 +276,39 @@ class PatientController extends Controller
     }
     /**
      * Store a newly created resource in storage.
-     *
+     * * @OA\Post(
+     *      path="/v1/patient",
+     *      operationId="storeUser to medsurlink",
+     *      tags={"Patient"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Store patient",
+     *      description="Returns user",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param patientStoreRequest $request
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
