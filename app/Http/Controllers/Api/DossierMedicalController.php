@@ -32,7 +32,39 @@ class DossierMedicalController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
+     * @OA\Get(
+     *      path="/dossier",
+     *      operationId="getDossierMedicalList",
+     *      tags={"DossierMedical"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Get list of Dossier Medical",
+     *      description="Return list of Dossier Medical",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -72,7 +104,39 @@ class DossierMedicalController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     * @OA\Post(
+     *      path="/dossier/{slug}", 
+     *      operationId="storeDossierMedicalList",
+     *      tags={"DossierMedical"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Store Dossier Medical",
+     *      description="Store a Dossier Medical",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -98,7 +162,39 @@ class DossierMedicalController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     * @OA\Get(
+     *      path="/dossier/{slug}", 
+     *      operationId="getDossierMedical",
+     *      tags={"DossierMedical"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Show Dossier Medical",
+     *      description="Show a Dossier Medical",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param $slug
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
@@ -170,7 +266,40 @@ class DossierMedicalController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     * Display the specified resource.
+     * @OA\Delete(
+     *      path="/dossier/{slug}", 
+     *      operationId="deleteDossierMedical",
+     *      tags={"DossierMedical"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Delete Dossier Medical",
+     *      description="Delete a Dossier Medical",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param $slug
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException

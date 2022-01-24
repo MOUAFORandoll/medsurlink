@@ -27,7 +27,7 @@ class SouscripteurController extends Controller
      *  {"passport": {}},
      *   },
      *      summary="Get list of souscripteur",
-     *      description="Returns list of users",
+     *      description="Returns list of souscripteur",
      *      @OA\Response(
      *          response=200,
      *          description="Successful operation",

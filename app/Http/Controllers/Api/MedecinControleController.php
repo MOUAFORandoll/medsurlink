@@ -22,7 +22,39 @@ class MedecinControleController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
+     * @OA\Get(
+     *      path="/medecin-controle",
+     *      operationId="getMedecinReferentList",
+     *      tags={"MedecinReferent"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Get list of Medecin Referent",
+     *      description="Return list of Medecin Referent",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -43,7 +75,39 @@ class MedecinControleController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     * @OA\Post(
+     *      path="/medecin-controle/{medecin-controle}", 
+     *      operationId="StoreMedecinReferentList",
+     *      tags={"MedecinReferent"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Store Medecin Referent",
+     *      description="Returns a Medecin Referent",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param MedecinControleStoreRequest $request
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
@@ -118,7 +182,39 @@ class MedecinControleController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     * @OA\Get(
+     *      path="/medecin-controle/{medecin-controle}", 
+     *      operationId="ShowMedecinReferentList",
+     *      tags={"MedecinReferent"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Show Medecin Referent",
+     *      description="Returns a Medecin Referent",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -145,7 +241,39 @@ class MedecinControleController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+     * @OA\Put(
+     *      path="/medecin-controle/{medecin-controle}", 
+     *      operationId="UpdateMedecinReferentList",
+     *      tags={"MedecinReferent"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Update Medecin Referent",
+     *      description="Returns a Medecin Referent",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param MedecinControleUpdateRequest $request
      * @param $slug
      * @return \Illuminate\Http\Response
@@ -199,7 +327,39 @@ class MedecinControleController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     * @OA\Delete(
+     *      path="/medecin-controle/{medecin-controle}", 
+     *      operationId="DeleteMedecinReferentList",
+     *      tags={"MedecinReferent"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Delete Medecin Referent",
+     *      description=" Medecin Referent Delete",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param $slug
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
