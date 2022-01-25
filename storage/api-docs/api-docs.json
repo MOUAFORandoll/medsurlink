@@ -19,7 +19,7 @@
         }
     ],
     "paths": {
-        "/oauth/token": {
+        "/login": {
             "post": {
                 "tags": [
                     "Login"
@@ -1226,9 +1226,9 @@
                 "scheme": "https",
                 "flows": {
                     "password": {
-                        "authorizationUrl": "http://localhost:8080/oauth/authorize",
-                        "tokenUrl": "http://localhost:8080/oauth/token",
-                        "refreshUrl": "http://localhost:8080/token/refresh",
+                        "authorizationUrl": "http://localhost/oauth/authorize",
+                        "tokenUrl": "http://localhost/oauth/token",
+                        "refreshUrl": "http://localhost/token/refresh",
                         "scopes": []
                     }
                 }
