@@ -19,7 +19,7 @@
         }
     ],
     "paths": {
-        "/login": {
+        "/oauth/token": {
             "post": {
                 "tags": [
                     "Login"
@@ -262,12 +262,7 @@
                     "404": {
                         "description": "not found"
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             }
         },
         "/dossier/{slug}": {
@@ -764,12 +759,7 @@
                     "404": {
                         "description": "not found"
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             }
         },
         "patient/{patient}": {
@@ -799,12 +789,7 @@
                     "404": {
                         "description": "not found"
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             },
             "put": {
                 "tags": [
@@ -832,12 +817,7 @@
                     "404": {
                         "description": "not found"
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             },
             "delete": {
                 "tags": [
@@ -865,12 +845,7 @@
                     "404": {
                         "description": "not found"
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             }
         },
         "patient/search/{value}": {
@@ -900,12 +875,7 @@
                     "404": {
                         "description": "not found"
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             }
         },
         "/praticien": {
@@ -1256,9 +1226,9 @@
                 "scheme": "https",
                 "flows": {
                     "password": {
-                        "authorizationUrl": "http://localhost/oauth/authorize",
-                        "tokenUrl": "http://localhost/oauth/token",
-                        "refreshUrl": "http://localhost/token/refresh",
+                        "authorizationUrl": "http://localhost:8080/oauth/authorize",
+                        "tokenUrl": "http://localhost:8080/oauth/token",
+                        "refreshUrl": "http://localhost:8080/token/refresh",
                         "scopes": []
                     }
                 }
