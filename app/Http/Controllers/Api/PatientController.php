@@ -36,6 +36,9 @@ class PatientController extends Controller
      *      path="/patient",
      *      operationId="getPatientList",
      *      tags={"Patient"},
+     *      security={
+     *       {"passport": {}},
+     *       },
      *      summary="Get list of patient",
      *      description="Returns list of users",
      *      @OA\Response(

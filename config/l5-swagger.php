@@ -157,17 +157,16 @@ return [
 
         // Open API 3.0 support
         'passport' => [ // Unique name of security
-            'type' => 'oauth2', // The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".
+            'type' => 'http', // The type of the security scheme. Valid values are "basic", "apiKey" or "oauth2".
             'description' => 'Laravel passport oauth2 security.',
+            'name' => 'Authorization',
             'in' => 'header',
-            'scheme' => 'https',
-            'flows' => [
-                "password" => [
-                    "authorizationUrl" => config('app.url') . '/oauth/authorize',
-                    "tokenUrl" => config('app.url') . '/oauth/token',
-                    "refreshUrl" => config('app.url') . '/token/refresh',
-                    "scopes" => []
-                ],
+            'scheme' => 'passport',
+            "password" => [
+                "authorizationUrl" => 'http://127.0.0.1:8001/api/oauth/authorize',
+                "tokenUrl" => 'http://127.0.0.1:8001/api/oauth/token',
+                "refreshUrl" => 'http://127.0.0.1:8001/api/token/refresh',
+                "scopes" => []
             ],
         ],
     ],
@@ -238,6 +237,6 @@ return [
     |--------------------------------------------------------------------------
      */
     'constants' => [
-        'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://localhost:8001'),
+        'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://localhost:8001/api/'),
     ],
 ];
