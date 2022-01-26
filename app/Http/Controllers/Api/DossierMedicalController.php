@@ -36,9 +36,6 @@ class DossierMedicalController extends Controller
      *      path="/dossier",
      *      operationId="getDossierMedicalList",
      *      tags={"DossierMedical"},
-     * security={
-     *  {"passport": {}},
-     *   },
      *      summary="Get list of Dossier Medical",
      *      description="Return list of Dossier Medical",
      *      @OA\Response(
