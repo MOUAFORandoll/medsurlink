@@ -18,9 +18,9 @@ if(!function_exists('enregistrerCommande')) {
 }
 
 if(!function_exists('reduireCommandeRestante')) {
-    function reduireCommandeRestante($commande_id)
+    function reduireCommandeRestante($id)
     {
-        $commande =  \App\Models\AffiliationSouscripteur::whereId($commande_id)->first();
+        $commande =  \App\Models\AffiliationSouscripteur::where("user_id",$id)->first();
 
         $commande->nombre_restant-=1;
         $commande->save();

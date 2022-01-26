@@ -26,10 +26,11 @@
                 ],
                 "summary": "Login",
                 "operationId": "login",
+                "consumes":"application/json",
                 "parameters": [
                     {
                         "name": "email",
-                        "in": "query",
+                        "in": "body",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -37,7 +38,7 @@
                     },
                     {
                         "name": "password",
-                        "in": "query",
+                        "in": "body",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -764,12 +765,7 @@
                     "404": {
                         "description": "not found"
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             }
         },
         "patient/{patient}": {
@@ -799,12 +795,7 @@
                     "404": {
                         "description": "not found"
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             },
             "put": {
                 "tags": [
@@ -832,12 +823,7 @@
                     "404": {
                         "description": "not found"
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             },
             "delete": {
                 "tags": [
@@ -865,12 +851,7 @@
                     "404": {
                         "description": "not found"
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             }
         },
         "patient/search/{value}": {
@@ -900,12 +881,7 @@
                     "404": {
                         "description": "not found"
                     }
-                },
-                "security": [
-                    {
-                        "passport": []
-                    }
-                ]
+                }
             }
         },
         "/praticien": {
@@ -1253,12 +1229,12 @@
                 "type": "oauth2",
                 "description": "Laravel passport oauth2 security.",
                 "in": "header",
-                "scheme": "https",
+                "scheme": "http",
                 "flows": {
                     "password": {
-                        "authorizationUrl": "http://localhost/oauth/authorize",
-                        "tokenUrl": "http://localhost/oauth/token",
-                        "refreshUrl": "http://localhost/token/refresh",
+                        "authorizationUrl": "api/oauth/authorize",
+                        "tokenUrl": "api/oauth/token",
+                        "refreshUrl": "api/token/refresh",
                         "scopes": []
                     }
                 }
