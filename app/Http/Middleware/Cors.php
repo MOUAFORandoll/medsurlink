@@ -20,7 +20,6 @@ class Cors
         header("Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token, x-csrf-token");
         //ALLOW OPTIONS METHOD
         $headers = [
-            'Access-Control-Allow-Origin:' =>'Accept, Allow',
             'Access-Control-Allow-Methods' => 'POST, GET, OPTIONS, PUT, DELETE, PATCH',
             'Access-Control-Allow-Headers' => 'Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token, x-csrf-token',
         ];

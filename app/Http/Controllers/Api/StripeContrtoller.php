@@ -48,7 +48,7 @@ class StripeContrtoller extends Controller
                     'product_data' => [
                         'name' => 'Intermediation médicale',
                     ],
-                    'unit_amount' => $request->get('amount'),
+                    'unit_amount' =>(int)$request->get('amount') * 100,
                 ],
                 'quantity' => 1,
             ]],
@@ -177,7 +177,7 @@ class StripeContrtoller extends Controller
                     'product_data' => [
                         'name' => 'Intermediation médicale',
                     ],
-                    'unit_amount' => $request->get('amount'),
+                    'unit_amount' => (int)$request->get('amount')*100,
                 ],
                 'quantity' =>$request->get('quantite'),
             ]],
@@ -243,7 +243,14 @@ class StripeContrtoller extends Controller
            $affiliation = AffiliationSouscripteur::where("cim_id",$slug)->first();
            $affiliation->date_paiement = Carbon::now()->toDateTimeString();
            $affiliation->save();
+           $env = strtolower(config('app.env'));
+           if ($env === 'local')
            return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+            else if ($env === 'staging')
+                return  redirect('https://www.staging.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$slug);
+            else
+                return  redirect('https://www.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$slug);
+
     }
     public function notifAndRedirectToAccount(Request $request,$slug){
 
@@ -261,6 +268,13 @@ class StripeContrtoller extends Controller
        $affiliation = AffiliationSouscripteur::where("cim_id",$slug)->first();
        $affiliation->date_paiement = Carbon::now()->toDateTimeString();
        $affiliation->save();
+       $env = strtolower(config('app.env'));
+       if ($env === 'local')
        return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+        else if ($env === 'staging')
+            return  redirect('https://www.staging.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$slug);
+        else
+            return  redirect('https://www.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$slug);
+       //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
 }
 }

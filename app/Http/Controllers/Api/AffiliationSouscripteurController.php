@@ -139,7 +139,7 @@ class AffiliationSouscripteurController extends Controller
 
     }
     public function rappelSouscripteurAffiliation(){
-        
+
     }
     public function storeSouscripteurRedirect(Request $request,$cim_id)
     {
@@ -163,7 +163,7 @@ class AffiliationSouscripteurController extends Controller
     public function souscripteurRedirect(Request $request,$cim_id)
     {
         //$token = $this->storeSouscripteur($request,$souscripteur_id);
-        
+
         // Récupération des informations relatifs au souscripteur
         $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
         $updatePath = 'token=';
@@ -263,17 +263,17 @@ class AffiliationSouscripteurController extends Controller
         $commande_id = $request->commande_id;
 
         // Recupération des informations relative à la commande
-        $commande =  \App\Models\AffiliationSouscripteur::whereId($commande_id)->first();
+        $commande =  \App\Models\AffiliationSouscripteur::where("user_id",Auth::id())->first();
 
        $validator = Validator::make($request->all(),[
            'question_id'=>'required|integer|exists:questions,id',
            'reponse'=>'required|string',
-           'commande_id'=>'required|integer|exists:affiliation_souscripteurs,id'
         ]);
 
        if ($validator->fails()){
            return  response()->json($validator->errors()->all(),400);
        }
+
 
         // Récupération des informations relatifs au souscripteur
         $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
@@ -309,7 +309,7 @@ class AffiliationSouscripteurController extends Controller
                 $patient->ajouterSouscripteur($souscripteur_id);
 
                 // Réduction du nombre de commande restante
-                $commande = reduireCommandeRestante($request->commande_id);
+                $commande = reduireCommandeRestante($souscripteur_id);
 
                 // Génération du contrat
                 $patientMedicasure = transformerEnAffilieMedicasure($patient);
@@ -327,7 +327,7 @@ class AffiliationSouscripteurController extends Controller
 
                 return response()->json(['patient'=>$patient]);
             }else{
-                $this->revealError('commande_restant','Commande restant égale 0, vous ne pouvez plus ajouter de patients');
+                $this->revealError('commande_restant','vous ne pouvez plus ajouter de patients');
             }
         }else{
             $this->revealError('commande_not_definie','La commande dont l\'identifiant a été transmis n\'existe pas');
