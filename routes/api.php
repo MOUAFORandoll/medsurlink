@@ -369,7 +369,7 @@ Route::prefix('paiement')->group(function () {
     Route::post('/stripe-paiement','Api\StripeContrtoller@stripePaidByCustomer');
     Route::post('/stripe-paiement-medicasure','Api\StripeContrtoller@paiementFromMedicasure');
     Route::post('/stripe-renouvellement','Api\StripeContrtoller@renouvellementPaiement');
-    Route::get('/stripe-paiement-success/{slug}','Api\StripeContrtoller@NotifierPaiement');
+    Route::get('/stripe-paiement-success/{slug}/{token}','Api\StripeContrtoller@NotifierPaiement');
     Route::get('/stripe-paiement-success-medicasure/{slug}','Api\StripeContrtoller@notifAndRedirectToAccount');
     Route::get('/stripe-paiement-cancel', function () {
         return response()->json(

@@ -129,10 +129,10 @@ class OmController extends Controller
         }
         return response()->json(['statut'=>$reponse]);
     }
-    public function souscripteurRedirectToMedsurlink($emailSouscripteur1)
+/*     public function souscripteurRedirectToMedsurlink($emailSouscripteur1)
     {
         //$token = $this->storeSouscripteur($request,$souscripteur_id);
-        
+
         // Récupération des informations relatifs au souscripteur
         $visiteur = Visiteur::whereEmail($emailSouscripteur1)->first();
         $updatePath = 'token=';
@@ -149,25 +149,26 @@ class OmController extends Controller
             return  redirect('https://www.staging.medsurlink.com/contrat-prepaye/add?'.$updatePath);
         else
             return  redirect('https://www.medsurlink.com/contrat-prepaye/add?'.$updatePath);
-    }
+    } */
 
     public function omPaidByCustomer(Request $request){
         $access_token = getOmToken();
         $mp_token = initierPaiement($access_token);
-        $body =[
+        $body = [
             "notifUrl"=> "https://www.medicasure.com/api/v1.0.0/om/".$mp_token."/notification",
             "channelUserMsisdn"=> "658392349",
             "amount"=> $request->get('amount'),
-            "subscriberMsisdn"=> $request->get('phone'),
+            "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
             "pin"=> "2019",
-            "orderId"=> $request->get('identifiant'),
+            "orderId"=> $request->get('reference'),
             "description"=> $request->get('description',''),
             "payToken"=> $mp_token
         ];
 
         $reponse = procederAuPaiementOm($access_token,$body);
 
-        if (isset($original->reponse))
+        //dd($body);
+        if (isset($reponse->original))
         {
             return response()->json(['status'=>'FAILED','reponse'=>$reponse->original['erreur']]);
         }

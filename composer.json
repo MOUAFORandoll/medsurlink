@@ -70,7 +70,8 @@
             "app/Helpers/RapportHelper.php",
             "app/helpers.php",
             "app/Helpers/PaiementHelper.php",
-            "app/Helpers/ComptabiliteHelper.php"
+            "app/Helpers/ComptabiliteHelper.php",
+            "app/Helpers/OmHelper.php"
         ],
         "classmap": [
             "database/seeds",

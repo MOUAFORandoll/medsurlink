@@ -9,6 +9,7 @@ use App\Http\Requests\SouscripteurUpdateRequest;
 use App\Mail\updateSetting;
 use App\Mail\RappelAffiliation;
 use App\Models\Souscripteur;
+use App\Models\AffiliationSouscripteur;
 use Illuminate\Support\Facades\Mail;
 use Netpok\Database\Support\DeleteRestrictionException;
 
@@ -230,10 +231,9 @@ class SouscripteurController extends Controller
      */
     public function cim()
     {
-        $souscripteurs = Souscripteur::with('patients','user','financeurs.patients','affiliation')
-        ->join('affiliation_souscripteurs', function ($join) {
-            $join->on('souscripteurs.user_id', '=', 'affiliation_souscripteurs.user_id');
-        })->get();
+        $souscripteurs = AffiliationSouscripteur::with('souscripteur','souscripteur.user','typeContrat')
+        ->orderBy("created_at","desc")
+        ->get();
         return response()->json(['souscripteurs'=>$souscripteurs]);
     }
     /**
