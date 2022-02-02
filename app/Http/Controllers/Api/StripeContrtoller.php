@@ -201,7 +201,7 @@ class StripeContrtoller extends Controller
                     ],
                     'unit_amount' => (int)$request->get('amount')*100,
                 ],
-                'quantity' =>$request->get('quantite'),
+                'quantity' => 1,
             ]],
             'mode' => 'payment',
             'success_url' => url('api/paiement/stripe-paiement-success/'.$commande->id.'/'.$tokenInfo),
@@ -263,7 +263,7 @@ class StripeContrtoller extends Controller
            }else{
             $updatePath = 'contrat-prepaye/add?status=success&token='.$token;
            }
-        //    dd($updatePath);
+//           dd($updatePath);
 
 
            $env = strtolower(config('app.env'));
