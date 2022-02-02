@@ -272,9 +272,9 @@ class StripeContrtoller extends Controller
            return  redirect('http://localhost:8081/'.$updatePath);
            //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
             else if ($env === 'staging')
-                return  redirect('https://www.staging.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$updatePath);
+                return  redirect('https://www.staging.medsurlink.com/'.$updatePath);
             else
-                return  redirect('https://www.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$updatePath);
+                return  redirect('https://www.medsurlink.com/'.$updatePath);
 
     }
     public function notifAndRedirectToAccount(Request $request,$slug){
@@ -304,9 +304,9 @@ class StripeContrtoller extends Controller
        return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
        //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
         else if ($env === 'staging')
-            return  redirect('https://www.staging.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$slug);
+            return  redirect('https://www.staging.medsurlink.com/'.$slug);
         else
-            return  redirect('https://www.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$slug);
+            return  redirect('https://www.medsurlink.com/'.$slug);
        //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
 }
 }
