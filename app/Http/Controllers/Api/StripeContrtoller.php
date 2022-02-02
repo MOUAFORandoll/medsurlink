@@ -156,13 +156,11 @@ class StripeContrtoller extends Controller
                 //return response()->json(['reponse'=>$tokenInfo,'souscripteur'=>$user, "message"=>$message]);
             }
         }else{
-            if(Souscripteur::where("user_id",$user->id)->first() == null){
+            $souscripteur = Souscripteur::where("user_id",$user->id)->first();
+            if($souscripteur == null){
                 $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
-            }else{
-                $passwordSouscripteur = substr(bin2hex(random_bytes(10)), 0, 7);
-                $tokenInfo = "login";
-                $souscripteur = Souscripteur::where("user_id",$user->id)->first();
             }
+            $tokenInfo = "checkout";
         }
 
         $commande =  CommandePackage::create([
@@ -260,8 +258,8 @@ class StripeContrtoller extends Controller
            //dd($affiliation);
            $affiliation->date_paiement = Carbon::now()->toDateTimeString();
            $affiliation->save();
-           if($token=="login"){
-            $updatePath = 'login';
+           if($token=="checkout"){
+            $updatePath = 'checkout';
            }else{
             $updatePath = 'contrat-prepaye/add?status=success&token='.$token;
            }
