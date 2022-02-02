@@ -263,11 +263,12 @@ class StripeContrtoller extends Controller
            }else{
             $updatePath = 'contrat-prepaye/add?status=success&token='.$token;
            }
+        //    dd($updatePath);
 
 
            $env = strtolower(config('app.env'));
            if ($env === 'local')
-           return  redirect('http://localhost:8081/'.$updatePath);
+           return  redirect('http://localhost:8080/'.$updatePath);
            //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
             else if ($env === 'staging')
                 return  redirect('https://www.staging.medsurlink.com/'.$updatePath);
