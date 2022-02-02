@@ -118,7 +118,11 @@ class StripeContrtoller extends Controller
         //Stripe::setApiKey('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');
         Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
         //dd($request);
-
+        $tokenInfo = "";
+        $passwordSouscripteur = "";
+        $user = User::where("email",$request->get("email"))->first();
+        $souscripteur = null;
+        if($user == null) {
             $userInformation = [];
             $userInformation['nom']=$request->get("name");
             $userInformation['prenom']=$request->get("prenom");
@@ -144,8 +148,22 @@ class StripeContrtoller extends Controller
 
             //Definition des identifiants pour connexion
             $tokenInfo =$passwordSouscripteur.'medsur'. $request->email;
-
-
+            // Envoi du mail avec mot de passe souscripteur
+            try{
+                sendUserInformationViaMail($user,$passwordSouscripteur);
+            }catch (\Swift_TransportException $transportException){
+                //$message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+                //return response()->json(['reponse'=>$tokenInfo,'souscripteur'=>$user, "message"=>$message]);
+            }
+        }else{
+            if(Souscripteur::where("user_id",$user->id)->first() == null){
+                $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
+            }else{
+                $passwordSouscripteur = substr(bin2hex(random_bytes(10)), 0, 7);
+                $tokenInfo = "login";
+                $souscripteur = Souscripteur::where("user_id",$user->id)->first();
+            }
+        }
 
         $commande =  CommandePackage::create([
             "date_commande" => Carbon::now()->toDateTimeString(),
@@ -160,15 +178,21 @@ class StripeContrtoller extends Controller
             'commande_id' =>$commande->id,
             'souscripteur_id' => $souscripteur->user_id,
         ]);
-        AffiliationSouscripteur::create([
-            'user_id'=>$souscripteur->user_id,
-            'type_contrat'=>$commande->offres_packages_id,
-            'nombre_paye'=>$request->get('quantite'),
-            'nombre_restant'=>$request->get('quantite'),
-            'montant'=>$request->get('amount'),
-            'cim_id'=>$commande->id,
-            'date_paiement'=>null,
-           ]);
+        $affiliation = AffiliationSouscripteur::where("cim_id",$commande->id)->first();
+        if($affiliation == null){
+            AffiliationSouscripteur::create([
+                'user_id'=>$souscripteur->user_id,
+                'type_contrat'=>$commande->offres_packages_id,
+                'nombre_paye'=>$request->get('quantite'),
+                'nombre_restant'=>$request->get('quantite'),
+                'montant'=>$request->get('amount'),
+                'cim_id'=>$commande->id,
+                'date_paiement'=>null,
+               ]);
+        }else{
+            $affiliation->nombre_paye = $request->get('quantite');
+            $affiliation->save();
+        }
         $session =   Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
@@ -182,18 +206,10 @@ class StripeContrtoller extends Controller
                 'quantity' =>$request->get('quantite'),
             ]],
             'mode' => 'payment',
-            'success_url' => url('api/paiement/stripe-paiement-success/'.$commande->id),
+            'success_url' => url('api/paiement/stripe-paiement-success/'.$commande->id.'/'.$tokenInfo),
             'cancel_url' => url('api/paiement/stripe-paiement-cancel'),
         ]);
 
-       // Envoi du mail avec mot de passe souscripteur
-        try{
-            sendUserInformationViaMail($user,$passwordSouscripteur);
-        }catch (\Swift_TransportException $transportException){
-            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
-            //return response()->json(['reponse'=>$tokenInfo,'souscripteur'=>$user, "message"=>$message]);
-        }
-        //return response()->json(['reponse'=>$tokenInfo],200) ;
 
         return response()->json([ 'id' => $session->id,'token'=>$tokenInfo]);
     }
@@ -227,7 +243,7 @@ class StripeContrtoller extends Controller
         ]);
         return response()->json([ 'id' => $session->id]);
     }*/
-    public function NotifierPaiement(Request $request,$slug){
+    public function NotifierPaiement(Request $request,$slug,$token){
 
             NotificationPaiement::create([
                 "type"=>'Stripe',
@@ -241,15 +257,24 @@ class StripeContrtoller extends Controller
            $payment->status = "SUCCESS";
            $payment->save();
            $affiliation = AffiliationSouscripteur::where("cim_id",$slug)->first();
+           //dd($affiliation);
            $affiliation->date_paiement = Carbon::now()->toDateTimeString();
            $affiliation->save();
+           if($token=="login"){
+            $updatePath = 'login';
+           }else{
+            $updatePath = 'contrat-prepaye/add?status=success&token='.$token;
+           }
+
+
            $env = strtolower(config('app.env'));
            if ($env === 'local')
-           return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+           return  redirect('http://localhost:8081/'.$updatePath);
+           //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
             else if ($env === 'staging')
-                return  redirect('https://www.staging.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$slug);
+                return  redirect('https://www.staging.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$updatePath);
             else
-                return  redirect('https://www.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$slug);
+                return  redirect('https://www.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$updatePath);
 
     }
     public function notifAndRedirectToAccount(Request $request,$slug){
@@ -268,9 +293,16 @@ class StripeContrtoller extends Controller
        $affiliation = AffiliationSouscripteur::where("cim_id",$slug)->first();
        $affiliation->date_paiement = Carbon::now()->toDateTimeString();
        $affiliation->save();
+       $souscripteur = Souscripteur::with('user')->where('user_id','=',$affiliation->user_id)->first();
+       $updatePath = 'token=';
+       //$reponse = $token->getOriginalContent()['reponse'];
+       $updatePath = 'status=success&'.$updatePath.$souscripteur->user->token;
+
+
        $env = strtolower(config('app.env'));
        if ($env === 'local')
-       return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+       return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
+       //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
         else if ($env === 'staging')
             return  redirect('https://www.staging.medsurlink.com/dashboard/user-management/patients/paiement-status/'.$slug);
         else

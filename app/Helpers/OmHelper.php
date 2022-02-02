@@ -68,10 +68,9 @@ if(!function_exists('procederAuPaiement')) {
         try {
             $client = new Client(['base_uri' => $base_uri, 'verify' => false]);
             $response = $client->request('POST', $base_uri, ['headers'=>$headers,'json'=> $body]);
-//            $request = new \GuzzleHttp\Psr7\Request('POST', $base_uri, $headers, json_encode($body));
-//            $response = $client->send($request);
 
             $responseArray = json_decode($response->getBody()->getContents(), true);
+
             return $responseArray;
 
         } catch (Exception $exception) {
