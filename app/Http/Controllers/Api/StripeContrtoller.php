@@ -292,20 +292,16 @@ class StripeContrtoller extends Controller
        $affiliation = AffiliationSouscripteur::where("cim_id",$slug)->first();
        $affiliation->date_paiement = Carbon::now()->toDateTimeString();
        $affiliation->save();
-       $souscripteur = Souscripteur::with('user')->where('user_id','=',$affiliation->user_id)->first();
-       $updatePath = 'token=';
-       //$reponse = $token->getOriginalContent()['reponse'];
-       $updatePath = 'status=success&'.$updatePath.$souscripteur->user->token;
-
+       //$souscripteur = Souscripteur::with('user')->where('user_id','=',$affiliation->user_id)->first();
 
        $env = strtolower(config('app.env'));
        if ($env === 'local')
-       return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
-       //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+        //return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
+         return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
         else if ($env === 'staging')
-            return  redirect('https://www.staging.medsurlink.com/'.$slug);
+            return  redirect('https://www.staging.medsurlink.com/user-management/patients/paiement-status/'.$slug);
         else
-            return  redirect('https://www.medsurlink.com/'.$slug);
+            return  redirect('https://www.medsurlink.com/user-management/patients/paiement-status/'.$slug);
        //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
-}
+    }
 }

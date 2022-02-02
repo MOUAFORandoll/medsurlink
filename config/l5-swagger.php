@@ -237,10 +237,6 @@ return [
     |--------------------------------------------------------------------------
      */
     'constants' => [
-<<<<<<< HEAD
         'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://localhost:8001/api/'),
-=======
-        'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'http://127.0.0.1:8001'),
->>>>>>> 2c9c7e95451a23e550b3533e177f4c749ddd3989
     ],
 ];
