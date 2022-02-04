@@ -22,5 +22,7 @@ class PaymentOffre extends Model
         'commande_id',
         'souscripteur_id'
     ];
-
+    public function commande(){
+        return $this->belongsTo(CommandePackage::class,'commande_id','id');
+    }
 }

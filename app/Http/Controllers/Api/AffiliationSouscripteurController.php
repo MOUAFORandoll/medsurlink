@@ -263,7 +263,7 @@ class AffiliationSouscripteurController extends Controller
         $commande_id = $request->commande_id;
 
         // Recupération des informations relative à la commande
-        $commande =  \App\Models\AffiliationSouscripteur::where("user_id",Auth::id())->first();
+        $commande =  \App\Models\AffiliationSouscripteur::where("id",$commande_id)->first();
 
        $validator = Validator::make($request->all(),[
            'question_id'=>'required|integer|exists:questions,id',
@@ -290,6 +290,7 @@ class AffiliationSouscripteurController extends Controller
                 $patient = Patient::create([
                     'user_id' => $user->id,
                     'sexe'=>$request->sexe,
+                    'age'=>  Carbon::parse($request->date_de_naissance)->age,
                     'date_de_naissance'=>$request->date_de_naissance
                 ]);
 
@@ -309,7 +310,7 @@ class AffiliationSouscripteurController extends Controller
                 $patient->ajouterSouscripteur($souscripteur_id);
 
                 // Réduction du nombre de commande restante
-                $commande = reduireCommandeRestante($souscripteur_id);
+                $commande = reduireCommandeRestante($commande->id);
 
                 // Génération du contrat
                 $patientMedicasure = transformerEnAffilieMedicasure($patient);
@@ -373,8 +374,7 @@ class AffiliationSouscripteurController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function affiliationRestante($id){
-        $commande = resteDeCommande($id);
-
+        $commande =  \App\Models\AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->get();
         return response()->json(['commande'=>$commande]);
     }
 
