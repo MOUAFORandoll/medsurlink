@@ -14,7 +14,7 @@ class AddFieldsLienDeParenteToPatientSouscripteursTable extends Migration
     public function up()
     {
         Schema::table('patient_souscripteurs', function (Blueprint $table) {
-            $table->string('lien_de_parente');
+            $table->string('lien_de_parente')->nullable();
         });
     }
 

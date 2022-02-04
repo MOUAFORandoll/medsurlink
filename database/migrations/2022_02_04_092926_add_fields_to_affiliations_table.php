@@ -14,18 +14,18 @@ class AddFieldsToAffiliationsTable extends Migration
     public function up()
     {
         Schema::table('affiliations', function (Blueprint $table) {
-            $table->unsignedBigInteger('souscripteur_id');
-            $table->unsignedBigInteger('package_id');
-            $table->unsignedBigInteger('paiement_id');
-            $table->date('date_signature');
+            $table->unsignedBigInteger('souscripteur_id')->nullable();
+            $table->unsignedBigInteger('package_id')->nullable();
+            $table->unsignedBigInteger('paiement_id')->nullable();
+            $table->date('date_signature')->nullable();
             $table->string('status_contrat');
             $table->string('status_paiement');
             $table->boolean('renouvelle');
             $table->boolean('expire');
             $table->string('code_contrat');
-            $table->bigIncrements('niveau_urgence');
-            $table->bigIncrements('nombre_envois_email');
-            $table->bigIncrements('expire_email');
+            $table->integer('niveau_urgence');
+            $table->integer('nombre_envois_email');
+            $table->integer('expire_email');
 
 
             $table->foreign('souscripteur_id')->references('user_id')->on('souscripteurs')->onDelete('RESTRICT')->onUpdate('RESTRICT');
