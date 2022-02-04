@@ -18,6 +18,18 @@ class Affiliation extends Model
 
     protected $fillable = [
         "patient_id",
+        "souscripteur_id",
+        "package_id",
+        "paiement_id",
+        "date_signature",
+        "status_contrat",
+        "status_paiement",
+        "renouvelle",
+        "expire",
+        "code_contrat",
+        "niveau_urgence",
+        "nombre_envois_email",
+        "expire_email",
         "nom",
         "date_debut",
         "date_fin",
@@ -43,6 +55,10 @@ class Affiliation extends Model
 
     public function patient(){
         return $this->belongsTo(Patient::class,'patient_id','user_id');
+    }
+
+    public function souscripteur(){
+        return $this->belongsTo(Souscripteur::class,'souscripteur_id','user_id');
     }
 
 
