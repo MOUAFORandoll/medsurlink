@@ -11,11 +11,11 @@ class ExamenComplementaireController extends Controller
 {
     public function index()
     {    
-        $othercomplementaire = OtherComplementaire::get()->toArray();
+        // $othercomplementaire = OtherComplementaire::get()->toArray();
         $examencomplementaire = ExamenComplementaire::get()->toArray();
-        $fusion = array_merge($examencomplementaire,$othercomplementaire);
+        // $fusion = array_merge($examencomplementaire);
         return response()->json([
-            'examencomplementaire'=>$fusion
+            'examencomplementaire'=>$examencomplementaire
         ]);
     }
 }

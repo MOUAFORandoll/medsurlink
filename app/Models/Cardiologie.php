@@ -61,6 +61,10 @@ class Cardiologie extends Model
         return $this->morphMany(Contributeurs::class,'operationable');
     }
 
+    public function ligneDeTemps(){
+        return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
+    }
+
     public function dossier(){
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }

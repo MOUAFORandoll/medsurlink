@@ -15,7 +15,7 @@ class CreateCatTable extends Migration
     {
         Schema::create('cat', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('conduite_a_tenir');
+            $table->longText('conduite_a_tenir');
             $table->unsignedBigInteger('medecin_id');
             $table->unsignedBigInteger('medecin_control_id');
             $table->unsignedBigInteger('ligne_de_temps_id');

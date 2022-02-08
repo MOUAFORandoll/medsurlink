@@ -55,7 +55,9 @@ class Kinesitherapie extends Model
     public function dossier(){
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }
-
+    public function ligneDeTemps(){
+        return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
+    }
     public function etablissement(){
         return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
     }

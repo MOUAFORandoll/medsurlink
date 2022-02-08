@@ -14,7 +14,7 @@ class AddInformationSupplementaireToConsultationMedecineGeneraleTable extends Mi
     public function up()
     {
         Schema::table('consultation_medecine_generales', function (Blueprint $table) {
-            $table->string('information')->nullable();
+           // $table->string('information')->nullable();
         });
     }
 

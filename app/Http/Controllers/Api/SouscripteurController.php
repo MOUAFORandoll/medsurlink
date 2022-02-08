@@ -37,7 +37,9 @@ class SouscripteurController extends Controller
     {
         //
     }
-
+    public function storeSouscripteur(SouscripteurStoreRequest $request){
+        $this->store($request);
+    }
     /**
      * Store a newly created resource in storage.
      *
