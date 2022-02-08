@@ -41,4 +41,7 @@ class AffiliationSouscripteur extends Model
     public function souscripteur(){
         return $this->belongsTo(Souscripteur::class,'user_id','user_id');
     }
+    public function typeContrat(){
+        return $this->belongsTo(Package::class,'type_contrat','id');
+    }
 }

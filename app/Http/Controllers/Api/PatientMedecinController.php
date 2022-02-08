@@ -48,7 +48,7 @@ class PatientMedecinController extends Controller
      */
     public function store(PatientMedecinControleRequest $request)
     {
-        
+
         $request->validated();
         foreach($request->medecin_control_id as $m){
             $patientMedecin = PatientMedecinControle::create([
@@ -61,11 +61,11 @@ class PatientMedecinController extends Controller
             $medecin = User::whereId($request->medecin_control_id)->first();
             $message = "<@".$medecin->slack."> a été affecté au patient ".$patient->user->nom. " " .$patient->user->prenom." comme médecin referent";
             // Send notification to affilié channel
-            $patientMedecin->setSlackChannel('affilie')
-            ->notify(new MedecinToPatient($message,null));
+            // $patientMedecin->setSlackChannel('affilie')
+            // ->notify(new MedecinToPatient($message,null));
             // Send notification to appel channel
-            $patientMedecin->setSlackChannel('appel')
-            ->notify(new MedecinToPatient($message,null));
+            // $patientMedecin->setSlackChannel('appel')
+            // ->notify(new MedecinToPatient($message,null));
         }
         return response()->json(['patient'=>$patientMedecin]);
     }

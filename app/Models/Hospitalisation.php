@@ -59,7 +59,9 @@ class Hospitalisation extends Model
     public function dossier(){
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
     }
-
+    public function ligneDeTemps(){
+        return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
+    }
     public function examensClinique(){
         return $this->belongsToMany(ExamenClinique::class,'hospitalisation_exam_clin','hospitalisation_id','examen_clinique_id');
     }

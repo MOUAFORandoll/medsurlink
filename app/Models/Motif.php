@@ -38,12 +38,14 @@ class Motif extends Model
     ];
 
     public  function  consultations(){
-    return $this->belongsToMany(ConsultationMedecineGenerale::class,'consultation_motif','motif_id','consultation_medecine_generale_id');
-}
+        return $this->belongsToMany(ConsultationMedecineGenerale::class,'consultation_motif','motif_id','consultation_medecine_generale_id');
+    }
     public  function  hospitalisation(){
         return $this->belongsToMany(Hospitalisation::class,'hospitalisation_motif','motif_id','hospitalisation_id');
     }
-
+    public  function  ligneDeTemps(){
+        return $this->hasMany(LigneDeTemps::class,'motif_consultation_id','id');
+    }
     public function updateMotif(){
         if (!is_null($this)){
             $isAuthor = checkIfIsAuthorOrIsAuthorized("Motif",$this->id,"create");

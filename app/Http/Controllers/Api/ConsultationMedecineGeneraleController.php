@@ -13,6 +13,7 @@ use App\Models\Contributeurs;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePatient;
 use App\Models\Motif;
+use App\Models\ConsultationExamenValidation;
 use App\Models\ParametreCommun;
 use App\Models\Patient;
 use App\Models\RendezVous;
@@ -28,6 +29,9 @@ use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
 use Psy\Util\Json;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use App\Message;
+use App\Events\MessageCreated;
+use App\Models\VersionValidation;
 
 class ConsultationMedecineGeneraleController extends Controller
 {
@@ -39,7 +43,39 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
+     * @OA\get(
+     *      path="/consultation-medecine",
+     *      operationId="GetConsultationMedecineGeneraleList",
+     *      tags={"ConsultationMedecineGenerale"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Get list of consultation medecine generale",
+     *      description="Returns list of consultation medecine generale",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -66,7 +102,40 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+      * Display a listing of the resource.
+     * @OA\Post(
+     *      path="/consultation-medecine",
+     *      operationId="StoreConsultationMedecineGeneraleList",
+     *      tags={"ConsultationMedecineGenerale"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Store consultation medecine generale",
+     *      description="Returns consultation medecine generale",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
@@ -119,6 +188,35 @@ class ConsultationMedecineGeneraleController extends Controller
                 ]);
             }
         }
+        $examens = $request->get('examen_complementaire');
+        //$examens_validation = array();
+        foreach (json_decode($examens) as $examen) {
+            //dd($consultation->dossier->patient->souscripteur_id);
+            $validation =  ConsultationExamenValidation::create([
+                'examen_complementaire_id'=>$examen->id,
+                'medecin_id'=>Auth::id(),
+                'version'=>0,
+                //'souscripteur_id'=>$consultation->dossier->patient->souscripteur_id,
+                'souscripteur_id'=>Auth::id(),
+                'consultation_general_id' => $consultation->id,
+                'etablissement_id'=>$request->get('etablissement_id'),
+                'ligne_de_temps_id'=>$request->get('ligne_de_temps_id'),
+            ]);
+            //array_push($examens_validation,$validation);
+        }
+        //dd($consultation->dossier->patient->medecinReferent);
+        VersionValidation::create([
+            'montant_prestation' => 0,
+            'montant_medecin' => 0,
+            'montant_souscripteur' => 0,
+            'montant_total' => 0,
+            'plus_value' => 0,
+            'consultation_general_id' => $consultation->id,
+            'version' => 0
+        ]);
+
+        /*broadcast(new MessageCreated($message))
+                ->toOthers();*/
 
         $motifs = $request->get('motifs');
         $motifs = explode(",", $motifs);
@@ -229,7 +327,41 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Display the specified resource.
-     *
+      * Store a newly created resource in storage.
+      * Display a listing of the resource.
+     * @OA\get(
+     *      path="/consultation-medecine/{slug} ", 
+     *      operationId="ShowConsultationMedecineGeneraleList",
+     *      tags={"ConsultationMedecineGenerale"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Show consultation medecine generale",
+     *      description="Returns consultation medecine generale",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param $slug
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
@@ -278,7 +410,39 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+     * @OA\Put(
+     *      path="/consultation-medecine/{slug} ", 
+     *      operationId="UpdateConsultationMedecineGeneraleList",
+     *      tags={"ConsultationMedecineGenerale"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Update consultation medecine generale",
+     *      description="Returns consultation medecine generale",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param ConsutationMedecineRequest $request
      * @param $slug
      * @return \Illuminate\Http\Response
@@ -320,6 +484,36 @@ class ConsultationMedecineGeneraleController extends Controller
                     defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
 
                 }
+            }
+        }
+
+        $examens = json_decode($request->get('examen_complementaire'));
+        // $last_validation = ConsultationExamenValidation::where([
+        //     ["consultation_general_id", $consultation->id],
+        // ])->orderBy('version','DESC')
+        // ->first();
+        // $version =0;
+        // if($last_validation->etat_validation_medecin==null){
+        //     $version = $last_validation->version;
+        // }else{
+        //     $version = $last_validation->version+1;
+        // }
+        foreach ($examens as $examen) {
+           $item = ConsultationExamenValidation::where([
+                ["consultation_general_id", $consultation->id],
+                ["examen_complementaire_id", $examen->id]
+            ])->first();
+
+            if($item == null){
+                ConsultationExamenValidation::create([
+                    'examen_complementaire_id'=>$examen->id,
+                    'medecin_id'=>Auth::id(),
+                    'souscripteur_id'=>Auth::id(),
+                    //'version' => $version,
+                    'consultation_general_id' => $consultation->id,
+                    'etablissement_id'=>$request->get('etablissement_id'),
+                    'ligne_de_temps_id'=>$request->get('ligne_de_temps_id'),
+                ]);
             }
         }
 
@@ -414,7 +608,39 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     * @OA\Delete(
+     *      path="/consultation-medecine/{slug} ", 
+     *      operationId="DeleteConsultationMedecineGeneraleList",
+     *      tags={"ConsultationMedecineGenerale"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Delete consultation medecine generale",
+     *      description="Returns list of consultation medecine generale",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param $slug
      * @return \Illuminate\Http\Response
      * @throws \App\Exceptions\PersonnnalException

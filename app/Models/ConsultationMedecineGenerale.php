@@ -106,6 +106,9 @@ class ConsultationMedecineGenerale extends Model
         return $this->hasMany(Conclusion::class,'consultation_medecine_generale_id','id');
     }
 
+    public function versionValidation(){
+        return $this->hasOne(VersionValidation::class,'consultation_general_id','id');
+    }
     public function parametresCommun(){
         return $this->hasMany(ParametreCommun::class,'consultation_medecine_generale_id','id');
     }
@@ -114,7 +117,12 @@ class ConsultationMedecineGenerale extends Model
         return $this->belongsTo(User::class,'creator','id');
     }
 
-
+    public function ligneDeTemps(){
+        return $this->belongsTo(LigneDeTemps::class,'ligne_de_temps_id','id');
+    }
+    public function  validations(){
+        return $this->hasMany(ConsultationExamenValidation::class,'consultation_general_id','id');
+    }
     /**
      * The "booting" method of the model.
      *

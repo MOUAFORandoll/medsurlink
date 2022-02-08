@@ -18,6 +18,59 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AuthController extends AccessTokenController
 {
+    /**
+     * @OA\Post(
+     ** path="/login",
+     *   tags={"Login"},
+     *   summary="Login",
+     *   operationId="login",
+     *
+     *   @OA\Parameter(
+     *      name="email",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="string"
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="password",
+     *      in="query",
+     *      required=true,
+     *      @OA\Schema(
+     *          type="string"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *       description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=401,
+     *       description="Unauthenticated"
+     *   ),
+     *   @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     *   @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      )
+     *)
+     **/
+    /**
+     * login api
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function auth(ServerRequestInterface $request)
     {
 
@@ -44,9 +97,9 @@ class AuthController extends AccessTokenController
                 // return "ici";
                 return response()->json(['message'=>$tokenInfo->get('message')],401);
             }
-            
 
-        
+
+
             $time = TimeActivite::create([
                 'date'=>Carbon::now()->format('Y-m-d'),
                 'start'=>Carbon::now()->format('H:i')
@@ -54,6 +107,7 @@ class AuthController extends AccessTokenController
             $user['time_slug'] = $time->slug;
             $user['isEtablissement'] = isComptable();
             $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
+            // dd($tokenInfo);
             $tokenInfo->put('user', $user);
             $user_id = $user->id;
 
@@ -66,7 +120,7 @@ class AuthController extends AccessTokenController
         }
         else
         return response()->json(['message'=>"The user credentials were incorrect."],401);
-        
+
     }
     public function authAfterRedirect(ServerRequestInterface $request)
     {
@@ -84,7 +138,7 @@ class AuthController extends AccessTokenController
         // Then we just add the user to the response before returning it.
         $username = $request->getParsedBody()['username'];
         $password = $request->getParsedBody()['password'];
-       
+
         //$user = $this->getUser($username,$password);
                 //Verification de l'existence de l'adresse email
                 $validator = Validator::make(compact('username'),['username'=>['exists:users,email']]);
@@ -102,10 +156,10 @@ class AuthController extends AccessTokenController
                     }
                     return [];
                 }
-        
+
                 $users = User::where('email', $username)->get();
                 $authUser = new User();
-                
+
                 foreach ($users as $user){
                     if($password == $user->password){
                         $authUser = $user;
@@ -136,7 +190,7 @@ class AuthController extends AccessTokenController
         //Verification de l'existence de l'adresse email
         $validator = Validator::make(compact('username'),['username'=>['exists:users,email']]);
         if($validator->fails()){
-            
+
             //Verification de l'existence du numero de dossier
             if (strlen($username)<=9){
                 $numero_dossier = $username;
@@ -144,7 +198,7 @@ class AuthController extends AccessTokenController
                 if (!is_null($dossier)){
                     $user = User::whereId($dossier->patient_id)->first();
                     $user['dossier'] = $dossier->slug;
-                    
+
                     return $user;
                 }
                 return null;
@@ -160,7 +214,7 @@ class AuthController extends AccessTokenController
         // return $authUser;
         foreach ($users as $user){
             if(Hash::check($password,$user->password)){
-                
+
                 $authUser = $user;
                 $dossier = DB::table('dossier_medicals')->where('patient_id','=',$authUser->id)->first();
                 if(!is_null($dossier)){
