@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Models\Patient;
 use App\Models\ReponseSecrete;
 use App\Models\Souscripteur;
+use App\Models\Affiliation;
 use App\Models\TimeActivite;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -291,7 +292,8 @@ class AffiliationSouscripteurController extends Controller
                     'user_id' => $user->id,
                     'sexe'=>$request->sexe,
                     'age'=>  Carbon::parse($request->date_de_naissance)->age,
-                    'date_de_naissance'=>$request->date_de_naissance
+                    'date_de_naissance'=>$request->date_de_naissance,
+                    'souscripteur_id' => $souscripteur->user_id,
                 ]);
 
                 // Enregistrement des informations de question secrete et reponse secrete
@@ -307,16 +309,38 @@ class AffiliationSouscripteurController extends Controller
                 $suivi = ajouterPatientAuSuivi($dossier->id,1);
 
                 // Ajout du souscripteur à la liste des souscripteurs du patient
-                $patient->ajouterSouscripteur($souscripteur_id);
+                //$patient->ajouterSouscripteur($souscripteur_id);
 
                 // Réduction du nombre de commande restante
-                $commande = reduireCommandeRestante($commande->id);
 
                 // Génération du contrat
                 $patientMedicasure = transformerEnAffilieMedicasure($patient);
                 $souscripteurMedicasure = transformerEnSouscripteurMedicasure($souscripteur);
                 $detailContrat = transformerCommande($commande,$request,$souscripteur->user->pays);
-                genererContrat($detailContrat+$souscripteurMedicasure+$patientMedicasure);
+
+
+                $affiliation = Affiliation::create([
+                    "patient_id"=>$patient->user_id,
+                    "souscripteur_id"=>$souscripteur->user_id,
+                    "package_id"=>$commande->type_contrat,
+                    //"paiement_id"=>$commande->id,
+                    "date_signature"=>Carbon::now(),
+                    "status_contrat"=>"PAYE",
+                    "status_paiement"=>"PAYE",
+                    "renouvelle"=>0,
+                    "expire"=>0,
+                    "code_contrat"=>$dossier->numero_dossier,
+                    "niveau_urgence"=>$request->urgence,
+                    "nombre_envois_email"=>0,
+                    "expire_email"=>0,
+                    "nom"=>'Annuelle',
+                    "date_debut"=>Carbon::now(),
+                    "date_fin"=>Carbon::now()->addYears(1)->format('Y-m-d')
+                ]);
+                $commande = reduireCommandeRestante($commande->id);
+
+                defineAsAuthor("Affiliation",$affiliation->id,'create',$request->patient_id);
+                //genererContrat($detailContrat+$souscripteurMedicasure+$patientMedicasure);
 
                 // Envoi sms et mail de creation de compte au patient
                 sendUserInformationViaSms($user,$passwordPatient);

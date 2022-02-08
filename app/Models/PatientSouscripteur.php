@@ -16,6 +16,7 @@ class PatientSouscripteur extends Model
         "financable_type",
         "financable_id",
         "patient_id",
+        "lien_de_parente",
         "slug",
     ];
 
@@ -37,5 +38,9 @@ class PatientSouscripteur extends Model
 
     public function patients(){
         return $this->belongsTo(Patient::class,'patient_id','user_id');
+    }
+
+    public function lien(){
+        return $this->belongsTo(Dictionnaire::class,'lien_de_parente','id');
     }
 }
