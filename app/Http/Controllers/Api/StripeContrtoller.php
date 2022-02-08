@@ -259,7 +259,7 @@ class StripeContrtoller extends Controller
            $affiliation->date_paiement = Carbon::now()->toDateTimeString();
            $affiliation->save();
            if($token=="checkout"){
-            $updatePath = 'checkout';
+            $updatePath = 'success';
            }else{
             $updatePath = 'contrat-prepaye/add?status=success&token='.$token;
            }
