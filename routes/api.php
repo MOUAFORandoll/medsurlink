@@ -58,7 +58,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Assistante']]
     Route::resource('praticien','Api\PraticienController')->except(['create','edit']);
     Route::resource('medecin-controle','Api\MedecinControleController')->except(['create','edit']);
 //    Route::resource('souscripteur','Api\SouscripteurController')->except(['create','edit']);
-    Route::resource('affiliation','Api\AffiliationController')->except(['create','edit','show']);
+
     Route::resource('dossier','Api\DossierMedicalController')->except(['create','edit']);
     Route::resource('gestionnaire','Api\GestionnaireController')->except(['create','edit']);
 
@@ -210,6 +210,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien|Assistante']], function () {
 //    Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
+    Route::resource('affiliation','Api\AffiliationController')->except(['create','edit','show']);
+    Route::post('affiliation-status','Api\AffiliationController@updateStatus');
     Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
     Route::post('/contrat-prepaye-store-patient-unpaid','Api\AffiliationSouscripteurController@storePatientBeforePayment');
     Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
@@ -370,7 +372,8 @@ Route::prefix('paiement')->group(function () {
     Route::post('/stripe-paiement-medicasure','Api\StripeContrtoller@paiementFromMedicasure');
     Route::post('/stripe-renouvellement','Api\StripeContrtoller@renouvellementPaiement');
     Route::get('/stripe-paiement-success/{slug}/{token}','Api\StripeContrtoller@NotifierPaiement');
-    Route::get('/stripe-paiement-success-medicasure/{slug}','Api\StripeContrtoller@notifAndRedirectToAccount');
+    Route::get('/stripe-renew-success/{slug}/{token}','Api\StripeContrtoller@notifRenewAndRedirectToAccount');
+    Route::get('/stripe-paiement-success-return/{slug}','Api\StripeContrtoller@notifAndRedirectToAccount');
     Route::get('/stripe-paiement-cancel', function () {
         return response()->json(
             [

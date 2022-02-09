@@ -23,9 +23,10 @@ class AffiliationController extends Controller
      */
     public function index()
     {
-        $affiliations = Affiliation::with(['patient'])->get();
+        $affiliations = Affiliation::with(['patient','patient.dossier','package','patient.financeurs.lien'])->get();
         foreach ($affiliations as $affiliation){
             if (!is_null($affiliation->patient)){
+                //dd($affiliation->patient->user);
                 $affiliation['user'] = $affiliation->patient->user;
                 $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
             }
@@ -74,7 +75,7 @@ class AffiliationController extends Controller
     public function show($slug)
     {
         $this->validatedSlug($slug,$this->table);
-        $affiliation = Affiliation::with(['patient'])->whereSlug($slug)->first();
+        $affiliation = Affiliation::with(['patient','patient.dossier','package','patient.financeurs.lien'])->whereSlug($slug)->first();
         if (!is_null($affiliation->patient)) {
             $affiliation['user'] = $affiliation->patient->user;
             $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
@@ -150,7 +151,11 @@ class AffiliationController extends Controller
         $affiliation->date_fin = $date_fin;
         $affiliation->save();
     }
-
+    public function updateStatus(Request $request){
+        $affiliation =  Affiliation::where('id','=',$request->id)->first();
+        $affiliation->status_contrat = $request->status;
+        $affiliation->save();
+    }
     /**
      * Permet de determiner si un utilisateur possede deja une affiliation
      * @param Request $request

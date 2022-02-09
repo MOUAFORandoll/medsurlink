@@ -18,6 +18,7 @@ use App\Models\CommandePackage;
 use App\Models\PaymentOffre;
 use App\Models\Souscripteur;
 use App\Models\AffiliationSouscripteur;
+use App\Models\Affiliation;
 use App\User;
 class StripeContrtoller extends Controller
 {
@@ -53,7 +54,7 @@ class StripeContrtoller extends Controller
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => url('api/paiement/stripe-paiement-success/'.$commande->id),
+            'success_url' => url('api/paiement/stripe-paiement-success-return/'.$commande->id),
             'cancel_url' => url($request->get('cancel_url')),
         ]);
 
@@ -77,20 +78,12 @@ class StripeContrtoller extends Controller
         ]);
         PaymentOffre::create([
             "date_payment" => Carbon::now()->toDateTimeString(),
-            "montant" => $request->get('quantite') * $request->get('amount'),
+            "montant" =>  $request->get('amount'),
             'status' => 'EN ATTENTE',
             'commande_id' =>$commande->id,
             'souscripteur_id' => $request->get('souscripteur_id'),
         ]);
-        AffiliationSouscripteur::create([
-            'user_id'=>$request->get('souscripteur_id'),
-            'type_contrat'=>$commande->offres_packages_id,
-            'nombre_paye'=>$request->get('quantite'),
-            'nombre_restant'=>$request->get('quantite'),
-            'montant'=>$request->get('amount'),
-            'cim_id'=>$commande->id,
-            'date_paiement'=>null,
-           ]);
+
         $session =   Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
@@ -99,12 +92,12 @@ class StripeContrtoller extends Controller
                     'product_data' => [
                         'name' => 'Intermediation médicale',
                     ],
-                    'unit_amount' => $request->get('amount'),
+                    'unit_amount' => (int)$request->get('amount')*100,
                 ],
-                'quantity' =>$request->get('quantite'),
+                'quantity' =>1,
             ]],
             'mode' => 'payment',
-            'success_url' => url('api/paiement/stripe-paiement-success/'.$commande->id),
+            'success_url' => url('api/paiement/stripe-paiement-success-return/'.$commande->id),
             'cancel_url' => url('api/paiement/stripe-paiement-cancel'),
         ]);
         return response()->json([ 'id' => $session->id]);
@@ -171,26 +164,51 @@ class StripeContrtoller extends Controller
         ]);
         PaymentOffre::create([
             "date_payment" => Carbon::now()->toDateTimeString(),
-            "montant" => $request->get('quantite') * $request->get('amount'),
+            "montant" =>  $request->get('amount'),
             'status' => 'EN ATTENTE',
             'commande_id' =>$commande->id,
             'souscripteur_id' => $souscripteur->user_id,
         ]);
-        $affiliation = AffiliationSouscripteur::where("cim_id",$commande->id)->first();
-        if($affiliation == null){
-            AffiliationSouscripteur::create([
-                'user_id'=>$souscripteur->user_id,
-                'type_contrat'=>$commande->offres_packages_id,
-                'nombre_paye'=>$request->get('quantite'),
-                'nombre_restant'=>$request->get('quantite'),
-                'montant'=>$request->get('amount'),
-                'cim_id'=>$commande->id,
-                'date_paiement'=>null,
-               ]);
-        }else{
-            $affiliation->nombre_paye = $request->get('quantite');
-            $affiliation->save();
-        }
+
+        $session =   Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'EUR',
+                    'product_data' => [
+                        'name' => 'Intermediation médicale',
+                    ],
+                    'unit_amount' => (int)$request->get('amount')*100,
+                ],
+                'quantity' =>1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => url('api/paiement/stripe-paiement-success/'.$commande->id.'/'.$tokenInfo),
+            'cancel_url' => url('api/paiement/stripe-paiement-cancel'),
+        ]);
+
+
+        return response()->json([ 'id' => $session->id,'token'=>$tokenInfo]);
+    }
+    public function renouvellementPaiement(Request $request){
+
+        //Stripe::setApiKey('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');
+        Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
+
+        $commande =  CommandePackage::create([
+            "date_commande" => Carbon::now()->toDateTimeString(),
+            'quantite' =>1,
+            'offres_packages_id' =>$request->get('package_id'),
+            'souscripteur_id' => $request->get('souscripteur_id'),
+        ]);
+        PaymentOffre::create([
+            "date_payment" => Carbon::now()->toDateTimeString(),
+            "montant" =>  $request->get('amount'),
+            'status' => 'RENOUVELLEMENT',
+            'commande_id' => $commande->id,
+            'souscripteur_id' => $request->get('souscripteur_id'),
+        ]);
+        //dd( $prixTotal);
         $session =   Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
@@ -204,43 +222,11 @@ class StripeContrtoller extends Controller
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => url('api/paiement/stripe-paiement-success/'.$commande->id.'/'.$tokenInfo),
-            'cancel_url' => url('api/paiement/stripe-paiement-cancel'),
-        ]);
-
-
-        return response()->json([ 'id' => $session->id,'token'=>$tokenInfo]);
-    }
-    /*public function renouvellementPaiement(Request $request){
-        $swap = (new Builder())
-            ->add('fixer', ['access_key' => '6725eecbfab360915787d6dabfc326c9'])
-            ->add('currency_layer', ['access_key' => '6725eecbfab360915787d6dabfc326c9', 'enterprise' => false])
-            ->build();
-        $euroFranc = $swap->latest('EUR/XAF')->getValue();
-
-        $identifiant = explode(',',$request->get('identifiant'));
-        //Stripe::setApiKey('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');
-        Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
-
-        //dd( $prixTotal);
-        $session =   Session::create([
-            'payment_method_types' => ['card'],
-            'line_items' => [[
-                'price_data' => [
-                    'currency' => 'EUR',
-                    'product_data' => [
-                        'name' => 'Intermediation médicale',
-                    ],
-                    'unit_amount' => $prixTotal,
-                ],
-                'quantity' => 1,
-            ]],
-            'mode' => 'payment',
-            'success_url' => url('api/v1.0.0/stripe-paiement-success/'.$request->get('identifiant')),
+            'success_url' => url('api/paiement/stripe-renew-success/'.$commande->id.'/'.$request->get('patient_id')),
             'cancel_url' => url('/affiliation/uba-paiement/error/CANCELED'),
         ]);
         return response()->json([ 'id' => $session->id]);
-    }*/
+    }
     public function NotifierPaiement(Request $request,$slug,$token){
 
             NotificationPaiement::create([
@@ -254,17 +240,29 @@ class StripeContrtoller extends Controller
            $payment = PaymentOffre::where("commande_id",$slug)->first();
            $payment->status = "SUCCESS";
            $payment->save();
-           $affiliation = AffiliationSouscripteur::where("cim_id",$slug)->first();
-           //dd($affiliation);
-           $affiliation->date_paiement = Carbon::now()->toDateTimeString();
-           $affiliation->save();
+           //dd($payment);
+           $affiliation = AffiliationSouscripteur::where([["type_contrat",$payment->commande->offres_packages_id],["user_id",$payment->souscripteur_id]])->first();
+           if($affiliation == null){
+            $affiliation = AffiliationSouscripteur::create([
+                   'user_id'=>$payment->souscripteur_id,
+                   'type_contrat'=>$payment->commande->offres_packages_id,
+                   'nombre_paye'=>$payment->commande->quantite,
+                   'nombre_restant'=>$payment->commande->quantite,
+                   'montant'=>$payment->montant,
+                   'cim_id'=>$payment->commande->id,
+                   'date_paiement'=>null,
+               ]);
+           }else{
+               $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
+               $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
+               $affiliation->save();
+           }
+
            if($token=="checkout"){
             $updatePath = 'success';
            }else{
             $updatePath = 'contrat-prepaye/add?status=success&token='.$token;
            }
-//           dd($updatePath);
-
 
            $env = strtolower(config('app.env'));
            if ($env === 'local')
@@ -289,11 +287,24 @@ class StripeContrtoller extends Controller
        $payment = PaymentOffre::where("commande_id",$slug)->first();
        $payment->status = "SUCCESS";
        $payment->save();
-       $affiliation = AffiliationSouscripteur::where("cim_id",$slug)->first();
-       $affiliation->date_paiement = Carbon::now()->toDateTimeString();
-       $affiliation->save();
-       //$souscripteur = Souscripteur::with('user')->where('user_id','=',$affiliation->user_id)->first();
 
+       $affiliation = AffiliationSouscripteur::where([["type_contrat",$payment->commande->offres_packages_id],["user_id",$payment->souscripteur_id]])->first();
+       if($affiliation == null){
+        $affiliation = AffiliationSouscripteur::create([
+               'user_id'=>$payment->souscripteur_id,
+               'type_contrat'=>$payment->commande->offres_packages_id,
+               'nombre_paye'=>$payment->commande->quantite,
+               'nombre_restant'=>$payment->commande->quantite,
+               'montant'=>$payment->montant,
+               'cim_id'=>$payment->commande->id,
+               'date_paiement'=>null,
+           ]);
+       }else{
+           $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
+           $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
+           $affiliation->save();
+       }
+       //dd($affiliation);
        $env = strtolower(config('app.env'));
        if ($env === 'local')
         //return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
@@ -302,6 +313,71 @@ class StripeContrtoller extends Controller
             return  redirect('https://www.staging.medsurlink.com/user-management/patients/paiement-status/'.$slug);
         else
             return  redirect('https://www.medsurlink.com/user-management/patients/paiement-status/'.$slug);
+       //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+    }
+    public function notifRenewAndRedirectToAccount(Request $request,$slug,$patient){
+
+        NotificationPaiement::create([
+            "type"=>'Stripe',
+            "code_contrat"=>$slug,
+            "pay_token"=>'Renouvellement',
+            "statut"=>'SUCCESS',
+            "reponse"=>Json::encode($request->all()),
+        ]);
+
+       $payment = PaymentOffre::where("commande_id",$slug)->first();
+       $payment->status = "SUCCESS";
+       $payment->save();
+
+       $affiliation = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
+
+        $affiliation->renouvelle = 1;
+        $affiliation->date_debut = Carbon::parse($affiliation->date_fin);
+        $affiliation->date_fin = Carbon::parse($affiliation->date_fin)->addYears(1)->format('Y-m-d');
+        $affiliation->save();
+
+       //dd($affiliation);
+       $env = strtolower(config('app.env'));
+       if ($env === 'local')
+        //return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
+         return redirect('http://localhost:8081/affiliation/'.$affiliation->slug.'?renouvellement=success');
+        else if ($env === 'staging')
+            return  redirect('https://www.staging.medsurlink.com/affiliation/'.$affiliation->slug.'?renouvellement=success');
+        else
+            return  redirect('https://www.medsurlink.com/affiliation/'.$affiliation->slug.'?renouvellement=success');
+       //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+    }
+
+    public function notifExtraAndRedirectToAccount(Request $request,$slug,$patient){
+
+        NotificationPaiement::create([
+            "type"=>'Stripe',
+            "code_contrat"=>$slug,
+            "pay_token"=>'Renouvellement',
+            "statut"=>'SUCCESS',
+            "reponse"=>Json::encode($request->all()),
+        ]);
+
+       $payment = PaymentOffre::where("commande_id",$slug)->first();
+       $payment->status = "SUCCESS";
+       $payment->save();
+
+       $affiliation = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
+
+        $affiliation->renouvelle = 1;
+        $affiliation->date_debut = Carbon::parse($affiliation->date_fin);
+        $affiliation->date_fin = Carbon::parse($affiliation->date_fin)->addYears(1)->format('Y-m-d');
+        $affiliation->save();
+
+       //dd($affiliation);
+       $env = strtolower(config('app.env'));
+       if ($env === 'local')
+        //return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
+         return redirect('http://localhost:8081/affiliation/'.$affiliation->slug.'?renouvellement=success');
+        else if ($env === 'staging')
+            return  redirect('https://www.staging.medsurlink.com/affiliation/'.$affiliation->slug.'?renouvellement=success');
+        else
+            return  redirect('https://www.medsurlink.com/affiliation/'.$affiliation->slug.'?renouvellement=success');
        //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
     }
 }
