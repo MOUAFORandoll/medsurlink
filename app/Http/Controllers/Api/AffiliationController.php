@@ -161,6 +161,18 @@ class AffiliationController extends Controller
      * @param Request $request
      * @throws \App\Exceptions\PersonnnalException
      */
+    public function affiliateBySouscripteur($souscripteur)
+    {
+        $affiliations = Affiliation::with(['patient','patient.dossier','package','patient.financeurs.lien'])->where("souscripteur_id",$souscripteur)->get();
+        foreach ($affiliations as $affiliation){
+            if (!is_null($affiliation->patient)){
+                //dd($affiliation->patient->user);
+                $affiliation['user'] = $affiliation->patient->user;
+                $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
+            }
+        }
+        return response()->json(['affiliations'=>$affiliations]);
+    }
     public function Affiliated(Request $request){
         $date_debut = Carbon::parse($request->date_debut)->year;
 
