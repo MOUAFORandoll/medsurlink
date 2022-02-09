@@ -138,11 +138,11 @@ class PatientMedecinController extends Controller
             $medecin = User::whereId($patientMedecin->medecin_control_id)->first();
             $message = "<@".$medecin->slack."> a été retiré au patient ".$patient->user->nom. " " .$patient->user->prenom." comme médecin referent";
                         // Send notification to affilié channel
-            // $patientMedecin->setSlackChannel('affilie')
-            // ->notify(new MedecinToPatient($message,null));
+            $patientMedecin->setSlackChannel('affilie')
+            ->notify(new MedecinToPatient($message,null));
             // Send notification to appel channel
-            // $patientMedecin->setSlackChannel('appel')
-            // ->notify(new MedecinToPatient($message,null));
+            $patientMedecin->setSlackChannel('appel')
+            ->notify(new MedecinToPatient($message,null));
             return response()->json(['patientMedecin'=>$patientMedecin]);
         }else{
             return response()->json(['error'=>"Erreur de suppression"]);
