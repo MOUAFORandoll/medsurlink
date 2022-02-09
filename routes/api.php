@@ -1,4 +1,6 @@
 <?php
+
+use App\Models\Dictionnaire;
 use Psy\Util\Json;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,7 +37,14 @@ Route::get('question','Api\QuestionController@index');
 //    Route::put('consultation-kinesitherapie/{slug}/reactiver','Api\KinesitherapieController@reactiver');
 //Route::resource('partenaire','Api\PartenaireController');
 Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
-
+Route::get('/liens', function () {
+    $liens = Dictionnaire::where("reference","lien_parente")->get();
+    return response()->json(
+        [
+            'liens' => $liens
+        ]
+    );
+});
 Route::middleware(['auth:api'])->group(function () {
     Route::get('/countries', function () {
         $countries = countries();
@@ -211,6 +220,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
 Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|Souscripteur|Praticien|Assistante']], function () {
 //    Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
     Route::resource('affiliation','Api\AffiliationController')->except(['create','edit','show']);
+    Route::get('affiliation/souscripteur/{id}','Api\AffiliationController@affiliateBySouscripteur');
     Route::post('affiliation-status','Api\AffiliationController@updateStatus');
     Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
     Route::post('/contrat-prepaye-store-patient-unpaid','Api\AffiliationSouscripteurController@storePatientBeforePayment');

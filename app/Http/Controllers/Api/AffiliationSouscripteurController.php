@@ -6,6 +6,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Models\Patient;
 use App\Models\ReponseSecrete;
 use App\Models\Souscripteur;
+use App\Models\PatientSouscripteur;
 use App\Models\Affiliation;
 use App\Models\TimeActivite;
 use Carbon\Carbon;
@@ -309,7 +310,12 @@ class AffiliationSouscripteurController extends Controller
                 $suivi = ajouterPatientAuSuivi($dossier->id,1);
 
                 // Ajout du souscripteur à la liste des souscripteurs du patient
-                //$patient->ajouterSouscripteur($souscripteur_id);
+                PatientSouscripteur::create([
+                    'financable_type'=>'Souscripteur',
+                    'financable_id'=>$souscripteur_id,
+                    'patient_id'=>$patient->user_id,
+                    'lien_de_parente' => $request->lien_parente
+                ]);
 
                 // Réduction du nombre de commande restante
 
@@ -325,7 +331,7 @@ class AffiliationSouscripteurController extends Controller
                     "package_id"=>$commande->type_contrat,
                     //"paiement_id"=>$commande->id,
                     "date_signature"=>Carbon::now(),
-                    "status_contrat"=>"PAYE",
+                    "status_contrat"=>"Généré",
                     "status_paiement"=>"PAYE",
                     "renouvelle"=>0,
                     "expire"=>0,
@@ -398,7 +404,7 @@ class AffiliationSouscripteurController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function affiliationRestante($id){
-        $commande =  \App\Models\AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->get();
+        $commande =  \App\Models\AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->where('nombre_restant','>',0)->get();
         return response()->json(['commande'=>$commande]);
     }
 

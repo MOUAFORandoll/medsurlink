@@ -21,7 +21,7 @@ class OffreController extends Controller
     {
         $offres = Offre::with(["packages","items","items.packages"])->get();
 
-
+        //dd($offres);
         return response()->json(['offres'=>$offres]);
     }
 
