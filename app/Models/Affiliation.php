@@ -28,6 +28,7 @@ class Affiliation extends Model
         "expire",
         "code_contrat",
         "niveau_urgence",
+        "plainte",
         "nombre_envois_email",
         "expire_email",
         "nom",

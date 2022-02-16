@@ -36,15 +36,18 @@ Route::get('question','Api\QuestionController@index');
 //Route::resource('partenaire','Api\PartenaireController');
 Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
 
+
 Route::middleware(['auth:api'])->group(function () {
+
     Route::get('/countries', function () {
-        $countries = countries();
+        $countries = collect(countries());
         return response()->json(
             [
-                'countries' => $countries
+                'countries' => $countries->sortBy('name')
             ]
         );
     });
+
     Route::post('/logout','Api\UserController@logout');
 
 });
