@@ -2,6 +2,7 @@
 use App\Models\ContratIntermediationMedicale;
 use App\Models\CompteRenduOperatoire;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,13 @@ Route::get('/doc', function () {
     $compteRendu = CompteRenduOperatoire::whereId(2)->first();
     $data = compact('compteRendu');
     return view('rapport.compte_rendu', $data);
+});
+
+Route::get('impression/facture-offre', function () {
+    $title = "Impression de la facture de l'offre ___";
+    return view('impression_offre');
+    $pdf=PDF::loadView('impression_offre');
+    return $pdf->stream($title.".pdf");
 });
 /*
 Route::get('{all}', function () {

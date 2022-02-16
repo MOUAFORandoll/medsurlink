@@ -46,14 +46,16 @@ Route::get('/liens', function () {
     );
 });
 Route::middleware(['auth:api'])->group(function () {
+
     Route::get('/countries', function () {
-        $countries = countries();
+        $countries = collect(countries());
         return response()->json(
             [
-                'countries' => $countries
+                'countries' => $countries->sortBy('name')
             ]
         );
     });
+
     Route::post('/logout','Api\UserController@logout');
 
 });

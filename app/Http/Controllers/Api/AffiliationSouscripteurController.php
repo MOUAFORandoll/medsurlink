@@ -267,14 +267,13 @@ class AffiliationSouscripteurController extends Controller
         // Recupération des informations relative à la commande
         $commande =  \App\Models\AffiliationSouscripteur::where("id",$commande_id)->first();
 
-       $validator = Validator::make($request->all(),[
-           'question_id'=>'required|integer|exists:questions,id',
-           'reponse'=>'required|string',
-        ]);
+        /* $validator = Validator::make($request->all(),[
+            'email'=>'required|email|unique:users'
+            ]);
 
-       if ($validator->fails()){
-           return  response()->json($validator->errors()->all(),400);
-       }
+        if ($validator->fails()){
+            return  response()->json($validator->errors()->all(),400);
+        } */
 
 
         // Récupération des informations relatifs au souscripteur
@@ -337,6 +336,8 @@ class AffiliationSouscripteurController extends Controller
                     "expire"=>0,
                     "code_contrat"=>$dossier->numero_dossier,
                     "niveau_urgence"=>$request->urgence,
+                    "plainte" => $request->plainte,
+                    'personne_contact' => $request->personne_contact,
                     "nombre_envois_email"=>0,
                     "expire_email"=>0,
                     "nom"=>'Annuelle',
