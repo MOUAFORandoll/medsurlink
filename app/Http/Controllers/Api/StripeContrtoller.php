@@ -331,8 +331,8 @@ class StripeContrtoller extends Controller
 
        $affiliation = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
 
-        $affiliation->renouvelle = 1;
-        $affiliation->date_debut = Carbon::parse($affiliation->date_fin);
+        $affiliation->renouvelle += 1;
+        $payment->status_contrat = "Renouvelé";
         $affiliation->date_fin = Carbon::parse($affiliation->date_fin)->addYears(1)->format('Y-m-d');
         $affiliation->save();
 
@@ -364,8 +364,7 @@ class StripeContrtoller extends Controller
 
        $affiliation = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
 
-        $affiliation->renouvelle = 1;
-        $affiliation->date_debut = Carbon::parse($affiliation->date_fin);
+        $affiliation->renouvelle += 1;
         $affiliation->date_fin = Carbon::parse($affiliation->date_fin)->addYears(1)->format('Y-m-d');
         $affiliation->save();
 
