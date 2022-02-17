@@ -199,8 +199,8 @@ class DossierMedicalController extends Controller
     public function show($slug)
     {
         $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        // if(!is_null($validation))
+        //     return $validation;
 
                  $dossier = DossierMedical::with([
                 'allergies'=> function ($query) {
@@ -229,7 +229,7 @@ class DossierMedicalController extends Controller
                 'cardiologies',
                      'consultationsManuscrites.praticien',
                      'consultationsManuscrites.etablissement',
-            ])->whereSlug($slug)->first();
+            ])->whereSlug($slug,$this->table)->first();
 
             if (!is_null($dossier)) {
                 $dossier->updateDossier();
