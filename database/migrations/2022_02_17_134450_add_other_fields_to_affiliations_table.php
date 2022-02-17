@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPlainteAndContactToAffiliationsTable extends Migration
+class AddOtherFieldsToAffiliationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,9 @@ class AddPlainteAndContactToAffiliationsTable extends Migration
     {
         Schema::table('affiliations', function (Blueprint $table) {
             $table->longText('plainte')->nullable();
-            $table->string('personne_contact')->nullable();
+            $table->string('contact_firstName')->nullable();
+            $table->string('contact_name')->nullable();
+            $table->string('contact_phone')->nullable();
         });
     }
 
@@ -27,7 +29,7 @@ class AddPlainteAndContactToAffiliationsTable extends Migration
     public function down()
     {
         Schema::table('affiliations', function (Blueprint $table) {
-            $table->dropColumn(['plainte', 'personne_contact']);
+            $table->dropColumn(['plainte', 'contact_firstName', 'contact_name', 'contact_phone']);
         });
     }
 }
