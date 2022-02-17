@@ -611,7 +611,7 @@ class CardiologieController extends Controller
         $filtered = array_diff($ancienContributeurs,$contributeurs);
         foreach ($filtered as $filter){
             $contributeurList = Contributeurs::where('operationable_type','Cardiologie')
-                ->where('operationable_id',$cardiologie->id)->where('contributable_id',$filter)->get();
+                ->where('operationable_id',$cardiologie->id)->where('contributable_id',$filter)->latest()->get();
             foreach ($contributeurList as $item){
                 $item->delete();
             }

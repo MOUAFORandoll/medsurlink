@@ -28,7 +28,7 @@ class ConsultationFichierController extends Controller
      */
     public function index()
     {
-        $consultations = ConsultationFichier::with(['dossier','etablissement','files'])->get();
+        $consultations = ConsultationFichier::with(['dossier','etablissement','files'])->latest()->get();
 
         return response()->json(['consultations'=>$consultations]);
     }

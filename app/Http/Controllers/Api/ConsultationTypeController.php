@@ -20,7 +20,7 @@ class ConsultationTypeController extends Controller
      */
     public function index()
     {
-        $specialites = ConsultationType::with(['profession'])->get();
+        $specialites = ConsultationType::with(['profession'])->latest()->get();
         return response()->json(['consultationTypes'=>$specialites]);
     }
 

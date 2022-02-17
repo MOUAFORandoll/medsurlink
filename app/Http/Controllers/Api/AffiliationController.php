@@ -23,7 +23,7 @@ class AffiliationController extends Controller
      */
     public function index()
     {
-        $affiliations = Affiliation::with(['patient','patient.dossier','package','patient.financeurs.lien'])->get();
+        $affiliations = Affiliation::with(['patient','patient.dossier','package','patient.financeurs.lien'])->latest()->get();
         foreach ($affiliations as $affiliation){
             if (!is_null($affiliation->patient)){
                 //dd($affiliation->patient->user);
@@ -163,7 +163,7 @@ class AffiliationController extends Controller
      */
     public function affiliateBySouscripteur($souscripteur)
     {
-        $affiliations = Affiliation::with(['patient','patient.dossier','package','patient.financeurs.lien'])->where("souscripteur_id",$souscripteur)->get();
+        $affiliations = Affiliation::with(['patient','patient.dossier','package','patient.financeurs.lien'])->where("souscripteur_id",$souscripteur)->latest()->get();
         foreach ($affiliations as $affiliation){
             if (!is_null($affiliation->patient)){
                 //dd($affiliation->patient->user);
@@ -177,7 +177,7 @@ class AffiliationController extends Controller
         $date_debut = Carbon::parse($request->date_debut)->year;
 
         //Ici on determine si le patient a deja une affiliation pour cette année
-        $affiliation =  Affiliation::where('patient_id','=',$request->patient_id)->where('nom','=','Annuelle')->WhereYear('date_debut',$date_debut)->get();
+        $affiliation =  Affiliation::where('patient_id','=',$request->patient_id)->where('nom','=','Annuelle')->WhereYear('date_debut',$date_debut)->latest()->get();
 
         if (count($affiliation)>0) {
             $message = "Le patient dispose déjà d'une affiliation pour cette année";
@@ -200,7 +200,7 @@ class AffiliationController extends Controller
             }
 
             if ($date_fin == $date_debut){
-                $affiliation =  Affiliation::where('patient_id','=',$request->patient_id)->where('nom','=','One shot')->whereDate('date_debut',$date_debut)->whereDate('date_fin',$date_fin)->get();
+                $affiliation =  Affiliation::where('patient_id','=',$request->patient_id)->where('nom','=','One shot')->whereDate('date_debut',$date_debut)->whereDate('date_fin',$date_fin)->latest()->get();
                 if (count($affiliation)>0){
                     $message = "Le patient dispose déjà d'une affiliation pour ce jour";
                     $this->revealError('dejaAffilie',$message);

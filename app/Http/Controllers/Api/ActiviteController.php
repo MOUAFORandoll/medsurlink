@@ -26,7 +26,7 @@ class ActiviteController extends Controller
      */
     public function index()
     {
-        $activites = Activite::with('createur','groupe')->get();
+        $activites = Activite::with('createur','groupe')->latest()->get();
         return  response()->json(['activites'=>$activites]);
     }
 
@@ -80,7 +80,7 @@ class ActiviteController extends Controller
             'groupe',
             'missions.createur',
             'missions.dossier.patient.user'
-        ])->where('groupe_id',$groupe->id)->get();
+        ])->where('groupe_id',$groupe->id)->latest()->latest()->get();
         return response()->json(['activites'=>$activites]);
     }
 
@@ -166,18 +166,18 @@ class ActiviteController extends Controller
     }
 
     public function getMissionAma($id){
-        $mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->get();
+        $mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->latest()->get();
         return response()->json(['activites'=>$mission]);
     }
     public function getMissionAmaByPatient($id){
-        $mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->where('patient_id',$id)->get();
-        $medecin_referent = PatientMedecinControle::with(['medecinControles','patients','createur'])->where('patient_id',$id)->get();
-        $medecin_referent = PatientMedecinControle::with(['medecinControles','patients','createur'])->where('patient_id',$id)->get();
+        $mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->where('patient_id',$id)->latest()->get();
+        $medecin_referent = PatientMedecinControle::with(['medecinControles','patients','createur'])->where('patient_id',$id)->latest()->get();
+        $medecin_referent = PatientMedecinControle::with(['medecinControles','patients','createur'])->where('patient_id',$id)->latest()->get();
         return response()->json(['activites'=>$mission]);
     }
     public function saveMissions(Request $request){
         dd($request);
-        //$mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->get();
+        //$mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->latest()->get();
        // return response()->json(['activites'=>$mission]);
     }
     public function createMissions(Request $request){
