@@ -18,6 +18,7 @@ class AddOtherFieldsToAffiliationsTable extends Migration
             $table->string('contact_firstName')->nullable();
             $table->string('contact_name')->nullable();
             $table->string('contact_phone')->nullable();
+            $table->string('paye_par_affilie')->nullable();
         });
     }
 
