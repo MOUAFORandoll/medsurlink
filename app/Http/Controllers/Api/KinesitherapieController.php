@@ -26,7 +26,7 @@ class KinesitherapieController extends Controller
     public function index()
     {
 
-        $kinesitherapies = Kinesitherapie::with(['author','operationables.contributable', 'dossier.patient.user', 'etablissement'])->orderByDateConsultation()->get();
+        $kinesitherapies = Kinesitherapie::with(['author','operationables.contributable', 'dossier.patient.user', 'etablissement'])->orderByDateConsultation()->latest()->get();
 
         foreach ($kinesitherapies as $consultation) {
             $consultation->updateConsultation();

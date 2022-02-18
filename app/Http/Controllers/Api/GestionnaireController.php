@@ -54,7 +54,7 @@ class GestionnaireController extends Controller
      */
     public function index()
     {
-        $gestionnaires = Gestionnaire::with('user')->get();
+        $gestionnaires = Gestionnaire::with('user')->latest()->get();
 
         foreach ($gestionnaires as $gestionnaire){
            $gestionnaire->updateGestionnaire();
@@ -77,7 +77,7 @@ class GestionnaireController extends Controller
      * Store a newly created resource in storage.
      * @OA\Post(
      *      path="/gestionnaire/{gestionnaire}",
-     *      operationId="storeGestionnaire", 
+     *      operationId="storeGestionnaire",
      *      tags={"Gestionnaire"},
      * security={
      *  {"passport": {}},
@@ -144,7 +144,7 @@ class GestionnaireController extends Controller
      * Display the specified resource.
      * @OA\Get(
      *      path="/gestionnaire/{gestionnaire}",
-     *      operationId="showGestionnaire", 
+     *      operationId="showGestionnaire",
      *      tags={"Gestionnaire"},
      * security={
      *  {"passport": {}},
@@ -206,7 +206,7 @@ class GestionnaireController extends Controller
      * Update the specified resource in storage.
      * @OA\Put(
      *      path="/gestionnaire/{gestionnaire}",
-     *      operationId="updateGestionnaire", 
+     *      operationId="updateGestionnaire",
      *      tags={"Gestionnaire"},
      * security={
      *  {"passport": {}},
@@ -283,7 +283,7 @@ class GestionnaireController extends Controller
      * Remove the specified resource from storage.
      * @OA\Delete(
      *      path="/gestionnaire/{gestionnaire}",
-     *      operationId="deleteGestionnaire", 
+     *      operationId="deleteGestionnaire",
      *      tags={"Gestionnaire"},
      * security={
      *  {"passport": {}},

@@ -14,7 +14,11 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Mail\NouvelAffiliation;
+use App\Mail\OrderShipped;
+use App\Models\Package;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Psy\Util\Json;
 
@@ -347,6 +351,13 @@ class AffiliationSouscripteurController extends Controller
                     "date_debut"=>Carbon::now(),
                     "date_fin"=>Carbon::now()->addYears(1)->format('Y-m-d')
                 ]);
+
+
+                // envoie de mail à contract
+                $package = Package::find($commande->type_contrat);
+                Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telehone, $request->plainte, $request->urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, ""));
+
+
                 $commande = reduireCommandeRestante($commande->id);
 
                 defineAsAuthor("Affiliation",$affiliation->id,'create',$request->patient_id);

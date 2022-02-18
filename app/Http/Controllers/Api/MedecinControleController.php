@@ -59,7 +59,7 @@ class MedecinControleController extends Controller
      */
     public function index()
     {
-        $medecins = MedecinControle::with(['etablissements','specialite','user'])->get();
+        $medecins = MedecinControle::with(['etablissements','specialite','user'])->latest()->get();
         return response()->json(['medecins'=>$medecins]);
     }
 
@@ -76,7 +76,7 @@ class MedecinControleController extends Controller
     /**
      * Store a newly created resource in storage.
      * @OA\Post(
-     *      path="/medecin-controle/{medecin-controle}", 
+     *      path="/medecin-controle/{medecin-controle}",
      *      operationId="StoreMedecinReferentList",
      *      tags={"MedecinReferent"},
      * security={
@@ -183,7 +183,7 @@ class MedecinControleController extends Controller
     /**
      * Display the specified resource.
      * @OA\Get(
-     *      path="/medecin-controle/{medecin-controle}", 
+     *      path="/medecin-controle/{medecin-controle}",
      *      operationId="ShowMedecinReferentList",
      *      tags={"MedecinReferent"},
      * security={
@@ -242,7 +242,7 @@ class MedecinControleController extends Controller
     /**
      * Update the specified resource in storage.
      * @OA\Put(
-     *      path="/medecin-controle/{medecin-controle}", 
+     *      path="/medecin-controle/{medecin-controle}",
      *      operationId="UpdateMedecinReferentList",
      *      tags={"MedecinReferent"},
      * security={
@@ -328,7 +328,7 @@ class MedecinControleController extends Controller
     /**
      * Remove the specified resource from storage.
      * @OA\Delete(
-     *      path="/medecin-controle/{medecin-controle}", 
+     *      path="/medecin-controle/{medecin-controle}",
      *      operationId="DeleteMedecinReferentList",
      *      tags={"MedecinReferent"},
      * security={
