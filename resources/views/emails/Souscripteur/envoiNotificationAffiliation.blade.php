@@ -1,9 +1,9 @@
 @component('mail::message')
 # Notification de l'enregistrement d'une affiliation
 
-Une nouvelle affiliation a été saisi sur la plateforme de medicasure
+Une nouvelle affiliation a été ajoutée sur la plateforme
 
-## Infomation du souscripteur
+## Infomations du souscripteur
 
 Nom : <b>{{ auth()->user()->nom }}</b>
 
@@ -18,7 +18,7 @@ Affiliation choisie :<b>{{$typeSouscription}}</b>
 Les soins seront payés par l'affilié : <b>{{$paye_par_affilie}}</b>
 
 
-## Information sur l'affilié(e)
+## Informations sur l'affilié(e)
 
 Nom : <b>{{ $patient_nom }}</b>
 
@@ -31,7 +31,7 @@ Plainte :<b>{{ $plainte }}</b>
 Niveau d'urgence :<b>{{ $urgence }}</b>
 
 
-## Information sur la personne à contacter
+## Informations sur la personne à contacter
 
 Nom : <b>{{ $contact_nom }}</b>
 
