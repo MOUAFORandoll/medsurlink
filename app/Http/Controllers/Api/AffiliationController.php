@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AffiliationRequest;
 use App\Models\Affiliation;
+use App\Models\Patient;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -163,12 +164,12 @@ class AffiliationController extends Controller
      */
     public function affiliateBySouscripteur($souscripteur)
     {
-        $affiliations = Affiliation::with(['patient','patient.dossier','package','patient.financeurs.lien'])->where("souscripteur_id",$souscripteur)->latest()->get();
+        $affiliations = Patient::with(['affiliations','user','dossier','affiliations.package','financeurs.lien','souscripteur'])->where("souscripteur_id",$souscripteur)->latest()->get();
         foreach ($affiliations as $affiliation){
             if (!is_null($affiliation->patient)){
                 //dd($affiliation->patient->user);
-                $affiliation['user'] = $affiliation->patient->user;
-                $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
+                $affiliation['user'] = $affiliation->user;
+                $affiliation['souscripteur'] = $affiliation->souscripteur->user;
             }
         }
         return response()->json(['affiliations'=>$affiliations]);
