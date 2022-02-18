@@ -29,6 +29,7 @@ class Affiliation extends Model
         "code_contrat",
         "niveau_urgence",
         'plainte',
+        'paye_par_affilie',
         'contact_firstName',
         'contact_name',
         'contact_phone',

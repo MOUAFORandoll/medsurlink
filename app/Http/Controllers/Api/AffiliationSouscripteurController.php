@@ -282,6 +282,8 @@ class AffiliationSouscripteurController extends Controller
 
         // Récupération des informations relatifs au souscripteur
         $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
+
+        \Log::alert(json_encode($commande));
         if ($commande){
             if ($commande->nombre_restant > 0){
                 // Récupération des informations nécessaire pour la création du compte utilisateur medsurlink
@@ -345,6 +347,7 @@ class AffiliationSouscripteurController extends Controller
                     "contact_name" => $request->contact_name,
                     "contact_phone" => $request->contact_phone,
                     'personne_contact' => $request->personne_contact,
+                    'paye_par_affilie' => $request->paye_par_affilie,
                     "nombre_envois_email"=>0,
                     "expire_email"=>0,
                     "nom"=>'Annuelle',
@@ -354,7 +357,9 @@ class AffiliationSouscripteurController extends Controller
 
                 // envoie de mail à contract
                 $package = Package::find($commande->type_contrat);
-                Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telehone, $request->plainte, $request->urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, ""));
+                Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $request->plainte, $request->urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie));
+
+
                 $commande = reduireCommandeRestante($commande->id);
 
                 defineAsAuthor("Affiliation",$affiliation->id,'create',$request->patient_id);
