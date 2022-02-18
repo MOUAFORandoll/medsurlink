@@ -8,6 +8,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Auth\AuthenticationException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Handler extends ExceptionHandler
@@ -84,6 +85,17 @@ class Handler extends ExceptionHandler
                 return response()->json($json, 401);
             }
         }
+        if ($request->is('api/*') || $request->wantsJson())
+        {
+            if($exception instanceof AuthenticationException){
+                $json = [
+                    'status' => 'failed',
+                    'message' => 'vous devez vous authentifier',
+                ];
+                return response()->json($json, 401);
+            }
+        }
+        
         return parent::render($request, $exception);
     }
 }

@@ -266,8 +266,8 @@ class StripeContrtoller extends Controller
 
            $env = strtolower(config('app.env'));
            if ($env === 'local')
-           return  redirect('http://localhost:8081/'.$updatePath);
-           //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+           return  redirect('http://localhost:8080/'.$updatePath);
+           //return redirect('http://localhost:8080/dashboard/user-management/patients/paiement-status/'.$slug);
             else if ($env === 'staging')
                 return  redirect('https://www.staging.medsurlink.com/'.$updatePath);
             else
@@ -308,12 +308,12 @@ class StripeContrtoller extends Controller
        $env = strtolower(config('app.env'));
        if ($env === 'local')
         //return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
-         return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+         return redirect('http://localhost:8080/dashboard/user-management/patients/paiement-status/'.$slug);
         else if ($env === 'staging')
             return  redirect('https://www.staging.medsurlink.com/user-management/patients/paiement-status/'.$slug);
         else
             return  redirect('https://www.medsurlink.com/user-management/patients/paiement-status/'.$slug);
-       //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+       //return redirect('http://localhost:8080/dashboard/user-management/patients/paiement-status/'.$slug);
     }
     public function notifRenewAndRedirectToAccount(Request $request,$slug,$patient){
 
@@ -331,8 +331,8 @@ class StripeContrtoller extends Controller
 
        $affiliation = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
 
-        $affiliation->renouvelle = 1;
-        $affiliation->date_debut = Carbon::parse($affiliation->date_fin);
+        $affiliation->renouvelle += 1;
+        $payment->status_contrat = "Renouvelé";
         $affiliation->date_fin = Carbon::parse($affiliation->date_fin)->addYears(1)->format('Y-m-d');
         $affiliation->save();
 
@@ -340,12 +340,12 @@ class StripeContrtoller extends Controller
        $env = strtolower(config('app.env'));
        if ($env === 'local')
         //return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
-         return redirect('http://localhost:8081/affiliation/'.$affiliation->slug.'?renouvellement=success');
+         return redirect('http://localhost:8080/affiliation/'.$affiliation->slug.'?renouvellement=success');
         else if ($env === 'staging')
             return  redirect('https://www.staging.medsurlink.com/affiliation/'.$affiliation->slug.'?renouvellement=success');
         else
             return  redirect('https://www.medsurlink.com/affiliation/'.$affiliation->slug.'?renouvellement=success');
-       //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+       //return redirect('http://localhost:8080/dashboard/user-management/patients/paiement-status/'.$slug);
     }
 
     public function notifExtraAndRedirectToAccount(Request $request,$slug,$patient){
@@ -364,8 +364,7 @@ class StripeContrtoller extends Controller
 
        $affiliation = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
 
-        $affiliation->renouvelle = 1;
-        $affiliation->date_debut = Carbon::parse($affiliation->date_fin);
+        $affiliation->renouvelle += 1;
         $affiliation->date_fin = Carbon::parse($affiliation->date_fin)->addYears(1)->format('Y-m-d');
         $affiliation->save();
 
@@ -373,11 +372,11 @@ class StripeContrtoller extends Controller
        $env = strtolower(config('app.env'));
        if ($env === 'local')
         //return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
-         return redirect('http://localhost:8081/affiliation/'.$affiliation->slug.'?renouvellement=success');
+         return redirect('http://localhost:8080/affiliation/'.$affiliation->slug.'?renouvellement=success');
         else if ($env === 'staging')
             return  redirect('https://www.staging.medsurlink.com/affiliation/'.$affiliation->slug.'?renouvellement=success');
         else
             return  redirect('https://www.medsurlink.com/affiliation/'.$affiliation->slug.'?renouvellement=success');
-       //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+       //return redirect('http://localhost:8080/dashboard/user-management/patients/paiement-status/'.$slug);
     }
 }
