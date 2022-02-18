@@ -31,7 +31,7 @@ class OrdonanceController extends Controller
      */
     public function index()
     {
-        $ordonances =  Ordonance::with('dossier','medicaments')->get();
+        $ordonances =  Ordonance::with('dossier','medicaments')->latest()->get();
         return response()->json(['ordonances'=>$ordonances]);
     }
 

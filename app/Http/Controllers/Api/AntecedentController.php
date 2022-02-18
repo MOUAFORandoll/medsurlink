@@ -23,7 +23,7 @@ class AntecedentController extends Controller
      */
     public function index()
     {
-        $antecedents = Antecedent::with('dossier')->get();
+        $antecedents = Antecedent::with('dossier')->latest()->get();
         foreach ($antecedents as $antecedent){
             $antecedent->updateAntecedentItem();
         }

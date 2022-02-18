@@ -76,7 +76,7 @@ class OmController extends Controller
             if (isset($status->reponse['data'])){
                 if ($reponse['data']['status'] == 'SUCCESSFULL'){
                     $identifiants = explode(',',$identifiant);
-                    $contrats = ContratIntermediationMedicale::whereIn('contrat_code','=',$identifiants)->get();
+                    $contrats = ContratIntermediationMedicale::whereIn('contrat_code','=',$identifiants)->latest()->get();
 //                    $nbreContrat = ContratIntermediationMedicale::where('emailSouscripteur1','=',$contrat->emailSouscripteur1)->where('statut_paiement','=','PAYÉ')->count();
                     foreach($contrats as $contrat){
                     $prix=0;

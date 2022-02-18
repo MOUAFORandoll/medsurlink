@@ -14,7 +14,11 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Mail\NouvelAffiliation;
+use App\Mail\OrderShipped;
+use App\Models\Package;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Psy\Util\Json;
 
@@ -348,10 +352,9 @@ class AffiliationSouscripteurController extends Controller
                     "date_fin"=>Carbon::now()->addYears(1)->format('Y-m-d')
                 ]);
 
-		// envoie de mail à contract
+                // envoie de mail à contract
                 $package = Package::find($commande->type_contrat);
                 Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telehone, $request->plainte, $request->urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, ""));
-
                 $commande = reduireCommandeRestante($commande->id);
 
                 defineAsAuthor("Affiliation",$affiliation->id,'create',$request->patient_id);
@@ -413,7 +416,7 @@ class AffiliationSouscripteurController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function affiliationRestante($id){
-        $commande =  \App\Models\AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->where('nombre_restant','>',0)->get();
+        $commande =  \App\Models\AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->where('nombre_restant','>',0)->latest()->get();
         return response()->json(['commande'=>$commande]);
     }
 

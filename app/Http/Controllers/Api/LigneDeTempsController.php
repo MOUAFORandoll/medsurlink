@@ -29,7 +29,7 @@ class LigneDeTempsController extends Controller
      */
     public function index()
     {
-        $ligneTemps = LigneDeTemps::with(['dossier','motif'])->get();
+        $ligneTemps = LigneDeTemps::with(['dossier','motif'])->latest()->get();
         return response()->json(['ligne_temps'=>$ligneTemps]);
     }
 
@@ -94,7 +94,7 @@ class LigneDeTempsController extends Controller
             'dossier',
             'validations.examenComplementaire.examenComplementairePrix',
             'validations.consultation.versionValidation',
-        ])->where("dossier_medical_id",$dossier->id)->get();
+        ])->where("dossier_medical_id",$dossier->id)->latest()->get();
 
         return response()->json(["ligne_temps" => $ligneDeTemps]);
     }
@@ -158,15 +158,15 @@ class LigneDeTempsController extends Controller
            ->whereNotNull('etat_validation_medecin')
            ->where('medecin_control_id', '=',Auth::id())
            ->distinct()
-           ->get();
+           ->latest()->get();
         $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])
            ->whereNotNull('etat_validation_souscripteur')
            ->where('medecin_control_id', '=',Auth::id())
            ->distinct()
-           ->get();
-        $activites = ActiviteAmaPatient::with(['activitesAma','patient','patient.rendezVous','patient.medecinReferent.medecinControles','updatedBy','createur'])->where('patient_id',$patient->user_id)->get();
+           ->latest()->get();
+        $activites = ActiviteAmaPatient::with(['activitesAma','patient','patient.rendezVous','patient.medecinReferent.medecinControles','updatedBy','createur'])->where('patient_id',$patient->user_id)->latest()->get();
         //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
-        $rendezVous = RendezVous::where('patient_id',$patient->user_id)->get();
+        $rendezVous = RendezVous::where('patient_id',$patient->user_id)->latest()->get();
         $array = array('rendez_vous' =>$rendezVous,'activite_ama' =>  $activites,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
 
 

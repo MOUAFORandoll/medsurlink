@@ -21,7 +21,7 @@ class ConclusionController extends Controller
      */
     public function index()
     {
-        $conclusions = Conclusion::with(['consultationMedecine'])->get();
+        $conclusions = Conclusion::with(['consultationMedecine'])->latest()->get();
 
         foreach ($conclusions as $conclusion){
             $conclusion->updateConclusionItem();

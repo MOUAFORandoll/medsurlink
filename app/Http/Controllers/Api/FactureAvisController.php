@@ -26,7 +26,7 @@ class FactureAvisController extends Controller
             'association',
             'avis',
             'dossier'
-        ])->get();
+        ])->latest()->get();
         return response()->json(['factureAvis'=>$dossiers]);
     }
 
@@ -50,7 +50,7 @@ class FactureAvisController extends Controller
     {
         $request->validated();
         $avis = $request->avis;
- 
+
         $facture = FactureAvis::create([
             "avis_id" => $request->avis_id,
             "association_id" => $request->association_id,

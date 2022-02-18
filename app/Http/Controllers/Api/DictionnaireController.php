@@ -37,7 +37,7 @@ class DictionnaireController extends Controller
      */
     public function show($search)
     {
-        $dictionnaires = Dictionnaire::whereReference(strtolower($search))->get();
+        $dictionnaires = Dictionnaire::whereReference(strtolower($search))->latest()->get();
         return response()->json(['dictionnaires'=>$dictionnaires]);
     }
 
