@@ -104,7 +104,7 @@ class ImprimerController extends Controller
         }else{
             $examen_clinique = $consultationMedecine->examens;
         }
-        //dd($consultationMedecine);
+        // dd($consultationMedecine);
 
         if(!is_null($consultationMedecine->examens)){
            $examen_clinique = _group_by(is_array($consultationMedecine->examens)?$consultationMedecine->examens:json_decode($consultationMedecine->examens, true),"reference");
@@ -112,6 +112,8 @@ class ImprimerController extends Controller
 
         if(!is_null($consultationMedecine->anamneses)){
           $anamneses = _group_by(is_array($consultationMedecine->anamneses)?$consultationMedecine->anamneses:json_decode($consultationMedecine->anamneses, true),"reference");
+        }else{
+            $anamneses = null;
         }
 
         if(!is_null($consultationMedecine->anamese)){
