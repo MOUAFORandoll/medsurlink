@@ -166,7 +166,7 @@ class MomoController extends Controller
                 ]);
        
         // $callbackUrl = url('api/paiement/momo/paymentStatus/'.$commande->id.'/'.$referenceId.'/collections/callback');
-        $callbackUrl = 'https://www.medicasure.com/'.$request->get('identifiant').'/'.$referenceId.'/collections/callback';
+        $callbackUrl = '';
 //        Requete de Paiement
         $paiementInformation =  requestToPay($referenceId,'mtncameroon ',$this->subscriptionKey,$accessToken,$operation,$this->host,$callbackUrl);
         //Pour la nouvelle version on va retourner à ce stade ci le message le reference uuid et on va faire le test
