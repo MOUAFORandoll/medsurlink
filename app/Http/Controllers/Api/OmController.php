@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\CodePromo;
-use App\Models\ContratIntermediationMedicale;
-use App\Models\NotificationPaiement;
-use App\Models\Visiteur;
+use App\User;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
 use Psy\Util\Json;
+use App\Models\CodePromo;
+use App\Models\PaymentOffre;
+use App\Models\Souscripteur;
+use Illuminate\Http\Request;
+use App\Models\CommandePackage;
+use App\Http\Controllers\Controller;
+use App\Models\NotificationPaiement;
+use App\Models\AffiliationSouscripteur;
+use Illuminate\Support\Facades\Validator;
+use App\Models\ContratIntermediationMedicale;
 
 class OmController extends Controller
 {
@@ -24,26 +28,86 @@ class OmController extends Controller
         return response()->json(['mp_token'=>$mp_token]);
     }
 
-    public function procederAuPaiement(Request $request,$identifiant){
-        //$identifiant = $request->input('identifiant');
+    public function paiementFromMedicasure(Request $request){
+        
+        $identifiant = $request->input('package_id');
         $subscriberMsisdn = $request->input('subscriberMsisdn');
-        $code= explode(',',$identifiant);
-        $validator=Validator::make(array('identifiant'=>$code,'subscriberMsisdn'=>$subscriberMsisdn),[
+        $validator=Validator::make(array('package'=>$identifiant,'subscriberMsisdn'=>$subscriberMsisdn),[
             'subscriberMsisdn'=>'required|digits_between:9,12',
-            'identifiant'=>'required|exists:contrat_intermediation_medicales,contrat_code']);
+            'package'=>'required|exists:offres_packages,id']);
         if ($validator->fails()){
             return response()->json(['error'=>$validator->errors()->getMessages()]);
         }
-        $contrat = ContratIntermediationMedicale::where('contrat_code','=',$identifiant)->first();
+        // create user if not exist
+        $tokenInfo = "";
+        $passwordSouscripteur = "";
+        $user = User::where("email",$request->get("email"))->first();
+        $souscripteur = null;
+        if($user == null) {
+            $userInformation = [];
+            $userInformation['nom']=$request->get("name");
+            $userInformation['prenom']=$request->get("prenom");
+            $userInformation['email']=$request->get("email");
+            $userInformation['nationalite']=$request->get("pays");
+            $userInformation['quartier']="";
+            $userInformation['code_postal']="";
+            $userInformation['ville']="";
+            $userInformation['pays']=$request->get("pays");
+            $userInformation['telephone']=$request->get("telephone");
+            $userInformation['adresse']="";
+
+            //dd($userInformation);
+            // Création du compte utilisateur medsurlink du souscripteur
+            $passwordSouscripteur = substr(bin2hex(random_bytes(10)), 0, 7);
+            $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordSouscripteur,'0');
+
+            // Assignation du role souscripteur
+            $user->assignRole('Souscripteur');
+
+            // Enregistrement des informations personnels du souscripteur
+            $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
+
+            //Definition des identifiants pour connexion
+            $tokenInfo =$passwordSouscripteur.'medsur'. $request->email;
+            // Envoi du mail avec mot de passe souscripteur
+            try{
+                sendUserInformationViaMail($user,$passwordSouscripteur);
+            }catch (\Swift_TransportException $transportException){
+                //$message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+                //return response()->json(['reponse'=>$tokenInfo,'souscripteur'=>$user, "message"=>$message]);
+            }
+        }else{
+            $souscripteur = Souscripteur::where("user_id",$user->id)->first();
+            if($souscripteur == null){
+                $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
+            }
+            $tokenInfo = "checkout";
+        }
+
+        $commande =  CommandePackage::create([
+            "date_commande" => Carbon::now()->toDateTimeString(),
+            'quantite' =>$request->get('quantite'),
+            'offres_packages_id' =>$request->get('package_id'),
+            'souscripteur_id' => $souscripteur->user_id,
+        ]);
+        PaymentOffre::create([
+            "date_payment" => Carbon::now()->toDateTimeString(),
+            "montant" =>  $request->get('amount'),
+            'status' => 'EN ATTENTE',
+            'commande_id' =>$commande->id,
+            'souscripteur_id' => $souscripteur->user_id,
+        ]);
+
         $access_token = getOmToken();
         $mp_token = initierPaiement($access_token);
+        $tokenInfo = "checkout";
         $body =[
-            "notifUrl"=> "https://www.medicasure.com/api/v1.0.0/om/".$identifiant."/".$mp_token."/notification",
+            "notifUrl"=> url("om/paiement/".$commande->id."/".$mp_token."/notification/".$tokenInfo),
             "channelUserMsisdn"=> "658392349",
-            "amount"=> $request->get('amount'),
+            "amount"=> 50,
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
             "pin"=> "2019",
-            "orderId"=> str_replace($identifiant,',','-'),
+            "orderId"=> $identifiant,
             "description"=> "",
             "payToken"=> $mp_token
         ];
@@ -69,61 +133,67 @@ class OmController extends Controller
         ]);
     }
 
-    public function statutPaiementOm(Request $request,$identifiant,$payToken){
+    public function statutPaiement(Request $request,$identifiant,$payToken,$token){
         $access_token = getOmToken();
         $reponse = statutPaiementOm($access_token,$payToken);
         if (isset($data->reponse)){
             if (isset($status->reponse['data'])){
                 if ($reponse['data']['status'] == 'SUCCESSFULL'){
-                    $identifiants = explode(',',$identifiant);
-                    $contrats = ContratIntermediationMedicale::whereIn('contrat_code','=',$identifiants)->get();
-//                    $nbreContrat = ContratIntermediationMedicale::where('emailSouscripteur1','=',$contrat->emailSouscripteur1)->where('statut_paiement','=','PAYÉ')->count();
-                    foreach($contrats as $contrat){
-                    $prix=0;
-                    if( $contrat->montantSouscription == '45.000' ){
-                        $prix = 45000;
-                    }else if( $contrat->montantSouscription == '85'){
-                        $prix = 85*655.957;
-                    }
-                    else if($contrat->montantSouscription == '25.000'){
-                        $prix = 25000;
-                    }
-                    else if($contrat->montantSouscription == '50'){
-                        $prix = 50*655.957;
-                    }
-                    else if($contrat->montantSouscription == '65.000' ){
-                        $prix = 65000;
-                    }
-                    else if($contrat->montantSouscription == '100'){
-                        $prix = 100*655.957;
-                    }
-
-                    if(!is_null($contrat->code_promo) && ($contrat->code_promo!='')){
-                        $code = CodePromo::whereCode($contrat->code_promo)->first();
-
-                        if ($code != null){
-                            if ($code->reduction != null && $code->reduction != ''){
-                                $reduction = ($prix*$code->reduction)/100;
-                                $prix = $prix - $reduction;
-                            }elseif ($code->prix_final != null && $code->prix_final !=''){
-                                $prix = $code->prix_final;
-                            }
-                        }
-                    }
-
-//                    if (($nbreContrat >0 ) && (($nbreContrat+1) % 3 == 0)){
-                    $contrat->reduction = 'non';
-//                        $prix = ($prix * 0.8); //Obtention réduction de 20%
-                    $contrat->montantSouscription = $prix;
-//                    }
-                    $contrat->statut_paiement = 'PAYÉ';
-                    $contrat->type_paiement = 'OM';
-                    $contrat->date_paiement = Carbon::now()->toDateTimeString();
-                    $contrat->save();
-                    }
-                    // implementer la redirection vers medsurlink ici
-                    // id_contrat,
-                    $this->souscripteurRedirectToMedsurlink($contrat->emailSouscripteur1);
+                    NotificationPaiement::create([
+                        "type"=>'Orange Money',
+                        "code_contrat"=>$identifiant,
+                        "pay_token"=>'',
+                        "statut"=>'Success',
+                        "reponse"=>Json::encode($request->all()),
+                    ]);
+        
+                   $payment = PaymentOffre::where("commande_id",$identifiant)->first();
+                   $payment->status = "SUCCESS";
+                   $payment->save();
+                   //dd($payment);
+                   $affiliation = AffiliationSouscripteur::where([["type_contrat",$payment->commande->offres_packages_id],["user_id",$payment->souscripteur_id]])->first();
+                   if($affiliation == null){
+                    $affiliation = AffiliationSouscripteur::create([
+                           'user_id'=>$payment->souscripteur_id,
+                           'type_contrat'=>$payment->commande->offres_packages_id,
+                           'nombre_paye'=>$payment->commande->quantite,
+                           'nombre_restant'=>$payment->commande->quantite,
+                           'montant'=>$payment->montant,
+                           'cim_id'=>$payment->commande->id,
+                           'date_paiement'=>null,
+                       ]);
+                   }else{
+                       $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
+                       $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
+                       $affiliation->save();
+                   }
+        
+                   if($token=="checkout"){
+                    $updatePath = 'checkout';
+                   }else{
+                    $updatePath = 'contrat-prepaye/add?status=success&token='.$token;
+                   }
+        
+                   $env = strtolower(config('app.env'));
+                   if ($env === 'local')
+                   return  redirect('http://localhost:8081/'.$updatePath);
+                   //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+                    else if ($env === 'staging')
+                        return  redirect('https://www.staging.medsurlink.com/'.$updatePath);
+                    else
+                        return  redirect('https://www.medsurlink.com/'.$updatePath);
+        
+                }
+                elseif ($reponse['data']['status'] == 'PENDING'){
+                    $payment = PaymentOffre::where("commande_id",$identifiant)->first();
+                    $payment->status = "PENDING";
+                    $payment->save();
+                    return response()->json(['status'=>'PENDING','reponse'=>$reponse]);
+                }elseif ($reponse['data']['status'] == 'CANCELLED'){
+                    $payment = PaymentOffre::where("commande_id",$identifiant)->first();
+                    $payment->status = "CANCELLED";
+                    $payment->save();
+                    return response()->json(['status'=>'CANCELLED','reponse'=>$reponse]);
                 }
             }
         }
