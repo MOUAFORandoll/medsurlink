@@ -25,6 +25,7 @@ class OmController extends Controller
     }
 
     public function procederAuPaiement(Request $request,$identifiant){
+
         //$identifiant = $request->input('identifiant');
         $subscriberMsisdn = $request->input('subscriberMsisdn');
         $code= explode(',',$identifiant);
@@ -157,11 +158,12 @@ class OmController extends Controller
         $body = [
             "notifUrl"=> "https://www.medicasure.com/api/v1.0.0/om/".$mp_token."/notification",
             "channelUserMsisdn"=> "658392349",
-            "amount"=> $request->get('amount'),
+            "amount"=> 50,
+            //"amount"=> $request->get('amount'),
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
             "pin"=> "2019",
             "orderId"=> $request->get('reference'),
-            "description"=> $request->get('description',''),
+            "description"=> "Paiement affiliation",
             "payToken"=> $mp_token
         ];
 

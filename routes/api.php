@@ -36,6 +36,12 @@ Route::get('question','Api\QuestionController@index');
 //    Route::put('consultation-kinesitherapie/{slug}/archiver','Api\KinesitherapieController@archiver');
 //    Route::put('consultation-kinesitherapie/{slug}/reactiver','Api\KinesitherapieController@reactiver');
 //Route::resource('partenaire','Api\PartenaireController');
+
+Route::get('impression/facture-offre/{commande_id}', function ($commande_id) {
+
+    return response()->json(['link' => route('facture.offre', $commande_id)]);
+});
+
 Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
 Route::get('/liens', function () {
     $liens = Dictionnaire::where("reference","lien_parente")->get();

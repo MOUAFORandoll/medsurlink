@@ -44,4 +44,8 @@ class AffiliationSouscripteur extends Model
     public function typeContrat(){
         return $this->belongsTo(Package::class,'type_contrat','id');
     }
+
+    public function commande(){
+        return $this->belongsTo(CommandePackage::class, 'cim_id');
+    }
 }
