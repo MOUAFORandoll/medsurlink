@@ -384,8 +384,8 @@ Route::prefix('paiement')->group(function () {
     //Ici nous mettons en place des routes pour initier les paiement venant d'ailleurs
     Route::post('/momo/paid','Api\MomoController@momoPaidByCustomer');
     Route::post('/momo/paymentStatus','Api\MomoController@momoPayementStatusByCustomer');
-    Route::post('/om/paid','Api\OmController@omPaidByCustomer');
-    Route::post('/om/paymentStatus','Api\OmController@omPayementStatusByCustomer');
+    Route::post('/om/paid','Api\OmController@paiementFromMedicasure');
+    Route::post('/om/paymentStatus','Api\OmController@statutPaiement');
     Route::post('/stripe-paiement','Api\StripeContrtoller@stripePaidByCustomer');
     Route::post('/stripe-paiement-medicasure','Api\StripeContrtoller@paiementFromMedicasure');
     Route::post('/stripe-renouvellement','Api\StripeContrtoller@renouvellementPaiement');
