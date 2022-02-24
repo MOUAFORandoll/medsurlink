@@ -103,7 +103,8 @@ class OmController extends Controller
         $mp_token = initierPaiement($access_token);
         $tokenInfo = "checkout";
         $body =[
-            "notifUrl"=> url("om/paiement/".$commande->id."/".$mp_token."/notification/".$tokenInfo),
+            //"notifUrl"=> url("om/paiement/".$commande->id."/".$mp_token."/notification/".$tokenInfo),
+            "notifUrl"=> 'https://webhook.site/71bde717-c4ba-430d-b037-a0ad7a97348c?',
             "channelUserMsisdn"=> "658392349",
             "amount"=> 50,
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
@@ -172,7 +173,7 @@ class OmController extends Controller
                         "statut"=>'Success',
                         "reponse"=>Json::encode($request->all()),
                     ]);
-        
+
                    $payment = PaymentOffre::where("commande_id",$identifiant)->first();
                    $payment->status = "SUCCESS";
                    $payment->save();
@@ -193,13 +194,13 @@ class OmController extends Controller
                        $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
                        $affiliation->save();
                    }
-        
+
                    if($token=="checkout"){
                     $updatePath = 'checkout';
                    }else{
                     $updatePath = 'contrat-prepaye/add?status=success&token='.$token;
                    }
-        
+
                    $env = strtolower(config('app.env'));
                    if ($env === 'local')
                    return  redirect('http://localhost:8081/'.$updatePath);
@@ -208,7 +209,7 @@ class OmController extends Controller
                         return  redirect('https://www.staging.medsurlink.com/'.$updatePath);
                     else
                         return  redirect('https://www.medsurlink.com/'.$updatePath);
-        
+
                 }
                 elseif ($reponse['data']['status'] == 'PENDING'){
                     $payment = PaymentOffre::where("commande_id",$identifiant)->first();
@@ -251,7 +252,8 @@ class OmController extends Controller
         $access_token = getOmToken();
         $mp_token = initierPaiement($access_token);
         $body = [
-            "notifUrl"=> "https://www.medicasure.com/api/v1.0.0/om/".$mp_token."/notification",
+            //"notifUrl"=> url('/')."/api/v1.0.0/om/".$mp_token."/notification",
+            "notifUrl"=> url('/')."/api/v1.0.0/om/".$mp_token."/notification",
             "channelUserMsisdn"=> "658392349",
             "amount"=> 50,
             //"amount"=> $request->get('amount'),
@@ -275,7 +277,7 @@ class OmController extends Controller
 
     }
 
-    public function omPayementStatusByCustomer(Request $request){
+/*     public function omPayementStatusByCustomer(Request $request){
         $payToken = $request->get('payToken');
         $access_token = getOmToken();
         $reponse = statutPaiementOm($access_token,$payToken);
@@ -294,6 +296,6 @@ class OmController extends Controller
         }else{
             return response()->json(['status'=>'FAILED','reponse'=>$reponse]);
         }
-    }
+    } */
 
 }
