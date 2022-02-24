@@ -29,7 +29,7 @@ class OmController extends Controller
     }
 
     public function paiementFromMedicasure(Request $request){
-        
+
         $identifiant = $request->input('package_id');
         $subscriberMsisdn = $request->input('subscriberMsisdn');
         $validator=Validator::make(array('package'=>$identifiant,'subscriberMsisdn'=>$subscriberMsisdn),[
@@ -101,8 +101,9 @@ class OmController extends Controller
         $access_token = getOmToken();
         $mp_token = initierPaiement($access_token);
         $tokenInfo = "checkout";
-        $body =[
-            "notifUrl"=> url("om/paiement/".$commande->id."/".$mp_token."/notification/".$tokenInfo),
+        $body = [
+            "notifUrl" => "https://9d57-154-72-170-86.ngrok.io/api/paiement/om/{$commande->id}/{$mp_token}/notification/{$tokenInfo}",
+            //"notifUrl" => route('om.notification', ['identifiant' => $commande->id, 'payToken' => $mp_token, 'tokenInfo' => $tokenInfo]),
             "channelUserMsisdn"=> "658392349",
             "amount"=> 50,
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
@@ -121,83 +122,79 @@ class OmController extends Controller
 
     }
 
-    public function notificationPaiement(Request $request,$identifiant,$pay_token){
+    public function notificationPaiement(Request $request, $identifiant, $payToken, $tokenInfo){
         //Notification du paiement par mail
 
-        NotificationPaiement::create([
+        $myNewData = $request->request->add(['tokenInfo' => $tokenInfo]);
+
+        $notif = NotificationPaiement::create([
             "type"=>'OM',
-            "code_contrat"=>$identifiant,
-            "pay_token"=>$pay_token,
-            "statut"=>(json_decode(Json::encode($request->all())))->status,
+            "code_contrat"=> $identifiant,
+            "pay_token"=> $request->payToken,
+            "statut"=> $request->status,
             "reponse"=>Json::encode($request->all()),
         ]);
     }
 
-    public function statutPaiement(Request $request,$identifiant,$payToken,$token){
-        $access_token = getOmToken();
-        $reponse = statutPaiementOm($access_token,$payToken);
-        if (isset($data->reponse)){
-            if (isset($status->reponse['data'])){
-                if ($reponse['data']['status'] == 'SUCCESSFULL'){
-                    NotificationPaiement::create([
-                        "type"=>'Orange Money',
-                        "code_contrat"=>$identifiant,
-                        "pay_token"=>'',
-                        "statut"=>'Success',
-                        "reponse"=>Json::encode($request->all()),
-                    ]);
-        
-                   $payment = PaymentOffre::where("commande_id",$identifiant)->first();
-                   $payment->status = "SUCCESS";
-                   $payment->save();
-                   //dd($payment);
-                   $affiliation = AffiliationSouscripteur::where([["type_contrat",$payment->commande->offres_packages_id],["user_id",$payment->souscripteur_id]])->first();
-                   if($affiliation == null){
-                    $affiliation = AffiliationSouscripteur::create([
-                           'user_id'=>$payment->souscripteur_id,
-                           'type_contrat'=>$payment->commande->offres_packages_id,
-                           'nombre_paye'=>$payment->commande->quantite,
-                           'nombre_restant'=>$payment->commande->quantite,
-                           'montant'=>$payment->montant,
-                           'cim_id'=>$payment->commande->id,
-                           'date_paiement'=>null,
-                       ]);
-                   }else{
-                       $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
-                       $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
-                       $affiliation->save();
-                   }
-        
-                   if($token=="checkout"){
-                    $updatePath = 'checkout';
-                   }else{
-                    $updatePath = 'contrat-prepaye/add?status=success&token='.$token;
-                   }
-        
-                   $env = strtolower(config('app.env'));
-                   if ($env === 'local')
-                   return  redirect('http://localhost:8081/'.$updatePath);
-                   //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
-                    else if ($env === 'staging')
-                        return  redirect('https://www.staging.medsurlink.com/'.$updatePath);
-                    else
-                        return  redirect('https://www.medsurlink.com/'.$updatePath);
-        
-                }
-                elseif ($reponse['data']['status'] == 'PENDING'){
-                    $payment = PaymentOffre::where("commande_id",$identifiant)->first();
-                    $payment->status = "PENDING";
-                    $payment->save();
-                    return response()->json(['status'=>'PENDING','reponse'=>$reponse]);
-                }elseif ($reponse['data']['status'] == 'CANCELLED'){
-                    $payment = PaymentOffre::where("commande_id",$identifiant)->first();
-                    $payment->status = "CANCELLED";
-                    $payment->save();
-                    return response()->json(['status'=>'CANCELLED','reponse'=>$reponse]);
-                }
+    public function statutPaiement($identifiant,$payToken){
+        $notification = NotificationPaiement::where('pay_token', $payToken)->first();
+        //{"payToken":"MP2202244469409A5830F5160CF1","status":"SUCCESSFULL","message":"Transaction completed"}
+        $payment = PaymentOffre::where("commande_id",$notification->code_contrat)->first();
+
+        if($notification->statut == "SUCCESSFULL"){
+            $payment->status = "SUCCESS";
+            $payment->save();
+            //dd($payment);
+
+            $affiliation = AffiliationSouscripteur::where([["type_contrat",$payment->commande->offres_packages_id],["user_id",$payment->souscripteur_id]])->first();
+
+            if($affiliation == null){
+                $affiliation = AffiliationSouscripteur::create([
+                    'user_id'=>$payment->souscripteur_id,
+                    'type_contrat'=>$payment->commande->offres_packages_id,
+                    'nombre_paye'=>$payment->commande->quantite,
+                    'nombre_restant'=>$payment->commande->quantite,
+                    'montant'=>$payment->montant,
+                    'cim_id'=>$payment->commande->id,
+                    'date_paiement'=>null,
+                ]);
+            }else{
+                $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
+                $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
+                $affiliation->save();
             }
+            $reponse = json_decode($notification->reponse);
+            $token = $reponse->tokenInfo;
+            if($token=="checkout"){
+                $updatePath = 'checkout';
+            }else{
+            $updatePath = 'contrat-prepaye/add?status=success&token='.$token;
+            }
+
+            $env = strtolower(config('app.env'));
+            if ($env === 'local')
+                return  redirect('http://localhost:8081/'.$updatePath);
+            //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+            else if ($env === 'staging')
+                return  redirect('https://www.staging.medsurlink.com/'.$updatePath);
+            else
+                return  redirect('https://www.medsurlink.com/'.$updatePath);
+
+        }elseif($notification->statut == "FAILED"){
+            $payment->status = "FAILED";
+            $payment->save();
+            return response()->json(['status'=>'FAILED','reponse' => $notification]);
+        }elseif($notification->statut == 'PENDING'){
+            $payment->status = "PENDING";
+            $payment->save();
+            return response()->json(['status'=>'PENDING','reponse' => $notification]);
+        }elseif ($notification->statut == 'CANCELLED'){
+            $payment->status = "CANCELLED";
+            $payment->save();
+            return response()->json(['status'=>'CANCELLED','reponse' => $notification]);
         }
-        return response()->json(['statut'=>$reponse]);
+
+        return response()->json(['status'=> $notification]);
     }
 /*     public function souscripteurRedirectToMedsurlink($emailSouscripteur1)
     {
@@ -248,7 +245,7 @@ class OmController extends Controller
 
     }
 
-    public function omPayementStatusByCustomer(Request $request){
+   /*  public function omPayementStatusByCustomer(Request $request){
         $payToken = $request->get('payToken');
         $access_token = getOmToken();
         $reponse = statutPaiementOm($access_token,$payToken);
@@ -267,6 +264,6 @@ class OmController extends Controller
         }else{
             return response()->json(['status'=>'FAILED','reponse'=>$reponse]);
         }
-    }
+    } */
 
 }
