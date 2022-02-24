@@ -31,6 +31,7 @@ class OmController extends Controller
     public function paiementFromMedicasure(Request $request){
         
         $identifiant = $request->input('package_id');
+        $reference = $request->input('reference');
         $subscriberMsisdn = $request->input('subscriberMsisdn');
         $validator=Validator::make(array('package'=>$identifiant,'subscriberMsisdn'=>$subscriberMsisdn),[
             'subscriberMsisdn'=>'required|digits_between:9,12',
@@ -104,7 +105,7 @@ class OmController extends Controller
         $body =[
             "notifUrl"=> url("om/paiement/".$commande->id."/".$mp_token."/notification/".$tokenInfo),
             "channelUserMsisdn"=> "658392349",
-            "amount"=> 50,
+            "amount"=> $request->get('amount'),
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
             "pin"=> "2019",
             "orderId"=> $identifiant,
@@ -115,6 +116,30 @@ class OmController extends Controller
         $reponse = procederAuPaiementOm($access_token,$body);
         return response()->json(['reponse'=>$reponse]);
     }
+
+    // Paiement via mobile
+    public function paiementOmMobile(Request $request){
+
+        $identifiant = $request->input('package_id');
+        $access_token = getOmToken();
+        $mp_token = initierPaiement($access_token);
+
+        $body =[
+            //"notifUrl"=> url("om/paiement/".$commande->id."/".$mp_token."/notification/".$tokenInfo),
+            "channelUserMsisdn"=> "658392349",
+            "amount"=> $request->get('amount'),
+            "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
+            "pin"=> "2019",
+            "orderId"=> $identifiant,
+            "description"=> "",
+            "payToken"=> $mp_token
+        ];
+
+        // faire autres actions relative au paiement
+        $reponse = procederAuPaiementOm($access_token,$body);
+        return response()->json(['reponse'=>$reponse]);
+    }
+
 
     public function InitierPaiement(){
         $accessToken = getOmToken();
