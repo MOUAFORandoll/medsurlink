@@ -49,7 +49,7 @@ class rappelerRendezVous extends Command
         $dateRendezVous = Carbon::tomorrow()->toDateString();
         $rdvs = RendezVous::with('patient','praticien')
             ->whereDate('date',$dateRendezVous)
-            ->where('statut','<>','Annulé')->get();
+            ->where('statut','<>','Annulé')->latest()->get();
 
         foreach ($rdvs as $rdv){
             $date = Carbon::parse($rdv->date)->format('d/m/Y');

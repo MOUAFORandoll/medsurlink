@@ -79,8 +79,8 @@ class ImprimerController extends Controller
             array_push($cContributeurs,$operationable['contributable']['id']);
         }
 
-        $pContributeurs = Praticien::with('user')->whereIn('user_id',$cContributeurs)->get();
-        $mContributeurs = MedecinControle::with('user')->whereIn('user_id',$cContributeurs)->get();
+        $pContributeurs = Praticien::with('user')->whereIn('user_id',$cContributeurs)->latest()->get();
+        $mContributeurs = MedecinControle::with('user')->whereIn('user_id',$cContributeurs)->latest()->get();
 
         if(isJSON($consultationMedecine->examen_complementaire)){
             $examen_complementaire = _group_by(json_decode($consultationMedecine->examen_complementaire, true),"reference");
@@ -128,7 +128,7 @@ class ImprimerController extends Controller
             $complementaire = $consultationMedecine->complementaire;
         }
 
-            
+
 
         // if(is_string($consultationMedecine->anamneses)){
         //     $anamneses = $consultationMedecine->anamneses;
@@ -369,8 +369,8 @@ class ImprimerController extends Controller
             array_push($cContributeurs,$operationable['contributable']['id']);
         }
 
-        $pContributeurs = Praticien::with('user')->whereIn('user_id',$cContributeurs)->get();
-        $mContributeurs = MedecinControle::with('user')->whereIn('user_id',$cContributeurs)->get();
+        $pContributeurs = Praticien::with('user')->whereIn('user_id',$cContributeurs)->latest()->get();
+        $mContributeurs = MedecinControle::with('user')->whereIn('user_id',$cContributeurs)->latest()->get();
         $updateAuteurs = getUpdatedAuthor("Kinesitherapie",$kinesitherapie->id,"update");
         $medecins = [];
         $auteurs = [];

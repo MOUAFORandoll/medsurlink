@@ -27,7 +27,7 @@ class ConsultationObstetriqueController extends Controller
      */
     public function index()
     {
-        $consultationsObstetrique = ConsultationObstetrique::with(['consultationPrenatales', 'dossier'])->orderByDateDeRendezVous()->get();
+        $consultationsObstetrique = ConsultationObstetrique::with(['consultationPrenatales', 'dossier'])->orderByDateDeRendezVous()->latest()->get();
 
         foreach ($consultationsObstetrique as $consultationObstetrique){
             $consultationObstetrique->updateObstetricConsultation();

@@ -1,8 +1,11 @@
 <?php
 
+use App\Mail\Facture\AchatOffre;
 use App\SMS;
 use App\Notifications\SendSMS;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Mail;
+use Barryvdh\DomPDF\Facade as PDF;
 
 if(!function_exists('sendSMS'))
 {
@@ -156,3 +159,41 @@ if(!function_exists('formatTelephone'))
     }
 }
 
+
+
+
+    if(!function_exists('EnvoieDeFactureApresSouscription'))
+{
+    /**
+     * @param $string_with_accent
+     * @return string
+     */
+    function EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire)
+    {
+        //return view('impression_offre');
+        try {
+            $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire);
+            Mail::to($email_souscripteur)->send(new AchatOffre($pdf['output'], $nom_souscripteur, $description));
+        }catch (\Exception $exception){
+            //$exception
+        }
+    }
+}
+
+if(!function_exists('generationPdfFactureOffre'))
+{
+    /**
+     * @param $string_with_accent
+     * @return string
+     */
+    function generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire)
+    {
+        //return view('impression_offre');
+        try {
+            $pdf = PDF::loadView('impression_offre', ['commande_id' => $commande_id, 'commande_date' => $commande_date, 'montant_total' => number_format($montant_total, 2, ',', ' '), 'echeance' => $echeance, 'description' => mb_strtoupper($description), 'quantite' => $quantite, 'prix_unitaire' => number_format($prix_unitaire, 2, ',', ' '), 'nom_souscripteur' => $nom_souscripteur, 'email_souscripteur' => $email_souscripteur, 'rue' => $rue, 'adresse' => $adresse, 'ville' => $ville, 'beneficiaire' => $beneficiaire]);
+            return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+        }catch (\Exception $exception){
+            //$exception
+        }
+    }
+}

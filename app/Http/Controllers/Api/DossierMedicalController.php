@@ -80,7 +80,7 @@ class DossierMedicalController extends Controller
             'traitements'=> function ($query) {
                 $query->orderBy('created_at', 'desc');
             }
-        ])->get();
+        ])->latest()->get();
         foreach ($dossiers as $dossier){
             if (!is_null($dossier)){
                 $dossier->updateDossier();
@@ -102,7 +102,7 @@ class DossierMedicalController extends Controller
     /**
      * Store a newly created resource in storage.
      * @OA\Post(
-     *      path="/dossier/{slug}", 
+     *      path="/dossier/{slug}",
      *      operationId="storeDossierMedicalList",
      *      tags={"DossierMedical"},
      * security={
@@ -160,7 +160,7 @@ class DossierMedicalController extends Controller
     /**
      * Display the specified resource.
      * @OA\Get(
-     *      path="/dossier/{slug}", 
+     *      path="/dossier/{slug}",
      *      operationId="getDossierMedical",
      *      tags={"DossierMedical"},
      * security={
@@ -199,8 +199,8 @@ class DossierMedicalController extends Controller
     public function show($slug)
     {
         $validation = validatedSlug($slug,$this->table);
-        if(!is_null($validation))
-            return $validation;
+        // if(!is_null($validation))
+        //     return $validation;
 
                  $dossier = DossierMedical::with([
                 'allergies'=> function ($query) {
@@ -229,7 +229,7 @@ class DossierMedicalController extends Controller
                 'cardiologies',
                      'consultationsManuscrites.praticien',
                      'consultationsManuscrites.etablissement',
-            ])->whereSlug($slug)->first();
+            ])->whereSlug($slug,$this->table)->first();
 
             if (!is_null($dossier)) {
                 $dossier->updateDossier();
@@ -265,7 +265,7 @@ class DossierMedicalController extends Controller
      * Remove the specified resource from storage.
      * Display the specified resource.
      * @OA\Delete(
-     *      path="/dossier/{slug}", 
+     *      path="/dossier/{slug}",
      *      operationId="deleteDossierMedical",
      *      tags={"DossierMedical"},
      * security={
@@ -348,7 +348,7 @@ class DossierMedicalController extends Controller
 
         }
 
-        while(count(DossierMedical::where('numero_dossier','=',$resultat)->get())>0){
+        while(count(DossierMedical::where('numero_dossier','=',$resultat)->latest()->get())>0){
             $resultat = self::randomNumeroDossier();
         }
 
@@ -405,19 +405,19 @@ class DossierMedicalController extends Controller
 
         $dossiers = Array(
             'consultationsMedecine'=>
-              ConsultationMedecineGenerale::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+              ConsultationMedecineGenerale::where('creator','=',Auth::id())->with('dossier.patient.user')->latest()->get(),
             'hospitalisations'=>
-                Hospitalisation::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+                Hospitalisation::where('creator','=',Auth::id())->with('dossier.patient.user')->latest()->get(),
             'cardiologies'=>
-                Cardiologie::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+                Cardiologie::where('creator','=',Auth::id())->with('dossier.patient.user')->latest()->get(),
             'kinesitherapies'=>
-                Kinesitherapie::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+                Kinesitherapie::where('creator','=',Auth::id())->with('dossier.patient.user')->latest()->get(),
             'consultationsObstetrique'=>
-                ConsultationObstetrique::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
-            'avis'=> Avis::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+                ConsultationObstetrique::where('creator','=',Auth::id())->with('dossier.patient.user')->latest()->get(),
+            'avis'=> Avis::where('creator','=',Auth::id())->with('dossier.patient.user')->latest()->get(),
             'mesAvis'=>MedecinAvis::with([
                     'avisMedecin.dossier.patient.user',
-                ])->where('medecin_id','=',Auth::id())->get(),
+                ])->where('medecin_id','=',Auth::id())->latest()->get(),
         );
         return response()->json(['dossiers'=>$dossiers]);
     }
@@ -433,19 +433,19 @@ class DossierMedicalController extends Controller
             'mesAvis'=>[]);
         $dossiers = Array(
             'consultationsMedecine'=>
-              ConsultationMedecineGenerale::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+              ConsultationMedecineGenerale::where('creator','=',Auth::id())->with('dossier.patient.user')->latest()->get(),
             'hospitalisations'=>
-                Hospitalisation::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+                Hospitalisation::where('creator','=',Auth::id())->with('dossier.patient.user')->latest()->get(),
             'cardiologies'=>
-                Cardiologie::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+                Cardiologie::where('creator','=',Auth::id())->with('dossier.patient.user')->latest()->get(),
             'kinesitherapies'=>
-                Kinesitherapie::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+                Kinesitherapie::where('creator','=',Auth::id())->with('dossier.patient.user')->latest()->get(),
             'consultationsObstetrique'=>
-                ConsultationObstetrique::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
-            'avis'=> Avis::where('creator','=',Auth::id())->with('dossier.patient.user')->get(),
+                ConsultationObstetrique::where('creator','=',Auth::id())->with('dossier.patient.user')->latest()->get(),
+            'avis'=> Avis::where('creator','=',Auth::id())->with('dossier.patient.user')->latest()->get(),
             'mesAvis'=>MedecinAvis::with([
                     'avisMedecin.dossier.patient.user',
-                ])->where('medecin_id','=',Auth::id())->get(),
+                ])->where('medecin_id','=',Auth::id())->latest()->get(),
         );
         // return $dossiers;
         foreach($dossiers['consultationsMedecine'] as $p){

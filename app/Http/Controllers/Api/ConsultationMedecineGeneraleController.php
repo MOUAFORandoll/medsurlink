@@ -81,7 +81,7 @@ class ConsultationMedecineGeneraleController extends Controller
     public function index()
     {
 
-        $consultations = ConsultationMedecineGenerale::with(['operationables.contributable', 'dossier', 'etablissement', 'motifs', 'traitements', 'conclusions', 'parametresCommun'])->orderByDateConsultation()->get();
+        $consultations = ConsultationMedecineGenerale::with(['operationables.contributable', 'dossier', 'etablissement', 'motifs', 'traitements', 'conclusions', 'parametresCommun'])->orderByDateConsultation()->latest()->get();
 
         foreach ($consultations as $consultation) {
             $consultation->updateConsultationMedecine();
@@ -330,7 +330,7 @@ class ConsultationMedecineGeneraleController extends Controller
       * Store a newly created resource in storage.
       * Display a listing of the resource.
      * @OA\get(
-     *      path="/consultation-medecine/{slug} ", 
+     *      path="/consultation-medecine/{slug} ",
      *      operationId="ShowConsultationMedecineGeneraleList",
      *      tags={"ConsultationMedecineGenerale"},
      * security={
@@ -411,7 +411,7 @@ class ConsultationMedecineGeneraleController extends Controller
     /**
      * Update the specified resource in storage.
      * @OA\Put(
-     *      path="/consultation-medecine/{slug} ", 
+     *      path="/consultation-medecine/{slug} ",
      *      operationId="UpdateConsultationMedecineGeneraleList",
      *      tags={"ConsultationMedecineGenerale"},
      * security={
@@ -609,7 +609,7 @@ class ConsultationMedecineGeneraleController extends Controller
     /**
      * Remove the specified resource from storage.
      * @OA\Delete(
-     *      path="/consultation-medecine/{slug} ", 
+     *      path="/consultation-medecine/{slug} ",
      *      operationId="DeleteConsultationMedecineGeneraleList",
      *      tags={"ConsultationMedecineGenerale"},
      * security={

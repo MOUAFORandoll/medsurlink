@@ -35,7 +35,7 @@ class ConsultationExamenValidationController extends Controller
         $etablissement = $consultation->etablissement_id;
         $examen_validation = ConsultationExamenValidation::with(['consultation.dossier.patient.user','examenComplementaire','etablissement','examenComplementaire.examenComplementairePrix' => function ($query) use ($etablissement) {
             $query->where('etablissement_exercices_id', '=', $etablissement);
-        }])->where('consultation_general_id', '=', $consultation->id)->get();
+        }])->where('consultation_general_id', '=', $consultation->id)->latest()->get();
         return response()->json(['examen_validation'=>$examen_validation]);
     }
     /**
@@ -45,7 +45,7 @@ class ConsultationExamenValidationController extends Controller
      */
     public function getExamenValidationSouscripteur()
     {
-        //$examen_validation = ConsultationExamenValidation::with(['examenComplementaire'])->where('souscripteur_id', '=',Auth::id())->get();
+        //$examen_validation = ConsultationExamenValidation::with(['examenComplementaire'])->where('souscripteur_id', '=',Auth::id())->latest()->get();
         //return response()->json(['examen_validation'=>$examen_validation]);
         $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
         //->whereNull('etat_validation_souscripteur')
@@ -142,7 +142,7 @@ class ConsultationExamenValidationController extends Controller
             $etablissement = $consultation->etablissement_id;
             $examen_validation = ConsultationExamenValidation::with(['examenComplementaire','etablissement','examenComplementaire.examenComplementairePrix' => function ($query) use ($etablissement) {
                 $query->where('etablissement_exercices_id', '=', $etablissement);
-            }])->where('consultation_general_id', '=', $consultation->id)->get();
+            }])->where('consultation_general_id', '=', $consultation->id)->latest()->get();
 
             foreach($examen_validation as $examen){
                 if(in_array($examen->id, $examens_id)){
