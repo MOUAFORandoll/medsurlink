@@ -385,6 +385,7 @@ Route::prefix('paiement')->group(function () {
     Route::post('/momo/paid','Api\MomoController@momoPaidByCustomer');
     Route::post('/momo/paymentStatus','Api\MomoController@momoPayementStatusByCustomer');
     Route::post('/om/paid','Api\OmController@paiementFromMedicasure');
+    Route::post('/om/{identifiant}/{payToken}/notification','Api\OmController@notificationPaiement');
     Route::post('/om/paymentStatus','Api\OmController@statutPaiement');
     Route::post('/stripe-paiement','Api\StripeContrtoller@stripePaidByCustomer');
     Route::post('/stripe-paiement-medicasure','Api\StripeContrtoller@paiementFromMedicasure');
