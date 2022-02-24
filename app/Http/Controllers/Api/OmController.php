@@ -105,13 +105,14 @@ class OmController extends Controller
         $body =[
             "notifUrl"=> url("om/paiement/".$commande->id."/".$mp_token."/notification/".$tokenInfo),
             "channelUserMsisdn"=> "658392349",
-            "amount"=> $request->get('amount'),
+            "amount"=> 50,
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
             "pin"=> "2019",
             "orderId"=> $identifiant,
             "description"=> "",
             "payToken"=> $mp_token
         ];
+        //$request->get('amount')
 
         $reponse = procederAuPaiementOm($access_token,$body);
         return response()->json(['reponse'=>$reponse]);
