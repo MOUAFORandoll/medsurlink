@@ -102,7 +102,7 @@ class OmController extends Controller
         $mp_token = initierPaiement($access_token);
         $tokenInfo = "checkout";
         $body = [
-            "notifUrl" => "https://9d57-154-72-170-86.ngrok.io/api/paiement/om/{$commande->id}/{$mp_token}/notification/{$tokenInfo}",
+            "notifUrl" => "https://94a0-154-72-168-208.ngrok.io/api/paiement/om/{$commande->id}/{$mp_token}/notification/{$tokenInfo}",
             //"notifUrl" => route('om.notification', ['identifiant' => $commande->id, 'payToken' => $mp_token, 'tokenInfo' => $tokenInfo]),
             "channelUserMsisdn"=> "658392349",
             "amount"=> 50,
@@ -163,7 +163,10 @@ class OmController extends Controller
                 $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
                 $affiliation->save();
             }
-            $reponse = json_decode($notification->reponse);
+
+            return response()->json(['status' => 'SUCCESSFULL','reponse' => $notification]);
+
+            /* $reponse = json_decode($notification->reponse);
             $token = $reponse->tokenInfo;
             if($token=="checkout"){
                 $updatePath = 'checkout';
@@ -178,7 +181,7 @@ class OmController extends Controller
             else if ($env === 'staging')
                 return  redirect('https://www.staging.medsurlink.com/'.$updatePath);
             else
-                return  redirect('https://www.medsurlink.com/'.$updatePath);
+                return  redirect('https://www.medsurlink.com/'.$updatePath); */
 
         }elseif($notification->statut == "FAILED"){
             $payment->status = "FAILED";
