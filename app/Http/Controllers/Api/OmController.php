@@ -29,9 +29,8 @@ class OmController extends Controller
     }
 
     public function paiementFromMedicasure(Request $request){
-        
+
         $identifiant = $request->input('package_id');
-        $reference = $request->input('reference');
         $subscriberMsisdn = $request->input('subscriberMsisdn');
         $validator=Validator::make(array('package'=>$identifiant,'subscriberMsisdn'=>$subscriberMsisdn),[
             'subscriberMsisdn'=>'required|digits_between:9,12',
@@ -103,7 +102,7 @@ class OmController extends Controller
         $mp_token = initierPaiement($access_token);
         $tokenInfo = "checkout";
         $body = [
-            "notifUrl" => "https://94a0-154-72-168-208.ngrok.io/api/paiement/om/{$commande->id}/{$mp_token}/notification/{$tokenInfo}",
+            "notifUrl" => "  https://03bf-154-72-169-220.ngrok.io/api/paiement/om/{$commande->id}/{$mp_token}/notification/{$tokenInfo}",
             //"notifUrl" => route('om.notification', ['identifiant' => $commande->id, 'payToken' => $mp_token, 'tokenInfo' => $tokenInfo]),
             "channelUserMsisdn"=> "658392349",
             "amount"=> 50,
@@ -113,49 +112,26 @@ class OmController extends Controller
             "description"=> "",
             "payToken"=> $mp_token
         ];
-        //$request->get('amount')
 
         $reponse = procederAuPaiementOm($access_token,$body);
         return response()->json(['reponse'=>$reponse]);
     }
-
-    // Paiement via mobile
-    public function paiementOmMobile(Request $request){
-
-        $identifiant = $request->input('package_id');
-        $access_token = getOmToken();
-        $mp_token = initierPaiement($access_token);
-
-        $body =[
-            //"notifUrl"=> url("om/paiement/".$commande->id."/".$mp_token."/notification/".$tokenInfo),
-            "channelUserMsisdn"=> "658392349",
-            "amount"=> $request->get('amount'),
-            "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
-            "pin"=> "2019",
-            "orderId"=> $identifiant,
-            "description"=> "",
-            "payToken"=> $mp_token
-        ];
-
-        // faire autres actions relative au paiement
-        $reponse = procederAuPaiementOm($access_token,$body);
-        return response()->json(['reponse'=>$reponse]);
-    }
-
 
     public function InitierPaiement(){
         $accessToken = getOmToken();
 
     }
 
-    public function notificationPaiement(Request $request,$identifiant,$pay_token){
+    public function notificationPaiement(Request $request, $identifiant, $payToken, $tokenInfo){
         //Notification du paiement par mail
 
-        NotificationPaiement::create([
+        $myNewData = $request->request->add(['tokenInfo' => $tokenInfo]);
+
+        $notif = NotificationPaiement::create([
             "type"=>'OM',
-            "code_contrat"=>$identifiant,
-            "pay_token"=>$pay_token,
-            "statut"=>(json_decode(Json::encode($request->all())))->status,
+            "code_contrat"=> $identifiant,
+            "pay_token"=> $request->payToken,
+            "statut"=> $request->status,
             "reponse"=>Json::encode($request->all()),
         ]);
     }
@@ -220,7 +196,8 @@ class OmController extends Controller
             $payment->save();
             return response()->json(['status'=>'CANCELLED','reponse' => $notification]);
         }
-        return response()->json(['statut'=>$reponse]);
+
+        return response()->json(['status'=> $notification]);
     }
 /*     public function souscripteurRedirectToMedsurlink($emailSouscripteur1)
     {
@@ -248,15 +225,13 @@ class OmController extends Controller
         $access_token = getOmToken();
         $mp_token = initierPaiement($access_token);
         $body = [
-            //"notifUrl"=> url('/')."/api/v1.0.0/om/".$mp_token."/notification",
-            "notifUrl"=> url('/')."/api/v1.0.0/om/".$mp_token."/notification",
+            "notifUrl"=> "https://www.medicasure.com/api/v1.0.0/om/".$mp_token."/notification",
             "channelUserMsisdn"=> "658392349",
-            "amount"=> 50,
-            //"amount"=> $request->get('amount'),
+            "amount"=> $request->get('amount'),
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
             "pin"=> "2019",
             "orderId"=> $request->get('reference'),
-            "description"=> "Paiement affiliation",
+            "description"=> $request->get('description',''),
             "payToken"=> $mp_token
         ];
 
@@ -273,7 +248,7 @@ class OmController extends Controller
 
     }
 
-/*     public function omPayementStatusByCustomer(Request $request){
+   /*  public function omPayementStatusByCustomer(Request $request){
         $payToken = $request->get('payToken');
         $access_token = getOmToken();
         $reponse = statutPaiementOm($access_token,$payToken);
