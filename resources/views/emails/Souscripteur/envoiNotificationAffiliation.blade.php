@@ -39,7 +39,6 @@ Prénom : <b>{{ $contact_prenom }}</b>
 
 Numero de téléphone de la personne à contacter :<b>{{ $contact_phone }}</b>
 
-Consulter avec l'un de ces liens
 
 
 {{ config('app.name') }}

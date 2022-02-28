@@ -258,6 +258,26 @@ class StripeContrtoller extends Controller
                $affiliation->save();
            }
 
+           /**
+            * envoie de la facture au souscripteur
+            */
+            $commande_id = $payment->commande->id;
+            $commande_date = $payment->commande->date_commande;
+            $montant_total = $payment->montant;
+            $echeance =  "13/02/2022";
+            $description = $affiliation->typeContrat->description_fr;
+            $quantite =  $payment->commande->quantite;
+            $prix_unitaire = $affiliation->typeContrat->montant;
+            $nom_souscripteur = mb_strtoupper($affiliation->souscripteur->user->nom).' '.$affiliation->souscripteur->user->prenom;
+            $email_souscripteur = $affiliation->souscripteur->user->email;
+            $rue =  $affiliation->souscripteur->user->quartier;
+            $adresse =  $affiliation->souscripteur->user->adresse;
+            $ville = $affiliation->souscripteur->user->ville;
+            $beneficiaire ="FOUKOUOP NDAM Rebecca";
+
+            EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire);
+
+
            if($token=="checkout"){
             $updatePath = 'success';
            }else{

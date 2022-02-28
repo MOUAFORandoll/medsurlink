@@ -23,4 +23,13 @@ class CommandePackage extends Model
         'souscripteur_id'
     ];
 
+    public function souscripteur(){
+        return $this->belongsTo(Souscripteur::class, 'souscripteur_id');
+    }
+
+    public function offres_package(){
+        return $this->belongsTo(Package::class, 'offres_packages_id');
+    }
+
+
 }

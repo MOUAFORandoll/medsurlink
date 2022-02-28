@@ -36,6 +36,12 @@ Route::get('question','Api\QuestionController@index');
 //    Route::put('consultation-kinesitherapie/{slug}/archiver','Api\KinesitherapieController@archiver');
 //    Route::put('consultation-kinesitherapie/{slug}/reactiver','Api\KinesitherapieController@reactiver');
 //Route::resource('partenaire','Api\PartenaireController');
+
+Route::get('impression/facture-offre/{commande_id}', function ($commande_id) {
+
+    return response()->json(['link' => route('facture.offre', $commande_id)]);
+});
+
 Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
 Route::get('/liens', function () {
     $liens = Dictionnaire::where("reference","lien_parente")->get();
@@ -377,9 +383,12 @@ Route::resource('offres','Api\OffreController');
 Route::prefix('paiement')->group(function () {
     //Ici nous mettons en place des routes pour initier les paiement venant d'ailleurs
     Route::post('/momo/paid','Api\MomoController@momoPaidByCustomer');
+    Route::post('/momo/{identifiant}/{uuid}/collections/callback','Api\MomoController@notificationPaiement')->name('momo.notification');
     Route::post('/momo/paymentStatus','Api\MomoController@momoPayementStatusByCustomer');
-    Route::post('/om/paid','Api\OmController@omPaidByCustomer');
-    Route::post('/om/paymentStatus','Api\OmController@omPayementStatusByCustomer');
+    Route::post('/om/paid','Api\OmController@paiementFromMedicasure');
+    Route::post('/om/{identifiant}/{payToken}/notification/{tokenInfo}','Api\OmController@notificationPaiement')->name('om.notification');
+    Route::get('/om/{identifiant}/{payToken}/statutPaiement','Api\OmController@statutPaiement');
+    //Route::post('/om/paymentStatus','Api\OmController@statutPaiement');
     Route::post('/stripe-paiement','Api\StripeContrtoller@stripePaidByCustomer');
     Route::post('/stripe-paiement-medicasure','Api\StripeContrtoller@paiementFromMedicasure');
     Route::post('/stripe-renouvellement','Api\StripeContrtoller@renouvellementPaiement');
