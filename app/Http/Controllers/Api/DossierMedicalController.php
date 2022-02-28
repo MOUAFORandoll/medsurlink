@@ -210,6 +210,7 @@ class DossierMedicalController extends Controller
                 'comptesRenduOperatoire.etablissement',
                 'ordonances',
                 'patient',
+                'financeurs.financable',
                 'patient.user',
                 'patient.medecinReferent.medecinControles.user',
                 'patient.souscripteur.user',

@@ -99,6 +99,10 @@ class DossierMedical extends Model
     public function avis(){
         return $this->hasMany(Avis::class,'dossier_medical_id','id');
     }
+    public function financeurs()
+    {
+        return $this->hasMany(PatientSouscripteur::class, 'patient_id','user_id');
+    }
     /**
      * The "booting" method of the model.
      *
