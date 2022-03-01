@@ -383,6 +383,7 @@ Route::resource('offres','Api\OffreController');
 Route::prefix('paiement')->group(function () {
     //Ici nous mettons en place des routes pour initier les paiement venant d'ailleurs
     Route::post('/momo/paid','Api\MomoController@momoPaidByCustomer');
+    Route::post('/momo/{identifiant}/{uuid}/collections/callback','Api\MomoController@notificationPaiement')->name('momo.notification');
     Route::post('/momo/paymentStatus','Api\MomoController@momoPayementStatusByCustomer');
     Route::post('/om/paid','Api\OmController@paiementFromMedicasure');
     Route::post('/om/{identifiant}/{payToken}/notification/{tokenInfo}','Api\OmController@notificationPaiement')->name('om.notification');

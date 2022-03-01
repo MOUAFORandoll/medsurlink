@@ -57,7 +57,8 @@ class MomoController extends Controller
         $referenceId = $request->get('referenceId');
 
         $operation = json_encode($operation);
-        $callbackUrl = 'https://www.medicasure.com/'.$request->get('identifiant').'/'.$referenceId.'/collections/callback';
+        $callbackUrl = route('momo.notification', ['identifiant' => $request->get('identifiant'), 'uuid' => $referenceId]);
+
 //        Requete de Paiement
         $paiementInformation =  requestToPay($referenceId,'mtncameroon ',$this->subscriptionKey,$accessToken,$operation,$this->host,$callbackUrl);
         //Pour la nouvelle version on va retourner à ce stade ci le message le reference uuid et on va faire le test
@@ -77,18 +78,19 @@ class MomoController extends Controller
     public function notificationPaiement(Request $request,$identifiant,$uuid){
         //Notification du paiement par mail
 
-        NotificationPaiement::create([
+        $notification = NotificationPaiement::create([
             "type"=>'MOMO',
             "code_contrat"=>$identifiant,
             "pay_token"=>$uuid,
             "statut"=>(json_decode(Json::encode($request->all())))->status,
             "reponse"=>Json::encode($request->all()),
         ]);
+        \Log::alert($notification);
     }
 
     public function momoPaidByCustomer(Request $request){
         $accessToken = getToken($this->subscriptionKey,$this->base64Code);
-        
+
         $operation = array(
             'amount'=> $request->amount,
             'currency'=> $this->currency,
@@ -122,18 +124,18 @@ class MomoController extends Controller
                     $userInformation['pays']=$request->get("pays");
                     $userInformation['telephone']=$request->get("telephone");
                     $userInformation['adresse']="";
-        
+
                     //dd($userInformation);
                     // Création du compte utilisateur medsurlink du souscripteur
                     $passwordSouscripteur = substr(bin2hex(random_bytes(10)), 0, 7);
                     $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordSouscripteur,'0');
-        
+
                     // Assignation du role souscripteur
                     $user->assignRole('Souscripteur');
-        
+
                     // Enregistrement des informations personnels du souscripteur
                     $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
-        
+
                     //Definition des identifiants pour connexion
                     $tokenInfo =$passwordSouscripteur.'medsur'. $request->email;
                     // Envoi du mail avec mot de passe souscripteur
@@ -150,7 +152,7 @@ class MomoController extends Controller
                     }
                     $tokenInfo = "checkout";
                 }
-        
+
                 $commande =  CommandePackage::create([
                     "date_commande" => Carbon::now()->toDateTimeString(),
                     'quantite' =>$request->get('quantite'),
@@ -164,9 +166,12 @@ class MomoController extends Controller
                     'commande_id' =>$commande->id,
                     'souscripteur_id' => $souscripteur->user_id,
                 ]);
-       
-        // $callbackUrl = url('api/paiement/momo/paymentStatus/'.$commande->id.'/'.$referenceId.'/collections/callback');
-        $callbackUrl = '';
+
+        $callbackUrl = route('momo.notification', ['identifiant' => $request->get('identifiant'), 'uuid' => $referenceId]);
+        //$callbackUrl = 'https://e6c3-154-72-168-205.ngrok.io/api/paiement/momo/'.$request->get('identifiant').'/'.$referenceId.'/collections/callback';
+        //$callbackUrl = 'https://webhook.site/71bde717-c4ba-430d-b037-a0ad7a97348c';
+
+
 //        Requete de Paiement
         $paiementInformation =  requestToPay($referenceId,'mtncameroon ',$this->subscriptionKey,$accessToken,$operation,$this->host,$callbackUrl);
         //Pour la nouvelle version on va retourner à ce stade ci le message le reference uuid et on va faire le test
@@ -199,7 +204,7 @@ class MomoController extends Controller
                         "statut"=>'Success',
                         "reponse"=>Json::encode($request->all()),
                     ]);
-        
+
                    $payment = PaymentOffre::where("commande_id",$identifiant)->first();
                    $payment->status = "SUCCESS";
                    $payment->save();
@@ -220,13 +225,13 @@ class MomoController extends Controller
                        $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
                        $affiliation->save();
                    }
-        
+
                    if($token=="checkout"){
                     $updatePath = 'checkout';
                    }else{
                     $updatePath = 'contrat-prepaye/add?status=success&token='.$token;
                    }
-        
+
                    $env = strtolower(config('app.env'));
                    if ($env === 'local')
                    return  redirect('http://localhost:8081/'.$updatePath);
@@ -235,7 +240,7 @@ class MomoController extends Controller
                         return  redirect('https://www.staging.medsurlink.com/'.$updatePath);
                     else
                         return  redirect('https://www.medsurlink.com/'.$updatePath);
-        
+
                 }
                 elseif ($reponse['data']['status'] == 'PENDING'){
                     $payment = PaymentOffre::where("commande_id",$identifiant)->first();
