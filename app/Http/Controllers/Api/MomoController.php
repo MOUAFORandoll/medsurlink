@@ -70,6 +70,30 @@ class MomoController extends Controller
         }
     }
 
+    // Paiement via mobile
+    public function paiementMomoMobile(Request $request, $subscriptionKey, $accessToken, $referenceId, $base64,$operation, $callbackUrl, $uuid, $host){
+
+        $identifiant = $request->input('package_id');
+        $access_Momo_token = getToken($subscriptionKey, $base64);
+        $mp_token = createUser($subscriptionKey, $uuid, $host);
+
+        $body =[
+            //"notifUrl"=> url("om/paiement/".$commande->id."/".$mp_token."/notification/".$tokenInfo),
+            "channelUserMsisdn"=> "658392349",
+            "amount"=> $request->get('amount'),
+            "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
+            "pin"=> "2019",
+            "orderId"=> $identifiant,
+            "description"=> "",
+            "payToken"=> $mp_token
+        ];
+
+        $reponse = requestToPay($referenceId, $environment='mtncameroon', $subscriptionKey, $accessToken, $operation, $host=null,$callbackUrl);
+        // faire autres actions relative au paiement
+        $reponse = procederAuPaiementOm($access_Momo_token,$body);
+        return response()->json(['reponse'=>$reponse]);
+    }
+
     public function statutPaiementMomo(Request $request){
 
 
@@ -87,6 +111,7 @@ class MomoController extends Controller
         ]);
         \Log::alert($notification);
     }
+    
 
     public function momoPaidByCustomer(Request $request){
         $accessToken = getToken($this->subscriptionKey,$this->base64Code);
@@ -254,5 +279,6 @@ class MomoController extends Controller
                     return response()->json(['status'=>'CANCELLED','reponse'=>$reponse]);
                 }
             }
+            
     }
 }
