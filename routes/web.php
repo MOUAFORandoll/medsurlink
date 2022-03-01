@@ -1,7 +1,12 @@
 <?php
+
+use App\Models\AffiliationSouscripteur;
+use App\Models\CommandePackage;
 use App\Models\ContratIntermediationMedicale;
 use App\Models\CompteRenduOperatoire;
+use App\Models\PaymentOffre;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,6 +68,27 @@ Route::get('/doc', function () {
     $data = compact('compteRendu');
     return view('rapport.compte_rendu', $data);
 });
+Route::get('impression/facture-offre/{affiliation}', function ($affiliation) {
+
+    $affiliation = AffiliationSouscripteur::find($affiliation);
+
+    $commande_id = $affiliation->commande->id;
+    $commande_date = $affiliation->commande->date_commande;
+    $montant_total = $affiliation->montant;
+    $echeance =  "13/02/2022";
+    $description = $affiliation->typeContrat->description_fr;
+    $quantite =  $affiliation->commande->quantite;
+    $prix_unitaire = $affiliation->typeContrat->montant;
+    $nom_souscripteur = mb_strtoupper($affiliation->souscripteur->user->nom).' '.$affiliation->souscripteur->user->prenom;
+    $email_souscripteur = $affiliation->souscripteur->user->email;
+    $rue =  $affiliation->souscripteur->user->quartier;
+    $adresse =  $affiliation->souscripteur->user->adresse;
+    $ville = $affiliation->souscripteur->user->ville;
+    $beneficiaire ="FOUKOUOP NDAM Rebecca";
+
+    $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire);
+    return $pdf['stream'];
+})->name('facture.offre');
 /*
 Route::get('{all}', function () {
     return view('dashboard');
@@ -71,7 +97,7 @@ Route::get('{all}', function () {
 ->where('all', '^admin|admin/|admin/.*,dashboard|dashboard/|dashboard/.*$');
 */
 
-//Auth::routes();
+Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');
 

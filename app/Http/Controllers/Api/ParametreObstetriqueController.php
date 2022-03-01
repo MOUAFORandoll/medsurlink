@@ -18,7 +18,7 @@ class ParametreObstetriqueController extends Controller
      */
     public function index()
     {
-        $parametresObs = ParametreObstetrique::with(['consultationPrenatale'])->get();
+        $parametresObs = ParametreObstetrique::with(['consultationPrenatale'])->latest()->get();
 
         foreach ($parametresObs as $parametreOb){
             $parametreOb->updateParametreObstetrique();

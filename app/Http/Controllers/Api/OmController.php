@@ -225,13 +225,15 @@ class OmController extends Controller
         $access_token = getOmToken();
         $mp_token = initierPaiement($access_token);
         $body = [
-            "notifUrl"=> "https://www.medicasure.com/api/v1.0.0/om/".$mp_token."/notification",
+            //"notifUrl"=> url('/')."/api/v1.0.0/om/".$mp_token."/notification",
+            "notifUrl"=> url('/')."/api/v1.0.0/om/".$mp_token."/notification",
             "channelUserMsisdn"=> "658392349",
-            "amount"=> $request->get('amount'),
+            "amount"=> 50,
+            //"amount"=> $request->get('amount'),
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
             "pin"=> "2019",
             "orderId"=> $request->get('reference'),
-            "description"=> $request->get('description',''),
+            "description"=> "Paiement affiliation",
             "payToken"=> $mp_token
         ];
 

@@ -108,7 +108,7 @@ class MedicamentController extends Controller
     }
 
     public function search($chaineRecherche){
-        $medicaments = Medicament::where('nom_specialite','like','%'.$chaineRecherche.'%')->orWhere('nom_dci','like','%'.$chaineRecherche.'%')->limit(100)->get();
+        $medicaments = Medicament::where('nom_specialite','like','%'.$chaineRecherche.'%')->orWhere('nom_dci','like','%'.$chaineRecherche.'%')->limit(100)->latest()->get();
         return response()->json(['medicaments'=>$medicaments]);
     }
 }

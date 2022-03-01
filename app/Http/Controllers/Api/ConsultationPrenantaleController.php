@@ -23,7 +23,7 @@ class ConsultationPrenantaleController extends Controller
      */
     public function index()
     {
-        $consultationsPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->get();
+        $consultationsPrenatale = ConsultationPrenatale::with(['consultationObstetrique','parametresObstetrique'])->latest()->get();
         foreach ($consultationsPrenatale as $consultationPrenatale){
             $consultationPrenatale->updatePrenatalConsultation();
         }

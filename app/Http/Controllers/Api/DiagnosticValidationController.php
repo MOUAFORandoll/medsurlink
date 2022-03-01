@@ -15,7 +15,7 @@ class DiagnosticValidationController extends Controller
      */
     public function index()
     {
-        $diagnostics = DiagnosticValidation::with(['medecinControl','medecin','diagnostic'])->get();
+        $diagnostics = DiagnosticValidation::with(['medecinControl','medecin','diagnostic'])->latest()->get();
         return response()->json(['diagnostic'=>$diagnostics]);
     }
 

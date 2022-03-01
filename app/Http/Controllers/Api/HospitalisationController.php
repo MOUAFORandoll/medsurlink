@@ -27,7 +27,7 @@ class HospitalisationController extends Controller
      */
     public function index()
     {
-        $hospitalisations = Hospitalisation::with(['dossier','motifs','etablissement'])->get();
+        $hospitalisations = Hospitalisation::with(['dossier','motifs','etablissement'])->latest()->get();
 
         foreach ($hospitalisations as $hospitalisation){
             $hospitalisation->updateHospitalisation();

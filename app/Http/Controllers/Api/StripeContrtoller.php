@@ -258,6 +258,26 @@ class StripeContrtoller extends Controller
                $affiliation->save();
            }
 
+           /**
+            * envoie de la facture au souscripteur
+            */
+            $commande_id = $payment->commande->id;
+            $commande_date = $payment->commande->date_commande;
+            $montant_total = $payment->montant;
+            $echeance =  "13/02/2022";
+            $description = $affiliation->typeContrat->description_fr;
+            $quantite =  $payment->commande->quantite;
+            $prix_unitaire = $affiliation->typeContrat->montant;
+            $nom_souscripteur = mb_strtoupper($affiliation->souscripteur->user->nom).' '.$affiliation->souscripteur->user->prenom;
+            $email_souscripteur = $affiliation->souscripteur->user->email;
+            $rue =  $affiliation->souscripteur->user->quartier;
+            $adresse =  $affiliation->souscripteur->user->adresse;
+            $ville = $affiliation->souscripteur->user->ville;
+            $beneficiaire ="FOUKOUOP NDAM Rebecca";
+
+            EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire);
+
+
            if($token=="checkout"){
             $updatePath = 'success';
            }else{
@@ -266,8 +286,8 @@ class StripeContrtoller extends Controller
 
            $env = strtolower(config('app.env'));
            if ($env === 'local')
-           return  redirect('http://localhost:8081/'.$updatePath);
-           //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+           return  redirect('http://localhost:8080/'.$updatePath);
+           //return redirect('http://localhost:8080/dashboard/user-management/patients/paiement-status/'.$slug);
             else if ($env === 'staging')
                 return  redirect('https://www.staging.medsurlink.com/'.$updatePath);
             else
@@ -308,12 +328,12 @@ class StripeContrtoller extends Controller
        $env = strtolower(config('app.env'));
        if ($env === 'local')
         //return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
-         return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+         return redirect('http://localhost:8080/dashboard/user-management/patients/paiement-status/'.$slug);
         else if ($env === 'staging')
             return  redirect('https://www.staging.medsurlink.com/user-management/patients/paiement-status/'.$slug);
         else
             return  redirect('https://www.medsurlink.com/user-management/patients/paiement-status/'.$slug);
-       //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+       //return redirect('http://localhost:8080/dashboard/user-management/patients/paiement-status/'.$slug);
     }
     public function notifRenewAndRedirectToAccount(Request $request,$slug,$patient){
 
@@ -331,8 +351,8 @@ class StripeContrtoller extends Controller
 
        $affiliation = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
 
-        $affiliation->renouvelle = 1;
-        $affiliation->date_debut = Carbon::parse($affiliation->date_fin);
+        $affiliation->renouvelle += 1;
+        $payment->status_contrat = "Renouvelé";
         $affiliation->date_fin = Carbon::parse($affiliation->date_fin)->addYears(1)->format('Y-m-d');
         $affiliation->save();
 
@@ -340,12 +360,12 @@ class StripeContrtoller extends Controller
        $env = strtolower(config('app.env'));
        if ($env === 'local')
         //return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
-         return redirect('http://localhost:8081/affiliation/'.$affiliation->slug.'?renouvellement=success');
+         return redirect('http://localhost:8080/affiliation/'.$affiliation->slug.'?renouvellement=success');
         else if ($env === 'staging')
             return  redirect('https://www.staging.medsurlink.com/affiliation/'.$affiliation->slug.'?renouvellement=success');
         else
             return  redirect('https://www.medsurlink.com/affiliation/'.$affiliation->slug.'?renouvellement=success');
-       //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+       //return redirect('http://localhost:8080/dashboard/user-management/patients/paiement-status/'.$slug);
     }
 
     public function notifExtraAndRedirectToAccount(Request $request,$slug,$patient){
@@ -364,8 +384,7 @@ class StripeContrtoller extends Controller
 
        $affiliation = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
 
-        $affiliation->renouvelle = 1;
-        $affiliation->date_debut = Carbon::parse($affiliation->date_fin);
+        $affiliation->renouvelle += 1;
         $affiliation->date_fin = Carbon::parse($affiliation->date_fin)->addYears(1)->format('Y-m-d');
         $affiliation->save();
 
@@ -373,11 +392,11 @@ class StripeContrtoller extends Controller
        $env = strtolower(config('app.env'));
        if ($env === 'local')
         //return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
-         return redirect('http://localhost:8081/affiliation/'.$affiliation->slug.'?renouvellement=success');
+         return redirect('http://localhost:8080/affiliation/'.$affiliation->slug.'?renouvellement=success');
         else if ($env === 'staging')
             return  redirect('https://www.staging.medsurlink.com/affiliation/'.$affiliation->slug.'?renouvellement=success');
         else
             return  redirect('https://www.medsurlink.com/affiliation/'.$affiliation->slug.'?renouvellement=success');
-       //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
+       //return redirect('http://localhost:8080/dashboard/user-management/patients/paiement-status/'.$slug);
     }
 }

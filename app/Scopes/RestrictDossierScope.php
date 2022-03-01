@@ -44,6 +44,7 @@ class RestrictDossierScope implements Scope
                     $dossiers = [];
                     foreach ($patients as $patient){
                         if (!is_null($patient->dossier)){
+                            // dd($patients);
                             array_push($dossiers,$patient->dossier->id);
                         }
                     }
@@ -51,7 +52,9 @@ class RestrictDossierScope implements Scope
 
                 foreach ($patientSouscripteurs as  $patient){
                     if (in_array($patient->patients->dossier->id,$dossiers)){
-                        array_push($patientsId,$patient->patients->dossier->id);
+                        //dd($patient->patients->dossier->id);
+                        //array_push($patientsId,$patient->patients->dossier->id);
+                        
                     }
                 }
                 if ($user->isMedicasure == 0){

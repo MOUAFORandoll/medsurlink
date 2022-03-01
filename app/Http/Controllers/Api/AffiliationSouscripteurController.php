@@ -14,7 +14,11 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Mail\NouvelAffiliation;
+use App\Mail\OrderShipped;
+use App\Models\Package;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Psy\Util\Json;
 
@@ -267,18 +271,19 @@ class AffiliationSouscripteurController extends Controller
         // Recupération des informations relative à la commande
         $commande =  \App\Models\AffiliationSouscripteur::where("id",$commande_id)->first();
 
-       $validator = Validator::make($request->all(),[
-           'question_id'=>'required|integer|exists:questions,id',
-           'reponse'=>'required|string',
-        ]);
+        /* $validator = Validator::make($request->all(),[
+            'email'=>'required|email|unique:users'
+            ]);
 
-       if ($validator->fails()){
-           return  response()->json($validator->errors()->all(),400);
-       }
+        if ($validator->fails()){
+            return  response()->json($validator->errors()->all(),400);
+        } */
 
 
         // Récupération des informations relatifs au souscripteur
         $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
+
+        \Log::alert(json_encode($commande));
         if ($commande){
             if ($commande->nombre_restant > 0){
                 // Récupération des informations nécessaire pour la création du compte utilisateur medsurlink
@@ -337,12 +342,25 @@ class AffiliationSouscripteurController extends Controller
                     "expire"=>0,
                     "code_contrat"=>$dossier->numero_dossier,
                     "niveau_urgence"=>$request->urgence,
+                    "plainte" => $request->plainte,
+                    "contact_firstName" => $request->contact_firstName,
+                    "contact_name" => $request->contact_name,
+                    "contact_phone" => $request->contact_phone,
+                    'personne_contact' => $request->personne_contact,
+                    'paye_par_affilie' => $request->paye_par_affilie,
                     "nombre_envois_email"=>0,
                     "expire_email"=>0,
                     "nom"=>'Annuelle',
                     "date_debut"=>Carbon::now(),
                     "date_fin"=>Carbon::now()->addYears(1)->format('Y-m-d')
                 ]);
+
+
+                // envoie de mail à contract
+                $package = Package::find($commande->type_contrat);
+                Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $request->plainte, $request->urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie));
+
+
                 $commande = reduireCommandeRestante($commande->id);
 
                 defineAsAuthor("Affiliation",$affiliation->id,'create',$request->patient_id);
@@ -404,7 +422,7 @@ class AffiliationSouscripteurController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function affiliationRestante($id){
-        $commande =  \App\Models\AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->where('nombre_restant','>',0)->get();
+        $commande =  \App\Models\AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->where('nombre_restant','>',0)->latest()->get();
         return response()->json(['commande'=>$commande]);
     }
 
