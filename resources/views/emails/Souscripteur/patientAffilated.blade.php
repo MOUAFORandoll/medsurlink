@@ -6,7 +6,7 @@ Nous espérons vous trouvez bien portant. Vous avez été désigné comme souscr
 Nom: <strong>{{ucfirst($patient->user->prenom).'  '.strtoupper($patient->user->nom)}}</strong><br>
 Email: {{$patient->user->email}}
 
-{{ config('app.name') }}
+{{ config('app.name') }} by Medicasure
 <div class="div-logo-mail">
     <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
 </div>
