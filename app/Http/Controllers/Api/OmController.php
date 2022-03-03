@@ -102,11 +102,12 @@ class OmController extends Controller
         $access_token = getOmToken();
         $mp_token = initierPaiement($access_token);
         $tokenInfo = "checkout";
+
         $body = [
-            "notifUrl" => "https://e969-154-72-169-161.ngrok.io/api/paiement/om/{$commande->id}/{$mp_token}/notification/{$tokenInfo}",
-            //"notifUrl" => route('om.notification', ['identifiant' => $commande->id, 'payToken' => $mp_token, 'tokenInfo' => $tokenInfo]),
+            //"notifUrl" => "https://e969-154-72-169-161.ngrok.io/api/paiement/om/{$commande->id}/{$mp_token}/notification/{$tokenInfo}",
+            "notifUrl" => route('om.notification', ['identifiant' => $commande->id, 'payToken' => $mp_token, 'tokenInfo' => $tokenInfo]),
             "channelUserMsisdn"=> "658392349",
-            "amount"=> 50,
+            "amount"=> ConversionEurotoXaf($request->get('amount')),
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
             "pin"=> "2019",
             "orderId"=> $identifiant,
