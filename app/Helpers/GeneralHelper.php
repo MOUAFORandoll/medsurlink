@@ -4,6 +4,7 @@ use App\Mail\Facture\AchatOffre;
 use App\SMS;
 use App\Notifications\SendSMS;
 use Illuminate\Support\Arr;
+use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade as PDF;
 
@@ -195,5 +196,34 @@ if(!function_exists('generationPdfFactureOffre'))
         }catch (\Exception $exception){
             //$exception
         }
+    }
+}
+
+
+if(!function_exists('ConversionEurotoXaf'))
+{
+    /**
+     * @param $montant
+     * @return int
+     */
+    function ConversionEurotoXaf($montant)
+    {
+        $base_uri = 'https://api.exchangerate.host/latest';
+
+        try {
+            $client = new Client(['base_uri' => $base_uri]);
+            $response = $client->request('GET', $base_uri);
+            $responseArray = json_decode($response->getBody()->getContents(), true);
+            if($responseArray['success'] == true){
+                $total = ceil($montant * $responseArray['rates']['XAF']);
+                return $total;
+            }
+
+            //return $responseArray;
+
+        } catch (Exception $exception) {
+            return response()->json(['erreur'=>$exception->getMessage()],419);
+        }
+
     }
 }

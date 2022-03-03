@@ -11,6 +11,7 @@ use App\Models\Souscripteur;
 use Illuminate\Http\Request;
 use App\Models\CommandePackage;
 use App\Http\Controllers\Controller;
+use App\Models\Affiliation;
 use App\Models\NotificationPaiement;
 use App\Models\AffiliationSouscripteur;
 use Illuminate\Support\Facades\Validator;
@@ -101,11 +102,12 @@ class OmController extends Controller
         $access_token = getOmToken();
         $mp_token = initierPaiement($access_token);
         $tokenInfo = "checkout";
+
         $body = [
-            "notifUrl" => "https://87de-154-72-170-47.ngrok.io/api/paiement/om/{$commande->id}/{$mp_token}/notification/{$tokenInfo}",
-            //"notifUrl" => route('om.notification', ['identifiant' => $commande->id, 'payToken' => $mp_token, 'tokenInfo' => $tokenInfo]),
+            //"notifUrl" => "https://e969-154-72-169-161.ngrok.io/api/paiement/om/{$commande->id}/{$mp_token}/notification/{$tokenInfo}",
+            "notifUrl" => route('om.notification', ['identifiant' => $commande->id, 'payToken' => $mp_token, 'tokenInfo' => $tokenInfo]),
             "channelUserMsisdn"=> "658392349",
-            "amount"=> 50,
+            "amount"=> ConversionEurotoXaf($request->get('amount')),
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
             "pin"=> "2019",
             "orderId"=> $identifiant,
@@ -136,7 +138,7 @@ class OmController extends Controller
         ]);
     }
 
-    public function statutPaiement($identifiant,$payToken){
+    public function statutPaiement($identifiant,$payToken, $patient = null){
         $notification = NotificationPaiement::where('pay_token', $payToken)->first();
         //{"payToken":"MP2202244469409A5830F5160CF1","status":"SUCCESSFULL","message":"Transaction completed"}
         $payment = PaymentOffre::where("commande_id",$notification->code_contrat)->first();
@@ -145,24 +147,52 @@ class OmController extends Controller
             $payment->status = "SUCCESS";
             $payment->save();
             //dd($payment);
-
             $affiliation = AffiliationSouscripteur::where([["type_contrat",$payment->commande->offres_packages_id],["user_id",$payment->souscripteur_id]])->first();
 
-            if($affiliation == null){
-                $affiliation = AffiliationSouscripteur::create([
-                    'user_id'=>$payment->souscripteur_id,
-                    'type_contrat'=>$payment->commande->offres_packages_id,
-                    'nombre_paye'=>$payment->commande->quantite,
-                    'nombre_restant'=>$payment->commande->quantite,
-                    'montant'=>$payment->montant,
-                    'cim_id'=>$payment->commande->id,
-                    'date_paiement'=>null,
-                ]);
+            if(!is_null($patient)){
+                    $affiliation_old = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
+
+                    $affiliation_old->renouvelle += 1;
+                    $payment->status_contrat = "Renouvelé";
+                    $affiliation_old->date_fin = Carbon::parse($affiliation_old->date_fin)->addYears(1)->format('Y-m-d');
+                    $affiliation_old->save();
             }else{
-                $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
-                $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
-                $affiliation->save();
+
+                    if($affiliation == null){
+                        $affiliation = AffiliationSouscripteur::create([
+                            'user_id'=>$payment->souscripteur_id,
+                            'type_contrat'=>$payment->commande->offres_packages_id,
+                            'nombre_paye'=>$payment->commande->quantite,
+                            'nombre_restant'=>$payment->commande->quantite,
+                            'montant'=>$payment->montant,
+                            'cim_id'=>$payment->commande->id,
+                            'date_paiement'=>null,
+                        ]);
+                    }else{
+                        $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
+                        $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
+                        $affiliation->save();
+                    }
             }
+
+            /**
+            * envoie de la facture au souscripteur
+            */
+            $commande_id = $payment->commande->id;
+            $commande_date = $payment->commande->date_commande;
+            $montant_total = $payment->montant;
+            $echeance =  "13/02/2022";
+            $description = $affiliation->typeContrat->description_fr;
+            $quantite =  $payment->commande->quantite;
+            $prix_unitaire = $affiliation->typeContrat->montant;
+            $nom_souscripteur = mb_strtoupper($affiliation->souscripteur->user->nom).' '.$affiliation->souscripteur->user->prenom;
+            $email_souscripteur = $affiliation->souscripteur->user->email;
+            $rue =  $affiliation->souscripteur->user->quartier;
+            $adresse =  $affiliation->souscripteur->user->adresse;
+            $ville = $affiliation->souscripteur->user->ville;
+            $beneficiaire ="FOUKOUOP NDAM Rebecca";
+            EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire);
+
 
             return response()->json(['status' => 'SUCCESSFULL','reponse' => $notification]);
 
