@@ -9,7 +9,7 @@ N'hésitez pas à prendre contact avec notre service si vous avez des questions 
 Salutations cordiales.
 
 {{--Signature Medsurlink--}}
-
+{{ config('app.name') }} by Medicasure
 <div class="div-logo-mail">
     <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
 </div>
