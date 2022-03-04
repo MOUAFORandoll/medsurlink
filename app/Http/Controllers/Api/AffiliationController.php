@@ -77,6 +77,27 @@ class AffiliationController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
         $affiliation = Affiliation::with(['patient','patient.dossier','package','patient.financeurs.lien'])->whereSlug($slug)->first();
+
+        $date_fin = Carbon::createFromFormat('Y-m-d', $affiliation->date_fin);
+        $today = Carbon::createFromFormat('Y-m-d', date('Y-m-d'));
+
+        if($today->gt($date_fin) && ($affiliation->status_contrat != 'Résilié')){
+            $affiliation->status_contrat = 'Expiré';
+            $affiliation->expire = 1;
+
+        }elseif($date_fin->gte($today) && ($affiliation->status_contrat != 'Résilié')){
+            if($affiliation->status_contrat == 'Généré' && $affiliation->status_paiement == 'PAYE'){
+                $affiliation->status_contrat = 'Actif';
+            }else{
+                $affiliation->status_contrat = 'Généré';
+            }
+            if($affiliation->renouvelle){
+                $affiliation->status_contrat = 'Renouvélé';
+            }
+            $affiliation->expire = 0;
+        }
+        $affiliation->save();
+
         if (!is_null($affiliation->patient)) {
             $affiliation['user'] = $affiliation->patient->user;
             $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
