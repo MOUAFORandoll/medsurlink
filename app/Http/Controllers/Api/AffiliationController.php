@@ -81,6 +81,7 @@ class AffiliationController extends Controller
             $affiliation['user'] = $affiliation->patient->user;
             $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
         }
+        //if($affiliation->status_contrat )
         return response()->json(['affiliation'=>$affiliation]);
     }
 
