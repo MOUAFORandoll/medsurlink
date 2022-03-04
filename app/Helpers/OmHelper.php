@@ -1,6 +1,5 @@
 <?php
 use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Http;
 
 if(!function_exists('getOmToken')){
     /**

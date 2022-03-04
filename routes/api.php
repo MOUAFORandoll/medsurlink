@@ -22,7 +22,7 @@ header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Autho
 
 Route::post('oauth/token', 'Api\AuthController@auth');
 Route::post('oauth/redirect/token', 'Api\AuthController@authAfterRedirect');
-Route::post('password/emailVersion','Auth\ForgotPasswordController@sendResetLinkEmail');
+Route::post('password/emailVersion','Auth\ForgotPasswordController@sendReset_LinkEmail');
 Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
 Route::get('question','Api\QuestionController@index');
