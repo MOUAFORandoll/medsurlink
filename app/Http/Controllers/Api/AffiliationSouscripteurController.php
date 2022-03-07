@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Traits\PersonnalErrors;
-use App\Models\Patient;
-use App\Models\ReponseSecrete;
-use App\Models\Souscripteur;
-use App\Models\PatientSouscripteur;
-use App\Models\Affiliation;
-use App\Models\TimeActivite;
 use Carbon\Carbon;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Mail\NouvelAffiliation;
-use App\Mail\OrderShipped;
-use App\Models\Package;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
 use Psy\Util\Json;
+use GuzzleHttp\Client;
+use App\Models\Package;
+use App\Models\Patient;
+use App\Mail\OrderShipped;
+use App\Models\Affiliation;
+use App\Models\Souscripteur;
+use App\Models\TimeActivite;
+use Illuminate\Http\Request;
+use App\Models\ReponseSecrete;
+use App\Mail\NouvelAffiliation;
+use App\Models\PatientSouscripteur;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Traits\PersonnalErrors;
 
 class AffiliationSouscripteurController extends Controller
 {
@@ -290,7 +291,8 @@ class AffiliationSouscripteurController extends Controller
                 $userInformation = configurerUserMedsurlink($request);
 
                 // Création du compte utilisateur du patient medsurlink
-                $passwordPatient = substr(bin2hex(random_bytes(10)), 0, 7);
+                $password_new = substr(bin2hex(random_bytes(10)), 0, 7);
+                $passwordPatient = Hash::make($password_new);
                 $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordPatient,'1');
 
                 // Enregistrement des informations personnels du patient
@@ -366,8 +368,8 @@ class AffiliationSouscripteurController extends Controller
                 //genererContrat($detailContrat+$souscripteurMedicasure+$patientMedicasure);
 
                 // Envoi sms et mail de creation de compte au patient
-                sendUserInformationViaSms($user,$passwordPatient);
-                sendUserInformationViaMail($user,$passwordPatient);
+                sendUserInformationViaSms($user,$password_new);
+                sendUserInformationViaMail($user,$password_new);
 
                 // Envoi sms et mail de mise à jour de compte au souscripteur
                 notifierMiseAJourCompte($souscripteur,$patient);
