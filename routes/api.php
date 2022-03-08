@@ -373,7 +373,7 @@ Route::get('examen-complementaire','Api\ExamenComplementaireController@index');
 
 Route::get('other-complementaire','Api\OtherComplementaireController@index');
 
-Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin controle|Assistante']], function () {
+Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin controle|Assistante|Patient']], function () {
     Route::resource('avis','Api\AvisController');
     Route::resource('rdvs','Api\RendezVousController');
 
