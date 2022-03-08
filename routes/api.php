@@ -317,7 +317,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
 
 });
 
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient']], function () {
     Route::put('patient-decede/{patient}','Api\PatientController@decede');
     Route::get('patient-with-medecin-control','Api\PatientController@getPatientWithMedecin');
     Route::get('first_patient-with-medecin-control/{limit}','Api\PatientController@getFirstPatientWithMedecin');
