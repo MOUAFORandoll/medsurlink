@@ -41,6 +41,13 @@ class Affiliation extends Model
         'slug'
     ];
 
+    protected $attributes = [
+        'status_contrat' => 'Généré',
+        'status_paiement' => "NON PAYE",
+        'renouvelle' => 0,
+        'expire' => 0
+    ];
+
     /**
      * Return the sluggable configuration array for this model.
      *
