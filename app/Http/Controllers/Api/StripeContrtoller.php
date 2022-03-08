@@ -284,7 +284,9 @@ class StripeContrtoller extends Controller
        $payment->status = "SUCCESS";
        $payment->save();
        if(!is_null($patient)){
-            return ProcessAfterPayment($payment, $patient);;
+            return ProcessAfterPayment($payment, $patient);
+        }else{
+            ProcessAfterPayment($payment, $patient);
         }
     }
 }
