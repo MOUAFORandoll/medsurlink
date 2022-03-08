@@ -5,7 +5,7 @@
 
 
 
-{{ config('app.name') }}
+{{ config('app.name') }} by Medicasure
 <div class="div-logo-mail">
     <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
 </div>
