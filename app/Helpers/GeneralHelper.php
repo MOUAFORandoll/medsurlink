@@ -240,6 +240,8 @@ if(!function_exists('ProcessAfterPayment'))
      */
     function ProcessAfterPayment($payment, $patient = null)
     {
+        \Log::alert("payment ".$payment);
+        \Log::alert("patient ".$patient);
         $affiliation = AffiliationSouscripteur::where([["type_contrat",$payment->commande->offres_packages_id],["user_id",$payment->souscripteur_id]])->first();
         if(!is_null($patient)){
 
@@ -254,6 +256,7 @@ if(!function_exists('ProcessAfterPayment'))
                 }
                 $affiliation_old->save();
         }
+        \Log::alert('fklf '.$affiliation);
         if($affiliation == ''){
             $affiliation = AffiliationSouscripteur::create([
                 'user_id'=>$payment->souscripteur_id,
