@@ -23,6 +23,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Log;
 use Netpok\Database\Support\DeleteRestrictionException;
 
@@ -75,6 +77,17 @@ class PatientController extends Controller
     {
         $patients = Patient::with(['souscripteur','dossier','user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->latest()->get();
         return response()->json(['patients'=>$patients]);
+    }
+
+    public function listingPatients($patient_search){
+        $patients = Patient::whereHas('user', function($query) use ($patient_search){
+            $query->where('nom', 'like',  '%'.$patient_search.'%')
+            ->orwhere('prenom', 'like',  '%'.$patient_search.'%')
+            ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$patient_search.'%')
+            ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$patient_search.'%');
+        })->with(['user:id,nom,prenom'])->select('user_id')->get();
+        return response()->json(['patients'=>$patients]);
+
     }
 
     /**

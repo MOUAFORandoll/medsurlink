@@ -24,10 +24,11 @@ class AffiliationController extends Controller
      */
     public function index()
     {
-        $affiliations = Affiliation::with(['patient','patient.dossier','package','patient.financeurs.lien'])->latest()->get();
+        $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien'])->latest()->get();
         foreach ($affiliations as $affiliation){
             if (!is_null($affiliation->patient)){
                 //dd($affiliation->patient->user);
+                \Log::alert($affiliation->patient);
                 $affiliation['user'] = $affiliation->patient->user;
                 $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
             }
@@ -54,16 +55,42 @@ class AffiliationController extends Controller
      */
     public function store(AffiliationRequest $request)
     {
-
         $this->Affiliated($request);
 
-        $affiliation = Affiliation::create($request->validated());
+        $patient = Patient::where('user_id', $request->patient_id)->first();
+        if($patient){
+            $affiliation = Affiliation::create([
+                "patient_id"=> $request->patient_id,
+                "souscripteur_id"=>$request->soucripteur_id,
+                "package_id"=>$request->package_id,
+                "date_signature"=>Carbon::now(),
+                "status_contrat"=> $request->status_contrat,
+                "status_paiement"=> $request->status_paiement,
+                "renouvelle"=>0,
+                "expire"=>0,
+                "code_contrat"=>$patient->dossier->numero_dossier,
+                "niveau_urgence"=>$request->niveau_urgence,
+                "plainte" => $request->plainte,
+                "contact_firstName" => $request->contact_firstName,
+                "contact_name" => $request->contact_name,
+                "contact_phone" => $request->contact_phone,
+                'personne_contact' => $request->personne_contact,
+                'paye_par_affilie' => $request->paye_par_affilie,
+                "nombre_envois_email"=>0,
+                "expire_email"=>0,
+                "nom"=>'Annuelle',
+                "date_debut"=>Carbon::now(),
+                "date_fin"=>Carbon::now()->addYears(1)->format('Y-m-d')
+            ]);
 
-        $this->updateDateFin($affiliation);
+            $patient->souscripteur_id = $request->soucripteur_id;
+            $patient->save();
 
-        defineAsAuthor("Affiliation",$affiliation->id,'create',$request->patient_id);
+            return response()->json(['affiliation'=>$affiliation]);
+        }else{
+            return response()->json(['erreur'=> "Le patient n'existe pas"], 419);
+        }
 
-        return response()->json(['affiliation'=>$affiliation]);
 
     }
 
@@ -77,6 +104,27 @@ class AffiliationController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
         $affiliation = Affiliation::with(['patient','patient.dossier','package','patient.financeurs.lien'])->whereSlug($slug)->first();
+
+        $date_fin = Carbon::createFromFormat('Y-m-d', $affiliation->date_fin);
+        $today = Carbon::createFromFormat('Y-m-d', date('Y-m-d'));
+
+        if($today->gt($date_fin) && ($affiliation->status_contrat != 'Résilié')){
+            $affiliation->status_contrat = 'Expiré';
+            $affiliation->expire = 1;
+
+        }elseif($date_fin->gte($today) && ($affiliation->status_contrat != 'Résilié')){
+            if($affiliation->status_contrat == 'Généré' && $affiliation->status_paiement == 'PAYE'){
+                $affiliation->status_contrat = 'Actif';
+            }else{
+                $affiliation->status_contrat = 'Généré';
+            }
+            if($affiliation->renouvelle){
+                $affiliation->status_contrat = 'Renouvélé';
+            }
+            $affiliation->expire = 0;
+        }
+        $affiliation->save();
+
         if (!is_null($affiliation->patient)) {
             $affiliation['user'] = $affiliation->patient->user;
             $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;

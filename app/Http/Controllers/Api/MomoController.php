@@ -111,7 +111,7 @@ class MomoController extends Controller
         ]);
         \Log::alert($notification);
     }
-    
+
 
     public function momoPaidByCustomer(Request $request){
         $accessToken = getToken($this->subscriptionKey,$this->base64Code);
@@ -192,7 +192,8 @@ class MomoController extends Controller
                     'souscripteur_id' => $souscripteur->user_id,
                 ]);
 
-        $callbackUrl = route('momo.notification', ['identifiant' => $request->get('identifiant'), 'uuid' => $referenceId]);
+        $callbackUrl = '';
+        //$callbackUrl = route('momo.notification', ['identifiant' => $request->get('identifiant'), 'uuid' => $referenceId]);
         //$callbackUrl = 'https://e6c3-154-72-168-205.ngrok.io/api/paiement/momo/'.$request->get('identifiant').'/'.$referenceId.'/collections/callback';
         //$callbackUrl = 'https://webhook.site/71bde717-c4ba-430d-b037-a0ad7a97348c';
 
@@ -279,6 +280,6 @@ class MomoController extends Controller
                     return response()->json(['status'=>'CANCELLED','reponse'=>$reponse]);
                 }
             }
-            
+
     }
 }
