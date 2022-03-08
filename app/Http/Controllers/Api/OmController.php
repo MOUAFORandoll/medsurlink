@@ -149,35 +149,36 @@ class OmController extends Controller
             //dd($payment);
             $affiliation = AffiliationSouscripteur::where([["type_contrat",$payment->commande->offres_packages_id],["user_id",$payment->souscripteur_id]])->first();
 
-            if(!is_null($patient)){
+            ProcessAfterPayment($payment, $patient);
+
+            /* if(!is_null($patient)){
                     $affiliation_old = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
 
-                    $affiliation_old->renouvelle += 1;
-                    $payment->status_contrat = "Renouvelé";
-                    $affiliation_old->date_fin = Carbon::parse($affiliation_old->date_fin)->addYears(1)->format('Y-m-d');
-                    $affiliation_old->save();
-            }else{
-
-                    if($affiliation == null){
-                        $affiliation = AffiliationSouscripteur::create([
-                            'user_id'=>$payment->souscripteur_id,
-                            'type_contrat'=>$payment->commande->offres_packages_id,
-                            'nombre_paye'=>$payment->commande->quantite,
-                            'nombre_restant'=>$payment->commande->quantite,
-                            'montant'=>$payment->montant,
-                            'cim_id'=>$payment->commande->id,
-                            'date_paiement'=>null,
-                        ]);
+                    if($affiliation_old->status_paiement == "NON PAYE"){
+                        $affiliation_old->status_paiement = "PAYE";
                     }else{
-                        $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
-                        $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
-                        $affiliation->save();
+                        $affiliation_old->renouvelle += 1;
+                        $payment->status_contrat = "Renouvelé";
+                        $affiliation_old->date_fin = Carbon::parse($affiliation_old->date_fin)->addYears(1)->format('Y-m-d');
                     }
+                    $affiliation_old->save();
+            }
+            if($affiliation == ''){
+                $affiliation = AffiliationSouscripteur::create([
+                    'user_id'=>$payment->souscripteur_id,
+                    'type_contrat'=>$payment->commande->offres_packages_id,
+                    'nombre_paye'=>$payment->commande->quantite,
+                    'nombre_restant'=>$payment->commande->quantite,
+                    'montant'=>$payment->montant,
+                    'cim_id'=>$payment->commande->id,
+                    'date_paiement'=>null,
+                ]);
+            }else{
+                $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
+                $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
+                $affiliation->save();
             }
 
-            /**
-            * envoie de la facture au souscripteur
-            */
             $commande_id = $payment->commande->id;
             $commande_date = $payment->commande->date_commande;
             $montant_total = $payment->montant;
@@ -192,26 +193,9 @@ class OmController extends Controller
             $ville = $affiliation->souscripteur->user->ville;
             $beneficiaire ="FOUKOUOP NDAM Rebecca";
             EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire);
-
+ */
 
             return response()->json(['status' => 'SUCCESSFULL','reponse' => $notification]);
-
-            /* $reponse = json_decode($notification->reponse);
-            $token = $reponse->tokenInfo;
-            if($token=="checkout"){
-                $updatePath = 'checkout';
-            }else{
-            $updatePath = 'contrat-prepaye/add?status=success&token='.$token;
-            }
-
-            $env = strtolower(config('app.env'));
-            if ($env === 'local')
-                return  redirect('http://localhost:8081/'.$updatePath);
-            //return redirect('http://localhost:8081/dashboard/user-management/patients/paiement-status/'.$slug);
-            else if ($env === 'staging')
-                return  redirect('https://www.staging.medsurlink.com/'.$updatePath);
-            else
-                return  redirect('https://www.medsurlink.com/'.$updatePath); */
 
         }elseif($notification->statut == "FAILED"){
             $payment->status = "FAILED";
@@ -229,27 +213,6 @@ class OmController extends Controller
 
         return response()->json(['status'=> $notification]);
     }
-/*     public function souscripteurRedirectToMedsurlink($emailSouscripteur1)
-    {
-        //$token = $this->storeSouscripteur($request,$souscripteur_id);
-
-        // Récupération des informations relatifs au souscripteur
-        $visiteur = Visiteur::whereEmail($emailSouscripteur1)->first();
-        $updatePath = 'token=';
-        //dd($visiteur);
-        //$reponse = $token->getOriginalContent()['reponse'];
-
-        $env = strtolower(config('app.env'));
-
-        $updatePath = 'status=success&'.$updatePath.$visiteur->email;
-
-        if ($env === 'local')
-            return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
-        else if ($env === 'staging')
-            return  redirect('https://www.staging.medsurlink.com/contrat-prepaye/add?'.$updatePath);
-        else
-            return  redirect('https://www.medsurlink.com/contrat-prepaye/add?'.$updatePath);
-    } */
 
     public function omPaidByCustomer(Request $request){
         $access_token = getOmToken();
