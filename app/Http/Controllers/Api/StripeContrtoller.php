@@ -271,7 +271,9 @@ class StripeContrtoller extends Controller
     }
 
     public function UpdateAndSendEmailAfterPayment(Request $request, $slug, $patient = null){
-
+        /**
+         * Notification après le paiement
+         */
         NotificationPaiement::create([
             "type"=>'Stripe',
             "code_contrat"=>$slug,
