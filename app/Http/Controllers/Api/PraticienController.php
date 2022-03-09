@@ -132,7 +132,7 @@ class PraticienController extends Controller
         $praticien = Praticien::create($request->validated() + ['user_id' => $user->id]);
         //Ajout des établissements
         $estDeMedicasure = $request->get('isMedicasure') == "1";
-        if ($estDeMedicasure || empty(array_diff([0],$etablissements))){
+        if (empty(array_diff([0],$etablissements))){
             $etablissements = EtablissementExercice::all();
             foreach ($etablissements as $etablissement){
                 $praticien->etablissements()->attach($etablissement->id);
