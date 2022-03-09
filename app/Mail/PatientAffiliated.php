@@ -31,6 +31,6 @@ class PatientAffiliated extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.Souscripteur.patientAffilated');
+        return $this->markdown('emails.Souscripteur.patientAffilated')->subject("Ajout d'un patient");
     }
 }
