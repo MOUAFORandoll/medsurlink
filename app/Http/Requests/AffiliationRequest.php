@@ -27,9 +27,10 @@ class AffiliationRequest extends FormRequest
     public function rules()
     {
         return [
-            "patient_id"=>"required|integer|exists:patients,user_id",
+            "patient_id"=>"required",
+            //"patient_id"=>"required|integer|exists:patients,user_id",
             "nom"=>["required",Rule::in(['One shot','Annuelle'])],
-            "date_debut"=>"required|date|after_or_equal:".Carbon::now()->format('Y-m-d'),
+            "date_debut"=>"required|date",
             "date_fin"=>"sometimes|nullable|date|after_or_equal:date_debut",
         ];
     }

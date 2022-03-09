@@ -60,6 +60,7 @@ class MedecinControleController extends Controller
     public function index()
     {
         $medecins = MedecinControle::with(['etablissements','specialite','user'])->latest()->get();
+        \Log::alert($medecins);
         return response()->json(['medecins'=>$medecins]);
     }
 
