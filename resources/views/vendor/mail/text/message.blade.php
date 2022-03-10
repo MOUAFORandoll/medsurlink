@@ -21,7 +21,7 @@
     {{-- Footer --}}
     @slot('footer')
         @component('mail::footer')
-            © {{ date('Y') }} <a class="lien-footer" href="www.medicasure.com">Medicasure</a> @lang('All rights reserved.')
+            © {{ date('Y') }} <a class="lien-footer" href="www.medicasure.com">Medsurlink by Medicasure</a> @lang('Tous droits réservés.')
         @endcomponent
     @endslot
 @endcomponent
