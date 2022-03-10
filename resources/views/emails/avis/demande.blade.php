@@ -1,7 +1,7 @@
 @component('mail::message')
 # <span style="color:#00ada7" >Votre avis médical est requis!</span>
 
-Hello Dr. {{$user->nom}}, nous espérons vous trouver bien portant.
+Bonjour Dr. {{$user->nom}}, nous espérons vous trouver bien portant.
 
 Nous aimerions avoir votre avis au sujet d'un-e patient-e.
 
