@@ -27,9 +27,9 @@ class StripeContrtoller extends Controller
     public function __construct()
     {
         $env = strtolower(config('app.env'));
-        if ($env === 'local')
+        if ($env == 'local')
             $this->url_global = $this->url_loccale;
-        else if ($env === 'staging')
+        else if ($env == 'staging')
             $this->url_global = $this->url_stagging;
         else
             $this->url_global = $this->url_prod;
