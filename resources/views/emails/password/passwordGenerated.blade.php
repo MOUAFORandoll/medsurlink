@@ -1,5 +1,5 @@
 @component('mail::message')
-# Medsurlink by Medicasure
+# {{ config('app.name') }}
 
 Bonjour <strong>{{ucfirst($user->prenom).'  '.strtoupper($user->nom)}}</strong>,<br>
 Votre paiement a bien été effectué. <br>

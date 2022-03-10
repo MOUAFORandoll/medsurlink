@@ -41,7 +41,7 @@ Numero de téléphone de la personne à contacter :<b>{{ $contact_phone }}</b>
 
 
 
-{{ config('app.name') }} by Medicasure
+{{ config('app.name') }}
 <div class="div-logo-mail">
     <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
 </div>
