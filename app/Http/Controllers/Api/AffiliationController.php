@@ -27,8 +27,6 @@ class AffiliationController extends Controller
         $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien'])->latest()->get();
         foreach ($affiliations as $affiliation){
             if (!is_null($affiliation->patient)){
-                //dd($affiliation->patient->user);
-                \Log::alert($affiliation->patient);
                 $affiliation['user'] = $affiliation->patient->user;
                 $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
             }

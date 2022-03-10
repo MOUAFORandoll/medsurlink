@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Medicalink'),
+    'name' => env('APP_NAME', 'Medsurlink by Medicasure'),
 
     /*
     |--------------------------------------------------------------------------
