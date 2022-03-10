@@ -66,9 +66,10 @@ class SouscripteurController extends Controller
         $souscripteurs = Souscripteur::whereHas('user', function($query) use ($souscripteur_search){
             $query->where('nom', 'like',  '%'.$souscripteur_search.'%')
             ->orwhere('prenom', 'like',  '%'.$souscripteur_search.'%')
+            ->orwhere('email', 'like',  '%'.$souscripteur_search.'%')
             ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$souscripteur_search.'%')
             ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$souscripteur_search.'%');
-        })->with(['user:id,nom,prenom'])->select('user_id')->get();
+        })->with(['user:id,nom,prenom,email'])->select('user_id')->get();
         return response()->json(['souscripteurs'=>$souscripteurs]);
 
     }

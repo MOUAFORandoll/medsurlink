@@ -83,9 +83,10 @@ class PatientController extends Controller
         $patients = Patient::whereHas('user', function($query) use ($patient_search){
             $query->where('nom', 'like',  '%'.$patient_search.'%')
             ->orwhere('prenom', 'like',  '%'.$patient_search.'%')
+            ->orwhere('email', 'like',  '%'.$patient_search.'%')
             ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$patient_search.'%')
             ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$patient_search.'%');
-        })->with(['user:id,nom,prenom'])->select('user_id')->get();
+        })->with(['user:id,nom,prenom,email'])->select('user_id')->get();
         return response()->json(['patients'=>$patients]);
 
     }
