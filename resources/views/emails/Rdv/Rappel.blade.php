@@ -9,5 +9,5 @@ et de mettre à jour le nouveau Rendez-vous sur **<a href="{{url(config('app.fro
 
 Salutations cordiales.
 
-{{ config('app.name') }} by Medicasure
+{{ config('app.name') }}
 @endcomponent
