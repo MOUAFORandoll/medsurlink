@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AffiliationRequest;
 use App\Models\Affiliation;
 use App\Models\Patient;
+use App\Models\PatientSouscripteur;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -80,9 +81,16 @@ class AffiliationController extends Controller
                 "date_debut"=>Carbon::now(),
                 "date_fin"=>Carbon::now()->addYears(1)->format('Y-m-d')
             ]);
-
             $patient->souscripteur_id = $request->soucripteur_id;
             $patient->save();
+
+            // Ajout du souscripteur à la liste des souscripteurs du patient
+            PatientSouscripteur::create([
+                'financable_type'=>'Souscripteur',
+                'financable_id'=> $request->soucripteur_id,
+                'patient_id'=> $request->patient_id,
+                'lien_de_parente' => $request->lien
+            ]);
 
             return response()->json(['affiliation'=>$affiliation]);
         }else{
