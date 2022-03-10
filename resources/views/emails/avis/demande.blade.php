@@ -11,7 +11,7 @@ Nous aimerions avoir votre avis au sujet d'un-e patient-e.
 
 **Niveau d'urgence** : {!! $avis->code_urgence !!}
 
-{{ config('app.name') }} by Medicasure
+{{ config('app.name') }}
 <div class="div-logo-mail">
     <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
 </div>
