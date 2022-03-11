@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AffiliationRequest;
 use App\Models\Affiliation;
 use App\Models\Patient;
+use App\Models\PatientSouscripteur;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -80,9 +81,16 @@ class AffiliationController extends Controller
                 "date_debut"=>Carbon::now(),
                 "date_fin"=>Carbon::now()->addYears(1)->format('Y-m-d')
             ]);
-
             $patient->souscripteur_id = $request->soucripteur_id;
             $patient->save();
+
+            // Ajout du souscripteur à la liste des souscripteurs du patient
+            PatientSouscripteur::create([
+                'financable_type'=>'Souscripteur',
+                'financable_id'=> $request->soucripteur_id,
+                'patient_id'=> $request->patient_id,
+                'lien_de_parente' => $request->lien
+            ]);
 
             return response()->json(['affiliation'=>$affiliation]);
         }else{
@@ -113,7 +121,7 @@ class AffiliationController extends Controller
         }elseif($date_fin->gte($today) && ($affiliation->status_contrat != 'Résilié')){
             if($affiliation->status_contrat == 'Généré' && $affiliation->status_paiement == 'PAYE'){
                 $affiliation->status_contrat = 'Actif';
-            }else{
+            }elseif(($affiliation->status_contrat == 'Généré' && $affiliation->status_paiement == 'NON PAYE')){
                 $affiliation->status_contrat = 'Généré';
             }
             if($affiliation->renouvelle){
@@ -211,15 +219,15 @@ class AffiliationController extends Controller
      */
     public function affiliateBySouscripteur($souscripteur)
     {
-        $affiliations = Patient::with(['affiliations','user','dossier','affiliations.package','financeurs.lien','souscripteur'])->where("souscripteur_id",$souscripteur)->latest()->get();
-        foreach ($affiliations as $affiliation){
+        $affiliations = Affiliation::has('patient.user')->with(['patient.dossier', 'patient.user', 'package','patient.financeurs.lien','souscripteur'])->where("souscripteur_id",$souscripteur)->latest()->get();
+       /*  foreach ($affiliations as $affiliation){
             if (!is_null($affiliation->patient)){
                 //dd($affiliation->patient->user);
                 $affiliation['user'] = $affiliation->user;
                 $affiliation['souscripteur'] = $affiliation->souscripteur->user;
             }
-        }
-        return response()->json(['affiliations'=>$affiliations]);
+        } */
+        return response()->json($affiliations);
     }
     public function Affiliated(Request $request){
         $date_debut = Carbon::parse($request->date_debut)->year;
