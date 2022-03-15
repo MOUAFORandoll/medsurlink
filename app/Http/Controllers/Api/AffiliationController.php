@@ -154,7 +154,7 @@ class AffiliationController extends Controller
         // Affiliation::whereSlug($slug)->update($request->validated());
 
         // $affiliation = Affiliation::with(['patient'])->whereSlug($slug)->first();
-        $affiliation = Affiliation::with(['patient.user','patient.souscripteur','patient.dossier','package','patient.financeurs.lien'])->whereSlug($slug)->first();
+        $affiliation = Affiliation::with(['patient.dossier','package','patient.financeurs.lien'])->whereSlug($slug)->first();
 
         $this->updateDateFin($affiliation);
 
