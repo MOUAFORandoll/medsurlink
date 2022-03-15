@@ -19,6 +19,7 @@ class AddOtherFieldsToAffiliationsTable extends Migration
             $table->string('contact_name')->nullable();
             $table->string('contact_phone')->nullable();
             $table->string('paye_par_affilie')->nullable();
+            $table->string('selected')->nullable();
         });
     }
 
@@ -30,7 +31,7 @@ class AddOtherFieldsToAffiliationsTable extends Migration
     public function down()
     {
         Schema::table('affiliations', function (Blueprint $table) {
-            $table->dropColumn(['plainte', 'contact_firstName', 'contact_name', 'contact_phone']);
+            $table->dropColumn(['plainte', 'contact_firstName', 'contact_name', 'contact_phone','selected']);
         });
     }
 }

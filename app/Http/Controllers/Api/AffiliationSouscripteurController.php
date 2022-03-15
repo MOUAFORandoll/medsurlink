@@ -350,6 +350,7 @@ class AffiliationSouscripteurController extends Controller
                     "contact_phone" => $request->contact_phone,
                     'personne_contact' => $request->personne_contact,
                     'paye_par_affilie' => $request->paye_par_affilie,
+                    'selected' => $request->selected,
                     "nombre_envois_email"=>0,
                     "expire_email"=>0,
                     "nom"=>'Annuelle',

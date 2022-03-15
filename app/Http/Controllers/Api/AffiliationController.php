@@ -75,6 +75,7 @@ class AffiliationController extends Controller
                 "contact_phone" => $request->contact_phone,
                 // 'personne_contact' => $request->personne_contact,
                 'paye_par_affilie' => $request->paye_par_affilie,
+                'selected' => $request->selected,
                 "nombre_envois_email"=>0,
                 "expire_email"=>0,
                 "nom"=>'Annuelle',
@@ -190,6 +191,7 @@ class AffiliationController extends Controller
                $affiliation->contact_firstName =  $request->contact_firstName;
                $affiliation->contact_name =  $request->contact_name;
                $affiliation->contact_phone =  $request->contact_phone;
+               $affiliation->selected =  $request->selected;
             //    $affiliation->personne_contact = $request->personne_contact;
                $affiliation->paye_par_affilie =  $request->paye_par_affilie;
                $affiliation->nombre_envois_email = 0;

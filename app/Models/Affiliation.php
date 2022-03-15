@@ -38,6 +38,7 @@ class Affiliation extends Model
         "nom",
         "date_debut",
         "date_fin",
+        "selected",
         'slug'
     ];
 
