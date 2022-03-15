@@ -73,7 +73,7 @@ class AffiliationController extends Controller
                 "contact_firstName" => $request->contact_firstName,
                 "contact_name" => $request->contact_name,
                 "contact_phone" => $request->contact_phone,
-                'personne_contact' => $request->personne_contact,
+                // 'personne_contact' => $request->personne_contact,
                 'paye_par_affilie' => $request->paye_par_affilie,
                 "nombre_envois_email"=>0,
                 "expire_email"=>0,
@@ -154,7 +154,7 @@ class AffiliationController extends Controller
         // Affiliation::whereSlug($slug)->update($request->validated());
 
         // $affiliation = Affiliation::with(['patient'])->whereSlug($slug)->first();
-        $affiliation = Affiliation::with(['patient.user','patient.souscripteur','patient.dossier','package','patient.financeurs.lien'])->whereSlug($slug)->first();
+        $affiliation = Affiliation::with(['patient.dossier','package','patient.financeurs.lien'])->whereSlug($slug)->first();
 
         $this->updateDateFin($affiliation);
 
