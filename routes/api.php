@@ -283,6 +283,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('imprimer-rapport-hospitalisation/{hospitalisation}','Api\ImprimerController@hospitalisation');
     Route::get('imprimer-rapport-kinesitherapie/{kinesitherapie}','Api\ImprimerController@kinesitherapie');
     Route::get('affiliationRevue/{affiliation}','Api\AffiliationController@show');
+    Route::get('affiliationRevueEdit/{affiliation}','Api\AffiliationController@edit');
+    Route::post('affiliationRevueUpdate/{affiliation}','Api\AffiliationController@update');
     Route::get('patient/{patient}','Api\PatientController@show')->name('patient.show');
     Route::get('patient','Api\PatientController@index')->name('patient.index');
     Route::get('patient/search/{value}','Api\PatientController@specialList')->name('patient.specialList');
