@@ -145,9 +145,20 @@ class AffiliationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $slug)
     {
-        //
+        $this->validatedSlug($slug,$this->table);
+
+        $this->Affiliated($request);
+
+        // Affiliation::whereSlug($slug)->update($request->validated());
+
+        // $affiliation = Affiliation::with(['patient'])->whereSlug($slug)->first();
+        $affiliation = Affiliation::with(['patient.user','patient.souscripteur','patient.dossier','package','patient.financeurs.lien'])->whereSlug($slug)->first();
+
+        $this->updateDateFin($affiliation);
+
+        return response()->json(['affiliation' => $affiliation]);
     }
 
 
@@ -158,21 +169,50 @@ class AffiliationController extends Controller
      * @throws \App\Exceptions\PersonnnalException
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(AffiliationRequest $request, $slug)
+    public function update(Request $request, $slug)
     {
+        // $this->Affiliated($request);
+        // $this->validatedSlug($slug,$this->table);
+        $patient = Patient::where('user_id', $request->patient_id)->first();
+        if($patient){
+            $affiliation = Affiliation::where('slug',$slug)->first();
+               $affiliation->patient_id =  $request->patient_id;
+               $affiliation->souscripteur_id  = $request->souscripteur_id ;
+               $affiliation->package_id = $request->package_id;
+               $affiliation->date_signature = Carbon::now();
+               $affiliation->status_contrat = $request->status_contrat;
+               $affiliation->status_paiement =  $request->status_paiement;
+               $affiliation->renouvelle = 0;
+               $affiliation->expire = 0;
+               $affiliation->code_contrat = $patient->dossier->numero_dossier;
+               $affiliation->niveau_urgence = $request->niveau_urgence;
+               $affiliation->plainte =  $request->plainte;
+               $affiliation->contact_firstName =  $request->contact_firstName;
+               $affiliation->contact_name =  $request->contact_name;
+               $affiliation->contact_phone =  $request->contact_phone;
+               $affiliation->personne_contact = $request->personne_contact;
+               $affiliation->paye_par_affilie =  $request->paye_par_affilie;
+               $affiliation->nombre_envois_email = 0;
+               $affiliation->expire_email = 0;
+               $affiliation->nom = 'Annuelle';
+               $affiliation->date_debut = Carbon::now();
+               $affiliation->date_fin = Carbon::now()->addYears(1)->format('Y-m-d');
+            $patient->souscripteur_id = $request->soucripteur_id;
+            $affiliation->save();
+            $patient->save();
 
-        $this->validatedSlug($slug,$this->table);
+            // Ajout du souscripteur à la liste des souscripteurs du patient
+            PatientSouscripteur::create([
+                'financable_type'=>'Souscripteur',
+                'financable_id'=> $request->soucripteur_id,
+                'patient_id'=> $request->patient_id,
+                'lien_de_parente' => $request->lien
+            ]);
 
-        $this->Affiliated($request);
-
-        Affiliation::whereSlug($slug)->update($request->validated());
-
-        $affiliation = Affiliation::with(['patient'])->whereSlug($slug)->first();
-
-        $this->updateDateFin($affiliation);
-
-        return response()->json(['affiliation' => $affiliation]);
-
+            return response()->json(['affiliation'=>$affiliation]);
+        }else{
+            return response()->json(['erreur'=> "Le patient n'existe pas"], 419);
+        }
     }
 
 
