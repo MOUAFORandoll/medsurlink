@@ -11,11 +11,13 @@ if(!function_exists('getToken'))
      * @return \Illuminate\Http\JsonResponse|mixed
      */
     function getToken($subscriptionKey, $base64){
-        $base_uri = 'https://proxy.momoapi.mtn.com/collection/token/';
-//        $base_uri = 'https://sandbox.momodeveloper.mtn.com/collection/token/';
+        $base_uri = config('app.momo_url').'/collection/oauth2/token/';
+//        $base_uri = config('app.momo_url').'/oauth2/token/';
         $headers = [
             'Ocp-Apim-Subscription-Key' => $subscriptionKey,
             'Authorization' => 'Basic '.$base64,
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'X-Target-Environment' => "sandbox"
         ];
 
         try {
@@ -23,6 +25,7 @@ if(!function_exists('getToken'))
             $request = new \GuzzleHttp\Psr7\Request('POST',$base_uri,$headers);
             $response = $client->send($request);
             $responseArray = json_decode($response->getBody()->getContents(),true);
+            \Log::alert(json_encode($responseArray));
             return $responseArray['access_token'];
 
         }catch (Exception $exception){
@@ -39,7 +42,7 @@ if(!function_exists('getKey'))
      * @return \Illuminate\Http\JsonResponse|mixed
      */
     function getKey($subscriptionKey, $uuid){
-        $base_uri = "https://sandbox.momodeveloper.mtn.com/v1_0/apiuser/".$uuid."/apikey";
+        $base_uri = config('app.momo_url')."/v1_0/apiuser/".$uuid."/apikey";
         $headers = [
             'Ocp-Apim-Subscription-Key' => $subscriptionKey,
         ];
@@ -67,7 +70,7 @@ if(!function_exists('createUser'))
      * @return \Illuminate\Http\JsonResponse
      */
     function createUser($subscriptionKey, $uuid, $host){
-        $base_uri = "https://sandbox.momodeveloper.mtn.com/v1_0/apiuser";
+        $base_uri = config('app.momo_url')."/v1_0/apiuser";
         $headers = [
             'Ocp-Apim-Subscription-Key' => $subscriptionKey,
             'X-Reference-Id' => $uuid,
@@ -99,10 +102,10 @@ if(!function_exists('requestToPay'))
      */
     function requestToPay($referenceId, $environment='mtncameroon', $subscriptionKey, $accessToken, $operation, $host=null,$callbackUrl){
         $curl = curl_init();
-//        CURLOPT_URL => "https://ericssonbasicapi1.azure-api.net/collection/v1_0/requesttopay",
+//        CURLOPT_URL => "https://ericssonbasicapi1.azure-api.net///v1_0/requesttopay",
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://proxy.momoapi.mtn.com/collection/v1_0/requesttopay",
+            CURLOPT_URL => config('app.momo_url')."/collection/v1_0/requesttopay",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
@@ -114,7 +117,7 @@ if(!function_exists('requestToPay'))
             CURLOPT_HTTPHEADER => array(
                 "Authorization: Bearer $accessToken",
                 "X-Reference-Id: $referenceId",
-                "X-Target-Environment: mtncameroon",
+                "X-Target-Environment: $environment",
                 "Ocp-Apim-Subscription-Key: $subscriptionKey",
                 "Content-Type: application/json",
                 "X-Callback-Url: $callbackUrl",
@@ -141,8 +144,8 @@ if(!function_exists('requestToPayStatus'))
      * @return \Illuminate\Http\JsonResponse|\Psr\Http\Message\ResponseInterface
      */
     function requestToPayStatus($referenceId, $environment='mtncameroon', $subscriptionKey, $accessToken,$callbackUrl){
-        $base_uri = 'https://proxy.momoapi.mtn.com/collection/v1_0/requesttopay/'.$referenceId;
-//        $base_uri = 'https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay/'.$referenceId;
+        $base_uri = config('app.momo_url').'/collection/v1_0/requesttopay/'.$referenceId;
+//        $base_uri = config('app.momo_url').'/collection/v1_0/requesttopay/'.$referenceId;
         $headers = [
             'X-Target-Environment' => $environment,
             'Ocp-Apim-Subscription-Key' => $subscriptionKey,
@@ -155,6 +158,7 @@ if(!function_exists('requestToPayStatus'))
             $client = new Client(['base_uri' => $base_uri]);
             $request = new \GuzzleHttp\Psr7\Request('GET',$base_uri,$headers);
             $response = $client->send($request);
+            \Log::alert(json_encode($response));
             return $response;
 
         }catch (Exception $exception){
