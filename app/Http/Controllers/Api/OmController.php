@@ -104,10 +104,11 @@ class OmController extends Controller
         $tokenInfo = "checkout";
 
         $body = [
-            //"notifUrl" => "https://e969-154-72-169-161.ngrok.io/api/paiement/om/{$commande->id}/{$mp_token}/notification/{$tokenInfo}",
+            //"notifUrl" => "https://399e-154-72-168-50.ngrok.io/api/paiement/om/{$commande->id}/{$mp_token}/notification/{$tokenInfo}",
             "notifUrl" => route('om.notification', ['identifiant' => $commande->id, 'payToken' => $mp_token, 'tokenInfo' => $tokenInfo]),
             "channelUserMsisdn"=> "658392349",
-            "amount"=> ConversionEurotoXaf($request->get('amount')),
+            "amount"=> $request->get('amount'),
+            //"amount"=> ConversionEurotoXaf($request->get('amount')),
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
             "pin"=> "2019",
             "orderId"=> $identifiant,
@@ -136,6 +137,7 @@ class OmController extends Controller
             "statut"=> $request->status,
             "reponse"=>Json::encode($request->all()),
         ]);
+        \Log::alert($notif);
     }
 
     public function statutPaiement($identifiant,$payToken, $patient = null){

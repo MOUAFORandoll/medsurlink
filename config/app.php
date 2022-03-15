@@ -57,6 +57,8 @@ return [
     'asset_url' => env('ASSET_URL', null),
 
     'frontend_url' =>env('FRONTEND_URL','www.medsurlink.com/login'),
+    'momo_url' => env('MOMO_URL', 'https://sandbox.momodeveloper.mtn.com'),
+    //'momo_url' => env('MOMO_URL', 'https://proxy.momoapi.mtn.com'),
 
     /*
     |--------------------------------------------------------------------------
