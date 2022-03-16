@@ -172,11 +172,11 @@ if(!function_exists('formatTelephone'))
      * @param $string_with_accent
      * @return string
      */
-    function EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire)
+    function EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire)
     {
         //return view('impression_offre');
         try {
-            $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire);
+            $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
             Mail::to($email_souscripteur)->send(new AchatOffre($pdf['output'], $nom_souscripteur, $description));
         }catch (\Exception $exception){
             //$exception
@@ -190,11 +190,11 @@ if(!function_exists('generationPdfFactureOffre'))
      * @param $string_with_accent
      * @return string
      */
-    function generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire)
+    function generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire)
     {
         //return view('impression_offre');
         try {
-            $pdf = PDF::loadView('impression_offre', ['commande_id' => $commande_id, 'commande_date' => $commande_date, 'montant_total' => number_format($montant_total, 2, ',', ' '), 'echeance' => $echeance, 'description' => mb_strtoupper($description), 'quantite' => $quantite, 'prix_unitaire' => number_format($prix_unitaire, 2, ',', ' '), 'nom_souscripteur' => $nom_souscripteur, 'email_souscripteur' => $email_souscripteur, 'rue' => $rue, 'adresse' => $adresse, 'ville' => $ville, 'beneficiaire' => $beneficiaire]);
+            $pdf = PDF::loadView('impression_offre', ['commande_id' => $commande_id, 'commande_date' => $commande_date, 'montant_total' => number_format($montant_total, 2, ',', ' '), 'echeance' => $echeance, 'description' => mb_strtoupper($description), 'quantite' => $quantite, 'prix_unitaire' => number_format($prix_unitaire, 2, ',', ' '), 'nom_souscripteur' => $nom_souscripteur, 'email_souscripteur' => $email_souscripteur, 'rue' => $rue, 'adresse' => $adresse, 'ville' => $ville, 'pays' => $pays, 'beneficiaire' => $beneficiaire]);
             return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
         }catch (\Exception $exception){
             //$exception
@@ -285,9 +285,10 @@ if(!function_exists('ProcessAfterPayment'))
         $email_souscripteur = $affiliation->souscripteur->user->email;
         $rue =  $affiliation->souscripteur->user->quartier;
         $adresse =  $affiliation->souscripteur->user->adresse;
-        $ville = $affiliation->souscripteur->user->ville;
+        $ville = $affiliation->souscripteur->user->code_postal.' - '.$affiliation->souscripteur->user->ville;
+        $pays = $affiliation->souscripteur->user->pays;
         $beneficiaire ="FOUKOUOP NDAM Rebecca";
-        EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire);
+        EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
 
         if(!is_null($patient)){
             return $affiliation_old->slug;
