@@ -83,10 +83,11 @@ Route::get('impression/facture-offre/{affiliation}', function ($affiliation) {
     $email_souscripteur = $affiliation->souscripteur->user->email;
     $rue =  $affiliation->souscripteur->user->quartier;
     $adresse =  $affiliation->souscripteur->user->adresse;
-    $ville = $affiliation->souscripteur->user->ville;
+    $pays =  $affiliation->souscripteur->user->pays;
+    $ville = $affiliation->souscripteur->user->code_postal.' - '.$affiliation->souscripteur->user->ville;
     $beneficiaire ="FOUKOUOP NDAM Rebecca";
 
-    $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire);
+    $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
     return $pdf['stream'];
 })->name('facture.offre');
 /*

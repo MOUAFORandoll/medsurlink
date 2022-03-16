@@ -153,50 +153,6 @@ class OmController extends Controller
 
             ProcessAfterPayment($payment, $patient);
 
-            /* if(!is_null($patient)){
-                    $affiliation_old = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
-
-                    if($affiliation_old->status_paiement == "NON PAYE"){
-                        $affiliation_old->status_paiement = "PAYE";
-                    }else{
-                        $affiliation_old->renouvelle += 1;
-                        $payment->status_contrat = "Renouvelé";
-                        $affiliation_old->date_fin = Carbon::parse($affiliation_old->date_fin)->addYears(1)->format('Y-m-d');
-                    }
-                    $affiliation_old->save();
-            }
-            if($affiliation == ''){
-                $affiliation = AffiliationSouscripteur::create([
-                    'user_id'=>$payment->souscripteur_id,
-                    'type_contrat'=>$payment->commande->offres_packages_id,
-                    'nombre_paye'=>$payment->commande->quantite,
-                    'nombre_restant'=>$payment->commande->quantite,
-                    'montant'=>$payment->montant,
-                    'cim_id'=>$payment->commande->id,
-                    'date_paiement'=>null,
-                ]);
-            }else{
-                $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
-                $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
-                $affiliation->save();
-            }
-
-            $commande_id = $payment->commande->id;
-            $commande_date = $payment->commande->date_commande;
-            $montant_total = $payment->montant;
-            $echeance =  "13/02/2022";
-            $description = $affiliation->typeContrat->description_fr;
-            $quantite =  $payment->commande->quantite;
-            $prix_unitaire = $affiliation->typeContrat->montant;
-            $nom_souscripteur = mb_strtoupper($affiliation->souscripteur->user->nom).' '.$affiliation->souscripteur->user->prenom;
-            $email_souscripteur = $affiliation->souscripteur->user->email;
-            $rue =  $affiliation->souscripteur->user->quartier;
-            $adresse =  $affiliation->souscripteur->user->adresse;
-            $ville = $affiliation->souscripteur->user->ville;
-            $beneficiaire ="FOUKOUOP NDAM Rebecca";
-            EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $beneficiaire);
- */
-
             return response()->json(['status' => 'SUCCESSFULL','reponse' => $notification]);
 
         }elseif($notification->statut == "FAILED"){
