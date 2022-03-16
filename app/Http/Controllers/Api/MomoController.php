@@ -21,17 +21,10 @@ class MomoController extends Controller
 {
     public $apiKey = "3f0906f05f774dbfb6829680ad329701";
     public $apiUser = "068284d4-09a2-44c5-ad72-ebc1f4e483d0";
-    public $subscriptionKey = '42f270585f5f4b2aab2cb926a333c1d4';
-    //public $subscriptionKey = 'fa60b91d41124fcb9bbe244d54c5a94f';
-
-    public $host = "";
+    public $subscriptionKey = 'fa60b91d41124fcb9bbe244d54c5a94f';
+    public $host = 'https://proxy.momoapi.mtn.com/collection/';
     public $base64Code = 'MDY4Mjg0ZDQtMDlhMi00NGM1LWFkNzItZWJjMWY0ZTQ4M2QwOjNmMDkwNmYwNWY3NzRkYmZiNjgyOTY4MGFkMzI5NzAx';
     public $currency = 'XAF';
-
-    public function __construct()
-    {
-        $this->host = config('app.momo_url').'/collection';
-    }
 
     public function paid(Request $request){
 
@@ -46,7 +39,6 @@ class MomoController extends Controller
 
 //        Récupération du token pour effectuer le paiement
         $accessToken = getToken($this->subscriptionKey,$this->base64Code);
-
 
 //          Définition des inforamations relatives à la somme et au compte à débiter
         $operation = array(
@@ -123,9 +115,10 @@ class MomoController extends Controller
 
     public function momoPaidByCustomer(Request $request){
         $accessToken = getToken($this->subscriptionKey,$this->base64Code);
-        \Log::alert("accessToken ".$accessToken);
+
         $operation = array(
-            'amount'=> $request->amount,
+            //'amount'=> $request->amount,
+            'amount'=> 50,
             'currency'=> $this->currency,
             'externalId'=> "cimcam",//$request->get('identifiant'),
             "payer"=>[
@@ -227,7 +220,7 @@ class MomoController extends Controller
         $paiementStatut = requestToPayStatus($referenceId,'mtncameroon ',$this->subscriptionKey,$accessToken,$callbackUrl);
         \Log::alert(json_encode($paiementStatut));
         return response()->json($paiementStatut);
-        if (isset($original->paiementStatut)){
+       /*  if (isset($original->paiementStatut)){
             return response()->json(['statut'=>'FAILED','reason'=>($paiementStatut->original)['erreur']]);
         }else{
             $reponse = json_decode($paiementStatut->getBody()->getContents(),true);
@@ -289,7 +282,7 @@ class MomoController extends Controller
                     $payment->save();
                     return response()->json(['status'=>'CANCELLED','reponse'=>$reponse]);
                 }
-            }
+            } */
 
     }
 }
