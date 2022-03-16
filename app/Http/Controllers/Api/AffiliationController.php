@@ -177,7 +177,7 @@ class AffiliationController extends Controller
         if($patient){
             $affiliation = Affiliation::where('slug',$slug)->first();
                $affiliation->patient_id =  $request->patient_id;
-               $affiliation->souscripteur_id  = $request->souscripteur_id ;
+               $affiliation->souscripteur_id  = $request->soucripteur_id ;
                $affiliation->package_id = $request->package_id;
                $affiliation->date_signature = Carbon::now();
                $affiliation->status_contrat = $request->status_contrat;
