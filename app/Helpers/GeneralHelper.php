@@ -266,7 +266,9 @@ if(!function_exists('ProcessAfterPayment'))
             ]);
         }else{
             $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
-            $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
+            if($payment->status_contrat != "Renouvelé"){
+                $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
+            }
             $affiliation->save();
         }
        /**
