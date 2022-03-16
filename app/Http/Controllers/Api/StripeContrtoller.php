@@ -52,6 +52,7 @@ class StripeContrtoller extends Controller
                 'offres_packages_id' =>$request->get('package_id'),
                 'souscripteur_id' => Auth::id()
             ]);
+            $package_nom = $commande->offres_package->description_fr;
 
         //dd( $prixTotal);
         $session =   Session::create([
@@ -60,7 +61,7 @@ class StripeContrtoller extends Controller
                 'price_data' => [
                     'currency' => 'EUR',
                     'product_data' => [
-                        'name' => 'Intermediation médicale',
+                        'name' => $package_nom,
                     ],
                     'unit_amount' =>(int)$request->get('amount') * 100,
                 ],
@@ -96,6 +97,7 @@ class StripeContrtoller extends Controller
             'commande_id' =>$commande->id,
             'souscripteur_id' => $request->get('souscripteur_id'),
         ]);
+        $package_nom = $commande->offres_package->description_fr;
 
         $session =   Session::create([
             'payment_method_types' => ['card'],
@@ -103,7 +105,7 @@ class StripeContrtoller extends Controller
                 'price_data' => [
                     'currency' => 'EUR',
                     'product_data' => [
-                        'name' => 'Intermediation médicale',
+                        'name' => $package_nom,
                     ],
                     'unit_amount' => (int)$request->get('amount')*100,
                 ],
@@ -182,14 +184,14 @@ class StripeContrtoller extends Controller
             'commande_id' =>$commande->id,
             'souscripteur_id' => $souscripteur->user_id,
         ]);
-
+        $package_nom = $commande->offres_package->description_fr;
         $session =   Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
                 'price_data' => [
                     'currency' => 'EUR',
                     'product_data' => [
-                        'name' => 'Intermediation médicale',
+                        'name' => $package_nom,
                     ],
                     'unit_amount' => (int)$request->get('amount')*100,
                 ],
@@ -221,14 +223,14 @@ class StripeContrtoller extends Controller
             'commande_id' => $commande->id,
             'souscripteur_id' => $request->get('souscripteur_id'),
         ]);
-        //dd( $prixTotal);
+        $package_nom = $commande->offres_package->description_fr;
         $session =   Session::create([
             'payment_method_types' => ['card'],
             'line_items' => [[
                 'price_data' => [
                     'currency' => 'EUR',
                     'product_data' => [
-                        'name' => 'Intermediation médicale',
+                        'name' => $package_nom,
                     ],
                     'unit_amount' => (int)$request->get('amount')*100,
                 ],

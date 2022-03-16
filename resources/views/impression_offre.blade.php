@@ -204,13 +204,13 @@
 
     <div style="position:absolute;left:500px;top:0px" class="cls_003"><span class="cls_003">+32 491 64 64 14</span></div>
     <div style="position:absolute;left:500px;top:20px" class="cls_003"><span class="cls_003">contact@medicasure.com</span></div>
-    <div style="position:absolute;left:500px;top:40px" class="cls_003"><span class="cls_003">medicasure.com</span></div>
+    <div style="position:absolute;left:500px;top:40px" class="cls_003"><span class="cls_003">www.medicasure.com</span></div>
 
     <div style="position:absolute;left:20px;top:137.25px" class="cls_002"><span class="cls_002">RECU DE PAIEMENT</span></div>
     <div style="position:absolute;left:20px;top:157.50px" class="cls_002"><span class="cls_002"># {{ $commande_id }}</span></div>
     <div style="position:absolute;left:20px;top:178.50px" class="cls_004"><span class="cls_004">du {{ $commande_date }}</span></div>
 
-    <div style="position:absolute;left:20px;top:206.25px;width: 17.5%; height: 63px; border:1px solid #00ada7; background-color: #00ada7;">
+    <div style="position:absolute;left:20px;top:206.25px;width: 17.5%; height: 73px; border:1px solid #00ada7; background-color: #00ada7;">
         <div style="position:relative; width: 100%" class="cls_011"><span class="cls_011">Total payé</span></div>
         <div style="position:relative:left: 10px; top:15px; " class="cls_007"><span class="cls_007">{{ $montant_total }} &euro;</span></div>
     </div>
@@ -220,11 +220,11 @@
         <div style="position:relative:left: 10px; top:15px; " class="cls_008"><span class="cls_008">{{ $echeance }}</span></div>
     </div> --}}
 
-    <div style="position:absolute;left:250px;top:150px;width: 63.8%; height: 120px; border:1px solid #00ada7;">
-        <div style="position:relative; width: 100%" class="cls_011">&nbsp;&nbsp;<span class="cls_011">Adressée à</span></div>
-        <div style="position: relative;left: 10px;top:2px" class="cls_004"><span class="cls_004">Nom: {{ $nom_souscripteur }}</span></div>
+    <div style="position:absolute;left:250px;top:150px;width: 63.8%; height: 130px; border:1px solid #00ada7;">
+        <div style="position:relative; width: 100%" class="cls_011">&nbsp;&nbsp;<span class="cls_011">Adressé à</span></div>
+        <div style="position: relative;left: 10px;top:2px" class="cls_004"><span class="cls_004"> {{ $nom_souscripteur }}</span></div>
         @if(!empty($rue))
-            <div style="position: relative;left: 10px;top:2px" class="cls_004"><span class="cls_004">{{ $rue }}</span></div>
+            <div style="position: relative;left: 10px;top:2px" class="cls_004"><span class="cls_004"> {{ $rue }}</span></div>
         @endif
         @if(!empty($adresse))
             <div style="position: relative;left: 10px;top:2px" class="cls_004"><span class="cls_004">{{ $adresse }}</span></div>
@@ -232,6 +232,10 @@
         @if(!empty($ville))
             <div style="position: relative;left: 10px;top:2px" class="cls_004"><span class="cls_004">{{ $ville }}</span></div>
         @endif
+        @if(!empty($pays))
+            <div style="position: relative;left: 10px;top:2px" class="cls_004"><span class="cls_004">{{ $pays }}</span></div>
+        @endif
+
         {{--
         <div style="position: relative;left: 10px;top:2px" class="cls_004"><span class="cls_004">Bénéficiaire : {{ $beneficiaire }}</span></div>
         <div style="position: relative;left: 10px;top:2px" class="cls_004"><span class="cls_004">N° de TVA</span></div> --}}
@@ -255,15 +259,22 @@
                 </tr>
             </tbody>
         </table>
+        <br><br><br><br>
+        <p style="text-align: right">
+            @php
+                Carbon\Carbon::setLocale('fr');
+            @endphp
+            Fait {{ Carbon\Carbon::parse($commande_date)->translatedFormat('l jS F Y') }}
+        </p>
     </div>
 
-    <div style="position:absolute;left:20px;top:815px;width: 50%; height: 170px; border:1px solid #00ada7;">
-        <div style="position:relative; width: 100%" class="cls_011">&nbsp;&nbsp;<span class="cls_011">Informations de paiements</span></div>
+   {{--  <div style="position:absolute;left:20px;top:815px;width: 50%; height: 170px; border:1px solid #00ada7;">
+        <div style="position:relative; width: 100%" class="cls_011">&nbsp;&nbsp;<span class="cls_011">Informations de paiement</span></div>
         <div style="position: relative;left: 10px;top:17px" class="cls_004"><span class="cls_004">IBAN BE75 0689 3376 3251</span></div>
         <div style="position: relative;left: 10px;top:20px" class="cls_004"><span class="cls_004">BIC   GKCCBEBB</span></div>
         <div style="position: relative;left: 10px;top:23px" class="cls_004"><span class="cls_004">Communication</span></div>
         <div style="position: relative;left: 10px;top:26px" class="cls_014"><span class="cls_014">+++044/9999/97601+++</span></div>
-    </div>
+    </div> --}}
 
     <div style="position:absolute;left:390px;top:815px;width: 40%; height: 170px; border:1px solid #00ada7; background-color: #00ada7;">
         <div style="position:relative; width: 100%" class="cls_011"><span class="cls_011">Total payé</span></div>
