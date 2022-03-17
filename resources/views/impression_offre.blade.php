@@ -207,7 +207,7 @@
     <div style="position:absolute;left:500px;top:40px" class="cls_003"><span class="cls_003">www.medicasure.com</span></div>
 
     <div style="position:absolute;left:20px;top:137.25px" class="cls_002"><span class="cls_002">RECU DE PAIEMENT</span></div>
-    <div style="position:absolute;left:20px;top:157.50px" class="cls_002"><span class="cls_002"># {{ $commande_id }}</span></div>
+    <div style="position:absolute;left:20px;top:157.50px" class="cls_002"><span class="cls_002">N° # {{ $commande_id }}</span></div>
     <div style="position:absolute;left:20px;top:178.50px" class="cls_004"><span class="cls_004">du {{ $commande_date }}</span></div>
 
     <div style="position:absolute;left:20px;top:206.25px;width: 17.5%; height: 73px; border:1px solid #00ada7; background-color: #00ada7;">
