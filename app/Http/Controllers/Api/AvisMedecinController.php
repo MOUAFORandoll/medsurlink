@@ -137,7 +137,7 @@ class AvisMedecinController extends Controller
         ->with(["medecinAvis.medecin","medecinAvis"=>function($query){
             $query->where("statut","VALIDE");
         }])
-        ->where("dossier_medical_id",$dossier)->get();
+        ->where("dossier_medical_id",$dossier)->latest()->get();
          return  response()->json(['avis'=>$avis]);
     }
     /**

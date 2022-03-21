@@ -18,10 +18,35 @@ class Affiliation extends Model
 
     protected $fillable = [
         "patient_id",
+        "souscripteur_id",
+        "package_id",
+        "paiement_id",
+        "date_signature",
+        "status_contrat",
+        "status_paiement",
+        "renouvelle",
+        "expire",
+        "code_contrat",
+        "niveau_urgence",
+        'plainte',
+        'paye_par_affilie',
+        'contact_firstName',
+        'contact_name',
+        'contact_phone',
+        "nombre_envois_email",
+        "expire_email",
         "nom",
         "date_debut",
         "date_fin",
+        "selected",
         'slug'
+    ];
+
+    protected $attributes = [
+        'status_contrat' => 'Généré',
+        'status_paiement' => "NON PAYE",
+        'renouvelle' => 0,
+        'expire' => 0
     ];
 
     /**
@@ -45,5 +70,11 @@ class Affiliation extends Model
         return $this->belongsTo(Patient::class,'patient_id','user_id');
     }
 
+    public function souscripteur(){
+        return $this->belongsTo(Souscripteur::class,'souscripteur_id','user_id');
+    }
 
+    public function package(){
+        return $this->belongsTo(Package::class,'package_id','id');
+    }
 }

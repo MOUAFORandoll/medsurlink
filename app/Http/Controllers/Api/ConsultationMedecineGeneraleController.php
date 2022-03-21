@@ -43,13 +43,45 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
+     * @OA\get(
+     *      path="/consultation-medecine",
+     *      operationId="GetConsultationMedecineGeneraleList",
+     *      tags={"ConsultationMedecineGenerale"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Get list of consultation medecine generale",
+     *      description="Returns list of consultation medecine generale",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
 
-        $consultations = ConsultationMedecineGenerale::with(['operationables.contributable', 'dossier', 'etablissement', 'motifs', 'traitements', 'conclusions', 'parametresCommun'])->orderByDateConsultation()->get();
+        $consultations = ConsultationMedecineGenerale::with(['operationables.contributable', 'dossier', 'etablissement', 'motifs', 'traitements', 'conclusions', 'parametresCommun'])->orderByDateConsultation()->latest()->get();
 
         foreach ($consultations as $consultation) {
             $consultation->updateConsultationMedecine();
@@ -70,7 +102,40 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+      * Display a listing of the resource.
+     * @OA\Post(
+     *      path="/consultation-medecine",
+     *      operationId="StoreConsultationMedecineGeneraleList",
+     *      tags={"ConsultationMedecineGenerale"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Store consultation medecine generale",
+     *      description="Returns consultation medecine generale",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
@@ -262,7 +327,41 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Display the specified resource.
-     *
+      * Store a newly created resource in storage.
+      * Display a listing of the resource.
+     * @OA\get(
+     *      path="/consultation-medecine/{slug} ",
+     *      operationId="ShowConsultationMedecineGeneraleList",
+     *      tags={"ConsultationMedecineGenerale"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Show consultation medecine generale",
+     *      description="Returns consultation medecine generale",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param $slug
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
@@ -311,7 +410,39 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+     * @OA\Put(
+     *      path="/consultation-medecine/{slug} ",
+     *      operationId="UpdateConsultationMedecineGeneraleList",
+     *      tags={"ConsultationMedecineGenerale"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Update consultation medecine generale",
+     *      description="Returns consultation medecine generale",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param ConsutationMedecineRequest $request
      * @param $slug
      * @return \Illuminate\Http\Response
@@ -477,7 +608,39 @@ class ConsultationMedecineGeneraleController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     * @OA\Delete(
+     *      path="/consultation-medecine/{slug} ",
+     *      operationId="DeleteConsultationMedecineGeneraleList",
+     *      tags={"ConsultationMedecineGenerale"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Delete consultation medecine generale",
+     *      description="Returns list of consultation medecine generale",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param $slug
      * @return \Illuminate\Http\Response
      * @throws \App\Exceptions\PersonnnalException

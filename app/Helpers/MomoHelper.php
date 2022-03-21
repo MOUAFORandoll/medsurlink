@@ -33,7 +33,7 @@ if(!function_exists('getToken'))
 if(!function_exists('getKey'))
 {
     /**
-     * Fonction permettant en environnement sandbox d'obtenir une clé api
+     * Fonction permettant en environnement sandbox d'obtenir une clÃ© api
      * @param $subscriptionKey
      * @param $uuid
      * @return \Illuminate\Http\JsonResponse|mixed
@@ -60,7 +60,7 @@ if(!function_exists('getKey'))
 if(!function_exists('createUser'))
 {
     /**
-     * Fonction permettant d'enregistrer un utilisateur pour effectuer les différentes transactions
+     * Fonction permettant d'enregistrer un utilisateur pour effectuer les diffÃ©rentes transactions
      * @param $subscriptionKey
      * @param $uuid
      * @param $host
@@ -141,14 +141,19 @@ if(!function_exists('requestToPayStatus'))
      * @return \Illuminate\Http\JsonResponse|\Psr\Http\Message\ResponseInterface
      */
     function requestToPayStatus($referenceId, $environment='mtncameroon', $subscriptionKey, $accessToken,$callbackUrl){
+        \Log::alert("referenceId $referenceId");
+        \Log::alert("environment $environment");
+        \Log::alert("subscriptionKey $subscriptionKey");
+        \Log::alert("accessToken $accessToken");
+        \Log::alert("callbackUrl $callbackUrl");
         $base_uri = 'https://proxy.momoapi.mtn.com/collection/v1_0/requesttopay/'.$referenceId;
 //        $base_uri = 'https://sandbox.momodeveloper.mtn.com/collection/v1_0/requesttopay/'.$referenceId;
         $headers = [
             'X-Target-Environment' => $environment,
             'Ocp-Apim-Subscription-Key' => $subscriptionKey,
             'Authorization' => 'Bearer '.$accessToken,
-            "Content-Type: application/json",
-            "X-Callback-Url: ".$callbackUrl,
+            "Content-Type" => 'application/json',
+            "X-Callback-Url" => $callbackUrl,
         ];
 
         try {

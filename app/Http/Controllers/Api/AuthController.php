@@ -20,7 +20,7 @@ class AuthController extends AccessTokenController
 {
     /**
      * @OA\Post(
-     ** path="/v1/login",
+     ** path="/login",
      *   tags={"Login"},
      *   summary="Login",
      *   operationId="login",
@@ -107,6 +107,7 @@ class AuthController extends AccessTokenController
             $user['time_slug'] = $time->slug;
             $user['isEtablissement'] = isComptable();
             $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
+            // dd($tokenInfo);
             $tokenInfo->put('user', $user);
             $user_id = $user->id;
 

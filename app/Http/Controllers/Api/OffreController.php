@@ -19,9 +19,9 @@ class OffreController extends Controller
      */
     public function index()
     {
-        $offres = Offre::with(["packages","items","items.packages"])->get();
+        $offres = Offre::with(["packages","items","items.packages"])->latest()->get();
 
-
+        //dd($offres);
         return response()->json(['offres'=>$offres]);
     }
 

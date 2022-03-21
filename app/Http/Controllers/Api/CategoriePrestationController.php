@@ -20,7 +20,7 @@ class CategoriePrestationController extends Controller
      */
     public function index()
     {
-        $categories = CategoriePrestation::with('prestations')->get();
+        $categories = CategoriePrestation::with('prestations')->latest()->get();
 
         return  response()->json(['categories'=>$categories]);
 

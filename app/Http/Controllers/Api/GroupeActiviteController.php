@@ -20,7 +20,7 @@ class GroupeActiviteController extends Controller
      */
     public function index()
     {
-        $activites = GroupeActivite::with('missions')->get();
+        $activites = GroupeActivite::with('missions')->latest()->get();
         return response()->json(['activites'=>$activites]);
     }
 
@@ -45,7 +45,7 @@ class GroupeActiviteController extends Controller
     {
         $this->validatedSlug($slug,'groupe_activites');
         $groupe = GroupeActivite::with('missions')->whereSlug($slug)->first();
-//        $activites = Activite::where('groupe_activite',$groupe->nom)->get();
+//        $activites = Activite::where('groupe_activite',$groupe->nom)->latest()->get();
         return response()->json(['groupe'=>$groupe]);
     }
 

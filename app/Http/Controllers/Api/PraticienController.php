@@ -24,7 +24,40 @@ class PraticienController extends Controller
     protected $table ="praticiens";
     /**
      * Display a listing of the resource.
-     *
+     * Display a listing of the resource.
+     * @OA\Get(
+     *      path="/praticien",
+     *      operationId="getPraticienList",
+     *      tags={"Praticien"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Get list of Praticiens",
+     *      description="Return list of Praticiens",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @return \Illuminate\Http\Response
      */
     public function index()
@@ -45,7 +78,39 @@ class PraticienController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     * @OA\Post(
+     *      path="/praticien/{praticien}",
+     *      operationId="storePraticienList",
+     *      tags={"Praticien"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Store Praticiens",
+     *      description="Return a Praticiens",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param PraticienStoreRequest $request
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
@@ -123,7 +188,39 @@ class PraticienController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     * @OA\Get(
+     *      path="/praticien/{praticien}", 
+     *      operationId="ShowPraticienList",
+     *      tags={"Praticien"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Show a Praticiens",
+     *      description="Return a Praticiens details",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -149,8 +246,40 @@ class PraticienController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
+     * Update the specified resource in storage..
+     * @OA\Put(
+     *      path="/praticien/{praticien}",
+     *      operationId="UpdatePraticienList",
+     *      tags={"Praticien"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Update a Praticiens",
+     *      description="Update Praticiens",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param PraticienUpdateRequest $request
      * @param $slug
      * @return \Illuminate\Http\Response
@@ -205,7 +334,39 @@ class PraticienController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     * @OA\Delete(
+     *      path="/praticien/{praticien}",
+     *      operationId="deletePraticienList",
+     *      tags={"Praticien"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Delete Praticiens",
+     *      description="Return a list Praticiens",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param $slug
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException

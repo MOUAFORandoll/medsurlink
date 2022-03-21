@@ -1,8 +1,15 @@
 <?php
 
+use App\Mail\Facture\AchatOffre;
+use App\Models\Affiliation;
+use App\Models\AffiliationSouscripteur;
 use App\SMS;
 use App\Notifications\SendSMS;
 use Illuminate\Support\Arr;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Mail;
+use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Carbon;
 
 if(!function_exists('sendSMS'))
 {
@@ -156,3 +163,135 @@ if(!function_exists('formatTelephone'))
     }
 }
 
+
+
+
+    if(!function_exists('EnvoieDeFactureApresSouscription'))
+{
+    /**
+     * @param $string_with_accent
+     * @return string
+     */
+    function EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire)
+    {
+        //return view('impression_offre');
+        try {
+            $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
+            Mail::to($email_souscripteur)->send(new AchatOffre($pdf['output'], $nom_souscripteur, $description));
+        }catch (\Exception $exception){
+            //$exception
+        }
+    }
+}
+
+if(!function_exists('generationPdfFactureOffre'))
+{
+    /**
+     * @param $string_with_accent
+     * @return string
+     */
+    function generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire)
+    {
+        //return view('impression_offre');
+        try {
+            $pdf = PDF::loadView('impression_offre', ['commande_id' => $commande_id, 'commande_date' => $commande_date, 'montant_total' => number_format($montant_total, 2, ',', ' '), 'echeance' => $echeance, 'description' => mb_strtoupper($description), 'quantite' => $quantite, 'prix_unitaire' => number_format($prix_unitaire, 2, ',', ' '), 'nom_souscripteur' => $nom_souscripteur, 'email_souscripteur' => $email_souscripteur, 'rue' => $rue, 'adresse' => $adresse, 'ville' => $ville, 'pays' => $pays, 'beneficiaire' => $beneficiaire]);
+            return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+        }catch (\Exception $exception){
+            //$exception
+        }
+    }
+}
+
+
+if(!function_exists('ConversionEurotoXaf'))
+{
+    /**
+     * @param $montant
+     * @return int
+     */
+    function ConversionEurotoXaf($montant)
+    {
+        $base_uri = 'https://api.exchangerate.host/latest';
+
+        try {
+            $client = new Client(['base_uri' => $base_uri]);
+            $response = $client->request('GET', $base_uri);
+            $responseArray = json_decode($response->getBody()->getContents(), true);
+            if($responseArray['success'] == true){
+                $total = ceil($montant * $responseArray['rates']['XAF']);
+                return $total;
+            }
+
+            //return $responseArray;
+
+        } catch (Exception $exception) {
+            return response()->json(['erreur'=>$exception->getMessage()],419);
+        }
+
+    }
+}
+
+
+if(!function_exists('ProcessAfterPayment'))
+{
+    /**
+     * @param $string_with_accent
+     * @return string
+     */
+    function ProcessAfterPayment($payment, $patient = null)
+    {
+        $affiliation = AffiliationSouscripteur::where([["type_contrat",$payment->commande->offres_packages_id],["user_id",$payment->souscripteur_id]])->first();
+        if(!is_null($patient)){
+
+                $affiliation_old = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
+
+                if($affiliation_old->status_paiement =="NON PAYE"){
+                    $affiliation_old->status_paiement = "PAYE";
+                }else{
+                    $affiliation_old->renouvelle += 1;
+                    $payment->status_contrat = "Renouvelé";
+                    $affiliation_old->date_fin = Carbon::parse($affiliation_old->date_fin)->addYears(1)->format('Y-m-d');
+                }
+                $affiliation_old->save();
+        }
+        if($affiliation == ''){
+            $affiliation = AffiliationSouscripteur::create([
+                'user_id'=>$payment->souscripteur_id,
+                'type_contrat'=>$payment->commande->offres_packages_id,
+                'nombre_paye'=>$payment->commande->quantite,
+                'nombre_restant'=>$payment->commande->quantite,
+                'montant'=>$payment->montant,
+                'cim_id'=>$payment->commande->id,
+                'date_paiement'=>null,
+            ]);
+        }else{
+            $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
+            if($payment->status_contrat != "Renouvelé"){
+                $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
+            }
+            $affiliation->save();
+        }
+       /**
+        * envoie de la facture au souscripteur
+        */
+        $commande_id = $payment->commande->id;
+        $commande_date = $payment->commande->date_commande;
+        $montant_total = $payment->montant;
+        $echeance =  "13/02/2022";
+        $description = $affiliation->typeContrat->description_fr;
+        $quantite =  $payment->commande->quantite;
+        $prix_unitaire = $affiliation->typeContrat->montant;
+        $nom_souscripteur = mb_strtoupper($affiliation->souscripteur->user->nom).' '.$affiliation->souscripteur->user->prenom;
+        $email_souscripteur = $affiliation->souscripteur->user->email;
+        $rue =  $affiliation->souscripteur->user->quartier;
+        $adresse =  $affiliation->souscripteur->user->adresse;
+        $ville = $affiliation->souscripteur->user->code_postal.' - '.$affiliation->souscripteur->user->ville;
+        $pays = $affiliation->souscripteur->user->pays;
+        $beneficiaire ="FOUKOUOP NDAM Rebecca";
+        EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
+
+        if(!is_null($patient)){
+            return $affiliation_old->slug;
+        }
+    }
+}

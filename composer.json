@@ -12,7 +12,6 @@
         "barryvdh/laravel-dompdf": "^0.8.5",
         "barryvdh/laravel-snappy": "^0.4.4",
         "cviebrock/eloquent-sluggable": "4.8.*",
-        "darkaonline/l5-swagger": "5.8.*",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
         "gbrock/laravel-table": "dev-master",
@@ -26,9 +25,11 @@
         "laravel/passport": "^7.3",
         "laravel/slack-notification-channel": "^2.3",
         "laravel/tinker": "^1.0",
+        "lcobucci/jwt": "3.3.3",
         "maatwebsite/excel": "^3.1",
         "mpociot/laravel-apidoc-generator": "^4.8",
         "phpoffice/phpspreadsheet": "^1.14",
+        "profclems/postman-collection-generator": "^1.2",
         "rinvex/countries": "^5.0",
         "spatie/laravel-permission": "^2.37",
         "stripe/stripe-php": "^7.87"
@@ -68,7 +69,9 @@
             "app/Helpers/RapportHelper.php",
             "app/helpers.php",
             "app/Helpers/PaiementHelper.php",
-            "app/Helpers/ComptabiliteHelper.php"
+            "app/Helpers/ComptabiliteHelper.php",
+            "app/Helpers/OmHelper.php",
+            "app/Helpers/MomoHelper.php"
         ],
         "classmap": [
             "database/seeds",

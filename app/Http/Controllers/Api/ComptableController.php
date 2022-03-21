@@ -24,7 +24,7 @@ class ComptableController extends Controller
      */
     public function index()
     {
-        $comptables = Comptable::with('etablissements','user')->get();
+        $comptables = Comptable::with('etablissements','user')->latest()->get();
         $distint = collect([]);
 
         foreach ($comptables as $comptable){

@@ -24,7 +24,7 @@ class AssistanteController extends Controller
      */
     public function index()
     {
-        $assistantes = Assistante::with('etablissements','user')->get();
+        $assistantes = Assistante::with('etablissements','user')->latest()->get();
         $distint = collect([]);
 
         foreach ($assistantes as $assistante){

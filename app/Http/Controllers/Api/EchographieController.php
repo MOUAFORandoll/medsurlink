@@ -25,7 +25,7 @@ class EchographieController extends Controller
      */
     public function index()
     {
-        $echographies = Echographie::with('consultation')->get();
+        $echographies = Echographie::with('consultation')->latest()->get();
 
         foreach ($echographies as $echography){
             $echography->updateEchographie();

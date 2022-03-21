@@ -17,12 +17,44 @@ class GestionnaireController extends Controller
     protected $table = "gestionnaires";
     /**
      * Display a listing of the resource.
-     *
+     * @OA\Get(
+     *      path="/gestionnaire",
+     *      operationId="getGestionnaireList",
+     *      tags={"Gestionnaire"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Get list of gestionnaire",
+     *      description="Returns list of gestionnaire",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $gestionnaires = Gestionnaire::with('user')->get();
+        $gestionnaires = Gestionnaire::with('user')->latest()->get();
 
         foreach ($gestionnaires as $gestionnaire){
            $gestionnaire->updateGestionnaire();
@@ -43,7 +75,39 @@ class GestionnaireController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
+     * @OA\Post(
+     *      path="/gestionnaire/{gestionnaire}",
+     *      operationId="storeGestionnaire",
+     *      tags={"Gestionnaire"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Store gestionnaire",
+     *      description="Returns a gestionnaire",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
@@ -78,7 +142,39 @@ class GestionnaireController extends Controller
 
     /**
      * Display the specified resource.
-     *
+     * @OA\Get(
+     *      path="/gestionnaire/{gestionnaire}",
+     *      operationId="showGestionnaire",
+     *      tags={"Gestionnaire"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Show gestionnaire",
+     *      description="Returns a gestionnaire",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param $slug
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
@@ -108,7 +204,39 @@ class GestionnaireController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
+     * @OA\Put(
+     *      path="/gestionnaire/{gestionnaire}",
+     *      operationId="updateGestionnaire",
+     *      tags={"Gestionnaire"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Update gestionnaire",
+     *      description="Returns a gestionnaire",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param GestionnaireUpdateRequest $request
      * @param $slug
      * @return \Illuminate\Http\Response
@@ -153,7 +281,39 @@ class GestionnaireController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
+     * @OA\Delete(
+     *      path="/gestionnaire/{gestionnaire}",
+     *      operationId="deleteGestionnaire",
+     *      tags={"Gestionnaire"},
+     * security={
+     *  {"passport": {}},
+     *   },
+     *      summary="Delete gestionnaire",
+     *      description="Returns list of gestionnaire",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden"
+     *      ),
+     * @OA\Response(
+     *      response=400,
+     *      description="Bad Request"
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found"
+     *   ),
+     *  )
      * @param $slug
      * @return \Illuminate\Http\Response
      * @throws \Illuminate\Validation\ValidationException
