@@ -22,17 +22,17 @@ use App\Models\Affiliation;
 use App\User;
 class StripeContrtoller extends Controller
 {
-    public $url_loccale= "http://localhost:8080", $url_stagging= "https://www.staging.medsurlink.com", $url_prod= "https://www.medsurlink.com",  $url_global= "";
+    public $url_global= "";
 
     public function __construct()
     {
         $env = strtolower(config('app.env'));
         if ($env == 'local')
-            $this->url_global = $this->url_loccale;
+            $this->url_global = config('app.url_loccale');
         else if ($env == 'staging')
-            $this->url_global = $this->url_stagging;
+            $this->url_global = config('app.url_stagging');
         else
-            $this->url_global = $this->url_prod;
+            $this->url_global = config('app.url_prod');
     }
 
     public function procederAuPaiement(Request $request){
@@ -42,7 +42,7 @@ class StripeContrtoller extends Controller
         //     ->build();
         // $euroFranc = $swap->latest('EUR/XAF')->getValue();
         //Stripe::setApiKey('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');
-        Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
+        Stripe::setApiKey(config('app.stripe_key'));
 
           $commande =  CommandePackage::create([
                 "date_commande" => Carbon::now()->toDateTimeString(),
@@ -82,7 +82,7 @@ class StripeContrtoller extends Controller
         //     ->build();
         // $euroFranc = $swap->latest('EUR/XAF')->getValue();
         //Stripe::setApiKey('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');
-        Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
+        Stripe::setApiKey(config('app.stripe_key'));
 
         $commande =  CommandePackage::create([
             "date_commande" => Carbon::now()->toDateTimeString(),
@@ -124,7 +124,7 @@ class StripeContrtoller extends Controller
         //     ->build();
         // $euroFranc = $swap->latest('EUR/XAF')->getValue();
         //Stripe::setApiKey('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');
-        Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
+        Stripe::setApiKey(config('app.stripe_key'));
         //dd($request);
         $tokenInfo = "";
         $passwordSouscripteur = "";
@@ -208,7 +208,7 @@ class StripeContrtoller extends Controller
     public function renouvellementPaiement(Request $request){
 
         //Stripe::setApiKey('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');
-        Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
+        Stripe::setApiKey(config('app.stripe_key'));
 
         $commande =  CommandePackage::create([
             "date_commande" => Carbon::now()->toDateTimeString(),

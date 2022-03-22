@@ -24,7 +24,19 @@ class PaymentController extends Controller
 {
     use PersonnalErrors;
     use SmsTrait;
-    protected $table = 'payments';
+
+    public $url_global= "";
+
+    public function __construct()
+    {
+        $env = strtolower(config('app.env'));
+        if ($env == 'local')
+            $this->url_global = config('app.url_loccale');
+        else if ($env == 'staging')
+            $this->url_global = config('app.url_stagging');
+        else
+            $this->url_global = config('app.url_prod');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -70,24 +82,36 @@ class PaymentController extends Controller
         //$url = '/payment/prestation/'.$payment->id);
         return  response()->json(['url'=>$payment]);
     }
-    
+
     public function paymentPrestation(Request $request){
 
-        $swap = (new Builder())
-            ->add('fixer', ['access_key' => '6725eecbfab360915787d6dabfc326c9'])
-            ->add('currency_layer', ['access_key' => '6725eecbfab360915787d6dabfc326c9', 'enterprise' => false])
-            ->build();
-        $euroFranc = $swap->latest('EUR/XAF')->getValue();
-        Stripe::setApiKey('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');
-        //Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
-        $payment = Payment::whereId($request->get('id'))->first();
-        $prix = $payment->amount/$euroFranc;
-       /* if ($prix < 500){
+        Stripe::setApiKey(config('app.stripe_key'));
 
-            $prix = $prix*100;
-            $prix = floor($prix);
-        }*/
-        $prix = number_format($prix, 2, '.', '');
+        $payment = Payment::find($request->id);
+        //$prix = $payment->amount/$euroFranc;
+
+        $session =   Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => [[
+                'price_data' => [
+                    'currency' => 'XAF',
+                    'product_data' => [
+                        'name' => 'Paiement des prestations sur '.$payment->patients->user->nom.' '.$payment->patients->user->prenom,
+                    ],
+                    'unit_amount' => $payment->amount,
+                ],
+                'quantity' =>1,
+            ]],
+            'mode' => 'payment',
+            'success_url' => url($this->url_global.'/payment-prestation/success/'.$request->get('id')),
+            'cancel_url' => url($this->url_global.'/payment-prestation/failed/'.$request->get('id'))
+        ]);
+        return response()->json([ 'id' => $session->id]);
+
+
+
+
+       /*  $prix = number_format($prix, 2, '.', '');
         //dd($prix);
         $session =   Session::create([
             'payment_method_types' => ['card'],
@@ -105,8 +129,8 @@ class PaymentController extends Controller
             'success_url' => url('https://www.medsurlink.com/payment-prestation/success/'.$request->get('id')),
             'cancel_url' => url('https://www.medsurlink.com/payment-prestation/failed/'.$request->get('id')),
         ]);
-        return response()->json([ 'id' => $session->id]);
-        
+        return response()->json([ 'id' => $session->id]); */
+
     }
     /**
      * Display the specified resource.
