@@ -862,6 +862,14 @@ class PatientController extends Controller
         $patient = Patient::with(['souscripteur','user','affiliations'])->restrictUser()->whereSlug($slug)->first();
         return response()->json(['patient'=>$patient]);
     }
+
+    public function assignation_souscripteur(Request $request){
+        $patient = Patient::find($request->patient_id);
+        $patient->souscripteur_id = $request->souscripteur_id;
+        $patient->save();
+        return response()->json(['patient' => 'success']);
+    }
+
     public function getPatientWithMedecin()
     {
         $patients = Patient::with(['souscripteur','dossier','user','affiliations','medecinReferent.medecinControles.user'])->restrictUser()->whereHas('user', function($q) {$q->where('isMedicasure', '=', 1)->where('decede', '=', 'non');})->latest()->get();

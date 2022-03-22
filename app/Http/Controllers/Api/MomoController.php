@@ -109,18 +109,18 @@ class MomoController extends Controller
             "statut"=>(json_decode(Json::encode($request->all())))->status,
             "reponse"=>Json::encode($request->all()),
         ]);
-        \Log::alert($notification);
     }
 
 
     public function momoPaidByCustomer(Request $request){
         $accessToken = getToken($this->subscriptionKey,$this->base64Code);
+        \Log::alert($request->all());
 
         $operation = array(
             //'amount'=> $request->amount,
             'amount'=> 50,
             'currency'=> $this->currency,
-            'externalId'=> "cimcam",//$request->get('identifiant'),
+            'externalId'=> $request->identifiant,
             "payer"=>[
                 "partyIdType"=>"MSISDN",
                 "partyId"=>'237'.$request->subscriberMsisdn,
@@ -129,7 +129,7 @@ class MomoController extends Controller
             'payeeNote' => "PaiementContratIntermediationMedicale"
         );
 //        Génération de l'identifiant unique du paiement
-        $referenceId = $request->get('reference');
+        $referenceId = $request->reference;
 
         $operation = json_encode($operation);
 
