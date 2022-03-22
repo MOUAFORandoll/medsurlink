@@ -49,9 +49,9 @@ class MedicasureController extends Controller
                 try {
                     $client = new Client();
                     $env = strtolower(config('app.env'));
-                    if ($env === 'local')
+                    if ($env == 'local')
                         $url = 'http://localhost:8000/api/v1.0.1/souscripteur/email/'.$email;
-                    else if ($env === 'staging')
+                    else if ($env == 'staging')
                         $url ='https://www.staging.medicasure.com/api/v1.0.1/souscripteur/email/'.$email;
                     else
                         $url ='https://www.medicasure.com/api/v1.0.1/souscripteur/email/'.$email;
