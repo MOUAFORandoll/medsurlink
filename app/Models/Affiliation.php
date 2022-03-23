@@ -38,7 +38,7 @@ class Affiliation extends Model
         "nom",
         "date_debut",
         "date_fin",
-        "selected",
+        "selected", // par quelle canal avez vous entendu parler de medicasure pour la première fois ?
         'slug'
     ];
 
