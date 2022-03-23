@@ -44,7 +44,7 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::with(['souscripteur','patients'])->get();
+        $payments = Payment::with(['souscripteur','patients'])->latest()->get();
         return response()->json(['payments'=>$payments]);
     }
 

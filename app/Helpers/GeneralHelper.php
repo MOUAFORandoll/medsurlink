@@ -230,6 +230,33 @@ if(!function_exists('ConversionEurotoXaf'))
 
     }
 }
+if(!function_exists('ConversionXafToEuro'))
+{
+    /**
+     * @param $montant
+     * @return int
+     */
+    function ConversionFromAndTo($montant, $from = "XAF", $to = "EUR")
+    {
+        $base_uri = "https://api.exchangerate.host/latest?base=$from";
+
+        try {
+            $client = new Client(['base_uri' => $base_uri]);
+            $response = $client->request('GET', $base_uri);
+            $responseArray = json_decode($response->getBody()->getContents(), true);
+            if($responseArray['success'] == true){
+                $total = ceil($montant * $responseArray['rates'][$to]);
+                return $total;
+            }
+
+            //return $responseArray;
+
+        } catch (Exception $exception) {
+            return response()->json(['erreur'=>$exception->getMessage()],419);
+        }
+
+    }
+}
 
 
 if(!function_exists('ProcessAfterPayment'))
