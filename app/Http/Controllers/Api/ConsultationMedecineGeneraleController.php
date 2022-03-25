@@ -162,7 +162,8 @@ class ConsultationMedecineGeneraleController extends Controller
             'traitements',
             'conclusions',
             'parametresCommun',
-            'etablissement'
+            'etablissement',
+            'diasgnostic'
         ])->find($consultation->id);
 
 
@@ -459,7 +460,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $this->checkIfCanUpdated("ConsultationMedecineGenerale",$consultation->id,"create");
 
         $motifs = $request->get('motifs');
-
+        $diasgnostic = $request->get('diasgnostic');
         $rConclusions = $request->get('conclusions');
         $motifs = explode(",",$motifs);
 
