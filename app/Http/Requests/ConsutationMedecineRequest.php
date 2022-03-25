@@ -28,9 +28,9 @@ class ConsutationMedecineRequest extends FormRequest
         $rules = [
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
             "conclusions"=>"sometimes|nullable|string|min:2",
-            "diasgnostic" => "required|sometimes||min:3",
+            "diasgnostic" => "required|sometimes",
             "anamese"=>"sometimes|nullable|string|min:5",
-            "complementaire"=>"sometimes|nullable|string|min:5",
+            "complementaire"=>"sometimes|nullable|string",
             "mode_de_vie"=>"sometimes|nullable|string|min:5",
             "examen_clinique"=>"sometimes|nullable|string|min:2",
             "examen_complementaire"=>"sometimes|nullable|string|min:2",
@@ -64,7 +64,7 @@ class ConsutationMedecineRequest extends FormRequest
             $rules["frequence_respiratoire"]="sometimes|nullable|numeric";
             $rules["sato2"]="sometimes|nullable|numeric";
             $rules["traitements"]="sometimes|nullable|string|min:2";
-            $rules["diasgnostic"]= "required|sometimes||min:3";
+            $rules["diasgnostic"]= "required|sometimes||min:1";
             $rules["documents.*"]="sometimes|file|mimes:jpeg,png,jpg,gif,docx,pdf|max:40960";
         }
  
