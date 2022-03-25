@@ -16,7 +16,7 @@ use App\Http\Controllers\Traits\PersonnalErrors;
 class PharmacienController extends Controller
 {
     use PersonnalErrors;
-    protected $table = 'pharmacien';
+    protected $table = 'pharmaciens';
     /**
      * Display a listing of the resource.
      *
