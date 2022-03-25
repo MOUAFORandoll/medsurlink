@@ -84,29 +84,32 @@ class PaymentController extends Controller
     }
 
     public function paymentPrestation(Request $request){
+        if($request->moyenpaiement == "stripe"){
+            Stripe::setApiKey(config('app.stripe_key'));
 
-        Stripe::setApiKey(config('app.stripe_key'));
+            $payment = Payment::find($request->id);
+            //$prix = $payment->amount/$euroFranc;
 
-        $payment = Payment::find($request->id);
-        //$prix = $payment->amount/$euroFranc;
-
-        $session =   Session::create([
-            'payment_method_types' => ['card'],
-            'line_items' => [[
-                'price_data' => [
-                    'currency' => 'XAF',
-                    'product_data' => [
-                        'name' => 'Paiement des prestations sur '.$payment->patients->user->nom.' '.$payment->patients->user->prenom,
+            $session =   Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'XAF',
+                        'product_data' => [
+                            'name' => 'Paiement des prestations sur '.$payment->patients->user->nom.' '.$payment->patients->user->prenom,
+                        ],
+                        'unit_amount' => $payment->amount,
                     ],
-                    'unit_amount' => $payment->amount,
-                ],
-                'quantity' =>1,
-            ]],
-            'mode' => 'payment',
-            'success_url' => url($this->url_global.'/payment-prestation/success/'.$request->get('id')),
-            'cancel_url' => url($this->url_global.'/payment-prestation/failed/'.$request->get('id'))
-        ]);
-        return response()->json([ 'id' => $session->id]);
+                    'quantity' =>1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => url($this->url_global.'/payment-prestation/success/'.$request->get('id')),
+                'cancel_url' => url($this->url_global.'/payment-prestation/failed/'.$request->get('id'))
+            ]);
+            return response()->json(['id' => $session->id]);
+        }
+
+
 
 
 
@@ -205,7 +208,7 @@ class PaymentController extends Controller
             $payment = Payment::with(['souscripteur.user','patients.user'])->whereId($slug)->first();
            // dd($payment);
             $payment->statut = 'PAYE';
-            $payment->method = 'STRIPE';
+            $payment->method = 'stripe';
             $payment->date_payment = Carbon::now()->toDateTimeString();
             $payment->save();
         return response()->json(['statut'=>$payment]);
