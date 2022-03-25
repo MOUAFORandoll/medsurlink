@@ -43,6 +43,7 @@ Route::get('impression/facture-offre/{commande_id}', function ($commande_id) {
 });
 
 Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
+Route::resource('contact_assurances', 'Api\ContactAssuranceController');
 Route::get('/liens', function () {
     $liens = Dictionnaire::where("reference","lien_parente")->get();
     return response()->json(
