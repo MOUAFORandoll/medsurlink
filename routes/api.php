@@ -317,6 +317,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
     Route::resource('comptable','Api\ComptableController');
     Route::resource('assistante','Api\AssistanteController');
     Route::resource('pharmacien','Api\PharmacienController');
+    Route::resource('role','Api\RoleController');
 
 
 });
