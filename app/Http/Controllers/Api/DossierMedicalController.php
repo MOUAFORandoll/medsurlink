@@ -80,7 +80,7 @@ class DossierMedicalController extends Controller
             'traitements'=> function ($query) {
                 $query->orderBy('created_at', 'desc');
             }
-        ])->latest()->get();
+        ])->latest()->paginate(15);
         foreach ($dossiers as $dossier){
             if (!is_null($dossier)){
                 $dossier->updateDossier();
