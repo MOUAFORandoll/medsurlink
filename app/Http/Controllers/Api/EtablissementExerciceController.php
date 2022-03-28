@@ -64,7 +64,6 @@ class EtablissementExerciceController extends Controller
             "description"=>$request->description,
             "adresse"=>$request->get('adresse')
         ]);
-
         if($request->hasFile('logo')) {
             if ($request->file('logo')->isValid()) {
                 $path = $request->logo->store('public/Etablissement/' . $etablissement->slug.'/Logo');

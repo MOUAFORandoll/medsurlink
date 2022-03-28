@@ -99,6 +99,7 @@ class OmController extends Controller
             'souscripteur_id' => $souscripteur->user_id,
         ]);
 
+        $package_nom = $commande->offres_package->description_fr;
         $access_token = getOmToken();
         $mp_token = initierPaiement($access_token);
         $tokenInfo = "checkout";
@@ -112,7 +113,7 @@ class OmController extends Controller
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
             "pin"=> "2019",
             "orderId"=> $identifiant,
-            "description"=> "",
+            "description"=> "$commande->quantite $package_nom",
             "payToken"=> $mp_token
         ];
 
@@ -137,7 +138,6 @@ class OmController extends Controller
             "statut"=> $request->status,
             "reponse"=>Json::encode($request->all()),
         ]);
-        \Log::alert($notif);
     }
 
     public function statutPaiement($identifiant,$payToken, $patient = null){
@@ -182,7 +182,7 @@ class OmController extends Controller
             "subscriberMsisdn"=> $request->get('subscriberMsisdn'),
             "pin"=> "2019",
             "orderId"=> $request->get('reference'),
-            "description"=> $request->get('description',''),
+            "description"=> $request->description,
             "payToken"=> $mp_token
         ];
 

@@ -395,6 +395,9 @@ Route::prefix('paiement')->group(function () {
     Route::post('/om/paid','Api\OmController@paiementFromMedicasure');
     //
     Route::post('/om/{identifiant}/{payToken}/notification/{tokenInfo}/','Api\OmController@notificationPaiement')->name('om.notification');
+    Route::post('/prestation/om/{payment_id}/notification','Api\PaymentController@notificationPaiement')->name('prestation.om.notification');
+    Route::get('/prestation/om/{pay_token}/notification','Api\PaymentController@statutPaiement');
+    //route('prestation.om.notification', ['payment_id' => $payment->id, 'payToken' => $mp_token, 'tokenInfo' => $tokenInfo]),
     Route::get('/om/{identifiant}/{payToken}/statutPaiement/{patient?}','Api\OmController@statutPaiement');
     //Route::post('/om/paymentStatus','Api\OmController@statutPaiement');
     Route::post('/stripe-paiement','Api\StripeContrtoller@stripePaidByCustomer');
