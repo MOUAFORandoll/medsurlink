@@ -28,8 +28,8 @@ class AffiliationController extends Controller
         $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien'])->latest()->get();
         foreach ($affiliations as $affiliation){
             if (!is_null($affiliation->patient)){
-                $affiliation['user'] = $affiliation->patient->user;
-                $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
+                $affiliation['user'] = isset($affiliation->patient->user) ? $affiliation->patient->user : null ;
+                $affiliation['souscripteur'] = isset($affiliation->patient->souscripteur->user) ? $affiliation->patient->souscripteur->user  : null;
             }
         }
         return response()->json(['affiliations'=>$affiliations]);
