@@ -32,7 +32,7 @@ class RappelSouscripteur extends Mailable
     public function build()
     {
         return $this->subject('Rendez-vous médical '.strtoupper($this->rdv->patient->nom).'  '.ucfirst($this->rdv->patient->prenom) )
-            ->from('medsurlink@medicasure.com')
+            ->from('no-reply@medsurlink.com')
             ->bcc('medsurlink@medicasure.com')
             ->markdown('emails.Rdv.RappelSouscripteur');
     }
