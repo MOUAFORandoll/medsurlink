@@ -360,6 +360,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
     Route::get('patient/{id}/contrat-medicasure','Api\LigneDeTempsController@patientContrat');
     Route::get('trajet-patient/dossier/{id}','Api\LigneDeTempsController@getTrajetPatient');
+
+    Route::get('paiement-prestation', 'Api\PaymentController@listPaiementSouscripteur');
 });
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Souscripteur|Assistante']], function () {
     Route::resource('souscripteur','Api\SouscripteurController')->only('update');
@@ -372,6 +374,7 @@ Route::post('payment-prestation','Api\PaymentController@paymentPrestation');
 Route::get('payment-prestation/{id}','Api\PaymentController@getPayment');
 Route::post('payment-statut/{id}','Api\PaymentController@NotifierPaiement');
 Route::resource('payment','Api\PaymentController');
+
 Route::get('snomed-icd/map/{string}','Api\SnomedIcdController@find');
 Route::get('anamnese','Api\AnamneseController@index');
 Route::get('examen-clinic','Api\ExamenClinicController@index');
