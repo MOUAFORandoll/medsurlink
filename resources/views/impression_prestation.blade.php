@@ -210,7 +210,7 @@
     <div style="position:absolute;left:20px;top:157.50px" class="cls_002"><span class="cls_002">N° # {{ $commande_id }}</span></div>
     <div style="position:absolute;left:20px;top:178.50px" class="cls_004"><span class="cls_004">du {{ $commande_date }}</span></div>
 
-    <div style="position:absolute;left:20px;top:206.25px;width: 25%; height: 73px; border:1px solid #00ada7; background-color: #00ada7;">
+    <div style="position:absolute;left:20px;top:206.25px;width: 25%; height: 93px; border:1px solid #00ada7; background-color: #00ada7;">
         <div style="position:relative; width: 100%" class="cls_011"><span class="cls_011">Total payé</span></div>
         <div style="position:relative:left: 10px; top:15px; " class="cls_007"><span class="cls_007">{{ $montant_total}} XAF</span></div>
     </div>
@@ -220,7 +220,7 @@
         <div style="position:relative:left: 10px; top:15px; " class="cls_008"><span class="cls_008">{{ $echeance }}</span></div>
     </div> --}}
 
-    <div style="position:absolute;left:250px;top:150px;width: 63.8%; height: 130px; border:1px solid #00ada7;">
+    <div style="position:absolute;left:250px;top:150px;width: 63.8%; height: 150px; border:1px solid #00ada7;">
         <div style="position:relative; width: 100%" class="cls_011">&nbsp;&nbsp;<span class="cls_011">Adressé à</span></div>
         <div style="position: relative;left: 10px;top:2px" class="cls_004"><span class="cls_004"> {{ $nom_souscripteur }}</span></div>
         @if(!empty($rue))
@@ -240,6 +240,7 @@
         {{-- <div style="position: relative;left: 10px;top:2px" class="cls_004"><span class="cls_004">N° de TVA</span></div> --}}
     </div>
     <div style="position:absolute;left:20px;top:306.00px; width: 100%; text-align: justify;" >
+        <br>
         <div class="cls_004"><span class="cls_004">Mode de Paiement: {{ $mode_paiement }}</span></div><br>
         <table style="width: 100%;">
             <thead>

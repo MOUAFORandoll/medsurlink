@@ -46,7 +46,20 @@ class PaymentController extends Controller
     public function index()
     {
         $payments = Payment::with(['souscripteur','patients'])->latest()->get();
-        return response()->json(['payments'=>$payments]);
+
+        return response()->json(['payments' => $payments]);
+    }
+
+    public function listPaiementSouscripteur()
+    {
+        $payments = Payment::with(['souscripteur','patients'])->where('souscripteur_id', auth()->user()->id)->latest()->get();
+
+        foreach($payments as $payment){
+            $payment['facture'] = route('facture.paiement.prestation', $payment->id);
+            $$payments[] = $payment;
+        }
+
+        return response()->json(['payments' => $payments]);
     }
 
     /**
