@@ -4,6 +4,7 @@ use App\Models\AffiliationSouscripteur;
 use App\Models\CommandePackage;
 use App\Models\ContratIntermediationMedicale;
 use App\Models\CompteRenduOperatoire;
+use App\Models\Payment;
 use App\Models\PaymentOffre;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Route;
@@ -90,6 +91,29 @@ Route::get('impression/facture-offre/{affiliation}', function ($affiliation) {
     $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
     return $pdf['stream'];
 })->name('facture.offre');
+
+Route::get('impression/prestation/{paiement_id}', function ($paiement_id) {
+
+    $payment = Payment::find($paiement_id)->load('souscripteur.user','patients.user');
+
+    $payment_id = $paiement_id;
+    $commande_date = $payment->date_payment;
+    $montant_total = $payment->amount;
+    $echeance =  "13/02/2022";
+    $description = $payment->motif;
+    $mode_paiement = mb_strtoupper($payment->method) == 'OM' ? 'Orange Money' : 'Stripe' ;
+    $prix_unitaire = 2;
+    $nom_souscripteur = mb_strtoupper($payment->souscripteur->user->nom).' '.$payment->souscripteur->user->prenom;
+    $email_souscripteur = $payment->souscripteur->user->email;
+    $rue =  $payment->souscripteur->user->quartier;
+    $adresse =  $payment->souscripteur->user->adresse;
+    $pays =  $payment->souscripteur->user->pays;
+    $ville = $payment->souscripteur->user->code_postal.' - '.$payment->souscripteur->user->ville;
+    $beneficiaire = mb_strtoupper($payment->patients->user->nom).' '.$payment->patients->user->prenom;
+
+    $pdf = generationPdfPaiementPrestation($payment_id, $commande_date, $montant_total, $echeance, $description, $mode_paiement, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
+    return $pdf['stream'];
+})->name('facture.paiement.prestation');
 /*
 Route::get('{all}', function () {
     return view('dashboard');

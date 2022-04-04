@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests\PaymentRequest;
 use App\Http\Controllers\Controller;
+use App\Models\NotificationPaiement;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Netpok\Database\Support\DeleteRestrictionException;
@@ -24,7 +25,19 @@ class PaymentController extends Controller
 {
     use PersonnalErrors;
     use SmsTrait;
-    protected $table = 'payments';
+
+    public $url_global= "";
+
+    public function __construct()
+    {
+        $env = strtolower(config('app.env'));
+        if ($env == 'local')
+            $this->url_global = config('app.url_loccale');
+        else if ($env == 'staging')
+            $this->url_global = config('app.url_stagging');
+        else
+            $this->url_global = config('app.url_prod');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -32,8 +45,21 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::with(['souscripteur','patients'])->get();
-        return response()->json(['payments'=>$payments]);
+        $payments = Payment::with(['souscripteur','patients'])->latest()->get();
+
+        return response()->json(['payments' => $payments]);
+    }
+
+    public function listPaiementSouscripteur()
+    {
+        $payments = Payment::with(['souscripteur','patients'])->where('souscripteur_id', auth()->user()->id)->latest()->get();
+
+        foreach($payments as $payment){
+            $payment['facture'] = route('facture.paiement.prestation', $payment->id);
+            $$payments[] = $payment;
+        }
+
+        return response()->json(['payments' => $payments]);
     }
 
     /**
@@ -70,43 +96,52 @@ class PaymentController extends Controller
         //$url = '/payment/prestation/'.$payment->id);
         return  response()->json(['url'=>$payment]);
     }
-    
+
     public function paymentPrestation(Request $request){
 
-        $swap = (new Builder())
-            ->add('fixer', ['access_key' => '6725eecbfab360915787d6dabfc326c9'])
-            ->add('currency_layer', ['access_key' => '6725eecbfab360915787d6dabfc326c9', 'enterprise' => false])
-            ->build();
-        $euroFranc = $swap->latest('EUR/XAF')->getValue();
-        Stripe::setApiKey('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');
-        //Stripe::setApiKey('sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5');
-        $payment = Payment::whereId($request->get('id'))->first();
-        $prix = $payment->amount/$euroFranc;
-       /* if ($prix < 500){
+        $payment = Payment::find($request->id);
+        $description = "d'actes médicaux effectués sur le patient ".$payment->patients->user->nom.' '.$payment->patients->user->prenom;
+        if($request->moyenpaiement == "stripe"){
+            Stripe::setApiKey(config('app.stripe_key'));
 
-            $prix = $prix*100;
-            $prix = floor($prix);
-        }*/
-        $prix = number_format($prix, 2, '.', '');
-        //dd($prix);
-        $session =   Session::create([
-            'payment_method_types' => ['card'],
-            'line_items' => [[
-                'price_data' => [
-                    'currency' => 'XAF',
-                    'product_data' => [
-                        'name' => 'Paiement des prestations sur '.$payment->patients->user->nom.' '.$payment->patients->user->prenom,
+            $session =   Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'XAF',
+                        'product_data' => [
+                            'name' => $description
+                        ],
+                        'unit_amount' => $payment->amount,
                     ],
-                    'unit_amount' => $payment->amount,
-                ],
-                'quantity' => 1,
-            ]],
-            'mode' => 'payment',
-            'success_url' => url('https://www.medsurlink.com/payment-prestation/success/'.$request->get('id')),
-            'cancel_url' => url('https://www.medsurlink.com/payment-prestation/failed/'.$request->get('id')),
-        ]);
-        return response()->json([ 'id' => $session->id]);
-        
+                    'quantity' =>1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => url($this->url_global.'/payment-prestation/success/'.$request->get('id')),
+                'cancel_url' => url($this->url_global.'/payment-prestation/failed/'.$request->get('id'))
+            ]);
+            return response()->json(['id' => $session->id, 'moyenpaiement' => $request->moyenpaiement]);
+        }
+        elseif($request->moyenpaiement == "orange"){
+            $access_token = getOmToken();
+            $mp_token = initierPaiement($access_token);
+
+            $body = [
+                //"notifUrl" => "https://0c6d-154-72-168-215.ngrok.io/api/paiement/prestation/om/{$payment->id}/notification",
+                "notifUrl" => route('prestation.om.notification', ['payment_id' => $payment->id]),
+                "channelUserMsisdn"=> "658392349",
+                "amount"=> $payment->amount,
+                "subscriberMsisdn"=> $request->telephone,
+                "pin"=> "2019",
+                "orderId"=> $payment->id,
+                "description"=> $description,
+                "payToken"=> $mp_token
+            ];
+
+            $reponse = procederAuPaiementOm($access_token,$body);
+            return response()->json(['reponse' => $reponse, 'moyenpaiement' => $request->moyenpaiement]);
+        }
+
     }
     /**
      * Display the specified resource.
@@ -118,6 +153,45 @@ class PaymentController extends Controller
     {
         $payments = Payment::with(['souscripteur.user','patients.user'])->whereId($id)->first();
         return response()->json(['payment'=>$payments]);
+    }
+
+    /**
+     * OM Notification
+     */
+    public function notificationPaiement(Request $request, $payment_id){
+
+        $notif = NotificationPaiement::create([
+            "type" =>'OM',
+            "code_contrat" => $payment_id,
+            "pay_token" => $request->payToken,
+            "statut" => $request->status,
+            "reponse" => json_encode($request->all())
+        ]);
+    }
+
+    /**
+     * Status de paiement par OM
+     */
+    public function statutPaiement($pay_token){
+
+        $notification = NotificationPaiement::where('pay_token', $pay_token)->first();
+
+        //{"payToken":"MP2202244469409A5830F5160CF1","status":"SUCCESSFULL","message":"Transaction completed"}
+        $payment = Payment::find($notification->code_contrat);
+
+        if($notification->statut == "SUCCESSFULL"){
+            $payment->statut = "PAYE";
+            $payment->method = 'OM';
+            $payment->date_payment = Carbon::now()->toDateTimeString();
+            $this->EnvoiDesEmails($payment);
+
+
+        }elseif($notification->statut == "FAILED" || $notification->statut == 'PENDING' || $notification->statut == 'CANCELLED'){
+            $payment->statut = "NON PAYE";
+        }
+        $payment->save();
+
+        return response()->json($notification);
     }
 
         /**
@@ -152,12 +226,11 @@ class PaymentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $payment = Payment::whereId($id)->first();
+        $payment = Payment::find($id);
         $payment->patient_id = $request->patient_id;
         $payment->souscripteur_id = $request->souscripteur_id;
         $payment->amount = $request->amount;
-        $payment->update();
-        $payment = Payment::whereId($id)->first();
+        $payment->save();
 
         return response()->json(['payment'=>$payment]);
 
@@ -181,9 +254,30 @@ class PaymentController extends Controller
             $payment = Payment::with(['souscripteur.user','patients.user'])->whereId($slug)->first();
            // dd($payment);
             $payment->statut = 'PAYE';
-            $payment->method = 'STRIPE';
+            $payment->method = 'stripe';
             $payment->date_payment = Carbon::now()->toDateTimeString();
             $payment->save();
+            $this->EnvoiDesEmails($payment);
         return response()->json(['statut'=>$payment]);
+    }
+
+    public function EnvoiDesEmails(Payment $payment){
+        /**
+         * envoi du reçu après de paiement de la prestation
+         */
+        $commande_date = $payment->date_payment;
+        $montant_total = $payment->amount;
+        $echeance =  "13/02/2022";
+        $description = $payment->motif;
+        $mode_paiement = mb_strtoupper($payment->method) == 'OM' ? 'Orange Money' : 'Stripe' ;
+        $prix_unitaire = 2;
+        $nom_souscripteur = mb_strtoupper($payment->souscripteur->user->nom).' '.$payment->souscripteur->user->prenom;
+        $email_souscripteur = $payment->souscripteur->user->email;
+        $rue =  $payment->souscripteur->user->quartier;
+        $adresse =  $payment->souscripteur->user->adresse;
+        $pays =  $payment->souscripteur->user->pays;
+        $ville = $payment->souscripteur->user->code_postal.' - '.$payment->souscripteur->user->ville;
+        $beneficiaire = mb_strtoupper($payment->patients->user->nom).' '.$payment->patients->user->prenom;
+        EnvoieDeFactureApresPaiementPrestation($payment->id, $commande_date, $montant_total, $echeance, $description, $mode_paiement, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
     }
 }

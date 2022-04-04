@@ -43,6 +43,7 @@ Route::get('impression/facture-offre/{commande_id}', function ($commande_id) {
 });
 
 Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
+Route::resource('contact_assurances', 'Api\ContactAssuranceController');
 Route::get('/liens', function () {
     $liens = Dictionnaire::where("reference","lien_parente")->get();
     return response()->json(
@@ -69,7 +70,7 @@ Route::group(['middleware' => ['auth:api','role:Admin']], function () {
     Route::resource('user', 'Api\UserController')->except(['create','edit']);
 });
 //        Définition des routes accéssible par le gestionnaire
-Route::group(['role:Admin|Gestionnaire|Assistante'], function () {
+Route::group(['middleware' => ['auth:api', 'role:Admin|Gestionnaire|Assistante']], function () {
     Route::resource('etablissement','Api\EtablissementExerciceController')->except(['create','edit']);
     Route::resource('profession','Api\ProfessionController')->except(['create','edit']);
     Route::resource('praticien','Api\PraticienController')->except(['create','edit']);
@@ -359,6 +360,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
     Route::get('patient/{id}/contrat-medicasure','Api\LigneDeTempsController@patientContrat');
     Route::get('trajet-patient/dossier/{id}','Api\LigneDeTempsController@getTrajetPatient');
+
+    Route::get('paiement-prestation', 'Api\PaymentController@listPaiementSouscripteur');
 });
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Souscripteur|Assistante']], function () {
     Route::resource('souscripteur','Api\SouscripteurController')->only('update');
@@ -371,6 +374,7 @@ Route::post('payment-prestation','Api\PaymentController@paymentPrestation');
 Route::get('payment-prestation/{id}','Api\PaymentController@getPayment');
 Route::post('payment-statut/{id}','Api\PaymentController@NotifierPaiement');
 Route::resource('payment','Api\PaymentController');
+
 Route::get('snomed-icd/map/{string}','Api\SnomedIcdController@find');
 Route::get('anamnese','Api\AnamneseController@index');
 Route::get('examen-clinic','Api\ExamenClinicController@index');
@@ -394,6 +398,9 @@ Route::prefix('paiement')->group(function () {
     Route::post('/om/paid','Api\OmController@paiementFromMedicasure');
     //
     Route::post('/om/{identifiant}/{payToken}/notification/{tokenInfo}/','Api\OmController@notificationPaiement')->name('om.notification');
+    Route::post('/prestation/om/{payment_id}/notification','Api\PaymentController@notificationPaiement')->name('prestation.om.notification');
+    Route::get('/prestation/om/{pay_token}/notification','Api\PaymentController@statutPaiement');
+    //route('prestation.om.notification', ['payment_id' => $payment->id, 'payToken' => $mp_token, 'tokenInfo' => $tokenInfo]),
     Route::get('/om/{identifiant}/{payToken}/statutPaiement/{patient?}','Api\OmController@statutPaiement');
     //Route::post('/om/paymentStatus','Api\OmController@statutPaiement');
     Route::post('/stripe-paiement','Api\StripeContrtoller@stripePaidByCustomer');

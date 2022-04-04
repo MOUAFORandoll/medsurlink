@@ -1,6 +1,7 @@
 <?php
 
 use App\Mail\Facture\AchatOffre;
+use App\Mail\Facture\PaiementPrestation;
 use App\Models\Affiliation;
 use App\Models\AffiliationSouscripteur;
 use App\SMS;
@@ -183,7 +184,6 @@ if(!function_exists('formatTelephone'))
         }
     }
 }
-
 if(!function_exists('generationPdfFactureOffre'))
 {
     /**
@@ -195,6 +195,44 @@ if(!function_exists('generationPdfFactureOffre'))
         //return view('impression_offre');
         try {
             $pdf = PDF::loadView('impression_offre', ['commande_id' => $commande_id, 'commande_date' => $commande_date, 'montant_total' => number_format($montant_total, 2, ',', ' '), 'echeance' => $echeance, 'description' => mb_strtoupper($description), 'quantite' => $quantite, 'prix_unitaire' => number_format($prix_unitaire, 2, ',', ' '), 'nom_souscripteur' => $nom_souscripteur, 'email_souscripteur' => $email_souscripteur, 'rue' => $rue, 'adresse' => $adresse, 'ville' => $ville, 'pays' => $pays, 'beneficiaire' => $beneficiaire]);
+            return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+        }catch (\Exception $exception){
+            //$exception
+        }
+    }
+}
+
+
+if(!function_exists('EnvoieDeFactureApresPaiementPrestation'))
+{
+    /**
+     * @param $string_with_accent
+     * @return string
+     */
+    function EnvoieDeFactureApresPaiementPrestation($commande_id, $commande_date, $montant_total, $echeance, $description, $mode_paiement, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire)
+    {
+        //return view('impression_offre');
+        try {
+            $pdf = generationPdfPaiementPrestation($commande_id, $commande_date, $montant_total, $echeance, $description, $mode_paiement, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
+            Mail::to($email_souscripteur)->send(new PaiementPrestation($pdf['output'], $nom_souscripteur, $beneficiaire, $description));
+        }catch (\Exception $exception){
+            //$exception
+        }
+    }
+}
+
+
+if(!function_exists('generationPdfPaiementPrestation'))
+{
+    /**
+     * @param $string_with_accent
+     * @return string
+     */
+    function generationPdfPaiementPrestation($commande_id, $commande_date, $montant_total, $echeance, $description, $mode_paiement, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire)
+    {
+        //return view('impression_offre');
+        try {
+            $pdf = PDF::loadView('impression_prestation', ['commande_id' => $commande_id, 'commande_date' => $commande_date, 'montant_total' => number_format($montant_total, 2, ',', ' '), 'echeance' => $echeance, 'description' => mb_strtoupper($description), 'mode_paiement' => $mode_paiement, 'nom_souscripteur' => $nom_souscripteur, 'email_souscripteur' => $email_souscripteur, 'rue' => $rue, 'adresse' => $adresse, 'ville' => $ville, 'pays' => $pays, 'beneficiaire' => $beneficiaire]);
             return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
         }catch (\Exception $exception){
             //$exception
@@ -219,6 +257,33 @@ if(!function_exists('ConversionEurotoXaf'))
             $responseArray = json_decode($response->getBody()->getContents(), true);
             if($responseArray['success'] == true){
                 $total = ceil($montant * $responseArray['rates']['XAF']);
+                return $total;
+            }
+
+            //return $responseArray;
+
+        } catch (Exception $exception) {
+            return response()->json(['erreur'=>$exception->getMessage()],419);
+        }
+
+    }
+}
+if(!function_exists('ConversionXafToEuro'))
+{
+    /**
+     * @param $montant
+     * @return int
+     */
+    function ConversionFromAndTo($montant, $from = "XAF", $to = "EUR")
+    {
+        $base_uri = "https://api.exchangerate.host/latest?base=$from";
+
+        try {
+            $client = new Client(['base_uri' => $base_uri]);
+            $response = $client->request('GET', $base_uri);
+            $responseArray = json_decode($response->getBody()->getContents(), true);
+            if($responseArray['success'] == true){
+                $total = ceil($montant * $responseArray['rates'][$to]);
                 return $total;
             }
 
