@@ -4,11 +4,12 @@ namespace App\Models;
 
 use App\User;
 use Carbon\Carbon;
-use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Models\ActivitesAma;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ActiviteAmaPatient extends Model
 {
@@ -54,7 +55,7 @@ class ActiviteAmaPatient extends Model
     }
 
     public function activitesAma(){
-        return $this->belongsTo(activitesAma::class,'activite_ama_id','id');
+        return $this->belongsTo(ActivitesAma::class,'activite_ama_id','id');
     }
 
     public function createur(){
