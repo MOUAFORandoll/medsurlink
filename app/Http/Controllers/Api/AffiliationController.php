@@ -79,7 +79,7 @@ class AffiliationController extends Controller
                 "nombre_envois_email"=>0,
                 "expire_email"=>0,
                 "nom"=>'Annuelle',
-                "date_debut"=>Carbon::now(),
+                "date_debut"=>  $request->date_debut ?? Carbon::now(),
                 "date_fin"=>Carbon::now()->addYears(1)->format('Y-m-d')
             ]);
             $patient->souscripteur_id = $request->souscripteur_id;
@@ -208,7 +208,7 @@ class AffiliationController extends Controller
             $affiliation->nombre_envois_email = 0;
             $affiliation->expire_email = 0;
             $affiliation->nom = 'Annuelle';
-            $affiliation->date_debut = Carbon::now();
+            $affiliation->date_debut = $request->date_debut ?? Carbon::now();
             $affiliation->date_fin = Carbon::now()->addYears(1)->format('Y-m-d');
 
             $patient->souscripteur_id = $request->souscripteur_id;
