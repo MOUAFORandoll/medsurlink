@@ -178,7 +178,7 @@ if(!function_exists('formatTelephone'))
         //return view('impression_offre');
         try {
             $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
-            Mail::to($email_souscripteur)->send(new AchatOffre($pdf['output'], $nom_souscripteur, $description));
+            Mail::to($email_souscripteur)->cc("contrat@medicasure.com")->send(new AchatOffre($pdf['output'], $nom_souscripteur, $description));
         }catch (\Exception $exception){
             //$exception
         }
@@ -214,7 +214,7 @@ if(!function_exists('EnvoieDeFactureApresPaiementPrestation'))
         //return view('impression_offre');
         try {
             $pdf = generationPdfPaiementPrestation($commande_id, $commande_date, $montant_total, $echeance, $description, $mode_paiement, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
-            Mail::to($email_souscripteur)->send(new PaiementPrestation($pdf['output'], $nom_souscripteur, $beneficiaire, $description));
+            Mail::to($email_souscripteur)->cc("contrat@medicasure.com")->send(new PaiementPrestation($pdf['output'], $nom_souscripteur, $beneficiaire, $description));
         }catch (\Exception $exception){
             //$exception
         }
