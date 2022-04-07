@@ -239,8 +239,13 @@ class DossierMedicalController extends Controller
             // dd($dossier->consultationsMedecine);
 
             foreach($dossier->consultationsMedecine as $i => $consultation){
+               if(isJSON(json_decode($consultation->examens))){
                 $consultation->examens = json_decode($consultation->examens);
                 $dossier->consultationsMedecine[$i] = $consultation;
+               }else{
+                $consultation->examens = [];
+                $dossier->consultationsMedecine[$i] = $consultation;
+               }
             }
            
         return response()->json(['dossier'=>$dossier]);
