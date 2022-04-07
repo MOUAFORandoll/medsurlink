@@ -236,6 +236,13 @@ class DossierMedicalController extends Controller
                 $dossier->updateDossier();
             }
             $this->checkIfUserAuthorized($dossier);
+            // dd($dossier->consultationsMedecine);
+
+            foreach($dossier->consultationsMedecine as $i => $consultation){
+                $consultation->examens = json_decode($consultation->examens);
+                $dossier->consultationsMedecine[$i] = $consultation;
+            }
+           
         return response()->json(['dossier'=>$dossier]);
     }
 
