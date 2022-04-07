@@ -143,7 +143,7 @@ class ConsultationMedecineGenerale extends Model
     public function updateConsultationMedecine(){
         if(!is_null($this)){
             $user = isset($this->dossier) ? $this->dossier->patient->user : null;
-            $patient = $this->dossier->patient;
+            $patient = isset($this->dossier) ? $this->dossier->patient : null;
             $motifs = $this->motifs;
 
             foreach ($motifs as $motif)
