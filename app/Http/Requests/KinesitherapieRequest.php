@@ -24,9 +24,9 @@ class KinesitherapieRequest extends FormRequest
     public function rules()
     {
         return [
-            "etablissement_id"=>'sometimes|nullable|string',
+            "etablissement_id"=>'sometimes|nullable',
             "creator"=>'sometimes|nullable|string',
-            "dossier_medical_id"=>'sometimes|nullable|string',
+            "dossier_medical_id"=>'sometimes|nullable',
             "date_consultation"=>'sometimes|nullable|string',
             "motifs"=>'sometimes|nullable|string',
             "anamnese"=>'sometimes|nullable|string',
