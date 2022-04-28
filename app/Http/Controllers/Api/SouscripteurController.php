@@ -204,8 +204,12 @@ class SouscripteurController extends Controller
         $souscripteur = Souscripteur::has('patients.user')->with('user','patients.user','patients.dossier','financeurs.patients.user','financeurs.patients.dossier','affiliation')->whereSlug($slug)->first();
 
         $souscripteur->updatePatientDossier();
-        $souscripteur = collect($souscripteur)->unique('patients');
-        return response()->json(['souscripteur'=>$souscripteur]);
+        $souscripteur->patients = collect($souscripteur->patients)->unique('user_id');
+        /* foreach($souscripteur->patients as $souscripteu){
+            $souscripteu->patients = $souscripteu->patients()->unique('user_id');
+            $new_scouscripteur->push($souscripteu);
+        } */
+        return response()->json([ 'souscripteur' => $souscripteur ]);
 
     }
 
