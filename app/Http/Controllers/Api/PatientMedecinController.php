@@ -129,7 +129,7 @@ class PatientMedecinController extends Controller
         //$this->validatedSlug($medecin,$this->table);
         //$request->validated();
 
-        $patientMedecin = PatientMedecinControle::where("id",$id)->first();
+        $patientMedecin = PatientMedecinControle::where("medecin_control_id", $id)->first();
 
         if($patientMedecin){
             $patientMedecin->delete();
@@ -145,7 +145,7 @@ class PatientMedecinController extends Controller
             ->notify(new MedecinToPatient($message,null));
             return response()->json(['patientMedecin'=>$patientMedecin]);
         }else{
-            return response()->json(['error'=>"Erreur de suppression"]);
+            return response()->json(['error'=>""]);
         }
     }
 }
