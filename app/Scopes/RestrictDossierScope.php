@@ -50,13 +50,13 @@ class RestrictDossierScope implements Scope
                     }
                 $patientSouscripteurs = PatientSouscripteur::where('financable_id',Auth::id())->get();
 
-                foreach ($patientSouscripteurs as  $patient){
-                    if (in_array($patient->patients->dossier->id,$dossiers)){
-                        //dd($patient->patients->dossier->id);
-                        array_push($patientsId,$patient->patients->dossier->id);
+                // foreach ($patientSouscripteurs as  $patient){
+                //     if (in_array($patient->patients->dossier->id,$dossiers)){
+                //         //dd($patient->patients->dossier->id);
+                //         array_push($patientsId,$patient->patients->dossier->id);
                         
-                    }
-                }
+                //     }
+                // }
                 if ($user->isMedicasure == 0){
                     $builder;
                 }else {
