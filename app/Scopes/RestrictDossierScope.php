@@ -53,7 +53,7 @@ class RestrictDossierScope implements Scope
                 foreach ($patientSouscripteurs as  $patient){
                     if (in_array($patient->patients->dossier->id,$dossiers)){
                         //dd($patient->patients->dossier->id);
-                        //array_push($patientsId,$patient->patients->dossier->id);
+                        array_push($patientsId,$patient->patients->dossier->id);
                         
                     }
                 }
