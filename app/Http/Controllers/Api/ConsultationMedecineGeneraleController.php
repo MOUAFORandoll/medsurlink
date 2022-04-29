@@ -163,7 +163,6 @@ class ConsultationMedecineGeneraleController extends Controller
             'conclusions',
             'parametresCommun',
             'etablissement',
-            'diasgnostic'
         ])->find($consultation->id);
 
 
