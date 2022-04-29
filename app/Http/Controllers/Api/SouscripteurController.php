@@ -201,10 +201,10 @@ class SouscripteurController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $souscripteur = Souscripteur::with('user','patients.user','patients.dossier','financeurs.patients.user','financeurs.patients.dossier','affiliation')->whereSlug($slug)->first();
+        $souscripteur = Souscripteur::has('user')->has('patients.user')->has('patients.dossier')->has('financeurs.patients.user')->has('financeurs.patients.dossier')->with('user','patients.user','patients.dossier','financeurs.patients.user','financeurs.patients.dossier','affiliation')->whereSlug($slug)->first();
 
-        $souscripteur->updatePatientDossier();
-        return response()->json(['souscripteur'=>$souscripteur]);
+        //$souscripteur->updatePatientDossier();
+        return response()->json([ 'souscripteur' => $souscripteur ]);
 
     }
 

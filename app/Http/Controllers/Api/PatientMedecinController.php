@@ -59,7 +59,7 @@ class PatientMedecinController extends Controller
             //dd($patientMedecin);
             $patient = Patient::where("user_id",$request->patient_id)->first();
             $medecin = User::whereId($request->medecin_control_id)->first();
-            $message = "<@".$medecin->slack."> a été affecté au patient ".$patient->user->nom. " " .$patient->user->prenom." comme médecin referent";
+            $message = "<@".$medecin->slack."> a été affecté au patient ".mb_strtoupper($patient->user->nom). " " .ucfirst($patient->user->prenom)." comme médecin referent";
             // Send notification to affilié channel
             $patientMedecin->setSlackChannel('affilie')
             ->notify(new MedecinToPatient($message,null));
@@ -136,7 +136,7 @@ class PatientMedecinController extends Controller
             $patient = Patient::where("user_id",$patientMedecin->patient_id)->first();
             // dd($patient);
             $medecin = User::whereId($patientMedecin->medecin_control_id)->first();
-            $message = "<@".$medecin->slack."> a été retiré au patient ".$patient->user->nom. " " .$patient->user->prenom." comme médecin referent";
+            $message = "<@".$medecin->slack."> a été retiré au patient ".mb_strtoupper($patient->user->nom). " " .ucfirst($patient->user->prenom)." comme médecin referent";
                         // Send notification to affilié channel
             $patientMedecin->setSlackChannel('affilie')
             ->notify(new MedecinToPatient($message,null));
