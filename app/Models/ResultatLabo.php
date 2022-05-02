@@ -26,6 +26,7 @@ class ResultatLabo extends Model
         "consultation_medecine_generale_id",
         "type",
         "description",
+        'praticien_id',
         "date",
         "file",
         'slug'

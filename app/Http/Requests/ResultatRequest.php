@@ -27,7 +27,9 @@ class ResultatRequest extends FormRequest
     {
         return [
             "dossier_medical_id"=>"required|integer|exists:dossier_medicals,id",
-            "consultation_medecine_generale_id"=>"required|integer|exists:consultation_medecine_generales,id",
+            "consultation_medecine_generale_id"=>"required",
+            "praticien_id" => "required",
+            //"consultation_medecine_generale_id"=>"required|integer|exists:consultation_medecine_generales,id",
             "description"=>"required|string|min:3",
             "date"=>"required|date",
         ];
