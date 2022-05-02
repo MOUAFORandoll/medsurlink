@@ -16,7 +16,7 @@ class CreateResultatLabosTable extends Migration
         Schema::create('resultat_labos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('dossier_medical_id');
-            $table->unsignedBigInteger('consultation_medecine_generale_id');
+            $table->unsignedBigInteger('consultation_medecine_generale_id'); // remplacere par type resultat
             $table->text('description');
             $table->date('date');
             $table->string('file')->nullable();
