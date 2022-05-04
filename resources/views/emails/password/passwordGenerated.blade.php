@@ -2,7 +2,6 @@
 # {{ config('app.name') }}
 
 Bonjour <strong>{{ucfirst($user->prenom).'  '.strtoupper($user->nom)}}</strong>,<br>
-Votre paiement a bien été effectué. <br>
 Retrouvez ci-dessous <strong>Les identifiants</strong> de votre compte :<br>
 Email : <strong> {{$user->email}} </strong><br>
 Mot de passe : <strong>{{$password}}</strong><br>
