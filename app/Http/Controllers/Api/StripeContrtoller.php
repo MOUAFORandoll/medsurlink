@@ -168,7 +168,8 @@ class StripeContrtoller extends Controller
             if($souscripteur == null){
                 $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
             }
-            $tokenInfo = "checkout";
+            //$tokenInfo = "checkout";
+            $tokenInfo = $user->slug .'medsur'. $request->email;
         }
 
         $commande =  CommandePackage::create([
