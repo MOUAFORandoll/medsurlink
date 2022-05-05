@@ -124,54 +124,14 @@ class AuthController extends AccessTokenController
     }
     public function authAfterRedirect(ServerRequestInterface $request)
     {
+        $user = User::where('slug', $request->getParsedBody()['password'])->first();
 
-        $tokenResponse = parent::issueToken($request);
-        $token = $tokenResponse->getContent();//json_decode($res->getBody()->getContents());
-        dd($tokenResponse);
+        //$tokenResponse = parent::issueToken($request);
+        $token = $user->createToken($request->getParsedBody()['client_secret'])->accessToken;
+
         // $tokenInfo will contain the usual Laravel Passort token response.
-        $tokenInformation = json_decode($token, true);
-        $tokenInfo = collect($tokenInformation);
-        //dd($request);
-        if ($tokenInfo->has('error'))
-            return response()->json(['message'=>$tokenInfo->get('message')],401);
+        $tokenInfo = collect();
 
-        // Then we just add the user to the response before returning it.
-        $username = $request->getParsedBody()['username'];
-        $password = $request->getParsedBody()['password'];
-
-        //$user = $this->getUser($username,$password);
-                //Verification de l'existence de l'adresse email
-                $validator = Validator::make(compact('username'),['username'=>['exists:users,email']]);
-                if($validator->fails()){
-                    //Verification de l'existence du numero de dossier
-                    if (strlen($username)<=9){
-                        $numero_dossier = $username;
-                        $dossier = DB::table('dossier_medicals')->where('numero_dossier','=',$numero_dossier)->first();
-                        if (!is_null($dossier)){
-                            $user = User::whereId($dossier->patient_id)->first();
-                            $user['dossier'] = $dossier->slug;
-                            return $user;
-                        }
-                        return [];
-                    }
-                    return [];
-                }
-
-                $users = User::where('email', $username)->get();
-                $authUser = new User();
-
-                foreach ($users as $user){
-                    if($password == $user->password){
-                        $authUser = $user;
-                        $dossier = DB::table('dossier_medicals')->where('patient_id','=',$authUser->id)->first();
-                        if(!is_null($dossier)){
-                            $user = User::whereId($dossier->patient_id)->first();
-                            $authUser = $user;
-                            $authUser['dossier'] = $dossier->slug;
-                        }
-                    }
-                }
-                $user = $authUser;
         $user->roles;
         Auth::login($user);
         $time = TimeActivite::create([
@@ -180,8 +140,9 @@ class AuthController extends AccessTokenController
         ]);
         $user['time_slug'] = $time->slug;
         $user['isEtablissement'] = isComptable();
-        $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
+        $tokenInfo->put('token_expires_at', Carbon::parse()->addSeconds(3600));
         $tokenInfo->put('user', $user);
+        $tokenInfo->put('access_token', $token);
         $status = getStatus();
         defineAsAuthor($status->getOriginalContent()['auteurable_type'],$status->getOriginalContent()['auteurable_id'],'Connexion');
         return $tokenInfo;
