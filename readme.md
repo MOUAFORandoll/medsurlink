@@ -5,3 +5,6 @@ php artisan migrate --path=/database/migrations/2022_03_24_162337_create_contact
 
 php artisan migrate --path=/database/migrations/2022_04_29_170444_add_praticien_id_to_resultat_labos_table.php
     - supprimer manuellement consultation_medecine_generale_id_foreign dans la table resultat_labos
+
+php artisan migrate --path=/database/migrations/2022_05_05_150043_add_praticien_to_resultat_imageries_table.php
+    - supprimer manuellement consultation_medecine_generale_id_foreign dans la table resultat_imageries
