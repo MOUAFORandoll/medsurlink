@@ -11,7 +11,7 @@ php artisan migrate --path=/database/migrations/2022_05_05_150043_add_praticien_
 
 parcours de soins
 php artisan migrate --path=/database/migrations/2021_11_22_090512_create_ligne_de_temps_table.php
-php artisan migrate --path=/database/migrations/2021_11_22_131854_create_consultation_examen_validation_table.php
+php artisan migrate --path=/database/migrations/2021_12_09_100627_add_consultation_general_id_to_consultation_examen_validation_table.php
 php artisan migrate --path=/database/migrations/2021_12_01_091531_create_activites_ama_patient_table.php
 php artisan migrate --path=/database/migrations/
 php artisan migrate --path=/database/migrations/
