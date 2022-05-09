@@ -22,6 +22,7 @@ class ConsultationMedecineGenerale extends Model
     use Sluggable;
     use SluggableScopeHelpers;
     use SlugRoutable;
+    
     /**
      * Return the sluggable configuration array for this model.
      *
@@ -41,6 +42,14 @@ class ConsultationMedecineGenerale extends Model
     /**
      * The relations restricting model deletion
      */
+
+      /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'consultation_medecine_generales';
+
     protected $restrictDeletes = [];
 
     protected $casts = [
