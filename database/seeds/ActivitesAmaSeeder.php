@@ -11,33 +11,46 @@ class ActivitesAmaSeeder extends Seeder
      */
     public function run()
     {
-        $activites = [
-            'Explication du service Medicasure au souscripteur',
-            'Explication du service Medicasure à l’affilié',
-            'Vérification existence d’un Profil Affilié et Souscripteur conforme sur Medsurlink',
+        $automatiques = [
             'Attribution d’un médecin référent à l’affilié',
             'Changement de Médecin référent selon Procédure adéquate',
-            'Vérification de l’existence de l’affilié dans « Suivi des Patients » - « PEC »',
-            'Vérification de l’existence d’un rendez-vous dont le motif est « 2ème Consultation Médecine générale préventive
-            planifié 6 mois plus tard »',
-            'Rappel du patient pour évaluer sa satisfaction à J2 au plus tard',
-            'Rappel du souscripteur pour évaluer sa satisfaction à J7 au plus tard',
-            'Réception d’une alerte médicale venant de l’affilié',
+            'Encodage des RDV du Patient selon Procédure adéquate',
             'Gestion de l’alerte médicale selon Procédure adéquate',
+            'Transmission éventuelle d’un lien du Dossier médical en externe',
+        ];
+        $manuelles = [
+            'Réception d’une alerte médicale venant de l’affilié',
             'Planification de rendez-vous chez un prestataire de soins selon Procédure adéquate',
             'Résolution difficulté administrative d’un souscripteur',
             'Résolution difficulté administrative d’un affilié',
             'Aide au renouvellement d’une affiliation selon Procédure adéquate',
             'Suivi réalisation des rendez-vous',
-            'Validation médicale après discussion avec médecin référent',
-            'Validation financière après contrôle solvabilité souscripteur',
             'Transmission de factures au souscripteur',
-            'Transmission exceptionnelle d’un lien du Dossier médical en externe'
+            'Sélection d’un cas en fonction de la 1ère Catégorisation sur l’échelle du formulaire 1/5',
+            'Explication du service Medicasure au souscripteur',
+            'Explication du service Medicasure à l’affilié',
+            'Suivi réalisation des rendez-vous chez les prestataires',
+            'Suivi réalisation des rendez-vous chez les prestataires',
+            'Suivi réalisation des rendez-vous chez les prestataires',
+            'Réception et traitement des factures des prestataires de 1ère Ligne',
+            'Transmission des factures au souscripteur',
+            'Rappel du patient pour évaluer sa satisfaction à J2 au plus tard',
+            'Rappel du souscripteur pour évaluer sa satisfaction à J7 au plus tard (Accès aux dossiers – Satisfaction service chez Prestataire / tarification – recommandation)'
+
         ];
-        foreach ($activites as $activite){
+        foreach ($automatiques as $automatique){
             \App\Models\ActivitesAma::create([
-               'description_fr'=>$activite,
-               'description_en'=>$activite
+               'description_fr'=>$automatique,
+               'description_en'=>$automatique,
+               'type'=> 'AUTOMATIQUE',
+            ]);
+        }
+
+        foreach ($manuelles as $manuelle){
+            \App\Models\ActivitesAma::create([
+               'description_fr'=>$manuelle,
+               'description_en'=>$manuelle,
+               'type'=> 'MANUELLE',
             ]);
         }
     }
