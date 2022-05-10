@@ -10,9 +10,9 @@ php artisan migrate --path=/database/migrations/2022_05_05_150043_add_praticien_
     - supprimer manuellement consultation_medecine_generale_id_foreign dans la table resultat_imageries
 
 parcours de soins
-php artisan migrate --path=/database/migrations/2021_11_22_090512_create_ligne_de_temps_table.php
+php artisan migrate --path=/database/migrations/2021_11_22_114522_add_ligne_de_temps_to_consultation_medecine_generale_table.php
 php artisan migrate --path=/database/migrations/2021_12_09_100627_add_consultation_general_id_to_consultation_examen_validation_table.php
-php artisan migrate --path=/database/migrations/2021_12_01_091531_create_activites_ama_patient_table.php
-php artisan migrate --path=/database/migrations/
+php artisan migrate --path=/database/migrations/2021_12_28_074058_add_version_to_consultation_examen_validation_table.php
+php artisan migrate --path=/database/migrations/2022_05_10_103046_add_etablissement_id_to_consultation_examen_validation_table.php
 php artisan migrate --path=/database/migrations/
 php artisan migrate --path=/database/migrations/
