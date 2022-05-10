@@ -511,7 +511,8 @@ class ConsultationMedecineGeneraleController extends Controller
                 ConsultationExamenValidation::create([
                     'examen_complementaire_id'=>$examen->id,
                     'medecin_id'=>Auth::id(),
-                    'souscripteur_id'=>Auth::id(),
+                    // 'souscripteur_id'=>Auth::id(),
+                    'souscripteur_id'=>$consultation->dossier->patient->souscripteur_id,
                     //'version' => $version,
                     'consultation_general_id' => $consultation->id,
                     'etablissement_id'=>$request->get('etablissement_id'),
