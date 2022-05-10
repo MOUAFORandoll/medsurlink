@@ -116,12 +116,18 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::resource('activite','Api\ActiviteController');
     Route::put('activite-cloture/{slug}','Api\ActiviteController@cloturer');
     Route::put('activite-mission/{slug}','Api\ActiviteController@updateActiviteMission');
-    Route::put('activite-mission-add','Api\ActiviteController@ajouterMission');
+    Route::post('activite-mission-add','Api\ActiviteController@ajouterMission');
     Route::post('/activite-ama/save','Api\ActiviteController@saveMissions');
     Route::post('/activite-ama/create','Api\ActiviteController@createMissions');
+
     Route::get('/mission/list','Api\ActiviteController@getListMission');
     
 
+    // Route::resource('/activite-pec','Api\PecController');
+    Route::post('/activite-pec','Api\PecController@store');
+    Route::get('/activite-pec-list','Api\PecController@index');
+    // Route::post('/activite-pec/list','Api\PecController@index')->name('index');
+    // Route::resource('activite-pec','Api\AssistanteController');
     Route::get('/chat', 'Api\ChatController@index')->name('chat');
     Route::get('/message', 'Api\MessageController@index')->name('message.index');
     Route::post('/message', 'Api\MessageController@store')->name('message.store');
@@ -419,3 +425,8 @@ Route::prefix('paiement')->group(function () {
         );
     });
 });
+Route::get('/livesearch', 'Api\PatientController@searchPatients');
+Route::get('/mission/list', 'Api\ActiviteController@getListMission');
+Route::get('/referent-activites/list', 'Api\ActivitesMedecinReferentController@getListActivites');
+Route::post('/referent-activites-add', 'Api\ActivitesControleController@store');
+
