@@ -251,8 +251,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('traitement-propose','Api\TraitementProposeController')->except('store','update','destroy');
     Route::resource('parametre-commun','Api\ParametreCommunController')->except('store','update','destroy');
     Route::resource('conclusion','Api\ConclusionController')->except('store','update','destroy');
-    Route::resource('resultat-labo','Api\ResultatLaboController')->except('store','update','destroy');
-    Route::resource('resultat-imagerie','Api\ResultatImagerieController')->except('store','update','destroy');
+    Route::resource('resultat-labo','Api\ResultatLaboController')->except('store','update');
+    Route::resource('resultat-imagerie','Api\ResultatImagerieController')->except('store','update');
     Route::resource('consultation-prenatale','Api\ConsultationPrenantaleController')->except('store','update','destroy');
     Route::resource('parametre-obstetrique','Api\ParametreObstetriqueController')->except('store','update','destroy');
     Route::resource('echographie','Api\EchographieController')->except('store','update','destroy');
