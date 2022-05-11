@@ -24,11 +24,13 @@ class ResultatImagerie extends Model
     protected $fillable = [
         "dossier_medical_id",
         "consultation_medecine_generale_id",
+
         "type",
         "description",
         "date",
         "file",
-        'slug'
+        'slug',
+        "praticien_id"
     ];
 
     protected $dates = [

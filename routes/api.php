@@ -119,6 +119,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::put('activite-mission-add','Api\ActiviteController@ajouterMission');
     Route::post('/activite-ama/save','Api\ActiviteController@saveMissions');
     Route::post('/activite-ama/create','Api\ActiviteController@createMissions');
+    Route::get('/mission/list','Api\ActiviteController@getListMission');
+    
 
     Route::get('/chat', 'Api\ChatController@index')->name('chat');
     Route::get('/message', 'Api\MessageController@index')->name('message.index');
@@ -264,8 +266,10 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::get('validation/examens/consultation/{consultation}', 'Api\ConsultationExamenValidationController@getListExamenToValidate');
 });
 
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Assistante']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Assistante|Medecin controle']], function () {
     Route::get('/get-commande-from-cim','Api\AffiliationSouscripteurController@getSouscripteurFromCIM');
+    Route::resource('resultat-imagerie','Api\ResultatImagerieController');
+    Route::resource('resultat-labo','Api\ResultatLaboController');
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur|Etablissement|Assistante']], function () {
