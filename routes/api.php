@@ -267,6 +267,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Assistante|Medecin controle']], function () {
     Route::get('/get-commande-from-cim','Api\AffiliationSouscripteurController@getSouscripteurFromCIM');
     Route::resource('resultat-imagerie','Api\ResultatImagerieController');
+    Route::resource('resultat-labo','Api\ResultatLaboController');
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur|Etablissement|Assistante']], function () {
