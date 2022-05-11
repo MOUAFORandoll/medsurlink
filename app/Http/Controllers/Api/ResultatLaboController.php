@@ -108,6 +108,7 @@ class ResultatLaboController extends Controller
         $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("ResultatLabo",$resultat->id,"create");
         $resultat['author'] = getAuthor("ResultatLabo",$resultat->id,"create");
         $resultat['isAuthor'] = $motifIsAuthor->getOriginalContent();
+        $resultat->file = asset('storage/'.$resultat->file);
         return response()->json([
             'resultat' => $resultat
         ]);

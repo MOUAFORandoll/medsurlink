@@ -119,6 +119,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::put('activite-mission-add','Api\ActiviteController@ajouterMission');
     Route::post('/activite-ama/save','Api\ActiviteController@saveMissions');
     Route::post('/activite-ama/create','Api\ActiviteController@createMissions');
+    Route::get('/mission/list','Api\ActiviteController@getListMission');
+    
 
     Route::get('/chat', 'Api\ChatController@index')->name('chat');
     Route::get('/message', 'Api\MessageController@index')->name('message.index');

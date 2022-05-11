@@ -141,6 +141,9 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function store(ConsutationMedecineRequest $request)
     {
+        $const = $request->all();
+        \Log::alert($const);
+
         //dd($request->except('documents','dateRdv','motifRdv'));
         $consultation = ConsultationMedecineGenerale::create($request->except('documents','dateRdv','motifRdv'));
         $consultation->creator = Auth::id();
@@ -163,7 +166,6 @@ class ConsultationMedecineGeneraleController extends Controller
             'conclusions',
             'parametresCommun',
             'etablissement',
-            'diasgnostic'
         ])->find($consultation->id);
 
 
@@ -197,8 +199,8 @@ class ConsultationMedecineGeneraleController extends Controller
                 'examen_complementaire_id'=>$examen->id,
                 'medecin_id'=>Auth::id(),
                 'version'=>0,
-                //'souscripteur_id'=>$consultation->dossier->patient->souscripteur_id,
-                'souscripteur_id'=>Auth::id(),
+                'souscripteur_id'=>$consultation->dossier->patient->souscripteur_id,
+                // 'souscripteur_id'=>Auth::id(),
                 'consultation_general_id' => $consultation->id,
                 'etablissement_id'=>$request->get('etablissement_id'),
                 'ligne_de_temps_id'=>$request->get('ligne_de_temps_id'),
@@ -460,7 +462,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $this->checkIfCanUpdated("ConsultationMedecineGenerale",$consultation->id,"create");
 
         $motifs = $request->get('motifs');
-        $diasgnostic = $request->get('diasgnostic');
+        // $diasgnostic = $request->get('diasgnostic');
         $rConclusions = $request->get('conclusions');
         $motifs = explode(",",$motifs);
 
