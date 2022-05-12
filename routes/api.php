@@ -121,7 +121,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::post('/activite-ama/create','Api\ActiviteController@createMissions');
 
     Route::get('/mission/list','Api\ActiviteController@getListMission');
-    
+
 
     // Route::resource('/activite-pec','Api\PecController');
     Route::post('/activite-pec','Api\PecController@store');
@@ -328,6 +328,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
 
 });
 
+Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient']], function () {
     Route::put('patient-decede/{patient}','Api\PatientController@decede');
     Route::post('souscripteur/assigin_patient', 'Api\PatientController@assignation_souscripteur');
@@ -344,7 +345,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::get('search/souscripteurs/{souscripteur_search}', 'Api\SouscripteurController@listingSouscripteur');
     Route::get('search/patients/{patient_search}', 'Api\PatientController@listingPatients');
     Route::post('patient','Api\PatientController@store')->name('patient.store');
-    Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
+    //Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
     Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
     Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
@@ -365,7 +366,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::get('ligne-temps/dossier/{id}','Api\LigneDeTempsController@ligneDeTempsByDossier');
     Route::resource('examen-prix','Api\ExamenEtablissementPrixController');
     Route::post('examen-prix/etablissement/save','Api\ExamenEtablissementPrixController@storeMultiple');
-    Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
     Route::get('patient/{id}/contrat-medicasure','Api\LigneDeTempsController@patientContrat');
     Route::get('trajet-patient/dossier/{id}','Api\LigneDeTempsController@getTrajetPatient');
 
