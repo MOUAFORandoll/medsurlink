@@ -61,8 +61,8 @@ class ExamenEtablissementPrixController extends Controller
             //dd($examen);
             ExamenEtablissementPrix::create([
                 'etablissement_exercices_id' =>$request->get('etablissement_id'),
-                'examen_complementaire_id' =>$examen['id'],
-                'prix' =>$examen['prix'],
+                'examen_complementaire_id' => $examen['id'],
+                'prix' => $examen['prix'] ?? null,
             ]);
         }
         return  response()->json(['statut'=>true]);

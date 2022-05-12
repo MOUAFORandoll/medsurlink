@@ -194,6 +194,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $examens = $request->get('examen_complementaire');
         //$examens_validation = array();
         foreach (json_decode($examens) as $examen) {
+            // dd($examens);
             //dd($consultation->dossier->patient->souscripteur_id);
             $validation =  ConsultationExamenValidation::create([
                 'examen_complementaire_id'=>$examen->id,
@@ -511,7 +512,8 @@ class ConsultationMedecineGeneraleController extends Controller
                 ConsultationExamenValidation::create([
                     'examen_complementaire_id'=>$examen->id,
                     'medecin_id'=>Auth::id(),
-                    'souscripteur_id'=>Auth::id(),
+                    // 'souscripteur_id'=>Auth::id(),
+                    'souscripteur_id'=>$consultation->dossier->patient->souscripteur_id,
                     //'version' => $version,
                     'consultation_general_id' => $consultation->id,
                     'etablissement_id'=>$request->get('etablissement_id'),
