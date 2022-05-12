@@ -143,7 +143,6 @@ class ImprimerController extends Controller
             $diasgnostic = null;
         }
 
-        //dd($diasgnostic);
         $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs','examen_complementaire','examen_clinique','anamneses','diasgnostic','anamese','complementaire');
         $pdf = PDF::loadView('rapport',$data);
 

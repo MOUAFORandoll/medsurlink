@@ -54,25 +54,29 @@ class ConsultationExamenValidationController extends Controller
         ->where('souscripteur_id', '=',Auth::id())
         ->distinct()
         ->get(['consultation_general_id']);
-  
+
 
 
         $examen_validations = collect();
-        
-        
+
+
         foreach($examen_validation as $examen){
             // $const = ConsultationMedecineGenerale::where('id',1179)->first();
             //$const = ConsultationMedecineGenerale::where('id', 1179)->first();
-            $const = ConsultationMedecineGenerale::find(1382);
-            dd($const);
+            $const = ConsultationMedecineGenerale::find($examen->consultation_general_id);
+            if($const != null){
+                $const = $const->load('ligneDeTemps.motif','dossier.patient.user','author');
+                $new_exam = new stdClass();
+
+                $new_exam->consultation_general_id = $examen->consultation_general_id;
+                $new_exam->consultation = $const;
+                $examen_validations->push($new_exam);
+            }
+            // dd($const);
             //$examen->consultation = ConsultationMedecineGenerale::find($examen->consultation_general_id)->load('ligneDeTemps.motif','dossier.patient.user','author');
-            $new_exam = new stdClass();
-           
-            $new_exam->consultation_general_id = $examen->consultation_general_id;
-            $new_exam->consultation = $const; 
-            $examen_validations->push($new_exam);
+
         }
-        return response()->json(['filtre_examen_validation'=>$examen_validations]);
+        return response()->json(['examen_validation'=>$examen_validations]);
     }
     /**
      * Count nomber of validation.

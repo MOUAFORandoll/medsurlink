@@ -13,6 +13,9 @@ parcours de soins
 php artisan migrate --path=/database/migrations/2021_11_22_114522_add_ligne_de_temps_to_consultation_medecine_generale_table.php
 php artisan migrate --path=/database/migrations/2021_12_09_100627_add_consultation_general_id_to_consultation_examen_validation_table.php
 php artisan migrate --path=/database/migrations/2021_12_28_074058_add_version_to_consultation_examen_validation_table.php
+    - mettre le medecin_control_id, etat_validation_medecin, etat_validation_souscripteur, date_validation_souscripteur,  à null dans la base de donnée
 php artisan migrate --path=/database/migrations/2022_05_10_103046_add_etablissement_id_to_consultation_examen_validation_table.php
+php artisan migrate --path=/database/migrations/2021_11_22_102450_create_examen_etablissement_prix_table.php
 php artisan migrate --path=/database/migrations/
-php artisan migrate --path=/database/migrations/
+
+

@@ -1,24 +1,21 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-use App\Http\Requests\LigneDeTempsRequest;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\ActiviteMission;
-use App\Models\Antecedent;
 use App\Models\Avis;
-use App\Models\Cardiologie;
-use App\Models\CompteRenduOperatoire;
-use App\Models\ConsultationFichier;
-use App\Models\ConsultationMedecineGenerale;
-use App\Models\ConsultationObstetrique;
-use App\Models\DossierMedical;
-use App\Models\LigneDeTemps;
 use App\Models\Patient;
-use App\Models\ActiviteAmaPatient;
+use App\Models\Antecedent;
 use App\Models\RendezVous;
-use App\Models\ConsultationExamenValidation;
+use App\Models\Cardiologie;
+use App\Models\LigneDeTemps;
+use App\Models\DossierMedical;
+use App\Models\ActiviteAmaPatient;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use App\Models\CompteRenduOperatoire;
+use App\Models\ConsultationObstetrique;
+use App\Http\Requests\LigneDeTempsRequest;
+use App\Models\ConsultationExamenValidation;
+use App\Models\ConsultationMedecineGenerale;
 
 class LigneDeTempsController extends Controller
 {
@@ -30,6 +27,13 @@ class LigneDeTempsController extends Controller
     public function index()
     {
         $ligneTemps = LigneDeTemps::with(['dossier','motif'])->latest()->get();
+        return response()->json(['ligne_temps'=>$ligneTemps]);
+    }
+
+    public function ligneDeTemps($id)
+    {
+        $dossier = DossierMedical::whereSlug($id)->first();
+        $ligneTemps = LigneDeTemps::with(['dossier','motif'])->get();
         return response()->json(['ligne_temps'=>$ligneTemps]);
     }
 
