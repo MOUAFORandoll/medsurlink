@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CompteRenduOperatoire;
 use App\Models\ConsultationObstetrique;
 use App\Http\Requests\LigneDeTempsRequest;
+use App\Models\Affiliation;
 use App\Models\ConsultationExamenValidation;
 use App\Models\ConsultationMedecineGenerale;
 
@@ -175,9 +176,80 @@ class LigneDeTempsController extends Controller
 
 
         $contrat = getContrat($patient->user);
+        $affiliations = Affiliation::with(['patient', 'souscripteur'])->where('patient_id',$patient->user_id)->latest()->get();
+        $newAffiliations = collect($contrat->contrat);
+        foreach($affiliations as $affiliation){
+            $newAffiliation = new \stdClass();
+            $newAffiliation->adresse_affilie = "";
+            $newAffiliation->ageAffilie = 18;
+            $newAffiliation->bornAroundAffilie = null;
+            $newAffiliation->bornAroundSouscripteur = null;
+            $newAffiliation->canal = "Website";
+            $newAffiliation->code_promo = null;
+            $newAffiliation->contrat_code = "96e181";
+            $newAffiliation->created_at = "2022-05-12 07:56:06";
+            $newAffiliation->dateNaissanceAffilie = "2004-02-11";
+            $newAffiliation->dateNaissanceSouscripteur = "1998-01-15";
+            $newAffiliation->dateSignature = "2022-05-12";
+            $newAffiliation->date_paiement = null;
+            $newAffiliation->decede = "non";
+            $newAffiliation->deleted_at = null;
+            $newAffiliation->emailSouscripteur1 = "fjfn@jdf.com";
+            $newAffiliation->emailSouscripteur2 = null;
+            $newAffiliation->etat = "GÉNÉRÉ";
+            $newAffiliation->expire = 0;
+            $newAffiliation->expire_mail_send = 0;
+            $newAffiliation->id = 1512;
+            $newAffiliation->lieuEtablissement = "Douala";
+            $newAffiliation->montantSouscription = "65.000";
+            $newAffiliation->nomAffilie = "KITIO";
+            $newAffiliation->nomContact = "fdjjfd";
+            $newAffiliation->nomPatient = "";
+            $newAffiliation->nomSouscripteur = "sofa";
+            $newAffiliation->nom_mere = "sdoiklkfs";
+            $newAffiliation->nom_pere = "sdfkjlkds";
+            $newAffiliation->nombre_envoi = 0;
+            $newAffiliation->paye_par_affilie = "non";
+            $newAffiliation->paysResidenceAffilie = "Cameroon";
+            $newAffiliation->paysResidenceSouscripteur = "Cameroon";
+            $newAffiliation->paysSouscription = "Cameroon";
+            $newAffiliation->personneContact1 = "650198745";
+            $newAffiliation->personneContact2 = null;
+            $newAffiliation->plaintes = "ksdkllkds dskl";
+            $newAffiliation->prenomAffilie = "AUDREY";
+            $newAffiliation->prenomContact = "dsjkkf";
+            $newAffiliation->prenomPatient = "";
+            $newAffiliation->prenomSouscripteur = "teugoum";
+            $newAffiliation->reduction = "non";
+            $newAffiliation->reference_paiement = null;
+            $newAffiliation->renouvelle =  "non";
+            $newAffiliation->sexeAffilie =  "Mme";
+            $newAffiliation->sexePatient =  "M";
+            $newAffiliation->sexeSouscripteur =  "M";
+            $newAffiliation->slug =  "xulqfofeeyamai6kewmb-1652342166";
+            $newAffiliation->statut_paiement =  "NON PAYÉ";
+            $newAffiliation->telephoneAffilie1 =  "00237650256320";
+            $newAffiliation->telephoneAffilie2 =  null;
+            $newAffiliation->telephoneSouscripeur1 =  "652012365";
+            $newAffiliation->telephoneSouscripeur2 =  null;
+            $newAffiliation->typeSouscription =  "Annuelle";
+            $newAffiliation->type_paiement =  null;
+            $newAffiliation->updated_at = "2022-05-12 07:56:06";
+            $newAffiliation->urgence = "3";
+            $newAffiliation->villeResidenceAffilie = "Lyon";
+            $newAffiliation->villeResidenceSouscripteur = "fkokfdklfd lkfdkl";
+            $newAffiliation->visiteur = "NON";
+
+            $newAffiliations->push($newAffiliation);
+
+        }
+
+
+
+
 
        //dd($patient->dossier->id);
-       return response()->json(["cim" => $contrat,"dossier"=>$dossier,"patient"=>$patient,'activites'=> $array]);
+       return response()->json(["cim" => $contrat,"dossier"=>$dossier,"patient"=>$patient,'activites'=> $array, 'affiliations' => $affiliations]);
     }
 
     /**
