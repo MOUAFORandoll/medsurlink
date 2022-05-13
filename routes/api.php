@@ -350,11 +350,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::get('search/souscripteurs/{souscripteur_search}', 'Api\SouscripteurController@listingSouscripteur');
     Route::get('search/patients/{patient_search}', 'Api\PatientController@listingPatients');
     Route::post('patient','Api\PatientController@store')->name('patient.store');
-<<<<<<< HEAD
-    
-=======
     //Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
->>>>>>> d08d6218c433e469f100841ab9c074be80b530d4
     Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
     Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
@@ -375,10 +371,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::get('ligne-temps/dossier/{id}','Api\LigneDeTempsController@ligneDeTempsByDossier');
     Route::resource('examen-prix','Api\ExamenEtablissementPrixController');
     Route::post('examen-prix/etablissement/save','Api\ExamenEtablissementPrixController@storeMultiple');
-<<<<<<< HEAD
-    
-=======
->>>>>>> d08d6218c433e469f100841ab9c074be80b530d4
     Route::get('patient/{id}/contrat-medicasure','Api\LigneDeTempsController@patientContrat');
     Route::get('trajet-patient/dossier/{id}','Api\LigneDeTempsController@getTrajetPatient');
 
