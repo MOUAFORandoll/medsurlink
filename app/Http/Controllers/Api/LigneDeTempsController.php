@@ -8,9 +8,10 @@ use App\Models\RendezVous;
 use App\Models\Cardiologie;
 use App\Models\LigneDeTemps;
 use App\Models\DossierMedical;
+use App\Models\ActivitesControle;
 use App\Models\ActiviteAmaPatient;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\CompteRenduOperatoire;
 use App\Models\ConsultationObstetrique;
 use App\Http\Requests\LigneDeTempsRequest;
@@ -169,9 +170,10 @@ class LigneDeTempsController extends Controller
            ->distinct()
            ->latest()->get();
         $activites = ActiviteAmaPatient::with(['activitesAma','patient','patient.rendezVous','patient.medecinReferent.medecinControles','updatedBy','createur'])->where('patient_id',$patient->user_id)->get();
+        $activites_referent = ActivitesControle::with(['activitesMedecinReferent','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->get();
         //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
         $rendezVous = RendezVous::where('patient_id',$patient->user_id)->latest()->get();
-        $array = array('rendez_vous' =>$rendezVous,'activite_ama' =>  $activites,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
+        $array = array('rendez_vous' =>$rendezVous,'activite_ama' =>  $activites,'activites_referent' =>  $activites_referent,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
 
 
         $contrat = getContrat($patient->user);

@@ -56,4 +56,13 @@ class ActivitesControle extends Model
     public function createur(){
         return $this->belongsTo(User::class,'creator','id');
     }
+
+    public function patient(){
+        return $this->belongsTo(Patient::class,'patient_id','user_id');
+    }
+    
+    public function updatedBy(){
+        return $this->belongsTo(User::class,'updated_by','id');
+    }
+    
 }
