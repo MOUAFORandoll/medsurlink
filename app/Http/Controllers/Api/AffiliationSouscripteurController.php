@@ -358,7 +358,6 @@ class AffiliationSouscripteurController extends Controller
                     "date_fin"=>Carbon::now()->addYears(1)->format('Y-m-d')
                 ]);
 
-
                 // envoie de mail à contract
                 $package = Package::find($commande->type_contrat);
                 Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $request->plainte, $request->urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie));
