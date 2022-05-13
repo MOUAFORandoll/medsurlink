@@ -19,6 +19,8 @@ class ActiviteAmaPatient extends Model
     protected $table = 'activites_ama_patient';
     protected $fillable = [
         'activite_ama_id',
+        'etablissement_id',
+        'commentaire',
         'patient_id',
         'creator',
         'statut',
