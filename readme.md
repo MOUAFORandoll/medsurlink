@@ -16,6 +16,8 @@ php artisan migrate --path=/database/migrations/2021_12_28_074058_add_version_to
     - mettre le medecin_control_id, etat_validation_medecin, etat_validation_souscripteur, date_validation_souscripteur,  à null dans la base de donnée
 php artisan migrate --path=/database/migrations/2022_05_10_103046_add_etablissement_id_to_consultation_examen_validation_table.php
 php artisan migrate --path=/database/migrations/2021_11_22_102450_create_examen_etablissement_prix_table.php
-php artisan migrate --path=/database/migrations/
+php artisan migrate --path=/database/migrations/2021_12_23_092950_create_activites_medecin_referent_table.php
 
+php artisan migrate --path=/database/migrations/2021_12_01_091212_create_activites_ama_table.php
+php artisan migrate --path=/database/migrations/2021_12_01_091531_create_activites_ama_patient_table.php
 

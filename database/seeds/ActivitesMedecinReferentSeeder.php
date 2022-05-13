@@ -53,5 +53,5 @@ class ActivitesMedecinReferentSeeder extends Seeder
             ]);
         }
     }
-    
+
 }
