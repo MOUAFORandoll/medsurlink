@@ -116,9 +116,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::resource('activite','Api\ActiviteController');
     Route::put('activite-cloture/{slug}','Api\ActiviteController@cloturer');
     Route::put('activite-mission/{slug}','Api\ActiviteController@updateActiviteMission');
-    Route::post('activite-mission-add','Api\ActiviteController@ajouterMission');
+    // Route::post('activite-mission-add','Api\ActiviteController@ajouterMission');
     Route::post('/activite-ama/save','Api\ActiviteController@saveMissions');
-    Route::post('/activite-ama/create','Api\ActiviteController@createMissions');
+    Route::post('activite-mission-add','Api\ActiviteController@createMissions');
 
     Route::get('/mission/list','Api\ActiviteController@getListMission');
 
@@ -330,6 +330,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
 
 
 });
+Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
+// Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
 
 Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient']], function () {

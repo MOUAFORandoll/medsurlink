@@ -169,7 +169,7 @@ class LigneDeTempsController extends Controller
            ->where('medecin_control_id', '=',Auth::id())
            ->distinct()
            ->latest()->get();
-        $activites = ActiviteAmaPatient::with(['activitesAma','patient','patient.rendezVous','patient.medecinReferent.medecinControles','updatedBy','createur'])->where('patient_id',$patient->user_id)->latest()->get();
+        $activites = ActiviteAmaPatient::with(['activitesAma','patient','patient.rendezVous','patient.medecinReferent.medecinControles','updatedBy','createur'])->where('patient_id',$patient->user_id)->get();
         //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
         $rendezVous = RendezVous::where('patient_id',$patient->user_id)->latest()->get();
         $array = array('rendez_vous' =>$rendezVous,'activite_ama' =>  $activites,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);

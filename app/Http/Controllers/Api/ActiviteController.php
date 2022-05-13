@@ -161,7 +161,7 @@ class ActiviteController extends Controller
 
     public function ajouterMission(Request $request){
         $mission = ActiviteMission::create($request->all());
-        $mission = ActiviteMission::with('description','dossier.patient.user','createur')->whereSlug($mission->slug)->first();
+        $mission = ActiviteMission::with('dossier.patient.user','createur')->whereSlug($mission->slug)->first();
         return response()->json(['mission'=>$mission]);
     }
 
@@ -172,8 +172,7 @@ class ActiviteController extends Controller
     public function getMissionAmaByPatient($id){
         $mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->where('patient_id',$id)->latest()->get();
         $medecin_referent = PatientMedecinControle::with(['medecinControles','patients','createur'])->where('patient_id',$id)->latest()->get();
-        $medecin_referent = PatientMedecinControle::with(['medecinControles','patients','createur'])->where('patient_id',$id)->latest()->get();
-        return response()->json(['activites'=>$mission]);
+        return response()->json(['activites'=>$mission, 'referent'=>$medecin_referent]);
     }
     public function saveMissions(Request $request){
         dd($request);
