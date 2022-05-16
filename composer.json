@@ -9,7 +9,8 @@
     "license": "MIT",
     "require": {
         "php": "^7.1.3",
-        "barryvdh/laravel-dompdf": "^1.0",
+        "antonrom00/laravel-model-changes-history": "dev-master",
+        "barryvdh/laravel-dompdf": "^0.8.2",
         "barryvdh/laravel-snappy": "^0.4.4",
         "cviebrock/eloquent-sluggable": "4.8.*",
         "doctrine/dbal": "^2.10",
@@ -28,6 +29,7 @@
         "lcobucci/jwt": "3.3.3",
         "maatwebsite/excel": "^3.1",
         "mpociot/laravel-apidoc-generator": "^4.8",
+        "owen-it/laravel-auditing": "*",
         "phpoffice/phpspreadsheet": "^1.14",
         "profclems/postman-collection-generator": "^1.2",
         "rinvex/countries": "^5.0",

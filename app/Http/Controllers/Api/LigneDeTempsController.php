@@ -17,6 +17,7 @@ use App\Http\Requests\LigneDeTempsRequest;
 use App\Models\Affiliation;
 use App\Models\ConsultationExamenValidation;
 use App\Models\ConsultationMedecineGenerale;
+use Illuminate\Support\Facades\DB;
 
 class LigneDeTempsController extends Controller
 {
@@ -176,69 +177,71 @@ class LigneDeTempsController extends Controller
 
 
         $contrat = getContrat($patient->user);
-        $affiliations = Affiliation::with(['patient', 'souscripteur'])->where('patient_id',$patient->user_id)->latest()->get();
+        $affiliations = Affiliation::with(['patient.user', 'souscripteur.user', 'package'])->where('patient_id',$patient->user_id)->latest()->get();
         $newAffiliations = collect($contrat->contrat);
         foreach($affiliations as $affiliation){
+
             $newAffiliation = new \stdClass();
-            $newAffiliation->adresse_affilie = "";
-            $newAffiliation->ageAffilie = 18;
-            $newAffiliation->bornAroundAffilie = null;
-            $newAffiliation->bornAroundSouscripteur = null;
+            $newAffiliation->adresse_affilie = $affiliation->patient->user->adresse;
+            $newAffiliation->ageAffilie = $affiliation->patient->age;
+            $newAffiliation->bornAroundAffilie = $affiliation->patient->date_de_naissance;
+            $newAffiliation->bornAroundSouscripteur = $affiliation->souscripteur->date_de_naissance;
             $newAffiliation->canal = "Website";
             $newAffiliation->code_promo = null;
-            $newAffiliation->contrat_code = "96e181";
-            $newAffiliation->created_at = "2022-05-12 07:56:06";
-            $newAffiliation->dateNaissanceAffilie = "2004-02-11";
-            $newAffiliation->dateNaissanceSouscripteur = "1998-01-15";
-            $newAffiliation->dateSignature = "2022-05-12";
-            $newAffiliation->date_paiement = null;
-            $newAffiliation->decede = "non";
-            $newAffiliation->deleted_at = null;
-            $newAffiliation->emailSouscripteur1 = "fjfn@jdf.com";
+            $newAffiliation->contrat_code = $affiliation->code_contrat;
+            $newAffiliation->created_at = $affiliation->created_at;
+            $newAffiliation->dateNaissanceAffilie = $affiliation->patient->date_de_naissance;
+            $newAffiliation->dateNaissanceSouscripteur = $affiliation->souscripteur->date_de_naissance;
+            $newAffiliation->dateSignature = $affiliation->date_signature;
+            $newAffiliation->date_paiement = $affiliation->date_debut;
+            $newAffiliation->decede = $affiliation->patient->user->decede;
+            $newAffiliation->emailSouscripteur1 = $affiliation->patient->user->email;
             $newAffiliation->emailSouscripteur2 = null;
-            $newAffiliation->etat = "GÉNÉRÉ";
-            $newAffiliation->expire = 0;
-            $newAffiliation->expire_mail_send = 0;
-            $newAffiliation->id = 1512;
-            $newAffiliation->lieuEtablissement = "Douala";
-            $newAffiliation->montantSouscription = "65.000";
-            $newAffiliation->nomAffilie = "KITIO";
-            $newAffiliation->nomContact = "fdjjfd";
-            $newAffiliation->nomPatient = "";
-            $newAffiliation->nomSouscripteur = "sofa";
-            $newAffiliation->nom_mere = "sdoiklkfs";
-            $newAffiliation->nom_pere = "sdfkjlkds";
+            $newAffiliation->etat = $affiliation->status_contrat;
+            $newAffiliation->expire = $affiliation->expire;
+            $newAffiliation->expire_mail_send = $affiliation->expire_email;
+            $newAffiliation->id = $affiliation->id;
+            $newAffiliation->lieuEtablissement = $affiliation->patient->user->ville;
+            $newAffiliation->montantSouscription = ConversionEurotoXaf($affiliation->package->montant);
+            $newAffiliation->nomAffilie = $affiliation->patient->user->nom;
+            $newAffiliation->nomContact = $affiliation->contact_name;
+            $newAffiliation->nomPatient = $affiliation->patient->user->nom;
+            $newAffiliation->nomSouscripteur = $affiliation->souscripteur->user->nom;
+            $newAffiliation->nom_mere = "";
+            $newAffiliation->nom_pere = "";
             $newAffiliation->nombre_envoi = 0;
-            $newAffiliation->paye_par_affilie = "non";
-            $newAffiliation->paysResidenceAffilie = "Cameroon";
-            $newAffiliation->paysResidenceSouscripteur = "Cameroon";
-            $newAffiliation->paysSouscription = "Cameroon";
-            $newAffiliation->personneContact1 = "650198745";
+            $newAffiliation->paye_par_affilie = $affiliation->paye_par_affilie;
+            $newAffiliation->paysResidenceAffilie = $affiliation->patient->user->pays;
+            $newAffiliation->paysResidenceSouscripteur = $affiliation->souscripteur->user->pays;
+            $newAffiliation->paysSouscription = $affiliation->souscripteur->user->pays;
+            $newAffiliation->personneContact1 = $affiliation->contact_phone;
             $newAffiliation->personneContact2 = null;
-            $newAffiliation->plaintes = "ksdkllkds dskl";
-            $newAffiliation->prenomAffilie = "AUDREY";
-            $newAffiliation->prenomContact = "dsjkkf";
-            $newAffiliation->prenomPatient = "";
-            $newAffiliation->prenomSouscripteur = "teugoum";
+            $newAffiliation->plaintes = $affiliation->plainte;
+            $newAffiliation->prenomAffilie = $affiliation->patient->user->prenom;
+            $newAffiliation->prenomContact = $affiliation->contact_firstName;
+            $newAffiliation->prenomPatient = $affiliation->patient->user->prenom;
+            $newAffiliation->prenomSouscripteur = $affiliation->souscripteur->user->prenom;
             $newAffiliation->reduction = "non";
             $newAffiliation->reference_paiement = null;
-            $newAffiliation->renouvelle =  "non";
-            $newAffiliation->sexeAffilie =  "Mme";
-            $newAffiliation->sexePatient =  "M";
-            $newAffiliation->sexeSouscripteur =  "M";
-            $newAffiliation->slug =  "xulqfofeeyamai6kewmb-1652342166";
-            $newAffiliation->statut_paiement =  "NON PAYÉ";
-            $newAffiliation->telephoneAffilie1 =  "00237650256320";
+            $newAffiliation->renouvelle = $affiliation->renouvelle == 1 ? 'oui' : 'non';
+            $newAffiliation->sexeAffilie =  $affiliation->patient->sexe;
+            $newAffiliation->sexePatient =  $affiliation->patient->sexe;
+            $newAffiliation->sexeSouscripteur =  $affiliation->souscripteur->sexe;
+            $newAffiliation->slug = $affiliation->slug;
+            $newAffiliation->statut_paiement =  $affiliation->status_paiement;
+            $newAffiliation->telephoneAffilie1 = $affiliation->patient->user->telephone;
             $newAffiliation->telephoneAffilie2 =  null;
-            $newAffiliation->telephoneSouscripeur1 =  "652012365";
+            $newAffiliation->telephoneSouscripeur1 = $affiliation->souscripteur->user->telephone;
             $newAffiliation->telephoneSouscripeur2 =  null;
-            $newAffiliation->typeSouscription =  "Annuelle";
+            $newAffiliation->typeSouscription =  $affiliation->nom;
             $newAffiliation->type_paiement =  null;
-            $newAffiliation->updated_at = "2022-05-12 07:56:06";
-            $newAffiliation->urgence = "3";
-            $newAffiliation->villeResidenceAffilie = "Lyon";
-            $newAffiliation->villeResidenceSouscripteur = "fkokfdklfd lkfdkl";
+            $newAffiliation->updated_at = $affiliation->updated_at;
+            $newAffiliation->urgence = $affiliation->niveau_urgence;
+            $newAffiliation->villeResidenceAffilie = $affiliation->patient->user->ville;
+            $newAffiliation->villeResidenceSouscripteur = $affiliation->souscripteur->user->ville;
             $newAffiliation->visiteur = "NON";
+            $newAffiliation->cim = $affiliation->package->description_fr;
+            $newAffiliation->changes = DB::table('model_changes_history')->where(['model_id' => $affiliation->id, 'model_type' => 'App\Models\Affiliation'])->orderBy('created_at', 'desc')->get(['changes']);
 
             $newAffiliations->push($newAffiliation);
 
@@ -249,7 +252,7 @@ class LigneDeTempsController extends Controller
 
 
        //dd($patient->dossier->id);
-       return response()->json(["cim" => $contrat,"dossier"=>$dossier,"patient"=>$patient,'activites'=> $array, 'affiliations' => $affiliations]);
+       return response()->json(["cim" => $newAffiliations->sortByDesc('updated_at'), "dossier"=>$dossier,"patient"=>$patient,'activites'=> $array, 'affiliations' => $affiliations]);
     }
 
     /**
