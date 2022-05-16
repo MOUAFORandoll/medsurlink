@@ -163,12 +163,12 @@ class LigneDeTempsController extends Controller
         $examen_validation_assureur = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
            ->whereNotNull('etat_validation_medecin')
            ->where('medecin_control_id', '=',Auth::id())
-           ->distinct()
+           ->distinct()->groupBy('ligne_de_temps_id')
            ->latest()->get();
         $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])
            ->whereNotNull('etat_validation_souscripteur')
            ->where('medecin_control_id', '=',Auth::id())
-           ->distinct()
+           ->distinct()->groupBy('ligne_de_temps_id')
            ->latest()->get();
         $activites = ActiviteAmaPatient::with(['activitesAma','patient','patient.rendezVous','patient.medecinReferent.medecinControles','updatedBy','createur'])->where('patient_id',$patient->user_id)->get();
         $activites_referent = ActivitesControle::with(['activitesMedecinReferent','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->get();
