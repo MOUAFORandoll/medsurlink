@@ -340,6 +340,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::get('patient-with-medecin-control','Api\PatientController@getPatientWithMedecin');
     Route::get('first_patient-with-medecin-control/{limit}','Api\PatientController@getFirstPatientWithMedecin');
     Route::get('next_patient-with-medecin-control/{limit}/{page}','Api\PatientController@getNextPatientWithMedecin');
+    Route::get('affiliations/{patient_id}','Api\PatientController@getAffiliations');
     // Route::get('10patient-with-medecin-control','Api\PatientController@get10PatientWithMedecin');
     // Route::get('15patient-with-medecin-control','Api\PatientController@get15PatientWithMedecin');
     // Route::get('100patient-with-medecin-control','Api\PatientController@get100PatientWithMedecin');

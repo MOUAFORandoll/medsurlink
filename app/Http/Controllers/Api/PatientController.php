@@ -21,6 +21,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Affiliation;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -585,6 +586,12 @@ class PatientController extends Controller
         return count($result);
 
     }
+
+    public function getAffiliations($patient_id){
+        $affiliations = Affiliation::where('patient_id', $patient_id)->with('package:id,description_fr')->latest()->get();
+        return response()->json(['affiliations' => $affiliations]);
+    }
+
 
     /**
      * @param  string  $value

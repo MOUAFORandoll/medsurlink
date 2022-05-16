@@ -23,3 +23,4 @@ php artisan migrate --path=/database/migrations/2021_12_01_091531_create_activit
 
 php artisan migrate --path=/database/migrations/2022_05_13_145159_create_model_changes_history_table.php
 
+php artisan migrate --path=/database/migrations/2021_12_29_114729_create_activites_controle_table.php
