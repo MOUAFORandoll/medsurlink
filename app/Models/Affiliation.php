@@ -8,13 +8,14 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Antonrom\ModelChangesHistory\Traits\HasChangesHistory;
 class Affiliation extends Model
 {
     use SoftDeletes;
     use Sluggable;
     use SluggableScopeHelpers;
     use SlugRoutable;
+    use HasChangesHistory;
 
     protected $fillable = [
         "patient_id",
@@ -76,5 +77,9 @@ class Affiliation extends Model
 
     public function package(){
         return $this->belongsTo(Package::class,'package_id','id');
+    }
+
+    public function ligneTemps(){
+        return $this->hasMany(LigneDeTemps::class);
     }
 }

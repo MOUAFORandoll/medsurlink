@@ -15,6 +15,7 @@ class CreateActivitesControleTable extends Migration
     {
         Schema::create('activites_controle', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('creator')->nullable();
             $table->string('statut')->nullable();
             $table->unsignedBigInteger('activite_id')->nullable();

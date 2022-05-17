@@ -21,3 +21,8 @@ php artisan migrate --path=/database/migrations/2021_12_23_092950_create_activit
 php artisan migrate --path=/database/migrations/2021_12_01_091212_create_activites_ama_table.php
 php artisan migrate --path=/database/migrations/2021_12_01_091531_create_activites_ama_patient_table.php
 
+php artisan migrate --path=/database/migrations/2022_05_13_145159_create_model_changes_history_table.php
+
+php artisan migrate --path=/database/migrations/2021_12_29_114729_create_activites_controle_table.php
+
+php artisan migrate --path=/database/migrations/2022_05_16_164429_add_affiliation_id_to_ligne_de_temps_table.php

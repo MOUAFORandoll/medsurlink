@@ -16,6 +16,7 @@ class LigneDeTemps extends Model
         'motif_consultation_id',
         'etat',
         'date_consultation',
+        'affiliation_id'
     ];
 
     // dossier médicaux lié à la ligne de temps
@@ -42,5 +43,9 @@ class LigneDeTemps extends Model
     }
     public function  validations(){
         return $this->hasMany(ConsultationExamenValidation::class,'ligne_de_temps_id','id');
+    }
+
+    public function affiliation(){
+        return $this->belongsTo(Affiliation::class);
     }
 }
