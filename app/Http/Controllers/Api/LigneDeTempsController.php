@@ -93,16 +93,34 @@ class LigneDeTempsController extends Controller
     public function ligneDeTempsByDossier($id)
     {
 
+        $ligneDeTemps = LigneDeTemps::with([
+            'motif',
+            'dossier',
+        ])->whereId($id)->first();
+
         $dossier = DossierMedical::whereSlug($id)->first();
+        // $examen_validation_assureur = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
+        //    ->whereNotNull('etat_validation_medecin')
+        //    ->where('medecin_control_id', '=',Auth::id())->where('ligne_de_temps_id', '=', $ligneDeTemps)
+        //    ->distinct()/*->groupBy('ligne_de_temps_id')*/
+        //    ->latest()->get();
+        // $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])
+        //    ->whereNotNull('etat_validation_souscripteur')
+        //    ->where('medecin_control_id', '=',Auth::id())->where('ligne_de_temps_id', '=', $ligneDeTemps)
+        //    ->distinct()/*->groupBy('ligne_de_temps_id')*/
+        //    ->latest()->get();
 
         $ligneDeTemps = LigneDeTemps::with([
             'motif',
             'dossier',
             'validations.examenComplementaire.examenComplementairePrix',
             'validations.consultation.versionValidation',
+            'validations',
+            // 'validations.consultation.ligneDeTemps.motif',
         ])->where("dossier_medical_id",$dossier->id)->latest()->get();
 
         return response()->json(["ligne_temps" => $ligneDeTemps]);
+        // "examen_validation_medecin" => $examen_validation_medecin, "examen_validation_assureur" => $examen_validation_assureur
     }
     /**
      * Show the form for editing the specified resource.
@@ -163,18 +181,19 @@ class LigneDeTempsController extends Controller
         $examen_validation_assureur = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
            ->whereNotNull('etat_validation_medecin')
            ->where('medecin_control_id', '=',Auth::id())
-           ->distinct()->groupBy('ligne_de_temps_id')
+           ->distinct()/*->groupBy('ligne_de_temps_id')*/
            ->latest()->get();
         $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])
            ->whereNotNull('etat_validation_souscripteur')
            ->where('medecin_control_id', '=',Auth::id())
-           ->distinct()->groupBy('ligne_de_temps_id')
+           ->distinct()/*->groupBy('ligne_de_temps_id')*/
            ->latest()->get();
         $activites = ActiviteAmaPatient::with(['activitesAma','patient','patient.rendezVous','patient.medecinReferent.medecinControles','updatedBy','createur'])->where('patient_id',$patient->user_id)->get();
         $activites_referent = ActivitesControle::with(['activitesMedecinReferent','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->get();
         //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
         $rendezVous = RendezVous::where('patient_id',$patient->user_id)->latest()->get();
         $array = array('rendez_vous' =>$rendezVous,'activite_ama' =>  $activites,'activites_referent' =>  $activites_referent,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
+        $referentArray = array('referent'=> $activites_referent);
 
 
         $contrat = getContrat($patient->user);
@@ -251,7 +270,7 @@ class LigneDeTempsController extends Controller
 
 
        //dd($patient->dossier->id);
-       return response()->json(["cim" => $contrat,"dossier"=>$dossier,"patient"=>$patient,'activites'=> $array, 'affiliations' => $affiliations]);
+       return response()->json(["cim" => $contrat,"dossier"=>$dossier,"patient"=>$patient,'activites'=> $array, 'affiliations' => $affiliations, 'referent' => $referentArray]);
     }
 
     /**

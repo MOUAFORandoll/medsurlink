@@ -141,9 +141,6 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function store(ConsutationMedecineRequest $request)
     {
-        $const = $request->all();
-        \Log::alert($const);
-
         //dd($request->except('documents','dateRdv','motifRdv'));
         $consultation = ConsultationMedecineGenerale::create($request->except('documents','dateRdv','motifRdv'));
         $consultation->creator = Auth::id();

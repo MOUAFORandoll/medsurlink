@@ -167,8 +167,9 @@ class ConsultationExamenValidationController extends Controller
             $examen_validation = ConsultationExamenValidation::with(['examenComplementaire','etablissement','examenComplementaire.examenComplementairePrix' => function ($query) use ($etablissement) {
                 $query->where('etablissement_exercices_id', '=', $etablissement);
             }])->where('consultation_general_id', '=', $consultation->id)->latest()->get();
-
+            
             foreach($examen_validation as $examen){
+                
                 if(in_array($examen->id, $examens_id)){
                     $montant_souscripteur += $examen->examenComplementaire->examenComplementairePrix[0]->prix;
                     $examen->etat_validation_souscripteur = 1;
