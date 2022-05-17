@@ -180,6 +180,7 @@ class ActiviteController extends Controller
        // return response()->json(['activites'=>$mission]);
     }
     public function createMissions(Request $request){
+
         $mission = ActiviteAmaPatient::create($request->all());
         $mission = ActiviteAmaPatient::with('activitesAma','patient','updatedBy','createur')->whereSlug($mission->slug)->first();
         return response()->json(['mission'=>$mission]);

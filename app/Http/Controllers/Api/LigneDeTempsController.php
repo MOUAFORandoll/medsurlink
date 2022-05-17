@@ -59,7 +59,7 @@ class LigneDeTempsController extends Controller
     public function store(LigneDeTempsRequest $request)
     {
         // création d'une ligne de temps
-        $ligneDeTemps = LigneDeTemps::create($request->validated(),['motif_consultation_id','dossier_medical_id','date_consultation']);
+        $ligneDeTemps = LigneDeTemps::create($request->validated(),['motif_consultation_id','dossier_medical_id','date_consultation', 'affiliation_id']);
 
         // Sauvegarde des contributeurs
         $contributeurs = $request->get('contributeurs');
@@ -93,7 +93,6 @@ class LigneDeTempsController extends Controller
      */
     public function ligneDeTempsByDossier($id)
     {
-
         $dossier = DossierMedical::whereSlug($id)->first();
 
         $ligneDeTemps = LigneDeTemps::with([
@@ -249,11 +248,6 @@ class LigneDeTempsController extends Controller
 
         }
 
-
-
-
-
-       //dd($patient->dossier->id);
        return response()->json(["cim" => $newAffiliations->sortByDesc('updated_at'), "dossier"=>$dossier,"patient"=>$patient,'activites'=> $array, 'affiliations' => $affiliations]);
     }
 
