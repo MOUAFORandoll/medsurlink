@@ -179,18 +179,29 @@ class LigneDeTempsController extends Controller
            "payments",
            "dossier",
            "rendezVous"])->first();
-        $examen_validation_assureur = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
+        $examen_validation_assureur = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif:id,description','consultation.dossier.patient.user','consultation.author'])->whereHas('consultation.dossier', function($query) use($patient) {
+            $query->where('patient_id', $patient->user_id);
+        })
            ->whereNotNull('etat_validation_medecin')
-           ->where('medecin_control_id', '=',Auth::id())
+           //->where('medecin_control_id', '=',Auth::id())
            ->distinct()/*->groupBy('ligne_de_temps_id')*/
            ->latest()->get();
-        $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])
+        $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif:id,description','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])->whereHas('consultation.dossier', function($query) use($patient) {
+            $query->where('patient_id', $patient->user_id);
+        })
            ->whereNotNull('etat_validation_souscripteur')
-           ->where('medecin_control_id', '=',Auth::id())
+           //->where('medecin_control_id', '=',Auth::id())
            ->distinct()/*->groupBy('ligne_de_temps_id')*/
            ->latest()->get();
+
+        /**
+         * ici nous retournons l'ensemble des activités ama qui nes sont pas relié à une line de temps
+         */
         $activite_ama_isoles = ActiviteAmaPatient::doesntHave('ligne_temps')->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'commentaire', 'date_cloture']);
 
+        /**
+         * ici nous retournons la liste des affiliations avec lignes de temps associées et pour chaque ligne de temps, ses activités AMA
+         */
         $activite_ama_manuelles = Affiliation::with(['package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_ama_patients' => function ($query) use ($patient) {
             $query->where('patient_id', $patient->user_id);
         }])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
