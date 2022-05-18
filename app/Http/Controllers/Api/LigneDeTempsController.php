@@ -157,7 +157,7 @@ class LigneDeTempsController extends Controller
     {
         //Auth::loginUsingId(1);
         $dossier = DossierMedical::whereSlug($id)
-         ->with(
+         ->with([
             // "resultatsImagerie",
             // "resultatsLabo",
             // "hospitalisations",
@@ -171,7 +171,7 @@ class LigneDeTempsController extends Controller
             // "kinesitherapies",
             "avis",
             // "consultationsManuscrites"
-            )->first();
+            ])->first();
 
        $patient = Patient::where('user_id', DossierMedical::whereSlug($id)->first()->patient_id)
        ->with([
@@ -189,15 +189,21 @@ class LigneDeTempsController extends Controller
            ->where('medecin_control_id', '=',Auth::id())
            ->distinct()/*->groupBy('ligne_de_temps_id')*/
            ->latest()->get();
-        $activites = ActiviteAmaPatient::with(['activitesAma','patient','patient.rendezVous','patient.medecinReferent.medecinControles','updatedBy','createur'])->where('patient_id',$patient->user_id)->get();
-        $activites_referent = ActivitesControle::with(['activitesMedecinReferent','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->get();
+        $activite_ama_isoles = ActiviteAmaPatient::doesntHave('ligne_temps')->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'commentaire', 'date_cloture']);
+
+        $activite_ama_manuelles = Affiliation::with(['package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_ama_patients' => function ($query) use ($patient) {
+            $query->where('patient_id', $patient->user_id);
+        }])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
+
+        $activites_referent = ActivitesControle::with(['activitesMedecinReferent','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get();
         //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
         $rendezVous = RendezVous::where('patient_id',$patient->user_id)->latest()->get();
-        $array = array('rendez_vous' =>$rendezVous,'activite_ama' =>  $activites,'activites_referent' =>  $activites_referent,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
+        $array = array('rendez_vous' =>$rendezVous,'activite_ama_isoles' =>  $activite_ama_isoles, 'activite_ama_manuelles' =>  $activite_ama_manuelles,'activites_referent' =>  $activites_referent,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
         $referentArray = array('referent'=> $activites_referent);
 
 
         $contrat = getContrat($patient->user);
+
         $affiliations = Affiliation::with(['patient.user', 'souscripteur.user', 'package'])->where('patient_id',$patient->user_id)->latest()->get();
         $newAffiliations = collect($contrat->contrat);
         foreach($affiliations as $affiliation){
@@ -268,12 +274,7 @@ class LigneDeTempsController extends Controller
 
         }
 
-
-
-
-
-       //dd($patient->dossier->id);
-       return response()->json(["cim" => $newAffiliations->sortByDesc('updated_at'), "dossier"=>$dossier,"patient"=>$patient,'activites'=> $array, 'affiliations' => $affiliations, 'referent' => $referentArray]);
+       return response()->json(["cim" => $newAffiliations->sortByDesc('updated_at'), "dossier" => $dossier, "patient" => $patient, 'activites' => $array, 'affiliations' => $affiliations, 'referent' => $referentArray]);
     }
 
     /**

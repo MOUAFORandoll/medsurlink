@@ -80,6 +80,6 @@ class Affiliation extends Model
     }
 
     public function ligneTemps(){
-        return $this->hasMany(LigneDeTemps::class);
+        return $this->hasMany(LigneDeTemps::class)->orderBy('updated_at', 'desc');
     }
 }

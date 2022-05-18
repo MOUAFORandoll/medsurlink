@@ -48,4 +48,8 @@ class LigneDeTemps extends Model
     public function affiliation(){
         return $this->belongsTo(Affiliation::class);
     }
+
+    public function activites_ama_patients(){
+        return $this->hasMany(ActiviteAmaPatient::class, 'ligne_temps_id');
+    }
 }
