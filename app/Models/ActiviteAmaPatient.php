@@ -81,4 +81,8 @@ class ActiviteAmaPatient extends Model
         return $this->belongsTo(LigneDeTemps::class);
     }
 
+    public function motif(){
+        return $this->belongsTo(Motif::class);
+    }
+
 }
