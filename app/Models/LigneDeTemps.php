@@ -45,9 +45,14 @@ class LigneDeTemps extends Model
         return $this->hasMany(ConsultationExamenValidation::class,'ligne_de_temps_id','id');
     }
 
+    public function rendezVous(){
+        return $this->hasMany(RendezVous::class, 'ligne_temps_id');
+    }
+
     public function affiliation(){
         return $this->belongsTo(Affiliation::class);
     }
+
 
     public function activites_ama_patients(){
         return $this->hasMany(ActiviteAmaPatient::class, 'ligne_temps_id');

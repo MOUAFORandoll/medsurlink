@@ -29,7 +29,7 @@ class RendezVous extends Model
         "statut",
         "slug",
         "nom_medecin",
-        "ligne_de_temps_id"
+        "ligne_temps_id"
     ];
 
     protected $hidden = ['initiateur','updated_at'];
@@ -61,6 +61,10 @@ class RendezVous extends Model
 
     public function initiateur(){
         return $this->belongsTo(User::class,'initiateur','id');
+    }
+
+    public function ligne_temps(){
+        return $this->belongsTo(LigneDeTemps::class, 'ligne_temps_id', 'id');
     }
 
 

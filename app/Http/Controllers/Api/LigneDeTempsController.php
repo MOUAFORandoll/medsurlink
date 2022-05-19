@@ -196,18 +196,18 @@ class LigneDeTempsController extends Controller
         /**
          * ici nous retournons l'ensemble des activités ama qui nes sont pas relié à une line de temps
          */
-        $activite_ama_isoles = ActiviteAmaPatient::doesntHave('ligne_temps')->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'commentaire', 'date_cloture']);
+        $activite_ama_isoles = ActiviteAmaPatient::doesntHave('ligne_temps')->with('activitesAma:id,description_fr')->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'commentaire', 'date_cloture']);
 
         /**
          * ici nous retournons la liste des affiliations avec lignes de temps associées et pour chaque ligne de temps, ses activités AMA
          */
-        $activite_ama_manuelles = Affiliation::with(['package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_ama_patients' => function ($query) use ($patient) {
+        $activite_ama_manuelles = Affiliation::with(['package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_ama_patients.activitesAma:id,description_fr', 'ligneTemps.activites_ama_patients' => function ($query) use ($patient) {
             $query->where('patient_id', $patient->user_id);
         }])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
 
         $activites_referent = ActivitesControle::with(['activitesMedecinReferent','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get();
         //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
-        $rendezVous = RendezVous::where('patient_id',$patient->user_id)->latest()->get();
+        $rendezVous = RendezVous::where('patient_id',$patient->user_id)->with('ligne_temps:id,date_consultation')->latest()->get(['id', 'date', 'statut', 'motifs', 'ligne_temps_id', 'created_at']);
         $array = array('rendez_vous' => $rendezVous,'activite_ama_isoles' =>  $activite_ama_isoles, 'activite_ama_manuelles' => $activite_ama_manuelles,'activites_referent' =>  $activites_referent,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
         $referentArray = array('referent' => $activites_referent);
 
