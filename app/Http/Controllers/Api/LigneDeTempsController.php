@@ -185,14 +185,13 @@ class LigneDeTempsController extends Controller
            ->whereNotNull('etat_validation_medecin')
            //->where('medecin_control_id', '=',Auth::id())
            ->distinct()/*->groupBy('ligne_de_temps_id')*/
-           ->latest()->get();
+           ->latest()->get()->unique('consultation_general_id');
         $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif:id,description','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])->whereHas('consultation.dossier', function($query) use($patient) {
             $query->where('patient_id', $patient->user_id);
         })
            ->whereNotNull('etat_validation_souscripteur')
-           //->where('medecin_control_id', '=',Auth::id())
            ->distinct()/*->groupBy('ligne_de_temps_id')*/
-           ->latest()->get();
+           ->latest()->get()->unique('consultation_general_id');
 
         /**
          * ici nous retournons l'ensemble des activités ama qui nes sont pas relié à une line de temps
