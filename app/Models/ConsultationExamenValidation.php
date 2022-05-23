@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Antonrom\ModelChangesHistory\Traits\HasChangesHistory;
 
 class ConsultationExamenValidation extends Model
 {
+    use HasChangesHistory;
     protected $table = 'consultation_examen_validation';
 
     protected $fillable = [

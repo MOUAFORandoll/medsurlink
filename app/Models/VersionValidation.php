@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Antonrom\ModelChangesHistory\Traits\HasChangesHistory;
 class VersionValidation extends Model
 {
+    use HasChangesHistory;
+
     protected $table = 'version_validations';
 
     protected $fillable = [

@@ -181,17 +181,11 @@ class LigneDeTempsController extends Controller
            "rendezVous"])->first();
         $examen_validation_assureur = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif:id,description','consultation.dossier.patient.user','consultation.author'])->whereHas('consultation.dossier', function($query) use($patient) {
             $query->where('patient_id', $patient->user_id);
-        })
-           ->whereNotNull('etat_validation_medecin')
-           //->where('medecin_control_id', '=',Auth::id())
-           ->distinct()/*->groupBy('ligne_de_temps_id')*/
-           ->latest()->get()->unique('consultation_general_id');
+        })->whereNotNull('etat_validation_medecin')->distinct()->latest()->get()->unique('consultation_general_id');
+
         $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif:id,description','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])->whereHas('consultation.dossier', function($query) use($patient) {
             $query->where('patient_id', $patient->user_id);
-        })
-           ->whereNotNull('etat_validation_souscripteur')
-           ->distinct()/*->groupBy('ligne_de_temps_id')*/
-           ->latest()->get()->unique('consultation_general_id');
+        })->whereNotNull('etat_validation_souscripteur')->distinct()->latest()->get()->unique('consultation_general_id');
 
         /**
          * ici nous retournons l'ensemble des activités ama qui nes sont pas relié à une line de temps
@@ -217,7 +211,6 @@ class LigneDeTempsController extends Controller
         $affiliations = Affiliation::with(['patient.user', 'souscripteur.user', 'package'])->where('patient_id',$patient->user_id)->latest()->get();
         $newAffiliations = collect($contrat->contrat);
         foreach($affiliations as $affiliation){
-
             $newAffiliation = new \stdClass();
             $newAffiliation->adresse_affilie = $affiliation->patient->user->adresse;
             $newAffiliation->ageAffilie = $affiliation->patient->age;
