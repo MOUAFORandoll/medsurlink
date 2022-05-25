@@ -234,7 +234,7 @@ class LigneDeTempsController extends Controller
         //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
         $rendezVous = RendezVous::where('patient_id',$patient->user_id)->with('ligne_temps:id,date_consultation')->latest()->get(['id', 'date', 'statut', 'motifs', 'ligne_temps_id', 'created_at']);
         $array = array('rendez_vous' => $rendezVous,'activite_ama_isoles' =>  $activite_ama_isoles, 'activites_referent_isoles' =>  $activites_referent_isoles, 'activite_ama_manuelles' => $activite_ama_manuelles,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
-        $referentArray = array('referent' => $activites_referent_manuelles);
+        $referentArray = array('activites_referent_manuelles' => $activites_referent_manuelles);
 
 
         $contrat = getContrat($patient->user);
