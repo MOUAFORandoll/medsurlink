@@ -110,9 +110,9 @@ class ExamenEtablissementPrixController extends Controller
     public function update(Request $request, $id)
     {
 
-        ExamenEtablissementPrix::whereId($id)->update(['prix'=>$request->get('prix')]);
+        $examen_prix = ExamenEtablissementPrix::where(["id" => $request->id, "etablissement_exercices_id" => $request->etablissement_id])->first();
+        $examen_prix->update(['prix'=>$request->prix]);
 
-        $examen_prix = ExamenEtablissementPrix::whereId($id)->first();
 
         return  response()->json(['examen_prix'=>$examen_prix]);
     }
