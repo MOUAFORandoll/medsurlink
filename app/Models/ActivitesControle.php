@@ -5,6 +5,7 @@ namespace App\Models;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use App\Models\LigneDeTemps;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ActivitesMedecinReferent;
@@ -19,6 +20,10 @@ class ActivitesControle extends Model
     protected $table = 'activites_controle';
     protected $fillable = [
         "activite_id",
+        "patient_id",
+        'etablissement_id',
+        'affiliation_id',
+        'ligne_temps_id',
         "creator",
         "commentaire",
         "statut",
@@ -63,6 +68,10 @@ class ActivitesControle extends Model
     
     public function updatedBy(){
         return $this->belongsTo(User::class,'updated_by','id');
+    }
+
+    public function ligne_temps(){
+        return $this->belongsTo(LigneDeTemps::class);
     }
     
 }

@@ -30,3 +30,5 @@ php artisan migrate --path=/database/migrations/2022_05_16_164429_add_affiliatio
 php artisan migrate --path=/database/migrations/2022_05_17_111718_add_affiliation_id_and_ligne_temps_id_to_activites_ama_patient_table.php
 
 php artisan migrate --path=/database/migrations/2022_05_19_111548_add_ligne_temps_id_to_rendez_vous_table.php
+
+php artisan migrate --path=/database/migrations/2022_05_23_121028_add_fields_to_activites_controle.php

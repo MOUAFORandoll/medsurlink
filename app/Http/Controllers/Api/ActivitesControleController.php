@@ -42,13 +42,18 @@ class ActivitesControleController extends Controller
             'commentaire'=>'string|nullable',
             'activite_id'=>'integer|required'
         ]);
-        $med = new ActivitesControle;
-        $med->creator = Auth::id();
-        $med->activite_id = $request->activite_id;
-        $med->statut = $request->statut;
-        $med->commentaire = $request->commentaire;
-        $med->date_cloture = $request->date_cloture;
-        $med->save();
+
+        $med = ActivitesControle::create($request->all());
+        // $med = new ActivitesControle;
+        // $med->creator = Auth::id();
+        // $med->activite_id = $request->activite_id;
+        // $med->etablissement_id = $request->etablissement_id;
+        // $med->ligne_temps_id = $request->ligne_temps_id;
+        // $med->patient_id = $request->patient_id;
+        // $med->statut = $request->statut;
+        // $med->commentaire = $request->commentaire;
+        // $med->date_cloture = $request->date_cloture;
+        // $med->save();
         
         return response()->json(['medReferent'=>$med]);
     }

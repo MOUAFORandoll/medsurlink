@@ -57,4 +57,8 @@ class LigneDeTemps extends Model
     public function activites_ama_patients(){
         return $this->hasMany(ActiviteAmaPatient::class, 'ligne_temps_id');
     }
+
+    public function activites_referent_patients(){
+        return $this->hasMany(ActivitesControle::class, 'ligne_temps_id');
+    }
 }
