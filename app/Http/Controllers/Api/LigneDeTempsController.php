@@ -118,9 +118,21 @@ class LigneDeTempsController extends Controller
             'validations.consultation.versionValidation',
             'validations',
             // 'validations.consultation.ligneDeTemps.motif',
-        ])->where("dossier_medical_id",$dossier->id)->latest()->get();
+        ])->where("dossier_medical_id", $dossier->id)->latest()->get();
 
-        return response()->json(["ligne_temps" => $ligneDeTemps]);
+        $ligne_temps = collect();
+        foreach($ligneDeTemps as $ligneTemps){
+            $validations = collect();
+            foreach($ligneTemps->validations as $validation){
+                $validation->histories = DB::table('model_changes_history')->where(['model_id' => $validation->consultation->versionValidation->id, 'model_type' => 'App\Models\VersionValidation'])->where('changes', '<>', '[]')->orderBy('created_at', 'desc')->get(['changes']);
+                $validations->push($validation);
+            }
+            $ligneTemps->validations = $validations;
+            $ligne_temps->push($ligneTemps);
+
+        }
+
+        return response()->json(["ligne_temps" => $ligne_temps]);
         // "examen_validation_medecin" => $examen_validation_medecin, "examen_validation_assureur" => $examen_validation_assureur
     }
     /**
@@ -172,6 +184,20 @@ class LigneDeTempsController extends Controller
             "avis",
             // "consultationsManuscrites"
             ])->first();
+        $consultations = collect();
+        foreach($dossier->consultationsMedecine as $consultation){
+            $validations = collect();
+            foreach($consultation->validations as $validation){
+                $validation->histories = DB::table('model_changes_history')->where(['model_id' => $validation->consultation->versionValidation->id, 'model_type' => 'App\Models\VersionValidation'])->where('changes', '<>', '[]')->orderBy('created_at', 'desc')->get(['changes']);
+                $validations->push($validation);
+            }
+            $consultation->validations = $validations;
+            $consultations->push($consultation);
+        }
+
+
+
+        $dossier->consultationsMedecine = $consultations;
 
        $patient = Patient::where('user_id', DossierMedical::whereSlug($id)->first()->patient_id)
        ->with([
