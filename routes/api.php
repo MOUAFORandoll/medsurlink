@@ -133,6 +133,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::post('/message', 'Api\MessageController@store')->name('message.store');
     Route::post('validation/examens/etat', 'Api\ConsultationExamenValidationController@setEtatValidationMedecin');
     Route::get('examens/validations/{ligne_temps_id}/{version}/{auteur}', 'Api\ConsultationExamenValidationController@versionValidation');
+    Route::get('ligne_temps/bilan/{ligne_temps_id}', 'Api\ConsultationExamenValidationController@ligneTempsBilan');
+    Route::get('bilans/globale/{dossier}/financiers', 'Api\ConsultationExamenValidationController@bilanGlobalFiancier');
     Route::post('validation/examens/souscripteur', 'Api\ConsultationExamenValidationController@setEtatValidationSouscripteur');
     Route::delete('activite-mission-delete/{slug}','Api\ActiviteController@supprimerMission');
     Route::get('show-groupe-activite/{slug}','Api\ActiviteController@showGroupActivities');
