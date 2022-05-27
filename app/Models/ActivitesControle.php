@@ -73,5 +73,13 @@ class ActivitesControle extends Model
     public function ligne_temps(){
         return $this->belongsTo(LigneDeTemps::class);
     }
+
+    public function affiliation(){
+        return $this->belongsTo(Affiliation::class);
+    }
+
+    public function motif(){
+        return $this->belongsTo(Motif::class);
+    }
     
 }

@@ -216,8 +216,8 @@ class LigneDeTempsController extends Controller
         /**
          * ici nous retournons l'ensemble des activités ama qui nes sont pas relié à une line de temps
          */
-        $activite_ama_isoles = ActiviteAmaPatient::doesntHave('ligne_temps')->with('activitesAma:id,description_fr')->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'commentaire', 'date_cloture']);
-        $activites_referent_isoles = ActivitesControle::with(['activitesMedecinReferent','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get();
+        $activite_ama_isoles = ActiviteAmaPatient::doesntHave('ligne_temps')->with(['activitesAma','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get();
+        $activites_referent_isoles = ActivitesControle::doesntHave('ligne_temps')->with(['activitesMedecinReferent','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get();
 
         /**
          * ici nous retournons la liste des affiliations avec lignes de temps associées et pour chaque ligne de temps, ses activités AMA
@@ -226,7 +226,7 @@ class LigneDeTempsController extends Controller
             $query->where('patient_id', $patient->user_id);
         }])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
 
-        $activites_referent_manuelles = Affiliation::with(['package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_referent_patients.ActivitesControle:id,description_fr', 'ligneTemps.activites_referent_patients' => function ($query) use ($patient) {
+        $activites_referent_manuelles = Affiliation::with(['package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_referent_patients.activitesMedecinReferent:id,description_fr', 'ligneTemps.activites_referent_patients' => function ($query) use ($patient) {
             $query->where('patient_id', $patient->user_id);
         }])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
 

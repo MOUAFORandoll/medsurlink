@@ -72,6 +72,7 @@ class ConsultationExamenValidationController extends Controller
                 $new_exam = new stdClass();
 
                 $new_exam->consultation_general_id = $examen->consultation_general_id;
+                // $new_exam->etat_validation_souscripteur = $examen->etat_validation_souscripteur;
                 $new_exam->consultation = $const;
                 $examen_validations->push($new_exam);
             }
@@ -170,15 +171,15 @@ class ConsultationExamenValidationController extends Controller
         $examens = $request->get('examens');
         $examens_id = array_column($examens, 'id');
         if(count($examens) > 0){
+            
             $consultation = ConsultationMedecineGenerale::whereId($examens[0]['consultation'])->first();
+           
             $etablissement = $consultation->etablissement_id;
             $examen_validation = ConsultationExamenValidation::with(['examenComplementaire','etablissement','examenComplementaire.examenComplementairePrix' => function ($query) use ($etablissement) {
                 $query->where('etablissement_exercices_id', '=', $etablissement);
             }])->where('consultation_general_id', '=', $consultation->id)->latest()->get();
-
+            
             foreach($examen_validation as $examen){
-               /*  \Log::alert("message $examen->id");
-                \Log::alert("message $examens_id"); */
                 if(in_array($examen->id, $examens_id)){
                     $montant_souscripteur += $examen->examenComplementaire->examenComplementairePrix[0]->prix;
                     $examen->etat_validation_souscripteur = 1;
@@ -192,8 +193,8 @@ class ConsultationExamenValidationController extends Controller
                     $examen->date_validation_souscripteur = Carbon::now();
                     $examen->save();
                 }
-                $totalPrestation += $examen->examenComplementaire->examenComplementairePrix[0]->prix;
 
+                $totalPrestation += $examen->examenComplementaire->examenComplementairePrix[0]->prix;
                 if($examen->etat_validation_medecin == 1){
                     $montant_medecin += $examen->examenComplementaire->examenComplementairePrix[0]->prix;
                 }
@@ -252,6 +253,7 @@ class ConsultationExamenValidationController extends Controller
             $consultation_examenvalidation = json_decode($item->after_changes);
             $examen_prix = ExamenEtablissementPrix::where(['examen_complementaire_id' => $consultation_examenvalidation->examen_complementaire_id, 'etablissement_exercices_id' => $consultation_examenvalidation->etablissement_id])->latest()->first();
             $consultation_examenvalidation->prix = $examen_prix->prix;
+            // dd($examen_prix->prix);
             $consultation_examenvalidation->examen = ExamenComplementaire::find($consultation_examenvalidation->examen_complementaire_id)->fr_description;
             return $consultation_examenvalidation;
         });
