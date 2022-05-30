@@ -116,12 +116,18 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::resource('activite','Api\ActiviteController');
     Route::put('activite-cloture/{slug}','Api\ActiviteController@cloturer');
     Route::put('activite-mission/{slug}','Api\ActiviteController@updateActiviteMission');
-    Route::put('activite-mission-add','Api\ActiviteController@ajouterMission');
+    Route::post('activite-mission-add','Api\ActiviteController@ajouterMission');
     Route::post('/activite-ama/save','Api\ActiviteController@saveMissions');
     Route::post('/activite-ama/create','Api\ActiviteController@createMissions');
-    Route::get('/mission/list','Api\ActiviteController@getListMission');
-    
 
+    Route::get('/mission/list','Api\ActiviteController@getListMission');
+
+
+    // Route::resource('/activite-pec','Api\PecController');
+    Route::post('/activite-pec','Api\PecController@store');
+    Route::get('/activite-pec-list','Api\PecController@index');
+    // Route::post('/activite-pec/list','Api\PecController@index')->name('index');
+    // Route::resource('activite-pec','Api\AssistanteController');
     Route::get('/chat', 'Api\ChatController@index')->name('chat');
     Route::get('/message', 'Api\MessageController@index')->name('message.index');
     Route::post('/message', 'Api\MessageController@store')->name('message.store');
@@ -251,8 +257,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('traitement-propose','Api\TraitementProposeController')->except('store','update','destroy');
     Route::resource('parametre-commun','Api\ParametreCommunController')->except('store','update','destroy');
     Route::resource('conclusion','Api\ConclusionController')->except('store','update','destroy');
-    Route::resource('resultat-labo','Api\ResultatLaboController')->except('store','update');
-    Route::resource('resultat-imagerie','Api\ResultatImagerieController')->except('store','update');
+    Route::resource('resultat-labo','Api\ResultatLaboController')->except('store','update','destroy');
+    Route::resource('resultat-imagerie','Api\ResultatImagerieController')->except('store','update','destroy');
+    Route::put('resultat-imagerie/{id}/transmettre', 'Api\ResultatImagerieController@transmit')->name('imagerie.transmettre');
     Route::resource('consultation-prenatale','Api\ConsultationPrenantaleController')->except('store','update','destroy');
     Route::resource('parametre-obstetrique','Api\ParametreObstetriqueController')->except('store','update','destroy');
     Route::resource('echographie','Api\EchographieController')->except('store','update','destroy');
@@ -324,6 +331,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
 
 });
 
+Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient']], function () {
     Route::put('patient-decede/{patient}','Api\PatientController@decede');
     Route::post('souscripteur/assigin_patient', 'Api\PatientController@assignation_souscripteur');
@@ -340,7 +348,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::get('search/souscripteurs/{souscripteur_search}', 'Api\SouscripteurController@listingSouscripteur');
     Route::get('search/patients/{patient_search}', 'Api\PatientController@listingPatients');
     Route::post('patient','Api\PatientController@store')->name('patient.store');
-    Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
+    //Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
     Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
     Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
@@ -361,7 +369,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::get('ligne-temps/dossier/{id}','Api\LigneDeTempsController@ligneDeTempsByDossier');
     Route::resource('examen-prix','Api\ExamenEtablissementPrixController');
     Route::post('examen-prix/etablissement/save','Api\ExamenEtablissementPrixController@storeMultiple');
-    Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
     Route::get('patient/{id}/contrat-medicasure','Api\LigneDeTempsController@patientContrat');
     Route::get('trajet-patient/dossier/{id}','Api\LigneDeTempsController@getTrajetPatient');
 
@@ -421,3 +428,8 @@ Route::prefix('paiement')->group(function () {
         );
     });
 });
+Route::get('/livesearch', 'Api\PatientController@searchPatients');
+Route::get('/mission/list', 'Api\ActiviteController@getListMission');
+Route::get('/referent-activites/list', 'Api\ActivitesMedecinReferentController@getListActivites');
+Route::post('/referent-activites-add', 'Api\ActivitesControleController@store');
+

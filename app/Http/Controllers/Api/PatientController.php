@@ -111,6 +111,8 @@ class PatientController extends Controller
         $data = (object) $request->json()->all();
         Log::info(json_encode($data->original['cim']));
         $cim = (object) $data->original['cim'];
+        $cim = (object) $cim->original['cim'];
+        Log::alert(json_encode($cim->nomSouscripteur));
         $souscripteurUser = new User();
         $souscripteurUser->nom = $cim->nomSouscripteur;
         $souscripteurUser->prenom = $cim->prenomSouscripteur;
@@ -172,7 +174,7 @@ class PatientController extends Controller
         $patientUser->isNotice = 1;
         $patientUser->password = null;
         $patientUser->decede = "non";
-        $patientUser->souscripteur_id = $souscripteur->id;
+        $patientUser->souscripteur_id = $souscripteur->user_id;
         $patientResponse =  UserController::generatedUserFromMedicasure($patientUser,"Patient");
 
         if($patientResponse->getOriginalContent()['user'] == null) {
