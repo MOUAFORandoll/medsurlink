@@ -45,12 +45,10 @@ class RendezVousController extends Controller
             ->orWhere('initiateur','=',$userId)
             ->get();
 
-        $rdvsAvant = $rdvs->where('date','>=',$dateAvant)
-            ->all();
+        $rdvsAvant = $rdvs->where('date','>=',$dateAvant)->all();
 
-        $rdvsApres = $rdvs->where('date','>=',$dateApres)
-            ->all();
-            
+        $rdvsApres = $rdvs->where('date','>=',$dateApres)->all();
+
         //Ici on récupère les rendez vous des autres praticiens et médécin
         $user = Auth::user();
         $roleName = $user->getRoleNames()->first();
@@ -69,7 +67,7 @@ class RendezVousController extends Controller
             $rdv->updateRendezVous();
         }
 
-        
+
         return response()->json(['rdvs'=>$rdvs]);
     }
 

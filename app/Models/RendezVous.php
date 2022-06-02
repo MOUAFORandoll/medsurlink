@@ -29,7 +29,9 @@ class RendezVous extends Model
         "statut",
         "slug",
         "nom_medecin",
-        "ligne_temps_id"
+        "ligne_temps_id",
+        "consultation_id",
+        'etablissement_id'
     ];
 
     protected $hidden = ['initiateur','updated_at'];
@@ -65,6 +67,14 @@ class RendezVous extends Model
 
     public function ligne_temps(){
         return $this->belongsTo(LigneDeTemps::class, 'ligne_temps_id', 'id');
+    }
+
+    public function etablissement(){
+        return $this->belongsTo(EtablissementExercice::class, 'etablissement_id', 'id');
+    }
+
+    public function consultationsMedecine(){
+        return $this->belongsTo(ConsultationMedecineGenerale::class, 'consultation_id', 'id');
     }
 
 
