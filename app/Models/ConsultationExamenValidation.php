@@ -35,6 +35,6 @@ class ConsultationExamenValidation extends Model
         return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
     }
     public function consultation(){
-        return $this->belongsTo(ConsultationMedecineGenerale::class,'consultation_general_id');
+        return $this->belongsTo(ConsultationMedecineGenerale::class,'consultation_general_id','id');
     }
 }

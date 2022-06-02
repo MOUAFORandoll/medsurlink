@@ -333,6 +333,18 @@ class LigneDeTempsController extends Controller
         return response()->json(["ligne_temps" => $ligneDeTemps]);
     }
 
+    public function changeEtat($id)
+    {
+        $ligneDeTemps = LigneDeTemps::whereId($id)->first();
+        
+        if ($ligneDeTemps != null){
+            
+            $ligneDeTemps->etat = $ligneDeTemps->etat== 1 ? 0 : 1;
+            $ligneDeTemps->save();
+            return response()->json(["etat" => $ligneDeTemps]);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *

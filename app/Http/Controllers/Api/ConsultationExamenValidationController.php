@@ -56,9 +56,8 @@ class ConsultationExamenValidationController extends Controller
         //return response()->json(['examen_validation'=>$examen_validation]);
         $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
         //->whereNull('etat_validation_souscripteur')
-        ->where('souscripteur_id', '=',Auth::id())
-        ->distinct()
-        ->get(['consultation_general_id']);
+        ->where(['souscripteur_id' => Auth::id(), 'etat_validation_medecin' => 1])
+        ->latest()->get()->unique('consultation_general_id');
 
 
 
@@ -74,7 +73,7 @@ class ConsultationExamenValidationController extends Controller
                 $new_exam = new stdClass();
 
                 $new_exam->consultation_general_id = $examen->consultation_general_id;
-                // $new_exam->etat_validation_souscripteur = $examen->etat_validation_souscripteur;
+                $new_exam->etat_validation_souscripteur = $examen->etat_validation_souscripteur;
                 $new_exam->consultation = $const;
                 $examen_validations->push($new_exam);
             }
