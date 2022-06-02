@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\VersionValidation;
 use App\Models\ExamenComplementaire;
 use App\Models\LigneDeTemps;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Support\Facades\DB;
 use stdClass;
 
@@ -172,14 +173,14 @@ class ConsultationExamenValidationController extends Controller
         $examens = $request->get('examens');
         $examens_id = array_column($examens, 'id');
         if(count($examens) > 0){
-            
+
             $consultation = ConsultationMedecineGenerale::whereId($examens[0]['consultation'])->first();
-           
+
             $etablissement = $consultation->etablissement_id;
             $examen_validation = ConsultationExamenValidation::with(['examenComplementaire','etablissement','examenComplementaire.examenComplementairePrix' => function ($query) use ($etablissement) {
                 $query->where('etablissement_exercices_id', '=', $etablissement);
             }])->where('consultation_general_id', '=', $consultation->id)->latest()->get();
-            
+
             foreach($examen_validation as $examen){
                 if(in_array($examen->id, $examens_id)){
                     $montant_souscripteur += $examen->examenComplementaire->examenComplementairePrix[0]->prix;
@@ -286,6 +287,12 @@ class ConsultationExamenValidationController extends Controller
         })->groupBy('version');
 
         return response()->json($bilans);
+    }
+
+
+    public function BilanFinancier($patient){
+
+        return response()->json(['link' => route('patient.bilan', $patient)]);
     }
 
     /**

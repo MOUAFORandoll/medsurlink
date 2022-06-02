@@ -129,7 +129,6 @@ class LigneDeTempsController extends Controller
             }
             $ligneTemps->validations = $validations;
             $ligne_temps->push($ligneTemps);
-
         }
 
         return response()->json(["ligne_temps" => $ligne_temps]);
@@ -205,13 +204,13 @@ class LigneDeTempsController extends Controller
            "payments",
            "dossier",
            "rendezVous"])->first();
-        $examen_validation_assureur = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif:id,description','consultation.dossier.patient.user','consultation.author'])->whereHas('consultation.dossier', function($query) use($patient) {
+       /*  $examen_validation_assureur = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif:id,description','consultation.dossier.patient.user','consultation.author'])->whereHas('consultation.dossier', function($query) use($patient) {
             $query->where('patient_id', $patient->user_id);
         })->whereNotNull('etat_validation_medecin')->distinct()->latest()->get()->unique('consultation_general_id');
 
         $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif:id,description','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])->whereHas('consultation.dossier', function($query) use($patient) {
             $query->where('patient_id', $patient->user_id);
-        })->whereNotNull('etat_validation_souscripteur')->distinct()->latest()->get()->unique('consultation_general_id');
+        })->whereNotNull('etat_validation_souscripteur')->distinct()->latest()->get()->unique('consultation_general_id'); */
 
         /**
          * ici nous retournons l'ensemble des activités ama qui nes sont pas relié à une line de temps
@@ -232,10 +231,11 @@ class LigneDeTempsController extends Controller
 
         // $activites_referent_manuelles = ActivitesControle::with(['activitesMedecinReferent','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get();
         //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
-        $rendezVous = RendezVous::where('patient_id',$patient->user_id)->with('ligne_temps:id,date_consultation')->latest()->get(['id', 'date', 'statut', 'motifs', 'ligne_temps_id', 'created_at']);
-        $array = array('rendez_vous' => $rendezVous,'activite_ama_isoles' =>  $activite_ama_isoles, 'activites_referent_isoles' =>  $activites_referent_isoles, 'activite_ama_manuelles' => $activite_ama_manuelles,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
-        $referentArray = array('activites_referent_manuelles' => $activites_referent_manuelles);
+        $rendezVous = RendezVous::where('patient_id',$patient->user_id)->with(['ligne_temps:id,date_consultation,affiliation_id', 'praticien:id,nom,prenom', 'etablissement:id,name'])->latest()->get(['id', 'date', 'statut', 'motifs', 'ligne_temps_id', 'praticien_id', 'etablissement_id', 'created_at']);
 
+        $array = array('rendez_vous' => $rendezVous,'activite_ama_isoles' =>  $activite_ama_isoles, 'activites_referent_isoles' =>  $activites_referent_isoles, 'activite_ama_manuelles' => $activite_ama_manuelles);
+
+        $referentArray = array('activites_referent_manuelles' => $activites_referent_manuelles);
 
         $contrat = getContrat($patient->user);
 
@@ -360,5 +360,18 @@ class LigneDeTempsController extends Controller
             $ligneDeTemps->delete();
         }
         return  response()->json(['ligne_temps'=>$ligneDeTemps]);
+    }
+
+    public function showConsultation($ligne_temp_id){
+        $consultations = ConsultationMedecineGenerale::with(['motifs', 'etablissement'])->where('ligne_de_temps_id', $ligne_temp_id)->latest()->get()->transform(function ($item, $key) {
+            $consultation = new \stdClass();
+            $consultation->id = $item->id;
+            $consultation->date_consultation = $item->date_consultation;
+            $consultation->etablissement = $item->etablissement->name;
+
+            $consultation->motifs = $item->motifs->implode('description', ', ');
+            return $consultation;
+        });
+        return response()->json($consultations);
     }
 }

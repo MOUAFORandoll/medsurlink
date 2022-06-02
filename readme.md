@@ -32,3 +32,10 @@ php artisan migrate --path=/database/migrations/2022_05_17_111718_add_affiliatio
 php artisan migrate --path=/database/migrations/2022_05_19_111548_add_ligne_temps_id_to_rendez_vous_table.php
 
 php artisan migrate --path=/database/migrations/2022_05_23_121028_add_fields_to_activites_controle.php
+
+php artisan migrate --path=/database/migrations/2022_06_01_115835_add_consultation_id_to_rendez_vous_table.php
+
+
+composer require doctrine/dbal:^2.12.1
+
+php artisan migrate --path=/database/migrations/2022_06_02_094859_update_date_validations_to_consultation_examen_validation.php

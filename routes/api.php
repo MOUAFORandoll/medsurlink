@@ -93,6 +93,9 @@ Route::group(['middleware' => ['auth:api', 'role:Admin|Gestionnaire|Assistante']
 
     Route::post('medecin-controle/{medecin}','Api\MedecinControleController@update')->name('medecin.controle.update');
     Route::post('praticien/{praticien}','Api\PraticienController@update')->name('praticien.post.update');
+    /**
+     * recuperer les medecins d'un établissement précis médécin controle et praticien     */
+    Route::get('praticien_medecin-controle/{etablissement}/etablissement','Api\MedecinControleController@getMedecinEtablissement');
 
 });
 
@@ -135,6 +138,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::get('examens/validations/{ligne_temps_id}/{version}/{auteur}', 'Api\ConsultationExamenValidationController@versionValidation');
     Route::get('ligne_temps/close/{id}', 'Api\LigneDeTempsController@changeEtat');
     Route::get('ligne_temps/bilan/{ligne_temps_id}', 'Api\ConsultationExamenValidationController@ligneTempsBilan');
+    Route::get('bilans/financiers/{patient}', 'Api\ConsultationExamenValidationController@BilanFinancier');
+
     Route::get('bilans/globale/{dossier}/financiers', 'Api\ConsultationExamenValidationController@bilanGlobalFiancier');
     Route::post('validation/examens/souscripteur', 'Api\ConsultationExamenValidationController@setEtatValidationSouscripteur');
     Route::delete('activite-mission-delete/{slug}','Api\ActiviteController@supprimerMission');
@@ -250,6 +255,12 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
     Route::get('/get-commande-from-cim','Api\AffiliationSouscripteurController@getSouscripteurFromCIM');
     Route::resource('rdvs','Api\RendezVousController');
+
+    /**
+     * recherche d'un établisseùent
+     */
+    Route::get('search/etablissements/{etablissement}','Api\EtablissementExerciceController@search');
+
     Route::resource('consultation-medecine','Api\ConsultationMedecineGeneraleController')->except('store','update','destroy');
     Route::resource('consultation-kinesitherapie','Api\KinesitherapieController')->except('store','update','destroy');
     Route::resource('consultation-cardiologie','Api\CardiologieController')->except(['store','update','destroy']);
@@ -379,6 +390,12 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::post('examen-prix/etablissement/save','Api\ExamenEtablissementPrixController@storeMultiple');
     Route::get('patient/{id}/contrat-medicasure','Api\LigneDeTempsController@patientContrat');
     Route::get('trajet-patient/dossier/{id}','Api\LigneDeTempsController@getTrajetPatient');
+
+    /**
+     * recuperation des consultations d'une ligne de temps
+     */
+    Route::get('consultation_generale/ligne-temps/{ligne_temp_id}','Api\LigneDeTempsController@showConsultation');
+
 
     Route::get('paiement-prestation', 'Api\PaymentController@listPaiementSouscripteur');
 });

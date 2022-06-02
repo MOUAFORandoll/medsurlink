@@ -22,7 +22,7 @@ class ConsultationMedecineGenerale extends Model
     use Sluggable;
     use SluggableScopeHelpers;
     use SlugRoutable;
-    
+
     /**
      * Return the sluggable configuration array for this model.
      *
@@ -131,6 +131,9 @@ class ConsultationMedecineGenerale extends Model
     }
     public function  validations(){
         return $this->hasMany(ConsultationExamenValidation::class,'consultation_general_id','id');
+    }
+    public function rendez_vous(){
+        return $this->hasMany(RendezVous::class);
     }
     /**
      * The "booting" method of the model.
