@@ -13,7 +13,7 @@
         "barryvdh/laravel-dompdf": "^0.8.2",
         "barryvdh/laravel-snappy": "^0.4.4",
         "cviebrock/eloquent-sluggable": "4.8.*",
-        "doctrine/dbal": "^2.12.1",
+        "doctrine/dbal": "2.12.1",
         "fideloper/proxy": "^4.0",
         "gbrock/laravel-table": "dev-master",
         "guzzlehttp/guzzle": "^6.5",

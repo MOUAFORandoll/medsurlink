@@ -36,6 +36,6 @@ php artisan migrate --path=/database/migrations/2022_05_23_121028_add_fields_to_
 php artisan migrate --path=/database/migrations/2022_06_01_115835_add_consultation_id_to_rendez_vous_table.php
 
 
-composer require doctrine/dbal:^2.12.1
+composer require doctrine/dbal:^2.12.1 
 
 php artisan migrate --path=/database/migrations/2022_06_02_094859_update_date_validations_to_consultation_examen_validation.php
