@@ -231,9 +231,18 @@ class LigneDeTempsController extends Controller
 
         // $activites_referent_manuelles = ActivitesControle::with(['activitesMedecinReferent','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get();
         //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
-        $rendezVous = RendezVous::where('patient_id',$patient->user_id)->with(['ligne_temps:id,date_consultation,affiliation_id', 'praticien:id,nom,prenom', 'etablissement:id,name'])->latest()->get(['id', 'date', 'statut', 'motifs', 'ligne_temps_id', 'praticien_id', 'etablissement_id', 'created_at']);
 
-        $array = array('rendez_vous' => $rendezVous,'activite_ama_isoles' =>  $activite_ama_isoles, 'activites_referent_isoles' =>  $activites_referent_isoles, 'activite_ama_manuelles' => $activite_ama_manuelles);
+        $rdata = Affiliation::has('ligneTemps.rendezVous')->with(['package:id,description_fr'])->where('patient_id', $patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
+        $rendezVous_affiliations = collect();
+        foreach($rdata as $affiliation){
+            $ligne_temps = LigneDeTemps::with(['rendezVous.etablissement:id,name', 'rendezVous.praticien:id,nom,prenom', 'motif:id,description'])->where('affiliation_id', $affiliation->id)->orderBy('updated_at', 'desc')->get();
+            $affiliation->ligne_temps = $ligne_temps;
+            $rendezVous_affiliations->push($affiliation);
+        }
+
+        $rendezVous = RendezVous::doesntHave('ligne_temps')->where('patient_id',$patient->user_id)->with(['ligne_temps:id,date_consultation,affiliation_id', 'praticien:id,nom,prenom', 'etablissement:id,name'])->latest()->get(['id', 'date', 'statut', 'motifs', 'ligne_temps_id', 'praticien_id', 'etablissement_id', 'created_at']);
+
+        $array = array('rendez_vous' => $rendezVous, 'rendezVous_affiliations' => $rendezVous_affiliations, 'activite_ama_isoles' =>  $activite_ama_isoles, 'activites_referent_isoles' =>  $activites_referent_isoles, 'activite_ama_manuelles' => $activite_ama_manuelles);
 
         $referentArray = array('activites_referent_manuelles' => $activites_referent_manuelles);
 
@@ -336,9 +345,9 @@ class LigneDeTempsController extends Controller
     public function changeEtat($id)
     {
         $ligneDeTemps = LigneDeTemps::whereId($id)->first();
-        
+
         if ($ligneDeTemps != null){
-            
+
             $ligneDeTemps->etat = $ligneDeTemps->etat== 1 ? 0 : 1;
             $ligneDeTemps->save();
             return response()->json(["etat" => $ligneDeTemps]);

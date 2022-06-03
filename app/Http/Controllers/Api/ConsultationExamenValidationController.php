@@ -28,7 +28,7 @@ class ConsultationExamenValidationController extends Controller
     {
         $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
         //->whereNull('etat_validation_medecin')
-        ->distinct()
+        ->distinct()->latest()
         ->get(['consultation_general_id']);
         return response()->json(['examen_validation'=>$examen_validation]);
     }
@@ -241,18 +241,10 @@ class ConsultationExamenValidationController extends Controller
 
         $examen_validation = ConsultationExamenValidation::where('ligne_de_temps_id', $ligne_temps_id)->first();
 
-        if($acteur == "medecin"){
-            $validations = DB::table('model_changes_history')->where(['after_changes->version' => $version - 1, 'after_changes->ligne_de_temps_id' => $ligne_temps_id, 'changer_id' => $examen_validation->medecin_control_id, 'model_type' => 'App\Models\ConsultationExamenValidation', 'change_type' => 'updated'])->orderBy('created_at', 'desc')->get(['after_changes'])->unique(function ($item) {
-                $after_changes = json_decode($item->after_changes);
-                return $after_changes->id;
-            });
-        }
-        elseif($acteur == "assureur"){
-            $validations = DB::table('model_changes_history')->where(['after_changes->version' => $version, 'after_changes->ligne_de_temps_id' => $ligne_temps_id, 'changer_id' => $examen_validation->souscripteur_id, 'model_type' => 'App\Models\ConsultationExamenValidation', 'change_type' => 'updated'])->orderBy('created_at', 'desc')->get(['after_changes'])->unique(function ($item) {
-                $after_changes = json_decode($item->after_changes);
-                return $after_changes->id;
-            });
-        }
+        $validations = DB::table('model_changes_history')->where(['after_changes->version' => $version, 'after_changes->ligne_de_temps_id' => $ligne_temps_id, 'changer_id' => $examen_validation->souscripteur_id, 'model_type' => 'App\Models\ConsultationExamenValidation', 'change_type' => 'updated'])->orderBy('created_at', 'desc')->get(['after_changes'])->unique(function ($item) {
+            $after_changes = json_decode($item->after_changes);
+            return $after_changes->id;
+        });
 
         $validations = $validations->transform(function ($item, $key) {
             $consultation_examenvalidation = json_decode($item->after_changes);

@@ -30,6 +30,7 @@ class Payment extends Model
 
 
     protected $fillable = [
+        "uuid",
         "motif",
         "amount",
         "souscripteur_id",

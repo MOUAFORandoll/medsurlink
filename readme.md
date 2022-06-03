@@ -39,3 +39,7 @@ php artisan migrate --path=/database/migrations/2022_06_01_115835_add_consultati
 composer require doctrine/dbal:^2.12.1
 
 php artisan migrate --path=/database/migrations/2022_06_02_094859_update_date_validations_to_consultation_examen_validation.php
+
+composer require ramsey/uuid "^3.7"
+
+php artisan migrate --path=/database/migrations/2022_06_03_155418_add_uuid_to_payments_table.php
