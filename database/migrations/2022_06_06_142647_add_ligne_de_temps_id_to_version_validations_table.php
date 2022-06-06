@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUuidToPaymentsTable extends Migration
+class AddLigneDeTempsIdToVersionValidationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddUuidToPaymentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->string('uuid')->after('id')->nullable();
+        Schema::table('version_validations', function (Blueprint $table) {
+            $table->unsignedInteger('ligne_de_temps_id')->nullable();
         });
     }
 
@@ -25,9 +25,8 @@ class AddUuidToPaymentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('payments', function (Blueprint $table) {
-            $table->dropColumn('uuid');
+        Schema::table('version_validations', function (Blueprint $table) {
+            $table->dropColumn(['ligne_de_temps_id']);
         });
     }
 }
-

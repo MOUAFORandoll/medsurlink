@@ -181,17 +181,23 @@ class ConsultationExamenValidationController extends Controller
                 $query->where('etablissement_exercices_id', '=', $etablissement);
             }])->where('consultation_general_id', '=', $consultation->id)->latest()->get();
 
+            $version_validation = VersionValidation::where(["consultation_general_id" => $examens[0]['consultation'], 'ligne_de_temps_id' => $examen_validation->ligne_de_temps_id])->first();
+
+            $version_validation->version += 1;
+            $version_validation->save();
+
+
             foreach($examen_validation as $examen){
                 if(in_array($examen->id, $examens_id)){
                     $montant_souscripteur += $examen->examenComplementaire->examenComplementairePrix[0]->prix;
                     $examen->etat_validation_souscripteur = 1;
-                    $examen->version = $examen->version+1;
+                    $examen->version += 1;
                     $examen->date_validation_souscripteur = Carbon::now();
 
                     $examen->save();
                 }else{
                     $examen->etat_validation_souscripteur = 0;
-                    $examen->version = $examen->version+1;
+                    $examen->version += 1;
                     $examen->date_validation_souscripteur = Carbon::now();
                     $examen->save();
                 }
@@ -207,13 +213,12 @@ class ConsultationExamenValidationController extends Controller
             }
 
             $plus_value = $montant_total;
-            $version_validation = VersionValidation::where("consultation_general_id",$examens[0]['consultation'])->first();
+
             $version_validation->plus_value = $plus_value;
             $version_validation->montant_total = $montant_total;
 
             $version_validation->montant_medecin = $montant_medecin;
             $version_validation->montant_souscripteur = $montant_souscripteur;
-            $version_validation->version = $version_validation->version+1;
 
             $version_validation->save();
         }

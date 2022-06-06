@@ -42,4 +42,7 @@ php artisan migrate --path=/database/migrations/2022_06_02_094859_update_date_va
 
 composer require ramsey/uuid "^3.7"
 
-php artisan migrate --path=/database/migrations/2022_06_03_155418_add_uuid_to_payments_table.php
+php artisan migrate --path=/database/migrations/2022_06_03_155418_add_uuid_to_payments_table.
+
+
+php artisan migrate --path=/database/migrations/2022_06_06_142647_add_ligne_de_temps_id_to_version_validations_table.php

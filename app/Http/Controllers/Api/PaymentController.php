@@ -46,7 +46,7 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::with(['souscripteur','patients'])->latest()->get();
+        $payments = Payment::with(['souscripteur.user:id,nom,prenom','patients.user:id,nom,prenom'])->latest()->get();
         $_payments = $payments->where('uuid', null)->all();
         foreach($_payments as $payment){
             $payment->uuid = Uuid::uuid4()->toString();
@@ -59,7 +59,7 @@ class PaymentController extends Controller
 
     public function listPaiementSouscripteur()
     {
-        $payments = Payment::with(['souscripteur','patients'])->where('souscripteur_id', auth()->user()->id)->latest()->get();
+        $payments = Payment::with(['souscripteur.user:id,nom,prenom','patients.user:id,nom,prenom'])->where('souscripteur_id', auth()->user()->id)->latest()->get();
 
         foreach($payments as $payment){
             $payment['facture'] = route('facture.paiement.prestation', $payment->uuid);

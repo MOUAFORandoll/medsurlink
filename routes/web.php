@@ -98,11 +98,12 @@ Route::get('impression/facture-offre/{affiliation}', function ($affiliation) {
     return $pdf['stream'];
 })->name('facture.offre');
 
-Route::get('impression/prestation/{paiement_id}', function ($paiement_id) {
+Route::get('impression/prestation/{paiement_uuid}', function ($paiement_uuid) {
 
-    $payment = Payment::find($paiement_id)->load('souscripteur.user','patients.user');
+    $payment = Payment::where("uuid", $paiement_uuid)->first();
+    $payment = $payment->load('souscripteur.user','patients.user');
 
-    $payment_id = $paiement_id;
+    $payment_id = $payment->id;
     $commande_date = $payment->date_payment;
     $montant_total = $payment->amount;
     $echeance =  "13/02/2022";
