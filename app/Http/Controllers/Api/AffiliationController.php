@@ -261,16 +261,16 @@ class AffiliationController extends Controller
 
 
 
-    public function stateSuspend($id)
-    {
-        $affiliation = affiliation::whereId($id)->first();
+    // public function stateSuspend($id)
+    // {
+    //     $affiliation = affiliation::whereId($id)->first();
 
-        if ($affiliation != null){
-            $affiliation->suspendu = $affiliation->suspendu== 1 ? 0 : 1;
-            $affiliation->save();
-            return response()->json(["affiliation" => $affiliation]);
-        }
-    }
+    //     if ($affiliation != null){
+    //         $affiliation->suspendu = $affiliation->suspendu== 1 ? 0 : 1;
+    //         $affiliation->save();
+    //         return response()->json(["affiliation" => $affiliation]);
+    //     }
+    // }
 
 
     /**
