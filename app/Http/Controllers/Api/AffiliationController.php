@@ -258,6 +258,21 @@ class AffiliationController extends Controller
         $affiliation->status_contrat = $request->status;
         $affiliation->save();
     }
+
+
+
+    // public function stateSuspend($id)
+    // {
+    //     $affiliation = affiliation::whereId($id)->first();
+
+    //     if ($affiliation != null){
+    //         $affiliation->suspendu = $affiliation->suspendu== 1 ? 0 : 1;
+    //         $affiliation->save();
+    //         return response()->json(["affiliation" => $affiliation]);
+    //     }
+    // }
+
+
     /**
      * Permet de determiner si un utilisateur possede deja une affiliation
      * @param Request $request
