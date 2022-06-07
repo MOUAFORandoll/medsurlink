@@ -103,6 +103,9 @@ class DossierMedical extends Model
     {
         return $this->hasMany(PatientSouscripteur::class, 'patient_id','user_id');
     }
+    public function package(){
+        return $this->belongsTo(Package::class,'package_id','id');
+    }
     /**
      * The "booting" method of the model.
      *
