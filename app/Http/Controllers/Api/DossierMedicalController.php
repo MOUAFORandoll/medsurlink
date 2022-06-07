@@ -238,11 +238,11 @@ class DossierMedicalController extends Controller
             if (!is_null($dossier)) {
                 $dossier->updateDossier();
             }
-            // dd($dossier->patient->user_id);
             $affiliation = Affiliation::with(['package'])->where('patient_id',$dossier->patient->user->id )->get();
+            $contrat = getContrat($dossier->patient->user);
             $dossier->affiliation = $affiliation;
             $this->checkIfUserAuthorized($dossier);
-        return response()->json(['dossier'=>$dossier, 'affiliation'=>$affiliation]);
+        return response()->json(['dossier'=>$dossier, 'affiliation'=>$affiliation, 'cim'=>$contrat ]);
     }
 
     /**
