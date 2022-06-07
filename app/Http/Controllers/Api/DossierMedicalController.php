@@ -2,28 +2,29 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Traits\PersonnalErrors;
-use App\Http\Requests\DossierMedicalRequest;
+use Carbon\Carbon;
+use App\Models\Avis;
+use App\Models\Patient;
+use App\Models\Affiliation;
+use App\Models\Cardiologie;
+use App\Models\MedecinAvis;
+use MongoDB\Driver\Session;
+use Illuminate\Http\Request;
 use App\Models\DossierMedical;
+use App\Models\Kinesitherapie;
+use App\Models\Hospitalisation;
+use function GuzzleHttp\Psr7\str;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\EtablissementExercice;
+use App\Models\ConsultationObstetrique;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\DossierMedicalRequest;
+use App\Models\ConsultationMedecineGenerale;
 use App\Models\EtablissementExercicePatient;
 use App\Models\EtablissementExercicePraticien;
-use App\Models\Patient;
-use App\Models\ConsultationMedecineGenerale;
-use App\Models\Hospitalisation;
-use App\Models\Cardiologie;
-use App\Models\ConsultationObstetrique;
-use App\Models\MedecinAvis;
-use App\Models\Avis;
-use Carbon\Carbon;
-use App\Models\Kinesitherapie;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use MongoDB\Driver\Session;
+use App\Http\Controllers\Traits\PersonnalErrors;
 use Netpok\Database\Support\DeleteRestrictionException;
-use function GuzzleHttp\Psr7\str;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class DossierMedicalController extends Controller
 {
@@ -198,6 +199,7 @@ class DossierMedicalController extends Controller
      */
     public function show($slug)
     {
+        // $this->validatedSlug($slug,$this->table);
         $validation = validatedSlug($slug,$this->table);
         // if(!is_null($validation))
         //     return $validation;
@@ -210,6 +212,7 @@ class DossierMedicalController extends Controller
                 'comptesRenduOperatoire.etablissement',
                 'ordonances',
                 'patient',
+                'avis',
                 'financeurs.financable',
                 'patient.user',
                 'patient.medecinReferent.medecinControles.user',
@@ -235,8 +238,11 @@ class DossierMedicalController extends Controller
             if (!is_null($dossier)) {
                 $dossier->updateDossier();
             }
+            $affiliation = Affiliation::with(['package'])->where('patient_id',$dossier->patient->user->id )->get();
+            $contrat = getContrat($dossier->patient->user);
+            $dossier->affiliation = $affiliation;
             $this->checkIfUserAuthorized($dossier);
-        return response()->json(['dossier'=>$dossier]);
+        return response()->json(['dossier'=>$dossier, 'affiliation'=>$affiliation, 'cim'=>$contrat ]);
     }
 
     /**
