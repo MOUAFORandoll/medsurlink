@@ -278,7 +278,12 @@ class ConsultationExamenValidationController extends Controller
         $bilans = $bilans->transform(function ($item, $key) {
             $consultation_examenvalidation = json_decode($item->after_changes);
             $examen_prix = ExamenEtablissementPrix::where(['examen_complementaire_id' => $consultation_examenvalidation->examen_complementaire_id, 'etablissement_exercices_id' => $consultation_examenvalidation->etablissement_id])->latest()->first();
-            $consultation_examenvalidation->prix = $examen_prix->prix;
+            if(!is_null($examen_prix)){
+                $consultation_examenvalidation->prix = $examen_prix->prix;
+            }else{
+                $examen_prix = ExamenEtablissementPrix::where(['examen_complementaire_id' => $consultation_examenvalidation->examen_complementaire_id])->latest()->first();
+                $consultation_examenvalidation->prix = $examen_prix->prix;
+            }
             $consultation_examenvalidation->examen = ExamenComplementaire::find($consultation_examenvalidation->examen_complementaire_id)->fr_description;
             return $consultation_examenvalidation;
         })->groupBy('version');
@@ -303,7 +308,12 @@ class ConsultationExamenValidationController extends Controller
 
         $examen_validations = $examen_validations->transform(function ($item, $key) {
             $examen_prix = ExamenEtablissementPrix::where(['examen_complementaire_id' => $item->examen_complementaire_id, 'etablissement_exercices_id' => $item->etablissement_id])->latest()->first();
-            $item->prix = $examen_prix->prix;
+            if(!is_null($examen_prix)){
+                $item->prix = $examen_prix->prix;
+            }else{
+                $examen_prix = ExamenEtablissementPrix::where(['examen_complementaire_id' => $item->examen_complementaire_id])->latest()->first();
+                $item->prix = $examen_prix->prix;
+            }
             return $item;
         });
 

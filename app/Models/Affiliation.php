@@ -82,4 +82,8 @@ class Affiliation extends Model
     public function ligneTemps(){
         return $this->hasMany(LigneDeTemps::class)->orderBy('updated_at', 'desc');
     }
+
+    public function motifs(){
+        return $this->morphToMany(Motif::class, 'motiffable');
+    }
 }

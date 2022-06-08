@@ -266,6 +266,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::resource('consultation-cardiologie','Api\CardiologieController')->except(['store','update','destroy']);
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->except('store','update','destroy');
     Route::resource('motif','Api\MotifController')->except('store','update','destroy');
+    Route::get('search/motif/{motif}','Api\MotifController@search');
     Route::resource('allergie','Api\AllergieController')->except('store','update','destroy');
     Route::resource('antecedent','Api\AntecedentController')->except('store','update','destroy');
     Route::resource('traitement-actuel','Api\TraitementActuelController')->except('store','update','destroy');

@@ -62,4 +62,8 @@ class LigneDeTemps extends Model
     public function activites_referent_patients(){
         return $this->hasMany(ActivitesControle::class, 'ligne_temps_id');
     }
+
+    public function motifs(){
+        return $this->morphToMany(Motif::class, 'motiffable');
+    }
 }

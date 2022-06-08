@@ -211,6 +211,11 @@ class ConsultationMedecineGenerale extends Model
     public function rdv(){
         return $this->morphOne(RendezVous::class,'sourceable');
     }
+
+    public function n_motifs(){
+        return $this->morphToMany(Motif::class, 'motiffable', 'consultation_medecine_generale_id','motif_id');
+    }
+
   /*
    public function setDiasgnosticAttribute($value)
     {

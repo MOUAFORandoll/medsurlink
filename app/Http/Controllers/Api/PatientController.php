@@ -589,8 +589,12 @@ class PatientController extends Controller
     }
 
     public function getAffiliations($patient_id){
-        $affiliations = Affiliation::where('patient_id', $patient_id)->with('package:id,description_fr')->latest()->get();
-        return response()->json(['affiliations' => $affiliations]);
+        /**
+         * retourne les lignes de temps des différentes affiliation
+         */
+        $dossier_id = Patient::find($patient_id)->dossier->id;
+        $ligne_temps = LigneDeTemps::with(['affiliation.package:id,description_fr', "motif:id,description"])->where('dossier_medical_id', $dossier_id)->latest()->get(['id', 'date_consultation', 'motif_consultation_id', 'affiliation_id', 'dossier_medical_id']);
+        return response()->json(['ligne_temps' => $ligne_temps]);
     }
 
     public function getAffiliationLigneDeTemps($affiliation_id){

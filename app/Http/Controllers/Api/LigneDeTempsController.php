@@ -18,6 +18,7 @@ use App\Http\Requests\LigneDeTempsRequest;
 use App\Models\Affiliation;
 use App\Models\ConsultationExamenValidation;
 use App\Models\ConsultationMedecineGenerale;
+use App\Models\Motif;
 use Illuminate\Support\Facades\DB;
 
 class LigneDeTempsController extends Controller
@@ -58,14 +59,32 @@ class LigneDeTempsController extends Controller
      */
     public function store(LigneDeTempsRequest $request)
     {
+        $all_plaintes = explode(",", $request->plaintes);
+        $plaintes = [];
+        foreach($all_plaintes as $plainte){
+            if(str_contains($plainte, 'item_')){
+                /**
+                 * on créé une nouvelle plainte si elle n'existe pas
+                 */
+                $motif = Motif::where(["description" => explode("item_", $plainte)[1]])->first();
+                if(is_null($motif)){
+                    $motif = Motif::create(["reference" => now(), "description" => explode("item_", $plainte)[1]]);
+                    defineAsAuthor("Motif",$motif->id,'create');
+                }
+                $plaintes[] = $motif->id;
+            }else{
+                $plaintes[] = $plainte;
+            }
+        }
         // création d'une ligne de temps
-        $ligneDeTemps = LigneDeTemps::create($request->validated(),['motif_consultation_id','dossier_medical_id','date_consultation', 'affiliation_id']);
+        $ligne_temps = LigneDeTemps::create(['dossier_medical_id' => $request->dossier_medical_id, 'motif_consultation_id' => $plaintes[0], 'etat' => 1, 'date_consultation' => $request->date_consultation, 'affiliation_id' => $request->affiliation_id]);
+        $ligne_temps->motifs()->sync($plaintes);
 
         // Sauvegarde des contributeurs
         $contributeurs = $request->get('contributeurs');
-        addContributors($contributeurs,$ligneDeTemps,'LigneDeTemps');
+        addContributors($contributeurs, $ligne_temps, 'LigneDeTemps');
 
-        return response()->json(["ligne_temps" => $ligneDeTemps]);
+        return response()->json(["ligne_temps" => $ligne_temps]);
     }
 
     /**
@@ -111,7 +130,7 @@ class LigneDeTempsController extends Controller
         //    ->distinct()/*->groupBy('ligne_de_temps_id')*/
         //    ->latest()->get();
 
-        $ligneDeTemps = LigneDeTemps::with([
+        $ligneDeTemps = LigneDeTemps::has('validations')->with([
             'motif',
             'dossier',
             'validations.examenComplementaire.examenComplementairePrix',
