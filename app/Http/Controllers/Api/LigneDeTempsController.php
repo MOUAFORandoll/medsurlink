@@ -234,8 +234,8 @@ class LigneDeTempsController extends Controller
         /**
          * ici nous retournons l'ensemble des activités ama qui nes sont pas relié à une line de temps
          */
-        $activite_ama_isoles = ActiviteAmaPatient::doesntHave('ligne_temps')->with(['activitesAma','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get();
-        $activites_referent_isoles = ActivitesControle::doesntHave('ligne_temps')->with(['activitesMedecinReferent','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get();
+        $activite_ama_isoles = ActiviteAmaPatient::doesntHave('affiliation')->with(['activitesAma:id,description_fr,created_at', 'updatedBy', 'createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_ama_id', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
+        $activites_referent_isoles = ActivitesControle::doesntHave('affiliation')->with(['activitesMedecinReferent:id,description_fr','updatedBy','createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get();
 
         /**
          * ici nous retournons la liste des affiliations avec lignes de temps associées et pour chaque ligne de temps, ses activités AMA
@@ -259,7 +259,7 @@ class LigneDeTempsController extends Controller
             $rendezVous_affiliations->push($affiliation);
         }
 
-        $rendezVous = RendezVous::doesntHave('ligne_temps')->where('patient_id',$patient->user_id)->with(['ligne_temps:id,date_consultation,affiliation_id', 'praticien:id,nom,prenom', 'etablissement:id,name'])->latest()->get(['id', 'date', 'statut', 'motifs', 'ligne_temps_id', 'praticien_id', 'etablissement_id', 'created_at']);
+        $rendezVous = RendezVous::doesntHave('ligne_temps.affiliation')->where('patient_id',$patient->user_id)->with(['ligne_temps:id,date_consultation,affiliation_id', 'praticien:id,nom,prenom', 'etablissement:id,name'])->latest()->get(['id', 'date', 'statut', 'motifs', 'ligne_temps_id', 'praticien_id', 'etablissement_id', 'created_at']);
 
         $array = array('rendez_vous' => $rendezVous, 'rendezVous_affiliations' => $rendezVous_affiliations, 'activite_ama_isoles' =>  $activite_ama_isoles, 'activites_referent_isoles' =>  $activites_referent_isoles, 'activite_ama_manuelles' => $activite_ama_manuelles);
 

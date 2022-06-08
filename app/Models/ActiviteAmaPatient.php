@@ -85,4 +85,8 @@ class ActiviteAmaPatient extends Model
         return $this->belongsTo(Motif::class);
     }
 
+    public function etablissement(){
+        return $this->belongsTo(EtablissementExercice::class);
+    }
+
 }
