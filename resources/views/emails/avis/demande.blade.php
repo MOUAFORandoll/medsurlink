@@ -3,7 +3,7 @@
 
 Bonjour {{$user->praticien->civilite }} {{$user->nom}} {{$user->prenom ? $user->prenom : ''}}, nous espérons vous trouver bien portant.
 
-Nous aimerions avoir votre avis au sujet d'un-e patient-e.
+Nous aimerions avoir votre avis au sujet du patient <strong> {{$avis->dossier->patient->user->nom }} {{$avis->dossier->patient->user->prenom }} <strong>
 
 **Objet** : {{$avis->objet}}
 

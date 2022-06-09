@@ -249,6 +249,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
 //    Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
     Route::resource('affiliation','Api\AffiliationController')->except(['create','edit','show']);
     Route::get('affiliation/souscripteur/{id}','Api\AffiliationController@affiliateBySouscripteur');
+    // Route::get('affiliation/suspendre/{id}','Api\AffiliationController@stateSuspend');
     Route::post('affiliation-status','Api\AffiliationController@updateStatus');
     Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
     Route::post('/contrat-prepaye-store-patient-unpaid','Api\AffiliationSouscripteurController@storePatientBeforePayment');
