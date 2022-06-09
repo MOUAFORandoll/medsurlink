@@ -36,9 +36,10 @@ class LigneDeTempsController extends Controller
 
     public function ligneDeTemps($id)
     {
-        $dossier = DossierMedical::whereSlug($id)->first();
-        $ligneTemps = LigneDeTemps::with(['dossier','motif'])->get();
-        return response()->json(['ligne_temps'=>$ligneTemps]);
+        $ligneTemps = LigneDeTemps::whereHas('dossier', function ($query) use($id) {
+            $query->where('slug', $id);
+        })->with(['motif', 'dossier'])->get();
+        return response()->json(['ligne_temps' => $ligneTemps]);
     }
 
     /**
@@ -79,6 +80,7 @@ class LigneDeTempsController extends Controller
         // création d'une ligne de temps
         $ligne_temps = LigneDeTemps::create(['dossier_medical_id' => $request->dossier_medical_id, 'motif_consultation_id' => $plaintes[0], 'etat' => 1, 'date_consultation' => $request->date_consultation, 'affiliation_id' => $request->affiliation_id]);
         $ligne_temps->motifs()->sync($plaintes);
+        $ligne_temps->cloture()->create([]);
 
         // Sauvegarde des contributeurs
         $contributeurs = $request->get('contributeurs');
@@ -130,7 +132,7 @@ class LigneDeTempsController extends Controller
         //    ->distinct()/*->groupBy('ligne_de_temps_id')*/
         //    ->latest()->get();
 
-        $ligneDeTemps = LigneDeTemps::has('validations')->with([
+        $ligneDeTemps = LigneDeTemps::/* has('validations')-> */with([
             'motif',
             'dossier',
             'validations.examenComplementaire.examenComplementairePrix',
@@ -141,6 +143,9 @@ class LigneDeTempsController extends Controller
 
         $ligne_temps = collect();
         foreach($ligneDeTemps as $ligneTemps){
+            if(count($ligneTemps->cloture) == 0){
+                $ligneTemps->cloture()->create([]);
+            }
             $validations = collect();
             foreach($ligneTemps->validations as $validation){
                 $validation->histories = DB::table('model_changes_history')->where(['model_id' => $validation->consultation->versionValidation->id, 'model_type' => 'App\Models\VersionValidation'])->where('changes', '<>', '[]')->orderBy('created_at', 'desc')->get(['changes']);
@@ -235,7 +240,7 @@ class LigneDeTempsController extends Controller
          * ici nous retournons l'ensemble des activités ama qui nes sont pas relié à une line de temps
          */
         $activite_ama_isoles = ActiviteAmaPatient::doesntHave('affiliation')->with(['activitesAma:id,description_fr,created_at', 'updatedBy', 'createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_ama_id', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
-        $activites_referent_isoles = ActivitesControle::doesntHave('affiliation')->with(['activitesMedecinReferent:id,description_fr','updatedBy','createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get();
+        $activites_referent_isoles = ActivitesControle::doesntHave('affiliation')->with(['activitesMedecinReferent:id,description_fr','updatedBy','createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_id', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
 
         /**
          * ici nous retournons la liste des affiliations avec lignes de temps associées et pour chaque ligne de temps, ses activités AMA

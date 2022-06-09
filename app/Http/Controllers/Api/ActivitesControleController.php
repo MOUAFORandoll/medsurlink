@@ -43,7 +43,17 @@ class ActivitesControleController extends Controller
             'activite_id'=>'integer|required'
         ]);
 
-        $med = ActivitesControle::create($request->all());
+        $med = ActivitesControle::create([
+            "activite_id" => $request->activite_id,
+            "patient_id" => $request->patient_id,
+            'etablissement_id' => $request->etablissement_id,
+            'affiliation_id' => $request->affiliation_id,
+            'ligne_temps_id' => $request->ligne_temps_id,
+            "creator" => auth()->user()->id,
+            "commentaire" => $request->commentaire,
+            "statut" => $request->statut,
+            "date_cloture" => $request->date_cloture
+        ]);
         // $med = new ActivitesControle;
         // $med->creator = Auth::id();
         // $med->activite_id = $request->activite_id;
@@ -54,7 +64,7 @@ class ActivitesControleController extends Controller
         // $med->commentaire = $request->commentaire;
         // $med->date_cloture = $request->date_cloture;
         // $med->save();
-        
+
         return response()->json(['medReferent'=>$med]);
     }
 

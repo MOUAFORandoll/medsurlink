@@ -249,6 +249,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
 //    Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
     Route::resource('affiliation','Api\AffiliationController')->except(['create','edit','show']);
     Route::get('affiliation/souscripteur/{id}','Api\AffiliationController@affiliateBySouscripteur');
+    // Route::get('affiliation/suspendre/{id}','Api\AffiliationController@stateSuspend');
     Route::post('affiliation-status','Api\AffiliationController@updateStatus');
     Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
     Route::post('/contrat-prepaye-store-patient-unpaid','Api\AffiliationSouscripteurController@storePatientBeforePayment');
@@ -399,6 +400,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
 
 
     Route::get('paiement-prestation', 'Api\PaymentController@listPaiementSouscripteur');
+
+    Route::post('/referent-activites-add', 'Api\ActivitesControleController@store');
 });
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Souscripteur|Assistante']], function () {
     Route::resource('souscripteur','Api\SouscripteurController')->only('update');
@@ -422,6 +425,8 @@ Route::get('other-complementaire','Api\OtherComplementaireController@index');
 Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin controle|Assistante|Patient']], function () {
     Route::resource('avis','Api\AvisController');
     Route::resource('rdvs','Api\RendezVousController');
+    Route::post('clotures/affiliation', "Api\ClotureController@store");
+
 
 });
 
@@ -457,5 +462,4 @@ Route::prefix('paiement')->group(function () {
 Route::get('/livesearch', 'Api\PatientController@searchPatients');
 Route::get('/mission/list', 'Api\ActiviteController@getListMission');
 Route::get('/referent-activites/list', 'Api\ActivitesMedecinReferentController@getListActivites');
-Route::post('/referent-activites-add', 'Api\ActivitesControleController@store');
 
