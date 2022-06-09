@@ -57,7 +57,7 @@ class ActivitesControle extends Model
     public function activitesMedecinReferent(){
         return $this->belongsTo(ActivitesMedecinReferent::class,'activite_id','id');
     }
-    
+
     public function createur(){
         return $this->belongsTo(User::class,'creator','id');
     }
@@ -65,7 +65,7 @@ class ActivitesControle extends Model
     public function patient(){
         return $this->belongsTo(Patient::class,'patient_id','user_id');
     }
-    
+
     public function updatedBy(){
         return $this->belongsTo(User::class,'updated_by','id');
     }
@@ -81,5 +81,8 @@ class ActivitesControle extends Model
     public function motif(){
         return $this->belongsTo(Motif::class);
     }
-    
+    public function etablissement(){
+        return $this->belongsTo(EtablissementExercice::class, 'etablissement_id');
+    }
+
 }

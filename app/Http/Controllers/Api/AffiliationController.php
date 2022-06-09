@@ -29,6 +29,9 @@ class AffiliationController extends Controller
     {
         $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien'])->latest()->get();
         foreach ($affiliations as $affiliation){
+            if(count($affiliation->cloture) == 0){
+                $affiliation->cloture()->create([]);
+            }
             if (!is_null($affiliation->patient)){
                 $affiliation['user'] = isset($affiliation->patient->user) ? $affiliation->patient->user : null ;
                 $affiliation['souscripteur'] = isset($affiliation->patient->souscripteur->user) ? $affiliation->patient->souscripteur->user  : null;
@@ -115,6 +118,7 @@ class AffiliationController extends Controller
                 }
 
                 $affiliation->motifs()->sync($plaintes);
+                $affiliation->cloture()->create([]);
                 /**
                  * creation d'une ligne de temps après une affiliation
                 */
@@ -138,6 +142,9 @@ class AffiliationController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
         $affiliation = Affiliation::with(['patient', 'motifs:id,description', 'patient.dossier:id,numero_dossier,slug', 'package:id,description_fr,montant', 'patient.financeurs.lien'])->whereSlug($slug)->first();
+        if(count($affiliation->cloture) == 0){
+            $affiliation->cloture()->create([]);
+        }
 
         $date_fin = Carbon::createFromFormat('Y-m-d', $affiliation->date_fin);
         $today = Carbon::createFromFormat('Y-m-d', date('Y-m-d'));
@@ -158,7 +165,7 @@ class AffiliationController extends Controller
             $affiliation->expire = 0;
         }
         $affiliation->save();
-
+        //$affiliation->clotures = $affiliation->cloture->first();
         if (!is_null($affiliation->patient)) {
             $affiliation['user'] = $affiliation->patient->user;
             $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;

@@ -48,3 +48,5 @@ php artisan migrate --path=/database/migrations/2022_06_03_155418_add_uuid_to_pa
 php artisan migrate --path=/database/migrations/2022_06_06_142647_add_ligne_de_temps_id_to_version_validations_table.php
 
 php artisan migrate --path=/database/migrations/2022_06_06_151155_create_motiffables_table.php
+
+php artisan migrate --path=/database/migrations/2022_06_09_084538_create_clotures_table.php

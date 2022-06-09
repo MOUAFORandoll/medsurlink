@@ -399,6 +399,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
 
 
     Route::get('paiement-prestation', 'Api\PaymentController@listPaiementSouscripteur');
+
+    Route::post('/referent-activites-add', 'Api\ActivitesControleController@store');
 });
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Souscripteur|Assistante']], function () {
     Route::resource('souscripteur','Api\SouscripteurController')->only('update');
@@ -457,5 +459,4 @@ Route::prefix('paiement')->group(function () {
 Route::get('/livesearch', 'Api\PatientController@searchPatients');
 Route::get('/mission/list', 'Api\ActiviteController@getListMission');
 Route::get('/referent-activites/list', 'Api\ActivitesMedecinReferentController@getListActivites');
-Route::post('/referent-activites-add', 'Api\ActivitesControleController@store');
 

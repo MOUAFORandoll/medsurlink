@@ -66,4 +66,8 @@ class LigneDeTemps extends Model
     public function motifs(){
         return $this->morphToMany(Motif::class, 'motiffable');
     }
+
+    public function cloture(){
+        return $this->morphMany(Cloture::class, 'cloturable');
+    }
 }
