@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\Cloture;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Affiliation;
+use Carbon\Carbon;
 
 class ClotureController extends Controller
 {
@@ -36,7 +38,16 @@ class ClotureController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $cloture = Cloture::where(['cloturable_id' => $request->id, 'cloturable_type' => 'Affiliation'])->first();
+        if($request->role == "Assistante"){
+            $cloture->ama = Carbon::now();
+        }elseif($request->role == "Medecin controle"){
+            $cloture->medecin_referent = Carbon::now();
+        }elseif($request->role == "Assistante"){
+            $cloture->medecin_referent = Carbon::now();
+        }
+        $cloture->save();
+        return response()->json($cloture);
     }
 
     /**

@@ -141,7 +141,7 @@ class AffiliationController extends Controller
     public function show($slug)
     {
         $this->validatedSlug($slug,$this->table);
-        $affiliation = Affiliation::with(['patient', 'motifs:id,description', 'patient.dossier:id,numero_dossier,slug', 'package:id,description_fr,montant', 'patient.financeurs.lien'])->whereSlug($slug)->first();
+        $affiliation = Affiliation::with(['patient', 'motifs:id,description', 'patient.dossier', 'package:id,description_fr,montant', 'patient.financeurs.lien'])->whereSlug($slug)->first();
         if(count($affiliation->cloture) == 0){
             $affiliation->cloture()->create([]);
         }

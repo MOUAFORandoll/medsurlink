@@ -425,6 +425,8 @@ Route::get('other-complementaire','Api\OtherComplementaireController@index');
 Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin controle|Assistante|Patient']], function () {
     Route::resource('avis','Api\AvisController');
     Route::resource('rdvs','Api\RendezVousController');
+    Route::post('clotures/affiliation', "Api\ClotureController@store");
+
 
 });
 
