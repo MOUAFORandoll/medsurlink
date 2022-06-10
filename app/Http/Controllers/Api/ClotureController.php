@@ -39,7 +39,7 @@ class ClotureController extends Controller
     public function store(Request $request)
     {
         $cloture = Cloture::where(['cloturable_id' => $request->id, 'cloturable_type' => 'Affiliation'])->first();
-        if($request->role == "Assistante"){
+        if($request->role == "ama"){
             $cloture->ama = Carbon::now();
         }elseif($request->role == "Medecin controle"){
             $cloture->medecin_referent = Carbon::now();
