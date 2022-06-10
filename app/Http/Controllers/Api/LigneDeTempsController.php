@@ -409,6 +409,11 @@ class LigneDeTempsController extends Controller
     public function listingPatient($slug){
         $dossier = DossierMedical::where('slug', $slug)->first();
         $ligne_temps = LigneDeTemps::with(['motifs:id,description', 'motif:id,description', 'cloture'])->where('dossier_medical_id', $dossier->id)->latest()->get();
+        foreach($ligne_temps as $ligne){
+            if(is_null($ligne->cloture)){
+                $ligne->cloture()->create([]);
+            }
+        }
         return response()->json($ligne_temps);
     }
 
