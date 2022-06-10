@@ -2,31 +2,32 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use App\Models\Patient;
+use App\Models\Praticien;
+use App\Models\Assistante;
+use App\Models\Pharmacien;
+use App\Models\Association;
+use App\Models\Gestionnaire;
+use App\Models\Souscripteur;
+use Illuminate\Http\Request;
 use App\Models\Contributeurs;
 use App\Models\DossierMedical;
-use App\Models\Gestionnaire;
-use App\Models\MedecinControle;
-use App\Models\Assistante;
-use App\Models\Patient;
-use App\Models\Association;
-use App\Models\Praticien;
 use App\Models\ReponseSecrete;
-use App\Models\Souscripteur;
-use App\Models\Traits\SlugRoutable;
-use App\Notifications\MailResetPasswordNotification;
-use Carbon\Carbon;
-use Cviebrock\EloquentSluggable\Sluggable;
-use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Http\Request;
-use Illuminate\Notifications\Notifiable;
+use App\Models\MedecinControle;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\HasApiTokens;
-use Netpok\Database\Support\RestrictSoftDeletes;
+use App\Models\Traits\SlugRoutable;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Validator;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Netpok\Database\Support\RestrictSoftDeletes;
+use App\Notifications\MailResetPasswordNotification;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -191,6 +192,9 @@ class User extends Authenticatable
     }
     public function assistante(){
         return $this->hasOne(Assistante::class,'user_id','id');
+    }
+    public function pharmacien(){
+        return $this->hasOne(Pharmacien::class,'user_id','id');
     }
     public function messages()
     {

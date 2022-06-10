@@ -17,6 +17,7 @@ use App\Models\EtablissementExercicePatient;
 use App\Models\EtablissementExercicePraticien;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\EtablissementExerciceRequest;
+use App\Models\Pharmacien;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 /**
@@ -250,6 +251,12 @@ class EtablissementExerciceController extends Controller
             return response()->json(['etablissements'=>$etablissements]);
 
         }
+        else if(gettype($userRoles->search('Pharmacien')) == 'integer'){
+            $etablissements = EtablissementExercice::with(['','comptables.user','pharmaciens.user','patients.user','patients.dossier','prestations.prestation','factures.dossier.patient.user'])->latest()->get();
+
+            return response()->json(['etablissements'=>$etablissements]);
+
+        }
         else if(gettype($userRoles->search('Souscripteur')) == 'integer'){
             $user = \App\User::whereId(Auth::id())->first();
             $patients = $user->souscripteur->patients;
@@ -276,6 +283,7 @@ class EtablissementExerciceController extends Controller
             $user = Auth::user();
             $comptables = Comptable::where('user_id',$user->id)->latest()->get();
             $assistantes = Assistante::where('user_id',$user->id)->latest()->get();
+            $pharmaciens = Pharmacien::where('user_id',$user->id)->latest()->get();
 
             $etablissementsId = [];
 
@@ -285,6 +293,9 @@ class EtablissementExerciceController extends Controller
             foreach ($assistantes as $assistante){
                 array_push($etablissementsId,$assistante->etablissement_id);
             }
+            foreach ($pharmaciens as $pharmacien){
+                array_push($etablissementsId,$pharmacien->etablissement_id);
+            }
 
 
 
@@ -293,6 +304,8 @@ class EtablissementExerciceController extends Controller
                 'comptables.user',
                 'assistantes',
                 'assistantes.user',
+                'pharmaciens',
+                'pharmaciens.user',
                 'patients',
                 'patients.user',
                 'patients.dossier',
