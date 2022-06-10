@@ -132,7 +132,7 @@ class LigneDeTempsController extends Controller
         //    ->distinct()/*->groupBy('ligne_de_temps_id')*/
         //    ->latest()->get();
 
-        $ligneDeTemps = LigneDeTemps::has('validations')->with([
+        $ligneDeTemps = LigneDeTemps::with([
             'motif',
             'dossier',
             'validations.examenComplementaire.examenComplementairePrix',
