@@ -28,8 +28,9 @@ class ConsultationExamenValidationController extends Controller
     {
         $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
         //->whereNull('etat_validation_medecin')
-        ->distinct()->latest()
+        ->distinct()
         ->get(['consultation_general_id']);
+        $examen_validation = $examen_validation->sortByDesc('created_at');
         return response()->json(['examen_validation'=>$examen_validation]);
     }
     /**
