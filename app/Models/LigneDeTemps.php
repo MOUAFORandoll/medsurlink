@@ -68,6 +68,6 @@ class LigneDeTemps extends Model
     }
 
     public function cloture(){
-        return $this->morphMany(Cloture::class, 'cloturable');
+        return $this->morphOne(Cloture::class, 'cloturable');
     }
 }

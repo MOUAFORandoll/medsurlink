@@ -344,6 +344,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
     Route::put('rejeter-prestation/{slug}','Api\FacturePrestationController@rejeter');
     Route::resource('comptable','Api\ComptableController');
     Route::resource('assistante','Api\AssistanteController');
+    Route::get('timelines/{slug}/patient', 'Api\LigneDeTempsController@listingPatient');
 
 
 });
