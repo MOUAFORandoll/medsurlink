@@ -162,9 +162,9 @@ class AffiliationSouscripteurController extends Controller
         }else{
             $updatePath = 'status='.$reponse.'&'.$updatePath;
         }
-        if ($env === 'local')
+        if ($env == 'local')
             return  redirect('http://localhost:8080/contrat-prepaye/add?'.$updatePath);
-        else if ($env === 'staging')
+        else if ($env == 'staging')
             return  redirect('https://www.staging.medsurlink.com/contrat-prepaye/add?'.$updatePath);
         else
             return  redirect('https://www.medsurlink.com/contrat-prepaye/add?'.$updatePath);
