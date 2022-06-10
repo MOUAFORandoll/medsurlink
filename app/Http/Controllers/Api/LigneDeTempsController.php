@@ -245,7 +245,7 @@ class LigneDeTempsController extends Controller
         /**
          * ici nous retournons la liste des affiliations avec lignes de temps associées et pour chaque ligne de temps, ses activités AMA
          */
-        $activite_ama_manuelles = Affiliation::with(['package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_ama_patients.activitesAma:id,description_fr', 'ligneTemps.activites_ama_patients' => function ($query) use ($patient) {
+        $activite_ama_manuelles = Affiliation::with(['package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps.cloture', 'ligneTemps.activites_ama_patients.activitesAma:id,description_fr', 'ligneTemps.activites_ama_patients' => function ($query) use ($patient) {
             $query->where('patient_id', $patient->user_id);
         }])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
 
