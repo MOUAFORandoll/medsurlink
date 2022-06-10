@@ -143,7 +143,7 @@ class LigneDeTempsController extends Controller
 
         $ligne_temps = collect();
         foreach($ligneDeTemps as $ligneTemps){
-            if(count($ligneTemps->cloture) == 0){
+            if($ligneTemps->cloture){
                 $ligneTemps->cloture()->create([]);
             }
             $validations = collect();
@@ -407,4 +407,10 @@ class LigneDeTempsController extends Controller
         });
         return response()->json($consultations);
     }
+    public function listingPatient($slug){
+        $dossier = DossierMedical::where('slug', $slug)->first();
+        $ligne_temps = LigneDeTemps::with(['motifs:id,description', 'motif:id,description', 'cloture'])->where('dossier_medical_id', $dossier->id)->latest()->get();
+        return response()->json($ligne_temps);
+    }
+
 }
