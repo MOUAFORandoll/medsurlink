@@ -387,7 +387,8 @@ class AffiliationSouscripteurController extends Controller
 
                 // envoie de mail à contract
                 $package = Package::find($commande->type_contrat);
-                Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $request->plainte, $request->urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie));
+                    $affiliation->motifs()->sync($plaintes);
+                Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $affiliation->motifs, $request->urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie));
 
 
                 $commande = reduireCommandeRestante($commande->id);
