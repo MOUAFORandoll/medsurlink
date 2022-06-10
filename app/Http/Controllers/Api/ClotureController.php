@@ -6,6 +6,7 @@ use App\Models\Cloture;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Affiliation;
+use App\Models\LigneDeTemps;
 use Carbon\Carbon;
 
 class ClotureController extends Controller
@@ -39,15 +40,29 @@ class ClotureController extends Controller
     public function store(Request $request)
     {
         $cloture = Cloture::where(['cloturable_id' => $request->id, 'cloturable_type' => 'Affiliation'])->first();
-        if($request->role == "ama"){
+        $cloture = $this->cloturer($cloture);
+        return response()->json($cloture);
+    }
+
+    public function ligne(Request $request){
+        $cloture = Cloture::where(['cloturable_id' => $request->id, 'cloturable_type' => 'App\Models\LigneDeTemps'])->first();
+        $cloture = $this->cloturer($cloture);
+        return response()->json($cloture);
+    }
+
+    public function cloturer( Cloture $cloture){
+
+        if(auth()->user()->hasrole("Assistante")){
             $cloture->ama = Carbon::now();
-        }elseif($request->role == "Medecin controle"){
+        }elseif(auth()->user()->hasrole("Medecin controle")){
             $cloture->medecin_referent = Carbon::now();
-        }elseif($request->role == "Assistante"){
+        }elseif(auth()->user()->hasrole("Gestionnaire")){
             $cloture->medecin_referent = Carbon::now();
         }
+
         $cloture->save();
-        return response()->json($cloture);
+
+        return $cloture;
     }
 
     /**

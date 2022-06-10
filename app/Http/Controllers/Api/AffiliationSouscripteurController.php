@@ -285,8 +285,6 @@ class AffiliationSouscripteurController extends Controller
 
         // Récupération des informations relatifs au souscripteur
         $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
-
-        \Log::alert(json_encode($commande));
         if ($commande){
             if ($commande->nombre_restant > 0){
                 // Récupération des informations nécessaire pour la création du compte utilisateur medsurlink
@@ -379,6 +377,7 @@ class AffiliationSouscripteurController extends Controller
                     }
 
                     $affiliation->motifs()->sync($plaintes);
+                    $affiliation->cloture()->create([]);
                     /**
                      * creation d'une ligne de temps après une affiliation
                     */

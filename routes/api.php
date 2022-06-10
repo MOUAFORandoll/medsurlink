@@ -427,8 +427,7 @@ Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin c
     Route::resource('avis','Api\AvisController');
     Route::resource('rdvs','Api\RendezVousController');
     Route::post('clotures/affiliation', "Api\ClotureController@store");
-
-
+    Route::post('clotures/ligne-temps', "Api\ClotureController@ligne");
 });
 
 Route::resource('offres','Api\OffreController');
