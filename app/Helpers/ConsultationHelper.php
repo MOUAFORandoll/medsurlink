@@ -208,7 +208,7 @@ if(!function_exists('canUpdateConsultation')) {
         if ($connectedUser){
             if ($connectedUser->id == $consultation->creator){
                 return true;
-            }elseif ( $role== 'Medecin controle' || $role == 'Admin'){
+            }elseif ( $role== 'Medecin controle' || $role == 'Admin' || $role== 'Assistante'){
                 return true;
             }else{
                 PersonnalErrors::staticRevealAccesRefuse();

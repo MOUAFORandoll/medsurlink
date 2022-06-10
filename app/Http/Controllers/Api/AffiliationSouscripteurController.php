@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Mail;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Traits\PersonnalErrors;
+use App\Models\LigneDeTemps;
+use App\Models\Motif;
 
 class AffiliationSouscripteurController extends Controller
 {
@@ -283,8 +285,6 @@ class AffiliationSouscripteurController extends Controller
 
         // Récupération des informations relatifs au souscripteur
         $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
-
-        \Log::alert(json_encode($commande));
         if ($commande){
             if ($commande->nombre_restant > 0){
                 // Récupération des informations nécessaire pour la création du compte utilisateur medsurlink
@@ -358,10 +358,37 @@ class AffiliationSouscripteurController extends Controller
                     "date_fin"=>Carbon::now()->addYears(1)->format('Y-m-d')
                 ]);
 
+                if($request->plaintes){
+                    $plaintes = [];
+                    foreach($request->plaintes as $plainte){
+                        if(str_contains($plainte, 'item_')){
+                            /**
+                             * on créé une nouvelle plainte si elle n'existe pas
+                             */
+                            $motif = Motif::where(["description" => explode("item_", $plainte)[1]])->first();
+                            if(is_null($motif)){
+                                $motif = Motif::create(["reference" => now(), "description" => explode("item_", $plainte)[1]]);
+                                defineAsAuthor("Motif",$motif->id,'create');
+                            }
+                            $plaintes[] = $motif->id;
+                        }else{
+                            $plaintes[] = $plainte;
+                        }
+                    }
+
+                    $affiliation->motifs()->sync($plaintes);
+                    $affiliation->cloture()->create([]);
+                    /**
+                     * creation d'une ligne de temps après une affiliation
+                    */
+                    $ligne_temps = LigneDeTemps::create(['dossier_medical_id' => $affiliation->patient->dossier->id, 'motif_consultation_id' => $plaintes[0], 'etat' => 1, 'date_consultation' => date('Y-m-d'), 'affiliation_id' => $affiliation->id]);
+                    $ligne_temps->motifs()->sync($plaintes);
+                }
 
                 // envoie de mail à contract
                 $package = Package::find($commande->type_contrat);
-                Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $request->plainte, $request->urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie));
+                    $affiliation->motifs()->sync($plaintes);
+                Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $affiliation->motifs, $request->urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie));
 
 
                 $commande = reduireCommandeRestante($commande->id);

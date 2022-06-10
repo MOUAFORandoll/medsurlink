@@ -197,7 +197,7 @@ if (!function_exists('checkIfCanUpdated')){
         $role = getAuthorRole($operationable_type,$operationable_id,$action);
         $isAuthor = checkIfIsAuthorOrIsAuthorized($operationable_type, $operationable_id, $action);
         if($isAuthor->getOriginalContent() == false){
-            if (($role == 'Praticien' && $user->getRoleNames()->first() == 'Medecin controle') || ($role == 'Medecin controle' && $user->getRoleNames()->first() == 'Medecin controle') ){
+            if (($role == 'Praticien' &&  $user->getRoleNames()->first() == 'Medecin controle' &&  $user->getRoleNames()->first() == 'Assistante') || ($role == 'Medecin controle' && $role == 'Assistante' && $user->getRoleNames()->first() == 'Medecin controle' && $user->getRoleNames()->first() == 'Assistante') ){
                 $nbre = 1;
             }
         }else{

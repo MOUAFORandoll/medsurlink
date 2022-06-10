@@ -17,6 +17,7 @@ class CreateActivitesAmaTable extends Migration
             $table->bigIncrements('id');
             $table->longText('description_fr');
             $table->longText('description_en');
+            $table->string('type');
             $table->string('slug');
             $table->softDeletes();
             $table->timestamps();

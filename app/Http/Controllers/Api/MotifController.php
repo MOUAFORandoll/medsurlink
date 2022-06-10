@@ -19,7 +19,7 @@ class MotifController extends Controller
      */
     public function index()
     {
-        $motifs = Motif::all();
+        $motifs = Motif::latest()->get();
 
         foreach ($motifs as $motif){
             $motif->updateMotif();
@@ -129,5 +129,16 @@ class MotifController extends Controller
         $motif->delete();
 
         return response()->json(['motif'=>$motif]);
+    }
+
+
+    public function search($motif){
+        $motifs = Motif::where('description', 'like', "%{$motif}%")->get();
+
+        foreach ($motifs as $motif){
+            $motif->updateMotif();
+        }
+
+        return response()->json(['motifs' => $motifs]);
     }
 }

@@ -161,7 +161,7 @@ class ActiviteController extends Controller
 
     public function ajouterMission(Request $request){
         $mission = ActiviteMission::create($request->all());
-        $mission = ActiviteMission::with('description','dossier.patient.user','createur')->whereSlug($mission->slug)->first();
+        $mission = ActiviteMission::with('dossier.patient.user','createur')->whereSlug($mission->slug)->first();
         return response()->json(['mission'=>$mission]);
     }
 
@@ -172,8 +172,7 @@ class ActiviteController extends Controller
     public function getMissionAmaByPatient($id){
         $mission = ActiviteAmaPatient::with(['activitesAma','patient','updatedBy','createur'])->where('patient_id',$id)->latest()->get();
         $medecin_referent = PatientMedecinControle::with(['medecinControles','patients','createur'])->where('patient_id',$id)->latest()->get();
-        $medecin_referent = PatientMedecinControle::with(['medecinControles','patients','createur'])->where('patient_id',$id)->latest()->get();
-        return response()->json(['activites'=>$mission]);
+        return response()->json(['activites'=>$mission, 'referent'=>$medecin_referent]);
     }
     public function saveMissions(Request $request){
         dd($request);
@@ -181,12 +180,45 @@ class ActiviteController extends Controller
        // return response()->json(['activites'=>$mission]);
     }
     public function createMissions(Request $request){
-        $mission = ActiviteAmaPatient::create($request->all());
-        $mission = ActiviteAmaPatient::with('activitesAma','patient','updatedBy','createur')->whereSlug($mission->slug)->first();
-        return response()->json(['mission'=>$mission]);
+
+        // $mission = ActiviteAmaPatient::create($request->all());
+        $activities = $request->get('activities');
+        $request->validate([
+            'activities' => 'required',
+        ]);
+        foreach($activities as $activity){
+            foreach($activity['selected'] as $selectId){
+                ActiviteAmaPatient::create([
+                    'activite_ama_id' => $selectId,
+                    'date_cloture' => $activity['date_cloture_activite'],
+                    'affiliation_id' => $request->get('affiliation_id'),
+                    'commentaire' => $request->get('commentaire'),
+                    'ligne_temps_id' => $request->get('ligne_temps_id'),
+                    'patient_id' => $request->get('patient_id'),
+                    'etablissement_id' => $request->get('etablissement_id'),
+                    'statut' => $request->get('statut'),
+                ]);
+            }
+
+        }
+        return  response()->json(['statut'=>true]);
+        // foreach($activities as $activity){
+        //     //dd($examen);
+        //     ActiviteAmaPatient::create([
+        //         'date_cloture_activite' =>$activity->get('etablissement_id'),
+        //         'selected' => $activity['selected'],
+        //         'affiliation_id' => $request->get('affiliation_id'),
+        //         'commentaire' => $request->get('commentaire'),
+        //         'etablissement_id' => $request->get('etablissement_id'),
+        //         'ligne_temps_id' => $request->get('ligne_temps_id'),
+        //         'ligne_temps_id' => $request->get('ligne_temps_id'),
+        //     ]);
+        // }
+        // $mission = ActiviteAmaPatient::with('activitesAma','patient','updatedBy','createur')->whereSlug($mission->slug)->first();
+        // return response()->json(['mission'=>$mission]);
     }
     public function getListMission(){
-        $mission = ActivitesAma::all();
+        $mission = ActivitesAma::where('type','MANUELLE')->get();
         return response()->json(['activites'=>$mission]);
     }
     public function supprimerMission($slug){

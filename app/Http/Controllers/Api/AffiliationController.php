@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\AffiliationRequest;
 use App\Models\Affiliation;
+use App\Models\LigneDeTemps;
+use App\Models\Motif;
 use App\Models\Patient;
 use App\Models\PatientSouscripteur;
 use Carbon\Carbon;
@@ -27,6 +29,9 @@ class AffiliationController extends Controller
     {
         $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien'])->latest()->get();
         foreach ($affiliations as $affiliation){
+            if($affiliation->cloture){
+                $affiliation->cloture()->create([]);
+            }
             if (!is_null($affiliation->patient)){
                 $affiliation['user'] = isset($affiliation->patient->user) ? $affiliation->patient->user : null ;
                 $affiliation['souscripteur'] = isset($affiliation->patient->souscripteur->user) ? $affiliation->patient->souscripteur->user  : null;
@@ -93,12 +98,38 @@ class AffiliationController extends Controller
                 'lien_de_parente' => $request->lien
             ]);
 
-            return response()->json(['affiliation'=>$affiliation]);
+            if($request->plaintes){
+                $all_plaintes = explode(",", $request->plaintes);
+                $plaintes = [];
+                foreach($all_plaintes as $plainte){
+                    if(str_contains($plainte, 'item_')){
+                        /**
+                         * on créé une nouvelle plainte si elle n'existe pas
+                         */
+                        $motif = Motif::where(["description" => explode("item_", $plainte)[1]])->first();
+                        if(is_null($motif)){
+                            $motif = Motif::create(["reference" => now(), "description" => explode("item_", $plainte)[1]]);
+                            defineAsAuthor("Motif",$motif->id,'create');
+                        }
+                        $plaintes[] = $motif->id;
+                    }else{
+                        $plaintes[] = $plainte;
+                    }
+                }
+
+                $affiliation->motifs()->sync($plaintes);
+                $affiliation->cloture()->create([]);
+                /**
+                 * creation d'une ligne de temps après une affiliation
+                */
+                $ligne_temps = LigneDeTemps::create(['dossier_medical_id' => $affiliation->patient->dossier->id, 'motif_consultation_id' => $plaintes[0], 'etat' => 1, 'date_consultation' => date('Y-m-d'), 'affiliation_id' => $affiliation->id]);
+                $ligne_temps->motifs()->sync($plaintes);
+            }
+
+            return response()->json(['affiliation' => $affiliation]);
         }else{
-            return response()->json(['erreur'=> "Le patient n'existe pas"], 419);
+            return response()->json(['erreur' => "Le patient n'existe pas"], 419);
         }
-
-
     }
 
 
@@ -110,7 +141,10 @@ class AffiliationController extends Controller
     public function show($slug)
     {
         $this->validatedSlug($slug,$this->table);
-        $affiliation = Affiliation::with(['patient','patient.dossier','package','patient.financeurs.lien'])->whereSlug($slug)->first();
+        $affiliation = Affiliation::with(['patient', 'motifs:id,description', 'patient.dossier', 'package:id,description_fr,montant', 'patient.financeurs.lien'])->whereSlug($slug)->first();
+        if($affiliation->cloture){
+            $affiliation->cloture()->create([]);
+        }
 
         $date_fin = Carbon::createFromFormat('Y-m-d', $affiliation->date_fin);
         $today = Carbon::createFromFormat('Y-m-d', date('Y-m-d'));
@@ -131,7 +165,7 @@ class AffiliationController extends Controller
             $affiliation->expire = 0;
         }
         $affiliation->save();
-
+        //$affiliation->clotures = $affiliation->cloture->first();
         if (!is_null($affiliation->patient)) {
             $affiliation['user'] = $affiliation->patient->user;
             $affiliation['souscripteur'] = $affiliation->patient->souscripteur->user;
@@ -155,7 +189,7 @@ class AffiliationController extends Controller
         // Affiliation::whereSlug($slug)->update($request->validated());
 
         // $affiliation = Affiliation::with(['patient'])->whereSlug($slug)->first();
-        $affiliation = Affiliation::with(['patient.dossier','package','patient.financeurs.lien'])->whereSlug($slug)->first();
+        $affiliation = Affiliation::with(['motifs:id,description', 'patient.dossier:id,numero_dossier,slug', 'package:id,description_fr,montant', 'patient.financeurs.lien'])->whereSlug($slug)->first();
 
         $this->updateDateFin($affiliation);
 
@@ -215,6 +249,44 @@ class AffiliationController extends Controller
             $affiliation->save();
             $patient->save();
 
+
+            if($request->plaintes){
+                $all_plaintes = explode(",", $request->plaintes);
+                $plaintes = [];
+                foreach($all_plaintes as $plainte){
+                    if(str_contains($plainte, 'item_')){
+                        /**
+                         * on créé une nouvelle plainte si elle n'existe pas
+                         */
+                        $motif = Motif::where(["description" => explode("item_", $plainte)[1]])->first();
+                        if(is_null($motif)){
+                            $motif = Motif::create(["reference" => now(), "description" => explode("item_", $plainte)[1]]);
+                            defineAsAuthor("Motif",$motif->id,'create');
+                        }
+                        $plaintes[] = $motif->id;
+                    }else{
+                        $plaintes[] = $plainte;
+                    }
+                }
+                if(count($plaintes) > 0){
+                    $affiliation->motifs()->detach();
+                    $affiliation->motifs()->sync($plaintes);
+                    /**
+                     * creation d'une ligne de temps après une affiliation
+                    */
+                    $ligne_temps = $affiliation->ligneTemps()->first();
+                    if($ligne_temps){
+                        $ligne_temps->update(['dossier_medical_id' => $affiliation->patient->dossier->id, 'motif_consultation_id' => $plaintes[0], 'etat' => 1, 'date_consultation' => date('Y-m-d'), 'affiliation_id' => $affiliation->id]);
+                        $ligne_temps->motifs()->detach();
+                        $ligne_temps->motifs()->sync($plaintes);
+                    }else{
+                        $ligne_temps = LigneDeTemps::create(['dossier_medical_id' => $affiliation->patient->dossier->id, 'motif_consultation_id' => $plaintes[0], 'etat' => 1, 'date_consultation' => date('Y-m-d'), 'affiliation_id' => $affiliation->id]);
+                        $ligne_temps->motifs()->sync($plaintes);
+                    }
+                }
+            }
+
+
             return response()->json(['affiliation'=>$affiliation]);
         }else{
             return response()->json(['erreur'=> "Le patient n'existe pas"], 419);
@@ -258,6 +330,21 @@ class AffiliationController extends Controller
         $affiliation->status_contrat = $request->status;
         $affiliation->save();
     }
+
+
+
+    // public function stateSuspend($id)
+    // {
+    //     $affiliation = affiliation::whereId($id)->first();
+
+    //     if ($affiliation != null){
+    //         $affiliation->suspendu = $affiliation->suspendu== 1 ? 0 : 1;
+    //         $affiliation->save();
+    //         return response()->json(["affiliation" => $affiliation]);
+    //     }
+    // }
+
+
     /**
      * Permet de determiner si un utilisateur possede deja une affiliation
      * @param Request $request

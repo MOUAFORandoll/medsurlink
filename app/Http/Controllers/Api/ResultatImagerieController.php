@@ -108,6 +108,7 @@ class ResultatImagerieController extends Controller
         $motifIsAuthor = checkIfIsAuthorOrIsAuthorized("ResultatImagerie",$resultat->id,"create");
         $resultat['author'] = getAuthor("ResultatImagerie",$resultat->id,"create");
         $resultat['isAuthor'] = $motifIsAuthor->getOriginalContent();
+        $resultat->file = asset('storage/'.$resultat->file);
 
         return response()->json([
             'resultat' => $resultat
@@ -268,4 +269,16 @@ class ResultatImagerieController extends Controller
             $resultat->save();
         }
     }
+
+
+   /*  public function uploadFile($request, $resultat){
+        if ($request->file('file')->isValid()) {
+            $path = $request->file->store('public/DossierMedicale/' . $resultat->dossier->numero_dossier . '/Consultation/' . $request->consultation_medecine_generale_id);
+            $file = str_replace('public/','',$path);
+
+            $resultat->file = $file;
+
+            $resultat->save();
+        }
+    } */
 }

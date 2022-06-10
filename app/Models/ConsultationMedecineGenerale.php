@@ -22,6 +22,7 @@ class ConsultationMedecineGenerale extends Model
     use Sluggable;
     use SluggableScopeHelpers;
     use SlugRoutable;
+
     /**
      * Return the sluggable configuration array for this model.
      *
@@ -41,6 +42,14 @@ class ConsultationMedecineGenerale extends Model
     /**
      * The relations restricting model deletion
      */
+
+      /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'consultation_medecine_generales';
+
     protected $restrictDeletes = [];
 
     protected $casts = [
@@ -123,6 +132,9 @@ class ConsultationMedecineGenerale extends Model
     public function  validations(){
         return $this->hasMany(ConsultationExamenValidation::class,'consultation_general_id','id');
     }
+    public function rendez_vous(){
+        return $this->hasMany(RendezVous::class);
+    }
     /**
      * The "booting" method of the model.
      *
@@ -199,6 +211,11 @@ class ConsultationMedecineGenerale extends Model
     public function rdv(){
         return $this->morphOne(RendezVous::class,'sourceable');
     }
+
+    public function n_motifs(){
+        return $this->morphToMany(Motif::class, 'motiffable', 'consultation_medecine_generale_id','motif_id');
+    }
+
   /*
    public function setDiasgnosticAttribute($value)
     {

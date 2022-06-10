@@ -21,6 +21,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Affiliation;
+use App\Models\LigneDeTemps;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -111,6 +113,8 @@ class PatientController extends Controller
         $data = (object) $request->json()->all();
         Log::info(json_encode($data->original['cim']));
         $cim = (object) $data->original['cim'];
+        $cim = (object) $cim->original['cim'];
+        Log::alert(json_encode($cim->nomSouscripteur));
         $souscripteurUser = new User();
         $souscripteurUser->nom = $cim->nomSouscripteur;
         $souscripteurUser->prenom = $cim->prenomSouscripteur;
@@ -172,7 +176,7 @@ class PatientController extends Controller
         $patientUser->isNotice = 1;
         $patientUser->password = null;
         $patientUser->decede = "non";
-        $patientUser->souscripteur_id = $souscripteur->id;
+        $patientUser->souscripteur_id = $souscripteur->user_id;
         $patientResponse =  UserController::generatedUserFromMedicasure($patientUser,"Patient");
 
         if($patientResponse->getOriginalContent()['user'] == null) {
@@ -583,6 +587,21 @@ class PatientController extends Controller
         return count($result);
 
     }
+
+    public function getAffiliations($patient_id){
+        /**
+         * retourne les lignes de temps des différentes affiliation
+         */
+        $dossier_id = Patient::find($patient_id)->dossier->id;
+        $ligne_temps = LigneDeTemps::with(['affiliation.package:id,description_fr', "motif:id,description"])->where('dossier_medical_id', $dossier_id)->latest()->get(['id', 'date_consultation', 'motif_consultation_id', 'affiliation_id', 'dossier_medical_id']);
+        return response()->json(['ligne_temps' => $ligne_temps]);
+    }
+
+    public function getAffiliationLigneDeTemps($affiliation_id){
+        $ligne_temps = LigneDeTemps::where('affiliation_id', $affiliation_id)->with('motif:id,description')->latest()->get();
+        return response()->json(['ligne_temps' => $ligne_temps]);
+    }
+
 
     /**
      * @param  string  $value

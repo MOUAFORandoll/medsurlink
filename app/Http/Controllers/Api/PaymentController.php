@@ -20,6 +20,7 @@ use Stripe\Charge;
 use Stripe\Checkout\Session;
 use Stripe\Stripe;
 use Swap\Builder;
+use Ramsey\Uuid\Uuid;
 
 class PaymentController extends Controller
 {
@@ -45,17 +46,23 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::with(['souscripteur','patients'])->latest()->get();
+        $payments = Payment::with(['souscripteur.user:id,nom,prenom','patients.user:id,nom,prenom'])->latest()->get();
+        $_payments = $payments->where('uuid', null)->all();
+        foreach($_payments as $payment){
+            $payment->uuid = Uuid::uuid4()->toString();
+            $payment->save();
+        }
+
 
         return response()->json(['payments' => $payments]);
     }
 
     public function listPaiementSouscripteur()
     {
-        $payments = Payment::with(['souscripteur','patients'])->where('souscripteur_id', auth()->user()->id)->latest()->get();
+        $payments = Payment::with(['souscripteur.user:id,nom,prenom','patients.user:id,nom,prenom'])->where('souscripteur_id', auth()->user()->id)->latest()->get();
 
         foreach($payments as $payment){
-            $payment['facture'] = route('facture.paiement.prestation', $payment->id);
+            $payment['facture'] = route('facture.paiement.prestation', $payment->uuid);
             $$payments[] = $payment;
         }
 
@@ -91,7 +98,8 @@ class PaymentController extends Controller
             "method" =>"stripe",
             "statut" =>"NON PAYE",
             "slug" => $request->souscripteur_id,
-            "motif" => "Paiement des prestations médicales"
+            "motif" => "Paiement des prestations médicales",
+            'uuid' => Uuid::uuid4()->toString()
         ]);
         //$url = '/payment/prestation/'.$payment->id);
         return  response()->json(['url'=>$payment]);
@@ -99,7 +107,7 @@ class PaymentController extends Controller
 
     public function paymentPrestation(Request $request){
 
-        $payment = Payment::find($request->id);
+        $payment = Payment::where('uuid', $request->id)->first();
         $description = "d'actes médicaux effectués sur le patient ".$payment->patients->user->nom.' '.$payment->patients->user->prenom;
         if($request->moyenpaiement == "stripe"){
             Stripe::setApiKey(config('app.stripe_key'));
@@ -117,8 +125,8 @@ class PaymentController extends Controller
                     'quantity' =>1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => url($this->url_global.'/payment-prestation/success/'.$request->get('id')),
-                'cancel_url' => url($this->url_global.'/payment-prestation/failed/'.$request->get('id'))
+                'success_url' => url($this->url_global.'/payment-prestation/success/'.$request->id),
+                'cancel_url' => url($this->url_global.'/payment-prestation/failed/'.$request->id)
             ]);
             return response()->json(['id' => $session->id, 'moyenpaiement' => $request->moyenpaiement]);
         }
@@ -151,7 +159,7 @@ class PaymentController extends Controller
      */
     public function show($id)
     {
-        $payments = Payment::with(['souscripteur.user','patients.user'])->whereId($id)->first();
+        $payments = Payment::with(['souscripteur.user','patients.user'])->whereUuid($id)->first();
         return response()->json(['payment'=>$payments]);
     }
 
@@ -202,7 +210,7 @@ class PaymentController extends Controller
      */
     public function getPayment($id)
     {
-        $payment = Payment::with(['souscripteur','patients'])->whereId($id)->first();
+        $payment = Payment::whereUuid($id)->first();
         return response()->json(['payment'=>$payment]);
     }
     /**
@@ -226,7 +234,7 @@ class PaymentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $payment = Payment::find($id);
+        $payment =  Payment::whereUuid($id)->first();
         $payment->patient_id = $request->patient_id;
         $payment->souscripteur_id = $request->souscripteur_id;
         $payment->amount = $request->amount;
@@ -245,7 +253,7 @@ class PaymentController extends Controller
      */
     public function destroy($id)
     {
-        $payments = Payment::with(['souscripteur.user','patients.user'])->whereId($id)->first();
+        $payments = Payment::with(['souscripteur.user','patients.user'])->whereUuid($id)->first();
         $payments->delete();
         return response()->json(['payment'=>$payments]);
     }

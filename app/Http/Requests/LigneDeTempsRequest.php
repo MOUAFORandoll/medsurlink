@@ -28,6 +28,7 @@ class LigneDeTempsRequest extends FormRequest
             "motif_consultation_id"=>'sometimes|nullable|string',
             "date_consultation"=>'sometimes|nullable|string',
             "etat"=>'sometimes|nullable|string',
+            'affiliation_id' => 'nullable'
         ];
     }
 }
