@@ -132,13 +132,12 @@ class LigneDeTempsController extends Controller
         //    ->distinct()/*->groupBy('ligne_de_temps_id')*/
         //    ->latest()->get();
 
-        $ligneDeTemps = LigneDeTemps::/* has('validations')-> */with([
+        $ligneDeTemps = LigneDeTemps::has('validations')->with([
             'motif',
             'dossier',
             'validations.examenComplementaire.examenComplementairePrix',
             'validations.consultation.versionValidation',
             'validations',
-            // 'validations.consultation.ligneDeTemps.motif',
         ])->where("dossier_medical_id", $dossier->id)->latest()->get();
 
         $ligne_temps = collect();
@@ -245,11 +244,11 @@ class LigneDeTempsController extends Controller
         /**
          * ici nous retournons la liste des affiliations avec lignes de temps associées et pour chaque ligne de temps, ses activités AMA
          */
-        $activite_ama_manuelles = Affiliation::with(['package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps.cloture', 'ligneTemps.activites_ama_patients.activitesAma:id,description_fr', 'ligneTemps.activites_ama_patients' => function ($query) use ($patient) {
+        $activite_ama_manuelles = Affiliation::with(['cloture', 'package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps.cloture', 'ligneTemps.activites_ama_patients.activitesAma:id,description_fr', 'ligneTemps.activites_ama_patients' => function ($query) use ($patient) {
             $query->where('patient_id', $patient->user_id);
         }])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
 
-        $activites_referent_manuelles = Affiliation::with(['package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_referent_patients.activitesMedecinReferent:id,description_fr', 'ligneTemps.activites_referent_patients' => function ($query) use ($patient) {
+        $activites_referent_manuelles = Affiliation::with(['cloture', 'package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_referent_patients.activitesMedecinReferent:id,description_fr', 'ligneTemps.activites_referent_patients' => function ($query) use ($patient) {
             $query->where('patient_id', $patient->user_id);
         }])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
 
@@ -272,7 +271,7 @@ class LigneDeTempsController extends Controller
 
         $contrat = getContrat($patient->user);
 
-        $affiliations = Affiliation::with(['patient.user', 'souscripteur.user', 'package','cloture'])->where('patient_id',$patient->user_id)->latest()->get();
+        $affiliations = Affiliation::with(['patient.user', 'souscripteur.user', 'package', 'cloture'])->where('patient_id',$patient->user_id)->latest()->get();
         $newAffiliations = collect($contrat->contrat);
         foreach($affiliations as $affiliation){
             $newAffiliation = new \stdClass();
