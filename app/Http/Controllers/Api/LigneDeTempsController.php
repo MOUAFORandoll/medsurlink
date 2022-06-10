@@ -142,7 +142,7 @@ class LigneDeTempsController extends Controller
 
         $ligne_temps = collect();
         foreach($ligneDeTemps as $ligneTemps){
-            if($ligneTemps->cloture){
+            if(is_null($ligneTemps->cloture)){
                 $ligneTemps->cloture()->create([]);
             }
             $validations = collect();
