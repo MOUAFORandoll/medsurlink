@@ -30,7 +30,7 @@ class ConsultationExamenValidationController extends Controller
         //->whereNull('etat_validation_medecin')
         ->distinct()
         ->get(['consultation_general_id']);
-        $examen_validation = $examen_validation->sortByDesc('created_at');
+        $examen_validation = $examen_validation->sortByDesc('updated_at');
         return response()->json(['examen_validation'=>$examen_validation]);
     }
     /**
