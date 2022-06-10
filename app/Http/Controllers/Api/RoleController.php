@@ -43,7 +43,7 @@ class RoleController extends Controller
             'guard_name'=>'api'
         ]);
         
-        $permission = Permission::create(['name'=>$request->get('permission'),]);
+//        $permission = Permission::create(['name'=>$request->get('permission'),]);
         return response()->json(['role'=>$role]);
     }
 
@@ -55,7 +55,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = Role::find($id);
+        $role = Role::detete($id);
         return response()->json(['role'=>$role]);
     }
 
@@ -94,8 +94,8 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::find($id);
-        $role->detete();
-        return response()->json(['delete'=>"Utilisateur supprimé avec succes"]);
+	 $role = Role::where('id',$id)->first();
+	 $role->detete();
+	 return response()->json(['delete'=>"Utilisateur supprimé avec succes"]);
     }
 }
