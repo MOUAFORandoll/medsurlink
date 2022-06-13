@@ -147,7 +147,7 @@ class LigneDeTempsController extends Controller
             }
             $validations = collect();
             foreach($ligneTemps->validations as $validation){
-                $validation->histories = DB::table('model_changes_history')->where(['model_id' => $validation->consultation->versionValidation->id, 'model_type' => 'App\Models\VersionValidation'])->where('changes', '<>', '[]')->orderBy('created_at', 'desc')->get(['changes']);
+                $validation->histories = DB::table('model_changes_history')->where(['model_id' => $validation->consultation->versionValidation->id, 'model_type' => 'App\Models\VersionValidation', 'change_type' => 'updated'])->orderBy('created_at', 'desc')->get(['changes']);
                 $validations->push($validation);
             }
             $ligneTemps->validations = $validations;
@@ -210,7 +210,7 @@ class LigneDeTempsController extends Controller
         foreach($dossier->consultationsMedecine as $consultation){
             $validations = collect();
             foreach($consultation->validations as $validation){
-                $validation->histories = DB::table('model_changes_history')->where(['model_id' => $validation->consultation->versionValidation->id, 'model_type' => 'App\Models\VersionValidation'])->where('changes', '<>', '[]')->orderBy('created_at', 'desc')->get(['changes']);
+                $validation->histories = DB::table('model_changes_history')->where(['model_id' => $validation->consultation->versionValidation->id, 'model_type' => 'App\Models\VersionValidation', 'change_type' => 'updated'])->orderBy('created_at', 'desc')->get(['changes']);
                 $validations->push($validation);
             }
             $consultation->validations = $validations;
