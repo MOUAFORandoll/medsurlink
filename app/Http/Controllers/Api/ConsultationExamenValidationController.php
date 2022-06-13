@@ -281,11 +281,13 @@ class ConsultationExamenValidationController extends Controller
     public function ligneTempsBilan($ligne_temps_id){
 
         $examen_validation = ConsultationExamenValidation::where('ligne_de_temps_id', $ligne_temps_id)->first();
-
-        $bilans = DB::table('model_changes_history')->where(['after_changes->ligne_de_temps_id' => $ligne_temps_id, 'changer_id' => $examen_validation->souscripteur_id, 'model_type' => 'App\Models\ConsultationExamenValidation', 'change_type' => 'updated'])->orderBy('created_at', 'desc')->get(['after_changes'])->unique(function ($item) {
-            $after_changes = json_decode($item->after_changes);
-            return $after_changes;
-        });
+        $bilans = collect([]);
+        if($examen_validation){
+            $bilans = DB::table('model_changes_history')->where(['after_changes->ligne_de_temps_id' => $ligne_temps_id, 'changer_id' => $examen_validation->souscripteur_id, 'model_type' => 'App\Models\ConsultationExamenValidation', 'change_type' => 'updated'])->orderBy('created_at', 'desc')->get(['after_changes'])->unique(function ($item) {
+                $after_changes = json_decode($item->after_changes);
+                return $after_changes;
+            });
+        }
 
         $bilans = $bilans->transform(function ($item, $key) {
             $consultation_examenvalidation = json_decode($item->after_changes);
