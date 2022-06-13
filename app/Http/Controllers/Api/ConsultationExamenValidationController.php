@@ -182,7 +182,7 @@ class ConsultationExamenValidationController extends Controller
                 $query->where('etablissement_exercices_id', '=', $etablissement);
             }])->where('consultation_general_id', '=', $consultation->id)->latest()->get();
 
-            $version_validation = VersionValidation::where(["consultation_general_id" => $examens[0]['consultation'], 'ligne_de_temps_id' => $examen_validation->ligne_de_temps_id])->first();
+            $version_validation = VersionValidation::where(["consultation_general_id" => $examens[0]['consultation'], 'ligne_de_temps_id' => $consultation->ligne_de_temps_id])->first();
 
             $version_validation->version += 1;
             $version_validation->save();
