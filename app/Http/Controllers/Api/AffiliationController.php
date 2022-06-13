@@ -29,7 +29,7 @@ class AffiliationController extends Controller
     {
         $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien'])->latest()->get();
         foreach ($affiliations as $affiliation){
-            if($affiliation->cloture){
+            if(is_null($affiliation->cloture)){
                 $affiliation->cloture()->create([]);
             }
             if (!is_null($affiliation->patient)){
@@ -142,7 +142,7 @@ class AffiliationController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
         $affiliation = Affiliation::with(['patient', 'motifs:id,description', 'patient.dossier', 'package:id,description_fr,montant', 'patient.financeurs.lien'])->whereSlug($slug)->first();
-        if($affiliation->cloture){
+        if(is_null($affiliation->cloture)){
             $affiliation->cloture()->create([]);
         }
 
