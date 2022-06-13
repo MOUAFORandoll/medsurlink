@@ -213,6 +213,7 @@ class ConsultationMedecineGeneraleController extends Controller
             'montant_total' => 0,
             'plus_value' => 0,
             'consultation_general_id' => $consultation->id,
+            'ligne_de_temps_id'=> $request->ligne_de_temps_id,
             'version' => 0
         ]);
 

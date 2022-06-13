@@ -183,9 +183,21 @@ class ConsultationExamenValidationController extends Controller
             }])->where('consultation_general_id', '=', $consultation->id)->latest()->get();
 
             $version_validation = VersionValidation::where(["consultation_general_id" => $examens[0]['consultation'], 'ligne_de_temps_id' => $consultation->ligne_de_temps_id])->first();
-
-            $version_validation->version += 1;
-            $version_validation->save();
+            if(!is_null($version_validation)){
+                $version_validation->version += 1;
+                $version_validation->save();
+            }else{
+                $version_validation = VersionValidation::create([
+                    'montant_prestation' => 0,
+                    'montant_medecin' => 0,
+                    'montant_souscripteur' => 0,
+                    'montant_total' => 0,
+                    'plus_value' => 0,
+                    'consultation_general_id' => $examens[0]['consultation'],
+                    'ligne_de_temps_id' => $consultation->ligne_de_temps_id,
+                    'version' => 1
+                ]);
+            }
 
 
             foreach($examen_validation as $examen){
@@ -194,7 +206,6 @@ class ConsultationExamenValidationController extends Controller
                     $examen->etat_validation_souscripteur = 1;
                     $examen->version += 1;
                     $examen->date_validation_souscripteur = Carbon::now();
-
                     $examen->save();
                 }else{
                     $examen->etat_validation_souscripteur = 0;
