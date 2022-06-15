@@ -51,7 +51,7 @@ class DossierAllergieController extends Controller
 //            "allergies"=>"required_without:allergiesACreer",
 //            "allergiesACreer"=>"required_without:allergies",
 //            "allergies.*"=>"sometimes|integer|exists:allergies,id",
-            "allergiesACreer"=>"required|string|min:7",
+            "allergiesACreer"=>"required|string|min:3",
 
         ]);
 
