@@ -37,4 +37,8 @@ class ConsultationExamenValidation extends Model
     public function consultation(){
         return $this->belongsTo(ConsultationMedecineGenerale::class,'consultation_general_id','id');
     }
+
+    public function souscripteur(){
+        return $this->belongsTo(Souscripteur::class,'souscripteur_id','user_id');
+    }
 }
