@@ -41,6 +41,11 @@ class EtablissementExerciceController extends Controller
 
     }
 
+    public function findEtablissement($etablissement){
+        $etablissements =  EtablissementExercice::where('name', 'LIKE', "%{$etablissement}%")->orwhere('description', 'LIKE', "%{$etablissement}%")->get();
+        return response()->json(['etablissements' => $etablissements]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
