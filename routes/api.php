@@ -72,6 +72,7 @@ Route::group(['middleware' => ['auth:api','role:Admin']], function () {
 //        Définition des routes accéssible par le gestionnaire
 Route::group(['middleware' => ['auth:api', 'role:Admin|Gestionnaire|Assistante|Pharmacien']], function () {
     Route::resource('etablissement','Api\EtablissementExerciceController')->except(['create','edit']);
+    Route::get('findEtablissement/{etablissement}', 'Api\EtablissementExerciceController@findEtablissement');
     Route::resource('profession','Api\ProfessionController')->except(['create','edit']);
     Route::resource('praticien','Api\PraticienController')->except(['create','edit']);
     Route::resource('medecin-controle','Api\MedecinControleController')->except(['create','edit']);
