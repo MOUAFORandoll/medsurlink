@@ -26,7 +26,7 @@ class AllergieRequest extends FormRequest
     public function rules()
     {
         return [
-            "description"=>"required|string|min:6",
+            "description"=>"required|string|min:3",
             "date"=>"sometimes|nullable|date|before_or_equal:".Carbon::now()->format('Y-m-d'),
         ];
     }

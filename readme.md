@@ -16,6 +16,37 @@ php artisan migrate --path=/database/migrations/2021_12_28_074058_add_version_to
     - mettre le medecin_control_id, etat_validation_medecin, etat_validation_souscripteur, date_validation_souscripteur,  à null dans la base de donnée
 php artisan migrate --path=/database/migrations/2022_05_10_103046_add_etablissement_id_to_consultation_examen_validation_table.php
 php artisan migrate --path=/database/migrations/2021_11_22_102450_create_examen_etablissement_prix_table.php
-php artisan migrate --path=/database/migrations/
+php artisan migrate --path=/database/migrations/2021_12_23_092950_create_activites_medecin_referent_table.php
+
+php artisan migrate --path=/database/migrations/2021_12_01_091212_create_activites_ama_table.php
+php artisan migrate --path=/database/migrations/2021_12_01_091531_create_activites_ama_patient_table.php
+
+php artisan migrate --path=/database/migrations/2022_05_13_145159_create_model_changes_history_table.php
+
+php artisan migrate --path=/database/migrations/2021_12_29_114729_create_activites_controle_table.php
+
+php artisan migrate --path=/database/migrations/2022_05_16_164429_add_affiliation_id_to_ligne_de_temps_table.php
+
+php artisan migrate --path=/database/migrations/2022_05_17_111718_add_affiliation_id_and_ligne_temps_id_to_activites_ama_patient_table.php
+
+php artisan migrate --path=/database/migrations/2022_05_19_111548_add_ligne_temps_id_to_rendez_vous_table.php
+
+php artisan migrate --path=/database/migrations/2022_05_23_121028_add_fields_to_activites_controle.php
+
+php artisan migrate --path=/database/migrations/2022_06_01_115835_add_consultation_id_to_rendez_vous_table.php
 
 
+composer require doctrine/dbal:^2.12.1 
+
+php artisan migrate --path=/database/migrations/2022_06_02_094859_update_date_validations_to_consultation_examen_validation.php
+
+composer require ramsey/uuid "^3.7"
+
+php artisan migrate --path=/database/migrations/2022_06_03_155418_add_uuid_to_payments_table.
+
+
+php artisan migrate --path=/database/migrations/2022_06_06_142647_add_ligne_de_temps_id_to_version_validations_table.php
+
+php artisan migrate --path=/database/migrations/2022_06_06_151155_create_motiffables_table.php
+
+php artisan migrate --path=/database/migrations/2022_06_09_084538_create_clotures_table.php

@@ -18,6 +18,7 @@ class CreateActivitesAmaPatientTable extends Migration
             $table->unsignedBigInteger('activite_ama_id')->nullable();
             $table->unsignedBigInteger('creator')->nullable();
             $table->unsignedBigInteger('patient_id')->nullable();
+            $table->unsignedBigInteger('etablissement_id')->nullable();
             $table->string('statut')->nullable();
             $table->longText('commentaire')->nullable();
             $table->date('date_cloture')->nullable();

@@ -242,7 +242,14 @@ class DossierMedicalController extends Controller
             $contrat = getContrat($dossier->patient->user);
             $dossier->affiliation = $affiliation;
             $this->checkIfUserAuthorized($dossier);
-        return response()->json(['dossier'=>$dossier, 'affiliation'=>$affiliation, 'cim'=>$contrat ]);
+            // dd($dossier->consultationsMedecine);
+
+            foreach($dossier->consultationsMedecine as $i => $consultation){
+                $consultation->examens = is_array($consultation->examens) ? $consultation->examens : json_decode($consultation->examens);
+                $dossier->consultationsMedecine[$i] = $consultation;
+            }
+           
+       return response()->json(['dossier'=>$dossier, 'affiliation'=>$affiliation, 'cim'=>$contrat ]);
     }
 
     /**
