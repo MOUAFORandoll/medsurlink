@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use App\Models\Souscripteur;
 use App\Http\Controllers\Controller;
+use App\Mail\ValidationFinanciere;
 use App\Models\ConsultationExamenValidation;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\DossierMedical;
+use App\Models\EtablissementPrestation;
 use App\Models\ExamenEtablissementPrix;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +18,7 @@ use App\Models\ExamenComplementaire;
 use App\Models\LigneDeTemps;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use stdClass;
 
 class ConsultationExamenValidationController extends Controller
@@ -139,23 +143,43 @@ class ConsultationExamenValidationController extends Controller
      */
     public function setEtatValidationMedecin(Request $request)
     {
-        //dd($request->get('examens'));
-
+        /**
+         *  $examens contient les examens valider par le medécin controle
+         */
+        $examens = collect();
+        $is_update = 0;
         foreach($request->get('examens') as $examen){
-
             $examen_validation = ConsultationExamenValidation::where('id',$examen['id'])->first();
             $ancienne_valeur = $examen_validation->etat_validation_medecin;
-
             $examen_validation->etat_validation_medecin = $examen['etat'];
             $examen_validation->medecin_control_id = Auth::id();
-            //$examen_validation->version = $examen_validation->version+1;
             $examen_validation->date_validation_medecin = Carbon::now();
+            /**
+             * Sauvegarde de la validation si nous avons des changements au niveau de la validation d'un examen
+             */
             if($ancienne_valeur != $examen['etat']){
                 $examen_validation->save();
+                $is_update = 1;
             }
+            /**
+             * Listing des prestations valider par le medécin controle pour la validation du souscripteur
+             */
+            if($examen['etat']){
+                $exam = ExamenEtablissementPrix::where(['etablissement_exercices_id' => $examen_validation->etablissement_id, 'examen_complementaire_id' => $examen_validation->examen_complementaire_id])->first();
+                $exam = $exam->makeHidden(['id', 'etablissement_exercices_id','examen_complementaire_id', 'other_complementaire_id', 'created_at', 'updated_at', 'deleted_at']);
+                $exam->fr_description = $exam->examenComplementaire->fr_description;
+                $examens->push($exam);
+            }
+
+        }
+        /**
+         * envoie du mail du souscripteur lui demandant de valider
+         */
+        if($is_update){
+            Mail::to($examen_validation->souscripteur->user->email)->send(new ValidationFinanciere($examen_validation->souscripteur->user, $examen_validation->consultation->dossier->patient->user, $examens));
         }
 
-        return  response()->json(['examen_validation'=>$examen_validation]);
+        return  response()->json(['examen_validation' => $examen_validation]);
     }
     /**
      * Update medecin validation.
