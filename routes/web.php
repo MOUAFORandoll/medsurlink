@@ -4,8 +4,14 @@ use App\Models\AffiliationSouscripteur;
 use App\Models\CommandePackage;
 use App\Models\ContratIntermediationMedicale;
 use App\Models\CompteRenduOperatoire;
+use App\Models\ConsultationExamenValidation;
+use App\Models\DossierMedical;
+use App\Models\ExamenComplementaire;
+use App\Models\ExamenEtablissementPrix;
+use App\Models\LigneDeTemps;
 use App\Models\Payment;
 use App\Models\PaymentOffre;
+use App\Models\RendezVous;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Route;
 
@@ -92,11 +98,12 @@ Route::get('impression/facture-offre/{affiliation}', function ($affiliation) {
     return $pdf['stream'];
 })->name('facture.offre');
 
-Route::get('impression/prestation/{paiement_id}', function ($paiement_id) {
+Route::get('impression/prestation/{paiement_uuid}', function ($paiement_uuid) {
 
-    $payment = Payment::find($paiement_id)->load('souscripteur.user','patients.user');
+    $payment = Payment::where("uuid", $paiement_uuid)->first();
+    $payment = $payment->load('souscripteur.user','patients.user');
 
-    $payment_id = $paiement_id;
+    $payment_id = $payment->id;
     $commande_date = $payment->date_payment;
     $montant_total = $payment->amount;
     $echeance =  "13/02/2022";
@@ -114,15 +121,31 @@ Route::get('impression/prestation/{paiement_id}', function ($paiement_id) {
     $pdf = generationPdfPaiementPrestation($payment_id, $commande_date, $montant_total, $echeance, $description, $mode_paiement, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
     return $pdf['stream'];
 })->name('facture.paiement.prestation');
-/*
-Route::get('{all}', function () {
-    return view('dashboard');
-//})->where('all', '^(dashboard).*$');
-})//->middleware('auth','isAdmin')
-->where('all', '^admin|admin/|admin/.*,dashboard|dashboard/|dashboard/.*$');
-*/
+
+Route::get('bilans/{patient}', function ($patient) {
+    try {
+        $dossier = DossierMedical::where('slug', $patient)->first();
+        $ligne_temp_ids = LigneDeTemps::where('dossier_medical_id', $dossier->id)->get()->pluck('id');
+        $examen_validations = ConsultationExamenValidation::whereIn('ligne_de_temps_id', $ligne_temp_ids)->get();
+
+        $examen_validations = $examen_validations->transform(function ($item, $key) {
+            $examen_prix = ExamenEtablissementPrix::where(['examen_complementaire_id' => $item->examen_complementaire_id, 'etablissement_exercices_id' => $item->etablissement_id])->latest()->first();
+            $item->prix = $examen_prix->prix;
+            $item->examen = ExamenComplementaire::find($examen_prix->examen_complementaire_id)->fr_description;
+            return $item;
+        });
+
+        $total_prescription = $examen_validations->sum('prix');
+        $total_medecin_controle = $examen_validations->where('etat_validation_medecin', 1)->sum('prix');
+        $total_medecin_assureur = $examen_validations->where('etat_validation_souscripteur', 1)->sum('prix');
+        $description = "Bilan ";
+        $pdf = PDF::loadView('pdf.soins.bilan_financier', ['examen_validations' => $examen_validations, 'total_prescription' => $total_prescription, 'total_medecin_controle' => $total_medecin_controle, 'total_medecin_assureur' => $total_medecin_assureur, 'description' => $description]);
+        return $pdf->stream("Bilan financier.pdf");
+    }catch (\Exception $exception){
+        //$exception
+    }
+})->name('patient.bilan');
 
 Auth::routes();
 
-//Route::get('/home', 'HomeController@index')->name('home');
 

@@ -26,7 +26,13 @@ Prénom : <b>{{ $patient_prenom }}</b>
 
 Numero de téléphone du patient :<b>{{ $patient_telehone }}</b>
 
-Plainte :<b>{{ $plainte }}</b>
+Plaintes :
+<ul>
+    @forelse ($plainte as $item)
+        <li> <b>{{ $item->description }}</b> </li>
+    @empty
+    @endforelse
+</ul>
 
 Niveau d'urgence :<b>{{ $urgence }}</b>
 

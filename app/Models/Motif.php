@@ -56,4 +56,21 @@ class Motif extends Model
     public function actions(){
         return $this->hasOne(Motif::class,'motif_id','id');
     }
+
+    public function consultationsMedecines(){
+
+        return $this->morphedByMany(ConsultationMedecineGenerale::class, 'motiffable' ,'consultation_motif','motif_id', 'consultation_medecine_generale_id');
+    }
+
+    public function nLigneDeTemps(){
+
+        return $this->morphedByMany(LigneDeTemps::class, 'motiffable', 'motif_consultation_id', 'id');
+    }
+
+    public function affiliations(){
+
+        return $this->morphedByMany(Affiliation::class, 'motiffable');
+    }
+
+
 }

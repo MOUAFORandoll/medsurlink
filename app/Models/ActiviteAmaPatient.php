@@ -19,6 +19,10 @@ class ActiviteAmaPatient extends Model
     protected $table = 'activites_ama_patient';
     protected $fillable = [
         'activite_ama_id',
+        'etablissement_id',
+        'affiliation_id',
+        'ligne_temps_id',
+        'commentaire',
         'patient_id',
         'creator',
         'statut',
@@ -66,6 +70,23 @@ class ActiviteAmaPatient extends Model
     }
     public function patient(){
         return $this->belongsTo(Patient::class,'patient_id','user_id');
+    }
+
+
+    public function affiliation(){
+        return $this->belongsTo(Affiliation::class);
+    }
+
+    public function ligne_temps(){
+        return $this->belongsTo(LigneDeTemps::class);
+    }
+
+    public function motif(){
+        return $this->belongsTo(Motif::class);
+    }
+
+    public function etablissement(){
+        return $this->belongsTo(EtablissementExercice::class);
     }
 
 }
