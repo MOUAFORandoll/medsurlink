@@ -274,7 +274,7 @@ class LigneDeTempsController extends Controller
         $affiliations = Affiliation::with(['patient.user', 'souscripteur.user', 'package', 'cloture'])->where('patient_id',$patient->user_id)->latest()->get();
         $newAffiliations = collect($contrat->contrat);
         foreach($affiliations as $affiliation){
-            if($affiliation->souscripteur->user){
+            if($affiliation->souscripteur){
                 $newAffiliation = new \stdClass();
                 $newAffiliation->adresse_affilie = $affiliation->patient->user->adresse;
                 $newAffiliation->ageAffilie = $affiliation->patient->age;
