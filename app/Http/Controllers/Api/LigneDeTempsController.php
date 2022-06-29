@@ -278,7 +278,7 @@ class LigneDeTempsController extends Controller
             $newAffiliation->adresse_affilie = $affiliation->patient->user->adresse;
             $newAffiliation->ageAffilie = $affiliation->patient->age;
             $newAffiliation->bornAroundAffilie = $affiliation->patient ? $affiliation->patient->date_de_naissance : "non renseigné";
-            $newAffiliation->bornAroundSouscripteur = $affiliation->souscripteur->date_de_naissance;
+            $newAffiliation->bornAroundSouscripteur = $affiliation->souscripteur ? $affiliation->souscripteur->date_de_naissance : "non renseigné";;
             $newAffiliation->canal = "Website";
             $newAffiliation->code_promo = null;
             $newAffiliation->contrat_code = $affiliation->code_contrat;
