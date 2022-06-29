@@ -299,7 +299,7 @@ class LigneDeTempsController extends Controller
             $newAffiliation->nomAffilie = $affiliation->patient->user->nom;
             $newAffiliation->nomContact = $affiliation->contact_name;
             $newAffiliation->nomPatient = $affiliation->patient->user->nom;
-            $newAffiliation->nomSouscripteur = $affiliation->souscripteur->user->nom;
+            $newAffiliation->nomSouscripteur = $affiliation->souscripteur ? $affiliation->souscripteur->user->nom : "";
             $newAffiliation->nom_mere = "";
             $newAffiliation->nom_pere = "";
             $newAffiliation->nombre_envoi = 0;
