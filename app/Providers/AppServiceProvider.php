@@ -17,6 +17,7 @@ use App\Models\Antecedent;
 use App\Models\Assistante;
 use App\Models\Conclusion;
 use App\Models\Medicament;
+use App\Models\Pharmacien;
 use App\Models\Profession;
 use App\Models\RendezVous;
 use App\Models\Specialite;
@@ -81,6 +82,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::morphMap([
             'Comptable'=>Comptable::class,
             'Assistante'=>Assistante::class,
+            'Pharmacien'=>Pharmacien::class,
             'Kinesitherapie'=>Kinesitherapie::class,
             'Facture'=>Facture::class,
             'RendezVous'=>RendezVous::class,

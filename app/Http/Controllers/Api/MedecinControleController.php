@@ -417,6 +417,7 @@ class MedecinControleController extends Controller
     }
 
     public function removeEtablissement(Request $request){
+
         $validation = Validator::make($request->all(),[
             'etablissement_id.*'=>'required|integer|exists:etablissement_exercices,id',
             'medecin_id'=>'required|exists:medecin_controles,slug',
@@ -434,9 +435,12 @@ class MedecinControleController extends Controller
             defineAsAuthor("Medecin",$medecin->user_id,'detach etablissement '.$etablissement->name);
         }
 
-
         $medecin = MedecinControle::with('etablissements','specialite','user')->whereUserId($medecin->user_id)->first();
         return response()->json(['medecin'=>$medecin]);
+    }
+
+    public function getMedecinEtablissement($etablissement){
+        return response()->json($etablissement);
     }
 
 }

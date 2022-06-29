@@ -150,6 +150,9 @@ if (!function_exists('getStatusUserRole')){
         elseif ($roleName == "Assistante"){
             return response()->json(['auteurable_user'=>$user->assistante]);
         }
+        elseif ($roleName == "Pharmacien"){
+            return response()->json(['auteurable_user'=>$user->pharmacien]);
+        }
     }
 }
 
@@ -289,6 +292,10 @@ if (!function_exists('getUser')){
         elseif ($roleName == "Assistante"){
             $assistante = \App\Models\Assistante::whereSlug($slug)->first();
             return response()->json(['user'=>$assistante->user]);
+        }
+        elseif ($roleName == "Pharmacien"){
+            $pharmacien = \App\Models\Pharmacien::whereSlug($slug)->first();
+            return response()->json(['user'=>$pharmacien->user]);
         }
     }
 }

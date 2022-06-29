@@ -2,8 +2,9 @@
 
 namespace App\Models;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\ActivitesControle;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LigneDeTemps extends Model
 {
@@ -16,6 +17,7 @@ class LigneDeTemps extends Model
         'motif_consultation_id',
         'etat',
         'date_consultation',
+        'affiliation_id'
     ];
 
     // dossier médicaux lié à la ligne de temps
@@ -42,5 +44,30 @@ class LigneDeTemps extends Model
     }
     public function  validations(){
         return $this->hasMany(ConsultationExamenValidation::class,'ligne_de_temps_id','id');
+    }
+
+    public function rendezVous(){
+        return $this->hasMany(RendezVous::class, 'ligne_temps_id');
+    }
+
+    public function affiliation(){
+        return $this->belongsTo(Affiliation::class);
+    }
+
+
+    public function activites_ama_patients(){
+        return $this->hasMany(ActiviteAmaPatient::class, 'ligne_temps_id');
+    }
+
+    public function activites_referent_patients(){
+        return $this->hasMany(ActivitesControle::class, 'ligne_temps_id');
+    }
+
+    public function motifs(){
+        return $this->morphToMany(Motif::class, 'motiffable');
+    }
+
+    public function cloture(){
+        return $this->morphOne(Cloture::class, 'cloturable');
     }
 }

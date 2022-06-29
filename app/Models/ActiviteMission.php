@@ -16,19 +16,29 @@ class ActiviteMission extends Model
     use Sluggable;
     use SoftDeletes;
 
+    // protected $fillable = [
+    //     'activite_id',
+    //     'dossier_medical_id',
+    //     'creator',
+    //     'commentaire',
+    //     'description',
+    //     'nom_partenaire',
+    //     'nom_activite',
+    //     'statut',
+    //     'date_cloture',
+    //     'slug',
+    // ];
+
     protected $fillable = [
+        'etablissement_id',
         'activite_id',
-        'dossier_medical_id',
+        'activite_ama_id',
         'creator',
         'commentaire',
-        'description',
-        'nom_partenaire',
-        'nom_activite',
         'statut',
         'date_cloture',
         'slug',
     ];
-
 
     /**
      * Return the sluggable configuration array for this model.
@@ -59,7 +69,7 @@ class ActiviteMission extends Model
     }
 
     public function activite(){
-        return $this->belongsTo(Activite::class,'activite_id','id');
+        return $this->belongsTo(ActivitesAma::class,'activite_ama_id','id');
     }
 
     public function createur(){
@@ -68,9 +78,5 @@ class ActiviteMission extends Model
 
     public function dossier(){
         return $this->belongsTo(DossierMedical::class,'dossier_medical_id','id');
-    }
-
-    public function description(){
-        return $this->belongsTo(GroupeActiviteMission::class,'description','id');
     }
 }

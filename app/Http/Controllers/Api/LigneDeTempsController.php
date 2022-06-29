@@ -8,14 +8,18 @@ use App\Models\RendezVous;
 use App\Models\Cardiologie;
 use App\Models\LigneDeTemps;
 use App\Models\DossierMedical;
+use App\Models\ActivitesControle;
 use App\Models\ActiviteAmaPatient;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Models\CompteRenduOperatoire;
 use App\Models\ConsultationObstetrique;
 use App\Http\Requests\LigneDeTempsRequest;
+use App\Models\Affiliation;
 use App\Models\ConsultationExamenValidation;
 use App\Models\ConsultationMedecineGenerale;
+use App\Models\Motif;
+use Illuminate\Support\Facades\DB;
 
 class LigneDeTempsController extends Controller
 {
@@ -32,9 +36,10 @@ class LigneDeTempsController extends Controller
 
     public function ligneDeTemps($id)
     {
-        $dossier = DossierMedical::whereSlug($id)->first();
-        $ligneTemps = LigneDeTemps::with(['dossier','motif'])->get();
-        return response()->json(['ligne_temps'=>$ligneTemps]);
+        $ligneTemps = LigneDeTemps::whereHas('dossier', function ($query) use($id) {
+            $query->where('slug', $id);
+        })->with(['motif', 'dossier'])->get();
+        return response()->json(['ligne_temps' => $ligneTemps]);
     }
 
     /**
@@ -55,14 +60,33 @@ class LigneDeTempsController extends Controller
      */
     public function store(LigneDeTempsRequest $request)
     {
+        $all_plaintes = explode(",", $request->plaintes);
+        $plaintes = [];
+        foreach($all_plaintes as $plainte){
+            if(str_contains($plainte, 'item_')){
+                /**
+                 * on créé une nouvelle plainte si elle n'existe pas
+                 */
+                $motif = Motif::where(["description" => explode("item_", $plainte)[1]])->first();
+                if(is_null($motif)){
+                    $motif = Motif::create(["reference" => now(), "description" => explode("item_", $plainte)[1]]);
+                    defineAsAuthor("Motif",$motif->id,'create');
+                }
+                $plaintes[] = $motif->id;
+            }else{
+                $plaintes[] = $plainte;
+            }
+        }
         // création d'une ligne de temps
-        $ligneDeTemps = LigneDeTemps::create($request->validated(),['motif_consultation_id','dossier_medical_id','date_consultation']);
+        $ligne_temps = LigneDeTemps::create(['dossier_medical_id' => $request->dossier_medical_id, 'motif_consultation_id' => $plaintes[0], 'etat' => 1, 'date_consultation' => $request->date_consultation, 'affiliation_id' => $request->affiliation_id]);
+        $ligne_temps->motifs()->sync($plaintes);
+        $ligne_temps->cloture()->create([]);
 
         // Sauvegarde des contributeurs
         $contributeurs = $request->get('contributeurs');
-        addContributors($contributeurs,$ligneDeTemps,'LigneDeTemps');
+        addContributors($contributeurs, $ligne_temps, 'LigneDeTemps');
 
-        return response()->json(["ligne_temps" => $ligneDeTemps]);
+        return response()->json(["ligne_temps" => $ligne_temps]);
     }
 
     /**
@@ -91,16 +115,47 @@ class LigneDeTempsController extends Controller
     public function ligneDeTempsByDossier($id)
     {
 
+        // $ligneDeTemps = LigneDeTemps::with([
+        //     'motif',
+        //     'dossier',
+        // ])->whereId($id)->first();
+
         $dossier = DossierMedical::whereSlug($id)->first();
+        // $examen_validation_assureur = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
+        //    ->whereNotNull('etat_validation_medecin')
+        //    ->where('medecin_control_id', '=',Auth::id())->where('ligne_de_temps_id', '=', $ligneDeTemps)
+        //    ->distinct()/*->groupBy('ligne_de_temps_id')*/
+        //    ->latest()->get();
+        // $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])
+        //    ->whereNotNull('etat_validation_souscripteur')
+        //    ->where('medecin_control_id', '=',Auth::id())->where('ligne_de_temps_id', '=', $ligneDeTemps)
+        //    ->distinct()/*->groupBy('ligne_de_temps_id')*/
+        //    ->latest()->get();
 
         $ligneDeTemps = LigneDeTemps::with([
             'motif',
             'dossier',
             'validations.examenComplementaire.examenComplementairePrix',
             'validations.consultation.versionValidation',
-        ])->where("dossier_medical_id",$dossier->id)->latest()->get();
+            'validations',
+        ])->where("dossier_medical_id", $dossier->id)->latest()->get();
 
-        return response()->json(["ligne_temps" => $ligneDeTemps]);
+        $ligne_temps = collect();
+        foreach($ligneDeTemps as $ligneTemps){
+            if(is_null($ligneTemps->cloture)){
+                $ligneTemps->cloture()->create([]);
+            }
+            $validations = collect();
+            foreach($ligneTemps->validations as $validation){
+                $validation->histories = DB::table('model_changes_history')->where(['model_id' => $validation->consultation->versionValidation->id, 'model_type' => 'App\Models\VersionValidation', 'change_type' => 'updated'])->orderBy('created_at', 'desc')->get(['changes']);
+                $validations->push($validation);
+            }
+            $ligneTemps->validations = $validations;
+            $ligne_temps->push($ligneTemps);
+        }
+
+        return response()->json(["ligne_temps" => $ligne_temps]);
+        // "examen_validation_medecin" => $examen_validation_medecin, "examen_validation_assureur" => $examen_validation_assureur
     }
     /**
      * Show the form for editing the specified resource.
@@ -136,7 +191,7 @@ class LigneDeTempsController extends Controller
     {
         //Auth::loginUsingId(1);
         $dossier = DossierMedical::whereSlug($id)
-         ->with(
+         ->with([
             // "resultatsImagerie",
             // "resultatsLabo",
             // "hospitalisations",
@@ -150,7 +205,21 @@ class LigneDeTempsController extends Controller
             // "kinesitherapies",
             "avis",
             // "consultationsManuscrites"
-            )->first();
+            ])->first();
+        $consultations = collect();
+        foreach($dossier->consultationsMedecine as $consultation){
+            $validations = collect();
+            foreach($consultation->validations as $validation){
+                $validation->histories = DB::table('model_changes_history')->where(['model_id' => $validation->consultation->versionValidation->id, 'model_type' => 'App\Models\VersionValidation', 'change_type' => 'updated'])->orderBy('created_at', 'desc')->get(['changes']);
+                $validations->push($validation);
+            }
+            $consultation->validations = $validations;
+            $consultations->push($consultation);
+        }
+
+
+
+        $dossier->consultationsMedecine = $consultations;
 
        $patient = Patient::where('user_id', DossierMedical::whereSlug($id)->first()->patient_id)
        ->with([
@@ -158,26 +227,120 @@ class LigneDeTempsController extends Controller
            "payments",
            "dossier",
            "rendezVous"])->first();
-        $examen_validation_assureur = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
-           ->whereNotNull('etat_validation_medecin')
-           ->where('medecin_control_id', '=',Auth::id())
-           ->distinct()
-           ->latest()->get();
-        $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])
-           ->whereNotNull('etat_validation_souscripteur')
-           ->where('medecin_control_id', '=',Auth::id())
-           ->distinct()
-           ->latest()->get();
-        $activites = ActiviteAmaPatient::with(['activitesAma','patient','patient.rendezVous','patient.medecinReferent.medecinControles','updatedBy','createur'])->where('patient_id',$patient->user_id)->latest()->get();
-        //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
-        $rendezVous = RendezVous::where('patient_id',$patient->user_id)->latest()->get();
-        $array = array('rendez_vous' =>$rendezVous,'activite_ama' =>  $activites,'examen_validation_assureur' =>  $examen_validation_assureur, 'examen_validation_medecin' =>  $examen_validation_medecin);
+       /*  $examen_validation_assureur = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif:id,description','consultation.dossier.patient.user','consultation.author'])->whereHas('consultation.dossier', function($query) use($patient) {
+            $query->where('patient_id', $patient->user_id);
+        })->whereNotNull('etat_validation_medecin')->distinct()->latest()->get()->unique('consultation_general_id');
 
+        $examen_validation_medecin = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif:id,description','consultation.dossier.patient.user','consultation.author','consultation.versionValidation'])->whereHas('consultation.dossier', function($query) use($patient) {
+            $query->where('patient_id', $patient->user_id);
+        })->whereNotNull('etat_validation_souscripteur')->distinct()->latest()->get()->unique('consultation_general_id'); */
+
+        /**
+         * ici nous retournons l'ensemble des activités ama qui nes sont pas relié à une line de temps
+         */
+        $activite_ama_isoles = ActiviteAmaPatient::doesntHave('affiliation')->with(['activitesAma:id,description_fr,created_at', 'updatedBy', 'createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_ama_id', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
+        $activites_referent_isoles = ActivitesControle::doesntHave('affiliation')->with(['activitesMedecinReferent:id,description_fr','updatedBy','createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_id', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
+
+        /**
+         * ici nous retournons la liste des affiliations avec lignes de temps associées et pour chaque ligne de temps, ses activités AMA
+         */
+        $activite_ama_manuelles = Affiliation::with(['cloture', 'package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps.cloture', 'ligneTemps.activites_ama_patients.activitesAma:id,description_fr', 'ligneTemps.activites_ama_patients' => function ($query) use ($patient) {
+            $query->where('patient_id', $patient->user_id);
+        }])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
+
+        $activites_referent_manuelles = Affiliation::with(['cloture', 'package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_referent_patients.activitesMedecinReferent:id,description_fr', 'ligneTemps.activites_referent_patients' => function ($query) use ($patient) {
+            $query->where('patient_id', $patient->user_id);
+        }])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
+
+        // $activites_referent_manuelles = ActivitesControle::with(['activitesMedecinReferent','patient','updatedBy','createur'])->where('patient_id',$patient->user_id)->orderBy('updated_at', 'desc')->get();
+        //Patient::with(['activitesAma','medecinReferent.createur','medecinReferent.medecinControles','rendezVous',])->where('user_id',$patient->user->id)->first();
+
+        $rdata = Affiliation::has('ligneTemps.rendezVous')->with(['package:id,description_fr'])->where('patient_id', $patient->user_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
+        $rendezVous_affiliations = collect();
+        foreach($rdata as $affiliation){
+            $ligne_temps = LigneDeTemps::with(['rendezVous.etablissement:id,name', 'rendezVous.praticien:id,nom,prenom', 'motif:id,description'])->where('affiliation_id', $affiliation->id)->orderBy('updated_at', 'desc')->get();
+            $affiliation->ligne_temps = $ligne_temps;
+            $rendezVous_affiliations->push($affiliation);
+        }
+
+        $rendezVous = RendezVous::doesntHave('ligne_temps.affiliation')->where('patient_id',$patient->user_id)->with(['ligne_temps:id,date_consultation,affiliation_id', 'praticien:id,nom,prenom', 'etablissement:id,name'])->latest()->get(['id', 'date', 'statut', 'motifs', 'ligne_temps_id', 'praticien_id', 'etablissement_id', 'created_at']);
+
+        $array = array('rendez_vous' => $rendezVous, 'rendezVous_affiliations' => $rendezVous_affiliations, 'activite_ama_isoles' =>  $activite_ama_isoles, 'activites_referent_isoles' =>  $activites_referent_isoles, 'activite_ama_manuelles' => $activite_ama_manuelles);
+
+        $referentArray = array('activites_referent_manuelles' => $activites_referent_manuelles);
 
         $contrat = getContrat($patient->user);
 
-       //dd($patient->dossier->id);
-       return response()->json(["cim" => $contrat,"dossier"=>$dossier,"patient"=>$patient,'activites'=> $array]);
+        $affiliations = Affiliation::with(['patient.user', 'souscripteur.user', 'package', 'cloture'])->where('patient_id',$patient->user_id)->latest()->get();
+        $newAffiliations = collect($contrat->contrat);
+        foreach($affiliations as $affiliation){
+            $newAffiliation = new \stdClass();
+            $newAffiliation->adresse_affilie = $affiliation->patient->user->adresse;
+            $newAffiliation->ageAffilie = $affiliation->patient->age;
+            $newAffiliation->bornAroundAffilie = $affiliation->patient->date_de_naissance;
+            $newAffiliation->bornAroundSouscripteur = $affiliation->souscripteur->date_de_naissance;
+            $newAffiliation->canal = "Website";
+            $newAffiliation->code_promo = null;
+            $newAffiliation->contrat_code = $affiliation->code_contrat;
+            $newAffiliation->created_at = $affiliation->created_at;
+            $newAffiliation->dateNaissanceAffilie = $affiliation->patient->date_de_naissance;
+            $newAffiliation->dateNaissanceSouscripteur = $affiliation->souscripteur->date_de_naissance;
+            $newAffiliation->dateSignature = $affiliation->date_signature;
+            $newAffiliation->date_paiement = $affiliation->date_debut;
+            $newAffiliation->decede = $affiliation->patient->user->decede;
+            $newAffiliation->emailSouscripteur1 = $affiliation->patient->user->email;
+            $newAffiliation->emailSouscripteur2 = null;
+            $newAffiliation->etat = $affiliation->status_contrat;
+            $newAffiliation->expire = $affiliation->expire;
+            $newAffiliation->expire_mail_send = $affiliation->expire_email;
+            $newAffiliation->id = $affiliation->id;
+            $newAffiliation->lieuEtablissement = $affiliation->patient->user->ville;
+            $newAffiliation->montantSouscription = ConversionEurotoXaf($affiliation->package->montant);
+            $newAffiliation->nomAffilie = $affiliation->patient->user->nom;
+            $newAffiliation->nomContact = $affiliation->contact_name;
+            $newAffiliation->nomPatient = $affiliation->patient->user->nom;
+            $newAffiliation->nomSouscripteur = $affiliation->souscripteur->user->nom;
+            $newAffiliation->nom_mere = "";
+            $newAffiliation->nom_pere = "";
+            $newAffiliation->nombre_envoi = 0;
+            $newAffiliation->paye_par_affilie = $affiliation->paye_par_affilie;
+            $newAffiliation->paysResidenceAffilie = $affiliation->patient->user->pays;
+            $newAffiliation->paysResidenceSouscripteur = $affiliation->souscripteur->user->pays;
+            $newAffiliation->paysSouscription = $affiliation->souscripteur->user->pays;
+            $newAffiliation->personneContact1 = $affiliation->contact_phone;
+            $newAffiliation->personneContact2 = null;
+            $newAffiliation->plaintes = $affiliation->plainte;
+            $newAffiliation->prenomAffilie = $affiliation->patient->user->prenom;
+            $newAffiliation->prenomContact = $affiliation->contact_firstName;
+            $newAffiliation->prenomPatient = $affiliation->patient->user->prenom;
+            $newAffiliation->prenomSouscripteur = $affiliation->souscripteur->user->prenom;
+            $newAffiliation->reduction = "non";
+            $newAffiliation->reference_paiement = null;
+            $newAffiliation->renouvelle = $affiliation->renouvelle == 1 ? 'oui' : 'non';
+            $newAffiliation->sexeAffilie =  $affiliation->patient->sexe;
+            $newAffiliation->sexePatient =  $affiliation->patient->sexe;
+            $newAffiliation->sexeSouscripteur =  $affiliation->souscripteur->sexe;
+            $newAffiliation->slug = $affiliation->slug;
+            $newAffiliation->statut_paiement =  $affiliation->status_paiement;
+            $newAffiliation->telephoneAffilie1 = $affiliation->patient->user->telephone;
+            $newAffiliation->telephoneAffilie2 =  null;
+            $newAffiliation->telephoneSouscripeur1 = $affiliation->souscripteur->user->telephone;
+            $newAffiliation->telephoneSouscripeur2 =  null;
+            $newAffiliation->typeSouscription =  $affiliation->nom;
+            $newAffiliation->type_paiement =  null;
+            $newAffiliation->updated_at = $affiliation->updated_at;
+            $newAffiliation->urgence = $affiliation->niveau_urgence;
+            $newAffiliation->villeResidenceAffilie = $affiliation->patient->user->ville;
+            $newAffiliation->villeResidenceSouscripteur = $affiliation->souscripteur->user->ville;
+            $newAffiliation->visiteur = "NON";
+            $newAffiliation->cim = $affiliation->package->description_fr;
+            $newAffiliation->changes = DB::table('model_changes_history')->where(['model_id' => $affiliation->id, 'model_type' => 'App\Models\Affiliation'])->orderBy('created_at', 'desc')->get(['changes']);
+
+            $newAffiliations->push($newAffiliation);
+
+        }
+
+       return response()->json(["cim" => $newAffiliations->sortByDesc('updated_at'), "dossier" => $dossier, "patient" => $patient, 'activites' => $array, 'affiliations' => $affiliations, 'referent' => $referentArray]);
     }
 
     /**
@@ -202,6 +365,18 @@ class LigneDeTempsController extends Controller
         return response()->json(["ligne_temps" => $ligneDeTemps]);
     }
 
+    public function changeEtat($id)
+    {
+        $ligneDeTemps = LigneDeTemps::whereId($id)->first();
+
+        if ($ligneDeTemps != null){
+
+            $ligneDeTemps->etat = $ligneDeTemps->etat== 1 ? 0 : 1;
+            $ligneDeTemps->save();
+            return response()->json(["etat" => $ligneDeTemps]);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -218,4 +393,28 @@ class LigneDeTempsController extends Controller
         }
         return  response()->json(['ligne_temps'=>$ligneDeTemps]);
     }
+
+    public function showConsultation($ligne_temp_id){
+        $consultations = ConsultationMedecineGenerale::with(['motifs', 'etablissement'])->where('ligne_de_temps_id', $ligne_temp_id)->latest()->get()->transform(function ($item, $key) {
+            $consultation = new \stdClass();
+            $consultation->id = $item->id;
+            $consultation->date_consultation = $item->date_consultation;
+            $consultation->etablissement = $item->etablissement->name;
+
+            $consultation->motifs = $item->motifs->implode('description', ', ');
+            return $consultation;
+        });
+        return response()->json($consultations);
+    }
+    public function listingPatient($slug){
+        $dossier = DossierMedical::where('slug', $slug)->first();
+        $ligne_temps = LigneDeTemps::with(['motifs:id,description', 'motif:id,description', 'cloture'])->where('dossier_medical_id', $dossier->id)->latest()->get();
+        foreach($ligne_temps as $ligne){
+            if(is_null($ligne->cloture)){
+                $ligne->cloture()->create([]);
+            }
+        }
+        return response()->json($ligne_temps);
+    }
+
 }
