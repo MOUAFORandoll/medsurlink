@@ -277,14 +277,14 @@ class LigneDeTempsController extends Controller
             $newAffiliation = new \stdClass();
             $newAffiliation->adresse_affilie = $affiliation->patient->user->adresse;
             $newAffiliation->ageAffilie = $affiliation->patient->age;
-            $newAffiliation->bornAroundAffilie = $affiliation->patient->date_de_naissance ? $affiliation->patient->date_de_naissance : "non renseigné";
+            $newAffiliation->bornAroundAffilie = $affiliation->patient ? $affiliation->patient->date_de_naissance : "non renseigné";
             $newAffiliation->bornAroundSouscripteur = $affiliation->souscripteur->date_de_naissance;
             $newAffiliation->canal = "Website";
             $newAffiliation->code_promo = null;
             $newAffiliation->contrat_code = $affiliation->code_contrat;
             $newAffiliation->created_at = $affiliation->created_at;
-            $newAffiliation->dateNaissanceAffilie = $affiliation->patient->date_de_naissance;
-            $newAffiliation->dateNaissanceSouscripteur = $affiliation->souscripteur->date_de_naissance;
+            $newAffiliation->dateNaissanceAffilie = $affiliation->patient ? $affiliation->patient->date_de_naissance: "non renseigné";
+            $newAffiliation->dateNaissanceSouscripteur = $affiliation->souscripteur ? $affiliation->souscripteur->date_de_naissance : "non renseigné";
             $newAffiliation->dateSignature = $affiliation->date_signature;
             $newAffiliation->date_paiement = $affiliation->date_debut;
             $newAffiliation->decede = $affiliation->patient->user->decede;
