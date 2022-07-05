@@ -484,4 +484,15 @@ class UserController extends Controller
 
         return \response()->json(['user'=>$user]);
     }
+
+    public function signature(Request $request){
+        $user  = auth()->user();
+        if($user->getMedia('signature')->count() > 0){
+            $user->clearMediaCollection('signature'); 
+        }
+        $user->addMediaFromBase64($request->signature)->usingFileName($user->slug.'.png')->toMediaCollection('signature');      
+
+        return response()->json(['message' => "Signature ajouté avec succès", 'signature' => $user->signature]);
+        
+    }
 }

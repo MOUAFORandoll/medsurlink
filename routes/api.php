@@ -64,6 +64,7 @@ Route::middleware(['auth:api'])->group(function () {
     });
 
     Route::post('/logout','Api\UserController@logout');
+    Route::post('/signature/user','Api\UserController@signature');
 
 });
 Route::group(['middleware' => ['auth:api','role:Admin']], function () {

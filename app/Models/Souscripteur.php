@@ -41,6 +41,7 @@ class Souscripteur extends Model
         "user_id",
         "sexe",
         "date_de_naissance",
+        "consentement",
         "age",
         'slug'
     ];

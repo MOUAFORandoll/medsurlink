@@ -18,6 +18,8 @@ class PatientSouscripteur extends Model
         "patient_id",
         "lien_de_parente",
         "slug",
+        'souscripteur_consentement',
+        'patient_consentement'
     ];
 
     public function sluggable()
