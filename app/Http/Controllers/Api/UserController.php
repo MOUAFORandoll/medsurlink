@@ -486,7 +486,7 @@ class UserController extends Controller
     }
 
     public function signature(Request $request){
-        $user  = auth()->user();
+        $user  = User::find($request->id);
         
         if(!is_null($request->consentement)){
             $patient = $user->patient;
