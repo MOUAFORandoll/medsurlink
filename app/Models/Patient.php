@@ -47,6 +47,7 @@ class Patient extends Model
         "nom_contact",
         "tel_contact",
         "lien_contact",
+        'consentement',
         'slug',
     ];
     public function sluggable()

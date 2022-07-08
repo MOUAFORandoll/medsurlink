@@ -14,8 +14,8 @@ class AddConcentementToPatientSouscripteursTable extends Migration
     public function up()
     {
         Schema::table('patient_souscripteurs', function (Blueprint $table) {
-            $table->boolean('souscripteur_consentement')->nullable()->after('lien_de_parente');
-            $table->boolean('patient_consentement')->nullable()->after('souscripteur_consentement');
+            $table->boolean('souscripteur_consentement')->default(true)->after('lien_de_parente');
+            $table->boolean('patient_consentement')->default(true)->after('souscripteur_consentement');
         });
     }
 

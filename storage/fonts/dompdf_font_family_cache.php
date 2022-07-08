@@ -81,10 +81,10 @@
     'italic' => $fontDir . '/montserrat-italic_9f2777e486c3bc6f95029ab6c49afef5',
     '500_italic' => $fontDir . '/montserrat-500-italic_7fbb19b5731cbc1a039dc469ce632ff7',
     '300' => $fontDir . '/montserrat-300_db8a5f13b110de292cd7213ad180d479',
-    'normal' => $fontDir . '/montserrat-normal_2dc64e901a5421aac1b4e82321a0b178',
+    'normal' => $fontDir . '/montserrat-normal_24d894023fa4a4e7377e308e49478300',
     '500' => $fontDir . '/montserrat-500_4779b49b2c886de4bab244230af18a3e',
     '600' => $fontDir . '/montserrat-600_f97af35255e21c92a9a0ce314fd1f754',
-    'bold' => $fontDir . '/montserrat-bold_144aa38d4559f8dc6a0c231f0548ac3d',
+    'bold' => $fontDir . '/montserrat-bold_2d1f67b06e948658542709372b8035e6',
     '800' => $fontDir . '/montserrat-800_6404481f92be352c8477d7cbcc9874c9',
     '900' => $fontDir . '/montserrat-900_99b572958bb366ef5e8be879469b8b4a',
     '100_italic' => $fontDir . '/montserrat-100-italic_6d3cc7caa12f29a659b9882b86c637fb',
@@ -94,7 +94,7 @@
     'bold_italic' => $fontDir . '/montserrat-bold-italic_5c847c3f1d6323fda48f858fcc358fe5',
     '800_italic' => $fontDir . '/montserrat-800-italic_c2ee6001b4bb23ec9742b730e222e28a',
     '900_italic' => $fontDir . '/montserrat-900-italic_43e5801d5bda14d90eb085755254b288',
-    '100' => $fontDir . '/montserrat-100_9f810f4b6c3864c519bca96ac8361efd',
+    '100' => $fontDir . '/montserrat-100_24d894023fa4a4e7377e308e49478300',
     '200' => $fontDir . '/montserrat-200_8b0c228ca3975be42d5fe5cc6136c711',
   ),
   'raleway' => array(
@@ -116,5 +116,8 @@
     '800' => $fontDir . '/raleway-800_8d67706f4ed016e6bdd96cd2ef3e8032',
     '900' => $fontDir . '/raleway-900_797d898f5ae40537db1e6a51747b6f33',
     '900_italic' => $fontDir . '/raleway-900-italic_58b988b0483f7008f9331442351f0ece',
+  ),
+  'open sans' => array(
+    'normal' => $fontDir . '/open-sans-normal_bf11512877ef2223afd06e89358ef2fc',
   ),
 ) ?>

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddConsentementToSouscripteurs extends Migration
+class AddConsentementToPatientsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddConsentementToSouscripteurs extends Migration
      */
     public function up()
     {
-        Schema::table('souscripteurs', function (Blueprint $table) {
-            $table->boolean('consentement')->default(true)->after('age');
+        Schema::table('patients', function (Blueprint $table) {
+            $table->boolean('consentement')->nullable()->after('age');
         });
     }
 
@@ -25,7 +25,7 @@ class AddConsentementToSouscripteurs extends Migration
      */
     public function down()
     {
-        Schema::table('souscripteurs', function (Blueprint $table) {
+        Schema::table('patients', function (Blueprint $table) {
             $table->dropColumn('consentement');
         });
     }

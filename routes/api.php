@@ -177,6 +177,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Souscripteur']], f
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->only('show','index');
     Route::get('{patient}/dossier-medical','Api\DossierMedicalController@dossierByPatientId');
     Route::put('/secretReset/{slug}','Api\ReponseSecreteController@update');
+    Route::get('consentement/{souscripteur_slug}/{patient_slug}', 'Api\UserController@consentement');
 
 });
 
