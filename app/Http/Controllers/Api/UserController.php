@@ -488,19 +488,30 @@ class UserController extends Controller
     public function signature(Request $request){
         $user  = User::find($request->id);
         
-        if(!is_null($request->consentement)){
-            $patient = $user->patient;
-            $patient->consentement = $request->consentement;
-            $patient->save();
+        if($request->souscripteur){
+            if(!is_null($request->consentement)){
+                $souscripteur = $user->souscripteur;
+                
+                $souscripteur->consentement = $request->consentement;
+                $souscripteur->save();
+            }
+
+        }else{
+            if(!is_null($request->consentement)){
+                $patient = $user->patient;
+                
+                $patient->consentement = $request->consentement;
+                $patient->restriction = $request->restriction;
+                $patient->save();
+            }
         }
+
         if(!is_null($request->signature)){
             if($user->getMedia('signature')->count() > 0){
                 $user->clearMediaCollection('signature'); 
             }
             $user->addMediaFromBase64($request->signature)->usingFileName($user->slug.'.png')->toMediaCollection('signature');  
         }
-            
-
         return response()->json(['message' => "Signature ajouté avec succès", 'signature' => $user->signature]);
         
     }

@@ -84,16 +84,15 @@ Route::get('/doc', function () {
 Route::get('souscripteur/consentement_generate/{souscripteur_slug}/{patient_slug}', function($souscripteur_slug, $patient_slug){
     $souscripteur = User::whereSlug($souscripteur_slug)->first();
     $patient = Patient::whereSlug($patient_slug)->first();
-    \Log::alert($patient);
     $patient_consentement = $patient->consentement;
+    $patient_restriction = $patient->restriction;
     $patient = $patient->user;
-    \Log::alert($patient_consentement);
     $patient_souscripteurs = PatientSouscripteur::where(['financable_id' => $souscripteur->souscripteur->user_id, 'patient_id' => $patient->id])->latest()->get();
     foreach($patient_souscripteurs as $patient_souscripteur){
-        $patient_souscripteur->update(['souscripteur_consentement' => 1, 'patient_consentement' => $patient_consentement]);
+        $patient_souscripteur->update(['souscripteur_consentement' => 1, 'patient_consentement' => $patient_consentement, 'restriction' => $patient_restriction]);
     }
     $patient_souscripteur = $patient_souscripteurs->first();
-    $title = $patient_consentement == 0  ? ' Consentement éclairé du patient "avec restrictions"' : ' Consentement éclairé du patient';
+    $title = $patient_restriction  ? ' Consentement éclairé du patient "avec restrictions"' : ' Consentement éclairé du patient';
     $pdf = PDF::loadView('pdf.consentement.souscripteur', ['souscripteur' => $souscripteur, 'patient' => $patient, 'lien' => $patient_souscripteur->lien->fr_description, 'patient_consentement' => $patient_consentement, 'title' => $title]);
     return $pdf->stream("Consentement éclairé du patient.pdf");
 })->name('consentement.patient');

@@ -127,7 +127,7 @@
 			</p><br>
 			<p>
 				<span class="float-left">
-					@if(!is_null($patient->signature))
+					@if(!is_null($patient->signature) && $patient_consentement)
 						<img src="{{ public_path(parse_url($patient->signature)['path']) }}" alt="" width="275px" class="left">
 					@endif
 				</span>

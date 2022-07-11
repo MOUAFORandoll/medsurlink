@@ -19,7 +19,8 @@ class PatientSouscripteur extends Model
         "lien_de_parente",
         "slug",
         'souscripteur_consentement',
-        'patient_consentement'
+        'patient_consentement',
+        'restriction'
     ];
 
     public function sluggable()
