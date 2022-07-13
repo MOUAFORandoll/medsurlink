@@ -357,6 +357,15 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
 Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
 // Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
 
+/**
+ * Parcours de soins
+ */
+
+Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient|Pharmacien'])->group(function () {
+    Route::get('/parcours/{dossier_medical_slug}/affiliations','Api\v1\ParcourDeSoinController@affiliations');
+});
+
+
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient|Pharmacien']], function () {
     Route::put('patient-decede/{patient}','Api\PatientController@decede');
     Route::post('souscripteur/assigin_patient', 'Api\PatientController@assignation_souscripteur');
@@ -398,6 +407,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::post('examen-prix/etablissement/save','Api\ExamenEtablissementPrixController@storeMultiple');
     Route::get('patient/{id}/contrat-medicasure','Api\LigneDeTempsController@patientContrat');
     Route::get('trajet-patient/dossier/{id}','Api\LigneDeTempsController@getTrajetPatient');
+
 
     /**
      * recuperation des consultations d'une ligne de temps
