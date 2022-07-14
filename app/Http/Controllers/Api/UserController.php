@@ -510,7 +510,8 @@ class UserController extends Controller
             if($user->getMedia('signature')->count() > 0){
                 $user->clearMediaCollection('signature'); 
             }
-            $user->addMediaFromBase64($request->signature)->usingFileName($user->slug.'.png')->toMediaCollection('signature');  
+            $user->addMediaFromBase64($request->signature)->usingFileName($user->slug.'.png')->toMediaCollection('signature'); 
+            $user = $user->fresh();
         }
         return response()->json(['message' => "Signature ajouté avec succès", 'signature' => $user->signature]);
         
