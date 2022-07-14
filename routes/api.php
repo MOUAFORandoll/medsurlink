@@ -364,6 +364,8 @@ Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient')
 Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient|Pharmacien'])->group(function () {
     Route::get('/parcours/{dossier_medical_slug}/affiliations','Api\v1\ParcourDeSoinController@affiliations');
     Route::get('/parcours/{dossier_medical_slug}/activite_amas','Api\v1\ParcourDeSoinController@activite_amas');
+    Route::get('/parcours/{dossier_medical_slug}/activite_medecin_referents','Api\v1\ParcourDeSoinController@activite_medecin_referents');
+    
     
 });
 
