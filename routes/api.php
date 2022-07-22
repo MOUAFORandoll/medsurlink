@@ -64,6 +64,7 @@ Route::middleware(['auth:api'])->group(function () {
     });
 
     Route::post('/logout','Api\UserController@logout');
+    Route::post('/signature/user','Api\UserController@signature');
 
 });
 Route::group(['middleware' => ['auth:api','role:Admin']], function () {
@@ -172,10 +173,11 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Assistant
 });
 
 //    Définition des routes accéssible par le patient
-Route::group(['middleware' => ['auth:api','role:Admin|Patient|Souscripteur']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Patient|Souscripteur|Assistante']], function () {
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->only('show','index');
     Route::get('{patient}/dossier-medical','Api\DossierMedicalController@dossierByPatientId');
     Route::put('/secretReset/{slug}','Api\ReponseSecreteController@update');
+    Route::get('consentement/{souscripteur_slug}/{patient_slug}', 'Api\UserController@consentement');
 
 });
 
@@ -355,6 +357,19 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
 Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
 // Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
 
+/**
+ * Parcours de soins
+ */
+
+Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient|Pharmacien'])->group(function () {
+    Route::get('/parcours/{dossier_medical_slug}/affiliations','Api\v1\ParcourDeSoinController@affiliations');
+    Route::get('/parcours/{dossier_medical_slug}/activite_amas','Api\v1\ParcourDeSoinController@activite_amas');
+    Route::get('/parcours/{dossier_medical_slug}/activite_medecin_referents','Api\v1\ParcourDeSoinController@activite_medecin_referents');
+    
+    
+});
+
+
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient|Pharmacien']], function () {
     Route::put('patient-decede/{patient}','Api\PatientController@decede');
     Route::post('souscripteur/assigin_patient', 'Api\PatientController@assignation_souscripteur');
@@ -396,6 +411,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::post('examen-prix/etablissement/save','Api\ExamenEtablissementPrixController@storeMultiple');
     Route::get('patient/{id}/contrat-medicasure','Api\LigneDeTempsController@patientContrat');
     Route::get('trajet-patient/dossier/{id}','Api\LigneDeTempsController@getTrajetPatient');
+
 
     /**
      * recuperation des consultations d'une ligne de temps

@@ -484,4 +484,40 @@ class UserController extends Controller
 
         return \response()->json(['user'=>$user]);
     }
+
+    public function signature(Request $request){
+        $user  = User::find($request->id);
+        
+        if($request->souscripteur){
+            if(!is_null($request->consentement)){
+                $souscripteur = $user->souscripteur;
+                
+                $souscripteur->consentement = $request->consentement;
+                $souscripteur->save();
+            }
+
+        }else{
+            if(!is_null($request->consentement)){
+                $patient = $user->patient;
+                
+                $patient->consentement = $request->consentement;
+                $patient->restriction = $request->restriction;
+                $patient->save();
+            }
+        }
+
+        if(!is_null($request->signature)){
+            if($user->getMedia('signature')->count() > 0){
+                $user->clearMediaCollection('signature'); 
+            }
+            $user->addMediaFromBase64($request->signature)->usingFileName($user->slug.'.png')->toMediaCollection('signature'); 
+            $user = $user->fresh();
+        }
+        return response()->json(['message' => "Signature ajouté avec succès", 'signature' => $user->signature]);
+        
+    }
+
+    public function consentement($souscripteur_slug, $patient_slug){
+        return route('consentement.patient', ['souscripteur_slug' => $souscripteur_slug, 'patient_slug' => $patient_slug]);
+    }
 }
