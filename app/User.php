@@ -28,9 +28,13 @@ use Netpok\Database\Support\RestrictSoftDeletes;
 use App\Notifications\MailResetPasswordNotification;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
+    use HasMediaTrait;
     use SoftDeletes;
     use Notifiable;
     use HasApiTokens;
@@ -77,6 +81,8 @@ class User extends Authenticatable
         'medecinControle',
         'assistante',
     ];
+
+    protected $appends = ['signature'];
 
     /**
      * Return the sluggable configuration array for this model.
@@ -217,5 +223,16 @@ class User extends Authenticatable
 
     public function questionSecrete(){
         return $this->hasOne(ReponseSecrete::class,'user_id','id');
+    }
+
+    public function getSignatureAttribute(){
+        if ($this->getFirstMedia('signature')) {
+            $arrayLinks = explode("public/", $this->getFirstMedia('signature')->getPath());
+            $link = Storage::url($arrayLinks[count($arrayLinks) - 1]);
+          } else {
+            return null;
+          }
+          $this->makeHidden('media');
+          return asset($link);
     }
 }
