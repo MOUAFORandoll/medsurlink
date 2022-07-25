@@ -9,9 +9,12 @@ use App\Models\DossierMedical;
 use App\Models\ExamenComplementaire;
 use App\Models\ExamenEtablissementPrix;
 use App\Models\LigneDeTemps;
+use App\Models\Patient;
+use App\Models\PatientSouscripteur;
 use App\Models\Payment;
 use App\Models\PaymentOffre;
 use App\Models\RendezVous;
+use App\User;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Route;
 
@@ -75,6 +78,26 @@ Route::get('/doc', function () {
     $data = compact('compteRendu');
     return view('rapport.compte_rendu', $data);
 });
+/**
+ * consentement éclairé du patient
+ */
+Route::get('souscripteur/consentement_generate/{souscripteur_slug}/{patient_slug}', function($souscripteur_slug, $patient_slug){
+    $souscripteur = User::whereSlug($souscripteur_slug)->first();
+    $patient = Patient::whereSlug($patient_slug)->first();
+    $patient_consentement = $patient->consentement;
+    $patient_restriction = $patient->restriction;
+    $patient = $patient->user;
+    $patient_souscripteurs = PatientSouscripteur::where(['financable_id' => $souscripteur->souscripteur->user_id, 'patient_id' => $patient->id])->latest()->get();
+    foreach($patient_souscripteurs as $patient_souscripteur){
+        $patient_souscripteur->update(['souscripteur_consentement' => 1, 'patient_consentement' => $patient_consentement, 'restriction' => $patient_restriction]);
+    }
+    $patient_souscripteur = $patient_souscripteurs->first();
+    $title = $patient_restriction  ? ' Consentement éclairé du patient "avec restrictions"' : ' Consentement éclairé du patient';
+    $pdf = PDF::loadView('pdf.consentement.souscripteur', ['souscripteur' => $souscripteur, 'patient' => $patient, 'lien' => $patient_souscripteur->lien->fr_description, 'patient_consentement' => $patient_consentement, 'title' => $title]);
+    return $pdf->stream("Consentement éclairé du patient.pdf");
+})->name('consentement.patient');
+
+
 Route::get('impression/facture-offre/{affiliation}', function ($affiliation) {
 
     $affiliation = AffiliationSouscripteur::find($affiliation);
