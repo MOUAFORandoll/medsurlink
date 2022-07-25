@@ -46,7 +46,7 @@ if(!function_exists('getContrat'))
             'headers' => [
                 'Accept' => 'application/json',
             ],
-            'json'=> ["nom"=>$patient->nom]
+            'json'=> ["nom"=> $patient->nom, 'prenom' => $patient->prenom]
         ]);
         $contrat = $res->getBody()->getContents();
         return json_decode($contrat);
