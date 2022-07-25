@@ -34,7 +34,11 @@
         "profclems/postman-collection-generator": "^1.2",
         "ramsey/uuid": "^3.7",
         "rinvex/countries": "^5.0",
+<<<<<<< HEAD
         "spatie/laravel-medialibrary": "^7.0.0",
+=======
+        "spatie/laravel-medialibrary": "*",
+>>>>>>> 7db9cab5d621fff61d9ab7093ef40a08939c66ba
         "spatie/laravel-permission": "^2.37",
         "stripe/stripe-php": "^7.87"
     },

@@ -50,3 +50,16 @@ php artisan migrate --path=/database/migrations/2022_06_06_142647_add_ligne_de_t
 php artisan migrate --path=/database/migrations/2022_06_06_151155_create_motiffables_table.php
 
 php artisan migrate --path=/database/migrations/2022_06_09_084538_create_clotures_table.php
+
+
+## concentement du patient et du souscripteur
+php artisan migrate --path=/database/migrations/2022_06_30_172954_add_concentement_to_patient_souscripteurs_table.php
+php artisan migrate --path=/database/migrations/2022_07_04_091726_add_consentement_to_souscripteurs.php
+php artisan migrate --path=/database/migrations/2022_07_07_115408_add_consentement_to_patients_table.php
+
+php artisan migrate --path=/database/migrations/2022_07_11_150100_add_restriction_to_patients_table.php
+php artisan migrate --path=/database/migrations/2022_07_11_151019_add_restriction_to_patient_souscripteurs_table.php
+
+## gestion des medias avec laravel medias
+composer require "spatie/laravel-medialibrary:^7.0.0"
+php artisan migrate --path=/database/migrations/2022_07_04_154636_create_media_table.php
