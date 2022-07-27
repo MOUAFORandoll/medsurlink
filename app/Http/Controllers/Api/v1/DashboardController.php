@@ -13,6 +13,7 @@ use App\Models\ConsultationExamenValidation;
 use App\Models\ConsultationFichier;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\DossierMedical;
+use App\Models\EtablissementExercice;
 use App\Models\File;
 use App\Models\LigneDeTemps;
 use App\Models\MedecinControle;
@@ -84,7 +85,9 @@ class DashboardController extends Controller
         $nbre_rendez_vous_par_patients = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('rendezVous')->has('patient')->withCount('rendezVous')->get();
         $nbre_rendez_vous_par_praticiens = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('rendezVous')->has('praticien')->withCount('rendezVous')->get();
         $nbre_rendez_vous_par_medecin_referents = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('rendezVous')->has('medecinControle')->withCount('rendezVous')->get();
-
+        $nbre_patient_avec_medecin_referents = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('patient.medecinReferent')->count();
+        $nbre_medecin_referent_has_patients = MedecinControle::with('user:id,nom,prenom')->with('patients')->get(/* ['user_id'] */);
+        $nbre_patient_decedes = Patient::whereHas('user', function ($query) { $query->where('decede', 'oui'); })->count();
 
         return response()->json([
             'nbre_patients' => $nbre_patients, 
@@ -127,6 +130,11 @@ class DashboardController extends Controller
             'nbre_rendez_vous_par_patients' => $nbre_rendez_vous_par_patients,
             'nbre_rendez_vous_par_praticiens' => $nbre_rendez_vous_par_praticiens,
             'nbre_rendez_vous_par_medecin_referents' => $nbre_rendez_vous_par_medecin_referents,
+            //'nombre_etablissement_exercices' => $nombre_etablissement_exercices,
+            'nbre_patient_avec_medecin_referents' => $nbre_patient_avec_medecin_referents,
+            'nbre_medecin_referent_has_patients' => $nbre_medecin_referent_has_patients,
+            'nbre_patient_decedes' => $nbre_patient_decedes
+
 
         ]);
     }

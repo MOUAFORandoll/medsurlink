@@ -240,4 +240,7 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(RendezVous::class, 'patient_id','id');
     }
+    public function patients(){
+        return $this->belongsToMany(Patient::class, 'patient_medecin_controles', 'patient_id', 'medecin_control_id');
+    }
 }
