@@ -6,15 +6,22 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActiviteAmaPatient;
+use App\Models\ActivitesAma;
 use App\Models\ActivitesControle;
 use App\Models\Affiliation;
+use App\Models\ConsultationExamenValidation;
+use App\Models\ConsultationFichier;
+use App\Models\ConsultationMedecineGenerale;
 use App\Models\DossierMedical;
+use App\Models\File;
 use App\Models\LigneDeTemps;
 use App\Models\MedecinControle;
 use App\Models\Offre;
 use App\Models\Package;
 use App\Models\Patient;
 use App\Models\Praticien;
+use App\Models\Prescription;
+use App\Models\ResultatLabo;
 use App\Models\Souscripteur;
 use App\User;
 use Illuminate\Support\Facades\DB;
@@ -54,7 +61,24 @@ class DashboardController extends Controller
 
         $nbre_offres = Package::count();
         $donnes_comparative_par_offres = Offre::with('packages.items')->get();
-        
+        $nbre_offre_par_villes = DB::select("select users.ville, count('users.id') as nombres from affiliations INNER JOIN users ON affiliations.patient_id = users.id WHERE users.deleted_at IS NULL GROUP BY users.ville ORDER BY COUNT('users.id') DESC;");
+        $nbre_offre_par_pays = DB::select("select users.pays, count('users.id') as nombres from affiliations INNER JOIN users ON affiliations.patient_id = users.id WHERE users.deleted_at IS NULL GROUP BY users.pays ORDER BY COUNT('users.id') DESC;");
+        $nbre_ligne_temps = LigneDeTemps::count();
+        $nbre_activite_amas = ActivitesAma::count();
+        $nbre_activite_controle = ActivitesControle::count();
+        $nbre_validations = ConsultationExamenValidation::count();
+        $nbre_consultation_medecine_generale = DB::table('consultation_medecine_generales')->whereNull('deleted_at')->count();
+        $nbre_allergies = DB::table('allergies')->whereNull('deleted_at')->count();
+        $traitement_actuels = DB::table('traitement_actuels')->whereNull('deleted_at')->count();
+        $nbre_prescriptions = Prescription::count();
+        $nbre_resultat_laboratoire = DB::table('resultat_labos')->whereNull('deleted_at')->count();
+        $nbre_resultat_imageries = DB::table('resultat_imageries')->whereNull('deleted_at')->count();
+        $nbre_hospitalisations = DB::table('hospitalisations')->whereNull('deleted_at')->count(); 
+        $fichier_medico_externes = File::count();
+        $nbre_dossier_medicaux = DossierMedical::has('patient')->count();
+        $nbre_compte_rendu_operatoires = DB::table('compte_rendu_operatoires')->whereNull('deleted_at')->count(); 
+
+
         return response()->json([
             'nbre_patients' => $nbre_patients, 
             'nbre_souscripteurs' => $nbre_souscripteurs, 
@@ -74,6 +98,23 @@ class DashboardController extends Controller
             'nbre_affiliation_par_offres' => $nbre_affiliation_par_offres,
             'nbre_offres' => $nbre_offres,
             'donnes_comparative_par_offres' => $donnes_comparative_par_offres,
+            'nbre_offre_par_villes' => $nbre_offre_par_villes,
+            'nbre_offre_par_pays' => $nbre_offre_par_pays,
+            'nbre_ligne_temps' => $nbre_ligne_temps,
+            'nbre_activite_amas' => $nbre_activite_amas,
+            'nbre_activite_controle' => $nbre_activite_controle,
+            'nbre_validations' => $nbre_validations,
+            'nbre_consultation_medecine_generale' => $nbre_consultation_medecine_generale,
+            'nbre_allergies' => $nbre_allergies,
+            'traitement_actuels' => $traitement_actuels,
+            'nbre_prescriptions' => $nbre_prescriptions,
+            'nbre_resultat_laboratoire' => $nbre_resultat_laboratoire,
+            'nbre_resultat_imageries' => $nbre_resultat_imageries,
+            'nbre_hospitalisations' => $nbre_hospitalisations,
+            'fichier_medico_externes' => $fichier_medico_externes,
+            'nbre_dossier_medicaux' => $nbre_dossier_medicaux,
+            'nbre_compte_rendu_operatoires' => $nbre_compte_rendu_operatoires
+
         ]);
     }
 
