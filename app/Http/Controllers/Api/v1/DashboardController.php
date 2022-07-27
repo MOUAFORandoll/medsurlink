@@ -45,6 +45,7 @@ class DashboardController extends Controller
         $nbre_patient_par_ville =  DB::select("select users.ville, count('users.id') as nombres from model_has_roles INNER JOIN users ON model_has_roles.model_id = users.id WHERE users.deleted_at IS NULL AND model_has_roles.role_id = 2 GROUP BY users.ville ORDER BY COUNT('users.id') DESC");
         $nbre_patient_par_pays = DB::select("select users.pays, count('users.id') as nombres from model_has_roles INNER JOIN users ON model_has_roles.model_id = users.id WHERE users.deleted_at IS NULL AND model_has_roles.role_id = 2 GROUP BY users.ville ORDER BY COUNT('users.id') DESC");
         $nbre_affiliations_janvier_juin = Affiliation::where('status_paiement', 'PAYE')->whereDate('created_at', '>=', '2022-01-01')->whereDate('created_at', '<=', '2022-06-30')->count();
+        $nbre_cim_janvier_juin = countContrats()->nbre_affiliations_janvier_juin;
         /* $ = User::orderBy('name', 'desc')
                 
                 ->having('count', '>', 100)
@@ -73,6 +74,7 @@ class DashboardController extends Controller
             'nbre_patient_par_ville' => $nbre_patient_par_ville,
             'nbre_patient_par_pays' => $nbre_patient_par_pays,
             'nbre_affiliations_janvier_juin' => $nbre_affiliations_janvier_juin,
+            'nbre_cim_janvier_juin' => $nbre_cim_janvier_juin
         ]);
     }
 
