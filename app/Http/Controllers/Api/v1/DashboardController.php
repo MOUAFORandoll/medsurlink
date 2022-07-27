@@ -77,6 +77,13 @@ class DashboardController extends Controller
         $fichier_medico_externes = File::count();
         $nbre_dossier_medicaux = DossierMedical::has('patient')->count();
         $nbre_compte_rendu_operatoires = DB::table('compte_rendu_operatoires')->whereNull('deleted_at')->count(); 
+        $nbre_avis = DB::table('avis')->whereNull('deleted_at')->count(); 
+        $nbre_medecin_avis = DB::table('medecin_avis')->whereNull('deleted_at')->count(); 
+        $nbre_rendez_vous = DB::table('rendez_vous')->whereNull('deleted_at')->count(); 
+
+        $nbre_rendez_vous_par_patients = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('rendezVous')->has('patient')->withCount('rendezVous')->get();
+        $nbre_rendez_vous_par_praticiens = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('rendezVous')->has('praticien')->withCount('rendezVous')->get();
+        $nbre_rendez_vous_par_medecin_referents = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('rendezVous')->has('medecinControle')->withCount('rendezVous')->get();
 
 
         return response()->json([
@@ -113,7 +120,13 @@ class DashboardController extends Controller
             'nbre_hospitalisations' => $nbre_hospitalisations,
             'fichier_medico_externes' => $fichier_medico_externes,
             'nbre_dossier_medicaux' => $nbre_dossier_medicaux,
-            'nbre_compte_rendu_operatoires' => $nbre_compte_rendu_operatoires
+            'nbre_compte_rendu_operatoires' => $nbre_compte_rendu_operatoires,
+            'nbre_avis' => $nbre_avis,
+            'nbre_medecin_avis' => $nbre_medecin_avis,
+            'nbre_rendez_vous' => $nbre_rendez_vous,
+            'nbre_rendez_vous_par_patients' => $nbre_rendez_vous_par_patients,
+            'nbre_rendez_vous_par_praticiens' => $nbre_rendez_vous_par_praticiens,
+            'nbre_rendez_vous_par_medecin_referents' => $nbre_rendez_vous_par_medecin_referents,
 
         ]);
     }
