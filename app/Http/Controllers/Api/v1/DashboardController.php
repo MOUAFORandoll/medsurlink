@@ -82,7 +82,7 @@ class DashboardController extends Controller
         $nbre_medecin_avis = DB::table('medecin_avis')->whereNull('deleted_at')->count(); 
         $nbre_rendez_vous = DB::table('rendez_vous')->whereNull('deleted_at')->count(); 
 
-        $nbre_rendez_vous_par_patients = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('rendezVous')->has('patient')->withCount('rendezVous')->get();
+        $nbre_rendez_vous_par_patients = User::select(['id'])->with('dossier')->has('rendezVous')->has('patient')->withCount('rendezVous')->get();
         $nbre_rendez_vous_par_praticiens = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('rendezVous')->has('praticien')->withCount('rendezVous')->get();
         $nbre_rendez_vous_par_medecin_referents = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('rendezVous')->has('medecinControle')->withCount('rendezVous')->get();
         $nbre_patient_avec_medecin_referents = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('patient.medecinReferent')->count();
