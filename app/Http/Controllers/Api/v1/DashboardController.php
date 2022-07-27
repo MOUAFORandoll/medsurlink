@@ -11,6 +11,8 @@ use App\Models\Affiliation;
 use App\Models\DossierMedical;
 use App\Models\LigneDeTemps;
 use App\Models\MedecinControle;
+use App\Models\Offre;
+use App\Models\Package;
 use App\Models\Patient;
 use App\Models\Praticien;
 use App\Models\Souscripteur;
@@ -46,18 +48,12 @@ class DashboardController extends Controller
         $nbre_patient_par_pays = DB::select("select users.pays, count('users.id') as nombres from model_has_roles INNER JOIN users ON model_has_roles.model_id = users.id WHERE users.deleted_at IS NULL AND model_has_roles.role_id = 2 GROUP BY users.ville ORDER BY COUNT('users.id') DESC");
         $nbre_affiliations_janvier_juin = Affiliation::where('status_paiement', 'PAYE')->whereDate('created_at', '>=', '2022-01-01')->whereDate('created_at', '<=', '2022-06-30')->count();
         $nbre_cim_janvier_juin = countContrats()->nbre_affiliations_janvier_juin;
-        /* $ = User::orderBy('name', 'desc')
-                
-                ->having('count', '>', 100)
-                ->get(); */
-        //$nbre_souscripteurs_par_ville = User::has('souscripteur')->groupBy('ville')->get(['id', 'ville']);
-        //$nbre_souscripteurs_par_ville = User::has('souscripteur')->select("ville", DB::raw("count('id') as user_count"))->groupBy('ville');
-        /* $nbre_souscripteurs_par_ville = User::has('souscripteur')
-        ->select("*")
-        ->orderBy('created_at', 'desc')
-        ->groupBy('ville')
-        ->get(); */
-        //dd($nbre_souscripteurs_par_ville);
+        $nbre_affiliation_par_offres = Package::select(['id', 'description_fr'])->withCount(['affiliations' => function ($query) {
+            $query->where('status_paiement', 'PAYE');
+        }])->get();
+
+        $nbre_offres = Package::count();
+        $donnes_comparative_par_offres = Offre::with('packages.items')->get();
         
         return response()->json([
             'nbre_patients' => $nbre_patients, 
@@ -74,7 +70,10 @@ class DashboardController extends Controller
             'nbre_patient_par_ville' => $nbre_patient_par_ville,
             'nbre_patient_par_pays' => $nbre_patient_par_pays,
             'nbre_affiliations_janvier_juin' => $nbre_affiliations_janvier_juin,
-            'nbre_cim_janvier_juin' => $nbre_cim_janvier_juin
+            'nbre_cim_janvier_juin' => $nbre_cim_janvier_juin,
+            'nbre_affiliation_par_offres' => $nbre_affiliation_par_offres,
+            'nbre_offres' => $nbre_offres,
+            'donnes_comparative_par_offres' => $donnes_comparative_par_offres,
         ]);
     }
 

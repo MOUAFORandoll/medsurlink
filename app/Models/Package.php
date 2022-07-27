@@ -27,4 +27,8 @@ class Package extends Model
     public  function  items(){
         return $this->hasMany(OffrePackageItem::class,'package_id','id');
     }
+
+    public function affiliations(){
+        return $this->hasMany(Affiliation::class);
+    }
 }
