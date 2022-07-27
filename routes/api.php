@@ -482,3 +482,10 @@ Route::get('/livesearch', 'Api\PatientController@searchPatients');
 Route::get('/mission/list', 'Api\ActiviteController@getListMission');
 Route::get('/referent-activites/list', 'Api\ActivitesMedecinReferentController@getListActivites');
 
+
+Route::prefix('v1')->group(function () {
+    
+    Route::get('/dashboard', 'Api\v1\DashboardController@dashboard');
+});
+
+
