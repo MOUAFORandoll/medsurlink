@@ -13,6 +13,7 @@ use App\Models\Souscripteur;
 use Illuminate\Http\Request;
 use App\Models\Contributeurs;
 use App\Models\DossierMedical;
+use App\Models\MedecinAvis;
 use App\Models\ReponseSecrete;
 use App\Models\MedecinControle;
 use App\Models\RendezVous;
@@ -246,5 +247,9 @@ class User extends Authenticatable implements HasMedia
 
     public function dossier(){
         return $this->hasOne(DossierMedical::class, 'id');
+    }
+
+    public function medecinAvis(){
+        return $this->hasMany(MedecinAvis::class, 'medecin_id');
     }
 }

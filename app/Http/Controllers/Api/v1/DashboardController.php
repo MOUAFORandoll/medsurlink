@@ -81,6 +81,13 @@ class DashboardController extends Controller
         $nbre_compte_rendu_operatoires = DB::table('compte_rendu_operatoires')->whereNull('deleted_at')->count(); 
         $nbre_avis = DB::table('medecin_avis')->whereNull('deleted_at')->count();  
         $nbre_medecin_avis = DB::table('medecin_avis')->whereNull('deleted_at')->whereNotNull('avis')->count(); 
+        /**
+         * Nombre d'avis par medecin referents
+         */
+        $nbre_avis_par_medecins = User::select(['nom', 'prenom'])->has('medecinAvis')->withCount('medecinAvis')->get();
+        $nbre_avis_par_medecins = $nbre_avis_par_medecins->sortByDesc('medecin_avis_count');
+        $nbre_avis_par_medecins = $nbre_avis_par_medecins->values()->all();
+
         $nbre_rendez_vous = DB::table('rendez_vous')->whereNull('deleted_at')->count(); 
 
         $nbre_rendez_vous_par_patients = User::select(['id'])->with('dossier')->has('rendezVous')->has('patient')->withCount('rendezVous')->get();
@@ -152,7 +159,8 @@ class DashboardController extends Controller
             'nbre_medecin_referent_has_patients' => $nbre_medecin_referent_has_patients,
             'nbre_patient_decedes' => $nbre_patient_decedes,
             'nbre_medecin_referents' => $nbre_medecin_referents,
-            'medecin_referent_ayant_plus_patients' => $medecin_referent_ayant_plus_patients
+            'medecin_referent_ayant_plus_patients' => $medecin_referent_ayant_plus_patients,
+            'nbre_avis_par_medecins' => $nbre_avis_par_medecins
         ]);
     }
 
