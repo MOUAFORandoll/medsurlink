@@ -99,7 +99,8 @@ class DashboardController extends Controller
          * medecin referent ayant plus de patient
          */
         $medecin_referent_ayant_plus_patients = MedecinControle::with('user:id,nom,prenom')->withCount('patients')->get();
-        $medecin_referent_ayant_plus_patients = $medecin_referent_ayant_plus_patients->firstWhere('patients_count', $medecin_referent_ayant_plus_patients->max('patients_count'));
+        $medecin_referent_ayant_plus_patients = $medecin_referent_ayant_plus_patients->sortByDesc('patients_count');
+        $medecin_referent_ayant_plus_patients = $medecin_referent_ayant_plus_patients->values()->all();
 
 
         $nbre_rendez_vous_par_etablissement = EtablissementExercice::select(['name'])->has('rendezVous')->withCount('rendezVous')->get();
