@@ -36,6 +36,7 @@ class DashboardController extends Controller
         $nbre_souscripteurs = Souscripteur::has('user')->count();
         $nbre_praticiens = Praticien::has('user')->count();
         $nbre_medecin_controles = MedecinControle::has('user')->count();
+        $nbre_medecin_referents = MedecinControle::has('user')->has('patients')->count();
         $nbre_amas = User::whereHas('roles', function ($query) {
             $query->where('name', 'Assistante');
         })->count();
@@ -133,7 +134,8 @@ class DashboardController extends Controller
             //'nombre_etablissement_exercices' => $nombre_etablissement_exercices,
             'nbre_patient_avec_medecin_referents' => $nbre_patient_avec_medecin_referents,
             'nbre_medecin_referent_has_patients' => $nbre_medecin_referent_has_patients,
-            'nbre_patient_decedes' => $nbre_patient_decedes
+            'nbre_patient_decedes' => $nbre_patient_decedes,
+            'nbre_medecin_referents' => $nbre_medecin_referents
 
 
         ]);
