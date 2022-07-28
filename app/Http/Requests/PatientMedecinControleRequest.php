@@ -25,7 +25,7 @@ class PatientMedecinControleRequest extends FormRequest
     {
         return [
             'patient_id' => "required|integer|exists:patients,user_id",
-            //'medecin_control_id' => "required|integer|exists:medecin_controles,user_id"
+            'medecin_control_id' => "required"
         ];
     }
 }
