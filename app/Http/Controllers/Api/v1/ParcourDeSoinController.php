@@ -94,11 +94,6 @@ class ParcourDeSoinController extends Controller
             $newAffiliations->push($newAffiliation);
 
         }
-        \Log::alert("lastAffiliations");
-        \Log::alert($lastAffiliations);
-
-        \Log::alert("newAffiliations");
-        \Log::alert($newAffiliations);
 
         $newAffiliations = $newAffiliations->merge($lastAffiliations);
 
