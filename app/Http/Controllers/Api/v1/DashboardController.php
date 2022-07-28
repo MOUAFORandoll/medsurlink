@@ -79,8 +79,8 @@ class DashboardController extends Controller
         $fichier_medico_externes = File::count();
         $nbre_dossier_medicaux = DossierMedical::has('patient')->count();
         $nbre_compte_rendu_operatoires = DB::table('compte_rendu_operatoires')->whereNull('deleted_at')->count(); 
-        $nbre_avis = DB::table('avis')->whereNull('deleted_at')->count(); 
-        $nbre_medecin_avis = DB::table('medecin_avis')->whereNull('deleted_at')->count(); 
+        $nbre_avis = DB::table('medecin_avis')->whereNull('deleted_at')->count();  
+        $nbre_medecin_avis = DB::table('medecin_avis')->whereNull('deleted_at')->whereNotNull('avis')->count(); 
         $nbre_rendez_vous = DB::table('rendez_vous')->whereNull('deleted_at')->count(); 
 
         $nbre_rendez_vous_par_patients = User::select(['id'])->with('dossier')->has('rendezVous')->has('patient')->withCount('rendezVous')->get();
