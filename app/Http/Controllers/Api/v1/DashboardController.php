@@ -85,7 +85,10 @@ class DashboardController extends Controller
 
         $nbre_rendez_vous_par_patients = User::select(['id'])->with('dossier')->has('rendezVous')->has('patient')->withCount('rendezVous')->get();
         $nbre_rendez_vous_par_praticiens = Praticien::select(['numero_ordre'])->has('rendezVous')->withCount('rendezVous')->get();
-        $nbre_rendez_vous_par_medecin_referents = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('rendezVous')->has('medecinControle')->withCount('rendezVous')->get();
+        
+        $nbre_rendez_vous_par_medecin_referents = MedecinControle::select(['numero_ordre'])->has('rendezVous')->withCount('rendezVous')->get();
+
+    
         $nbre_patient_avec_medecin_referents = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('patient.medecinReferent')->count();
         $nbre_medecin_referent_has_patients = MedecinControle::with('user:id,nom,prenom')->with('patients')->get(/* ['user_id'] */);
         $nbre_patient_decedes = Patient::whereHas('user', function ($query) { $query->where('decede', 'oui'); })->count();
