@@ -89,7 +89,19 @@ class DashboardController extends Controller
         $nbre_rendez_vous_par_medecin_referents = MedecinControle::select(['numero_ordre'])->has('rendezVous')->withCount('rendezVous')->get();
 
         $nbre_patient_avec_medecin_referents = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('patient.medecinReferent')->count();
+
+        /**
+         * medecin referent avec ses patients
+         */
         $nbre_medecin_referent_has_patients = MedecinControle::with('user:id,nom,prenom')->with('patients')->get();
+
+        /**
+         * medecin referent ayant plus de patient
+         */
+        $medecin_referent_ayant_plus_patients = MedecinControle::with('user:id,nom,prenom')->withCount('patients')->get();
+        $medecin_referent_ayant_plus_patients = $medecin_referent_ayant_plus_patients->firstWhere('patients_count', $medecin_referent_ayant_plus_patients->max('patients_count'));
+
+
         $nbre_rendez_vous_par_etablissement = EtablissementExercice::select(['name'])->has('rendezVous')->withCount('rendezVous')->get();
         $nbre_patient_decedes = Patient::whereHas('user', function ($query) { $query->where('decede', 'oui'); })->count();
 
@@ -138,7 +150,8 @@ class DashboardController extends Controller
             'nbre_patient_avec_medecin_referents' => $nbre_patient_avec_medecin_referents,
             'nbre_medecin_referent_has_patients' => $nbre_medecin_referent_has_patients,
             'nbre_patient_decedes' => $nbre_patient_decedes,
-            'nbre_medecin_referents' => $nbre_medecin_referents
+            'nbre_medecin_referents' => $nbre_medecin_referents,
+            'medecin_referent_ayant_plus_patients' => $medecin_referent_ayant_plus_patients
         ]);
     }
 
