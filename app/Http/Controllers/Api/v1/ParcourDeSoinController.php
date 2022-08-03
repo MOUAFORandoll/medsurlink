@@ -50,7 +50,7 @@ class ParcourDeSoinController extends Controller
             $newAffiliation->expire_mail_send = $affiliation->expire_email;
             $newAffiliation->id = $affiliation->id;
             $newAffiliation->lieuEtablissement = $affiliation->patient->user->ville;
-            $newAffiliation->montantSouscription = ConversionEurotoXaf($affiliation->package->montant);
+            $newAffiliation->montantSouscription = $affiliation->package->montant;
             $newAffiliation->nomAffilie = $affiliation->patient->user->nom;
             $newAffiliation->nomContact = $affiliation->contact_name;
             $newAffiliation->nomPatient = $affiliation->patient->user->nom;

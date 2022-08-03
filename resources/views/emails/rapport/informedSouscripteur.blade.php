@@ -5,7 +5,7 @@ Le dossier médical de votre proche {{strtoupper($patient->user->nom).'  '.ucfir
 
 Rendez-vous sur https://www.medsurlink.com/login pour consulter à tout moment ses informations médicales.
 
-N'hésitez pas à prendre contact avec notre service pour si vous des questions à l'adresse medical@medicasure.com
+N'hésitez pas à prendre contact avec notre service pour plus de questions à l'adresse <a href="mailto:medical@medicasure.com" target="_blank">medical@medicasure.com</a>
 
 Salutations cordiales.
 

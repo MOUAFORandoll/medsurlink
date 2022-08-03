@@ -116,8 +116,8 @@
 				Fait le {{ $date->translatedFormat('l jS F Y') }}
 			</p>
 			<p>
-				<span class="float-left">Le Patient</span>
-				<span class="float-right">Le Souscripteur ou Le représentant
+				<span class="float-left">Le Patient / Représentant</span>
+				<span class="float-right">Le Souscripteur / Représentant
 					({{ $lien }})
 				</span>
 			</p><br>
