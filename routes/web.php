@@ -161,9 +161,10 @@ Route::get('bilans/{patient}', function ($patient) {
         $total_prescription = $examen_validations->sum('prix');
         $total_medecin_controle = $examen_validations->where('etat_validation_medecin', 1)->sum('prix');
         $total_medecin_assureur = $examen_validations->where('etat_validation_souscripteur', 1)->sum('prix');
-        $description = "Bilan ";
+        Carbon\Carbon::setLocale('fr');
+        $description = "Bilan Financier au ".Carbon\Carbon::now()->translatedFormat('l jS F Y');
         $pdf = PDF::loadView('pdf.soins.bilan_financier', ['examen_validations' => $examen_validations, 'total_prescription' => $total_prescription, 'total_medecin_controle' => $total_medecin_controle, 'total_medecin_assureur' => $total_medecin_assureur, 'description' => $description]);
-        return $pdf->stream("Bilan financier.pdf");
+        return $pdf->stream($description.".pdf");
     }catch (\Exception $exception){
         //$exception
     }

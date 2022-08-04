@@ -61,4 +61,11 @@ class MedecinControle extends Model
     public function etablissements(){
         return $this->belongsToMany(EtablissementExercice::class,'etablissement_exercice_medecin','medecin_controle_id','etablissement_id');
     }
+    public function patients(){
+        return $this->belongsToMany(Patient::class, 'patient_medecin_controles', 'medecin_control_id',  'patient_id');
+    }
+
+    public function rendezVous(){
+        return $this->hasMany(RendezVous::class, 'praticien_id', 'user_id');
+     }
 }

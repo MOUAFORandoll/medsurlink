@@ -13,8 +13,10 @@ use App\Models\Souscripteur;
 use Illuminate\Http\Request;
 use App\Models\Contributeurs;
 use App\Models\DossierMedical;
+use App\Models\MedecinAvis;
 use App\Models\ReponseSecrete;
 use App\Models\MedecinControle;
+use App\Models\RendezVous;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 use App\Models\Traits\SlugRoutable;
@@ -234,5 +236,20 @@ class User extends Authenticatable implements HasMedia
           }
           $this->makeHidden('media');
           return asset($link);
+    }
+    public function rendezVous()
+    {
+        return $this->hasMany(RendezVous::class, 'patient_id','id');
+    }
+    public function patients(){
+        return $this->belongsToMany(Patient::class, 'patient_medecin_controles', 'patient_id', 'medecin_control_id');
+    }
+
+    public function dossier(){
+        return $this->hasOne(DossierMedical::class, 'id');
+    }
+
+    public function medecinAvis(){
+        return $this->hasMany(MedecinAvis::class, 'medecin_id');
     }
 }

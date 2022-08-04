@@ -25,9 +25,9 @@ class ParcourDeSoinController extends Controller
         $patient = Patient::where('user_id', $dossier->patient_id)->first();
 
         $contrat = getContrat($patient->user);
-
+        $lastAffiliations = collect($contrat->contrat);
         $affiliations = Affiliation::with(['patient.user', 'souscripteur.user', 'package', 'cloture'])->where('patient_id',$patient->user_id)->latest()->get();
-        $newAffiliations = collect($contrat->contrat);
+        $newAffiliations = collect();
         foreach($affiliations as $affiliation){
             $newAffiliation = new \stdClass();
             $newAffiliation->adresse_affilie = $affiliation->patient->user->adresse;
@@ -94,6 +94,9 @@ class ParcourDeSoinController extends Controller
             $newAffiliations->push($newAffiliation);
 
         }
+
+        $newAffiliations = $newAffiliations->merge($lastAffiliations);
+
 
         return response()->json(['affiliations' => $newAffiliations]);
     }
