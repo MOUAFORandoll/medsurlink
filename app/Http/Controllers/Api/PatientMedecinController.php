@@ -49,10 +49,9 @@ class PatientMedecinController extends Controller
      */
     public function store(PatientMedecinControleRequest $request)
     {
-
         $request->validated();
         foreach($request->medecin_control_id as $m){
-            $medecin_referent = PatientMedecinControle::where('medecin_control_id', $m['id'])->first();
+            $medecin_referent = PatientMedecinControle::where(['medecin_control_id' => $m['id'], 'patient_id' => $request->patient_id])->first();
             $patientMedecin = null;
             if(is_null($medecin_referent)){
                 $patientMedecin = PatientMedecinControle::create([

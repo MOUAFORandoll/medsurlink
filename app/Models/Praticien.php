@@ -64,4 +64,8 @@ class Praticien extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
 
+    public function rendezVous(){
+       return $this->hasMany(RendezVous::class, 'praticien_id', 'user_id');
+    }
+
 }

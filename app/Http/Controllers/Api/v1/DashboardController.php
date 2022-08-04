@@ -36,6 +36,7 @@ class DashboardController extends Controller
         $nbre_souscripteurs = Souscripteur::has('user')->count();
         $nbre_praticiens = Praticien::has('user')->count();
         $nbre_medecin_controles = MedecinControle::has('user')->count();
+        $nbre_medecin_referents = MedecinControle::has('user')->has('patients')->count();
         $nbre_amas = User::whereHas('roles', function ($query) {
             $query->where('name', 'Assistante');
         })->count();
@@ -78,15 +79,38 @@ class DashboardController extends Controller
         $fichier_medico_externes = File::count();
         $nbre_dossier_medicaux = DossierMedical::has('patient')->count();
         $nbre_compte_rendu_operatoires = DB::table('compte_rendu_operatoires')->whereNull('deleted_at')->count(); 
-        $nbre_avis = DB::table('avis')->whereNull('deleted_at')->count(); 
-        $nbre_medecin_avis = DB::table('medecin_avis')->whereNull('deleted_at')->count(); 
+        $nbre_avis = DB::table('medecin_avis')->whereNull('deleted_at')->count();  
+        $nbre_medecin_avis = DB::table('medecin_avis')->whereNull('deleted_at')->whereNotNull('avis')->count(); 
+        /**
+         * Nombre d'avis par medecin referents
+         */
+        $nbre_avis_par_medecins = User::select(['nom', 'prenom'])->has('medecinAvis')->withCount('medecinAvis')->get();
+        $nbre_avis_par_medecins = $nbre_avis_par_medecins->sortByDesc('medecin_avis_count');
+        $nbre_avis_par_medecins = $nbre_avis_par_medecins->values()->all();
+
         $nbre_rendez_vous = DB::table('rendez_vous')->whereNull('deleted_at')->count(); 
 
         $nbre_rendez_vous_par_patients = User::select(['id'])->with('dossier')->has('rendezVous')->has('patient')->withCount('rendezVous')->get();
-        $nbre_rendez_vous_par_praticiens = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('rendezVous')->has('praticien')->withCount('rendezVous')->get();
-        $nbre_rendez_vous_par_medecin_referents = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('rendezVous')->has('medecinControle')->withCount('rendezVous')->get();
+        $nbre_rendez_vous_par_praticiens = Praticien::select(['numero_ordre'])->has('rendezVous')->withCount('rendezVous')->get();
+        
+        $nbre_rendez_vous_par_medecin_referents = MedecinControle::select(['numero_ordre'])->has('rendezVous')->withCount('rendezVous')->get();
+
         $nbre_patient_avec_medecin_referents = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('patient.medecinReferent')->count();
-        $nbre_medecin_referent_has_patients = MedecinControle::with('user:id,nom,prenom')->with('patients')->get(/* ['user_id'] */);
+
+        /**
+         * medecin referent avec ses patients
+         */
+        $nbre_medecin_referent_has_patients = MedecinControle::with('user:id,nom,prenom')->with('patients')->get();
+
+        /**
+         * medecin referent ayant plus de patient
+         */
+        $medecin_referent_ayant_plus_patients = MedecinControle::with('user:id,nom,prenom')->withCount('patients')->get();
+        $medecin_referent_ayant_plus_patients = $medecin_referent_ayant_plus_patients->sortByDesc('patients_count');
+        $medecin_referent_ayant_plus_patients = $medecin_referent_ayant_plus_patients->values()->all();
+
+
+        $nbre_rendez_vous_par_etablissement = EtablissementExercice::select(['name'])->has('rendezVous')->withCount('rendezVous')->get();
         $nbre_patient_decedes = Patient::whereHas('user', function ($query) { $query->where('decede', 'oui'); })->count();
 
         return response()->json([
@@ -130,12 +154,13 @@ class DashboardController extends Controller
             'nbre_rendez_vous_par_patients' => $nbre_rendez_vous_par_patients,
             'nbre_rendez_vous_par_praticiens' => $nbre_rendez_vous_par_praticiens,
             'nbre_rendez_vous_par_medecin_referents' => $nbre_rendez_vous_par_medecin_referents,
-            //'nombre_etablissement_exercices' => $nombre_etablissement_exercices,
+            'nbre_rendez_vous_par_etablissement' => $nbre_rendez_vous_par_etablissement,
             'nbre_patient_avec_medecin_referents' => $nbre_patient_avec_medecin_referents,
             'nbre_medecin_referent_has_patients' => $nbre_medecin_referent_has_patients,
-            'nbre_patient_decedes' => $nbre_patient_decedes
-
-
+            'nbre_patient_decedes' => $nbre_patient_decedes,
+            'nbre_medecin_referents' => $nbre_medecin_referents,
+            'medecin_referent_ayant_plus_patients' => $medecin_referent_ayant_plus_patients,
+            'nbre_avis_par_medecins' => $nbre_avis_par_medecins
         ]);
     }
 

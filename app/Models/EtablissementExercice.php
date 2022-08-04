@@ -92,6 +92,6 @@ class EtablissementExercice extends Model
     }
 
     public function rendezVous(){
-        return $this->hasMany(RendezVous::class);
+        return $this->hasMany(RendezVous::class, 'etablissement_id');
     }
 }

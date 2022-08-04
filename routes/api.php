@@ -365,6 +365,7 @@ Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|M
     Route::get('/parcours/{dossier_medical_slug}/affiliations','Api\v1\ParcourDeSoinController@affiliations');
     Route::get('/parcours/{dossier_medical_slug}/activite_amas','Api\v1\ParcourDeSoinController@activite_amas');
     Route::get('/parcours/{dossier_medical_slug}/activite_medecin_referents','Api\v1\ParcourDeSoinController@activite_medecin_referents');
+    Route::get('/dashboard', 'Api\v1\DashboardController@dashboard');
     
     
 });
@@ -482,10 +483,5 @@ Route::get('/livesearch', 'Api\PatientController@searchPatients');
 Route::get('/mission/list', 'Api\ActiviteController@getListMission');
 Route::get('/referent-activites/list', 'Api\ActivitesMedecinReferentController@getListActivites');
 
-
-Route::prefix('v1')->group(function () {
-    
-    Route::get('/dashboard', 'Api\v1\DashboardController@dashboard');
-});
 
 

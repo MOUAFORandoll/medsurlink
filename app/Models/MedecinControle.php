@@ -64,4 +64,8 @@ class MedecinControle extends Model
     public function patients(){
         return $this->belongsToMany(Patient::class, 'patient_medecin_controles', 'medecin_control_id',  'patient_id');
     }
+
+    public function rendezVous(){
+        return $this->hasMany(RendezVous::class, 'praticien_id', 'user_id');
+     }
 }
