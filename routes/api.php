@@ -173,7 +173,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Assistant
 });
 
 //    Définition des routes accéssible par le patient
-Route::group(['middleware' => ['auth:api','role:Admin|Patient|Souscripteur|Assistante']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Patient|Souscripteur|Assistante|Medecin controle']], function () {
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->only('show','index');
     Route::get('{patient}/dossier-medical','Api\DossierMedicalController@dossierByPatientId');
     Route::put('/secretReset/{slug}','Api\ReponseSecreteController@update');
