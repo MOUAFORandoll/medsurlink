@@ -120,4 +120,7 @@
   'open sans' => array(
     'normal' => $fontDir . '/open-sans-normal_bf11512877ef2223afd06e89358ef2fc',
   ),
+  'fontawesome' => array(
+    'normal' => $fontDir . '/fontawesome-normal_7ea195556637d817f455524c7885b526',
+  ),
 ) ?>
