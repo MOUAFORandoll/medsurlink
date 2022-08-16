@@ -145,4 +145,14 @@ class ParcourDeSoinController extends Controller
         return response()->json(['activites_medecin_referent_isoles' => $activites_medecin_referent_isoles, 'activites_medecin_referent_manuelles' => $activites_medecin_referent_manuelles]);
     }
 
+    /**
+    * fiche signalitique du patient
+    */
+    public function FicheSignalitique($dossier){
+
+        $dossier = DossierMedical::where('slug', $dossier)->first();
+        $patient = $dossier->patient;
+        $telephone = $patient->user->telephone;
+    }
+
 }
