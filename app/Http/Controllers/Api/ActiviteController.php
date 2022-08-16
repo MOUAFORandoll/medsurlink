@@ -181,15 +181,13 @@ class ActiviteController extends Controller
     }
     public function createMissions(Request $request){
 
-        // $mission = ActiviteAmaPatient::create($request->all());
-        $activities = $request->get('activities');
         $request->validate([
             'activities' => 'required',
         ]);
-        foreach($activities as $activity){
-            foreach($activity['selected'] as $selectId){
+        foreach($request->get('activities') as $activity){
+            foreach($activity['activity_id'] as $item){
                 ActiviteAmaPatient::create([
-                    'activite_ama_id' => $selectId,
+                    'activite_ama_id' => $item,
                     'date_cloture' => $activity['date_cloture_activite'],
                     'affiliation_id' => $request->get('affiliation_id'),
                     'commentaire' => $request->get('commentaire'),

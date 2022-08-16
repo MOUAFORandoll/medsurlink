@@ -67,7 +67,7 @@ class User extends Authenticatable implements HasMedia
         'slug',
         'adresse',
         'smsEnvoye',
-        'isNotice',
+        'isNotice', // Permet de mentionner que le medecin est un medecin avis
         'slack',
         'decede',
     ];
