@@ -487,7 +487,6 @@ class ConsultationMedecineGeneraleController extends Controller
         $motifs = explode(",",$motifs);
         
         $consultation = $consultation->fresh(); 
-        \Log::alert($motifs);
         //Insertion des motifs
         defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update', $consultation->dossier->patient->user_id);
         $consultation->motifs()->sync($motifs);
