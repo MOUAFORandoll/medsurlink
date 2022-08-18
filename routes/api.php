@@ -141,6 +141,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::get('ligne_temps/close/{id}', 'Api\LigneDeTempsController@changeEtat');
     Route::get('ligne_temps/bilan/{ligne_temps_id}', 'Api\ConsultationExamenValidationController@ligneTempsBilan');
     Route::get('bilans/financiers/{patient}', 'Api\ConsultationExamenValidationController@BilanFinancier');
+    Route::get('fiche/signalitique/{patient}', 'Api\ConsultationExamenValidationController@FicheSignalitique'); // lll
 
     Route::get('bilans/globale/{dossier}/financiers', 'Api\ConsultationExamenValidationController@bilanGlobalFiancier');
     Route::post('validation/examens/souscripteur', 'Api\ConsultationExamenValidationController@setEtatValidationSouscripteur');

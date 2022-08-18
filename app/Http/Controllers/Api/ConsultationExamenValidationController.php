@@ -366,6 +366,7 @@ class ConsultationExamenValidationController extends Controller
         return response()->json(['total_prescription' => $total_prescription, 'total_medecin_controle' => $total_medecin_controle, 'total_medecin_assureur' => $total_medecin_assureur, 'sexe' => $sexe, 'telephone' => $telephone, 'age' => $age]);
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
