@@ -102,11 +102,7 @@ class AllergieController extends Controller
      */
     public function update(Request $request, $slug)
     {
-        $validation = Validator::make($request->all(),[
-            "dossier_slug"=>"required|exists:dossier_medicals,slug",
-            "description"=>"required|string|min:3",
-
-        ]);
+        $validation = Validator::make($request->all());
 
         $this->validatedSlug($slug,$this->table);
 
