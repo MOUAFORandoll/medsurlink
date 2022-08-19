@@ -102,6 +102,11 @@ class AllergieController extends Controller
      */
     public function update(Request $request, $slug)
     {
+        $validation = Validator::make($request->all(),[
+            "dossier_slug"=>"required|exists:dossier_medicals,slug",
+            "description"=>"required|string|min:3",
+
+        ]);
 
         $this->validatedSlug($slug,$this->table);
 
@@ -109,7 +114,7 @@ class AllergieController extends Controller
 
        // $this->checkIfAuthorized("Allergie",$allergie->id,"create");
 
-        Allergie::whereSlug($slug)->update($request->validated());
+        Allergie::whereSlug($slug)->update($validation->validated());
 
         $allergie = $allergie->fresh();
 
