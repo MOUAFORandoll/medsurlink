@@ -294,7 +294,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::get('validation/examens/consultation/{consultation}', 'Api\ConsultationExamenValidationController@getListExamenToValidate');
 });
 
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Assistante|Medecin controle|Pharmacien']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Assistante|Medecin controle|Pharmacien|Souscripteur']], function () {
     Route::get('/get-commande-from-cim','Api\AffiliationSouscripteurController@getSouscripteurFromCIM');
     Route::resource('resultat-imagerie','Api\ResultatImagerieController');
     Route::resource('resultat-labo','Api\ResultatLaboController');
