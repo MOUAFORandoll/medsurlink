@@ -137,7 +137,7 @@ class ParcourDeSoinController extends Controller
     public function activite_medecin_referents($dossier_medical_slug){
         $dossier = DossierMedical::whereSlug($dossier_medical_slug)->first();
         $patient_id = $dossier->patient_id;
-        $activites_medecin_referent_isoles = ActivitesControle::doesntHave('affiliation')->with(['activitesMedecinReferent:id,description_fr','updatedBy','createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id',$patient_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_id', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
+        $activites_medecin_referent_isoles = ActivitesControle::doesntHave('affiliation')->with(['activitesMedecinReferent:id,description_fr','updatedBy','createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id',$patient_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_id', 'date_cloture', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
         $activites_medecin_referent_manuelles = Affiliation::with(['cloture', 'package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_referent_patients.activitesMedecinReferent:id,description_fr', 'ligneTemps.activites_referent_patients' => function ($query) use ($patient_id) {
             $query->where('patient_id', $patient_id);
         }])->where('patient_id',$patient_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
