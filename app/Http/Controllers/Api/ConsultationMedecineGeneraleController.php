@@ -391,11 +391,33 @@ class ConsultationMedecineGeneraleController extends Controller
             'files',
             'rdv.praticien'
         ])->whereSlug($slug)->first();
+        $lgne_temps = $consultation->ligneDeTemps;
+        $etablissement = $consultation->etablissement;
+        $motifs = $consultation->motifs->map(function ($motif) {
+            return [
+                'id' => $motif->id,
+                'description' => $motif->description
+            ];
+        });
+        $contributors = $consultation->operationables->map(function ($user) {
+            return [
+                'id' => $user->contributable->id,
+                'nom' => mb_strtoupper($user->contributable->nom).' '.ucfirst($user->contributable->prenom)
+            ];
+        });
 
         if (!is_null($consultation)){
+
             $consultation->updateConsultationMedecine();
         }
-        return response()->json(["consultation"=>$consultation]);
+
+        $consultation->makeHidden(['ligneDeTemps', 'etablissement', 'motifs']);
+
+        $consultation->ligne_de_temps_id = ["id" => $lgne_temps->id, "date" => $lgne_temps->date_consultation, "motif" => $lgne_temps->motif->description, "etat" => $lgne_temps->etat == null ? true : false];
+        $consultation->etablissement_id = ["id" => $etablissement->id, "nom" => $etablissement->name, "description" => $etablissement->description, "date" => $etablissement->created_at->format('DD-MM-YYYY'), 'slug' => $etablissement->slug];
+        $consultation->current_motifs = $motifs;
+        $consultation->contributors = $contributors;
+        return response()->json(["consultation" => $consultation]);
 
     }
 
@@ -453,7 +475,6 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function update(ConsutationMedecineRequest $request, $slug)
     {
-
         $this->validatedSlug($slug,$this->table);
 
         $consultation = ConsultationMedecineGenerale::findBySlug($slug);
@@ -464,16 +485,21 @@ class ConsultationMedecineGeneraleController extends Controller
         // $diasgnostic = $request->get('diasgnostic');
         $rConclusions = $request->get('conclusions');
         $motifs = explode(",",$motifs);
-
+        
+        $consultation = $consultation->fresh(); 
         //Insertion des motifs
-        foreach ($motifs as $motif){
+        defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update', $consultation->dossier->patient->user_id);
+        $consultation->motifs()->sync($motifs);
+       /*  foreach ($motifs as $motif){
 
             $converti = (integer) $motif;
 
-            if ($converti !== 0){
-                $consultation->motifs()->attach($motif);
-                defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
+            if ($converti != 0){
+                \Log::alert("mon motif converti $converti");
+                $consultation->motifs()->attach($converti);
+                defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update', $consultation->dossier->patient->user_id);
             }else{
+                \Log::alert("mon motif chaine $converti");
                 if ($motif != ""){
 
                     $item =   Motif::create([
@@ -483,11 +509,11 @@ class ConsultationMedecineGeneraleController extends Controller
 
                     defineAsAuthor("Motif", $item->id, 'create');
                     $consultation->motifs()->attach($item->id);
-                    defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
+                    defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update', $consultation->dossier->patient->user_id);
 
                 }
             }
-        }
+        } */
 
         $examens = json_decode($request->get('examen_complementaire'));
         // $last_validation = ConsultationExamenValidation::where([
