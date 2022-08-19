@@ -367,7 +367,11 @@ Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|M
     Route::get('/parcours/{dossier_medical_slug}/activite_amas','Api\v1\ParcourDeSoinController@activite_amas');
     Route::get('/parcours/{dossier_medical_slug}/activite_medecin_referents','Api\v1\ParcourDeSoinController@activite_medecin_referents');
     Route::get('/dashboard', 'Api\v1\DashboardController@dashboard');
-    
+    Route::resource('allergies', 'Api\v1\AllergieController');
+    Route::resource('antecedents', 'Api\v1\AntecedentController');
+    Route::get('/consultationsMedecines/{dossier_slug}', 'Api\v1\DossierMedicalController@consultationsMedecines');
+    Route::resource('traitement-actuels', 'Api\v1\TraitementActuelController');
+
     
 });
 
