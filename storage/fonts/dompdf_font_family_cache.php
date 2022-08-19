@@ -86,7 +86,7 @@
     '600' => $fontDir . '/montserrat-600_78ffe211b9c1a9ecc54d176954a2889f',
     'bold' => $fontDir . '/montserrat-bold_629e71940f11098ade299cc55f80363d',
     '800' => $fontDir . '/montserrat-800_8470bfc253b5e154cdf18175b3f37c23',
-    '900' => $fontDir . '/montserrat-900_a14aa5fa76202380dcf0d3aad6f35cfb',
+    '900' => $fontDir . '/montserrat-900_f211363c4d816f802e92103f12fe3e42',
     '100_italic' => $fontDir . '/montserrat-100-italic_f6e39813e81e2a2915375a01035869ff',
     '200_italic' => $fontDir . '/montserrat-200-italic_7b7696ff3357448a0828129439d682c1',
     '300_italic' => $fontDir . '/montserrat-300-italic_fb5a415793464dedbdefb17fc42d396a',
