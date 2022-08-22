@@ -141,6 +141,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::get('ligne_temps/close/{id}', 'Api\LigneDeTempsController@changeEtat');
     Route::get('ligne_temps/bilan/{ligne_temps_id}', 'Api\ConsultationExamenValidationController@ligneTempsBilan');
     Route::get('bilans/financiers/{patient}', 'Api\ConsultationExamenValidationController@BilanFinancier');
+    Route::get('fiche/signalitique/{patient}', 'Api\ConsultationExamenValidationController@FicheSignalitique'); // lll
 
     Route::get('bilans/globale/{dossier}/financiers', 'Api\ConsultationExamenValidationController@bilanGlobalFiancier');
     Route::post('validation/examens/souscripteur', 'Api\ConsultationExamenValidationController@setEtatValidationSouscripteur');
@@ -293,7 +294,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::get('validation/examens/consultation/{consultation}', 'Api\ConsultationExamenValidationController@getListExamenToValidate');
 });
 
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Assistante|Medecin controle|Pharmacien']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Assistante|Medecin controle|Pharmacien|Souscripteur']], function () {
     Route::get('/get-commande-from-cim','Api\AffiliationSouscripteurController@getSouscripteurFromCIM');
     Route::resource('resultat-imagerie','Api\ResultatImagerieController');
     Route::resource('resultat-labo','Api\ResultatLaboController');
@@ -366,7 +367,11 @@ Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|M
     Route::get('/parcours/{dossier_medical_slug}/activite_amas','Api\v1\ParcourDeSoinController@activite_amas');
     Route::get('/parcours/{dossier_medical_slug}/activite_medecin_referents','Api\v1\ParcourDeSoinController@activite_medecin_referents');
     Route::get('/dashboard', 'Api\v1\DashboardController@dashboard');
-    
+    Route::resource('allergies', 'Api\v1\AllergieController');
+    Route::resource('antecedents', 'Api\v1\AntecedentController');
+    Route::get('/consultationsMedecines/{dossier_slug}', 'Api\v1\DossierMedicalController@consultationsMedecines');
+    Route::resource('traitement-actuels', 'Api\v1\TraitementActuelController');
+
     
 });
 
