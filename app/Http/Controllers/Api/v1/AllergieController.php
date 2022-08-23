@@ -109,7 +109,7 @@ class AllergieController extends Controller
 
        // $this->checkIfAuthorized("Allergie",$allergie->id,"create");
 
-        Allergie::whereSlug($slug)->update($request->validated());
+        Allergie::whereSlug($slug)->update($request->all());
 
         $allergie = $allergie->fresh();
 
