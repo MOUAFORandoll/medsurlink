@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'staging'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost:8001'),
+    'url' => env('APP_URL', 'https://www.staging-back.medsurlink.com/api'),
 
     'asset_url' => env('ASSET_URL', null),
 
