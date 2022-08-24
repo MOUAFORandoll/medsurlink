@@ -20,7 +20,8 @@ class DelaiOperation extends Model
 
     protected $fillable = [
         "patient_id",
-        "type_operation_id",
+        "delai_operationable_id",
+        "delai_operationable_type",
         "date_heure_prevue",
         "date_heure_effectif",
         "observation",
@@ -28,15 +29,15 @@ class DelaiOperation extends Model
     ];
 
 
-    public function getTypeAndTimestampAttribute() {
-        return $this->type_operation_id.' '.Carbon::now()->timestamp;
+    public function getPatientIdAndTimestampAttribute() {
+        return $this->patient_id.' '.Carbon::now()->timestamp;
     }
 
     public function sluggable()
     {
         return [
             'slug' => [
-                'source' => 'TypeAndTimestamp'
+                'source' => 'patientIdAndTimestamp'
             ]
         ];
     }
@@ -47,5 +48,10 @@ class DelaiOperation extends Model
 
     public function type_observation(){
         return $this->belongsTo(TypeOperation::class);
+    }
+
+    public function delai_operationable()
+    {
+        return $this->morphTo();
     }
 }

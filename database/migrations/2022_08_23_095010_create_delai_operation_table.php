@@ -16,12 +16,13 @@ class CreateDelaiOperationTable extends Migration
         Schema::create('delai_operations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('patient_id')->nullable();
-            $table->unsignedBigInteger('type_operation_id');
+            $table->unsignedBigInteger('delai_operationable_id'); 
+            $table->string('delai_operationable_type');
             $table->dateTime('date_heure_prevue');
             $table->dateTime('date_heure_effectif');
             $table->longText('observation')->nullable();
+            $table->string('slug');
             $table->foreign('patient_id')->references('user_id')->on('patients')->onDelete('Cascade');
-            $table->foreign('type_operation_id')->references('id')->on('type_operations')->onDelete('Cascade');
             $table->timestamps();
             $table->softDeletes();
         });

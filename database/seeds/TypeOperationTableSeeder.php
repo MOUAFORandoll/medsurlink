@@ -11,7 +11,7 @@ class TypeOperationTableSeeder extends Seeder
      * @return void
      */
     public function run()
-    {
+    {        
         DB::table('type_operations')->insert([
             [
                 'libelle' => 'Souscription'
@@ -24,6 +24,9 @@ class TypeOperationTableSeeder extends Seeder
             ],
             [
                 'libelle' => 'Appel du patient'
+            ],
+            [
+                'libelle' => 'Appel du souscripteur'
             ],
             [
                 'libelle' => 'Téléconsultation'
