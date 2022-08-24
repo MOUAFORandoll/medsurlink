@@ -13,6 +13,8 @@ use App\Models\GroupeActivite;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Affiliation;
+use App\Models\DelaiOperation;
 
 class ActiviteController extends Controller
 {
@@ -184,9 +186,14 @@ class ActiviteController extends Controller
         $request->validate([
             'activities' => 'required',
         ]);
+        $activity = ActiviteAmaPatient::latest()->first();
+        $affiliation = Affiliation::where("patient_id",$request->patient_id)->latest()->first();
+        $delai_operation = DelaiOperation::latest()->first();
+        
         foreach($request->get('activities') as $activity){
+            
             foreach($activity['activity_id'] as $item){
-                ActiviteAmaPatient::create([
+                $activite = ActiviteAmaPatient::create([
                     'activite_ama_id' => $item,
                     'date_cloture' => $activity['date_cloture_activite'],
                     'affiliation_id' => $request->get('affiliation_id'),
@@ -196,6 +203,44 @@ class ActiviteController extends Controller
                     'etablissement_id' => $request->get('etablissement_id'),
                     'statut' => $request->get('statut'),
                 ]);
+
+                if(!is_null($delai_operation)){
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $request->patient_id,
+                            "delai_operationable_id" => $activite->id,
+                            "delai_operationable_type" => ActiviteAmaPatient::class,
+                            "date_heure_prevue" => $delai_operation->created_at,
+                            "date_heure_effectif" => $activite->created_at,
+                            "observation" => "RAS"
+                        ]
+                    );
+                }
+                elseif(!is_null($activity)){
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $request->patient_id,
+                            "delai_operationable_id" => $activite->id,
+                            "delai_operationable_type" => ActiviteAmaPatient::class,
+                            "date_heure_prevue" => $activity->created_at,
+                            "date_heure_effectif" => $activite->created_at,
+                            "observation" => "RAS"
+                        ]
+                    );
+                }elseif(!is_null($affiliation)){
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $request->patient_id,
+                            "delai_operationable_id" => $activite->id,
+                            "delai_operationable_type" => ActiviteAmaPatient::class,
+                            "date_heure_prevue" => $affiliation->created_at,
+                            "date_heure_effectif" => $activite->created_at,
+                            "observation" => "RAS"
+                        ]
+                    );
+                }
+                
+
             }
 
         }

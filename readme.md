@@ -69,3 +69,5 @@ php artisan migrate --path=/database/migrations/2022_08_23_094803_create_type_op
 php artisan migrate --path=/database/migrations/2022_08_23_095010_create_delai_operation_table.php
 
 php artisan db:seed --class=TypeOperationTableSeeder
+
+php artisan db:seed --class=ActivitesAmaOtherSeeder

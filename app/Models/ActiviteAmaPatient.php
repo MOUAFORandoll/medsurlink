@@ -89,4 +89,9 @@ class ActiviteAmaPatient extends Model
         return $this->belongsTo(EtablissementExercice::class);
     }
 
+    public function delai_operations()
+    {
+        return $this->morphMany(DelaiOperation::class, 'delai_operationable');
+    }
+
 }
