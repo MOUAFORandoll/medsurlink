@@ -25,9 +25,9 @@ class ParcourDeSoinController extends Controller
         $patient = Patient::where('user_id', $dossier->patient_id)->first();
 
         $contrat = getContrat($patient->user);
-
+        $lastAffiliations = collect($contrat->contrat);
         $affiliations = Affiliation::with(['patient.user', 'souscripteur.user', 'package', 'cloture'])->where('patient_id',$patient->user_id)->latest()->get();
-        $newAffiliations = collect($contrat->contrat);
+        $newAffiliations = collect();
         foreach($affiliations as $affiliation){
             $newAffiliation = new \stdClass();
             $newAffiliation->adresse_affilie = $affiliation->patient->user->adresse;
@@ -50,7 +50,7 @@ class ParcourDeSoinController extends Controller
             $newAffiliation->expire_mail_send = $affiliation->expire_email;
             $newAffiliation->id = $affiliation->id;
             $newAffiliation->lieuEtablissement = $affiliation->patient->user->ville;
-            $newAffiliation->montantSouscription = ConversionEurotoXaf($affiliation->package->montant);
+            $newAffiliation->montantSouscription = $affiliation->package->montant;
             $newAffiliation->nomAffilie = $affiliation->patient->user->nom;
             $newAffiliation->nomContact = $affiliation->contact_name;
             $newAffiliation->nomPatient = $affiliation->patient->user->nom;
@@ -95,6 +95,9 @@ class ParcourDeSoinController extends Controller
 
         }
 
+        $newAffiliations = $newAffiliations->merge($lastAffiliations);
+
+
         return response()->json(['affiliations' => $newAffiliations]);
     }
 
@@ -134,12 +137,22 @@ class ParcourDeSoinController extends Controller
     public function activite_medecin_referents($dossier_medical_slug){
         $dossier = DossierMedical::whereSlug($dossier_medical_slug)->first();
         $patient_id = $dossier->patient_id;
-        $activites_medecin_referent_isoles = ActivitesControle::doesntHave('affiliation')->with(['activitesMedecinReferent:id,description_fr','updatedBy','createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id',$patient_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_id', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
+        $activites_medecin_referent_isoles = ActivitesControle::doesntHave('affiliation')->with(['activitesMedecinReferent:id,description_fr','updatedBy','createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id',$patient_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_id', 'date_cloture', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
         $activites_medecin_referent_manuelles = Affiliation::with(['cloture', 'package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_referent_patients.activitesMedecinReferent:id,description_fr', 'ligneTemps.activites_referent_patients' => function ($query) use ($patient_id) {
             $query->where('patient_id', $patient_id);
         }])->where('patient_id',$patient_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
 
         return response()->json(['activites_medecin_referent_isoles' => $activites_medecin_referent_isoles, 'activites_medecin_referent_manuelles' => $activites_medecin_referent_manuelles]);
+    }
+
+    /**
+    * fiche signalitique du patient
+    */
+    public function FicheSignalitique($dossier){
+
+        $dossier = DossierMedical::where('slug', $dossier)->first();
+        $patient = $dossier->patient;
+        $telephone = $patient->user->telephone;
     }
 
 }

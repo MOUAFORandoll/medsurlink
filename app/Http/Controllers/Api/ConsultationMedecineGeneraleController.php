@@ -31,6 +31,9 @@ use Psy\Util\Json;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use App\Message;
 use App\Events\MessageCreated;
+use App\Models\ActiviteAmaPatient;
+use App\Models\Affiliation;
+use App\Models\DelaiOperation;
 use App\Models\VersionValidation;
 
 class ConsultationMedecineGeneraleController extends Controller
@@ -324,6 +327,47 @@ class ConsultationMedecineGeneraleController extends Controller
         }
         $this->updateDossierId($consultation->dossier->id);
 
+        $delai_operation = DelaiOperation::latest()->first();
+        $activity = ActiviteAmaPatient::latest()->first();
+        $affiliation = Affiliation::where("patient_id",$request->patient_id)->latest()->first();
+        
+        if(!is_null($delai_operation)){
+            DelaiOperation::create(
+                [
+                    "patient_id" => $patient->user_id,
+                    "delai_operationable_id" => $consultation->id,
+                    "delai_operationable_type" => ConsultationMedecineGenerale::class,
+                    "date_heure_prevue" => $delai_operation->created_at,
+                    "date_heure_effectif" => $consultation->created_at,
+                    "observation" => "RAS"
+                ]
+            );
+        }
+        elseif (!is_null($activity)){
+            DelaiOperation::create(
+                [
+                    "patient_id" => $patient->user_id,
+                    "delai_operationable_id" => $consultation->id,
+                    "delai_operationable_type" => ConsultationMedecineGenerale::class,
+                    "date_heure_prevue" => $activity->created_at,
+                    "date_heure_effectif" => $consultation->created_at,
+                    "observation" => "RAS"
+                ]
+            );
+        }elseif(!is_null($affiliation)){
+            DelaiOperation::create(
+                [
+                    "patient_id" => $patient->user_id,
+                    "delai_operationable_id" => $consultation->id,
+                    "delai_operationable_type" => ConsultationMedecineGenerale::class,
+                    "date_heure_prevue" => $affiliation->created_at,
+                    "date_heure_effectif" => $consultation->created_at,
+                    "observation" => "RAS"
+                ]
+            );
+        }
+
+
         return response()->json(["consultation" => $consultation]);
     }
 
@@ -391,11 +435,33 @@ class ConsultationMedecineGeneraleController extends Controller
             'files',
             'rdv.praticien'
         ])->whereSlug($slug)->first();
+        $lgne_temps = $consultation->ligneDeTemps;
+        $etablissement = $consultation->etablissement;
+        $motifs = $consultation->motifs->map(function ($motif) {
+            return [
+                'id' => $motif->id,
+                'description' => $motif->description
+            ];
+        });
+        $contributors = $consultation->operationables->map(function ($user) {
+            return [
+                'id' => $user->contributable->id,
+                'nom' => mb_strtoupper($user->contributable->nom).' '.ucfirst($user->contributable->prenom)
+            ];
+        });
 
         if (!is_null($consultation)){
+
             $consultation->updateConsultationMedecine();
         }
-        return response()->json(["consultation"=>$consultation]);
+
+        $consultation->makeHidden(['ligneDeTemps', 'etablissement', 'motifs']);
+
+        $consultation->ligne_de_temps_id = ["id" => $lgne_temps->id, "date" => $lgne_temps->date_consultation, "motif" => $lgne_temps->motif->description, "etat" => $lgne_temps->etat == null ? true : false];
+        $consultation->etablissement_id = ["id" => $etablissement->id, "nom" => $etablissement->name, "description" => $etablissement->description, "date" => $etablissement->created_at->format('DD-MM-YYYY'), 'slug' => $etablissement->slug];
+        $consultation->current_motifs = $motifs;
+        $consultation->contributors = $contributors;
+        return response()->json(["consultation" => $consultation]);
 
     }
 
@@ -453,7 +519,6 @@ class ConsultationMedecineGeneraleController extends Controller
      */
     public function update(ConsutationMedecineRequest $request, $slug)
     {
-
         $this->validatedSlug($slug,$this->table);
 
         $consultation = ConsultationMedecineGenerale::findBySlug($slug);
@@ -464,16 +529,21 @@ class ConsultationMedecineGeneraleController extends Controller
         // $diasgnostic = $request->get('diasgnostic');
         $rConclusions = $request->get('conclusions');
         $motifs = explode(",",$motifs);
-
+        
+        $consultation = $consultation->fresh(); 
         //Insertion des motifs
-        foreach ($motifs as $motif){
+        defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update', $consultation->dossier->patient->user_id);
+        $consultation->motifs()->sync($motifs);
+       /*  foreach ($motifs as $motif){
 
             $converti = (integer) $motif;
 
-            if ($converti !== 0){
-                $consultation->motifs()->attach($motif);
-                defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
+            if ($converti != 0){
+                \Log::alert("mon motif converti $converti");
+                $consultation->motifs()->attach($converti);
+                defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update', $consultation->dossier->patient->user_id);
             }else{
+                \Log::alert("mon motif chaine $converti");
                 if ($motif != ""){
 
                     $item =   Motif::create([
@@ -483,11 +553,11 @@ class ConsultationMedecineGeneraleController extends Controller
 
                     defineAsAuthor("Motif", $item->id, 'create');
                     $consultation->motifs()->attach($item->id);
-                    defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update',$consultation->dossier->patient->user_id);
+                    defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update', $consultation->dossier->patient->user_id);
 
                 }
             }
-        }
+        } */
 
         $examens = json_decode($request->get('examen_complementaire'));
         // $last_validation = ConsultationExamenValidation::where([

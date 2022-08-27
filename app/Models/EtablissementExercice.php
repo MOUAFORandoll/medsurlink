@@ -90,4 +90,8 @@ class EtablissementExercice extends Model
     public function assistantes(){
         return $this->hasMany(Assistante::class,'etablissement_id','id');
     }
+
+    public function rendezVous(){
+        return $this->hasMany(RendezVous::class, 'etablissement_id');
+    }
 }

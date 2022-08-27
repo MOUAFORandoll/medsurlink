@@ -21,7 +21,7 @@ php artisan migrate --path=/database/migrations/2021_12_23_092950_create_activit
 php artisan migrate --path=/database/migrations/2021_12_01_091212_create_activites_ama_table.php
 php artisan migrate --path=/database/migrations/2021_12_01_091531_create_activites_ama_patient_table.php
 
-php artisan migrate --path=/database/migrations/2022_05_13_145159_create_model_changes_history_table.php
+php artisan migrate --path=/database/migrations/2022_05_13_145159_create_model_changes_history_table.php (pas encore)
 
 php artisan migrate --path=/database/migrations/2021_12_29_114729_create_activites_controle_table.php
 
@@ -63,3 +63,11 @@ php artisan migrate --path=/database/migrations/2022_07_11_151019_add_restrictio
 ## gestion des medias avec laravel medias
 composer require "spatie/laravel-medialibrary:^7.0.0"
 php artisan migrate --path=/database/migrations/2022_07_04_154636_create_media_table.php
+
+## Délai de prise en charge
+php artisan migrate --path=/database/migrations/2022_08_23_094803_create_type_operation_table.php
+php artisan migrate --path=/database/migrations/2022_08_23_095010_create_delai_operation_table.php
+
+php artisan db:seed --class=TypeOperationTableSeeder
+
+php artisan db:seed --class=ActivitesAmaOtherSeeder

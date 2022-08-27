@@ -30,7 +30,7 @@ class ConsultationExamenValidationController extends Controller
      */
     public function index()
     {
-        $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
+        $examen_validation = ConsultationExamenValidation::has('consultation')->with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
         //->whereNull('etat_validation_medecin')
         ->distinct()
         ->get(['consultation_general_id']);
@@ -341,6 +341,8 @@ class ConsultationExamenValidationController extends Controller
     public function bilanGlobalFiancier($dossier){
 
         $dossier = DossierMedical::where('slug', $dossier)->first();
+        $patient = $dossier->patient;
+        $telephone = $patient->user->telephone;
         $ligne_temp_ids = LigneDeTemps::where('dossier_medical_id', $dossier->id)->get()->pluck('id');
         $examen_validations = ConsultationExamenValidation::whereIn('ligne_de_temps_id', $ligne_temp_ids)->get();
 
@@ -358,9 +360,11 @@ class ConsultationExamenValidationController extends Controller
         $total_prescription = $examen_validations->sum('prix');
         $total_medecin_controle = $examen_validations->where('etat_validation_medecin', 1)->sum('prix');
         $total_medecin_assureur = $examen_validations->where('etat_validation_souscripteur', 1)->sum('prix');
-
-        return response()->json(['total_prescription' => $total_prescription, 'total_medecin_controle' => $total_medecin_controle, 'total_medecin_assureur' => $total_medecin_assureur]);
+        $sexe = $patient->sexe;
+        $age = Carbon::parse($patient->date_de_naissance)->diff(Carbon::now())->y;
+        return response()->json(['total_prescription' => $total_prescription, 'total_medecin_controle' => $total_medecin_controle, 'total_medecin_assureur' => $total_medecin_assureur, 'sexe' => $sexe, 'telephone' => $telephone, 'age' => $age]);
     }
+
 
     /**
      * Show the form for editing the specified resource.
