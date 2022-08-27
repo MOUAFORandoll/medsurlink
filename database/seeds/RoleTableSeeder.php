@@ -12,6 +12,7 @@ class RoleTableSeeder extends Seeder
     public function run()
     {
         $roles = [
+            'Super Admin',
             'Admin',
             'Patient',
             'Souscripteur',
@@ -24,7 +25,10 @@ class RoleTableSeeder extends Seeder
             'Etablissement',
             'Comptable',
             'Assistante',
-            'Pharmacien'
+            'Pharmacien',
+            'Assureur',
+            'Association',
+            'Directeur'
         ];
 
         foreach ($roles as $role) {
@@ -33,6 +37,9 @@ class RoleTableSeeder extends Seeder
                 'guard_name'=>'api'
             ]);
         }
+
+        //Definition des permissions du super-admin
+        $this->setPermissionRole(1,1);
 
 //        Definition des permissions de l'admin
         $this->setPermissionRole(1,1);
