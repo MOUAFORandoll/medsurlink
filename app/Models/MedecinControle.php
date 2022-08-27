@@ -67,5 +67,10 @@ class MedecinControle extends Model
 
     public function rendezVous(){
         return $this->hasMany(RendezVous::class, 'praticien_id', 'user_id');
-     }
+    }
+
+    public function delai_operations()
+    {
+        return $this->morphMany(DelaiOperation::class, 'delai_operationable');
+    }
 }

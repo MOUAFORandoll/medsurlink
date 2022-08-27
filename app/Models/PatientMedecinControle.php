@@ -93,4 +93,10 @@ class PatientMedecinControle extends Model
     public function medecinControles(){
         return $this->belongsTo(MedecinControle::class,'medecin_control_id','user_id');
     }
+
+    public function delai_operations()
+    {
+        return $this->morphMany(DelaiOperation::class, 'delai_operationable');
+    }
 }
+

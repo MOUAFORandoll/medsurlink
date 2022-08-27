@@ -33,9 +33,8 @@ class ConsultationExamenValidationController extends Controller
         $examen_validation = ConsultationExamenValidation::has('consultation')->with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
         //->whereNull('etat_validation_medecin')
         ->distinct()
-        ->latest()
         ->get(['consultation_general_id']);
-        //$examen_validation = $examen_validation->sortByDesc('updated_at');
+        $examen_validation = $examen_validation->sortByDesc('updated_at');
         return response()->json(['examen_validation'=>$examen_validation]);
     }
     /**
@@ -365,6 +364,7 @@ class ConsultationExamenValidationController extends Controller
         $age = Carbon::parse($patient->date_de_naissance)->diff(Carbon::now())->y;
         return response()->json(['total_prescription' => $total_prescription, 'total_medecin_controle' => $total_medecin_controle, 'total_medecin_assureur' => $total_medecin_assureur, 'sexe' => $sexe, 'telephone' => $telephone, 'age' => $age]);
     }
+
 
     /**
      * Show the form for editing the specified resource.

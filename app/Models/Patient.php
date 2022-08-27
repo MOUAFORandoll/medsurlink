@@ -150,4 +150,8 @@ class Patient extends Model
         ]);
     }
 
+    public function delai_operations(){
+        return $this->hasMany(DelaiOperation::class);
+    }
+
 }
