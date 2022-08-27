@@ -67,6 +67,12 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/signature/user','Api\UserController@signature');
 
 });
+
+//super Admin route
+// Route::group(['middleware' => ['auth:api','role:Super Admin']], function () {
+//     Route::resource('user', 'Api\UserController')->except(['create','edit']);
+// });
+
 Route::group(['middleware' => ['auth:api','role:Admin']], function () {
     Route::resource('user', 'Api\UserController')->except(['create','edit']);
 });
