@@ -85,9 +85,7 @@ class PermissionTableSeeder extends Seeder
            'Modifier souscriptions assureurs',
            'Desactiver souscriptions assureurs',
            'Effectuer validation financieres',
-<<<<<<< HEAD
-           'Effectuer validation médicales'
-=======
+           'Effectuer validation médicales',
            'Créer formations',
            'Modifier formations',
            'Supprimer formations',
@@ -118,7 +116,6 @@ class PermissionTableSeeder extends Seeder
            'Creer activite',
            'Modifier activite',
            'Consulter activite patients',
->>>>>>> 969842ae1f80fb6d235fc47fd6cb1bfada18ee32
         ];
 
 
