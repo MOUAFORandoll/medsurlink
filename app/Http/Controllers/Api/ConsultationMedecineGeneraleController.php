@@ -327,8 +327,8 @@ class ConsultationMedecineGeneraleController extends Controller
         }
         $this->updateDossierId($consultation->dossier->id);
 
-        $delai_operation = DelaiOperation::latest()->first();
-        $activity = ActiviteAmaPatient::latest()->first();
+        $delai_operation = DelaiOperation::where("patient_id",$request->patient_id)->latest()->first();
+        $activity = ActiviteAmaPatient::where("patient_id",$request->patient_id)->latest()->first();
         $affiliation = Affiliation::where("patient_id",$request->patient_id)->latest()->first();
         
         if(!is_null($delai_operation)){

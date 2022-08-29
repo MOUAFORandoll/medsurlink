@@ -9,6 +9,44 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\FactureAvisDetail
+ *
+ * @property int $id
+ * @property int $medecin_avis_id
+ * @property int $facture_avis_id
+ * @property string|null $total_montant
+ * @property string|null $medicasure_montant
+ * @property string|null $association_montant
+ * @property string|null $medecin_avis_montant
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\EtablissementExercice $etablissement
+ * @property-read \App\Models\FactureAvis $factureAvis
+ * @property-read mixed $name_and_timestamp
+ * @property-read \App\Models\MedecinAvis $medecinAvis
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail newQuery()
+ * @method static \Illuminate\Database\Query\Builder|FactureAvisDetail onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail whereAssociationMontant($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail whereFactureAvisId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail whereMedecinAvisId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail whereMedecinAvisMontant($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail whereMedicasureMontant($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail whereTotalMontant($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FactureAvisDetail whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|FactureAvisDetail withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|FactureAvisDetail withoutTrashed()
+ * @mixin \Eloquent
+ */
 class FactureAvisDetail extends Model
 {
     use SoftDeletes;

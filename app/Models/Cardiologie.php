@@ -11,6 +11,84 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * App\Models\Cardiologie
+ *
+ * @property int $id
+ * @property int $etablissement_id
+ * @property int $dossier_medical_id
+ * @property string|null $date_consultation
+ * @property string|null $anamnese
+ * @property string|null $facteur_de_risque
+ * @property string|null $profession
+ * @property string|null $situation_familiale
+ * @property string $nbre_enfant
+ * @property string $tabac
+ * @property string $alcool
+ * @property string|null $autres
+ * @property string|null $conclusion
+ * @property string|null $conduite_a_tenir
+ * @property string|null $examen_clinique
+ * @property string|null $rendez_vous
+ * @property string|null $archieved_at
+ * @property string|null $passed_at
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string $nbreAnnee
+ * @property string $nbreCigarette
+ * @property int|null $creator
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ActionMotif[] $actions
+ * @property-read int|null $actions_count
+ * @property-read User|null $author
+ * @property-read \App\Models\DossierMedical $dossier
+ * @property-read \App\Models\EtablissementExercice $etablissement
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ExamenCardio[] $examenCardios
+ * @property-read int|null $examen_cardios_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\File[] $files
+ * @property-read int|null $files_count
+ * @property-read mixed $dossier_and_timestamp
+ * @property-read \App\Models\LigneDeTemps $ligneDeTemps
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Contributeurs[] $operationables
+ * @property-read int|null $operationables_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ParametreCommun[] $parametresCommun
+ * @property-read int|null $parametres_commun_count
+ * @property-read \App\Models\RendezVous|null $rdv
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Cardiologie onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereAlcool($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereAnamnese($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereArchievedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereAutres($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereConclusion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereConduiteATenir($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereDateConsultation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereDossierMedicalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereEtablissementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereExamenClinique($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereFacteurDeRisque($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereNbreAnnee($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereNbreCigarette($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereNbreEnfant($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie wherePassedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereProfession($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereRendezVous($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereSituationFamiliale($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereTabac($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Cardiologie whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Cardiologie withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Cardiologie withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Cardiologie extends Model
 {
     use SoftDeletes;

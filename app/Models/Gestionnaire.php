@@ -10,6 +10,35 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * App\Models\Gestionnaire
+ *
+ * @property string $slug
+ * @property int|null $user_id
+ * @property string $civilite
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Auteur[] $auteurs
+ * @property-read int|null $auteurs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Auteur[] $operations
+ * @property-read int|null $operations_count
+ * @property-read User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Gestionnaire findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gestionnaire newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Gestionnaire newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Gestionnaire onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Gestionnaire query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Gestionnaire whereCivilite($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gestionnaire whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gestionnaire whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gestionnaire whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gestionnaire whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Gestionnaire whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|Gestionnaire withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Gestionnaire withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Gestionnaire extends Model
 {
     use SoftDeletes;

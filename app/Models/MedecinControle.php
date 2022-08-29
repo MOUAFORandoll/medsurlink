@@ -9,6 +9,48 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\MedecinControle
+ *
+ * @property string $slug
+ * @property int $specialite_id
+ * @property int|null $user_id
+ * @property string $civilite
+ * @property string|null $numero_ordre
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $signature
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Auteur[] $auteurs
+ * @property-read int|null $auteurs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DelaiOperation[] $delai_operations
+ * @property-read int|null $delai_operations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\EtablissementExercice[] $etablissements
+ * @property-read int|null $etablissements_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Patient[] $patients
+ * @property-read int|null $patients_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RendezVous[] $rendezVous
+ * @property-read int|null $rendez_vous_count
+ * @property-read \App\Models\Specialite $specialite
+ * @property-read User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle newQuery()
+ * @method static \Illuminate\Database\Query\Builder|MedecinControle onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle query()
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle whereCivilite($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle whereNumeroOrdre($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle whereSignature($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle whereSpecialiteId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|MedecinControle whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|MedecinControle withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|MedecinControle withoutTrashed()
+ * @mixin \Eloquent
+ */
 class MedecinControle extends Model
 {
     use SoftDeletes;

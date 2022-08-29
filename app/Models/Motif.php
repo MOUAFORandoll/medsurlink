@@ -9,6 +9,46 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\Motif
+ *
+ * @property int $id
+ * @property string $reference
+ * @property string $description
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $slug
+ * @property-read Motif|null $actions
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Affiliation[] $affiliations
+ * @property-read int|null $affiliations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ConsultationMedecineGenerale[] $consultations
+ * @property-read int|null $consultations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ConsultationMedecineGenerale[] $consultationsMedecines
+ * @property-read int|null $consultations_medecines_count
+ * @property-read mixed $reference_and_timestamp
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Hospitalisation[] $hospitalisation
+ * @property-read int|null $hospitalisation_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\LigneDeTemps[] $ligneDeTemps
+ * @property-read int|null $ligne_de_temps_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\LigneDeTemps[] $nLigneDeTemps
+ * @property-read int|null $n_ligne_de_temps_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Motif findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Motif newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Motif newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Motif onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Motif query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Motif whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Motif whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Motif whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Motif whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Motif whereReference($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Motif whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Motif whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Motif withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Motif withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Motif extends Model
 {
     use SoftDeletes;

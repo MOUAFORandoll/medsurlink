@@ -10,6 +10,44 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * App\Models\Ordonance
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon $date_prescription
+ * @property \Illuminate\Support\Carbon|null $archieved_at
+ * @property \Illuminate\Support\Carbon|null $passed_at
+ * @property int $dossier_medical_id
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $praticien_id
+ * @property-read \App\Models\DossierMedical $dossier
+ * @property-read mixed $dossier_and_timestamp
+ * @property-read \App\Models\LigneDeTemps $ligneDeTemps
+ * @property-read User|null $praticien
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Prescription[] $prescriptions
+ * @property-read int|null $prescriptions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Ordonance onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance whereArchievedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance whereDatePrescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance whereDossierMedicalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance wherePassedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance wherePraticienId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Ordonance whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Ordonance withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Ordonance withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Ordonance extends Model
 {
     use SoftDeletes;

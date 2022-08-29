@@ -12,6 +12,55 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Netpok\Database\Support\RestrictSoftDeletes;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 
+/**
+ * App\Models\EtablissementExercice
+ *
+ * @property int $id
+ * @property string $name
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string $slug
+ * @property string|null $logo
+ * @property string|null $adresse
+ * @property-read \Illuminate\Database\Eloquent\Collection|Assistante[] $assistantes
+ * @property-read int|null $assistantes_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Comptable[] $comptables
+ * @property-read int|null $comptables_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FactureAvis[] $factureAvis
+ * @property-read int|null $facture_avis_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Facture[] $factures
+ * @property-read int|null $factures_count
+ * @property-read mixed $name_and_timestamp
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MedecinControle[] $medecinControles
+ * @property-read int|null $medecin_controles_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Patient[] $patients
+ * @property-read int|null $patients_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Praticien[] $praticiens
+ * @property-read int|null $praticiens_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\EtablissementPrestation[] $prestations
+ * @property-read int|null $prestations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RendezVous[] $rendezVous
+ * @property-read int|null $rendez_vous_count
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice newQuery()
+ * @method static \Illuminate\Database\Query\Builder|EtablissementExercice onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice query()
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice whereAdresse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice whereLogo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementExercice whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|EtablissementExercice withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|EtablissementExercice withoutTrashed()
+ * @mixin \Eloquent
+ */
 class EtablissementExercice extends Model
 {
     use SoftDeletes;

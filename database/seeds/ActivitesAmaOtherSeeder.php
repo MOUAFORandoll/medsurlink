@@ -17,8 +17,15 @@ class ActivitesAmaOtherSeeder extends Seeder
         $manuelles = [
             "Appel du souscripteur après l'affiliation",
             "Appel du patient après l'affiliation",
-            "",
-
+            "obtention du dossier physique du patient
+            pour encodage ( compte rendu, CD)",
+            "organisation de l\'obtention des médicaments
+            du patient",
+            "organisation discussion pluridisciplinaire",
+            "organisation d'une prestation à domicile ",
+            "encodage données medicales",
+            "reception d'une allerte par le souscripteur",
+            "reception d'une alerte par la personne de contact"
         ];
         foreach ($automatiques as $automatique){
             \App\Models\ActivitesAma::create([

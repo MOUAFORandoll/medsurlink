@@ -11,6 +11,7 @@
         "php": "^7.1.3",
         "antonrom00/laravel-model-changes-history": "dev-master",
         "barryvdh/laravel-dompdf": "^0.8.2",
+        "barryvdh/laravel-ide-helper": "*",
         "barryvdh/laravel-snappy": "^0.4.4",
         "cviebrock/eloquent-sluggable": "4.8.*",
         "doctrine/dbal": "^2.12.1",
@@ -92,7 +93,10 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
+            "@php artisan ide-helper:generate",
+            "@php artisan ide-helper:meta"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""

@@ -10,6 +10,39 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\Comptable
+ *
+ * @property int $id
+ * @property int|null $user_id
+ * @property int|null $creator
+ * @property int|null $etablissement_id
+ * @property string $sexe
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\EtablissementExercice|null $etablissements
+ * @property-read mixed $reference_and_timestamp
+ * @property-read User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Comptable onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable whereEtablissementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable whereSexe($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Comptable whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|Comptable withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Comptable withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Comptable extends Model
 {
     use SoftDeletes;
