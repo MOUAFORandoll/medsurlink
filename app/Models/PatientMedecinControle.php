@@ -129,6 +129,10 @@ class PatientMedecinControle extends Model
     public function patients(){
         return $this->belongsTo(Patient::class,'patient_id','user_id');
     }
+
+    public function affiliations(){
+        return $this->hasMany(Affiliation::class);
+    }
     public function medecinControles(){
         return $this->belongsTo(MedecinControle::class,'medecin_control_id','user_id');
     }

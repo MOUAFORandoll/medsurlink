@@ -68,7 +68,6 @@ use Netpok\Database\Support\RestrictSoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|DossierMedical withTrashed()
  * @method static \Illuminate\Database\Query\Builder|DossierMedical withoutTrashed()
- * @mixin \Eloquent
  */
 class DossierMedical extends Model
 {
@@ -100,6 +99,10 @@ class DossierMedical extends Model
 
     public function patient(){
         return $this->belongsTo(Patient::class,'patient_id','user_id');
+    }
+
+    public function affiliations(){
+        return $this->hasMany(Affiliation::class,'patient_id','user_id');
     }
 
     public function resultatsImagerie(){
