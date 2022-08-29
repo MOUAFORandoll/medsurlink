@@ -69,25 +69,17 @@ class PermissionTableSeeder extends Seeder
            'Consulter souscriptions e-prescriptions',
            'Creer souscriptions e-prescriptions',
            'Modifier souscriptions e-prescriptions',
-           'Supprimer Téléconsultation',
-           'Consulter Téléconsultation',
-           'Creer Téléconsultation',
-           'Modifier Téléconsultation',
+           'Téléconsultation',
            'Monitoring des paramètres',
            'Supprimer  Recommandation',
            'Creer  Recommandation',
            'Consulter  Recommandation',
            'Modifier  Recommandation',
-           'Accéder au Chat',
-           'Accéder au Parcours de soins',
-           'Géolocalisez',
+           'Géolocalisation',
            'Creer souscriptions assureurs',
            'Modifier souscriptions assureurs',
            'Desactiver souscriptions assureurs',
            'Effectuer validation financieres',
-<<<<<<< HEAD
-           'Effectuer validation médicales'
-=======
            'Créer formations',
            'Modifier formations',
            'Supprimer formations',
@@ -118,7 +110,6 @@ class PermissionTableSeeder extends Seeder
            'Creer activite',
            'Modifier activite',
            'Consulter activite patients',
->>>>>>> 969842ae1f80fb6d235fc47fd6cb1bfada18ee32
         ];
 
 
