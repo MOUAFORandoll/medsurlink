@@ -10,6 +10,7 @@ use App\Traits\DossierTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\DelaiOperation;
 use Illuminate\Support\Facades\Auth;
 
 class AvisMedecinController extends Controller
@@ -49,7 +50,7 @@ class AvisMedecinController extends Controller
         $this->validatedSlug($slug,$this->table);
 
         $avis = MedecinAvis::whereSlug($slug)->first();
-
+        $avis_initial = Avis::find($avis->avis_id);
         $avis->view = $request->view;
         $avis->avis = $request->avis;
         $avis->statut = $request->get('statut','NON VALIDE');
@@ -59,6 +60,18 @@ class AvisMedecinController extends Controller
             }
         }
         $avis->save();
+
+        DelaiOperation::create(
+            [
+                "patient_id" => $avis->avisMedecin->dossier->patient_id,
+                "delai_operationable_id" => $avis->id,
+                "delai_operationable_type" => MedecinAvis::class,
+                "date_heure_prevue" => $avis_initial->created_at,
+                "date_heure_effectif" => $avis->created_at,
+                "observation" => "RAS"
+            ]
+        );
+
         $this->updateDossierId($avis->avisMedecin->dossier->id);
         return  response()->json(['avis'=>$avis]);
     }
