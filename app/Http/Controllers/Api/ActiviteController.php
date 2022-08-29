@@ -186,9 +186,9 @@ class ActiviteController extends Controller
         $request->validate([
             'activities' => 'required',
         ]);
-        $activity = ActiviteAmaPatient::latest()->first();
+        $activity = ActiviteAmaPatient::where("patient_id",$request->patient_id)->latest()->first();
         $affiliation = Affiliation::where("patient_id",$request->patient_id)->latest()->first();
-        $delai_operation = DelaiOperation::latest()->first();
+        $delai_operation = DelaiOperation::where("patient_id",$request->patient_id)->latest()->first();
         
         foreach($request->get('activities') as $activity){
             
