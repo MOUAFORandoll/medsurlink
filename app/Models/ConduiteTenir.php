@@ -4,6 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\ConduiteTenir
+ *
+ * @property-read \App\Models\LigneDeTemps $ligneDeTemps
+ * @method static \Illuminate\Database\Eloquent\Builder|ConduiteTenir newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ConduiteTenir newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ConduiteTenir query()
+ * @mixin \Eloquent
+ */
 class ConduiteTenir extends Model
 {
     protected $table = 'cat';

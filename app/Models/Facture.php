@@ -10,6 +10,54 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\Facture
+ *
+ * @property int $id
+ * @property int|null $dossier_medical_id
+ * @property int|null $etablissement_id
+ * @property int|null $creator
+ * @property string|null $total_hors_remise
+ * @property string|null $total_avec_remise
+ * @property string|null $remise
+ * @property string|null $date_facturation
+ * @property string|null $statut
+ * @property string|null $motif
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read User|null $createur
+ * @property-read \App\Models\DossierMedical|null $dossier
+ * @property-read \App\Models\EtablissementExercice|null $etablissement
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\File[] $files
+ * @property-read int|null $files_count
+ * @property-read mixed $name_and_timestamp
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\FacturePrestation[] $prestations
+ * @property-read int|null $prestations_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Facture onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereDateFacturation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereDossierMedicalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereEtablissementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereMotif($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereRemise($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereStatut($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereTotalAvecRemise($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereTotalHorsRemise($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Facture whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Facture withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Facture withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Facture extends Model
 {
     use SoftDeletes;

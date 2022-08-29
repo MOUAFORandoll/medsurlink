@@ -9,6 +9,43 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\FacturePrestation
+ *
+ * @property int $id
+ * @property int $facture_id
+ * @property int $prestation_id
+ * @property int|null $creator
+ * @property string|null $date_prestation
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $statut
+ * @property string|null $motif
+ * @property-read \App\Models\Facture $facture
+ * @property-read mixed $name_and_timestamp
+ * @property-read \App\Models\EtablissementPrestation $prestation_etablissement
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation newQuery()
+ * @method static \Illuminate\Database\Query\Builder|FacturePrestation onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation whereDatePrestation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation whereFactureId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation whereMotif($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation wherePrestationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation whereStatut($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|FacturePrestation whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|FacturePrestation withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|FacturePrestation withoutTrashed()
+ * @mixin \Eloquent
+ */
 class FacturePrestation extends Model
 {
     use SoftDeletes;

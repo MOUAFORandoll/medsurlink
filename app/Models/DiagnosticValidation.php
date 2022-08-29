@@ -4,6 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\DiagnosticValidation
+ *
+ * @property-read \App\Models\LigneDeTemps $ligneDeTemps
+ * @property-read \App\Models\Praticien $medecin
+ * @property-read \App\Models\MedecinControle $medecinControl
+ * @method static \Illuminate\Database\Eloquent\Builder|DiagnosticValidation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DiagnosticValidation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DiagnosticValidation query()
+ * @mixin \Eloquent
+ */
 class DiagnosticValidation extends Model
 {
     protected $table = 'diagnostic_validation';

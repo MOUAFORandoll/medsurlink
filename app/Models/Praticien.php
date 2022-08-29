@@ -9,6 +9,44 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\Praticien
+ *
+ * @property int|null $user_id
+ * @property int $specialite_id
+ * @property string $civilite
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string|null $numero_ordre
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $slug
+ * @property string|null $signature
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Auteur[] $auteurs
+ * @property-read int|null $auteurs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\EtablissementExercice[] $etablissements
+ * @property-read int|null $etablissements_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RendezVous[] $rendezVous
+ * @property-read int|null $rendez_vous_count
+ * @property-read \App\Models\Specialite $specialite
+ * @property-read User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Praticien onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien whereCivilite($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien whereNumeroOrdre($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien whereSignature($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien whereSpecialiteId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Praticien whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|Praticien withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Praticien withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Praticien extends Model
 {
     use SoftDeletes;

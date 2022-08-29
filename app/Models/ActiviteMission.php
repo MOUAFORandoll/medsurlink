@@ -10,6 +10,50 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\ActiviteMission
+ *
+ * @property int $id
+ * @property int|null $activite_id
+ * @property int|null $dossier_medical_id
+ * @property int|null $creator
+ * @property int|null $description
+ * @property string|null $commentaire
+ * @property string|null $nom_partenaire
+ * @property string|null $nom_activite
+ * @property string|null $slug
+ * @property string|null $statut
+ * @property string|null $date_cloture
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \App\Models\ActivitesAma $activite
+ * @property-read User|null $createur
+ * @property-read \App\Models\DossierMedical|null $dossier
+ * @property-read mixed $dossier_and_timestamp
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission newQuery()
+ * @method static \Illuminate\Database\Query\Builder|ActiviteMission onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereActiviteId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereCommentaire($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereDateCloture($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereDossierMedicalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereNomActivite($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereNomPartenaire($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereStatut($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteMission whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|ActiviteMission withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|ActiviteMission withoutTrashed()
+ * @mixin \Eloquent
+ */
 class ActiviteMission extends Model
 {
 
