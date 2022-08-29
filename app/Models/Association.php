@@ -12,6 +12,49 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\Association
+ *
+ * @property int $id
+ * @property int|null $creator
+ * @property int|null $responsable
+ * @property string|null $region
+ * @property string|null $ville
+ * @property string|null $nom
+ * @property string|null $telephone
+ * @property string|null $localisation
+ * @property string|null $email
+ * @property string|null $contact
+ * @property string|null $slug
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read User|null $author
+ * @property-read mixed $dossier_and_timestamp
+ * @property-read User|null $userResponsable
+ * @method static \Illuminate\Database\Eloquent\Builder|Association findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Association newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Association onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Association query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereContact($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereLocalisation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereNom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereRegion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereResponsable($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereTelephone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Association whereVille($value)
+ * @method static \Illuminate\Database\Query\Builder|Association withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Association withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Association extends Model
 {
     use Sluggable;

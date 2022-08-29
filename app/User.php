@@ -34,6 +34,100 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
+/**
+ * App\User
+ *
+ * @property int $id
+ * @property string $nom
+ * @property string|null $prenom
+ * @property string|null $nationalite
+ * @property string|null $quartier
+ * @property string|null $code_postal
+ * @property string|null $ville
+ * @property string|null $pays
+ * @property string $telephone
+ * @property string|null $email
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string $password
+ * @property string $slug
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string|null $adresse
+ * @property int $isMedicasure
+ * @property int $smsEnvoye
+ * @property int $isNotice
+ * @property string $decede
+ * @property string|null $slack
+ * @property-read Assistante|null $assistante
+ * @property-read Association|null $association
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[] $clients
+ * @property-read int|null $clients_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Contributeurs[] $contributeurs
+ * @property-read int|null $contributeurs_count
+ * @property-read DossierMedical|null $dossier
+ * @property-read Gestionnaire|null $gestionnaire
+ * @property-read mixed $nom_and_timestamp
+ * @property-read mixed $signature
+ * @property-read \Illuminate\Database\Eloquent\Collection|MedecinAvis[] $medecinAvis
+ * @property-read int|null $medecin_avis_count
+ * @property-read MedecinControle|null $medecinControle
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Models\Media[] $media
+ * @property-read int|null $media_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Message[] $messages
+ * @property-read int|null $messages_count
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read Patient|null $patient
+ * @property-read \Illuminate\Database\Eloquent\Collection|Patient[] $patients
+ * @property-read int|null $patients_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Permission[] $permissions
+ * @property-read int|null $permissions_count
+ * @property-read Pharmacien|null $pharmacien
+ * @property-read Praticien|null $praticien
+ * @property-read ReponseSecrete|null $questionSecrete
+ * @property-read \Illuminate\Database\Eloquent\Collection|RendezVous[] $rendezVous
+ * @property-read int|null $rendez_vous_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
+ * @property-read int|null $roles_count
+ * @property-read Souscripteur|null $souscripteur
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[] $tokens
+ * @property-read int|null $tokens_count
+ * @method static \Illuminate\Database\Eloquent\Builder|User findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
+ * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
+ * @method static \Illuminate\Database\Eloquent\Builder|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereAdresse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCodePostal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDecede($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsMedicasure($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereIsNotice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereNationalite($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereNom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User wherePrenom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereQuartier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSlack($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSmsEnvoye($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereTelephone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereVille($value)
+ * @method static \Illuminate\Database\Query\Builder|User withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
+ * @mixin \Eloquent
+ */
 class User extends Authenticatable implements HasMedia
 {
     use HasMediaTrait;

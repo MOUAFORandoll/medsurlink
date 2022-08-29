@@ -9,6 +9,35 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\CategoriePrestation
+ *
+ * @property int $id
+ * @property string $nom
+ * @property string $slug
+ * @property int|null $creator
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read mixed $name_and_timestamp
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Prestation[] $prestations
+ * @property-read int|null $prestations_count
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoriePrestation findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoriePrestation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoriePrestation newQuery()
+ * @method static \Illuminate\Database\Query\Builder|CategoriePrestation onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoriePrestation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoriePrestation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoriePrestation whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoriePrestation whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoriePrestation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoriePrestation whereNom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoriePrestation whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|CategoriePrestation whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|CategoriePrestation withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|CategoriePrestation withoutTrashed()
+ * @mixin \Eloquent
+ */
 class CategoriePrestation extends Model
 {
     use Sluggable;

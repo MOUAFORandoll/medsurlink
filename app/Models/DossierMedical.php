@@ -10,6 +10,66 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Netpok\Database\Support\RestrictSoftDeletes;
 
+/**
+ * App\Models\DossierMedical
+ *
+ * @property int $id
+ * @property int $patient_id
+ * @property string $date_de_creation
+ * @property string $numero_dossier
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string $slug
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Allergie[] $allergies
+ * @property-read int|null $allergies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Antecedent[] $antecedents
+ * @property-read int|null $antecedents_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Avis[] $avis
+ * @property-read int|null $avis_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Cardiologie[] $cardiologies
+ * @property-read int|null $cardiologies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\CompteRenduOperatoire[] $comptesRenduOperatoire
+ * @property-read int|null $comptes_rendu_operatoire_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ConsultationFichier[] $consultationsManuscrites
+ * @property-read int|null $consultations_manuscrites_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ConsultationMedecineGenerale[] $consultationsMedecine
+ * @property-read int|null $consultations_medecine_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ConsultationObstetrique[] $consultationsObstetrique
+ * @property-read int|null $consultations_obstetrique_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PatientSouscripteur[] $financeurs
+ * @property-read int|null $financeurs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Hospitalisation[] $hospitalisations
+ * @property-read int|null $hospitalisations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Kinesitherapie[] $kinesitherapies
+ * @property-read int|null $kinesitherapies_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Ordonance[] $ordonances
+ * @property-read int|null $ordonances_count
+ * @property-read \App\Models\Package $package
+ * @property-read \App\Models\Patient $patient
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ResultatImagerie[] $resultatsImagerie
+ * @property-read int|null $resultats_imagerie_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ResultatLabo[] $resultatsLabo
+ * @property-read int|null $resultats_labo_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\TraitementActuel[] $traitements
+ * @property-read int|null $traitements_count
+ * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical newQuery()
+ * @method static \Illuminate\Database\Query\Builder|DossierMedical onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical query()
+ * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical whereDateDeCreation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical whereNumeroDossier($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical wherePatientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|DossierMedical whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|DossierMedical withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|DossierMedical withoutTrashed()
+ * @mixin \Eloquent
+ */
 class DossierMedical extends Model
 {
     use SoftDeletes;

@@ -12,6 +12,55 @@ use App\Models\ActivitesMedecinReferent;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\ActivitesControle
+ *
+ * @property int $id
+ * @property int $patient_id
+ * @property int|null $creator
+ * @property string|null $statut
+ * @property int|null $activite_id
+ * @property string|null $commentaire
+ * @property string|null $date_cloture
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $affiliation_id
+ * @property int|null $ligne_temps_id
+ * @property int|null $etablissement_id
+ * @property-read ActivitesMedecinReferent|null $activitesMedecinReferent
+ * @property-read \App\Models\Affiliation|null $affiliation
+ * @property-read User|null $createur
+ * @property-read \App\Models\EtablissementExercice|null $etablissement
+ * @property-read mixed $dossier_and_timestamp
+ * @property-read LigneDeTemps|null $ligne_temps
+ * @property-read \App\Models\Motif $motif
+ * @property-read \App\Models\Patient $patient
+ * @property-read User $updatedBy
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle newQuery()
+ * @method static \Illuminate\Database\Query\Builder|ActivitesControle onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereActiviteId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereAffiliationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereCommentaire($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereDateCloture($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereEtablissementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereLigneTempsId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle wherePatientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereStatut($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActivitesControle whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|ActivitesControle withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|ActivitesControle withoutTrashed()
+ * @mixin \Eloquent
+ */
 class ActivitesControle extends Model
 {
     use Sluggable;

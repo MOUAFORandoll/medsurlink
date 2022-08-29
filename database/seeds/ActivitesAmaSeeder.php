@@ -35,7 +35,16 @@ class ActivitesAmaSeeder extends Seeder
             'Réception et traitement des factures des prestataires de 1ère Ligne',
             'Transmission des factures au souscripteur',
             'Rappel du patient pour évaluer sa satisfaction à J2 au plus tard',
-            'Rappel du souscripteur pour évaluer sa satisfaction à J7 au plus tard (Accès aux dossiers – Satisfaction service chez Prestataire / tarification – recommandation)'
+            'Rappel du souscripteur pour évaluer sa satisfaction à J7 au plus tard (Accès aux dossiers – Satisfaction service chez Prestataire / tarification – recommandation)',
+            "obtention du dossier physique du patient
+            pour encodage ( compte rendu, CD)",
+            "organisation de l\'obtention des médicaments
+            du patient",
+            "organisation discussion pluridisciplinaire",
+            "organisation d'une prestation à domicile ",
+            "encodage données medicales",
+            "reception d'une allerte par le souscripteur",
+            "reception d'une alerte par la personne de contact"
 
         ];
         foreach ($automatiques as $automatique){

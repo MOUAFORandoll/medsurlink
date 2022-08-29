@@ -10,6 +10,61 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\RendezVous
+ *
+ * @property int $id
+ * @property string|null $sourceable_type
+ * @property int|null $sourceable_id
+ * @property int $patient_id
+ * @property int|null $praticien_id
+ * @property User $initiateur
+ * @property string|null $motifs
+ * @property string $date
+ * @property string|null $statut
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $nom_medecin
+ * @property int|null $creator
+ * @property int|null $consultation_id
+ * @property int|null $etablissement_id
+ * @property int|null $ligne_temps_id
+ * @property-read \App\Models\ConsultationMedecineGenerale|null $consultationsMedecine
+ * @property-read \App\Models\EtablissementExercice|null $etablissement
+ * @property-read mixed $name_and_timestamp
+ * @property-read \App\Models\LigneDeTemps|null $ligne_temps
+ * @property-read User $patient
+ * @property-read User|null $praticien
+ * @property-read Model|\Eloquent $sourceable
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous newQuery()
+ * @method static \Illuminate\Database\Query\Builder|RendezVous onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous query()
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereConsultationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereEtablissementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereInitiateur($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereLigneTempsId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereMotifs($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereNomMedecin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous wherePatientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous wherePraticienId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereSourceableId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereSourceableType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereStatut($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|RendezVous whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|RendezVous withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|RendezVous withoutTrashed()
+ * @mixin \Eloquent
+ */
 class RendezVous extends Model
 {
     use SoftDeletes;
