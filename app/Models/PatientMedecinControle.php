@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Antonrom\ModelChangesHistory\Traits\HasChangesHistory;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,7 @@ class PatientMedecinControle extends Model
     use SoftDeletes;
     use Sluggable;
     use Notifiable;
+    use HasChangesHistory;
 
     protected $fillable = [
         "creator",
@@ -91,4 +93,10 @@ class PatientMedecinControle extends Model
     public function medecinControles(){
         return $this->belongsTo(MedecinControle::class,'medecin_control_id','user_id');
     }
+
+    public function delai_operations()
+    {
+        return $this->morphMany(DelaiOperation::class, 'delai_operationable');
+    }
 }
+

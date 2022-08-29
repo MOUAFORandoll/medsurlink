@@ -11,6 +11,8 @@ use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ConsultationMedecineGenerale;
+use App\Models\DelaiOperation;
 use Illuminate\Support\ConfigurationUrlParser;
 
 class ConsultationFichierController extends Controller
@@ -84,6 +86,19 @@ class ConsultationFichierController extends Controller
 
         $consultation = ConsultationFichier::with(['dossier','etablissement','files','praticien'])->whereSlug($consultation->slug)->first();
         $this->updateDossierId($consultation->dossier->id);
+
+        $consultation_medecine_generale = ConsultationMedecineGenerale::latest()->where('dossier_medical_id', $consultation->dossier->id)->first();
+
+        DelaiOperation::create(
+            [
+                "patient_id" => $dossier->patient_id,
+                "delai_operationable_id" => $consultation->id,
+                "delai_operationable_type" => ConsultationFichier::class,
+                "date_heure_prevue" => $consultation_medecine_generale->created_at,
+                "date_heure_effectif" => $consultation->created_at,
+                "observation" => "RAS"
+            ]
+        );
 
         return response()->json(["consultation" => $consultation]);
 

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ResultatRequest;
+use App\Models\ConsultationMedecineGenerale;
+use App\Models\DelaiOperation;
+use App\Models\DossierMedical;
 use App\Models\ResultatImagerie;
 use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
@@ -52,7 +55,9 @@ class ResultatImagerieController extends Controller
      */
     public function store(ResultatRequest $request)
     {
-
+        $consultation_medecine_generale = ConsultationMedecineGenerale::latest()->where('dossier_medical_id', $request->dossier_medical_id)->first();
+        $dossier = DossierMedical::find($request->dossier_medical_id);
+        $delai_operation = DelaiOperation::latest()->where('patient_id', $dossier->patient_id)->first();
         if($request->hasFile('file')) {
             if ($request->file('file')->isValid()) {
                 $resultat = ResultatImagerie::create($request->validated());
@@ -60,6 +65,41 @@ class ResultatImagerieController extends Controller
                 $this->updateDossierId($resultat->dossier->id);
 
                 defineAsAuthor("ResultatImagerie", $resultat->id,'create',$resultat->dossier->patient->user_id);
+
+                if(!is_null($delai_operation)){
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $resultat->dossier->patient_id,
+                            "delai_operationable_id" => $resultat->id,
+                            "delai_operationable_type" => ResultatImagerie::class,
+                            "date_heure_prevue" => $delai_operation->created_at,
+                            "date_heure_effectif" => $resultat->created_at,
+                            "observation" => "RAS"
+                        ]
+                    );
+                }elseif(!is_null($consultation_medecine_generale)){
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $resultat->dossier->patient_id,
+                            "delai_operationable_id" => $resultat->id,
+                            "delai_operationable_type" => ResultatImagerie::class,
+                            "date_heure_prevue" => $consultation_medecine_generale->created_at,
+                            "date_heure_effectif" => $resultat->created_at,
+                            "observation" => "RAS"
+                        ]
+                    );
+                }elseif(!is_null($dossier)){
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $resultat->dossier->patient_id,
+                            "delai_operationable_id" => $resultat->id,
+                            "delai_operationable_type" => ResultatImagerie::class,
+                            "date_heure_prevue" => $dossier->created_at,
+                            "date_heure_effectif" => $resultat->created_at,
+                            "observation" => "RAS"
+                        ]
+                    );
+                }
 
                 return response()->json([
                     'resultat' => $resultat
@@ -76,6 +116,41 @@ class ResultatImagerieController extends Controller
             $resultat = ResultatImagerie::create($request->validated());
             $this->updateDossierId($resultat->dossier->id);
             defineAsAuthor("ResultatImagerie", $resultat->id,'create',$resultat->dossier->patient->user_id);
+
+            if(!is_null($delai_operation)){
+                DelaiOperation::create(
+                    [
+                        "patient_id" => $resultat->dossier->patient_id,
+                        "delai_operationable_id" => $resultat->id,
+                        "delai_operationable_type" => ResultatImagerie::class,
+                        "date_heure_prevue" => $delai_operation->created_at,
+                        "date_heure_effectif" => $resultat->created_at,
+                        "observation" => "RAS"
+                    ]
+                );
+            }elseif(!is_null($consultation_medecine_generale)){
+                DelaiOperation::create(
+                    [
+                        "patient_id" => $resultat->dossier->patient_id,
+                        "delai_operationable_id" => $resultat->id,
+                        "delai_operationable_type" => ResultatImagerie::class,
+                        "date_heure_prevue" => $consultation_medecine_generale->created_at,
+                        "date_heure_effectif" => $resultat->created_at,
+                        "observation" => "RAS"
+                    ]
+                );
+            }elseif(!is_null($dossier)){
+                DelaiOperation::create(
+                    [
+                        "patient_id" => $resultat->dossier->patient_id,
+                        "delai_operationable_id" => $resultat->id,
+                        "delai_operationable_type" => ResultatImagerie::class,
+                        "date_heure_prevue" => $dossier->created_at,
+                        "date_heure_effectif" => $resultat->created_at,
+                        "observation" => "RAS"
+                    ]
+                );
+            }
 
             return response()->json([
                 'resultat' => $resultat

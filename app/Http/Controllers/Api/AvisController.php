@@ -52,7 +52,7 @@ class AvisController extends Controller
         if (!is_null($medecins)){
             foreach ($medecins as $medecin){
                 MedecinAvis::create(['medecin_id'=>$medecin,'avis_id'=>$avis->id]);
-               $user= User::whereId($medecin)->first();
+               $user= User::whereId($medecin)->with(['praticien','medecinControle'])->first();
                $mail = new AvisDemande($user, $avis);
                Mail::to($user->email)->send($mail);
              }

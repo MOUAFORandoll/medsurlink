@@ -18,7 +18,12 @@ use App\Http\Requests\LigneDeTempsRequest;
 use App\Models\Affiliation;
 use App\Models\ConsultationExamenValidation;
 use App\Models\ConsultationMedecineGenerale;
+use App\Models\DelaiOperation;
+use App\Models\MedecinAvis;
 use App\Models\Motif;
+use App\Models\ResultatImagerie;
+use App\Models\ResultatLabo;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class LigneDeTempsController extends Controller
@@ -140,20 +145,52 @@ class LigneDeTempsController extends Controller
             'validations',
         ])->where("dossier_medical_id", $dossier->id)->latest()->get();
 
+        $delai_opeartions = DelaiOperation::where('patient_id', $dossier->patient_id)->latest()->get();
         $ligne_temps = collect();
+        $new_ligne_delais = collect(); //
+        $ecart_en_second = 0;
+        /**
+         * récupérations des délais d'opérations
+         */
+        foreach($delai_opeartions as $delai){
+            $model = $delai->delai_operationable_type::find($delai->delai_operationable_id);
+            if($delai->delai_operationable_type == ResultatLabo::class || $delai->delai_operationable_type == ResultatImagerie::class){
+                $consultation = $model->dossier->consultationsMedecine()->latest()->first();
+                if(!is_null($consultation)){
+                    $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
+                    $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
+                    $ligne = $consultation->ligneDeTemps;
+                    $ligne->date_heure_prevue = $delai->date_heure_prevue;
+                    $ligne->date_heure_effectif = $delai->date_heure_effectif;
+                    $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue); ;
+                    $new_ligne_delais->push($ligne);
+                }
+            }
+            elseif($delai->delai_operationable_type == ResultatImagerie::class){
+                /* $consultation = $model->dossier->consultationsMedecine()->latest()->first();
+                \Log::alert("consultation");
+                \Log::alert($consultation); */
+            }
+        }
+
         foreach($ligneDeTemps as $ligneTemps){
             if(is_null($ligneTemps->cloture)){
                 $ligneTemps->cloture()->create([]);
             }
             $validations = collect();
             foreach($ligneTemps->validations as $validation){
-                $validation->histories = DB::table('model_changes_history')->where(['model_id' => $validation->consultation->versionValidation->id, 'model_type' => 'App\Models\VersionValidation', 'change_type' => 'updated'])->orderBy('created_at', 'desc')->get(['changes']);
-                $validations->push($validation);
+                if($validation->consultation != null){
+                    $validation->histories = DB::table('model_changes_history')->where(['model_id' => $validation->consultation->versionValidation->id, 'model_type' => 'App\Models\VersionValidation', 'change_type' => 'updated'])->orderBy('created_at', 'desc')->get(['changes']);
+                    $validations->push($validation);
+                }
             }
+            $ecart_en_second = $new_ligne_delais->Where('id', $ligneTemps->id)->sum('ecart_en_second');
+            $ligneTemps->ecart_en_second = $ecart_en_second;
             $ligneTemps->validations = $validations;
             $ligne_temps->push($ligneTemps);
         }
-
+        
+        // \Log::alert($ligne_temps);
         return response()->json(["ligne_temps" => $ligne_temps]);
         // "examen_validation_medecin" => $examen_validation_medecin, "examen_validation_assureur" => $examen_validation_assureur
     }

@@ -15,6 +15,7 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
        $permissions = [
+           'Super Administrer les roles & permissions',
            'Administrer les roles & permissions',
            'Consulter profils patient',
            'Consulter consultations archivees',
@@ -59,6 +60,26 @@ class PermissionTableSeeder extends Seeder
            'Consulter souscriptions affiliations',
            'Creer souscriptions affiliations',
            'Modifier souscriptions affiliations',
+           'Supprimer  rendez-vous',
+           'Consulter souscriptions rendez-vous',
+           'Creer souscriptions rendez-vous',
+           'Modifier souscriptions rendez-vous',
+           
+           'Supprimer  e-prescriptions',
+           'Consulter souscriptions e-prescriptions',
+           'Creer souscriptions e-prescriptions',
+           'Modifier souscriptions e-prescriptions',
+           'Téléconsultation',
+           'Monitoring des paramètres',
+           'Supprimer  Recommandation',
+           'Creer  Recommandation',
+           'Consulter  Recommandation',
+           'Modifier  Recommandation',
+           'Géolocalisation',
+           'Creer souscriptions assureurs',
+           'Modifier souscriptions assureurs',
+           'Desactiver souscriptions assureurs',
+           'Effectuer validation financieres',
         ];
 
 

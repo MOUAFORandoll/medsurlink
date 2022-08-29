@@ -67,6 +67,12 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/signature/user','Api\UserController@signature');
 
 });
+
+//super Admin route
+// Route::group(['middleware' => ['auth:api','role:Super Admin']], function () {
+//     Route::resource('user', 'Api\UserController')->except(['create','edit']);
+// });
+
 Route::group(['middleware' => ['auth:api','role:Admin']], function () {
     Route::resource('user', 'Api\UserController')->except(['create','edit']);
 });
@@ -141,6 +147,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::get('ligne_temps/close/{id}', 'Api\LigneDeTempsController@changeEtat');
     Route::get('ligne_temps/bilan/{ligne_temps_id}', 'Api\ConsultationExamenValidationController@ligneTempsBilan');
     Route::get('bilans/financiers/{patient}', 'Api\ConsultationExamenValidationController@BilanFinancier');
+    Route::get('fiche/signalitique/{patient}', 'Api\ConsultationExamenValidationController@FicheSignalitique'); // lll
 
     Route::get('bilans/globale/{dossier}/financiers', 'Api\ConsultationExamenValidationController@bilanGlobalFiancier');
     Route::post('validation/examens/souscripteur', 'Api\ConsultationExamenValidationController@setEtatValidationSouscripteur');
@@ -173,7 +180,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Assistant
 });
 
 //    Définition des routes accéssible par le patient
-Route::group(['middleware' => ['auth:api','role:Admin|Patient|Souscripteur|Assistante']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Patient|Souscripteur|Assistante|Medecin controle']], function () {
     Route::resource('consultation-obstetrique','Api\ConsultationObstetriqueController')->only('show','index');
     Route::get('{patient}/dossier-medical','Api\DossierMedicalController@dossierByPatientId');
     Route::put('/secretReset/{slug}','Api\ReponseSecreteController@update');
@@ -293,7 +300,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::get('validation/examens/consultation/{consultation}', 'Api\ConsultationExamenValidationController@getListExamenToValidate');
 });
 
-Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Assistante|Medecin controle|Pharmacien']], function () {
+Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Assistante|Medecin controle|Pharmacien|Souscripteur']], function () {
     Route::get('/get-commande-from-cim','Api\AffiliationSouscripteurController@getSouscripteurFromCIM');
     Route::resource('resultat-imagerie','Api\ResultatImagerieController');
     Route::resource('resultat-labo','Api\ResultatLaboController');
@@ -363,6 +370,16 @@ Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient')
 
 Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient|Pharmacien'])->group(function () {
     Route::get('/parcours/{dossier_medical_slug}/affiliations','Api\v1\ParcourDeSoinController@affiliations');
+    Route::get('/parcours/{dossier_medical_slug}/activite_amas','Api\v1\ParcourDeSoinController@activite_amas');
+    Route::get('/parcours/{dossier_medical_slug}/activite_medecin_referents','Api\v1\ParcourDeSoinController@activite_medecin_referents');
+    Route::get('/dashboard', 'Api\v1\DashboardController@dashboard');
+    Route::resource('allergies', 'Api\v1\AllergieController');
+    Route::resource('antecedents', 'Api\v1\AntecedentController');
+    Route::get('/consultationsMedecines/{dossier_slug}', 'Api\v1\DossierMedicalController@consultationsMedecines');
+    Route::resource('traitement-actuels', 'Api\v1\TraitementActuelController');
+    Route::resource('type-operations', 'Api\v1\TypeOperationController');
+
+    
 });
 
 
@@ -477,4 +494,6 @@ Route::prefix('paiement')->group(function () {
 Route::get('/livesearch', 'Api\PatientController@searchPatients');
 Route::get('/mission/list', 'Api\ActiviteController@getListMission');
 Route::get('/referent-activites/list', 'Api\ActivitesMedecinReferentController@getListActivites');
+
+
 

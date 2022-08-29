@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Api\v1;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ActiviteAmaPatient;
+use App\Models\ActivitesControle;
 use App\Models\Affiliation;
 use App\Models\DossierMedical;
+use App\Models\LigneDeTemps;
 use App\Models\Patient;
 use Illuminate\Support\Facades\DB;
 
@@ -22,9 +25,9 @@ class ParcourDeSoinController extends Controller
         $patient = Patient::where('user_id', $dossier->patient_id)->first();
 
         $contrat = getContrat($patient->user);
-
+        $lastAffiliations = collect($contrat->contrat);
         $affiliations = Affiliation::with(['patient.user', 'souscripteur.user', 'package', 'cloture'])->where('patient_id',$patient->user_id)->latest()->get();
-        $newAffiliations = collect($contrat->contrat);
+        $newAffiliations = collect();
         foreach($affiliations as $affiliation){
             $newAffiliation = new \stdClass();
             $newAffiliation->adresse_affilie = $affiliation->patient->user->adresse;
@@ -47,7 +50,7 @@ class ParcourDeSoinController extends Controller
             $newAffiliation->expire_mail_send = $affiliation->expire_email;
             $newAffiliation->id = $affiliation->id;
             $newAffiliation->lieuEtablissement = $affiliation->patient->user->ville;
-            $newAffiliation->montantSouscription = ConversionEurotoXaf($affiliation->package->montant);
+            $newAffiliation->montantSouscription = $affiliation->package->montant;
             $newAffiliation->nomAffilie = $affiliation->patient->user->nom;
             $newAffiliation->nomContact = $affiliation->contact_name;
             $newAffiliation->nomPatient = $affiliation->patient->user->nom;
@@ -92,7 +95,64 @@ class ParcourDeSoinController extends Controller
 
         }
 
+        $newAffiliations = $newAffiliations->merge($lastAffiliations);
+
+
         return response()->json(['affiliations' => $newAffiliations]);
+    }
+
+    /**
+     * Listing des activités par affiliation et par ligne de temps des amas
+     */
+    public function activite_amas($dossier_medical_slug){
+
+        $dossier = DossierMedical::whereSlug($dossier_medical_slug)->first();
+
+        $patient_id = $dossier->patient_id;
+
+        $activite_ama_isoles = ActiviteAmaPatient::doesntHave('affiliation')->with(['activitesAma:id,description_fr,created_at', 'updatedBy', 'createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id', $patient_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_ama_id', 'commentaire', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
+        /**
+         * ici nous retournons la liste des affiliations avec lignes de temps associées et pour chaque ligne de temps, ses activités AMA
+         */
+        $activite_ama_manuelles = Affiliation::with(['cloture', 'package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps.cloture', 'ligneTemps.activites_ama_patients.activitesAma:id,description_fr', 'ligneTemps.activites_ama_patients' => function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        }])->where('patient_id',$patient_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
+
+        $rdata = Affiliation::has('ligneTemps.rendezVous')->with(['package:id,description_fr'])->where('patient_id', $patient_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
+        $activite_ama_automatiques = collect();
+        foreach($rdata as $affiliation){
+            $ligne_temps = LigneDeTemps::with(['rendezVous.etablissement:id,name', 'rendezVous.praticien:id,nom,prenom', 'motif:id,description'])->where('affiliation_id', $affiliation->id)->orderBy('updated_at', 'desc')->get();
+            $affiliation->ligne_temps = $ligne_temps;
+            $activite_ama_automatiques->push($affiliation);
+        }
+        
+        return response()->json(['activite_ama_isoles' => $activite_ama_isoles, 'activite_ama_manuelles' => $activite_ama_manuelles, 'activite_ama_automatiques' => $activite_ama_automatiques]);
+
+    }
+
+    /**
+    * Listing des activités par affiliation et par ligne de temps du médécin reférent (contrôle)
+    */
+
+    public function activite_medecin_referents($dossier_medical_slug){
+        $dossier = DossierMedical::whereSlug($dossier_medical_slug)->first();
+        $patient_id = $dossier->patient_id;
+        $activites_medecin_referent_isoles = ActivitesControle::doesntHave('affiliation')->with(['activitesMedecinReferent:id,description_fr','updatedBy','createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id',$patient_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_id', 'date_cloture', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
+        $activites_medecin_referent_manuelles = Affiliation::with(['cloture', 'package:id,description_fr', 'ligneTemps.motif:id,description', 'ligneTemps', 'ligneTemps.activites_referent_patients.activitesMedecinReferent:id,description_fr', 'ligneTemps.activites_referent_patients' => function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        }])->where('patient_id',$patient_id)->orderBy('updated_at', 'desc')->get(['id', 'status_paiement', 'date_signature', 'package_id']);
+
+        return response()->json(['activites_medecin_referent_isoles' => $activites_medecin_referent_isoles, 'activites_medecin_referent_manuelles' => $activites_medecin_referent_manuelles]);
+    }
+
+    /**
+    * fiche signalitique du patient
+    */
+    public function FicheSignalitique($dossier){
+
+        $dossier = DossierMedical::where('slug', $dossier)->first();
+        $patient = $dossier->patient;
+        $telephone = $patient->user->telephone;
     }
 
 }

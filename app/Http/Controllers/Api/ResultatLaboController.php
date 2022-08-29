@@ -10,6 +10,9 @@ use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ConsultationMedecineGenerale;
+use App\Models\DelaiOperation;
+use App\Models\DossierMedical;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -53,6 +56,9 @@ class ResultatLaboController extends Controller
      */
     public function store(ResultatRequest $request)
     {
+        $consultation_medecine_generale = ConsultationMedecineGenerale::latest()->where('dossier_medical_id', $request->dossier_medical_id)->first();
+        $dossier = DossierMedical::find($request->dossier_medical_id);
+        $delai_operation = DelaiOperation::latest()->where('patient_id', $dossier->patient_id)->first();
         if($request->hasFile('file')) {
             if ($request->file('file')->isValid()) {
                 $resultat = ResultatLabo::create($request->validated());
@@ -60,6 +66,42 @@ class ResultatLaboController extends Controller
                 $this->uploadFile($request,$resultat);
                 $this->updateDossierId($resultat->dossier->id);
                 defineAsAuthor("ResultatLabo", $resultat->id,'create',$resultat->dossier->patient->user_id);
+
+                if(!is_null($delai_operation)){
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $resultat->dossier->patient_id,
+                            "delai_operationable_id" => $resultat->id,
+                            "delai_operationable_type" => ResultatLabo::class,
+                            "date_heure_prevue" => $delai_operation->created_at,
+                            "date_heure_effectif" => $resultat->created_at,
+                            "observation" => "RAS"
+                        ]
+                    );
+                }elseif(!is_null($consultation_medecine_generale)){
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $resultat->dossier->patient_id,
+                            "delai_operationable_id" => $resultat->id,
+                            "delai_operationable_type" => ResultatLabo::class,
+                            "date_heure_prevue" => $consultation_medecine_generale->created_at,
+                            "date_heure_effectif" => $resultat->created_at,
+                            "observation" => "RAS"
+                        ]
+                    );
+                }elseif(!is_null($dossier)){
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $resultat->dossier->patient_id,
+                            "delai_operationable_id" => $resultat->id,
+                            "delai_operationable_type" => ResultatLabo::class,
+                            "date_heure_prevue" => $dossier->created_at,
+                            "date_heure_effectif" => $resultat->created_at,
+                            "observation" => "RAS"
+                        ]
+                    );
+                }
+                
 
                 return response()->json([
                     'resultat' => $resultat
@@ -76,6 +118,16 @@ class ResultatLaboController extends Controller
             $resultat = ResultatLabo::create($request->validated());
             $this->updateDossierId($resultat->dossier->id);
             defineAsAuthor("ResultatLabo", $resultat->id,'create',$resultat->dossier->patient->user_id);
+            DelaiOperation::create(
+                [
+                    "patient_id" => $resultat->dossier->patient_id,
+                    "delai_operationable_id" => $resultat->id,
+                    "delai_operationable_type" => ResultatLabo::class,
+                    "date_heure_prevue" => $consultation_medecine_generale->created_at,
+                    "date_heure_effectif" => $resultat->created_at,
+                    "observation" => "RAS"
+                ]
+            );
 
             return response()->json([
                 'resultat' => $resultat
