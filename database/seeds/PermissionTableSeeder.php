@@ -120,7 +120,10 @@ class PermissionTableSeeder extends Seeder
 
 
         foreach ($permissions as $permission) {
-             Permission::create(['name' => $permission]);
+            $exist_permission = Permission::where('name', $permission)->first();
+            if(!$exist_permission){
+                Permission::create(['name' => $permission]);
+            }
         }
     }
 }
