@@ -64,6 +64,10 @@ php artisan migrate --path=/database/migrations/2022_07_11_151019_add_restrictio
 composer require "spatie/laravel-medialibrary:^7.0.0"
 php artisan migrate --path=/database/migrations/2022_07_04_154636_create_media_table.php
 
+## autocomplete des models
+composer require barryvdh/laravel-ide-helper:*
+php artisan ide-helper:generate
+
 ## Délai de prise en charge
 php artisan migrate --path=/database/migrations/2022_08_23_094803_create_type_operation_table.php
 php artisan migrate --path=/database/migrations/2022_08_23_095010_create_delai_operation_table.php
