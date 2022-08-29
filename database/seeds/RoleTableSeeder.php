@@ -39,7 +39,7 @@ class RoleTableSeeder extends Seeder
         }
 
         //Definition des permissions du super-admin
-        $this->setPermissionRole(1,1);
+        // $this->setPermissionRole(1,1);
 
 //        Definition des permissions de l'admin
         $this->setPermissionRole(1,1);
