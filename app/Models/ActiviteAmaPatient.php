@@ -11,6 +11,57 @@ use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\ActiviteAmaPatient
+ *
+ * @property int $id
+ * @property int|null $activite_ama_id
+ * @property int $etablissement_id
+ * @property string|null $commentaire
+ * @property int|null $creator
+ * @property int|null $patient_id
+ * @property string|null $statut
+ * @property string|null $date_cloture
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $affiliation_id
+ * @property int|null $ligne_temps_id
+ * @property-read ActivitesAma|null $activitesAma
+ * @property-read \App\Models\Affiliation|null $affiliation
+ * @property-read User|null $createur
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DelaiOperation[] $delai_operations
+ * @property-read int|null $delai_operations_count
+ * @property-read \App\Models\EtablissementExercice $etablissement
+ * @property-read mixed $dossier_and_timestamp
+ * @property-read \App\Models\LigneDeTemps|null $ligne_temps
+ * @property-read \App\Models\Motif $motif
+ * @property-read \App\Models\Patient|null $patient
+ * @property-read User $updatedBy
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient newQuery()
+ * @method static \Illuminate\Database\Query\Builder|ActiviteAmaPatient onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereActiviteAmaId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereAffiliationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereCommentaire($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereDateCloture($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereEtablissementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereLigneTempsId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient wherePatientId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereStatut($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ActiviteAmaPatient whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|ActiviteAmaPatient withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|ActiviteAmaPatient withoutTrashed()
+ * @mixin \Eloquent
+ */
 class ActiviteAmaPatient extends Model
 {
     use Sluggable;

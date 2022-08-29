@@ -6,6 +6,55 @@ use App\Models\ActivitesControle;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\LigneDeTemps
+ *
+ * @property int $id
+ * @property int $dossier_medical_id
+ * @property int $etat
+ * @property int $motif_consultation_id
+ * @property string $date_consultation
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int|null $affiliation_id
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ActiviteAmaPatient[] $activites_ama_patients
+ * @property-read int|null $activites_ama_patients_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|ActivitesControle[] $activites_referent_patients
+ * @property-read int|null $activites_referent_patients_count
+ * @property-read \App\Models\Affiliation|null $affiliation
+ * @property-read \App\Models\Cardiologie $cardiologie
+ * @property-read \App\Models\Cloture|null $cloture
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ConsultationMedecineGenerale[] $consultationGeneral
+ * @property-read int|null $consultation_general_count
+ * @property-read \App\Models\ConsultationObstetrique $consultationObstetrique
+ * @property-read \App\Models\DossierMedical $dossier
+ * @property-read \App\Models\Kinesitherapie $kenesitherapie
+ * @property-read \App\Models\Motif $motif
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Motif[] $motifs
+ * @property-read int|null $motifs_count
+ * @property-read \App\Models\PrescriptionValidation $prescriptionValidation
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RendezVous[] $rendezVous
+ * @property-read int|null $rendez_vous_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ConsultationExamenValidation[] $validations
+ * @property-read int|null $validations_count
+ * @method static \Illuminate\Database\Eloquent\Builder|LigneDeTemps newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|LigneDeTemps newQuery()
+ * @method static \Illuminate\Database\Query\Builder|LigneDeTemps onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|LigneDeTemps query()
+ * @method static \Illuminate\Database\Eloquent\Builder|LigneDeTemps whereAffiliationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LigneDeTemps whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LigneDeTemps whereDateConsultation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LigneDeTemps whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LigneDeTemps whereDossierMedicalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LigneDeTemps whereEtat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LigneDeTemps whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LigneDeTemps whereMotifConsultationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|LigneDeTemps whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|LigneDeTemps withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|LigneDeTemps withoutTrashed()
+ * @mixin \Eloquent
+ */
 class LigneDeTemps extends Model
 {
     use SoftDeletes;

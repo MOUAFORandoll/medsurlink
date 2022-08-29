@@ -11,6 +11,35 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use function GuzzleHttp\Psr7\str;
 
+/**
+ * App\Models\Allergie
+ *
+ * @property int $id
+ * @property string $description
+ * @property string|null $date
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property string $slug
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\DossierMedical[] $dossiers
+ * @property-read int|null $dossiers_count
+ * @property-read mixed $description_and_timestamp
+ * @method static \Illuminate\Database\Eloquent\Builder|Allergie findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Allergie newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Allergie newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Allergie onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Allergie query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Allergie whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Allergie whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Allergie whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Allergie whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Allergie whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Allergie whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Allergie whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Allergie withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Allergie withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Allergie extends Model
 {
     use SoftDeletes;

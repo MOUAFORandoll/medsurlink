@@ -9,6 +9,38 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\Prestation
+ *
+ * @property int $id
+ * @property string $nom
+ * @property string|null $prix
+ * @property string $slug
+ * @property int|null $creator
+ * @property int|null $categorie_id
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\CategoriePrestation|null $categorie
+ * @property-read mixed $name_and_timestamp
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Prestation onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation whereCategorieId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation whereNom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation wherePrix($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Prestation whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Prestation withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Prestation withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Prestation extends Model
 {
     use SoftDeletes;

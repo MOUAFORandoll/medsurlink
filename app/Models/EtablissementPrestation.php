@@ -9,6 +9,41 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\EtablissementPrestation
+ *
+ * @property int $id
+ * @property int $etablissement_id
+ * @property int $prestation_id
+ * @property int|null $creator
+ * @property string $prix
+ * @property string|null $reduction
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\EtablissementExercice $etablissement
+ * @property-read mixed $name_and_timestamp
+ * @property-read \App\Models\Prestation $prestation
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation newQuery()
+ * @method static \Illuminate\Database\Query\Builder|EtablissementPrestation onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation query()
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation whereEtablissementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation wherePrestationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation wherePrix($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation whereReduction($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|EtablissementPrestation whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|EtablissementPrestation withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|EtablissementPrestation withoutTrashed()
+ * @mixin \Eloquent
+ */
 class EtablissementPrestation extends Model
 {
     use Sluggable;

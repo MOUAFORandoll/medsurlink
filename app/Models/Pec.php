@@ -5,6 +5,17 @@ use App\User;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\Pec
+ *
+ * @property-read User $createur
+ * @property-read \App\Models\EtablissementExercice $etablissements
+ * @property-read User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Pec newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pec newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pec query()
+ * @mixin \Eloquent
+ */
 class Pec extends Model
 {
     protected $table='pec';

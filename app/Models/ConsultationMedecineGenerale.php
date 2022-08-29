@@ -15,6 +15,116 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Netpok\Database\Support\RestrictSoftDeletes;
 
+/**
+ * App\Models\ConsultationMedecineGenerale
+ *
+ * @property int $id
+ * @property int $dossier_medical_id
+ * @property string|null $date_consultation
+ * @property string|null $anamese
+ * @property string|null $mode_de_vie
+ * @property string|null $examen_clinique
+ * @property string|null $examen_complementaire
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $slug
+ * @property string|null $archieved_at
+ * @property string|null $passed_at
+ * @property string|null $traitement_propose
+ * @property string|null $profession
+ * @property string|null $situation_familiale
+ * @property string $nbre_enfant
+ * @property string $tabac
+ * @property string $alcool
+ * @property string|null $autres
+ * @property int|null $etablissement_id
+ * @property string|null $file
+ * @property string $nbreAnnee
+ * @property string $nbreCigarette
+ * @property int|null $creator
+ * @property string|null $information
+ * @property array $examens
+ * @property array $diasgnostic
+ * @property array $nutrition
+ * @property array $lipide
+ * @property array $glucide
+ * @property array $anamneses
+ * @property string|null $anthropometrie
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\TraitementPropose[] $traitements
+ * @property string|null $complementaire
+ * @property int|null $ligne_de_temps_id
+ * @property-read User|null $author
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Conclusion[] $conclusions
+ * @property-read int|null $conclusions_count
+ * @property-read \App\Models\DossierMedical $dossier
+ * @property-read \App\Models\EtablissementExercice|null $etablissement
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\File[] $files
+ * @property-read int|null $files_count
+ * @property-read mixed $dossier_and_timestamp
+ * @property-read \App\Models\LigneDeTemps|null $ligneDeTemps
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Motif[] $motifs
+ * @property-read int|null $motifs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Motif[] $n_motifs
+ * @property-read int|null $n_motifs_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Contributeurs[] $operationables
+ * @property-read int|null $operationables_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ParametreCommun[] $parametresCommun
+ * @property-read int|null $parametres_commun_count
+ * @property-read \App\Models\RendezVous|null $rdv
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\RendezVous[] $rendez_vous
+ * @property-read int|null $rendez_vous_count
+ * @property-read int|null $traitements_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ConsultationExamenValidation[] $validations
+ * @property-read int|null $validations_count
+ * @property-read \App\Models\VersionValidation|null $versionValidation
+ * @method static Builder|ConsultationMedecineGenerale findSimilarSlugs($attribute, $config, $slug)
+ * @method static Builder|ConsultationMedecineGenerale newModelQuery()
+ * @method static Builder|ConsultationMedecineGenerale newQuery()
+ * @method static \Illuminate\Database\Query\Builder|ConsultationMedecineGenerale onlyTrashed()
+ * @method static Builder|ConsultationMedecineGenerale orderByDateConsultation()
+ * @method static Builder|ConsultationMedecineGenerale passed()
+ * @method static Builder|ConsultationMedecineGenerale query()
+ * @method static Builder|ConsultationMedecineGenerale whereAlcool($value)
+ * @method static Builder|ConsultationMedecineGenerale whereAnamese($value)
+ * @method static Builder|ConsultationMedecineGenerale whereAnamneses($value)
+ * @method static Builder|ConsultationMedecineGenerale whereAnthropometrie($value)
+ * @method static Builder|ConsultationMedecineGenerale whereArchievedAt($value)
+ * @method static Builder|ConsultationMedecineGenerale whereAutres($value)
+ * @method static Builder|ConsultationMedecineGenerale whereComplementaire($value)
+ * @method static Builder|ConsultationMedecineGenerale whereCreatedAt($value)
+ * @method static Builder|ConsultationMedecineGenerale whereCreator($value)
+ * @method static Builder|ConsultationMedecineGenerale whereDateConsultation($value)
+ * @method static Builder|ConsultationMedecineGenerale whereDeletedAt($value)
+ * @method static Builder|ConsultationMedecineGenerale whereDiasgnostic($value)
+ * @method static Builder|ConsultationMedecineGenerale whereDossierMedicalId($value)
+ * @method static Builder|ConsultationMedecineGenerale whereEtablissementId($value)
+ * @method static Builder|ConsultationMedecineGenerale whereExamenClinique($value)
+ * @method static Builder|ConsultationMedecineGenerale whereExamenComplementaire($value)
+ * @method static Builder|ConsultationMedecineGenerale whereExamens($value)
+ * @method static Builder|ConsultationMedecineGenerale whereFile($value)
+ * @method static Builder|ConsultationMedecineGenerale whereGlucide($value)
+ * @method static Builder|ConsultationMedecineGenerale whereId($value)
+ * @method static Builder|ConsultationMedecineGenerale whereInformation($value)
+ * @method static Builder|ConsultationMedecineGenerale whereLigneDeTempsId($value)
+ * @method static Builder|ConsultationMedecineGenerale whereLipide($value)
+ * @method static Builder|ConsultationMedecineGenerale whereModeDeVie($value)
+ * @method static Builder|ConsultationMedecineGenerale whereNbreAnnee($value)
+ * @method static Builder|ConsultationMedecineGenerale whereNbreCigarette($value)
+ * @method static Builder|ConsultationMedecineGenerale whereNbreEnfant($value)
+ * @method static Builder|ConsultationMedecineGenerale whereNutrition($value)
+ * @method static Builder|ConsultationMedecineGenerale wherePassedAt($value)
+ * @method static Builder|ConsultationMedecineGenerale whereProfession($value)
+ * @method static Builder|ConsultationMedecineGenerale whereSituationFamiliale($value)
+ * @method static Builder|ConsultationMedecineGenerale whereSlug($value)
+ * @method static Builder|ConsultationMedecineGenerale whereTabac($value)
+ * @method static Builder|ConsultationMedecineGenerale whereTraitementPropose($value)
+ * @method static Builder|ConsultationMedecineGenerale whereTraitements($value)
+ * @method static Builder|ConsultationMedecineGenerale whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|ConsultationMedecineGenerale withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|ConsultationMedecineGenerale withoutTrashed()
+ * @mixin \Eloquent
+ */
 class ConsultationMedecineGenerale extends Model
 {
     use SoftDeletes;

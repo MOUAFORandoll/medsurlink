@@ -8,6 +8,38 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * App\Models\ExamenCardio
+ *
+ * @property int $id
+ * @property int $cardiologie_id
+ * @property string $nom
+ * @property string $date_examen
+ * @property string $description
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Cardiologie $cardiologie
+ * @property-read mixed $nom_and_timestamp
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio newQuery()
+ * @method static \Illuminate\Database\Query\Builder|ExamenCardio onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio whereCardiologieId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio whereDateExamen($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio whereNom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ExamenCardio whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|ExamenCardio withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|ExamenCardio withoutTrashed()
+ * @mixin \Eloquent
+ */
 class ExamenCardio extends Model
 {
     use Sluggable;
