@@ -21,6 +21,7 @@ use App\Models\ConsultationMedecineGenerale;
 use App\Models\DelaiOperation;
 use App\Models\MedecinAvis;
 use App\Models\Motif;
+use App\Models\PatientMedecinControle;
 use App\Models\ResultatImagerie;
 use App\Models\ResultatLabo;
 use Carbon\Carbon;
@@ -166,10 +167,10 @@ class LigneDeTempsController extends Controller
                     $new_ligne_delais->push($ligne);
                 }
             }
-            elseif($delai->delai_operationable_type == ResultatImagerie::class){
-                /* $consultation = $model->dossier->consultationsMedecine()->latest()->first();
-                \Log::alert("consultation");
-                \Log::alert($consultation); */
+            elseif($delai->delai_operationable_type == PatientMedecinControle::class){
+                $affiliations = $model->dossier;
+                \Log::alert("affiliations");
+                \Log::alert($affiliations);
             }
         }
 
