@@ -269,7 +269,7 @@ class LigneDeTempsController extends Controller
             }
             Carbon::setLocale('fr');
             $ecart_en_second = $new_ligne_delais->Where('id', $ligneTemps->id)->sum('ecart_en_second');
-            $ligneTemps->duree = CarbonInterval::seconds($ecart_en_second)->cascade()->forHumans();;
+            $ligneTemps->duree = CarbonInterval::seconds($ecart_en_second)->cascade()->forHumans(['short' => true, 'parts' => 3]);
             $ligneTemps->validations = $validations;
             $ligne_temps->push($ligneTemps);
         }
