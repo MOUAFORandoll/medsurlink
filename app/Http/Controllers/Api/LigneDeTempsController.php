@@ -17,6 +17,7 @@ use App\Models\ConsultationObstetrique;
 use App\Http\Requests\LigneDeTempsRequest;
 use App\Models\Affiliation;
 use App\Models\ConsultationExamenValidation;
+use App\Models\ConsultationFichier;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\DelaiOperation;
 use App\Models\MedecinAvis;
@@ -25,6 +26,7 @@ use App\Models\PatientMedecinControle;
 use App\Models\ResultatImagerie;
 use App\Models\ResultatLabo;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Support\Facades\DB;
 
 class LigneDeTempsController extends Controller
@@ -163,15 +165,95 @@ class LigneDeTempsController extends Controller
                     $ligne = $consultation->ligneDeTemps;
                     $ligne->date_heure_prevue = $delai->date_heure_prevue;
                     $ligne->date_heure_effectif = $delai->date_heure_effectif;
-                    $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue); ;
+                    $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
                     $new_ligne_delais->push($ligne);
                 }
             }
             elseif($delai->delai_operationable_type == PatientMedecinControle::class){
-                $affiliations = $model->dossier;
-                \Log::alert("affiliations");
-                \Log::alert($affiliations);
+                $consultation = $model->patients->dossier->consultationsMedecine()->latest()->first();
+                if(!is_null($consultation)){
+                    $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
+                    $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
+                    $ligne = $consultation->ligneDeTemps;
+                    $ligne->date_heure_prevue = $delai->date_heure_prevue;
+                    $ligne->date_heure_effectif = $delai->date_heure_effectif;
+                    $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+                    $new_ligne_delais->push($ligne);
+                }
             }
+            elseif($delai->delai_operationable_type == ActiviteAmaPatient::class){
+                $ligne = $model->ligne_temps;
+                $ligne_temp = new \stdClass();
+                $ligne_temp->id = $ligne->id;
+                $ligne_temp->dossier_medical_id = $ligne->dossier_medical_id;
+                $ligne_temp->etat = $ligne->etat;
+                $ligne_temp->motif_consultation_id = $ligne->motif_consultation_id;
+                $ligne_temp->date_consultation = $ligne->date_consultation;
+                $ligne_temp->affiliation_id = $ligne->affiliation_id;
+                $ligne_temp->created_at = $ligne->created_at;
+                $ligne_temp->updated_at = $ligne->updated_at;
+                $ligne_temp->deleted_at = $ligne->deleted_at;
+                $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
+                $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
+                $ligne_temp->date_heure_prevue = $delai->date_heure_prevue;
+                $ligne_temp->date_heure_effectif = $delai->date_heure_effectif;
+                $ligne_temp->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+                $new_ligne_delais->push($ligne_temp);
+            }
+            elseif($delai->delai_operationable_type == ConsultationFichier::class){
+                $consultation = $model->dossier->consultationsMedecine()->latest()->first();
+                if(!is_null($consultation)){
+                    $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
+                    $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
+                    $ligne = $consultation->ligneDeTemps;
+                    $ligne->date_heure_prevue = $delai->date_heure_prevue;
+                    $ligne->date_heure_effectif = $delai->date_heure_effectif;
+                    $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+                    $new_ligne_delais->push($ligne);
+                }
+            }
+            elseif($delai->delai_operationable_type == ConsultationMedecineGenerale::class){
+                $consultation = $model;
+                $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
+                $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
+                $ligne = $consultation->ligneDeTemps;
+                $ligne->date_heure_prevue = $delai->date_heure_prevue;
+                $ligne->date_heure_effectif = $delai->date_heure_effectif;
+                $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+                $new_ligne_delais->push($ligne);
+            }
+            elseif($delai->delai_operationable_type == MedecinAvis::class){
+                $consultation = $model->avisMedecin->dossier->consultationsMedecine()->latest()->first();
+                if(!is_null($consultation)){
+                    $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
+                    $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
+                    $ligne = $consultation->ligneDeTemps;
+                    $ligne->date_heure_prevue = $delai->date_heure_prevue;
+                    $ligne->date_heure_effectif = $delai->date_heure_effectif;
+                    $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+                    $new_ligne_delais->push($ligne);
+                }
+            }elseif($delai->delai_operationable_type == ActivitesControle::class){
+                $ligne = $model->ligne_temps;
+                $ligne_temp = new \stdClass();
+                $ligne_temp->id = $ligne->id;
+                $ligne_temp->dossier_medical_id = $ligne->dossier_medical_id;
+                $ligne_temp->etat = $ligne->etat;
+                $ligne_temp->motif_consultation_id = $ligne->motif_consultation_id;
+                $ligne_temp->date_consultation = $ligne->date_consultation;
+                $ligne_temp->affiliation_id = $ligne->affiliation_id;
+                $ligne_temp->created_at = $ligne->created_at;
+                $ligne_temp->updated_at = $ligne->updated_at;
+                $ligne_temp->deleted_at = $ligne->deleted_at;
+                $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
+                $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
+                $ligne_temp->date_heure_prevue = $delai->date_heure_prevue;
+                $ligne_temp->date_heure_effectif = $delai->date_heure_effectif;
+                $ligne_temp->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+                $new_ligne_delais->push($ligne_temp);
+            }
+
+            
         }
 
         foreach($ligneDeTemps as $ligneTemps){
@@ -185,8 +267,9 @@ class LigneDeTempsController extends Controller
                     $validations->push($validation);
                 }
             }
+            Carbon::setLocale('fr');
             $ecart_en_second = $new_ligne_delais->Where('id', $ligneTemps->id)->sum('ecart_en_second');
-            $ligneTemps->ecart_en_second = $ecart_en_second;
+            $ligneTemps->duree = CarbonInterval::seconds($ecart_en_second)->cascade()->forHumans();;
             $ligneTemps->validations = $validations;
             $ligne_temps->push($ligneTemps);
         }

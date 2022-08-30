@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Models\ActivitesControle;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Affiliation;
+use App\Models\DelaiOperation;
 use Illuminate\Support\Facades\Auth;
 
 class ActivitesControleController extends Controller
@@ -43,7 +45,11 @@ class ActivitesControleController extends Controller
             'activite_id'=>'integer|required'
         ]);
 
-        $med = ActivitesControle::create([
+        $activity = ActivitesControle::where("patient_id", $request->patient_id)->latest()->first();
+        $affiliation = Affiliation::where("patient_id", $request->patient_id)->latest()->first();
+        $delai_operation = DelaiOperation::where("patient_id", $request->patient_id)->latest()->first();
+
+        $activite = ActivitesControle::create([
             "activite_id" => $request->activite_id,
             "patient_id" => $request->patient_id,
             'etablissement_id' => $request->etablissement_id,
@@ -54,6 +60,44 @@ class ActivitesControleController extends Controller
             "statut" => $request->statut,
             "date_cloture" => $request->date_cloture
         ]);
+
+        if(!is_null($delai_operation)){
+            DelaiOperation::create(
+                [
+                    "patient_id" => $request->patient_id,
+                    "delai_operationable_id" => $activite->id,
+                    "delai_operationable_type" => ActivitesControle::class,
+                    "date_heure_prevue" => $delai_operation->created_at,
+                    "date_heure_effectif" => $activite->created_at,
+                    "observation" => "RAS"
+                ]
+            );
+        }
+        elseif(!is_null($activity)){
+            DelaiOperation::create(
+                [
+                    "patient_id" => $request->patient_id,
+                    "delai_operationable_id" => $activite->id,
+                    "delai_operationable_type" => ActivitesControle::class,
+                    "date_heure_prevue" => $activity->created_at,
+                    "date_heure_effectif" => $activite->created_at,
+                    "observation" => "RAS"
+                ]
+            );
+        }elseif(!is_null($affiliation)){
+            DelaiOperation::create(
+                [
+                    "patient_id" => $request->patient_id,
+                    "delai_operationable_id" => $activite->id,
+                    "delai_operationable_type" => ActivitesControle::class,
+                    "date_heure_prevue" => $affiliation->created_at,
+                    "date_heure_effectif" => $activite->created_at,
+                    "observation" => "RAS"
+                ]
+            );
+        }
+
+        
         // $med = new ActivitesControle;
         // $med->creator = Auth::id();
         // $med->activite_id = $request->activite_id;
@@ -65,7 +109,7 @@ class ActivitesControleController extends Controller
         // $med->date_cloture = $request->date_cloture;
         // $med->save();
 
-        return response()->json(['medReferent'=>$med]);
+        return response()->json(['medReferent' => $activite]);
     }
 
     /**

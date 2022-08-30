@@ -326,10 +326,9 @@ class ConsultationMedecineGeneraleController extends Controller
             $this->uploadFile($request, $consultation);
         }
         $this->updateDossierId($consultation->dossier->id);
-
-        $delai_operation = DelaiOperation::where("patient_id",$request->patient_id)->latest()->first();
-        $activity = ActiviteAmaPatient::where("patient_id",$request->patient_id)->latest()->first();
-        $affiliation = Affiliation::where("patient_id",$request->patient_id)->latest()->first();
+        $delai_operation = DelaiOperation::where("patient_id",$patient->user_id)->latest()->first();
+        $activity = ActiviteAmaPatient::where("patient_id",$patient->user_id)->latest()->first();
+        $affiliation = Affiliation::where("patient_id",$patient->user_id)->latest()->first();
         
         if(!is_null($delai_operation)){
             DelaiOperation::create(
