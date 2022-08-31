@@ -75,5 +75,6 @@ php artisan migrate --path=/database/migrations/2022_08_23_095010_create_delai_o
 php artisan db:seed --class=TypeOperationTableSeeder
 
 composer dump-autoload
+php artisan db:seed --class=ActivitesAmaSeeder
 php artisan db:seed --class=RoleTableSeeder
 php artisan db:seed --class=PermissionTableSeeder
