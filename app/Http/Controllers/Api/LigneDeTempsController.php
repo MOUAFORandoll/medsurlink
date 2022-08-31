@@ -302,9 +302,11 @@ class LigneDeTempsController extends Controller
             $ligneTemps->validations = $validations;
             $ligne_temps->push($ligneTemps);
         }
-        $temps_max_prise_en_charge = CarbonInterval::seconds($ligne_temps->avg('ecart_en_second'))->cascade()->forHumans(['long' => true, 'parts' => 3]);
-
+        $temps_max_prise_en_charge = CarbonInterval::seconds($ligneDeTemps->max('ecart_en_second'))->cascade()->forHumans(['short' => false, 'parts' => 3]);
+        
+        // \Log::alert($ligne_temps);
         return response()->json(["ligne_temps" => $ligne_temps, 'temps_max_prise_en_charge' => $temps_max_prise_en_charge]);
+        // "examen_validation_medecin" => $examen_validation_medecin, "examen_validation_assureur" => $examen_validation_assureur
     }
 
     /**
