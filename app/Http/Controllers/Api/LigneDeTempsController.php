@@ -288,12 +288,14 @@ class LigneDeTempsController extends Controller
             Carbon::setLocale('fr');
             $ecart_en_second = $new_ligne_delais->Where('id', $ligneTemps->id)->sum('ecart_en_second');
             $ligneTemps->duree = CarbonInterval::seconds($ecart_en_second)->cascade()->forHumans(['short' => true, 'parts' => 3]);
+            $ligneTemps->ecart_en_second = $ecart_en_second;
             $ligneTemps->validations = $validations;
             $ligne_temps->push($ligneTemps);
         }
+        $temps_max_prise_en_charge = CarbonInterval::seconds($ligneDeTemps->max('ecart_en_second'))->cascade()->forHumans(['short' => false, 'parts' => 3]);
         
         // \Log::alert($ligne_temps);
-        return response()->json(["ligne_temps" => $ligne_temps]);
+        return response()->json(["ligne_temps" => $ligne_temps, 'temps_max_prise_en_charge' => $temps_max_prise_en_charge]);
         // "examen_validation_medecin" => $examen_validation_medecin, "examen_validation_assureur" => $examen_validation_assureur
     }
     /**
