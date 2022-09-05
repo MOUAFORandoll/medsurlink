@@ -57,6 +57,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\ConsultationExamenClinique;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\ConsultationExamenComplementaire;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 class AppServiceProvider extends ServiceProvider
@@ -81,6 +82,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        Carbon::setLocale('fr');
         Relation::morphMap([
             'Comptable'=>Comptable::class,
             'Assistante'=>Assistante::class,
