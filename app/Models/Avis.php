@@ -10,6 +10,47 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\Avis
+ *
+ * @property int $id
+ * @property int $dossier_medical_id
+ * @property string|null $objet
+ * @property string|null $slug
+ * @property string $description
+ * @property int|null $creator
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int $creer_lien
+ * @property string $code_urgence
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ConsultationFichier[] $consultationFichier
+ * @property-read int|null $consultation_fichier_count
+ * @property-read User|null $createur
+ * @property-read \App\Models\DossierMedical $dossier
+ * @property-read mixed $name_and_timestamp
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MedecinAvis[] $medecinAvis
+ * @property-read int|null $medecin_avis_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Avis onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis whereCodeUrgence($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis whereCreerLien($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis whereDossierMedicalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis whereObjet($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Avis whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Avis withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Avis withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Avis extends Model
 {
     use SoftDeletes;

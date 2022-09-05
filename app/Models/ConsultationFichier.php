@@ -12,6 +12,54 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\ConsultationFichier
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $dossier_medical_id
+ * @property int $etablissement_id
+ * @property int $creator
+ * @property string|null $user_id
+ * @property string|null $passed_at
+ * @property string|null $archieved_at
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $date_consultation
+ * @property string|null $praticien_externe
+ * @property string|null $consultation_externe
+ * @property-read \App\Models\DossierMedical $dossier
+ * @property-read \App\Models\EtablissementExercice $etablissement
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\File[] $files
+ * @property-read int|null $files_count
+ * @property-read mixed $dossier_and_timestamp
+ * @property-read User|null $praticien
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier newQuery()
+ * @method static \Illuminate\Database\Query\Builder|ConsultationFichier onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereArchievedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereConsultationExterne($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereDateConsultation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereDossierMedicalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereEtablissementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier wherePassedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier wherePraticienExterne($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationFichier whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|ConsultationFichier withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|ConsultationFichier withoutTrashed()
+ * @mixin \Eloquent
+ */
 class ConsultationFichier extends Model
 {
     use SoftDeletes;

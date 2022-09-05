@@ -10,6 +10,41 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\Activite
+ *
+ * @property int $id
+ * @property int|null $groupe_id
+ * @property int|null $creator
+ * @property string|null $statut
+ * @property string|null $date_cloture
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read User|null $createur
+ * @property-read mixed $dossier_and_timestamp
+ * @property-read \App\Models\GroupeActivite|null $groupe
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ActiviteMission[] $missions
+ * @property-read int|null $missions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Activite onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite whereDateCloture($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite whereGroupeId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite whereStatut($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Activite whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Activite withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Activite withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Activite extends Model
 {
     use Sluggable;

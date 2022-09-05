@@ -14,6 +14,99 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Netpok\Database\Support\RestrictSoftDeletes;
 
+/**
+ * App\Models\ConsultationObstetrique
+ *
+ * @property int $id
+ * @property int $dossier_medical_id
+ * @property string $date_creation
+ * @property int $numero_grossesse
+ * @property string $ddr
+ * @property string|null $antecedent_conjoint
+ * @property string|null $serologie
+ * @property string|null $groupe_sanguin
+ * @property string|null $statut_socio_familiale
+ * @property string|null $assuetudes
+ * @property string|null $antecedent_de_transfusion
+ * @property string|null $facteur_de_risque
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $slug
+ * @property string|null $archieved_at
+ * @property string|null $passed_at
+ * @property string $pcr_gonocoque
+ * @property string $pcr_chlamydia
+ * @property string $rcc
+ * @property string $glycemie
+ * @property string $emu
+ * @property string $tsh
+ * @property string $anti_tpo
+ * @property string $ft4
+ * @property string $ft3
+ * @property string|null $attention
+ * @property string|null $info_prise_en_charge
+ * @property int|null $etablissement_id
+ * @property string $t1
+ * @property string $nle_anle
+ * @property string $sexe
+ * @property int|null $creator
+ * @property-read User|null $author
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ConsultationPrenatale[] $consultationPrenatales
+ * @property-read int|null $consultation_prenatales_count
+ * @property-read \App\Models\DossierMedical $dossier
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Echographie[] $echographies
+ * @property-read int|null $echographies_count
+ * @property-read \App\Models\EtablissementExercice|null $etablissement
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\File[] $files
+ * @property-read int|null $files_count
+ * @property-read mixed $dossier_and_timestamp
+ * @property-read \App\Models\LigneDeTemps $ligneDeTemps
+ * @property-read \App\Models\RendezVous|null $rdv
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique newQuery()
+ * @method static \Illuminate\Database\Query\Builder|ConsultationObstetrique onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique orderByDateDeRendezVous()
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereAntecedentConjoint($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereAntecedentDeTransfusion($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereAntiTpo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereArchievedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereAssuetudes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereAttention($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereDateCreation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereDdr($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereDossierMedicalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereEmu($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereEtablissementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereFacteurDeRisque($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereFt3($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereFt4($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereGlycemie($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereGroupeSanguin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereInfoPriseEnCharge($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereNleAnle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereNumeroGrossesse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique wherePassedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique wherePcrChlamydia($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique wherePcrGonocoque($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereRcc($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereSerologie($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereSexe($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereStatutSocioFamiliale($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereT1($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereTsh($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationObstetrique whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|ConsultationObstetrique withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|ConsultationObstetrique withoutTrashed()
+ * @mixin \Eloquent
+ */
 class ConsultationObstetrique extends Model
 {
     use SoftDeletes;

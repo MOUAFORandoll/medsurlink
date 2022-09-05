@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Database\Seeder;
-
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Row;
+use  \Spatie\Permission\Models\Role;
 class RoleTableSeeder extends Seeder
 {
     /**
@@ -12,6 +14,7 @@ class RoleTableSeeder extends Seeder
     public function run()
     {
         $roles = [
+            'Super Admin',
             'Admin',
             'Patient',
             'Souscripteur',
@@ -24,15 +27,25 @@ class RoleTableSeeder extends Seeder
             'Etablissement',
             'Comptable',
             'Assistante',
-            'Pharmacien'
+            'Pharmacien',
+            'Assureur',
+            'Association',
+            'Directeur'
         ];
 
         foreach ($roles as $role) {
-            \Spatie\Permission\Models\Role::create([
-                'name' => $role,
-                'guard_name'=>'api'
-            ]);
+            $exist_role = Role::where('name', $role)->first();
+            if(!$exist_role){
+                Role::create([
+                    'name' => $role,
+                    'guard_name'=>'api'
+                ]);
+            }
+            
         }
+
+        //Definition des permissions du super-admin
+        // $this->setPermissionRole(1,1);
 
 //        Definition des permissions de l'admin
         $this->setPermissionRole(1,1);
@@ -103,9 +116,12 @@ class RoleTableSeeder extends Seeder
     }
 
     public function setPermissionRole($permission,$role){
-        \Illuminate\Support\Facades\DB::table('role_has_permissions')->insert([
-            'permission_id'=>$permission,
-            'role_id'=>$role
-        ]);
+        $role_has_permission = DB::table('role_has_permissions')->where(['permission_id'=>$permission, 'role_id'=>$role])->first();
+        if(!$role_has_permission){
+            DB::table('role_has_permissions')->insert([
+                'permission_id'=>$permission,
+                'role_id'=>$role
+            ]);
+        }
     }
 }

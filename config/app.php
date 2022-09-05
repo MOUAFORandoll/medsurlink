@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'staging'),
+    'env' => env('APP_ENV', 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -183,6 +183,7 @@ return [
         'Gbrock\Table\Providers\TableServiceProvider',
         Maatwebsite\Excel\ExcelServiceProvider::class,
         OwenIt\Auditing\AuditingServiceProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
 
         /*

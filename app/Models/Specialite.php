@@ -10,6 +10,38 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Netpok\Database\Support\RestrictSoftDeletes;
 
+/**
+ * App\Models\Specialite
+ *
+ * @property int $id
+ * @property int $profession_id
+ * @property string $name
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $slug
+ * @property-read mixed $name_and_timestamp
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MedecinControle[] $medecinsControle
+ * @property-read int|null $medecins_controle_count
+ * @property-read \App\Models\Profession $profession
+ * @method static \Illuminate\Database\Eloquent\Builder|Specialite findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Specialite newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Specialite newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Specialite onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Specialite query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Specialite whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Specialite whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Specialite whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Specialite whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Specialite whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Specialite whereProfessionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Specialite whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Specialite whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Specialite withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Specialite withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Specialite extends Model
 {
     use SoftDeletes;

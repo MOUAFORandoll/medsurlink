@@ -12,6 +12,65 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\Kinesitherapie
+ *
+ * @property int $id
+ * @property int $etablissement_id
+ * @property int|null $creator
+ * @property int $dossier_medical_id
+ * @property string|null $date_consultation
+ * @property string|null $motifs
+ * @property string|null $anamnese
+ * @property string|null $profession
+ * @property string|null $evaluation_globale
+ * @property string|null $impression_diagnostique
+ * @property string|null $examens_complementaires
+ * @property string|null $conduite_a_tenir
+ * @property string $slug
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string|null $archieved_at
+ * @property string|null $passed_at
+ * @property-read User|null $author
+ * @property-read \App\Models\DossierMedical $dossier
+ * @property-read \App\Models\EtablissementExercice $etablissement
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\File[] $files
+ * @property-read int|null $files_count
+ * @property-read mixed $dossier_and_timestamp
+ * @property-read \App\Models\LigneDeTemps $ligneDeTemps
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Contributeurs[] $operationables
+ * @property-read int|null $operationables_count
+ * @property-read \App\Models\RendezVous|null $rdv
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Kinesitherapie onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie orderByDateConsultation()
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereAnamnese($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereArchievedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereConduiteATenir($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereDateConsultation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereDossierMedicalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereEtablissementId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereEvaluationGlobale($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereExamensComplementaires($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereImpressionDiagnostique($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereMotifs($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie wherePassedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereProfession($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Kinesitherapie whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Kinesitherapie withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Kinesitherapie withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Kinesitherapie extends Model
 {
     use Sluggable;

@@ -10,6 +10,48 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\Suivi
+ *
+ * @property int $id
+ * @property int $dossier_medical_id
+ * @property int|null $creator
+ * @property string|null $motifs
+ * @property string $slug
+ * @property string|null $etat
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int|null $categorie_id
+ * @property-read \App\Models\Categories|null $categorie
+ * @property-read User|null $createur
+ * @property-read \App\Models\DossierMedical $dossier
+ * @property-read mixed $name_and_timestamp
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MedecinDeSuivi[] $responsable
+ * @property-read int|null $responsable_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SpecialiteSuivi[] $specialites
+ * @property-read int|null $specialites_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\SuiviToDoList[] $toDoList
+ * @property-read int|null $to_do_list_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Suivi onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi whereCategorieId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi whereCreator($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi whereDossierMedicalId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi whereEtat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi whereMotifs($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Suivi whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Suivi withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Suivi withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Suivi extends Model
 {
     use SoftDeletes;

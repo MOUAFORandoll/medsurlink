@@ -67,6 +67,12 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/signature/user','Api\UserController@signature');
 
 });
+
+//super Admin route
+// Route::group(['middleware' => ['auth:api','role:Super Admin']], function () {
+//     Route::resource('user', 'Api\UserController')->except(['create','edit']);
+// });
+
 Route::group(['middleware' => ['auth:api','role:Admin']], function () {
     Route::resource('user', 'Api\UserController')->except(['create','edit']);
 });
@@ -371,6 +377,7 @@ Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|M
     Route::resource('antecedents', 'Api\v1\AntecedentController');
     Route::get('/consultationsMedecines/{dossier_slug}', 'Api\v1\DossierMedicalController@consultationsMedecines');
     Route::resource('traitement-actuels', 'Api\v1\TraitementActuelController');
+    Route::resource('type-operations', 'Api\v1\TypeOperationController');
 
     
 });

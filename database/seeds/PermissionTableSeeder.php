@@ -15,6 +15,7 @@ class PermissionTableSeeder extends Seeder
     public function run()
     {
        $permissions = [
+           'Super Administrer les roles & permissions',
            'Administrer les roles & permissions',
            'Consulter profils patient',
            'Consulter consultations archivees',
@@ -59,11 +60,70 @@ class PermissionTableSeeder extends Seeder
            'Consulter souscriptions affiliations',
            'Creer souscriptions affiliations',
            'Modifier souscriptions affiliations',
+           'Supprimer  rendez-vous',
+           'Consulter souscriptions rendez-vous',
+           'Creer souscriptions rendez-vous',
+           'Modifier souscriptions rendez-vous',
+           
+           'Supprimer  e-prescriptions',
+           'Consulter souscriptions e-prescriptions',
+           'Creer souscriptions e-prescriptions',
+           'Modifier souscriptions e-prescriptions',
+           'Supprimer Téléconsultation',
+           'Consulter Téléconsultation',
+           'Creer Téléconsultation',
+           'Modifier Téléconsultation',
+           'Monitoring des paramètres',
+           'Supprimer  Recommandation',
+           'Creer  Recommandation',
+           'Consulter  Recommandation',
+           'Modifier  Recommandation',
+           'Accéder au Chat',
+           'Accéder au Parcours de soins',
+           'Géolocalisez',
+           'Creer souscriptions assureurs',
+           'Modifier souscriptions assureurs',
+           'Desactiver souscriptions assureurs',
+           'Effectuer validation financieres',
+           'Effectuer validation médical',
+           'Creer formations',
+           'Modifier formations',
+           'Supprimer formations',
+           'Consulter formations',
+           'Creer avis-medicaux',
+           'Modifier avis-medicaux',
+           'Supprimer avis-medicaux',
+           'Consulter avis-medicaux',
+           'Creer comptable',
+           'Modifier comptable',
+           'Supprimer comptable',
+           'Consulter comptable',
+           'Creer souscripteur',
+           'Modifier souscripteur',
+           'Supprimer souscripteur',
+           'Creer patients',
+           'Modifier patients',
+           'Supprimer patients',
+           'Consulter patients',
+           'Creer partenaires',
+           'Modifier partenaires',
+           'Supprimer partenaires',
+           'Consulter partenaires',
+           'Creer association',
+           'Modifier association',
+           'Supprimer association',
+           'Consulter association',
+           'Creer activite',
+           'Modifier activite',
+           'Consulter activite patients',
         ];
 
 
         foreach ($permissions as $permission) {
-             Permission::create(['name' => $permission]);
+            $exist_permission = Permission::where('name', $permission)->first();
+            if(!$exist_permission){
+                Permission::create(['name' => $permission]);
+            }
         }
     }
 }

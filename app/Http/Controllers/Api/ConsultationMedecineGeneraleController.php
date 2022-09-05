@@ -31,6 +31,9 @@ use Psy\Util\Json;
 use Symfony\Component\Mime\Part\Multipart\FormDataPart;
 use App\Message;
 use App\Events\MessageCreated;
+use App\Models\ActiviteAmaPatient;
+use App\Models\Affiliation;
+use App\Models\DelaiOperation;
 use App\Models\VersionValidation;
 
 class ConsultationMedecineGeneraleController extends Controller
@@ -323,6 +326,46 @@ class ConsultationMedecineGeneraleController extends Controller
             $this->uploadFile($request, $consultation);
         }
         $this->updateDossierId($consultation->dossier->id);
+        $delai_operation = DelaiOperation::where("patient_id",$patient->user_id)->latest()->first();
+        $activity = ActiviteAmaPatient::where("patient_id",$patient->user_id)->latest()->first();
+        $affiliation = Affiliation::where("patient_id",$patient->user_id)->latest()->first();
+        
+        if(!is_null($delai_operation)){
+            DelaiOperation::create(
+                [
+                    "patient_id" => $patient->user_id,
+                    "delai_operationable_id" => $consultation->id,
+                    "delai_operationable_type" => ConsultationMedecineGenerale::class,
+                    "date_heure_prevue" => $delai_operation->created_at,
+                    "date_heure_effectif" => $consultation->created_at,
+                    "observation" => "RAS"
+                ]
+            );
+        }
+        elseif (!is_null($activity)){
+            DelaiOperation::create(
+                [
+                    "patient_id" => $patient->user_id,
+                    "delai_operationable_id" => $consultation->id,
+                    "delai_operationable_type" => ConsultationMedecineGenerale::class,
+                    "date_heure_prevue" => $activity->created_at,
+                    "date_heure_effectif" => $consultation->created_at,
+                    "observation" => "RAS"
+                ]
+            );
+        }elseif(!is_null($affiliation)){
+            DelaiOperation::create(
+                [
+                    "patient_id" => $patient->user_id,
+                    "delai_operationable_id" => $consultation->id,
+                    "delai_operationable_type" => ConsultationMedecineGenerale::class,
+                    "date_heure_prevue" => $affiliation->created_at,
+                    "date_heure_effectif" => $consultation->created_at,
+                    "observation" => "RAS"
+                ]
+            );
+        }
+
 
         return response()->json(["consultation" => $consultation]);
     }

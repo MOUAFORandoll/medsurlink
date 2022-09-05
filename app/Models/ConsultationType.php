@@ -10,6 +10,38 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Netpok\Database\Support\RestrictSoftDeletes;
 
+/**
+ * App\Models\ConsultationType
+ *
+ * @property int $id
+ * @property int $profession_id
+ * @property string $name
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property string $slug
+ * @property-read mixed $name_and_timestamp
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\MedecinControle[] $medecinsControle
+ * @property-read int|null $medecins_controle_count
+ * @property-read \App\Models\Profession $profession
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationType findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationType newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationType newQuery()
+ * @method static \Illuminate\Database\Query\Builder|ConsultationType onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationType query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationType whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationType whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationType whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationType whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationType whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationType whereProfessionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationType whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConsultationType whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|ConsultationType withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|ConsultationType withoutTrashed()
+ * @mixin \Eloquent
+ */
 class ConsultationType extends Model
 {
     use SoftDeletes;

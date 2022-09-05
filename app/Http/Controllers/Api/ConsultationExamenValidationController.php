@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\ValidationFinanciere;
 use App\Models\ConsultationExamenValidation;
 use App\Models\ConsultationMedecineGenerale;
+use App\Models\DelaiOperation;
 use App\Models\DossierMedical;
 use App\Models\EtablissementPrestation;
 use App\Models\ExamenEtablissementPrix;
@@ -99,7 +100,7 @@ class ConsultationExamenValidationController extends Controller
         $examen_validation = ConsultationExamenValidation::with(['consultation.ligneDeTemps.motif','consultation.dossier.patient.user','consultation.author'])
         //->whereNull('etat_validation_medecin')
         ->distinct()
-        ->get(['consultation_general_id']);;
+        ->get(['consultation_general_id']);
         return response()->json(['examen_validation'=>$examen_validation->count()]);
     }
     /**
@@ -160,6 +161,30 @@ class ConsultationExamenValidationController extends Controller
             if($ancienne_valeur != $examen['etat']){
                 $examen_validation->save();
                 $is_update = 1;
+                $delai_operation = DelaiOperation::where(["patient_id" => $examen_validation->consultation->dossier->patient_id, "delai_operationable_type" => ConsultationExamenValidation::class])->latest()->first();
+                if(!is_null($delai_operation)){
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $examen_validation->consultation->dossier->patient_id,
+                            "delai_operationable_id" => $examen_validation->id,
+                            "delai_operationable_type" => ConsultationExamenValidation::class,
+                            "date_heure_prevue" => $delai_operation->created_at,
+                            "date_heure_effectif" => Carbon::now(),
+                            "observation" => "RAS"
+                        ]
+                    );
+                }else{
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $examen_validation->consultation->dossier->patient_id,
+                            "delai_operationable_id" => $examen_validation->id,
+                            "delai_operationable_type" => ConsultationExamenValidation::class,
+                            "date_heure_prevue" => $examen_validation->created_at,
+                            "date_heure_effectif" => Carbon::now(),
+                            "observation" => "RAS"
+                        ]
+                    );
+                }
             }
             /**
              * Listing des prestations valider par le medécin controle pour la validation du souscripteur
@@ -237,6 +262,32 @@ class ConsultationExamenValidationController extends Controller
                     $examen->date_validation_souscripteur = Carbon::now();
                     $examen->save();
                 }
+
+                $delai_operation = DelaiOperation::where(["patient_id" => $examen->consultation->dossier->patient_id, "delai_operationable_type" => ConsultationExamenValidation::class])->latest()->first();
+                if(!is_null($delai_operation)){
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $examen->consultation->dossier->patient_id,
+                            "delai_operationable_id" => $examen->id,
+                            "delai_operationable_type" => ConsultationExamenValidation::class,
+                            "date_heure_prevue" => $delai_operation->updated_at,
+                            "date_heure_effectif" => Carbon::now(),
+                            "observation" => "RAS"
+                        ]
+                    );
+                }else{
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $examen->consultation->dossier->patient_id,
+                            "delai_operationable_id" => $examen->id,
+                            "delai_operationable_type" => ConsultationExamenValidation::class,
+                            "date_heure_prevue" => $examen->updated_at,
+                            "date_heure_effectif" => Carbon::now(),
+                            "observation" => "RAS"
+                        ]
+                    );
+                }
+
 
                 $totalPrestation += $examen->examenComplementaire->examenComplementairePrix[0]->prix;
                 if($examen->etat_validation_medecin == 1){

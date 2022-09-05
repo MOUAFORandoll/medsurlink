@@ -10,6 +10,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\Pharmacien
+ *
+ * @property-read \App\Models\EtablissementExercice $etablissements
+ * @property-read mixed $reference_and_timestamp
+ * @property-read User $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Pharmacien findSimilarSlugs($attribute, $config, $slug)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pharmacien newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pharmacien newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Pharmacien onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pharmacien query()
+ * @method static \Illuminate\Database\Query\Builder|Pharmacien withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Pharmacien withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Pharmacien extends Model
 {
     use SoftDeletes;
