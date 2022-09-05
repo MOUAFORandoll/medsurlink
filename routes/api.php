@@ -417,6 +417,11 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::resource('financeur','Api\PatientSouscripteurController');
     Route::post('financeur/retirer','Api\PatientSouscripteurController@retirer');
 
+    /**
+     *  delai de prise en charge
+     */
+    Route::get('prise-en-charge', 'Api\LigneDeTempsController@tempsMoyenPriseEnCharge');
+
         // trajet patient
     Route::resource('ligne-temps','Api\LigneDeTempsController');
     Route::get('ligne-temps/dossier/{id}','Api\LigneDeTempsController@ligneDeTempsByDossier');
