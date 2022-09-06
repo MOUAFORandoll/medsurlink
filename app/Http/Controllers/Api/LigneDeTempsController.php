@@ -374,7 +374,51 @@ class LigneDeTempsController extends Controller
         $temps_moyen = CarbonInterval::seconds($calcul_temps_moyen_patients->avg('ecart_en_second'))->cascade()->forHumans(['long' => true, 'parts' => 3]);
         $nbre_patients = $calcul_temps_moyen_patients->count();
 
-        return response()->json(["temps_moyen" => $temps_moyen, 'nbre_patients' => $nbre_patients]);
+        /**
+         * calcul des temps moyen de prise en charge par opérations
+         */
+     
+        $affiliation_et_affectation_medecin_referents = DelaiOperation::where('delai_operationable_type', PatientMedecinControle::class)->get();
+        $affiliation_et_affectation_medecin_referents = DelaiDePriseEnChargeParOperations($affiliation_et_affectation_medecin_referents);
+        
+        $consultation_medecine_generale = DelaiOperation::where('delai_operationable_type', ConsultationMedecineGenerale::class)->get();
+        $consultation_medecine_generale = DelaiDePriseEnChargeParOperations($consultation_medecine_generale);
+
+        $consultation_fichier = DelaiOperation::where('delai_operationable_type', ConsultationFichier::class)->get();
+        $consultation_fichier = DelaiDePriseEnChargeParOperations($consultation_fichier);
+
+        $resultat_labo = DelaiOperation::where('delai_operationable_type', ResultatLabo::class)->get();
+        $resultat_labo = DelaiDePriseEnChargeParOperations($resultat_labo);
+
+        $resultat_imagerie = DelaiOperation::where('delai_operationable_type', ResultatImagerie::class)->get();
+        $resultat_imagerie = DelaiDePriseEnChargeParOperations($resultat_imagerie);
+
+        $avis_medicals = DelaiOperation::where('delai_operationable_type', MedecinAvis::class)->get();
+        $avis_medicals = DelaiDePriseEnChargeParOperations($avis_medicals);
+
+        $medecin_controle = DelaiOperation::where('delai_operationable_type', ActivitesControle::class)->get();
+        $medecin_controle = DelaiDePriseEnChargeParOperations($medecin_controle);
+
+        $consultation_examen_validation = DelaiOperation::where('delai_operationable_type', ConsultationExamenValidation::class)->get();
+        $consultation_examen_validation = DelaiDePriseEnChargeParOperations($consultation_examen_validation);
+
+        $activite_amas = DelaiOperation::where('delai_operationable_type', ActiviteAmaPatient::class)->get();
+        $activite_amas = DelaiDePriseEnChargeParOperations($activite_amas);
+              
+        
+        return response()->json([
+            "temps_moyen" => $temps_moyen, 
+            'nbre_patients' => $nbre_patients, 
+            'affiliation_et_affectation_medecin_referents' => $affiliation_et_affectation_medecin_referents,
+            'consultation_medecine_generale' => $consultation_medecine_generale,
+            'consultation_fichier' => $consultation_fichier,
+            'resultat_labo' => $resultat_labo,
+            'resultat_imagerie' => $resultat_imagerie,
+            'avis_medicals' => $avis_medicals,
+            'medecin_controle' => $medecin_controle,
+            'consultation_examen_validation' => $consultation_examen_validation,
+            'activite_amas' => $activite_amas
+        ]);
     }
 
 

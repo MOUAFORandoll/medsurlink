@@ -11,6 +11,7 @@ use Illuminate\Support\Arr;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade as PDF;
+use Carbon\CarbonInterval;
 use Illuminate\Support\Carbon;
 
 if(!function_exists('sendSMS'))
@@ -377,5 +378,24 @@ if(!function_exists('ProcessAfterPayment'))
         if(!is_null($patient)){
             return $affiliation_old->slug;
         }
+    }
+}
+
+if(!function_exists('DelaiDePriseEnChargeParOperations'))
+{
+    /**
+     * @param $string_with_accent
+     * @return string
+     */
+    function DelaiDePriseEnChargeParOperations($operattions)
+    {
+        $operattions = $operattions->map(function ($item) {
+            $date_heure_prevue = Carbon::parse($item->date_heure_prevue);
+            $date_heure_effectif = Carbon::parse($item->date_heure_effectif);
+            $ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+            return $ecart_en_second;
+        });
+        $operattions = CarbonInterval::seconds($operattions->avg())->cascade()->forHumans(['long' => true, 'parts' => 3]);
+        return $operattions;
     }
 }
