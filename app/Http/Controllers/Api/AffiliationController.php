@@ -10,6 +10,9 @@ use App\Models\LigneDeTemps;
 use App\Models\Motif;
 use App\Models\Patient;
 use App\Models\PatientSouscripteur;
+use App\Models\AffiliationSouscripteur;
+use App\Models\PaymentOffre;
+use App\Models\CommandePackage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -97,6 +100,39 @@ class AffiliationController extends Controller
                 'patient_id'=> $request->patient_id,
                 'lien_de_parente' => $request->lien
             ]);
+            //reduction du nombre de commande du Souscripteur
+            $package_id = $request->package_id;
+            $commande =  AffiliationSouscripteur::whereHas('commande.paymentOffres', function($query) use ($package_id){
+                $query->where(['status' => 'SUCCESS', 'offres_packages_id' => $package_id]);
+            })->where(['user_id' => $request->souscripteur_id])->first();
+
+            if(is_null($commande)){
+                $souscription =  CommandePackage::create([
+                    "date_commande" => Carbon::now()->toDateTimeString(),
+                    'quantite' =>1,
+                    'offres_packages_id' =>$request->get('package_id'),
+                    'souscripteur_id' => $request->souscripteur_id,
+                ]);
+                $package = $souscription->offres_package;
+                PaymentOffre::create([
+                    "date_payment" => Carbon::now()->toDateTimeString(),
+                    "montant" => 1 * $package->montant,
+                    'status' => 'SUCCESS',
+                    'commande_id' =>$souscription->id,
+                    'souscripteur_id' => $request->souscripteur_id,
+                ]);
+                $commande = AffiliationSouscripteur::create([
+                    'user_id'=> $request->souscripteur_id,
+                    'nombre_paye'=> 1,
+                    'nombre_restant'=> 1,
+                    'montant' => $package->montant,
+                    'cim_id'=>$request->package_id,
+                    'date_paiement'=>null,
+                   ]);
+            }
+            \Log::alert($request);
+            $commande = reduireCommandeRestante($commande->id);
+
 
             if($request->plaintes){
                 $all_plaintes = explode(",", $request->plaintes);
