@@ -316,7 +316,7 @@ class CardiologieController extends Controller
             $resultat->save();
 
             defineAsAuthor("Cardiologie",$resultat->id,'archive');
-            $resultat->updateConsultationCardiologique();;
+            $resultat->updateConsultationCardiologique();
 
             $user = $resultat->dossier->patient->user;
             if ($user->decede == 'non'){

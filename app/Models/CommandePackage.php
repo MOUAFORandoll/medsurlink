@@ -60,5 +60,9 @@ class CommandePackage extends Model
         return $this->belongsTo(Package::class, 'offres_packages_id');
     }
 
+    public function paymentOffres(){
+        return $this->hasMany(PaymentOffre::class, 'commande_id');
+    }
+
 
 }

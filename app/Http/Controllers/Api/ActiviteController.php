@@ -186,7 +186,7 @@ class ActiviteController extends Controller
         $request->validate([
             'activities' => 'required',
         ]);
-        $activity = ActiviteAmaPatient::where("patient_id",$request->patient_id)->latest()->first();
+        $ama_activity = ActiviteAmaPatient::where("patient_id",$request->patient_id)->latest()->first();
         $affiliation = Affiliation::where("patient_id",$request->patient_id)->latest()->first();
         $delai_operation = DelaiOperation::where("patient_id",$request->patient_id)->latest()->first();
         
@@ -216,13 +216,13 @@ class ActiviteController extends Controller
                         ]
                     );
                 }
-                elseif(!is_null($activity)){
+                elseif(!is_null($ama_activity)){
                     DelaiOperation::create(
                         [
                             "patient_id" => $request->patient_id,
                             "delai_operationable_id" => $activite->id,
                             "delai_operationable_type" => ActiviteAmaPatient::class,
-                            "date_heure_prevue" => $activity->created_at,
+                            "date_heure_prevue" => $ama_activity->created_at,
                             "date_heure_effectif" => $activite->created_at,
                             "observation" => "RAS"
                         ]

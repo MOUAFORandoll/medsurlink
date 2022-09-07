@@ -63,38 +63,38 @@ class MedicasureController extends Controller
                         ],
                     ]);
                     
-                        $affiliation = json_decode($res->getBody()->getContents());
-                        $request = $affiliation->reponse;
-                        $userInformation = [];
-                        $userInformation['nom']=$request->nom;
-                        $userInformation['prenom']=$request->prenom;
-                        $userInformation['email']=$request->email;
-                        $userInformation['nationalite']="";
-                        $userInformation['quartier']="";
-                        $userInformation['code_postal']="";
-                        $userInformation['ville']="";
-                        $userInformation['pays']="";
-                        $userInformation['telephone']=$request->phone;
-                        $userInformation['adresse']=$request->adresse;
-                        $passwordSouscripteur = $request->password;
-                        $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordSouscripteur,'1');
-                        
-                        // Assignation du role souscripteur
-                        $user->assignRole('Souscripteur');
+                    $affiliation = json_decode($res->getBody()->getContents());
+                    $request = $affiliation->reponse;
+                    $userInformation = [];
+                    $userInformation['nom']=$request->nom;
+                    $userInformation['prenom']=$request->prenom;
+                    $userInformation['email']=$request->email;
+                    $userInformation['nationalite']="";
+                    $userInformation['quartier']="";
+                    $userInformation['code_postal']="";
+                    $userInformation['ville']="";
+                    $userInformation['pays']="";
+                    $userInformation['telephone']=$request->phone;
+                    $userInformation['adresse']=$request->adresse;
+                    $passwordSouscripteur = $request->password;
+                    $user = genererCompteUtilisateurMedsurlink($userInformation,$passwordSouscripteur,'1');
+                    
+                    // Assignation du role souscripteur
+                    $user->assignRole('Souscripteur');
 
-                        // Enregistrement des informations personnels du souscripteur
-                        $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
+                    // Enregistrement des informations personnels du souscripteur
+                    $souscripteur = Souscripteur::create(['user_id' => $user->id,'sexe'=>'']);
 
-                        $tokenInfo =$passwordSouscripteur.'medsur'. $request->email;
+                    $tokenInfo =$passwordSouscripteur.'medsur'. $request->email;
 
-                        // Envoi du mail avec mot de passe souscripteur
-                        try{
-                            sendUserInformationViaMail($user,$passwordSouscripteur);
-                        }catch (\Swift_TransportException $transportException){
-                            $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
-                            return response()->json(['reponse'=>$tokenInfo,'souscripteur'=>$user, "message"=>$message]);
-                        }
-                        return response()->json(['reponse'=>$tokenInfo],200);
+                    // Envoi du mail avec mot de passe souscripteur
+                    try{
+                        sendUserInformationViaMail($user,$passwordSouscripteur);
+                    }catch (\Swift_TransportException $transportException){
+                        $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+                        return response()->json(['reponse'=>$tokenInfo,'souscripteur'=>$user, "message"=>$message]);
+                    }
+                    return response()->json(['reponse'=>$tokenInfo],200);
                         
                 }catch ( ClientException $exception){
                     return response()->json(['reponse'=>$exception],404) ;

@@ -6,10 +6,12 @@ use App\Models\Affiliation;
 use App\Models\AffiliationSouscripteur;
 use App\SMS;
 use App\Notifications\SendSMS;
+use App\Notifications\SouscriptionAlert;
 use Illuminate\Support\Arr;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade as PDF;
+use Carbon\CarbonInterval;
 use Illuminate\Support\Carbon;
 
 if(!function_exists('sendSMS'))
@@ -346,17 +348,54 @@ if(!function_exists('ProcessAfterPayment'))
         $description = $affiliation->typeContrat->description_fr;
         $quantite =  $payment->commande->quantite;
         $prix_unitaire = $affiliation->typeContrat->montant;
-        $nom_souscripteur = mb_strtoupper($affiliation->souscripteur->user->nom).' '.$affiliation->souscripteur->user->prenom;
+        $nom_souscripteur = mb_strtoupper($affiliation->souscripteur->user->nom).' '.ucfirst($affiliation->souscripteur->user->prenom);
         $email_souscripteur = $affiliation->souscripteur->user->email;
+        $telephone = $affiliation->souscripteur->user->telephone;
         $rue =  $affiliation->souscripteur->user->quartier;
         $adresse =  $affiliation->souscripteur->user->adresse;
         $ville = $affiliation->souscripteur->user->code_postal.' - '.$affiliation->souscripteur->user->ville;
         $pays = $affiliation->souscripteur->user->pays;
         $beneficiaire ="FOUKOUOP NDAM Rebecca";
+
+        /**
+         * Notification sur slack
+         */
+        $env = strtolower(config('app.env'));
+        $url_global = "";
+        if ($env == 'local')
+            $url_global = config('app.url_loccale');
+        else if ($env == 'staging')
+            $url_global = config('app.url_stagging');
+        else
+            $url_global = config('app.url_prod');
+        $url_global = $url_global."/payment-management/medicasure";
+        $message = "*$nom_souscripteur* a acheté un $description à *$montant_total Euros*\nemail: $email_souscripteur \ntéléphone: $telephone \n <$url_global|*Cliquer ici pour plus de détails*>";
+        // Send notification to affilié channel
+        $affiliation->setSlackChannel('souscription')->notify(new SouscriptionAlert($message,null));
+
         EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
 
         if(!is_null($patient)){
             return $affiliation_old->slug;
         }
+    }
+}
+
+if(!function_exists('DelaiDePriseEnChargeParOperations'))
+{
+    /**
+     * @param $string_with_accent
+     * @return string
+     */
+    function DelaiDePriseEnChargeParOperations($operattions)
+    {
+        $operattions = $operattions->map(function ($item) {
+            $date_heure_prevue = Carbon::parse($item->date_heure_prevue);
+            $date_heure_effectif = Carbon::parse($item->date_heure_effectif);
+            $ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+            return $ecart_en_second;
+        });
+        $operattions = CarbonInterval::seconds($operattions->avg())->cascade()->forHumans(['long' => true, 'parts' => 3]);
+        return $operattions;
     }
 }
