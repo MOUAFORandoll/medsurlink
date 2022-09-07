@@ -182,7 +182,7 @@ class OrdonanceController extends Controller
 //        $this->sendSmsToUser($ordonance->dossier->patient->user);
         $user = $ordonance->dossier->patient->user;
         if ($user->decede == 'non') {
-            informedPatientAndSouscripteurs($ordonance->dossier->patient, 1);
+            //informedPatientAndSouscripteurs($ordonance->dossier->patient, 1);
         }
         return response()->json(['ordonance'=>$ordonance]);
     }
@@ -202,7 +202,7 @@ class OrdonanceController extends Controller
         $user = $ordonance->dossier->patient->user;
         if ($user->decede == 'non') {
             $this->sendSmsToUser($ordonance->dossier->patient->user);
-            informedPatientAndSouscripteurs($ordonance->dossier->patient, 0);
+            //informedPatientAndSouscripteurs($ordonance->dossier->patient, 0);
         }
         return response()->json(['ordonance'=>$ordonance]);
     }

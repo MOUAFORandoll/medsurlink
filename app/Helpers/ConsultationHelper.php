@@ -315,7 +315,7 @@ if(!function_exists('transmitConsultation')) {
             if ($user->isMedicasure == '0' || $user->isMedicasure == 0) {
                 \App\Traits\SmsTrait::sendSmsToUser($user);
             }
-            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+            //informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
         }
     }
 }
