@@ -61,16 +61,31 @@ class AvisMedecinController extends Controller
         }
         $avis->save();
 
-        DelaiOperation::create(
-            [
-                "patient_id" => $avis->avisMedecin->dossier->patient_id,
-                "delai_operationable_id" => $avis->id,
-                "delai_operationable_type" => MedecinAvis::class,
-                "date_heure_prevue" => $avis_initial->created_at,
-                "date_heure_effectif" => $avis->created_at,
-                "observation" => "RAS"
-            ]
-        );
+        $delai_operation = DelaiOperation::where("patient_id", $avis->avisMedecin->dossier->patient_id)->latest()->first();
+        if(!is_null($delai_operation)){
+            DelaiOperation::create(
+                [
+                    "patient_id" => $request->patient_id,
+                    "delai_operationable_id" => $avis->id,
+                    "delai_operationable_type" => MedecinAvis::class,
+                    "date_heure_prevue" => $delai_operation->created_at,
+                    "date_heure_effectif" => $avis->created_at,
+                    "observation" => "RAS"
+                ]
+            );
+        }else{
+            DelaiOperation::create(
+                [
+                    "patient_id" => $avis->avisMedecin->dossier->patient_id,
+                    "delai_operationable_id" => $avis->id,
+                    "delai_operationable_type" => MedecinAvis::class,
+                    "date_heure_prevue" => $avis_initial->created_at,
+                    "date_heure_effectif" => $avis->created_at,
+                    "observation" => "RAS"
+                ]
+            );
+        }
+        
 
         $this->updateDossierId($avis->avisMedecin->dossier->id);
         return  response()->json(['avis'=>$avis]);

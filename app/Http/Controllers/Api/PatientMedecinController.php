@@ -8,6 +8,7 @@ use App\Http\Requests\PatientMedecinControleRequest;
 use App\Mail\updateSetting;
 use App\Models\Affiliation;
 use App\Models\DelaiOperation;
+use App\Models\DossierMedical;
 use App\Models\Patient;
 use App\User;
 use App\Models\PatientMedecinControle;
@@ -54,7 +55,9 @@ class PatientMedecinController extends Controller
     {
         $request->validated();
         $patientMedecin = "";
-        DB::transaction(function () use($request) {
+        $dossier = DossierMedical::where('patient_id', $request->patient_id)->latest()->first();
+        $affiliation = Affiliation::where("patient_id",$request->patient_id)->latest()->first();
+        DB::transaction(function () use($request, $dossier, $affiliation) {
             foreach($request->medecin_control_id as $m){
                 $medecin_referent = PatientMedecinControle::where(['medecin_control_id' => $m['id'], 'patient_id' => $request->patient_id])->first();
                 $patientMedecin = null;
@@ -72,17 +75,30 @@ class PatientMedecinController extends Controller
                     $patientMedecin->setSlackChannel('affilie')->notify(new MedecinToPatient($message,null));
                     // Send notification to appel channel
                     $patientMedecin->setSlackChannel('appel')->notify(new MedecinToPatient($message,null));
-                    $affiliation = Affiliation::where("patient_id",$request->patient_id)->latest()->first();
-                    DelaiOperation::create(
-                        [
-                            "patient_id" => $request->patient_id,
-                            "delai_operationable_id" => $patientMedecin->id,
-                            "delai_operationable_type" => PatientMedecinControle::class,
-                            "date_heure_prevue" => $affiliation->created_at,
-                            "date_heure_effectif" => $patientMedecin->created_at,
-                            "observation" => "RAS"
-                        ]
-                    );
+                    if(!is_null($affiliation)){
+                        DelaiOperation::create(
+                            [
+                                "patient_id" => $request->patient_id,
+                                "delai_operationable_id" => $patientMedecin->id,
+                                "delai_operationable_type" => PatientMedecinControle::class,
+                                "date_heure_prevue" => $affiliation->created_at,
+                                "date_heure_effectif" => $patientMedecin->created_at,
+                                "observation" => "RAS"
+                            ]
+                        );
+                    }else{
+                        DelaiOperation::create(
+                            [
+                                "patient_id" => $request->patient_id,
+                                "delai_operationable_id" => $patientMedecin->id,
+                                "delai_operationable_type" => PatientMedecinControle::class,
+                                "date_heure_prevue" => $dossier->updated_at,
+                                "date_heure_effectif" => $patientMedecin->created_at,
+                                "observation" => "RAS"
+                            ]
+                        );
+                    }
+                    
                    
     
                 }

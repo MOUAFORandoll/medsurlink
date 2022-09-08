@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Affiliation;
 use App\Models\DelaiOperation;
+use App\Models\DossierMedical;
 
 class ActiviteController extends Controller
 {
@@ -189,6 +190,7 @@ class ActiviteController extends Controller
         $ama_activity = ActiviteAmaPatient::where("patient_id",$request->patient_id)->latest()->first();
         $affiliation = Affiliation::where("patient_id",$request->patient_id)->latest()->first();
         $delai_operation = DelaiOperation::where("patient_id",$request->patient_id)->latest()->first();
+        $dossier = DossierMedical::where('patient_id', $request->patient_id)->latest()->first();
         
         foreach($request->get('activities') as $activity){
             
@@ -238,9 +240,18 @@ class ActiviteController extends Controller
                             "observation" => "RAS"
                         ]
                     );
+                }elseif(!is_null($dossier)){
+                    DelaiOperation::create(
+                        [
+                            "patient_id" => $request->patient_id,
+                            "delai_operationable_id" => $activite->id,
+                            "delai_operationable_type" => ActiviteAmaPatient::class,
+                            "date_heure_prevue" => $dossier->updated_at,
+                            "date_heure_effectif" => $activite->created_at,
+                            "observation" => "RAS"
+                        ]
+                    );
                 }
-                
-
             }
 
         }
