@@ -339,6 +339,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::post('update-password','Api\UserController@updatePassword');
     Route::resource('facture','Api\FactureController')->only('show');
 
+    Route::put('update-user','Api\UserController@update');
+
 });
 
 Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin controle|Etablissement|Assistante|Souscripteur|Pharmacien']], function () {

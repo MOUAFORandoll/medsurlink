@@ -122,7 +122,7 @@ class HospitalisationController extends Controller
         $user = $hospitalisation->dossier->patient->user;
         if ($user->decede == 'non') {
             $this->sendSmsToUser($hospitalisation->dossier->patient->user);
-            informedPatientAndSouscripteurs($hospitalisation->dossier->patient, 3);
+            //informedPatientAndSouscripteurs($hospitalisation->dossier->patient, 3);
         }
         return response()->json(['hospitalisation'=>$hospitalisation]);
 
@@ -361,7 +361,7 @@ class HospitalisationController extends Controller
                     $this->sendSmsToUser($user);
                 }
 //            $this->sendSmsToUser($resultat->dossier->patient->user);
-                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+                //informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
             }
             return response()->json(['resultat'=>$resultat]);
         }
@@ -406,7 +406,7 @@ class HospitalisationController extends Controller
                 $this->sendSmsToUser($user);
             }
 //        $this->sendSmsToUser($resultat->dossier->patient->user);
-            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+            //informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
         }
         return response()->json(['resultat'=>$resultat]);
 
