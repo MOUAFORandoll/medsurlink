@@ -411,8 +411,15 @@ if(!function_exists('DelaiDePriseEnChargeParOperations'))
             $ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
             return $ecart_en_second;
         });
-        $operattions = CarbonInterval::seconds($operattions->avg())->cascade()->forHumans(['long' => true, 'parts' => 3]);
-        return $operattions;
+        return $operations->avg();
     }
 }
->>>>>>> c7da23f4421406c5c664a0c0235003cfc2e0ab7a
+
+if(!function_exists('ConversionDesDelais'))
+{
+    function ConversionDesDelais($operations)
+    {
+        return CarbonInterval::seconds($operations)->cascade()->forHumans(['long' => true, 'parts' => 3]);
+    }
+}
+
