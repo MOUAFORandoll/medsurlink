@@ -26,6 +26,7 @@ Route::post('password/emailVersion','Auth\ForgotPasswordController@sendReset_Lin
 Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
 Route::get('question','Api\QuestionController@index');
+Route::resource('user-show','Api\UserController');
 
 // Pour faire rapidement les tests sur suivi en back avec postman
 //Route::resource('avis','Api\AvisController');
@@ -338,8 +339,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('user-etablissements', 'Api\EtablissementExerciceController@userEtablissements');
     Route::post('update-password','Api\UserController@updatePassword');
     Route::resource('facture','Api\FactureController')->only('show');
-
-    Route::put('update-user','Api\UserController@update');
 
 });
 
