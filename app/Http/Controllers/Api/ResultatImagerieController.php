@@ -94,7 +94,7 @@ class ResultatImagerieController extends Controller
                             "patient_id" => $resultat->dossier->patient_id,
                             "delai_operationable_id" => $resultat->id,
                             "delai_operationable_type" => ResultatImagerie::class,
-                            "date_heure_prevue" => $dossier->created_at,
+                            "date_heure_prevue" => $dossier->updated_at,
                             "date_heure_effectif" => $resultat->created_at,
                             "observation" => "RAS"
                         ]
@@ -145,7 +145,7 @@ class ResultatImagerieController extends Controller
                         "patient_id" => $resultat->dossier->patient_id,
                         "delai_operationable_id" => $resultat->id,
                         "delai_operationable_type" => ResultatImagerie::class,
-                        "date_heure_prevue" => $dossier->created_at,
+                        "date_heure_prevue" => $dossier->updated_at,
                         "date_heure_effectif" => $resultat->created_at,
                         "observation" => "RAS"
                     ]

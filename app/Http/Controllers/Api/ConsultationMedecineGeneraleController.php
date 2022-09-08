@@ -359,7 +359,7 @@ class ConsultationMedecineGeneraleController extends Controller
                     "patient_id" => $patient->user_id,
                     "delai_operationable_id" => $consultation->id,
                     "delai_operationable_type" => ConsultationMedecineGenerale::class,
-                    "date_heure_prevue" => $affiliation->created_at,
+                    "date_heure_prevue" => $affiliation->updated_at,
                     "date_heure_effectif" => $consultation->created_at,
                     "observation" => "RAS"
                 ]

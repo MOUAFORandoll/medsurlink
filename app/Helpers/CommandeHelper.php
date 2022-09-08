@@ -221,16 +221,16 @@ if(!function_exists('RecuperationMetrique')) {
         $metrique = Metrique::whereDate('created_at', date('Y-m-d'))->first();
         if(is_null($metrique)){
             $metrique = Metrique::create([
-                "temps_moyen" => $temps_moyen,
-                "affiliation_et_affectation_medecin_referents" => $affiliation_et_affectation_medecin_referents,
-                "consultation_medecine_generale" => $consultation_medecine_generale,
-                "consultation_fichier" => $consultation_fichier,
-                "resultat_labo" => $resultat_labo,
-                "resultat_imagerie" => $resultat_imagerie,
-                "avis_medicals" => $avis_medicals,
-                "medecin_controle" => $medecin_controle,
-                "consultation_examen_validation" => $consultation_examen_validation,
-                "activite_amas" => $activite_amas
+                "temps_moyen" => $temps_moyen ?? 0,
+                "affiliation_et_affectation_medecin_referents" => $affiliation_et_affectation_medecin_referents  ?? 0,
+                "consultation_medecine_generale" => $consultation_medecine_generale ?? 0,
+                "consultation_fichier" => $consultation_fichier ?? 0,
+                "resultat_labo" => $resultat_labo ?? 0,
+                "resultat_imagerie" => $resultat_imagerie ?? 0,
+                "avis_medicals" => $avis_medicals ?? 0,
+                "medecin_controle" => $medecin_controle ?? 0,
+                "consultation_examen_validation" => $consultation_examen_validation ?? 0,
+                "activite_amas" => $activite_amas ?? 0
             ]);
         }
         $metrique->nbre_patients = $calcul_temps_moyen_patients->count();

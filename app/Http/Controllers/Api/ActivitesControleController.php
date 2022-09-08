@@ -92,7 +92,7 @@ class ActivitesControleController extends Controller
                     "patient_id" => $request->patient_id,
                     "delai_operationable_id" => $activite->id,
                     "delai_operationable_type" => ActivitesControle::class,
-                    "date_heure_prevue" => $affiliation->created_at,
+                    "date_heure_prevue" => $affiliation->updated_at,
                     "date_heure_effectif" => $activite->created_at,
                     "observation" => "RAS"
                 ]

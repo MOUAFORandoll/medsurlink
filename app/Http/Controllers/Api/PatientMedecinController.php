@@ -81,7 +81,7 @@ class PatientMedecinController extends Controller
                                 "patient_id" => $request->patient_id,
                                 "delai_operationable_id" => $patientMedecin->id,
                                 "delai_operationable_type" => PatientMedecinControle::class,
-                                "date_heure_prevue" => $affiliation->created_at,
+                                "date_heure_prevue" => $affiliation->updated_at,
                                 "date_heure_effectif" => $patientMedecin->created_at,
                                 "observation" => "RAS"
                             ]
@@ -98,9 +98,6 @@ class PatientMedecinController extends Controller
                             ]
                         );
                     }
-                    
-                   
-    
                 }
             }
         });
