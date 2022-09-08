@@ -21,16 +21,19 @@ class RestrictArchievedAt implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $user = Auth::user();
-        $userRoles = $user->getRoleNames();
-        if(gettype($userRoles->search('Souscripteur')) == 'integer' || gettype($userRoles->search('Patient')) == 'integer'){
-            if ($user->isMedicasure == '0'){
-                $builder->whereNotNull('passed_at');
-            }
-            else{
-                $builder->whereNotNull('archieved_at');
+        if(Auth::check()){
+            $user = Auth::user();
+            $userRoles = $user->getRoleNames();
+            if(gettype($userRoles->search('Souscripteur')) == 'integer' || gettype($userRoles->search('Patient')) == 'integer'){
+                if ($user->isMedicasure == '0'){
+                    $builder->whereNotNull('passed_at');
+                }
+                else{
+                    $builder->whereNotNull('archieved_at');
+                }
             }
         }
+        
 
     }
 }

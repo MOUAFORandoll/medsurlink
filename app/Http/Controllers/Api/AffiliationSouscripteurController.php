@@ -268,7 +268,7 @@ class AffiliationSouscripteurController extends Controller
      */
     public function storePatient(Request $request)
     {
-        $souscripteur_id = $request->souscripteur_id;
+        /* $souscripteur_id = $request->souscripteur_id;
         $commande_id = $request->commande_id;
 
         // Recupération des informations relative à la commande
@@ -283,8 +283,8 @@ class AffiliationSouscripteurController extends Controller
         } */
 
 
-        // Récupération des informations relatifs au souscripteur
-        $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
+        //Récupération des informations relatifs au souscripteur
+        /*$souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
         if ($commande){
             if ($commande->nombre_restant > 0){
                 // Récupération des informations nécessaire pour la création du compte utilisateur medsurlink
@@ -344,7 +344,7 @@ class AffiliationSouscripteurController extends Controller
                     "expire"=>0,
                     "code_contrat"=>$dossier->numero_dossier,
                     "niveau_urgence"=>$request->urgence,
-                    "plainte" => $request->plainte,
+                    "plainte" => $request->plaintes,
                     "contact_firstName" => $request->contact_firstName,
                     "contact_name" => $request->contact_name,
                     "contact_phone" => $request->contact_phone,
@@ -365,7 +365,7 @@ class AffiliationSouscripteurController extends Controller
                             /**
                              * on créé une nouvelle plainte si elle n'existe pas
                              */
-                            $motif = Motif::where(["description" => explode("item_", $plainte)[1]])->first();
+                            /*$motif = Motif::where(["description" => explode("item_", $plainte)[1]])->first();
                             if(is_null($motif)){
                                 $motif = Motif::create(["reference" => now(), "description" => explode("item_", $plainte)[1]]);
                                 defineAsAuthor("Motif",$motif->id,'create');
@@ -381,7 +381,7 @@ class AffiliationSouscripteurController extends Controller
                     /**
                      * creation d'une ligne de temps après une affiliation
                     */
-                    $ligne_temps = LigneDeTemps::create(['dossier_medical_id' => $affiliation->patient->dossier->id, 'motif_consultation_id' => $plaintes[0], 'etat' => 1, 'date_consultation' => date('Y-m-d'), 'affiliation_id' => $affiliation->id]);
+                   /* $ligne_temps = LigneDeTemps::create(['dossier_medical_id' => $affiliation->patient->dossier->id, 'motif_consultation_id' => $plaintes[0], 'etat' => 1, 'date_consultation' => date('Y-m-d'), 'affiliation_id' => $affiliation->id]);
                     $ligne_temps->motifs()->sync($plaintes);
                 }
 
@@ -410,7 +410,8 @@ class AffiliationSouscripteurController extends Controller
             }
         }else{
             $this->revealError('commande_not_definie','La commande dont l\'identifiant a été transmis n\'existe pas');
-        }
+        }*/
+        AjoutDuneAffiliation($request);
     }
 
     /**

@@ -329,7 +329,7 @@ class ConsultationMedecineGeneraleController extends Controller
         $delai_operation = DelaiOperation::where("patient_id",$patient->user_id)->latest()->first();
         $activity = ActiviteAmaPatient::where("patient_id",$patient->user_id)->latest()->first();
         $affiliation = Affiliation::where("patient_id",$patient->user_id)->latest()->first();
-        
+
         if(!is_null($delai_operation)){
             DelaiOperation::create(
                 [
@@ -528,8 +528,8 @@ class ConsultationMedecineGeneraleController extends Controller
         // $diasgnostic = $request->get('diasgnostic');
         $rConclusions = $request->get('conclusions');
         $motifs = explode(",",$motifs);
-        
-        $consultation = $consultation->fresh(); 
+
+        $consultation = $consultation->fresh();
         //Insertion des motifs
         defineAsAuthor("ConsultationMotif", $consultation->id, 'attach and update', $consultation->dossier->patient->user_id);
         $consultation->motifs()->sync($motifs);

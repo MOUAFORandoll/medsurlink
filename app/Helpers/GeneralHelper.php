@@ -1,5 +1,25 @@
 <?php
-
+use Carbon\Carbon;
+use Psy\Util\Json;
+use GuzzleHttp\Client;
+use App\Models\Package;
+use App\Models\Patient;
+use App\Mail\OrderShipped;
+use App\Models\Souscripteur;
+use App\Models\TimeActivite;
+use Illuminate\Http\Request;
+use App\Models\ReponseSecrete;
+use App\Mail\NouvelAffiliation;
+use App\Models\PatientSouscripteur;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\Traits\PersonnalErrors;
+use App\Models\LigneDeTemps;
+use App\Models\Motif;
 use App\Mail\Facture\AchatOffre;
 use App\Mail\Facture\PaiementPrestation;
 use App\Models\Affiliation;
@@ -8,11 +28,11 @@ use App\SMS;
 use App\Notifications\SendSMS;
 use App\Notifications\SouscriptionAlert;
 use Illuminate\Support\Arr;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Mail;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\CarbonInterval;
-use Illuminate\Support\Carbon;
+use App\Http\Requests\AffiliationRequest;
+use App\Models\PaymentOffre;
+use App\Models\CommandePackage;
 
 if(!function_exists('sendSMS'))
 {
@@ -383,19 +403,23 @@ if(!function_exists('ProcessAfterPayment'))
 
 if(!function_exists('DelaiDePriseEnChargeParOperations'))
 {
-    /**
-     * @param $string_with_accent
-     * @return string
-     */
-    function DelaiDePriseEnChargeParOperations($operattions)
+    function DelaiDePriseEnChargeParOperations($operations)
     {
-        $operattions = $operattions->map(function ($item) {
+        $operations = $operations->map(function ($item) {
             $date_heure_prevue = Carbon::parse($item->date_heure_prevue);
             $date_heure_effectif = Carbon::parse($item->date_heure_effectif);
             $ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
             return $ecart_en_second;
         });
-        $operattions = CarbonInterval::seconds($operattions->avg())->cascade()->forHumans(['long' => true, 'parts' => 3]);
-        return $operattions;
+        return $operations->avg();
     }
 }
+
+if(!function_exists('ConversionDesDelais'))
+{
+    function ConversionDesDelais($operations)
+    {
+        return CarbonInterval::seconds($operations)->cascade()->forHumans(['long' => true, 'parts' => 3]);
+    }
+}
+

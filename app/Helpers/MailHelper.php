@@ -70,11 +70,11 @@ if(!function_exists('informedPatientAndSouscripteurs'))
             $precedentSouscripteur = $patient->souscripteur;
 
             foreach ($patient->financeurs as $financeur){
-                if (!is_null($financeur->financable->user)){
+                if (!is_null($financeur->financable->user) && ($financeur->financable->user->email != $user->email)){
                     informedSouscripteurOfRapport($financeur->financable,$patient);
                 }
             }
-            if (!is_null($precedentSouscripteur)){
+            if (!is_null($precedentSouscripteur) && ($precedentSouscripteur->user->email != $user->email)){
                 informedSouscripteurOfRapport($precedentSouscripteur,$patient);
             }
         }
