@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Antonrom\ModelChangesHistory\Traits\HasChangesHistory;
 use App\User;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
@@ -70,6 +71,7 @@ class RendezVous extends Model
     use SoftDeletes;
     use Sluggable;
     use SluggableScopeHelpers;
+    use HasChangesHistory;
 
     protected $table='rendez_vous';
 

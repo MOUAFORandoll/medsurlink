@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Antonrom\ModelChangesHistory\Traits\HasChangesHistory;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
@@ -54,6 +55,7 @@ class AffiliationSouscripteur extends Model
     use Notifiable;
     use SoftDeletes;
     use Sluggable;
+    use HasChangesHistory;
 
     protected $fillable = [
         'user_id',

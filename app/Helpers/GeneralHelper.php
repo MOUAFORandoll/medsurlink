@@ -383,19 +383,26 @@ if(!function_exists('ProcessAfterPayment'))
 
 if(!function_exists('DelaiDePriseEnChargeParOperations'))
 {
-    /**
-     * @param $string_with_accent
-     * @return string
-     */
-    function DelaiDePriseEnChargeParOperations($operattions)
+    function DelaiDePriseEnChargeParOperations($operations)
     {
-        $operattions = $operattions->map(function ($item) {
+        $operations = $operations->map(function ($item) {
             $date_heure_prevue = Carbon::parse($item->date_heure_prevue);
             $date_heure_effectif = Carbon::parse($item->date_heure_effectif);
             $ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
             return $ecart_en_second;
         });
-        $operattions = CarbonInterval::seconds($operattions->avg())->cascade()->forHumans(['long' => true, 'parts' => 3]);
-        return $operattions;
+        //$operations = CarbonInterval::seconds($operations->avg())->cascade()->forHumans(['long' => true, 'parts' => 3]);
+        return $operations->avg();
     }
 }
+
+if(!function_exists('ConversionDesDelais'))
+{
+    function ConversionDesDelais($operations)
+    {
+        $operations = CarbonInterval::seconds($operations)->cascade()->forHumans(['long' => true, 'parts' => 3]);
+        return $operations;
+    }
+}
+
+
