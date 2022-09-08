@@ -166,6 +166,7 @@ class AffiliationController extends Controller
         }else{
             return response()->json(['erreur' => "Le patient n'existe pas"], 419);
         }*/
+        \Log::alert($request->all());
         AjoutDuneAffiliation($request);
     }
 
