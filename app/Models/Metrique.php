@@ -25,7 +25,8 @@ class Metrique extends Model
         "medecin_controle",
         "consultation_examen_validation",
         "activite_amas",
-        "date_recuperation"
+        "date_recuperation",
+        "nbre_patients"
     ];
 
 }

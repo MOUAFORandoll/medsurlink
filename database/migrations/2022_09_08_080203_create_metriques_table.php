@@ -25,6 +25,7 @@ class CreateMetriquesTable extends Migration
             $table->double('medecin_controle');
             $table->double('consultation_examen_validation');
             $table->double('activite_amas');
+            $table->double('nbre_patients');
             $table->timestamps();
         });
     }

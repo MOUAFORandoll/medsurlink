@@ -230,10 +230,10 @@ if(!function_exists('RecuperationMetrique')) {
                 "avis_medicals" => $avis_medicals ?? 0,
                 "medecin_controle" => $medecin_controle ?? 0,
                 "consultation_examen_validation" => $consultation_examen_validation ?? 0,
-                "activite_amas" => $activite_amas ?? 0
+                "activite_amas" => $activite_amas ?? 0,
+                "nbre_patients" => $calcul_temps_moyen_patients->count() ?? 0
             ]);
         }
-        $metrique->nbre_patients = $calcul_temps_moyen_patients->count();
         $metrique->date_recuperation = $date_recuperation;
         return $metrique;
     }
