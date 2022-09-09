@@ -293,35 +293,6 @@ class LigneDeTempsController extends Controller
         return response()->json(["ligne_temps" => $ligne_temps, 'temps_max_prise_en_charge' => $temps_max_prise_en_charge]);
     }
 
-
-    /**
-     * calcul du temps moyen de prise en charge
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function tempsMoyenPriseEnCharge(){
-        
-        $metrique = RecuperationMetrique();
-        return response()->json([
-            "temps_moyen" => ConversionDesDelais($metrique->temps_moyen), 
-            'nbre_patients' => $metrique->nbre_patients, 
-            'affiliation_et_affectation_medecin_referents' => ConversionDesDelais($metrique->affiliation_et_affectation_medecin_referents),
-            'consultation_medecine_generale' => ConversionDesDelais($metrique->consultation_medecine_generale),
-            'consultation_fichier' => ConversionDesDelais($metrique->consultation_fichier),
-            'resultat_labo' => ConversionDesDelais($metrique->resultat_labo),
-            'resultat_imagerie' => ConversionDesDelais($metrique->resultat_imagerie),
-            'avis_medicals' => ConversionDesDelais($metrique->avis_medicals),
-            'medecin_controle' => ConversionDesDelais($metrique->medecin_controle),
-            'consultation_examen_validation' => ConversionDesDelais($metrique->consultation_examen_validation),
-            'activite_amas' => ConversionDesDelais($metrique->activite_amas),
-            'date_recuperation' => $metrique->date_recuperation
-        ]);
-    }
-
-
-
-
     /**
      * Show the form for editing the specified resource.
      *

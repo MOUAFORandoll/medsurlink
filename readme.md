@@ -81,3 +81,5 @@ php artisan db:seed --class=PermissionTableSeeder
 
 ## graphes des métriques
 php artisan migrate --path=/database/migrations/2022_09_08_080203_create_metriques_table.php
+
+php artisan db:seed --class=MetriquesTableSeeder

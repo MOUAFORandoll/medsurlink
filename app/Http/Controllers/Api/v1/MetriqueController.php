@@ -14,7 +14,21 @@ class MetriqueController extends Controller
      */
     public function index()
     {
-        //
+        $metrique = RecuperationMetrique();
+        return response()->json([
+            "temps_moyen" => ConversionDesDelais($metrique->temps_moyen), 
+            'nbre_patients' => $metrique->nbre_patients, 
+            'affiliation_et_affectation_medecin_referents' => ConversionDesDelais($metrique->affiliation_et_affectation_medecin_referents),
+            'consultation_medecine_generale' => ConversionDesDelais($metrique->consultation_medecine_generale),
+            'consultation_fichier' => ConversionDesDelais($metrique->consultation_fichier),
+            'resultat_labo' => ConversionDesDelais($metrique->resultat_labo),
+            'resultat_imagerie' => ConversionDesDelais($metrique->resultat_imagerie),
+            'avis_medicals' => ConversionDesDelais($metrique->avis_medicals),
+            'medecin_controle' => ConversionDesDelais($metrique->medecin_controle),
+            'consultation_examen_validation' => ConversionDesDelais($metrique->consultation_examen_validation),
+            'activite_amas' => ConversionDesDelais($metrique->activite_amas),
+            'date_recuperation' => $metrique->date_recuperation
+        ]);
     }
 
     /**
@@ -35,7 +49,7 @@ class MetriqueController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       
     }
 
     /**
@@ -46,7 +60,7 @@ class MetriqueController extends Controller
      */
     public function show($id)
     {
-        //
+        return response()->json(['id' => $id]);
     }
 
     /**

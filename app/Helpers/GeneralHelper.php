@@ -529,7 +529,7 @@ if(!function_exists('AjoutDuneAffiliation')){
             }
 
         }
-        if($request->lien){
+        else if($request->lien){
             app('App\Http\Controllers\Api\AffiliationController')->Affiliated($request);
             $patient = Patient::where('user_id', $request->patient_id)->first();
             if($patient){
@@ -544,8 +544,7 @@ if(!function_exists('AjoutDuneAffiliation')){
                     $query->where('status', 'SUCCESS');
                 })->where('nombre_restant', '>', 0)->latest()->first();*/
                 $commande = AffiliationSouscripteur::where(['user_id'=> $commande_package->souscripteur_id])->where('nombre_restant', '>', 0)->latest()->first();
-                $nullpoint = null;
-                $affiliation = CreationAffiliation($request, $patient, $nullpoint);
+                $affiliation = CreationAffiliation($request, $patient);
                 $patient->souscripteur_id = $request->souscripteur_id;
                 $patient->save();
 
@@ -634,7 +633,7 @@ if(!function_exists('AjoutDesPlaintes')){
 
 if(!function_exists('CreationAffiliation')){
 
-    function CreationAffiliation($request, $patient, $commande){
+    function CreationAffiliation($request, $patient, $commande = null){
         $affiliation = Affiliation::create([
             "patient_id"=> $request->lien ? $request->patient_id: $patient->user_id,
             "souscripteur_id"=>$request->souscripteur_id,
