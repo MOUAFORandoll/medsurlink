@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Metrique;
+use Illuminate\Support\Carbon;
 
 class MetriqueController extends Controller
 {
@@ -60,7 +62,16 @@ class MetriqueController extends Controller
      */
     public function show($id)
     {
-        return response()->json(['id' => $id]);
+        /**
+         * Filtrage par mois
+         */
+        $today = Carbon::now()->format('Y-m-d');
+        $date = Carbon::now()->subDays(30)->format('Y-m-d');
+        /* \Log::alert("today $today");
+        \Log::alert("date $date"); */
+        $nbre_patients = Metrique::semaineMoisAnnee($date, $today)->get(['nbre_patients', 'created_at']);
+
+        return response()->json(['nbre_patients' => $nbre_patients]);
     }
 
     /**

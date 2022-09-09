@@ -29,4 +29,18 @@ class Metrique extends Model
         "nbre_patients"
     ];
 
+    /**
+     * Recuperation des metriques par semaines, mois ou année
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  mixed  $type
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->where('created_at', '>=', $intervalle_debut)->Where('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
+    }
+
 }

@@ -51,7 +51,7 @@ class MetriquesTableSeeder extends Seeder
                     "medecin_controle" => mt_rand(0, 7776000),
                     "consultation_examen_validation" => mt_rand(0, 7776000),
                     "activite_amas" => mt_rand(0, 7776000),
-                    "nbre_patients" => mt_rand(0, 7776000),
+                    "nbre_patients" => mt_rand(0, 6000),
                     "created_at" => $new_created_at,
                     "updated_at" => $new_created_at
                 ]);
