@@ -454,6 +454,7 @@ class AffiliationSouscripteurController extends Controller
      */
     public function affiliationRestante($id){
         $commande =  \App\Models\AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->where('nombre_restant','>',0)->latest()->get();
+        \Log::alert($commande);
         return response()->json(['commande'=>$commande]);
     }
 

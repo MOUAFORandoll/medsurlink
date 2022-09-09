@@ -432,7 +432,10 @@ if(!function_exists('AjoutDuneAffiliation')){
      * @return string
      */
     function AjoutDuneAffiliation(Request $request){
-        if($request->lien_parente){//Affiliation Souscripteur
+        /**
+         * Affiliation Souscripteur
+         */
+        if($request->lien_parente){
             $souscripteur_id = $request->souscripteur_id;
             $commande_id = $request->commande_id;
 
@@ -492,7 +495,7 @@ if(!function_exists('AjoutDuneAffiliation')){
                     $detailContrat = transformerCommande($commande,$request,$souscripteur->user->pays);
 
 
-                    $affiliation = CreationAffiliation($request, $patient);
+                    $affiliation = CreationAffiliation($request, $patient, $commande);
 
                     if($request->plaintes){
                         $plaintes = AjoutDesPlaintes($affiliation, $request->plaintes);
@@ -528,21 +531,28 @@ if(!function_exists('AjoutDuneAffiliation')){
         }
         if($request->lien){
             app('App\Http\Controllers\Api\AffiliationController')->Affiliated($request);
-
             $patient = Patient::where('user_id', $request->patient_id)->first();
             if($patient){
-                $affiliation = CreationAffiliation($request, $patient);
+                $package_id = $request->package_id;
+                $souscripteur_id = $request->souscripteur_id;
+                \Log::alert($request);
+                $commande_package = CommandePackage::where(['souscripteur_id'=> $souscripteur_id, 'offres_packages_id'=> $package_id])->latest()->first();
+                \Log::alert($commande_package);
+                /*$commande =  AffiliationSouscripteur::whereHas('commande', function($query) use ($package_id, $souscripteur_id){
+                    $query->;
+                })->whereHas('commande.paymentOffres', function($query) {
+                    $query->where('status', 'SUCCESS');
+                })->where('nombre_restant', '>', 0)->latest()->first();*/
+                $commande = AffiliationSouscripteur::where(['user_id'=> $commande_package->souscripteur_id])->where('nombre_restant', '>', 0)->latest()->first();
+                $nullpoint = null;
+                $affiliation = CreationAffiliation($request, $patient, $nullpoint);
                 $patient->souscripteur_id = $request->souscripteur_id;
                 $patient->save();
 
                 // Ajout du souscripteur à la liste des souscripteurs du patient
                 CreationPatientSouscripteur($request, $patient);
                 //reduction du nombre de commande du Souscripteur
-                $package_id = $request->package_id;
-                $commande =  AffiliationSouscripteur::whereHas('commande.paymentOffres', function($query) use ($package_id){
-                    $query->where(['status' => 'SUCCESS', 'offres_packages_id' => $package_id]);
-                })->where(['user_id' => $request->souscripteur_id])->first();
-
+                \Log::alert($commande);
                 if(is_null($commande)){
                     $souscription =  CommandePackage::create([
                         "date_commande" => Carbon::now()->toDateTimeString(),
@@ -567,8 +577,9 @@ if(!function_exists('AjoutDuneAffiliation')){
                         'date_paiement'=>null,
                     ]);
                 }
-                \Log::alert($request);
+                \Log::alert($commande);
                 $commande = reduireCommandeRestante($commande->id);
+                \Log::alert($commande);
 
 
                 if($request->plaintes){
@@ -623,11 +634,11 @@ if(!function_exists('AjoutDesPlaintes')){
 
 if(!function_exists('CreationAffiliation')){
 
-    function CreationAffiliation($request, $patient){
+    function CreationAffiliation($request, $patient, $commande){
         $affiliation = Affiliation::create([
             "patient_id"=> $request->lien ? $request->patient_id: $patient->user_id,
             "souscripteur_id"=>$request->souscripteur_id,
-            "package_id"=>$request->package_id,
+            "package_id"=>$request->lien ? $request->package_id : $commande->type_contrat,
             "date_signature"=>Carbon::now(),
             "status_contrat"=> $request->lien ? $request->status_contrat: "Généré",
             "status_paiement"=> $request->lien ? $request->status_paiement: "PAYE",
