@@ -302,7 +302,7 @@ class ConsultationObstetriqueController extends Controller
             $resultat->updateObstetricConsultation();
             $user = $resultat->dossier->patient->user;
             if ($user->decede == 'non') {
-                //informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
+                informedPatientAndSouscripteurs($resultat->dossier->patient, 1);
                 $this->updateDossierId($resultat->dossier->id);
                 //Envoi du sms
 
@@ -339,7 +339,7 @@ class ConsultationObstetriqueController extends Controller
                 $this->sendSmsToUser($user);
             }
 //        $this->sendSmsToUser($resultat->dossier->patient->user);
-            //informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
+            informedPatientAndSouscripteurs($resultat->dossier->patient, 0);
         }
         return response()->json(['resultat'=>$resultat]);
 
