@@ -379,6 +379,7 @@ Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|M
     Route::get('/consultationsMedecines/{dossier_slug}', 'Api\v1\DossierMedicalController@consultationsMedecines');
     Route::resource('traitement-actuels', 'Api\v1\TraitementActuelController');
     Route::resource('type-operations', 'Api\v1\TypeOperationController');
+    Route::resource('metriques', 'Api\v1\MetriqueController');
 
     
 });
@@ -421,7 +422,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     /**
      *  delai de prise en charge
      */
-    Route::get('prise-en-charge', 'Api\LigneDeTempsController@tempsMoyenPriseEnCharge');
 
         // trajet patient
     Route::resource('ligne-temps','Api\LigneDeTempsController');
