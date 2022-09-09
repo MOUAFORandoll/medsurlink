@@ -33,6 +33,7 @@ use Carbon\CarbonInterval;
 use App\Http\Requests\AffiliationRequest;
 use App\Models\PaymentOffre;
 use App\Models\CommandePackage;
+use App\User;
 
 if(!function_exists('sendSMS'))
 {
@@ -435,6 +436,7 @@ if(!function_exists('AjoutDuneAffiliation')){
         /**
          * Affiliation Souscripteur
          */
+        //$affiliation_old = Affiliation::where([["patient_id",$patient],["package_id",$payment->commande->offres_packages_id]])->first();
         if($request->lien_parente){
             $souscripteur_id = $request->souscripteur_id;
             $commande_id = $request->commande_id;
@@ -505,9 +507,8 @@ if(!function_exists('AjoutDuneAffiliation')){
                     $package = Package::find($commande->type_contrat);
                         $affiliation->motifs()->sync($plaintes);
                     Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $affiliation->motifs, $request->urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie));
-
-
-                    $commande = reduireCommandeRestante($commande->id);
+                    $affiliation_old = Affiliation::where([["patient_id",$patient->user_id],["souscripteur_id",$souscripteur->user_id]])->first();
+                    $commande = reduireCommandeRestante($commande->id, $souscripteur->user_id, $patient->user_id, $package->description_fr, $affiliation_old->slug);
 
                     defineAsAuthor("Affiliation",$affiliation->id,'create',$request->patient_id);
                     //genererContrat($detailContrat+$souscripteurMedicasure+$patientMedicasure);
@@ -577,7 +578,9 @@ if(!function_exists('AjoutDuneAffiliation')){
                     ]);
                 }
                 \Log::alert($commande);
-                $commande = reduireCommandeRestante($commande->id);
+                $cim = Package::where('id', $request->package_id)->first();
+                $affiliation_old = Affiliation::where([["patient_id",$patient->user_id],["souscripteur_id",$request->souscripteur_id]])->first();
+                $commande = reduireCommandeRestante($commande->id,  $request->souscripteur_id, $request->patient_id, $cim->description_fr, $affiliation_old->slug);
                 \Log::alert($commande);
 
 
@@ -590,7 +593,6 @@ if(!function_exists('AjoutDuneAffiliation')){
                 return response()->json(['erreur' => "Le patient n'existe pas"], 419);
             }
         }
-
     }
 }
 

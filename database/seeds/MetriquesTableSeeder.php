@@ -17,48 +17,45 @@ class MetriquesTableSeeder extends Seeder
         $metrique = Metrique::whereDate('created_at', date('Y-m-d'))->first();
         if(is_null($metrique)){
             DB::table('metriques')->insert([
-                "temps_moyen" => mt_rand(),
-                "affiliation_et_affectation_medecin_referents" => mt_rand(),
-                "consultation_medecine_generale" => mt_rand(),
-                "consultation_fichier" => mt_rand(),
-                "resultat_labo" => mt_rand(),
-                "resultat_imagerie" => mt_rand(),
-                "avis_medicals" => mt_rand(),
-                "medecin_controle" => mt_rand(),
-                "consultation_examen_validation" => mt_rand(),
-                "activite_amas" => mt_rand(),
-                "date_recuperation" => now(),
-                "nbre_patients" => mt_rand(),
+                "temps_moyen" => mt_rand(0, 7776000),
+                "affiliation_et_affectation_medecin_referents" => mt_rand(0, 7776000),
+                "consultation_medecine_generale" => mt_rand(0, 7776000),
+                "consultation_fichier" => mt_rand(0, 7776000),
+                "resultat_labo" => mt_rand(0, 7776000),
+                "resultat_imagerie" => mt_rand(0, 7776000),
+                "avis_medicals" => mt_rand(0, 7776000),
+                "medecin_controle" => mt_rand(0, 7776000),
+                "consultation_examen_validation" => mt_rand(0, 7776000),
+                "activite_amas" => mt_rand(0, 7776000),
+                "nbre_patients" => mt_rand(0, 7776000),
                 "created_at" => now(),
                 "updated_at" => now(),
             ]);
             $metrique = Metrique::whereDate('created_at', date('Y-m-d'))->first();
         }
 
-        $created_at = new Carbon($metrique->created_at);
-        \Log::alert($created_at);
+        $created_at = Carbon::parse($metrique->created_at);
         for ($i=1; $i <= 1000; $i++) { 
             // 2022-09-09 07:47:39
-            $created_at = $created_at->subDays($i)->format('Y-m-d');
-            /* $exist = Metrique::whereDate('created_at', $created_at)->first();
+            $new_created_at = $created_at->subDays(1)->format('Y-m-d');
+            $exist = Metrique::whereDate('created_at', $created_at)->first();
             if(is_null($exist)){
                 DB::table('metriques')->insert([
-                    "temps_moyen" => mt_rand(),
-                    "affiliation_et_affectation_medecin_referents" => mt_rand(),
-                    "consultation_medecine_generale" => mt_rand(),
-                    "consultation_fichier" => mt_rand(),
-                    "resultat_labo" => mt_rand(),
-                    "resultat_imagerie" => mt_rand(),
-                    "avis_medicals" => mt_rand(),
-                    "medecin_controle" => mt_rand(),
-                    "consultation_examen_validation" => mt_rand(),
-                    "activite_amas" => mt_rand(),
-                    "date_recuperation" => now(),
-                    "nbre_patients" => mt_rand(),
-                    "created_at" => $created_at,
-                    "updated_at" => $created_at
+                    "temps_moyen" => mt_rand(0, 7776000),
+                    "affiliation_et_affectation_medecin_referents" => mt_rand(0, 7776000),
+                    "consultation_medecine_generale" => mt_rand(0, 7776000),
+                    "consultation_fichier" => mt_rand(0, 7776000),
+                    "resultat_labo" => mt_rand(0, 7776000),
+                    "resultat_imagerie" => mt_rand(0, 7776000),
+                    "avis_medicals" => mt_rand(0, 7776000),
+                    "medecin_controle" => mt_rand(0, 7776000),
+                    "consultation_examen_validation" => mt_rand(0, 7776000),
+                    "activite_amas" => mt_rand(0, 7776000),
+                    "nbre_patients" => mt_rand(0, 7776000),
+                    "created_at" => $new_created_at,
+                    "updated_at" => $new_created_at
                 ]);
-            } */
+            }
         }
 
     }

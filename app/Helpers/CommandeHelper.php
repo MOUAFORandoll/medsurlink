@@ -11,6 +11,8 @@ use App\Models\Metrique;
 use App\Models\PatientMedecinControle;
 use App\Models\ResultatImagerie;
 use App\Models\ResultatLabo;
+use App\Notifications\SouscriptionAlert;
+use App\User;
 use Carbon\Carbon;
 
 if(!function_exists('enregistrerCommande')) {
@@ -31,12 +33,32 @@ if(!function_exists('enregistrerCommande')) {
 }
 
 if(!function_exists('reduireCommandeRestante')) {
-    function reduireCommandeRestante($id)
+    function reduireCommandeRestante($id, $souscripteur_id, $patient_id, $description, $affiliation_slug)
     {
         $commande =  \App\Models\AffiliationSouscripteur::where("id",$id)->first();
 
         $commande->nombre_restant-=1;
         $commande->save();
+
+        $url_global = "";
+        $env = strtolower(config('app.env'));
+        if ($env == 'local')
+            $url_global = config('app.url_loccale');
+        else if ($env == 'staging')
+            $url_global = config('app.url_stagging');
+        else
+            $url_global = config('app.url_prod');
+        $souscripteur = User::where('id', $souscripteur_id)->first();
+        $patient = User::where('id', $patient_id)->first();
+        $nom_souscripteur = mb_strtoupper($souscripteur->nom).' '.ucfirst($souscripteur->prenom);
+        $nom_patient = mb_strtoupper($patient->nom).' '.ucfirst($patient->prenom);
+        $url_global = $url_global."/affiliation/".$affiliation_slug."#generale";
+        $message = "Une Nouvelle Affiliation a été enregistrée pour le patient *$nom_patient* par le Souscripteur *$nom_souscripteur*.\n L'affiliation Concerne un  *$description* à *$commande->montant Euros*\n\n*Infomations du souscripteur*:\n Nom: $nom_souscripteur \nAdresse e-mail: $souscripteur->email \nTéléphone: $souscripteur->telephone \n\n *Informations du patient*:\n Nom: $nom_patient \nAdresse e-mail: $patient->email \nTéléphone: $patient->telephone \n\n<$url_global|*Cliquer ici pour plus de détails*>";
+        // Send notification to affilié channel
+        $commande->setSlackChannel('souscription')->notify(new SouscriptionAlert($message,null));
+
+
+
 
         return $commande;
     }
@@ -171,21 +193,21 @@ if(!function_exists('RecuperationMetrique')) {
                         $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
                         $ecart_en_second += $date_heure_effectif->DiffInSeconds($date_heure_prevue);
                     }
-                } 
+                }
             }
             $patient->ecart_en_second = $ecart_en_second;
             $calcul_temps_moyen_patients->push($patient);
         }
 
         /**
-         * 
+         *
          * calcul des temps moyen de prise en charge par opérations
-         * 
+         *
          */
-     
+
         $affiliation_et_affectation_medecin_referents = DelaiOperation::where('delai_operationable_type', PatientMedecinControle::class)->get();
         $affiliation_et_affectation_medecin_referents = DelaiDePriseEnChargeParOperations($affiliation_et_affectation_medecin_referents);
-        
+
         $consultation_medecine_generale = DelaiOperation::where('delai_operationable_type', ConsultationMedecineGenerale::class)->get();
         $consultation_medecine_generale = DelaiDePriseEnChargeParOperations($consultation_medecine_generale);
 
@@ -208,10 +230,10 @@ if(!function_exists('RecuperationMetrique')) {
         $consultation_examen_validation = DelaiDePriseEnChargeParOperations($consultation_examen_validation);
 
         $activite_amas = DelaiOperation::where('delai_operationable_type', ActiviteAmaPatient::class)->get();
-        $activite_amas = DelaiDePriseEnChargeParOperations($activite_amas);   
+        $activite_amas = DelaiDePriseEnChargeParOperations($activite_amas);
 
         $temps_moyen = $calcul_temps_moyen_patients->avg('ecart_en_second');
-        
+
         $date_recuperation = DelaiOperation::get()->first();
         if(!is_null($date_recuperation)){
             $date_recuperation =  $date_recuperation->created_at->format('d-M-Y');
