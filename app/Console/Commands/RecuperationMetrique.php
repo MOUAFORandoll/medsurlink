@@ -38,5 +38,6 @@ class RecuperationMetrique extends Command
     public function handle()
     {
         $metrique = RecuperationMetrique();
+        $this->info("Vos métriques d'aujourd'hui ont été recupérer avec succèes");
     }
 }
