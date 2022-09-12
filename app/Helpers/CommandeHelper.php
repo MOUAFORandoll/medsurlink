@@ -255,22 +255,6 @@ if(!function_exists('RecuperationMetrique')) {
                 "activite_amas" => $activite_amas ?? 0,
                 "nbre_patients" => $calcul_temps_moyen_patients->count() ?? 0
             ]);
-        }else{
-            $metrique->update(
-                [
-                    "temps_moyen" => $temps_moyen,
-                    "affiliation_et_affectation_medecin_referents" => $affiliation_et_affectation_medecin_referents ,
-                    "consultation_medecine_generale" => $consultation_medecine_generale,
-                    "consultation_fichier" => $consultation_fichier,
-                    "resultat_labo" => $resultat_labo,
-                    "resultat_imagerie" => $resultat_imagerie,
-                    "avis_medicals" => $avis_medicals,
-                    "medecin_controle" => $medecin_controle,
-                    "consultation_examen_validation" => $consultation_examen_validation,
-                    "activite_amas" => $activite_amas,
-                    "nbre_patients" => $calcul_temps_moyen_patients->count()
-                ]
-            );
         }
         $metrique->date_recuperation = $date_recuperation;
         return $metrique;
