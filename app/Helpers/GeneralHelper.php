@@ -536,9 +536,7 @@ if(!function_exists('AjoutDuneAffiliation')){
             if($patient){
                 $package_id = $request->package_id;
                 $souscripteur_id = $request->souscripteur_id;
-                \Log::alert($request);
                 $commande_package = CommandePackage::where(['souscripteur_id'=> $souscripteur_id, 'offres_packages_id'=> $package_id])->latest()->first();
-                \Log::alert($commande_package);
                 /*$commande =  AffiliationSouscripteur::whereHas('commande', function($query) use ($package_id, $souscripteur_id){
                     $query->;
                 })->whereHas('commande.paymentOffres', function($query) {
@@ -552,7 +550,6 @@ if(!function_exists('AjoutDuneAffiliation')){
                 // Ajout du souscripteur à la liste des souscripteurs du patient
                 CreationPatientSouscripteur($request, $patient);
                 //reduction du nombre de commande du Souscripteur
-                \Log::alert($commande);
                 if(is_null($commande)){
                     $souscription =  CommandePackage::create([
                         "date_commande" => Carbon::now()->toDateTimeString(),
@@ -577,11 +574,9 @@ if(!function_exists('AjoutDuneAffiliation')){
                         'date_paiement'=>null,
                     ]);
                 }
-                \Log::alert($commande);
                 $cim = Package::where('id', $request->package_id)->first();
                 $affiliation_old = Affiliation::where([["patient_id",$patient->user_id],["souscripteur_id",$request->souscripteur_id]])->first();
                 $commande = reduireCommandeRestante($commande->id,  $request->souscripteur_id, $request->patient_id, $cim->description_fr, $affiliation_old->slug);
-                \Log::alert($commande);
 
 
                 if($request->plaintes){
