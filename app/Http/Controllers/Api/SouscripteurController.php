@@ -245,6 +245,9 @@ class SouscripteurController extends Controller
     public function cim()
     {
         $souscripteurs = AffiliationSouscripteur::with('souscripteur','souscripteur.user','typeContrat')
+        ->whereHas('commande.paymentOffres', function($query) {
+            $query->where('status', 'SUCCESS');
+        })
         ->orderBy("created_at","desc")
         ->get();
         return response()->json(['souscripteurs'=>$souscripteurs]);
