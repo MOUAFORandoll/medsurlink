@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 
 class RecuperationMetrique extends Command
 {
@@ -38,6 +39,11 @@ class RecuperationMetrique extends Command
     public function handle()
     {
         $metrique = RecuperationMetrique();
+        $affiliations = DB::table('model_changes_history')->where('model_type', 'App\Models\Affiliation')->get(['model_id', 'changer_id']);
+        foreach($affiliations as $affiliation){
+            
+        }
+        $this->info($affiliations);
         $this->info("Vos métriques d'aujourd'hui ont été recupérer avec succèes");
     }
 }
