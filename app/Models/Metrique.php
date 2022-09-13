@@ -39,8 +39,9 @@ class Metrique extends Model
     public function scopeSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
     {
         return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
-            $query->where('created_at', '>=', $intervalle_debut)->Where('created_at', '<=', $intervalle_fin);
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
         })->orderBy('created_at', 'asc');
     }
+
 
 }

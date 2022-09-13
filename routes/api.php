@@ -380,6 +380,7 @@ Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|M
     Route::resource('traitement-actuels', 'Api\v1\TraitementActuelController');
     Route::resource('type-operations', 'Api\v1\TypeOperationController');
     Route::resource('metriques', 'Api\v1\MetriqueController');
+    Route::get('metriques/{date}/{metrique}', 'Api\v1\MetriqueController@courbe');
 
     
 });
