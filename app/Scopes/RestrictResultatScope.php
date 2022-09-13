@@ -65,7 +65,7 @@ class RestrictResultatScope implements Scope
                 return $builder;
             }
         }else{
-            throw new UnauthorizedException("Veuillez vous authentifier",401);
+            //throw new UnauthorizedException("Veuillez vous authentifier",401);
         }
 
     }

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use Antonrom\ModelChangesHistory\Traits\HasChangesHistory;
 use Carbon\Carbon;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 
 /**
@@ -50,8 +52,10 @@ use Illuminate\Support\Str;
  */
 class AffiliationSouscripteur extends Model
 {
+    use Notifiable;
     use SoftDeletes;
     use Sluggable;
+    use HasChangesHistory;
 
     protected $fillable = [
         'user_id',
@@ -63,6 +67,39 @@ class AffiliationSouscripteur extends Model
         'date_paiement',
         'slug',
     ];
+
+    protected $slackChannels= [
+        'souscription' => 'https://hooks.slack.com/services/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'
+    ];
+
+    protected $slack_url = null;
+
+    public function routeNotificationForSlack(){
+        if($this->slack_url === null){
+            return $this->slackChannels['test'];
+        }
+        return $this->slack_url;
+    }
+    /**
+     * @param $name
+     * @return $this
+     */
+    public function setSlackChannel($name){
+        if(isset($this->slackChannels[$name])){
+            $this->setSlackUrl($this->slackChannels[$name]);
+        }
+        return $this;
+    }
+
+    /**
+     * @param $url
+     * @return $this
+     */
+    public function setSlackUrl($url){
+        $this->slack_url = $url;
+
+        return $this;
+    }
 
     public function sluggable()
     {

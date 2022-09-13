@@ -15,6 +15,7 @@ use App\Models\ConsultationFichier;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\DelaiOperation;
 use App\Models\MedecinAvis;
+use App\Models\Metrique;
 use App\Models\Motif;
 use App\Models\PatientMedecinControle;
 use App\Models\ResultatImagerie;
@@ -291,94 +292,6 @@ class LigneDeTempsController extends Controller
 
         return response()->json(["ligne_temps" => $ligne_temps, 'temps_max_prise_en_charge' => $temps_max_prise_en_charge]);
     }
-
-
-    /**
-     * calcul du temps moyen de prise en charge
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function tempsMoyenPriseEnCharge(){
-        
-        $patients = Patient::has('delai_operations')->get(['user_id']);
-        $calcul_temps_moyen_patients = collect();
-
-        foreach($patients as $patient){
-            $delai_opeartions = DelaiOperation::where('patient_id', $patient->user_id)->latest()->get();
-            $ecart_en_second = 0;
-            /**
-             * récupérations des délais d'opérations
-             */
-            foreach($delai_opeartions as $delai){
-                $model = $delai->delai_operationable_type::find($delai->delai_operationable_id);
-                if(!is_null($model)){
-                    if($delai->delai_operationable_type == ResultatLabo::class || $delai->delai_operationable_type == ResultatImagerie::class){
-                        $consultation = $model->dossier->consultationsMedecine()->latest()->first();
-                        if(!is_null($consultation)){
-                            $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
-                            $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
-                            $ecart_en_second += $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                        }
-                    }
-                    elseif($delai->delai_operationable_type == PatientMedecinControle::class){
-                        $consultation = $model->patients->dossier->consultationsMedecine()->latest()->first();
-                        if(!is_null($consultation)){
-                            $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
-                            $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
-                            $ecart_en_second += $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                        }
-                    }
-                    elseif($delai->delai_operationable_type == ActiviteAmaPatient::class){
-                        $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
-                        $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
-                        $ecart_en_second += $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                    }
-                    elseif($delai->delai_operationable_type == ConsultationFichier::class){
-                        $consultation = $model->dossier->consultationsMedecine()->latest()->first();
-                        if(!is_null($consultation)){
-                            $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
-                            $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
-                            $ecart_en_second += $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                        }
-                    }
-                    elseif($delai->delai_operationable_type == ConsultationMedecineGenerale::class){
-                        $consultation = $model;
-                        if(!is_null($consultation)){
-                            $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
-                            $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
-                            $ecart_en_second += $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                        }
-                    }
-                    elseif($delai->delai_operationable_type == MedecinAvis::class){
-                        $consultation = $model->avisMedecin->dossier->consultationsMedecine()->latest()->first();
-                        if(!is_null($consultation)){
-                            $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
-                            $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
-                            $ecart_en_second += $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                        }
-                    }elseif($delai->delai_operationable_type == ActivitesControle::class){
-                        $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
-                        $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
-                        $ecart_en_second += $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                    }elseif($delai->delai_operationable_type == ConsultationExamenValidation::class){
-                        $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
-                        $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
-                        $ecart_en_second += $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                    }
-                } 
-            }
-            $patient->ecart_en_second = $ecart_en_second;
-            $calcul_temps_moyen_patients->push($patient);
-        }
-        $temps_moyen = CarbonInterval::seconds($calcul_temps_moyen_patients->avg('ecart_en_second'))->cascade()->forHumans(['long' => true, 'parts' => 3]);
-        $nbre_patients = $calcul_temps_moyen_patients->count();
-
-        return response()->json(["temps_moyen" => $temps_moyen, 'nbre_patients' => $nbre_patients]);
-    }
-
-
-
 
     /**
      * Show the form for editing the specified resource.

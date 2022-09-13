@@ -99,7 +99,6 @@ class AuthController extends AccessTokenController
             }
 
 
-
             $time = TimeActivite::create([
                 'date'=>Carbon::now()->format('Y-m-d'),
                 'start'=>Carbon::now()->format('H:i')

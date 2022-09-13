@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Affiliation;
 use App\Models\DelaiOperation;
+use App\Models\DossierMedical;
 use Illuminate\Support\Facades\Auth;
 
 class ActivitesControleController extends Controller
@@ -48,6 +49,7 @@ class ActivitesControleController extends Controller
         $activity = ActivitesControle::where("patient_id", $request->patient_id)->latest()->first();
         $affiliation = Affiliation::where("patient_id", $request->patient_id)->latest()->first();
         $delai_operation = DelaiOperation::where("patient_id", $request->patient_id)->latest()->first();
+        $dossier = DossierMedical::where('patient_id', $request->patient_id)->latest()->first();
 
         $activite = ActivitesControle::create([
             "activite_id" => $request->activite_id,
@@ -90,7 +92,18 @@ class ActivitesControleController extends Controller
                     "patient_id" => $request->patient_id,
                     "delai_operationable_id" => $activite->id,
                     "delai_operationable_type" => ActivitesControle::class,
-                    "date_heure_prevue" => $affiliation->created_at,
+                    "date_heure_prevue" => $affiliation->updated_at,
+                    "date_heure_effectif" => $activite->created_at,
+                    "observation" => "RAS"
+                ]
+            );
+        }elseif(!is_null($dossier)){
+            DelaiOperation::create(
+                [
+                    "patient_id" => $request->patient_id,
+                    "delai_operationable_id" => $activite->id,
+                    "delai_operationable_type" => ActivitesControle::class,
+                    "date_heure_prevue" => $dossier->updated_at,
                     "date_heure_effectif" => $activite->created_at,
                     "observation" => "RAS"
                 ]

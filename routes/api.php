@@ -26,6 +26,7 @@ Route::post('password/emailVersion','Auth\ForgotPasswordController@sendReset_Lin
 Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
 Route::get('question','Api\QuestionController@index');
+Route::resource('user-show','Api\UserController');
 
 // Pour faire rapidement les tests sur suivi en back avec postman
 //Route::resource('avis','Api\AvisController');
@@ -77,7 +78,7 @@ Route::group(['middleware' => ['auth:api','role:Admin']], function () {
     Route::resource('user', 'Api\UserController')->except(['create','edit']);
 });
 //        Définition des routes accéssible par le gestionnaire
-Route::group(['middleware' => ['auth:api', 'role:Admin|Gestionnaire|Assistante|Pharmacien']], function () {
+Route::group(['middleware' => ['auth:api', 'role:Admin|Gestionnaire|Assistante|Pharmacien|Souscripteur']], function () {
     Route::resource('etablissement','Api\EtablissementExerciceController')->except(['create','edit']);
     Route::get('findEtablissement/{etablissement}', 'Api\EtablissementExerciceController@findEtablissement');
     Route::resource('profession','Api\ProfessionController')->except(['create','edit']);
@@ -378,6 +379,8 @@ Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|M
     Route::get('/consultationsMedecines/{dossier_slug}', 'Api\v1\DossierMedicalController@consultationsMedecines');
     Route::resource('traitement-actuels', 'Api\v1\TraitementActuelController');
     Route::resource('type-operations', 'Api\v1\TypeOperationController');
+    Route::resource('metriques', 'Api\v1\MetriqueController');
+    Route::get('metriques/{date}/{metrique}', 'Api\v1\MetriqueController@courbe');
 
     
 });
@@ -420,7 +423,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     /**
      *  delai de prise en charge
      */
-    Route::get('prise-en-charge', 'Api\LigneDeTempsController@tempsMoyenPriseEnCharge');
 
         // trajet patient
     Route::resource('ligne-temps','Api\LigneDeTempsController');
