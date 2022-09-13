@@ -69,7 +69,7 @@ class RestrictEtablissementScope implements Scope
                         array_push($etablissementsId, $etablissement->etablissement_id);
                     }
                 }
-                $builder->whereIn('id',$etablissementsId);
+                $builder->whereIn('etablissement_id',$etablissementsId);
             }
             elseif(gettype($userRoles->search('Praticien')) == 'integer'){
 //                $user = \App\User::with(['praticien'])->whereId(Auth::id())->first();

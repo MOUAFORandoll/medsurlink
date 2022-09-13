@@ -80,6 +80,11 @@ class UserController extends Controller
             return $validation;
         $user = User::findBySlug($slug);
         $user->roles;
+        if ($user->assistante->sexe == "Mme") {
+            return $user->assistante->sexe == "Feminin";
+        }
+        // dd($user);
+        // if($user->)
         return response()->json(['user'=>$user]);
     }
 
