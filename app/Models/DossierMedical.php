@@ -178,7 +178,7 @@ class DossierMedical extends Model
     {
         parent::boot();
 
-        static::addGlobalScope(new RestrictPatientScope);
+        // static::addGlobalScope(new RestrictPatientScope);
     }
 
     public function updateDossier(){
