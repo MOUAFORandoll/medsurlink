@@ -77,16 +77,16 @@ class MetriqueController extends Controller
         $metriques = $metriques->map(function ($item, $key) {
             $item = $item;
             $item->nbre_patients = $item->nbre_patients;
-            $item->temps_moyen = $item->temps_moyen / 3600;
-            $item->affiliation_et_affectation_medecin_referents = $item->affiliation_et_affectation_medecin_referents / 3600;
-            $item->consultation_medecine_generale = $item->consultation_medecine_generale / 3600;
-            $item->resultat_labo = $item->resultat_labo / 3600;
-            $item->resultat_imagerie = $item->resultat_imagerie / 3600;
-            $item->avis_medicals = $item->avis_medicals / 3600;
-            $item->medecin_controle = $item->medecin_controle / 3600;
-            $item->consultation_examen_validation = $item->consultation_examen_validation / 3600;
-            $item->activite_amas = $item->activite_amas / 3600;
-            $item->consultation_fichier = $item->consultation_fichier / 3600;
+            $item->temps_moyen = $item->temps_moyen;
+            $item->affiliation_et_affectation_medecin_referents = $item->affiliation_et_affectation_medecin_referents;
+            $item->consultation_medecine_generale = $item->consultation_medecine_generale;
+            $item->resultat_labo = $item->resultat_labo;
+            $item->resultat_imagerie = $item->resultat_imagerie;
+            $item->avis_medicals = $item->avis_medicals;
+            $item->medecin_controle = $item->medecin_controle;
+            $item->consultation_examen_validation = $item->consultation_examen_validation;
+            $item->activite_amas = $item->activite_amas;
+            $item->consultation_fichier = $item->consultation_fichier;
             $item->date = $item->created_at->format('d-m-Y');
             return $item;
         });
@@ -195,16 +195,12 @@ class MetriqueController extends Controller
         $courbe->type = "line";
         $courbe->data = $data;
         $courbe->options = [
+            "title" => [
+                "display" => true,
+                "text" => $graphe["label"]
+            ],
             "responsive" => true,
-            "lineTension" => 1,
-            "scales" => [
-                "yAxes" => [
-                    "ticks" => [
-                        "beginAtZero" => true,
-                        "padding" => 25
-                    ]
-                ]
-            ]
+            "lineTension" => 1
         ];    
         
         return response()->json(["courbe" => $courbe]);
