@@ -235,22 +235,24 @@ class LigneDeTempsController extends Controller
                     }
                 }elseif($delai->delai_operationable_type == ActivitesControle::class){
                     $ligne = $model->ligne_temps;
-                    $ligne_temp = new \stdClass();
-                    $ligne_temp->id = $ligne->id;
-                    $ligne_temp->dossier_medical_id = $ligne->dossier_medical_id;
-                    $ligne_temp->etat = $ligne->etat;
-                    $ligne_temp->motif_consultation_id = $ligne->motif_consultation_id;
-                    $ligne_temp->date_consultation = $ligne->date_consultation;
-                    $ligne_temp->affiliation_id = $ligne->affiliation_id;
-                    $ligne_temp->created_at = $ligne->created_at;
-                    $ligne_temp->updated_at = $ligne->updated_at;
-                    $ligne_temp->deleted_at = $ligne->deleted_at;
-                    $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
-                    $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
-                    $ligne_temp->date_heure_prevue = $delai->date_heure_prevue;
-                    $ligne_temp->date_heure_effectif = $delai->date_heure_effectif;
-                    $ligne_temp->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                    $new_ligne_delais->push($ligne_temp);
+                    if(!is_null($ligne)){
+                        $ligne_temp = new \stdClass();
+                        $ligne_temp->id = $ligne->id;
+                        $ligne_temp->dossier_medical_id = $ligne->dossier_medical_id;
+                        $ligne_temp->etat = $ligne->etat;
+                        $ligne_temp->motif_consultation_id = $ligne->motif_consultation_id;
+                        $ligne_temp->date_consultation = $ligne->date_consultation;
+                        $ligne_temp->affiliation_id = $ligne->affiliation_id;
+                        $ligne_temp->created_at = $ligne->created_at;
+                        $ligne_temp->updated_at = $ligne->updated_at;
+                        $ligne_temp->deleted_at = $ligne->deleted_at;
+                        $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
+                        $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
+                        $ligne_temp->date_heure_prevue = $delai->date_heure_prevue;
+                        $ligne_temp->date_heure_effectif = $delai->date_heure_effectif;
+                        $ligne_temp->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+                        $new_ligne_delais->push($ligne_temp);
+                    }
                 }elseif($delai->delai_operationable_type == ConsultationExamenValidation::class){
                     $ligne = $model->ligneDeTemps;
                     $ligne_temp = new \stdClass();

@@ -107,7 +107,6 @@ class AffiliationSouscripteur extends Model
             'slug' => [
                 'source' => 'generateSlug'
             ]
-
         ];
     }
 
