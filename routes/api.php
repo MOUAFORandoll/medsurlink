@@ -338,6 +338,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::resource('etablissement', 'Api\EtablissementExerciceController')->except(['create', 'store', 'destroy', 'edit']);
     Route::get('user-etablissements', 'Api\EtablissementExerciceController@userEtablissements');
     Route::post('update-password','Api\UserController@updatePassword');
+    Route::put('update-user/{slug}','Api\UserController@update');
     Route::resource('facture','Api\FactureController')->only('show');
 
 });
