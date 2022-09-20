@@ -31,6 +31,7 @@ class UserController extends Controller
 {
     use PersonnalErrors;
     use SmsTrait;
+    protected $table = 'users';
     /**
      * Display a listing of the resource.
      *
@@ -80,9 +81,9 @@ class UserController extends Controller
             return $validation;
         $user = User::findBySlug($slug);
         $user->roles;
-        if ($user->assistante->sexe == "Mme") {
-            return $user->assistante->sexe == "Feminin";
-        }
+        // if ($user->assistante->sexe == "Mme") {
+        //     return $user->assistante->sexe == "Feminin";
+        // }
         // dd($user);
         // if($user->)
         return response()->json(['user'=>$user]);
@@ -106,18 +107,35 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserUpdateRequest $request, $slug)
+    public function update(Request $request, $slug)
     {
         if ($request->has('error'))
         {
             return  response()->json(['error'=>$request->all()['error']],419);
         }
 
-        $validation = $this->validatedSlug($slug);
-        if(!is_null($validation))
-            return $validation;
+        // $validation = $this->validatedSlug($slug);
+        // if(!is_null($validation))
+        //     return $validation;
 
-        $user = User::whereSlug($slug)->update($request->validated());
+        $this->validatedSlug($slug, $this->table);
+
+        $user = User::whereSlug($request->slug)->first()->update($request->all());
+        
+        // $user = User::whereSlug($slug)->first();
+        // $user->nom = $request->nom;
+        // $user->prenom = $request->prenom;
+        // $user->email = $request->email;
+        // $user->telephone = $request->telephone;
+        // $user->pays = $request->pays;
+        // $user->code_postal = $request->code_postal;
+        // $user->quartier = $request->quartier;
+        // $user->adresse = $request->adresse;
+        // $user->ville = $request->ville;
+        // $user->save();
+        // $user->update();
+        // dd($request->all());
+        \Log::alert($user);
 
         return response()->json(['user'=>$user]);
     }
