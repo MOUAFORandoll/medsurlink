@@ -310,6 +310,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Ass
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur|Etablissement|Assistante|Pharmacien']], function () {
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
     Route::resource('medecin-patient','Api\PatientMedecinController');
+    Route::post("transfert-patient-medecin-referent", "Api\PatientMedecinController@transfertPatientFromOneMedecinToAnother");
+    Route::get('recuperation-patients/{medecin_control_id}', "Api\PatientMedecinController@getPatients");
     Route::get('dossiers-mes-patient','Api\DossierMedicalController@dossierMyPatient');
     Route::get('dossiers-mes-patient/search/{value}','Api\DossierMedicalController@dossierMyPatientSpecial')->name('dossiers-mes-patient.dossierMyPatientSpecial');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
@@ -340,6 +342,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::post('update-password','Api\UserController@updatePassword');
     Route::put('update-user/{slug}','Api\UserController@update');
     Route::resource('facture','Api\FactureController')->only('show');
+
 
 });
 

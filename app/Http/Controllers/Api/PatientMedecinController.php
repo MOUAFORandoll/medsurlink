@@ -129,6 +129,51 @@ class PatientMedecinController extends Controller
     {
         //
     }
+    /**
+     *  Transfère  des patients d'un médécin controle à une autre
+     */
+    public function transfertPatientFromOneMedecinToAnother(Request $request){
+        
+        $this->validate($request, [
+            'ancien_medecin_referent' => 'required|numeric',
+            'nouveau_medecin_referent' => 'required|numeric'
+        ]); 
+
+        //$ancien_medecin_referent, $nouveau_medecin_referent
+        if(is_null($request->patients)){
+            $patient_medecin_controles = PatientMedecinControle::where('medecin_control_id', $request->ancien_medecin_referent)->get();
+            foreach($patient_medecin_controles as $patient_medecin_controle){
+                $patient_medecin_controle->update(['medecin_control_id', $request->nouveau_medecin_referent]);
+            }
+        }else{
+            $patient_medecin_controles = PatientMedecinControle::where('medecin_control_id', $request->ancien_medecin_referent)->whereIn('patient_id', $request->patients)->get();
+            foreach($patient_medecin_controles as $patient_medecin_controle){
+                $patient_medecin_controle->update(['medecin_control_id', $request->nouveau_medecin_referent]);
+            }
+        }
+        $ancien_medecin_referent = User::whereId($request->ancien_medecin_referent)->first();
+        $medecin_patients = $patient_medecin_controles->count();
+        if($medecin_patients > 0){
+            $medecin_patients = $medecin_patients == 1 ? "1 patient" : "2 patients";
+            $nouveau_medecin_referent = User::whereId($request->nouveau_medecin_referent)->first();
+            $message = "<@".$nouveau_medecin_referent->slack."> a reçu un transfert de ".$medecin_patients." précédement suivie par <@".$ancien_medecin_referent->slack."> comme médecin referent";
+            // Send notification to affilié channel
+            $nouveau_medecin_referent->setSlackChannel('affilie')->notify(new MedecinToPatient($message,null));
+            // Send notification to appel channel
+            $nouveau_medecin_referent->setSlackChannel('appel')->notify(new MedecinToPatient($message,null));
+        }
+        return response()->json(['nouveau_medecin_referent' => $nouveau_medecin_referent]);
+    }
+
+
+    /**
+     * Liste des patiens suivie par un médécin controle
+     */
+    public function getPatients($medecin_control_id){
+        $patients = PatientMedecinControle::where('medecin_control_id', $medecin_control_id)->first();
+        // patients
+        return response()->json(['patients' => $patients]);
+    }
 
     /**
      * Show the form for editing the specified resource.
