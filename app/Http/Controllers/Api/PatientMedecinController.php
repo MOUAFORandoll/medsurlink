@@ -9,6 +9,7 @@ use App\Mail\updateSetting;
 use App\Models\Affiliation;
 use App\Models\DelaiOperation;
 use App\Models\DossierMedical;
+use App\Models\MedecinControle;
 use App\Models\Patient;
 use App\User;
 use App\Models\PatientMedecinControle;
@@ -139,10 +140,8 @@ class PatientMedecinController extends Controller
             'nouveau_medecin_referent' => 'required|numeric'
         ]); 
 
-        //$ancien_medecin_referent, $nouveau_medecin_referent
         if(is_null($request->patients)){
             $patient_medecin_controles = PatientMedecinControle::where('medecin_control_id', $request->ancien_medecin_referent)->get();
-            \Log::alert($patient_medecin_controles);
             foreach($patient_medecin_controles as $patient_medecin_controle){
                 $patient_medecin_controle->medecin_control_id = $request->nouveau_medecin_referent;
                 $patient_medecin_controle->save();
@@ -158,12 +157,12 @@ class PatientMedecinController extends Controller
         $medecin_patients = $patient_medecin_controles->count();
         $nouveau_medecin_referent = User::whereId($request->nouveau_medecin_referent)->first();
         if($medecin_patients > 0){
-            /* $medecin_patients = $medecin_patients == 1 ? "1 patient" : "2 patients";
+            $medecin_patients = $medecin_patients == 1 ? "1 patient" : "2 patients";
             $message = "<@".$nouveau_medecin_referent->slack."> a reçu un transfert de ".$medecin_patients." précédement suivie par <@".$ancien_medecin_referent->slack."> comme médecin referent";
             // Send notification to affilié channel
             $nouveau_medecin_referent->setSlackChannel('affilie')->notify(new MedecinToPatient($message,null));
             // Send notification to appel channel
-            $nouveau_medecin_referent->setSlackChannel('appel')->notify(new MedecinToPatient($message,null)); */
+            $nouveau_medecin_referent->setSlackChannel('appel')->notify(new MedecinToPatient($message,null));
         }
         return response()->json(['nouveau_medecin_referent' => $nouveau_medecin_referent]);
     }
@@ -173,9 +172,20 @@ class PatientMedecinController extends Controller
      * Liste des patiens suivie par un médécin controle
      */
     public function getPatients($medecin_control_id){
-        $patients = PatientMedecinControle::where('medecin_control_id', $medecin_control_id)->first();
-        // patients
-        return response()->json(['patients' => $patients]);
+        $patients = MedecinControle::find($medecin_control_id)->patients()->with('user')->get();
+        $patient_retour = collect();
+        foreach($patients as $patient){
+            $item = new \stdClass();
+            $item->id = $patient->user_id;
+            $item->nom = ucfirst($patient->user->prenom).' '.mb_strtoupper($patient->user->nom);
+            $patient_retour->push($item);
+        }
+        
+        $patient_retour = $patient_retour->unique();
+        $patient_retour = $patient_retour->sortBy('nom');
+        $patient_retour = $patient_retour->values()->all();
+
+        return response()->json(['patients' => $patient_retour]);
     }
 
     /**
