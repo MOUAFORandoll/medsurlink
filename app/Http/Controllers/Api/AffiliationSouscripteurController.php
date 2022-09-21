@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Mail;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Traits\PersonnalErrors;
+use App\Models\AffiliationSouscripteur;
 use App\Models\LigneDeTemps;
 use App\Models\Motif;
 
@@ -453,10 +454,18 @@ class AffiliationSouscripteurController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function affiliationRestante($id){
-        $commande =  \App\Models\AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->where('nombre_restant','>',0)->latest()->get();
-        \Log::alert($commande);
-        return response()->json(['commande'=>$commande]);
+        /**
+         * Listing des commandes restantes dont le nombre restant est supérieur à 0
+         */
+        $commande =  AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->where('nombre_restant','>',0)->latest()->get();
+
+        /**
+         * Listing de toutes les commanes restantes
+         */
+        $commandes =  AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->orderBy('nombre_restant', 'desc')->get();
+        return response()->json(['commande'=>$commande, "commandes" => $commandes]);
     }
+
 
     /**
      * @param $id
