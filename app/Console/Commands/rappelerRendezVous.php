@@ -46,6 +46,23 @@ class rappelerRendezVous extends Command
      */
     public function handle()
     {
+        /**
+         * Marqué les rendez-vous non honoré comme manqués
+         */
+
+        $aujourdhui = Carbon::now()->format('Y-m-d');
+        $rendez_vous = RendezVous::where(function ($query) {
+            $query->where('statut', "Programmé")->orWhere('statut', "Reprogrammé");
+        })->whereDate('date', '<', $aujourdhui)->get();
+
+        foreach($rendez_vous as $rdv){
+            $rdv->statut = "Manqué";
+            $rdv->save();
+        }
+
+        /**
+         * Rappeler le praticien, souscripteur dont  le patient a un rendez-vous demain
+         */
         $dateRendezVous = Carbon::tomorrow()->toDateString();
         $rdvs = RendezVous::with('patient','praticien')
             ->whereDate('date',$dateRendezVous)
