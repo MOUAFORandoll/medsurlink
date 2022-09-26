@@ -2,32 +2,34 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Traits\PersonnalErrors;
-use App\Http\Requests\patientStoreRequest;
-use App\Http\Requests\PatientUpdateRequest;
-use App\Http\Requests\UserStoreRequest;
-use App\Mail\PatientAffiliated;
-use App\Mail\updateSetting;
-use App\Models\DossierMedical;
-use App\Models\EtablissementExercice;
-use App\Models\EtablissementExercicePatient;
-use App\Models\Patient;
-use App\Models\ReponseSecrete;
-use App\Models\Souscripteur;
-use App\Models\Suivi;
-use App\Traits\SmsTrait;
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Models\Suivi;
+use App\Models\Patient;
+use App\Traits\SmsTrait;
+use App\Models\RendezVous;
+use App\Mail\updateSetting;
 use App\Models\Affiliation;
 use App\Models\LigneDeTemps;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Souscripteur;
+use Illuminate\Http\Request;
+use App\Models\DossierMedical;
+use App\Models\ReponseSecrete;
+use App\Mail\PatientAffiliated;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Models\EtablissementExercice;
+use App\Http\Requests\UserStoreRequest;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\patientStoreRequest;
+use App\Http\Requests\PatientUpdateRequest;
+
+use App\Models\EtablissementExercicePatient;
+use App\Http\Controllers\Traits\PersonnalErrors;
+use App\Models\ConsultationMedecineGenerale;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class PatientController extends Controller
