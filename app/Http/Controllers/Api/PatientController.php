@@ -84,7 +84,7 @@ class PatientController extends Controller
     public function ListingPatientSansIntervention()
     {
         $patients = Patient::with(['souscripteur','dossier','user','financeurs.financable','medecinReferent.medecinControles.user','rendezVous','etablissements'])
-        ->latest()->take(10)->get();
+        ->latest()->take(100)->get();
 
         return response()->json(['patients'=>$patients]);
     }
