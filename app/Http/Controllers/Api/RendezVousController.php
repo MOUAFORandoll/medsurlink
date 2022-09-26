@@ -23,31 +23,77 @@ class RendezVousController extends Controller
      */
     public function index(Request $request)
     {
-        $dateDebut = $request->get('date_debut');
-        $nbre = $request->get('nbre',1);
-        $userId = Auth::id();
-
-        try {
-            $dateDebut = Carbon::parse($dateDebut);
-        }catch (\Exception $exception){
-            $dateDebut = Carbon::now();
+        if($request->rendez_vous_manques == "rendez_vous_manques"){
+            return $this->rendez_vous_manques();
         }
-        //On récupère les rendez entre ces deux dates
+        elseif($request->rendez_vous_manques == "rendez_vous_effectues"){
+            return $this->rendez_vous_effectues();
+        }
+        else{
+            $dateDebut = $request->get('date_debut');
+            $nbre = $request->get('nbre',1);
+            $userId = Auth::id();
 
-        $dateAvant = date('Y-m-d', strtotime($dateDebut. ' - '.$nbre.' months'));
-        $dateApres = date('Y-m-d', strtotime($dateDebut. ' + '.$nbre.' months'));
+            try {
+                $dateDebut = Carbon::parse($dateDebut);
+            }catch (\Exception $exception){
+                $dateDebut = Carbon::now();
+            }
+            //On récupère les rendez entre ces deux dates
+            $dateAvant = date('Y-m-d', strtotime($dateDebut. ' - '.$nbre.' months'));
+            $dateApres = date('Y-m-d', strtotime($dateDebut. ' + '.$nbre.' months'));
+
+            $rdvs = RendezVous::with(['patient','praticien','sourceable','initiateur'])
+                ->where(function ($query) {
+                $query->where('statut', "Programmé")->orWhere('statut', "Reprogrammé");
+            })->where('praticien_id','=',$userId)->orWhere('patient_id','=',$userId)
+                ->orWhere('initiateur','=',$userId)->get();
+
+            $rdvsAvant = $rdvs->where('date','>=',$dateAvant)->all();
+
+            $rdvsApres = $rdvs->where('date','>=',$dateApres)->all();
+
+            //Ici on récupère les rendez vous des autres praticiens et médécin
+            $user = Auth::user();
+            $roleName = $user->getRoleNames()->first();
+            if ($roleName == 'Praticien' || $roleName == 'Medecin controle' || $roleName == 'Admin' || $roleName == 'Gestionnaire' || $roleName == 'Assistante' || $roleName == 'Pharmacien'){
+
+                if (strpos($user->email,'@medicasure.com')){
+                    $rdvDesAutres = RendezVous::with(['patient','praticien','sourceable','initiateur'])
+                    ->where(function ($query) {
+                        $query->where('statut', "Programmé")->orWhere('statut', "Reprogrammé");
+                    })->where('praticien_id','<>',$userId)->get();
+                    $rdvsApres = $rdvsApres + $rdvDesAutres->where('date','>=',$dateApres)->all();
+                    $rdvsAvant = $rdvsAvant + $rdvDesAutres->where('date','>',$dateAvant)->all();
+                }
+            }
+            $rdvs = $rdvsAvant+$rdvsApres;
+            foreach ($rdvs as $rdv){
+                $rdv->updateRendezVous();
+            }
+            return response()->json(['rdvs' => $rdvs]);
+        }
+    }
 
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function rendez_vous_manques(){
+        /**
+         * Recupération des rendez-vous manqués des 90 derniers jours
+         */
+        $userId = Auth::id();
+        $date_debut = Carbon::now()->subDays(90)->format('Y-m-d');
+        $date_fin = Carbon::now()->format('Y-m-d');
 
-        $rdvs = RendezVous::with(['patient','praticien','sourceable','initiateur'])
-            ->where('praticien_id','=',$userId)
-            ->orWhere('patient_id','=',$userId)
-            ->orWhere('initiateur','=',$userId)
-            ->get();
+        $rdvs = RendezVous::with(['patient','praticien','sourceable','initiateur'])->has('patient')
+        ->where(function ($query) use($userId) {
+            $query->where('praticien_id', $userId)->orWhere('patient_id', $userId)->orWhere('initiateur', $userId);
+        })->Jours306090($date_debut, $date_fin)->get();
 
-        $rdvsAvant = $rdvs->where('date','>=',$dateAvant)->all();
-
-        $rdvsApres = $rdvs->where('date','>=',$dateApres)->all();
 
         //Ici on récupère les rendez vous des autres praticiens et médécin
         $user = Auth::user();
@@ -55,21 +101,55 @@ class RendezVousController extends Controller
         if ($roleName == 'Praticien' || $roleName == 'Medecin controle' || $roleName == 'Admin' || $roleName == 'Gestionnaire' || $roleName == 'Assistante' || $roleName == 'Pharmacien'){
 
             if (strpos($user->email,'@medicasure.com')){
-                $rdvDesAutres = RendezVous::with(['patient','praticien','sourceable','initiateur'])
-                    ->where('praticien_id','<>',$userId)
-                    ->get();
-                $rdvsApres = $rdvsApres + $rdvDesAutres->where('date','>=',$dateApres)->all();
-                $rdvsAvant = $rdvsAvant + $rdvDesAutres->where('date','>',$dateAvant)->all();
+                $rdvDesAutres = RendezVous::with(['patient','praticien','sourceable','initiateur'])->has('patient')
+                ->Jours306090($date_debut, $date_fin)->get();
+                $rdvs = $rdvs->merge($rdvDesAutres)->sortByDesc('date');
+                $rdvs = $rdvs->values()->all();
             }
         }
-        $rdvs = $rdvsAvant+$rdvsApres;
         foreach ($rdvs as $rdv){
             $rdv->updateRendezVous();
         }
-
-
-        return response()->json(['rdvs'=>$rdvs]);
+        return response()->json(['rdvs' => $rdvs]);
     }
+
+    /**
+     * Recuparation des rendez-vous effectué
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function rendez_vous_effectues(){
+        /**
+         * Recupération des rendez-vous manqués des 90 derniers jours
+         */
+        $userId = Auth::id();
+        $date_debut = Carbon::now()->subDays(90)->format('Y-m-d');
+        $date_fin = Carbon::now()->format('Y-m-d');
+
+        $rdvs = RendezVous::with(['patient','praticien','sourceable','initiateur'])->has('patient')
+        ->where(function ($query) use($userId) {
+            $query->where('praticien_id', $userId)->orWhere('patient_id', $userId)->orWhere('initiateur', $userId);
+        })->Effectues306090($date_debut, $date_fin)->get();
+
+
+        //Ici on récupère les rendez vous des autres praticiens et médécin
+        $user = Auth::user();
+        $roleName = $user->getRoleNames()->first();
+        if ($roleName == 'Praticien' || $roleName == 'Medecin controle' || $roleName == 'Admin' || $roleName == 'Gestionnaire' || $roleName == 'Assistante' || $roleName == 'Pharmacien'){
+
+            if (strpos($user->email,'@medicasure.com')){
+                $rdvDesAutres = RendezVous::with(['patient','praticien','sourceable','initiateur'])->has('patient')
+                ->Effectues306090($date_debut, $date_fin)->get();
+                $rdvs = $rdvs->merge($rdvDesAutres)->sortByDesc('date');
+                $rdvs = $rdvs->values()->all();
+            }
+        }
+        foreach ($rdvs as $rdv){
+            $rdv->updateRendezVous();
+        }
+        return response()->json(['rdvs' => $rdvs]);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -158,28 +238,51 @@ class RendezVousController extends Controller
      */
     public function update(RendezVousRequest $request, $slug)
     {
+        $rdv = RendezVous::with(['patient','praticien','sourceable','initiateur'])->WhereSlug($slug)->first();
 
-        $this->validatedSlug($slug,$this->table);
+        if($request->statut == "Effectué"){
+            $rdv->statut = $request->statut;
+            $rdv->save();
+        }elseif($request->statut == "Reprogrammé"){
+            /**
+             * Annulons le rendez-vous pour créer un autre comme enfant de ce dernier
+             */
+            $rdv->statut = $request->statut == "Reprogrammé" ? "Annulé" : $request->statut;
+            $rdv->save();
+            $rdv = RendezVous::create([
+                "sourceable_id" => $rdv->sourceable_id,
+                "sourceable_type" => $rdv->sourceable_type,
+                "patient_id" => $rdv->patient_id,
+                "praticien_id" => $rdv->praticien_id,
+                "initiateur" => $rdv->initiateur,
+                "motifs" => $rdv->motifs,
+                "date" => $request->date,
+                "statut" => $request->statut,
+                "nom_medecin" => $rdv->nom_medecin,
+                "ligne_temps_id" => $rdv->ligne_temps_id,
+                "consultation_id" => $rdv->consultation_id,
+                'etablissement_id' => $rdv->etablissement_id,
+                'parent_id' => $rdv->id
+            ]);
+        }
+        else{
+            $this->validatedSlug($slug,$this->table);
 
-        //Récupération du nom du medecin ou bien de l'identifiant du praticien
-        $praticien = $request->get('praticien_id');
+            //Récupération du nom du medecin ou bien de l'identifiant du praticien
+            $praticien = $request->get('praticien_id');
 
-        $praticienId = (integer) $praticien;
+            $praticienId = (integer) $praticien;
 
-        if ($praticienId !== 0){
-            RendezVous::whereSlug($slug)->update($request->except('praticien_id') + ['praticien_id'=>$praticienId,'initiateur'=>Auth::id()]);
-        }else{
-            if ($praticien != ""){
-                RendezVous::whereSlug($slug)->update($request->except('praticien_id') + ['praticien_id'=>null,'nom_medecin'=>$praticien,'initiateur'=>Auth::id()]);
+            if ($praticienId !== 0){
+                RendezVous::whereSlug($slug)->update($request->except('praticien_id') + ['praticien_id'=>$praticienId,'initiateur'=>Auth::id()]);
+            }else{
+                if ($praticien != ""){
+                    RendezVous::whereSlug($slug)->update($request->except('praticien_id') + ['praticien_id'=>null,'nom_medecin'=>$praticien,'initiateur'=>Auth::id()]);
+                }
             }
         }
 
-
-        $rdv = RendezVous::with(['patient','praticien','sourceable','initiateur'])
-            ->WhereSlug($slug)
-            ->first();
-
-        defineAsAuthor("RendezVous", $rdv->id, 'update');
+        defineAsAuthor("RendezVous", $rdv->id, $request->statut == "Reprogrammé" ? 'create' : 'update');
         $rdv->updateRendezVous();
         return response()->json(['rdv'=>$rdv]);
     }

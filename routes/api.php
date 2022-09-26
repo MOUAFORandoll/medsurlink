@@ -470,6 +470,7 @@ Route::get('other-complementaire','Api\OtherComplementaireController@index');
 Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin controle|Assistante|Patient|Pharmacien']], function () {
     Route::resource('avis','Api\AvisController');
     Route::resource('rdvs','Api\RendezVousController');
+    Route::get('rendez-vous-manques', 'Api\RendezVousController@rendez_vous_manques');
     Route::post('clotures/affiliation', "Api\ClotureController@store");
     Route::post('clotures/ligne-temps', "Api\ClotureController@ligne");
 });

@@ -28,7 +28,7 @@ class AffiliationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien'])->latest()->get();
         foreach ($affiliations as $affiliation){
@@ -40,7 +40,7 @@ class AffiliationController extends Controller
                 $affiliation['souscripteur'] = isset($affiliation->patient->souscripteur->user) ? $affiliation->patient->souscripteur->user  : null;
             }
         }
-        return response()->json(['affiliations'=>$affiliations]);
+        return response()->json(['affiliations' => $affiliations]);
     }
 
     /**
