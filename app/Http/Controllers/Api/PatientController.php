@@ -83,10 +83,16 @@ class PatientController extends Controller
         return response()->json(['patients'=>$patients]);
     }
 
-    public function ListingPatientSansIntervention()
+    public function ListingPatientSansIntervention($date)
     {
+        
         $patients = Patient::with(['souscripteur','dossier','user','financeurs.financable','medecinReferent.medecinControles.user','rendezVous','etablissements'])
-        ->latest()->take(100)->get();
+        ->whereDate('date', $date)
+        ->restrictUser()->latest()->take(3)->get();
+
+        // $today = Carbon::now()->format('Y-m-d');
+        // $date = Carbon::now()->subDays($date+1)->format('Y-m-d');
+        // $metriques = Patient::semaineMoisAnnee($date, $today)->get();
 
         return response()->json(['patients'=>$patients]);
     }
