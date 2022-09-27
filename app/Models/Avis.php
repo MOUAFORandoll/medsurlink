@@ -71,6 +71,13 @@ class Avis extends Model
         'updated_at'
     ];
 
+    public function scopeAvisSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
+    }
+
     /**
      * Return the sluggable configuration array for this model.
      *

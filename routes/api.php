@@ -412,7 +412,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     //Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
     Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
     Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');
-    Route::get('patient-sans-intervention','Api\PatientController@ListingPatientSansIntervention')->name('patient.ListingPatientSansIntervention');
+    Route::get('patient-sans-intervention/{date}','Api\PatientController@ListingPatientSansIntervention')->name('patient.ListingPatientSansIntervention');
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::resource('medecin-controle','Api\MedecinControleController')->only(['index']);
     Route::resource('praticien','Api\PraticienController')->only(['index']);

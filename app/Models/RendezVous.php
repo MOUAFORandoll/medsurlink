@@ -137,6 +137,13 @@ class RendezVous extends Model
         })->orderBy('date', 'desc');
     }
 
+    public function scopeRdvSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
+    }
+
     public function getNameAndTimestampAttribute() {
         return Str::random(16).' '.Carbon::now()->timestamp;
     }
