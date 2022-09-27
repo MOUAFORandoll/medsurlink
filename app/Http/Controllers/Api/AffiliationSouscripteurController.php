@@ -22,8 +22,10 @@ use Illuminate\Support\Facades\Mail;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Traits\PersonnalErrors;
+use App\Models\AffiliationSouscripteur;
 use App\Models\LigneDeTemps;
 use App\Models\Motif;
+use App\Models\PaymentOffre;
 
 class AffiliationSouscripteurController extends Controller
 {
@@ -453,10 +455,18 @@ class AffiliationSouscripteurController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function affiliationRestante($id){
-        $commande =  \App\Models\AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->where('nombre_restant','>',0)->latest()->get();
-        \Log::alert($commande);
-        return response()->json(['commande'=>$commande]);
+        /**
+         * Listing des commandes restantes dont le nombre restant est supérieur à 0
+         */
+        $commande =  AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->where('nombre_restant','>',0)->latest()->get();
+
+        /**
+         * Listing de toutes les commanes restantes
+         */
+        $commandes =  AffiliationSouscripteur::with(['typeContrat'])->where('user_id',$id)->orderBy('nombre_restant', 'desc')->get();
+        return response()->json(['commande'=>$commande, "commandes" => $commandes]);
     }
+
 
     /**
      * @param $id
@@ -466,6 +476,36 @@ class AffiliationSouscripteurController extends Controller
         $commande = increaseCommandeRestante($id);
 
         return response()->json(['commande'=>$commande]);
+    }
+
+
+    public function CommandeAttentes(){
+        /* $commande =  CommandePackage::create([
+            "date_commande" => Carbon::now()->toDateTimeString(),
+            'quantite' =>$request->get('quantite'),
+            'offres_packages_id' =>$request->get('package_id'),
+            'souscripteur_id' => $souscripteur->user_id,
+        ]);
+         */
+
+        $commandes = PaymentOffre::where(['status' => 'EN ATTENTE'])->with(['commande.offres_package', 'souscripteur.user:id,nom,prenom,telephone,email,ville,pays'])->latest()->get();
+        $commandes = $commandes->map(function($commande){
+            return [
+                'id' => $commande->id,
+                'montant' => $commande->montant, 
+                'date_payment' => $commande->date_payment, 
+                'status' => $commande->status, 
+                'souscripteur' => !is_null($commande->souscripteur) ? $commande->souscripteur->user : $commande->souscripteur,
+                'commande' => [
+                    'id' => $commande->commande->id,
+                    'quantite' => $commande->commande->quantite,
+                    'offres_packages_id' => $commande->commande->offres_packages_id,
+                    'offre_id' => $commande->commande->offres_package->offre_id,
+                    'description_fr' => $commande->commande->offres_package->description_fr
+                ]
+            ];
+        });
+        return  response()->json([ 'commandes' => $commandes]);
     }
 
 

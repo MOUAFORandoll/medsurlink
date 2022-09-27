@@ -2,32 +2,34 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Traits\PersonnalErrors;
-use App\Http\Requests\patientStoreRequest;
-use App\Http\Requests\PatientUpdateRequest;
-use App\Http\Requests\UserStoreRequest;
-use App\Mail\PatientAffiliated;
-use App\Mail\updateSetting;
-use App\Models\DossierMedical;
-use App\Models\EtablissementExercice;
-use App\Models\EtablissementExercicePatient;
-use App\Models\Patient;
-use App\Models\ReponseSecrete;
-use App\Models\Souscripteur;
-use App\Models\Suivi;
-use App\Traits\SmsTrait;
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Models\Suivi;
+use App\Models\Patient;
+use App\Traits\SmsTrait;
+use App\Models\RendezVous;
+use App\Mail\updateSetting;
 use App\Models\Affiliation;
 use App\Models\LigneDeTemps;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Validator;
+use App\Models\Souscripteur;
+use Illuminate\Http\Request;
+use App\Models\DossierMedical;
+use App\Models\ReponseSecrete;
+use App\Mail\PatientAffiliated;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Models\EtablissementExercice;
+use App\Http\Requests\UserStoreRequest;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\patientStoreRequest;
+use App\Http\Requests\PatientUpdateRequest;
+
+use App\Models\EtablissementExercicePatient;
+use App\Http\Controllers\Traits\PersonnalErrors;
+use App\Models\ConsultationMedecineGenerale;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class PatientController extends Controller
@@ -78,6 +80,33 @@ class PatientController extends Controller
     public function index()
     {
         $patients = Patient::with(['souscripteur','dossier','user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])->restrictUser()->latest()->get();
+        return response()->json(['patients'=>$patients]);
+    }
+
+    public function ListingPatientSansIntervention($date)
+    {
+
+        $today = Carbon::now()->format('Y-m-d');
+        $date = Carbon::now()->subDays($date+1)->format('Y-m-d');
+
+        $patients = Patient::WhereDoesntHave('rendezVous', function($query) use($date,$today){
+            $query->RdvSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('dossier.consultationsMedecine', function($query) use($date,$today){
+            $query->ConsultationSemaineMoisAnnee($date, $today);
+        })->with(['user'])->get();
+
+        // ->whereHas('dossier')
+        
+
+        // $rdvs = RendezVous::with(['patient','praticien','sourceable','initiateur'])->has('patient')
+        // ->where(function ($query) use($userId) {
+        //     $query->where('praticien_id', $userId)->orWhere('patient_id', $userId)->orWhere('initiateur', $userId);
+        // })->Jours306090($date_debut, $date_fin)->get();
+
+        // $today = Carbon::now()->format('Y-m-d');
+        // $date = Carbon::now()->subDays($date+1)->format('Y-m-d');
+        // $metriques = Patient::semaineMoisAnnee($date, $today)->get();
+
         return response()->json(['patients'=>$patients]);
     }
 

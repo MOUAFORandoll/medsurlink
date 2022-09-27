@@ -88,7 +88,8 @@ class RendezVous extends Model
         "nom_medecin",
         "ligne_temps_id",
         "consultation_id",
-        'etablissement_id'
+        'etablissement_id',
+        'parent_id'
     ];
 
     protected $hidden = ['initiateur','updated_at'];
@@ -104,6 +105,34 @@ class RendezVous extends Model
                 'source' => 'NameAndTimestamp'
             ]
         ];
+    }
+
+    public function scopeJours306090($query, $date_debut, $date_fin)
+    {
+        return $query->where(function ($query) use($date_debut, $date_fin) {
+            $query->where('statut', "Manqué")->whereDate('date', '>=', $date_debut)->whereDate('date', '<', $date_fin);
+        })->orderBy('date', 'desc');
+    }
+
+    public function scopeEffectues306090($query, $date_debut, $date_fin)
+    {
+        return $query->where(function ($query) use($date_debut, $date_fin) {
+            $query->where('statut', "Effectué")->whereDate('date', '>=', $date_debut)->whereDate('date', '<', $date_fin);
+        })->orderBy('date', 'desc');
+    }
+
+    public function scopeFiltre($query, $date_debut, $date_fin, $statut)
+    {
+        return $query->where(function ($query) use($date_debut, $date_fin, $statut) {
+            $query->where('statut', "statut")->whereDate('date', '>=', $date_debut)->whereDate('date', '<', $date_fin);
+        })->orderBy('date', 'desc');
+    }
+
+    public function scopeRdvSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
     }
 
     public function getNameAndTimestampAttribute() {

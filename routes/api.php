@@ -251,6 +251,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::put('compte-rendu-operatoire/{compte}/archiver','Api\CompteRenduOperatoireController@archiver');
     Route::put('compte-rendu-operatoire/{compte}/reactivier','Api\CompteRenduOperatoireController@reactiver');
 
+    Route::get('commandes-attentes', 'Api\AffiliationSouscripteurController@CommandeAttentes');
 
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
@@ -310,6 +311,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Ass
 Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien|Gestionnaire|Patient|Souscripteur|Etablissement|Assistante|Pharmacien']], function () {
     Route::resource('dossier','Api\DossierMedicalController')->except('store','update','destroy');
     Route::resource('medecin-patient','Api\PatientMedecinController');
+    Route::post("transfert-patient-medecin-referent", "Api\PatientMedecinController@transfertPatientFromOneMedecinToAnother");
+    Route::get('recuperation-patients/{medecin_control_id}', "Api\PatientMedecinController@getPatients");
     Route::get('dossiers-mes-patient','Api\DossierMedicalController@dossierMyPatient');
     Route::get('dossiers-mes-patient/search/{value}','Api\DossierMedicalController@dossierMyPatientSpecial')->name('dossiers-mes-patient.dossierMyPatientSpecial');
     Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
@@ -340,6 +343,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::post('update-password','Api\UserController@updatePassword');
     Route::put('update-user/{slug}','Api\UserController@update');
     Route::resource('facture','Api\FactureController')->only('show');
+
 
 });
 
@@ -408,6 +412,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     //Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
     Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
     Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');
+    Route::get('patient-sans-intervention/{date}','Api\PatientController@ListingPatientSansIntervention')->name('patient.ListingPatientSansIntervention');
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::resource('medecin-controle','Api\MedecinControleController')->only(['index']);
     Route::resource('praticien','Api\PraticienController')->only(['index']);
@@ -466,6 +471,7 @@ Route::get('other-complementaire','Api\OtherComplementaireController@index');
 Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin controle|Assistante|Patient|Pharmacien']], function () {
     Route::resource('avis','Api\AvisController');
     Route::resource('rdvs','Api\RendezVousController');
+    Route::get('rendez-vous-manques', 'Api\RendezVousController@rendez_vous_manques');
     Route::post('clotures/affiliation', "Api\ClotureController@store");
     Route::post('clotures/ligne-temps', "Api\ClotureController@ligne");
 });

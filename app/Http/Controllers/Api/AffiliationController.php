@@ -28,9 +28,16 @@ class AffiliationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien'])->latest()->get();
+        if($request->sortCIM == 7 || $request->sortCIM == 14 || $request->sortCIM == 30){
+            $affiliations = Affiliation::has('patient.user')->whereDateBetween('date_fin', Carbon::now()->format('Y-m-d'), Carbon::now()->addDays($request->sortCIM)->format('Y-m-d'))->with(['patient','patient.dossier','package','patient.financeurs.lien'])->orderBy('date_fin', 'desc')->get();
+        }elseif($request->sortCIM == ""){
+            $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien'])->orderBy('date_fin', 'desc')->get();
+        }else{
+            $affiliations = Affiliation::has('patient.user')->whereDate('date_fin', '<', Carbon::now()->format('Y-m-d'))->with(['patient','patient.dossier','package','patient.financeurs.lien'])->orderBy('date_fin', 'desc')->get();
+        }
+       
         foreach ($affiliations as $affiliation){
             if(is_null($affiliation->cloture)){
                 $affiliation->cloture()->create([]);
@@ -40,7 +47,7 @@ class AffiliationController extends Controller
                 $affiliation['souscripteur'] = isset($affiliation->patient->souscripteur->user) ? $affiliation->patient->souscripteur->user  : null;
             }
         }
-        return response()->json(['affiliations'=>$affiliations]);
+        return response()->json(['affiliations' => $affiliations]);
     }
 
     /**
@@ -166,7 +173,6 @@ class AffiliationController extends Controller
         }else{
             return response()->json(['erreur' => "Le patient n'existe pas"], 419);
         }*/
-        \Log::alert($request->all());
        return AjoutDuneAffiliation($request);
     }
 
