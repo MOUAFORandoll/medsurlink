@@ -480,14 +480,7 @@ class AffiliationSouscripteurController extends Controller
 
 
     public function CommandeAttentes(){
-        /* $commande =  CommandePackage::create([
-            "date_commande" => Carbon::now()->toDateTimeString(),
-            'quantite' =>$request->get('quantite'),
-            'offres_packages_id' =>$request->get('package_id'),
-            'souscripteur_id' => $souscripteur->user_id,
-        ]);
-         */
-
+        
         $commandes = PaymentOffre::where(['status' => 'EN ATTENTE'])->with(['commande.offres_package', 'souscripteur.user:id,nom,prenom,telephone,email,ville,pays'])->latest()->get();
         $commandes = $commandes->map(function($commande){
             return [
