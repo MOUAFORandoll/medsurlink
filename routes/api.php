@@ -251,6 +251,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::put('compte-rendu-operatoire/{compte}/archiver','Api\CompteRenduOperatoireController@archiver');
     Route::put('compte-rendu-operatoire/{compte}/reactivier','Api\CompteRenduOperatoireController@reactiver');
 
+    Route::get('commandes-attentes', 'Api\AffiliationSouscripteurController@CommandeAttentes');
 
 });
 //  Définition des routes accéssible a la fois par le patient, le medecin controle, le souscripteur et le praticien
