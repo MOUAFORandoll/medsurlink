@@ -55,4 +55,7 @@ class PaymentOffre extends Model
     public function commande(){
         return $this->belongsTo(CommandePackage::class,'commande_id','id');
     }
+    public function souscripteur(){
+        return $this->belongsTo(Souscripteur::class,'souscripteur_id','user_id');
+    }
 }
