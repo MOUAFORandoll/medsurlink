@@ -176,7 +176,25 @@ class Patient extends Model
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 $builder->where('user_id',$user->id);
 
-            }else if(gettype($userRoles->search('Souscripteur')) == 'integer'){
+            }else if(gettype($userRoles->search('Assistante')) == 'integer'){
+                    $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
+                    //Récupération des patiens du souscripteur
+                    $patients = $user->souscripteur->patients;
+                    $patientsId = [];
+                    foreach ($patients as $patient){
+                        array_push($patientsId,$patient->user_id);
+                    }
+    
+                    $patientSouscripteurs = PatientSouscripteur::where('financable_id',Auth::id())->get();
+    
+                    foreach ($patientSouscripteurs as  $patient){
+                        if (!in_array($patient->patient_id,$patientsId)){
+                            array_push($patientsId,$patient->patient_id);
+                        }
+                    }
+    
+                    $builder->whereIn('user_id',$patientsId);
+                 } else if(gettype($userRoles->search('Souscripteur')) == 'integer'){
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 //Récupération des patiens du souscripteur
                 $patients = $user->souscripteur->patients;
