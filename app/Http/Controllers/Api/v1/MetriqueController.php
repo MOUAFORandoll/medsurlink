@@ -77,6 +77,16 @@ class MetriqueController extends Controller
          */
         
         if($metrique == "taux_rendez_vous"){
+            /**
+             * diagramme de rendez-vous
+             */
+            $rdv_manques = RendezVous::where('statut', 'Manqué')->count();
+            $rdv_annules = RendezVous::where(['statut' => 'Annulé', 'parent_id' => null])->count();
+            $rdv_reprogrammes = RendezVous::where('statut', 'Annulé')->where('parent_id', '<>', null)->count();
+            $rdv_effectues = RendezVous::where('statut', 'Effectué')->count();
+            $rdv_programmes = RendezVous::where('statut', 'Reprogrammé')->count();
+            $courbe_pie_charts = [$rdv_manques, $rdv_annules, $rdv_reprogrammes, $rdv_effectues, $rdv_programmes];
+
             $metriques = collect();
             for ($i = $date; $i >= 0; $i--) {
                 $item = new \stdClass();
@@ -92,25 +102,25 @@ class MetriqueController extends Controller
             $manques = [
                 "label" => "Rendez-vous manqués",
                 "data" => $metriques->pluck('manques'),
-                "borderColor" => "#36495d",
+                "borderColor" => "#3c8dbc",
                 "borderWidth" => 3
             ];
             $annules = [
                 "label" =>  "Rendez-vous annulés",
                 "data" => $metriques->pluck('annules'),
-                "borderColor" => "#6a1ec9",
+                "borderColor" => "#f56954",
                 "borderWidth" => 3
             ];
             $effectues = [
                 "label" => "Rendez-vous honorés",
                 "data" => $metriques->pluck('effectues'),
-                "borderColor" => "#36495d",
+                "borderColor" => "#7283D4",
                 "borderWidth" => 3
             ];
             $reprogrammes = [
                 "label" => "Rendez-vous reprogrammés",
                 "data" => $metriques->pluck('reprogrammes'),
-                "borderColor" => "#1bbce6",
+                "borderColor" => "#f39c12",
                 "borderWidth" => 3
             ];
             $data = new \stdClass();
@@ -128,7 +138,7 @@ class MetriqueController extends Controller
                 "responsive" => true,
                 "lineTension" => 1
             ];
-            return response()->json(["courbe" => $courbe]);
+            return response()->json(["courbe" => $courbe, "courbe_pie_charts" => $courbe_pie_charts]);
         }else{
             $today = Carbon::now()->format('Y-m-d');
             $date = Carbon::now()->subDays($date+1)->format('Y-m-d');
