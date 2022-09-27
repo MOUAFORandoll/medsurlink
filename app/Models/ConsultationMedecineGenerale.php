@@ -262,6 +262,13 @@ class ConsultationMedecineGenerale extends Model
 
     }
 
+    public function scopeConsultationSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
+    }
+
     public function updateConsultationMedecine(){
         if(!is_null($this)){
             $user = isset($this->dossier) ? $this->dossier->patient->user : null;
