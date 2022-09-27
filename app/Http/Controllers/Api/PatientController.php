@@ -83,10 +83,29 @@ class PatientController extends Controller
         return response()->json(['patients'=>$patients]);
     }
 
-    public function ListingPatientSansIntervention()
+    public function ListingPatientSansIntervention($date)
     {
-        $patients = Patient::with(['souscripteur','dossier','user','financeurs.financable','medecinReferent.medecinControles.user','rendezVous','etablissements'])
-        ->latest()->take(100)->get();
+
+        $today = Carbon::now()->format('Y-m-d');
+        $date = Carbon::now()->subDays($date+1)->format('Y-m-d');
+
+        $patients = Patient::WhereDoesntHave('rendezVous', function($query) use($date,$today){
+            $query->RdvSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('dossier.consultationsMedecine', function($query) use($date,$today){
+            $query->ConsultationSemaineMoisAnnee($date, $today);
+        })->with(['user'])->get();
+
+        // ->whereHas('dossier')
+        
+
+        // $rdvs = RendezVous::with(['patient','praticien','sourceable','initiateur'])->has('patient')
+        // ->where(function ($query) use($userId) {
+        //     $query->where('praticien_id', $userId)->orWhere('patient_id', $userId)->orWhere('initiateur', $userId);
+        // })->Jours306090($date_debut, $date_fin)->get();
+
+        // $today = Carbon::now()->format('Y-m-d');
+        // $date = Carbon::now()->subDays($date+1)->format('Y-m-d');
+        // $metriques = Patient::semaineMoisAnnee($date, $today)->get();
 
         return response()->json(['patients'=>$patients]);
     }

@@ -64,9 +64,8 @@ class rappelerRendezVous extends Command
          * Rappeler le praticien, souscripteur dont  le patient a un rendez-vous demain
          */
         $dateRendezVous = Carbon::tomorrow()->toDateString();
-        $rdvs = RendezVous::with('patient','praticien')
-            ->whereDate('date',$dateRendezVous)
-            ->where('statut','<>','Annulé')->latest()->get();
+        $rdvs = RendezVous::with('patient','praticien')->whereDate('date',$dateRendezVous)->where('statut','<>','Annulé')->latest()->get();
+        \Log::alert("rsvs ".$rdvs);
 
         foreach ($rdvs as $rdv){
             $date = Carbon::parse($rdv->date)->format('d/m/Y');

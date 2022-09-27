@@ -152,7 +152,7 @@ class Patient extends Model
 
     public function rendezVous()
     {
-        return $this->hasMany(RendezVous::class, 'patient_id','id');
+        return $this->hasMany(RendezVous::class, 'patient_id','user_id');
     }
 
     public function user(){
@@ -177,23 +177,7 @@ class Patient extends Model
                 $builder->where('user_id',$user->id);
 
             }else if(gettype($userRoles->search('Assistante')) == 'integer'){
-                    $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
-                    //Récupération des patiens du souscripteur
-                    $patients = $user->souscripteur->patients;
-                    $patientsId = [];
-                    foreach ($patients as $patient){
-                        array_push($patientsId,$patient->user_id);
-                    }
-    
-                    $patientSouscripteurs = PatientSouscripteur::where('financable_id',Auth::id())->get();
-    
-                    foreach ($patientSouscripteurs as  $patient){
-                        if (!in_array($patient->patient_id,$patientsId)){
-                            array_push($patientsId,$patient->patient_id);
-                        }
-                    }
-    
-                    $builder->whereIn('user_id',$patientsId);
+                return $builder;
                  } else if(gettype($userRoles->search('Souscripteur')) == 'integer'){
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 //Récupération des patiens du souscripteur
@@ -232,6 +216,13 @@ class Patient extends Model
 
     public function delai_operations(){
         return $this->hasMany(DelaiOperation::class, 'patient_id','user_id');
+    }
+
+    public function scopePatientSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
     }
 
 }
