@@ -152,7 +152,7 @@ class Patient extends Model
 
     public function rendezVous()
     {
-        return $this->hasMany(RendezVous::class, 'patient_id','id');
+        return $this->hasMany(RendezVous::class, 'patient_id','user_id');
     }
 
     public function user(){
@@ -176,7 +176,9 @@ class Patient extends Model
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 $builder->where('user_id',$user->id);
 
-            }else if(gettype($userRoles->search('Souscripteur')) == 'integer'){
+            }else if(gettype($userRoles->search('Assistante')) == 'integer'){
+                return $builder;
+                 } else if(gettype($userRoles->search('Souscripteur')) == 'integer'){
                 $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
                 //Récupération des patiens du souscripteur
                 $patients = $user->souscripteur->patients;
@@ -214,6 +216,13 @@ class Patient extends Model
 
     public function delai_operations(){
         return $this->hasMany(DelaiOperation::class, 'patient_id','user_id');
+    }
+
+    public function scopePatientSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
     }
 
 }
