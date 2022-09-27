@@ -83,3 +83,6 @@ php artisan db:seed --class=PermissionTableSeeder
 php artisan migrate --path=/database/migrations/2022_09_08_080203_create_metriques_table.php
 
 php artisan db:seed --class=MetriquesTableSeeder
+
+## Métriques des rendez-vous
+php artisan migrate --path=/database/migrations/2022_09_21_112830_add_parent_id_to_rendez_vous_table.php

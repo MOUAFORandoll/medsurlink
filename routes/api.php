@@ -411,6 +411,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     //Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
     Route::put('patient/{patient}','Api\PatientController@update')->name('patient.update');
     Route::delete('patient/{patient}','Api\PatientController@destroy')->name('patient.destroy');
+    Route::get('patient-sans-intervention','Api\PatientController@ListingPatientSansIntervention')->name('patient.ListingPatientSansIntervention');
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::resource('medecin-controle','Api\MedecinControleController')->only(['index']);
     Route::resource('praticien','Api\PraticienController')->only(['index']);
@@ -469,6 +470,7 @@ Route::get('other-complementaire','Api\OtherComplementaireController@index');
 Route::group(['middleware' => ['auth:api','role:Praticien|Gestionnaire|Medecin controle|Assistante|Patient|Pharmacien']], function () {
     Route::resource('avis','Api\AvisController');
     Route::resource('rdvs','Api\RendezVousController');
+    Route::get('rendez-vous-manques', 'Api\RendezVousController@rendez_vous_manques');
     Route::post('clotures/affiliation', "Api\ClotureController@store");
     Route::post('clotures/ligne-temps', "Api\ClotureController@ligne");
 });

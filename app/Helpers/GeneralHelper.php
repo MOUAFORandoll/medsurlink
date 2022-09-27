@@ -392,7 +392,9 @@ if(!function_exists('ProcessAfterPayment'))
         $url_global = $url_global."/payment-management/medicasure";
         $message = "*$nom_souscripteur* a acheté $quantite $description à *$montant_total Euros*\nemail: $email_souscripteur \ntéléphone: $telephone \n <$url_global|*Cliquer ici pour plus de détails*>";
         // Send notification to affilié channel
-        $affiliation->setSlackChannel('souscription')->notify(new SouscriptionAlert($message,null));
+        if($url_global = 'production'){
+            $affiliation->setSlackChannel('souscription')->notify(new SouscriptionAlert($message,null));
+        }
 
         EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
 
