@@ -93,8 +93,36 @@ class PatientController extends Controller
             $query->RdvSemaineMoisAnnee($date, $today);
         })->WhereDoesntHave('dossier.consultationsMedecine', function($query) use($date,$today){
             $query->ConsultationSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('dossier.resultatsLabo', function($query) use($date,$today){
+            $query->ResultLaboSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('dossier.resultatsImagerie', function($query) use($date,$today){
+            $query->ResultImagerieSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('dossier.hospitalisations', function($query) use($date,$today){
+            $query->HospitalisationSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('dossier.consultationsManuscrites', function($query) use($date,$today){
+            $query->ConsultationFichierSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('dossier.comptesRenduOperatoire', function($query) use($date,$today){
+            $query->CompteRenduSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('dossier.avis', function($query) use($date,$today){
+            $query->AvisSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('dossier.kinesitherapies', function($query) use($date,$today){
+            $query->KinesiSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('dossier.antecedents', function($query) use($date,$today){
+            $query->AntecedentsSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('dossier.traitements', function($query) use($date,$today){
+            $query->TraitementSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('medecinReferent', function($query) use($date,$today){
+            $query->MedRefSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('activitesAma', function($query) use($date,$today){
+            $query->ActiviteAmaSemaineMoisAnnee($date, $today);
+        })->WhereDoesntHave('activitesMedecinReferent', function($query) use($date,$today){
+            $query->ActiviteMedControleMoisAnnee($date, $today);
         })->with(['user'])->get();
 
+        // scopeActiviteMedControleMoisAnnee
+        
+
+        
         // ->whereHas('dossier')
         
 

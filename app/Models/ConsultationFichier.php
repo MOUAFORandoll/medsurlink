@@ -127,4 +127,11 @@ class ConsultationFichier extends Model
            $this['canUpdate'] = $user->getRoleNames()->first() == 'Medecin controle' || $this['isAuthor'];
         }
     }
+
+    public function scopeConsultationFichierSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
+    }
 }

@@ -80,4 +80,11 @@ class TraitementActuel extends Model
             $this['isAuthor'] = $traitementIsAuthor->getOriginalContent();
         }
     }
+
+    public function scopeTraitementSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
+    }
 }

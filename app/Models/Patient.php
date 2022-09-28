@@ -133,7 +133,10 @@ class Patient extends Model
         return $this->hasOne(DossierMedical::class,'patient_id','user_id');
     }
     public function activitesAma(){
-        return $this->hasMany(ActiviteAmaPatient::class,'patient_id','id');
+        return $this->hasMany(ActiviteAmaPatient::class,'patient_id','user_id');
+    }
+    public function activitesMedecinReferent(){
+        return $this->hasMany(ActivitesControle::class,'patient_id','user_id');
     }
     public function auteurs()
     {
