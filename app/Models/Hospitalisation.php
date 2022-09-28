@@ -82,6 +82,13 @@ class Hospitalisation extends Model
         return $this->belongsTo(User::class,'creator','id');
     }
 
+    public function scopeHospitalisationSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
+    }
+
     /**
      * The "booting" method of the model.
      *

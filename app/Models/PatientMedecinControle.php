@@ -85,6 +85,13 @@ class PatientMedecinControle extends Model
         return str_random(6). ' ' .Carbon::now()->timestamp;
     }
 
+    public function scopeMedRefSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
+    }
+
     /**
      * Send the affectation notification.
      *
