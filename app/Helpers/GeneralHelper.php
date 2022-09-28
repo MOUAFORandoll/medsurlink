@@ -392,7 +392,7 @@ if(!function_exists('ProcessAfterPayment'))
         $url_global = $url_global."/payment-management/medicasure";
         $message = "*$nom_souscripteur* a acheté $quantite $description à *$montant_total Euros*\nemail: $email_souscripteur \ntéléphone: $telephone \n <$url_global|*Cliquer ici pour plus de détails*>";
         // Send notification to affilié channel
-        if($url_global = 'production'){
+        if($env = 'production'){
             $affiliation->setSlackChannel('souscription')->notify(new SouscriptionAlert($message,null));
         }
 
