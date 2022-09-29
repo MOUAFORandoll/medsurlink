@@ -145,4 +145,11 @@ class CompteRenduOperatoire extends Model
             $this['canUpdate'] = is_null($this->archieved_at);
         }
     }
+
+    public function scopeCompteRenduSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
+    }
 }

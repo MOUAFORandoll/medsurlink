@@ -43,7 +43,7 @@ class RendezVousController extends Controller
             $dateAvant = date('Y-m-d', strtotime($dateDebut. ' - '.$nbre.' months'));
             $dateApres = date('Y-m-d', strtotime($dateDebut. ' + '.$nbre.' months'));
 
-            $rdvs = RendezVous::with(['patient','praticien','sourceable','initiateur'])
+            $rdvs = RendezVous::has('patient')->with(['patient','praticien','sourceable','initiateur'])
                 ->where(function ($query) {
                 $query->where('statut', "Programmé")->orWhere('statut', "Reprogrammé");
             })->where('praticien_id','=',$userId)->orWhere('patient_id','=',$userId)
@@ -69,7 +69,9 @@ class RendezVousController extends Controller
             }
             $rdvs = $rdvsAvant+$rdvsApres;
             foreach ($rdvs as $rdv){
-                $rdv->updateRendezVous();
+                if($rdv->patient){
+                    $rdv->updateRendezVous();
+                }
             }
             return response()->json(['rdvs' => $rdvs]);
         }

@@ -6,6 +6,7 @@ use App\Mail\Rappel;
 use App\Mail\Rdv\RappelSouscripteur;
 use App\Models\Auteur;
 use App\Models\RendezVous;
+use App\Notifications\SouscriptionAlert;
 use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -64,9 +65,13 @@ class rappelerRendezVous extends Command
          * Rappeler le praticien, souscripteur dont  le patient a un rendez-vous demain
          */
         $dateRendezVous = Carbon::tomorrow()->toDateString();
-        $rdvs = RendezVous::with('patient','praticien')->whereDate('date',$dateRendezVous)->where('statut','<>','Annulé')->latest()->get();
-        \Log::alert("rsvs ".$rdvs);
-
+        $rdvs = RendezVous::with('patient','praticien')
+            ->whereHas('patient', function($query){
+                $query->where('decede', 'non');
+            })
+            ->whereDate('date',$dateRendezVous)
+            ->where('statut','<>','Annulé')->orderBy('date', 'asc')->get();
+        $slack_notification = "";
         foreach ($rdvs as $rdv){
             $date = Carbon::parse($rdv->date)->format('d/m/Y');
             $heure = Carbon::parse($rdv->date)->format('H').'h'.Carbon::parse($rdv->date)->format('i');
@@ -85,10 +90,31 @@ class rappelerRendezVous extends Command
 
                 if (is_null($rdv->nom_medecin)) {
                     $mail = new Rappel($rdv);
-                    Mail::to($rdv->praticien->email)->send($mail);
+                    if($rdv->praticien){
+                        Mail::to($rdv->praticien->email)->send($mail);
+                    }
                 }
+                $patient = mb_strtoupper($rdv->patient->nom).' '.ucfirst($rdv->patient->prenom);
+                $date_heure = Carbon::parse($rdv->date)->format('d-M-Y à H:i');
+                $docta =  !is_null($rdv->praticien) ? mb_strtoupper($rdv->praticien->nom).' '.ucfirst($rdv->praticien->prenom) : null;
+                $praticien = !is_null($rdv->nom_medecin) ? $rdv->nom_medecin : $docta;
+                $etablissement = !is_null($rdv->etablissement) ? $rdv->etablissement->name: null;
+                $slack_notification = $slack_notification. "*$patient* a rendez-vous demain le *$date_heure* avec le médecin *$praticien* dans l'établissement *$etablissement*\nMotif: $rdv->motifs\n\n";
             }
         }
+
+        $env = strtolower(config('app.env'));
+        $url_global = "";
+        if ($env == 'local')
+            $url_global = config('app.url_loccale');
+        else if ($env == 'staging')
+            $url_global = config('app.url_stagging');
+        else
+            $url_global = config('app.url_prod');
+        $url_global = $url_global."/appointments";
+
+        $slack_notification = $slack_notification. "<$url_global|Voir plus de détails>";
+        $rdv->setSlackChannel('appel')->notify(new SouscriptionAlert($slack_notification,null));
 
         foreach ($rdvs as $rdv){
             if($rdv->patient->decede == 'non') {
@@ -100,9 +126,11 @@ class rappelerRendezVous extends Command
                 }
                 $financeurs = $rdv->patient->patient->financeurs;
                 foreach ($financeurs as $financeur) {
-                    $mail = new RappelSouscripteur($rdv, $financeur->financable);
-                    Mail::to($financeur->financable->user->email)->send($mail);
-                    Log::info('envoi de mail de rappel au souscripteur' . $financeur->financable->user->email);
+                    if($financeur->financable->user){
+                        $mail = new RappelSouscripteur($rdv, $financeur->financable);
+                        Mail::to($financeur->financable->user->email)->send($mail);
+                        Log::info('envoi de mail de rappel au souscripteur' . $financeur->financable->user->email);
+                    }
                 }
             }
         }

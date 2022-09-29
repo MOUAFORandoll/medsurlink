@@ -108,6 +108,13 @@ class ResultatImagerie extends Model
         return $this->belongsTo(ConsultationMedecineGenerale::class,'consultation_medecine_generale_id','id');
     }
 
+    public function scopeResultImagerieSemaineMoisAnnee($query, $intervalle_debut, $intervalle_fin)
+    {
+        return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
+            $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
+        })->orderBy('created_at', 'asc');
+    }
+
     /**
      * The "booting" method of the model.
      *
