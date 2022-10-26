@@ -433,7 +433,7 @@ class ConsultationMedecineGeneraleController extends Controller
             'etablissement',
             'files',
             'rdv.praticien'
-        ])->whereSlug($slug)->first();
+        ])->whereSlug($slug)->withTrashed()->first();
         $lgne_temps = $consultation->ligneDeTemps;
         $etablissement = $consultation->etablissement;
         $motifs = $consultation->motifs->map(function ($motif) {

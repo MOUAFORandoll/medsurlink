@@ -160,9 +160,9 @@ class PatientMedecinController extends Controller
             $medecin_patients = $medecin_patients == 1 ? "1 patient" : "2 patients";
             $message = "<@".$nouveau_medecin_referent->slack."> a reçu un transfert de ".$medecin_patients." précédement suivie par <@".$ancien_medecin_referent->slack."> comme médecin referent";
             // Send notification to affilié channel
-            $nouveau_medecin_referent->setSlackChannel('affilie')->notify(new MedecinToPatient($message,null));
+            // $nouveau_medecin_referent->setSlackChannel('affilie')->notify(new MedecinToPatient($message,null));
             // Send notification to appel channel
-            $nouveau_medecin_referent->setSlackChannel('appel')->notify(new MedecinToPatient($message,null));
+            // $nouveau_medecin_referent->setSlackChannel('appel')->notify(new MedecinToPatient($message,null));
         }
         return response()->json(['nouveau_medecin_referent' => $nouveau_medecin_referent]);
     }
