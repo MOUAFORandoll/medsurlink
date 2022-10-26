@@ -314,7 +314,7 @@ class User extends Authenticatable implements HasMedia
 
 
     public function praticien(){
-        return $this->hasOne(Praticien::class,'user_id','id');
+        return $this->hasOne(Praticien::class,'user_id','id')->withTrashed();
     }
     public function association(){
         return $this->hasOne(Association::class,'responsable','id');
@@ -323,16 +323,16 @@ class User extends Authenticatable implements HasMedia
         return $this->hasOne(Patient::class,'user_id','id');
     }
     public function gestionnaire(){
-        return $this->hasOne(Gestionnaire::class,'user_id','id');
+        return $this->hasOne(Gestionnaire::class,'user_id','id')->withTrashed();
     }
     public function souscripteur(){
-        return $this->hasOne(Souscripteur::class,'user_id','id');
+        return $this->hasOne(Souscripteur::class,'user_id','id')->withTrashed();
     }
     public function medecinControle(){
-        return $this->hasOne(MedecinControle::class,'user_id','id');
+        return $this->hasOne(MedecinControle::class,'user_id','id')->withTrashed();
     }
     public function assistante(){
-        return $this->hasOne(Assistante::class,'user_id','id');
+        return $this->hasOne(Assistante::class,'user_id','id')->withTrashed();
     }
     public function pharmacien(){
         return $this->hasOne(Pharmacien::class,'user_id','id');
