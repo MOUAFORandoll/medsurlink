@@ -110,7 +110,7 @@ class ParcourDeSoinController extends Controller
 
         $patient_id = $dossier->patient_id;
 
-        $activite_ama_isoles = ActiviteAmaPatient::doesntHave('affiliation')->with(['activitesAma:id,description_fr,created_at', 'updatedBy', 'createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id', $patient_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_ama_id', 'commentaire', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
+        $activite_ama_isoles = ActiviteAmaPatient::doesntHave('affiliation')->with(['activitesAma:id,description_fr,created_at', 'updatedBy', 'createur:id,nom,prenom', 'ligne_temps:id,date_consultation,motif_consultation_id', 'ligne_temps.motif:id,description', 'etablissement:id,name'])->where('patient_id', $patient_id)->orderBy('updated_at', 'desc')->get(['id', 'activite_ama_id', 'date_cloture', 'commentaire', 'creator', 'ligne_temps_id', 'etablissement_id', 'created_at']);
         /**
          * ici nous retournons la liste des affiliations avec lignes de temps associées et pour chaque ligne de temps, ses activités AMA
          */
