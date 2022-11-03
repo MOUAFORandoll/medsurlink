@@ -31,16 +31,12 @@ class ActivitesAmaSeeder extends Seeder
             'Explication du service Medicasure au souscripteur',
             'Explication du service Medicasure à l’affilié',
             'Suivi réalisation des rendez-vous chez les prestataires',
-            'Suivi réalisation des rendez-vous chez les prestataires',
-            'Suivi réalisation des rendez-vous chez les prestataires',
             'Réception et traitement des factures des prestataires de 1ère Ligne',
             'Transmission des factures au souscripteur',
             'Rappel du patient pour évaluer sa satisfaction à J2 au plus tard',
             'Rappel du souscripteur pour évaluer sa satisfaction à J7 au plus tard (Accès aux dossiers – Satisfaction service chez Prestataire / tarification – recommandation)',
-            "obtention du dossier physique du patient
-            pour encodage ( compte rendu, CD)",
-            "organisation de l\'obtention des médicaments
-            du patient",
+            "obtention du dossier physique du patient pour encodage ( compte rendu, CD)",
+            "organisation de l\'obtention des médicaments du patient",
             "organisation discussion pluridisciplinaire",
             "organisation d'une prestation à domicile ",
             "encodage données medicales",
@@ -48,10 +44,8 @@ class ActivitesAmaSeeder extends Seeder
             "reception d'une alerte par la personne de contact",
             "Appel du souscripteur après l'affiliation",
             "Appel du patient après l'affiliation",
-            "obtention du dossier physique du patient
-            pour encodage ( compte rendu, CD)",
-            "organisation de l\'obtention des médicaments
-            du patient",
+            "obtention du dossier physique du patient pour encodage ( compte rendu, CD)",
+            "organisation de l\'obtention des médicaments du patient",
             "organisation discussion pluridisciplinaire",
             "organisation d'une prestation à domicile ",
             "encodage données medicales",

@@ -455,8 +455,9 @@ class ConsultationMedecineGeneraleController extends Controller
         }
 
         $consultation->makeHidden(['ligneDeTemps', 'etablissement', 'motifs']);
-
-        $consultation->ligne_de_temps_id = ["id" => $lgne_temps->id, "date" => $lgne_temps->date_consultation, "motif" => $lgne_temps->motif->description, "etat" => $lgne_temps->etat == null ? true : false];
+        if($consultation->ligne_de_temps_id){
+            $consultation->ligne_de_temps_id = ["id" => $lgne_temps->id, "date" => $lgne_temps->date_consultation, "motif" => $lgne_temps->motif->description, "etat" => $lgne_temps->etat == null ? true : false];
+        }
         $consultation->etablissement_id = ["id" => $etablissement->id, "nom" => $etablissement->name, "description" => $etablissement->description, "date" => $etablissement->created_at->format('DD-MM-YYYY'), 'slug' => $etablissement->slug];
         $consultation->current_motifs = $motifs;
         $consultation->contributors = $contributors;

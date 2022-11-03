@@ -67,10 +67,10 @@ class Contributeurs extends Model
     }
 
     public function contributable(){
-        return $this->morphTo();
+        return $this->morphTo()->withTrashed();
     }
 
     public function operationable(){
-        return $this->morphTo();
+        return $this->morphTo()->withTrashed();
     }
 }

@@ -159,10 +159,12 @@ class LigneDeTempsController extends Controller
                         $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
                         $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
                         $ligne = $consultation->ligneDeTemps;
-                        $ligne->date_heure_prevue = $delai->date_heure_prevue;
-                        $ligne->date_heure_effectif = $delai->date_heure_effectif;
-                        $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                        $new_ligne_delais->push($ligne);
+                        if(!is_null($ligne)){
+                            $ligne->date_heure_prevue = $delai->date_heure_prevue;
+                            $ligne->date_heure_effectif = $delai->date_heure_effectif;
+                            $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+                            $new_ligne_delais->push($ligne);
+                        }
                     }
                 }
                 elseif($delai->delai_operationable_type == PatientMedecinControle::class){
@@ -171,10 +173,12 @@ class LigneDeTempsController extends Controller
                         $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
                         $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
                         $ligne = $consultation->ligneDeTemps;
-                        $ligne->date_heure_prevue = $delai->date_heure_prevue;
-                        $ligne->date_heure_effectif = $delai->date_heure_effectif;
-                        $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                        $new_ligne_delais->push($ligne);
+                        if(!is_null($ligne)){
+                            $ligne->date_heure_prevue = $delai->date_heure_prevue;
+                            $ligne->date_heure_effectif = $delai->date_heure_effectif;
+                            $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+                            $new_ligne_delais->push($ligne);
+                        }
                     }
                 }
                 elseif($delai->delai_operationable_type == ActiviteAmaPatient::class){
@@ -204,10 +208,12 @@ class LigneDeTempsController extends Controller
                         $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
                         $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
                         $ligne = $consultation->ligneDeTemps;
-                        $ligne->date_heure_prevue = $delai->date_heure_prevue;
-                        $ligne->date_heure_effectif = $delai->date_heure_effectif;
-                        $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                        $new_ligne_delais->push($ligne);
+                        if(!is_null($ligne)){
+                            $ligne->date_heure_prevue = $delai->date_heure_prevue;
+                            $ligne->date_heure_effectif = $delai->date_heure_effectif;
+                            $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+                            $new_ligne_delais->push($ligne);
+                        }
                     }
                 }
                 elseif($delai->delai_operationable_type == ConsultationMedecineGenerale::class){
@@ -216,10 +222,12 @@ class LigneDeTempsController extends Controller
                         $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
                         $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
                         $ligne = $consultation->ligneDeTemps;
-                        $ligne->date_heure_prevue = $delai->date_heure_prevue;
-                        $ligne->date_heure_effectif = $delai->date_heure_effectif;
-                        $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                        $new_ligne_delais->push($ligne);
+                        if(!is_null($ligne)){
+                            $ligne->date_heure_prevue = $delai->date_heure_prevue;
+                            $ligne->date_heure_effectif = $delai->date_heure_effectif;
+                            $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+                            $new_ligne_delais->push($ligne);
+                        }
                     }
                 }
                 elseif($delai->delai_operationable_type == MedecinAvis::class){
@@ -228,10 +236,12 @@ class LigneDeTempsController extends Controller
                         $date_heure_prevue = Carbon::parse($delai->date_heure_prevue);
                         $date_heure_effectif = Carbon::parse($delai->date_heure_effectif);
                         $ligne = $consultation->ligneDeTemps;
-                        $ligne->date_heure_prevue = $delai->date_heure_prevue;
-                        $ligne->date_heure_effectif = $delai->date_heure_effectif;
-                        $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
-                        $new_ligne_delais->push($ligne);
+                        if(!is_null($ligne)){
+                            $ligne->date_heure_prevue = $delai->date_heure_prevue;
+                            $ligne->date_heure_effectif = $delai->date_heure_effectif;
+                            $ligne->ecart_en_second = $date_heure_effectif->DiffInSeconds($date_heure_prevue);
+                            $new_ligne_delais->push($ligne);
+                        }
                     }
                 }elseif($delai->delai_operationable_type == ActivitesControle::class){
                     $ligne = $model->ligne_temps;
