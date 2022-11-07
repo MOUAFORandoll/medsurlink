@@ -139,7 +139,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
 
     Route::get('/mission/list','Api\ActiviteController@getListMission');
 
-
     // Route::resource('/activite-pec','Api\PecController');
     Route::post('/activite-pec','Api\PecController@store');
     Route::get('/activite-pec-list','Api\PecController@index');
@@ -422,6 +421,9 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::resource('medecin-controle','Api\MedecinControleController')->only(['index']);
     Route::resource('praticien','Api\PraticienController')->only(['index']);
+    // timeActivities
+    Route::get('/timeactivities','Api\PraticienController@timeActivities');
+    
     Route::resource('association','Api\AssociationController');
     Route::resource('facture-avis','Api\FactureAvisController');
     Route::resource('medicament','Api\MedicamentController')->except(['edit','create']);

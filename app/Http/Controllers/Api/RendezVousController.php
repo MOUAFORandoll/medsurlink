@@ -171,7 +171,7 @@ class RendezVousController extends Controller
      */
     public function store(RendezVousRequest $request)
     {
-//        Auth::loginUsingId(77);
+        //Auth::loginUsingId(77);
         //Récupération du nom du medecin ou bien de l'identifiant du praticien
         $praticien = $request->get('praticien_id');
 

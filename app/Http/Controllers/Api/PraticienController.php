@@ -11,6 +11,7 @@ use App\Models\Comptable;
 use App\Models\EtablissementExercice;
 use App\Models\EtablissementExercicePraticien;
 use App\Models\Praticien;
+use App\Models\TimeActivite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -441,5 +442,9 @@ class PraticienController extends Controller
 
         $praticien = Praticien::with('etablissements','specialite','user')->whereUserId($praticien->user_id)->first();
         return response()->json(['praticien'=>$praticien]);
+    }
+    public function timeActivities() {
+        $praticien = TimeActivite::with(['etablissements','specialite','user'])->get();
+        return response()->success($praticien, 'Package of subscription successfully changed !',  200);
     }
 }
