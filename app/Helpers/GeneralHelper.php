@@ -1,39 +1,42 @@
 <?php
+use App\SMS;
+use App\User;
 use Carbon\Carbon;
 use Psy\Util\Json;
+use App\Models\Motif;
 use GuzzleHttp\Client;
 use App\Models\Package;
 use App\Models\Patient;
+use App\Models\Praticien;
 use App\Mail\OrderShipped;
+use Carbon\CarbonInterval;
+use App\Models\Affiliation;
+use Illuminate\Support\Arr;
+use App\Models\LigneDeTemps;
+use App\Models\PaymentOffre;
 use App\Models\Souscripteur;
 use App\Models\TimeActivite;
 use Illuminate\Http\Request;
 use App\Models\ReponseSecrete;
+use App\Notifications\SendSMS;
 use App\Mail\NouvelAffiliation;
+use App\Models\CommandePackage;
+use App\Models\MedecinControle;
+use App\Mail\Facture\AchatOffre;
+use Barryvdh\DomPDF\Facade as PDF;
 use App\Models\PatientSouscripteur;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Models\AffiliationSouscripteur;
+use App\Mail\Facture\PaiementPrestation;
+use App\Notifications\SouscriptionAlert;
+use App\Http\Requests\AffiliationRequest;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
+use App\Models\ConsultationMedecineGenerale;
 use App\Http\Controllers\Traits\PersonnalErrors;
-use App\Models\LigneDeTemps;
-use App\Models\Motif;
-use App\Mail\Facture\AchatOffre;
-use App\Mail\Facture\PaiementPrestation;
-use App\Models\Affiliation;
-use App\Models\AffiliationSouscripteur;
-use App\SMS;
-use App\Notifications\SendSMS;
-use App\Notifications\SouscriptionAlert;
-use Illuminate\Support\Arr;
-use Barryvdh\DomPDF\Facade as PDF;
-use Carbon\CarbonInterval;
-use App\Http\Requests\AffiliationRequest;
-use App\Models\PaymentOffre;
-use App\Models\CommandePackage;
-use App\User;
 
 if(!function_exists('sendSMS'))
 {
@@ -222,6 +225,124 @@ if(!function_exists('generationPdfFactureOffre'))
         }catch (\Exception $exception){
             //$exception
         }
+    }
+
+    function visualiser($slug)
+    {
+        $consultationMedecine = ConsultationMedecineGenerale::with('operationables.contributable','files')->whereSlug($slug)->first();
+
+        $auteur = getAuthor("ConsultationMedecineGenerale",$consultationMedecine->id,"create");
+        $updateAuteurs = getUpdatedAuthor("ConsultationMedecineGenerale",$consultationMedecine->id,"update");
+        $signature = null;
+        $medecins = [];
+        $praticiens = new Praticien();
+        $auteurs = [];
+        if (!is_null($auteur)){
+            if ($auteur->auteurable_type == 'Praticien'){
+                $praticien = Praticien::with('user')->find($auteur->auteurable_id);
+                $praticiens = $praticien ?? '';
+                $signature = $praticien->signature ?? '';
+            }else if($auteur->auteurable_type == 'Medecin controle') {
+                $medecin = MedecinControle::with('user')->find($auteur->auteurable_id);
+                $praticiens = $medecin ?? '';
+                $signature = $medecin->signature ?? '';
+            }
+        }
+
+        foreach ($updateAuteurs as $item){
+            if ($item->auteurable_id != $auteur->auteurable_id){
+                if (!in_array($item->auteurable_id,$auteurs)){
+                    if ($item->auteurable_type == 'Medecin controle'){
+                        $medecin = MedecinControle::with('user')->find($item->auteurable_id);
+                        array_push($medecins,$medecin);
+                    }
+                    array_push($auteurs,$item->auteurable_id);
+                }
+            }
+        }
+        //Recuperation des contributeurs de la consultation
+        $cContributeurs = [];
+        foreach($consultationMedecine->operationables as $operationable){
+            array_push($cContributeurs,$operationable['contributable']['id']);
+        }
+
+        $pContributeurs = Praticien::with('user')->whereIn('user_id',$cContributeurs)->latest()->get();
+        $mContributeurs = MedecinControle::with('user')->whereIn('user_id',$cContributeurs)->latest()->get();
+
+        if(isJSON($consultationMedecine->examen_complementaire)){
+            $examen_complementaire = _group_by(json_decode($consultationMedecine->examen_complementaire, true),"reference");
+        }else if(is_array($consultationMedecine->examen_complementaire)){
+            $examen_complementaire = _group_by($consultationMedecine->examen_complementaire,"reference");
+        }else if(is_string($consultationMedecine->complementaire)){
+            $complementaire = $consultationMedecine->complementaire;
+        }else{
+            $examen_complementaire = null;
+        }
+
+
+        if(isJSON($consultationMedecine->examen_clinique)){
+            // dd($consultationMedecine->examen_clinique);
+            $examen_clinique = _group_by(json_decode($consultationMedecine->examens, true),"reference");
+        }else if(is_array($consultationMedecine->examens)){
+            $examen_clinique = _group_by($consultationMedecine->examens,"reference");
+        }else if(is_string($consultationMedecine->examens)){
+            $examen_clinique = $consultationMedecine->examen_clinique;
+            // dd($examen_clinique);
+        }else{
+            $examen_clinique = $consultationMedecine->examens;
+        }
+        // dd($consultationMedecine);
+
+        if(!is_null($consultationMedecine->examens)){
+           $examen_clinique = _group_by(is_array($consultationMedecine->examens)?$consultationMedecine->examens:json_decode($consultationMedecine->examens, true),"reference");
+        }
+
+        if(!is_null($consultationMedecine->anamneses)){
+          $anamneses = _group_by(is_array($consultationMedecine->anamneses)?$consultationMedecine->anamneses:json_decode($consultationMedecine->anamneses, true),"reference");
+        }else{
+            $anamneses = null;
+        }
+
+        if(!is_null($consultationMedecine->anamese)){
+            $anamese = $consultationMedecine->anamese;
+        }else{
+            $anamese = $consultationMedecine->anamese;
+        }
+
+        if(!is_null($consultationMedecine->complementaire)){
+            $complementaire = $consultationMedecine->complementaire;
+        }else{
+            $complementaire = $consultationMedecine->complementaire;
+        }
+
+
+
+        // if(is_string($consultationMedecine->anamneses)){
+        //     $anamneses = $consultationMedecine->anamneses;
+        // }else{
+        //     $anamneses = $consultationMedecine->anamneses;
+        // }
+        // dd($consultationMedecine);
+
+        if(!is_null($consultationMedecine->diasgnostic)){
+          $diasgnostic = is_array($consultationMedecine->diasgnostic)?$consultationMedecine->diasgnostic:json_decode($consultationMedecine->diasgnostic, true);
+        }else{
+            $diasgnostic = null;
+        }
+
+        $data = compact('consultationMedecine','signature','medecins','praticiens','mContributeurs','pContributeurs','examen_complementaire','examen_clinique','anamneses','diasgnostic','anamese','complementaire');
+        $pdf = PDF::loadView('rapport',$data);
+
+        $nom  = patientLastName($consultationMedecine);
+        $prenom = patientFirstName($consultationMedecine);
+        $date= $consultationMedecine->date_consultation;
+
+        // $path = storage_path().'/app/public/pdf/'.'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf';
+        // $pdf->save($path);
+
+        // return  response()->json(['link'=>'Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf']);
+        return $pdf->stream('Generale_'.$nom.'_'.$prenom.'_'.$date.'.pdf');
+        // response()->json(['link' => route('facture.offre', $commande_id)]);
     }
 }
 

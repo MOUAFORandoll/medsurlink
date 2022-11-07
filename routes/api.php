@@ -42,6 +42,11 @@ Route::get('impression/facture-offre/{commande_id}', function ($commande_id) {
 
     return response()->json(['link' => route('facture.offre', $commande_id)]);
 });
+// Route::get('visualiser-consultation-medecine/{slug}', function ($slug) {
+
+//     return response()->json(['link' => route('visualiser.consultation', $slug)]);
+// });
+Route::get('visualiser-consultation-medecine/{slug}','Api\ImprimerController@visualiser');
 
 Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
 Route::resource('contact_assurances', 'Api\ContactAssuranceController');
@@ -321,6 +326,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('imprimer-compte-rendu/{compte}','Api\ImprimerController@compteRendu');
     Route::get('imprimer-facture-proforma/{facture}','Api\ImprimerController@factureProforma');
     Route::get('imprimer-consultation-medecine/{generale}','Api\ImprimerController@generale');
+    
 //    Route::get('imprimer-consultation-fichier/{fichier}','Api\ImprimerController@manuscrit');
     Route::get('imprimer-consultation-cardiologie/{cardiologie}','Api\ImprimerController@cardiologie');
     Route::get('imprimer-rapport-hospitalisation/{hospitalisation}','Api\ImprimerController@hospitalisation');
