@@ -267,6 +267,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::get('affiliation/souscripteur/{id}','Api\AffiliationController@affiliateBySouscripteur');
     // Route::get('affiliation/suspendre/{id}','Api\AffiliationController@stateSuspend');
     Route::post('affiliation-status','Api\AffiliationController@updateStatus');
+    // getLastestAffiliation
     Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
     Route::post('/contrat-prepaye-store-patient-unpaid','Api\AffiliationSouscripteurController@storePatientBeforePayment');
     Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
@@ -423,6 +424,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::resource('praticien','Api\PraticienController')->only(['index']);
     // timeActivities
     Route::get('/timeactivities','Api\PraticienController@timeActivities');
+    Route::get('/lastestaffiliation','Api\AffiliationController@getLastestAffiliation');
     
     Route::resource('association','Api\AssociationController');
     Route::resource('facture-avis','Api\FactureAvisController');

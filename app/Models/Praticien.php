@@ -99,11 +99,15 @@ class Praticien extends Model
         return $this->morphMany(Auteur::class, 'auteurable');
     }
     public function user(){
-        return $this->belongsTo(User::class,'user_id','id')->withTrashed();
+        return $this->belongsTo(User::class,'user_id','id');
     }
 
     public function rendezVous(){
        return $this->hasMany(RendezVous::class, 'praticien_id', 'user_id');
+    }
+
+    public function time(){
+        return $this->hasMany(TimeActivite::class, 'user_id');
     }
 
 }

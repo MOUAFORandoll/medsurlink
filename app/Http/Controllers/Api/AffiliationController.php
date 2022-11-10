@@ -443,4 +443,11 @@ class AffiliationController extends Controller
             }
         }
     }
+
+    public function getLastestAffiliation(){
+        $affiliations = Affiliation::has('patient.user')->with(['patient.user','package'])->whereHas('package', function($query){
+            $query->where('id', 1)->OrWhere('id', 2);
+        })->latest()->take(10)->get();
+        return response()->json($affiliations);
+    }
 }
