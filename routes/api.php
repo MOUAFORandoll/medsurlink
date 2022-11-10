@@ -386,6 +386,8 @@ Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|M
     Route::resource('type-operations', 'Api\v1\TypeOperationController');
     Route::resource('metriques', 'Api\v1\MetriqueController');
     Route::get('metriques/{date}/{metrique}', 'Api\v1\MetriqueController@courbe');
+    Route::get('/timeactivities', 'Api\PraticienController@timeActivities');
+    // timeActivities
 
     
 });
@@ -416,6 +418,10 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::resource('medecin-controle','Api\MedecinControleController')->only(['index']);
     Route::resource('praticien','Api\PraticienController')->only(['index']);
+
+    Route::get('/timeactivities','Api\PraticienController@timeActivities');
+
+    
     Route::resource('association','Api\AssociationController');
     Route::resource('facture-avis','Api\FactureAvisController');
     Route::resource('medicament','Api\MedicamentController')->except(['edit','create']);
