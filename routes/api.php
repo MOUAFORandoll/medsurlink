@@ -427,10 +427,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
 
     // timeActivities
     Route::get('/timeactivities','Api\PraticienController@timeActivities');
-
     Route::get('/lastestaffiliation','Api\AffiliationController@getLastestAffiliation');
-
-
+    
     Route::resource('association','Api\AssociationController');
     Route::resource('facture-avis','Api\FactureAvisController');
     Route::resource('medicament','Api\MedicamentController')->except(['edit','create']);

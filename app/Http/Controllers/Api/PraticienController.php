@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Comptable;
 use App\Models\Praticien;
+use App\Mail\updateSetting;
+use App\Models\TimeActivite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
@@ -445,6 +447,5 @@ class PraticienController extends Controller
     public function timeActivities() {
         $praticien = Praticien::with('time','user')->withCount('time')->get();
         return response()->json(['praticien' => $praticien]);
-
     }
 }
