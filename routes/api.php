@@ -426,6 +426,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::resource('praticien','Api\PraticienController')->only(['index']);
     // timeActivities
     Route::get('/timeactivities','Api\PraticienController@timeActivities');
+    Route::get('/lastestaffiliation','Api\AffiliationController@getLastestAffiliation');
     
     Route::resource('association','Api\AssociationController');
     Route::resource('facture-avis','Api\FactureAvisController');
