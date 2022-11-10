@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\User;
 use Carbon\Carbon;
-use Cviebrock\EloquentSluggable\Sluggable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Praticien;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Model;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\TimeActivite
@@ -78,5 +80,13 @@ class TimeActivite extends Model
         TimeActivite::creating(function ($time){
             $time->user_id = Auth::id();
         });
+    }
+
+    public function time(){
+        return $this->hasMany(TimeActivite::class, 'user_id', 'praticien_id');
+    }
+
+    public function user(){
+        return $this->belongsTo(Praticien::class,'user_id','user_id');
     }
 }
