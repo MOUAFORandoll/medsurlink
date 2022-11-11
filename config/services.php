@@ -44,4 +44,9 @@ return [
         ],
     ],
 
+    'teleconsultations' => [
+        'base_uri' => env('TELECONSULTATIONS_SERVICE_BASE_URI', "http://localhost:8002"),
+        'secret' => env('TELECONSULTATIONS_SERVICE_SECRET', "1Oo4L3YRMdpxXEw1fMYOcfLMLddQ7AwtbOZTlI7d"),
+    ]
+
 ];
