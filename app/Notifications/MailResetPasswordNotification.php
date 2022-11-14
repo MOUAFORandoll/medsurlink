@@ -83,7 +83,7 @@ class MailResetPasswordNotification extends Notification
         }
         if (count($users)>0) {
             $token = $this->token;
-            $mail->from('no-reply@medsurlink.com');
+            $mail->from(config('mail.from.address'));
             $mail->subject(Lang::getFromJson('Reset Password Notification'));
             $mail->line(Lang::getFromJson('You are receiving this email because we received a password reset request for your account.'));
 

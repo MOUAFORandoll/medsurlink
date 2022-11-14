@@ -34,7 +34,7 @@ class RestrictDossierScope implements Scope
 
                 $dossier = $user->patient->dossier;
                 if ($user->isMedicasure == 0){
-                    $builder;
+                    $builder->where('dossier_medical_id', '=', $dossier->id)->whereNotNull('archieved_at');
                 }else {
                     $builder->where('dossier_medical_id', '=', $dossier->id)->whereNotNull('archieved_at');
                 }

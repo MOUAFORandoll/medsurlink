@@ -42,6 +42,11 @@ Route::get('impression/facture-offre/{commande_id}', function ($commande_id) {
 
     return response()->json(['link' => route('facture.offre', $commande_id)]);
 });
+// Route::get('visualiser-consultation-medecine/{slug}', function ($slug) {
+
+//     return response()->json(['link' => route('visualiser.consultation', $slug)]);
+// });
+Route::get('visualiser-consultation-medecine/{slug}','Api\ImprimerController@visualiser');
 
 Route::resource('dictionnaire','Api\DictionnaireController')->only('show');
 Route::resource('contact_assurances', 'Api\ContactAssuranceController');
@@ -133,7 +138,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Praticien|Medecin controle
     Route::post('activite-mission-add','Api\ActiviteController@createMissions');
 
     Route::get('/mission/list','Api\ActiviteController@getListMission');
-
 
     // Route::resource('/activite-pec','Api\PecController');
     Route::post('/activite-pec','Api\PecController@store');
@@ -263,6 +267,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::get('affiliation/souscripteur/{id}','Api\AffiliationController@affiliateBySouscripteur');
     // Route::get('affiliation/suspendre/{id}','Api\AffiliationController@stateSuspend');
     Route::post('affiliation-status','Api\AffiliationController@updateStatus');
+    // getLastestAffiliation
     Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
     Route::post('/contrat-prepaye-store-patient-unpaid','Api\AffiliationSouscripteurController@storePatientBeforePayment');
     Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
@@ -321,6 +326,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Medecin controle|Praticien
     Route::get('imprimer-compte-rendu/{compte}','Api\ImprimerController@compteRendu');
     Route::get('imprimer-facture-proforma/{facture}','Api\ImprimerController@factureProforma');
     Route::get('imprimer-consultation-medecine/{generale}','Api\ImprimerController@generale');
+    
 //    Route::get('imprimer-consultation-fichier/{fichier}','Api\ImprimerController@manuscrit');
     Route::get('imprimer-consultation-cardiologie/{cardiologie}','Api\ImprimerController@cardiologie');
     Route::get('imprimer-rapport-hospitalisation/{hospitalisation}','Api\ImprimerController@hospitalisation');
@@ -386,6 +392,8 @@ Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|M
     Route::resource('type-operations', 'Api\v1\TypeOperationController');
     Route::resource('metriques', 'Api\v1\MetriqueController');
     Route::get('metriques/{date}/{metrique}', 'Api\v1\MetriqueController@courbe');
+    Route::get('/timeactivities', 'Api\PraticienController@timeActivities');
+    // timeActivities
 
     
 });
@@ -416,6 +424,10 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::resource('medecin-controle','Api\MedecinControleController')->only(['index']);
     Route::resource('praticien','Api\PraticienController')->only(['index']);
+    // timeActivities
+    Route::get('/timeactivities','Api\PraticienController@timeActivities');
+    Route::get('/lastestaffiliation','Api\AffiliationController@getLastestAffiliation');
+    
     Route::resource('association','Api\AssociationController');
     Route::resource('facture-avis','Api\FactureAvisController');
     Route::resource('medicament','Api\MedicamentController')->except(['edit','create']);

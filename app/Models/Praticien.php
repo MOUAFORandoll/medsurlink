@@ -106,4 +106,8 @@ class Praticien extends Model
        return $this->hasMany(RendezVous::class, 'praticien_id', 'user_id');
     }
 
+    public function time(){
+        return $this->hasMany(TimeActivite::class, 'user_id');
+    }
+
 }
