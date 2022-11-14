@@ -542,8 +542,7 @@ class PatientController extends Controller
                                                                             ->orwhere('email', 'like', '%' .$value.'%')
                                                                             ;})
                             ->orwhereHas('dossier', function($q) use ($value) {$q->where('numero_dossier', 'like', '%' .$value.'%');})
-                            ->orwhere('age', 'like', '%' .$value.'%')
-                            ->latest()->get();
+                            ->orwhere('age', 'like', '%' .$value.'%')->get();
         return $patients;
         // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->latest()->get();
         // return $patients;

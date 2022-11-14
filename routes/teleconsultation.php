@@ -124,14 +124,25 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware('client.cr
         Route::delete('/{niveau_urgence}', 'NiveauUrgenceController@destroy');
     });
 
-     /**
-     * CRUDS rendez-vous
-     */
+    /**
+    * CRUDS rendez-vous
+    */
     Route::group(['prefix' => 'rendez_vous'], function () {
         Route::get('/', 'RendezVousController@index');
         Route::post('/', 'RendezVousController@store');
         Route::get('/{rendez_vous}', 'RendezVousController@show');
         Route::patch('/{rendez_vous}', 'RendezVousController@update');
         Route::delete('/{rendez_vous}', 'RendezVousController@destroy');
+    });
+
+    /**
+    * CRUDS patients
+    */
+    Route::group(['prefix' => 'patients'], function () {
+        Route::get('/', 'PatientController@index');
+       /*  Route::post('/', 'PatientController@store'); */
+        Route::get('/{patient_id}', 'PatientController@show');
+        /* Route::patch('/{rendez_vous}', 'PatientController@update');
+        Route::delete('/{rendez_vous}', 'PatientController@destroy'); */
     });
 });

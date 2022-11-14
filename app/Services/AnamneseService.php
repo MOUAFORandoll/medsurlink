@@ -35,7 +35,7 @@ class AnamneseService
      */
     public function fetchAnamneses(Request $request) : string
     {
-        return $this->request('GET', "{$this->path}?search={$request->search}&page={$request->page}");
+        return $this->request('GET', "{$this->path}?search={$request->search}&page={$request->page}&page_size={$request->page_size}");
     }
 
     /**

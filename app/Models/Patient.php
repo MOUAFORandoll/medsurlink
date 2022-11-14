@@ -176,13 +176,13 @@ class Patient extends Model
             $user = Auth::user();
             $userRoles = $user->getRoleNames();
             if(gettype($userRoles->search('Patient')) == 'integer'){
-                $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
+                $user = User::with(['patient'])->whereId(Auth::id())->first();
                 $builder->where('user_id',$user->id);
 
             }else if(gettype($userRoles->search('Assistante')) == 'integer'){
                 return $builder;
                  } else if(gettype($userRoles->search('Souscripteur')) == 'integer'){
-                $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
+                $user = User::with(['patient'])->whereId(Auth::id())->first();
                 //Récupération des patiens du souscripteur
                 $patients = $user->souscripteur->patients;
                 $patientsId = [];
