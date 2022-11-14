@@ -33,7 +33,7 @@ class PaiementPrestation extends Mailable
      */
     public function build()
     {
-        return $this->from('no-reply@medsurlink.com')->subject("Reçu de $this->prestation")
+        return $this->from(config('mail.from.address'))->subject("Reçu de $this->prestation")
                 ->markdown('emails.Souscripteur.paiementPrestation')
                 ->attachData($this->pdf,"$this->prestation du ".date('d-m-Y').".pdf");
     }

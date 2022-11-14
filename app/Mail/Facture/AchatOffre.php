@@ -32,7 +32,7 @@ class AchatOffre extends Mailable
      */
     public function build()
     {
-        return $this->from('no-reply@medsurlink.com')->subject("Commande de l'offre $this->cim_title")
+        return $this->from(config('mail.from.address'))->subject("Commande de l'offre $this->cim_title")
                 ->markdown('emails.Souscripteur.factureOffre')
                 ->attachData($this->pdf,"$this->cim_title du ".date('d-m-Y').".pdf");
     }
