@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Patient;
 use App\Traits\RequestService;
+use App\User;
 use Illuminate\Http\Request;
 
 class PatientService
@@ -53,5 +54,12 @@ class PatientService
         }
         $patient = $patient->firstOrFail();
         return $patient;
+    }
+    public function medecin()
+    {
+        $user = \Auth::guard('api')->user();
+        //$user->token = $user->createToken(config('services.teleconsultations.secret'))->accessToken;
+        //$user->roles = $user->roles;
+        return $user;
     }
 }

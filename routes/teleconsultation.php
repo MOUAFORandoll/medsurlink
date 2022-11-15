@@ -13,7 +13,7 @@
 */
 
 
-Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware('client.credentials')->group(function () {
+Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.credentials'])->group(function () {
 
     /**
      * CRUDS allergies
@@ -145,4 +145,12 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware('client.cr
         /* Route::patch('/{rendez_vous}', 'PatientController@update');
         Route::delete('/{rendez_vous}', 'PatientController@destroy'); */
     });
+
+    /**
+     * Informations des utilisateurs connectés
+     */
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/medecin', 'UserController@medecin');
+    });
+    
 });
