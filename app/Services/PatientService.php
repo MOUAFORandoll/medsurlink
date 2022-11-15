@@ -58,8 +58,10 @@ class PatientService
     public function medecin()
     {
         $user = \Auth::guard('api')->user();
-        //$user->token = $user->createToken(config('services.teleconsultations.secret'))->accessToken;
-        //$user->roles = $user->roles;
+        $user->token = $user->createToken(config('services.teleconsultations.secret'))->accessToken;
+        //$user->medecin = $user->souscripteur;
+        $user->roles = $user->roles->makeHidden(['guard_name', 'created_at', 'updated_at', 'pivot']);
+        $user->makeHidden(['quartier', 'created_at', 'updated_at', 'deleted_at', 'adresse', 'isNotice', 'smsEnvoye', 'email_verified_at']);
         return $user;
     }
 }
