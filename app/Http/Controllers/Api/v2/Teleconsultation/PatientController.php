@@ -30,9 +30,8 @@ class PatientController extends Controller
         return $this->successResponse($patients);
     }    
 
-    public function show($patient_id){
-        
-        $patient = $this->patient->fetchPatient($patient_id);
+    public function show(Request $request, $patient_id){
+        $patient = $this->patient->fetchPatient($request, $patient_id);
         return $this->successResponse($patient);
     }
 }

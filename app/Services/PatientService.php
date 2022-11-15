@@ -36,9 +36,22 @@ class PatientService
      *
      * @return string
      */
-    public function fetchPatient($patient) : Patient
+    public function fetchPatient(Request $request, $patient) : Patient
     {
-        $patient = Patient::where('user_id', $patient)->with(['dossier:patient_id,id,numero_dossier', 'user:id,nom,prenom,email,slug','affiliations.package:id,description_fr'])->firstOrFail();
+        $associations = $request->associations;
+
+        $patient = Patient::where('user_id', $patient);
+
+        if(str_contains($associations, "dossier")){
+            $patient = $patient->with('dossier:patient_id,id,numero_dossier');
+        }
+        if(str_contains($associations, "user")){
+            $patient = $patient->with('user:id,nom,prenom,email,slug');
+        }
+        if(str_contains($associations, "affiliations")){
+            $patient = $patient->with('affiliations.package:id,description_fr');
+        }
+        $patient = $patient->firstOrFail();
         return $patient;
     }
 }
