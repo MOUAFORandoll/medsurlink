@@ -59,7 +59,9 @@ class PatientService
     {
         $user = \Auth::guard('api')->user();
         $user->token = $user->createToken(config('services.teleconsultations.secret'))->accessToken;
-        $user->medecin = $user->medecinControle->makeHidden(['deleted_at', 'created_at', 'updated_at']);
+        if($user->medecinControle != null){
+            $user->medecin = $user->medecinControle->makeHidden(['deleted_at', 'created_at', 'updated_at']);
+        }
         $user->roles = $user->roles->makeHidden(['guard_name', 'created_at', 'updated_at', 'pivot']);
         $user->makeHidden(['quartier', 'created_at', 'updated_at', 'deleted_at', 'adresse', 'isNotice', 'smsEnvoye', 'email_verified_at']);
         return $user;

@@ -11,7 +11,7 @@
 | contains the "user" middleware group. Now create something great!
 |
 */
-
+Route::post('v2/oauth/token', 'Api\AuthController@auth');
 
 Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.credentials'])->group(function () {
 
