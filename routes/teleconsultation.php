@@ -12,10 +12,6 @@
 |
 */
 
-header('Access-Control-Allow-Origin:  Accept');
-header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
-header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token, x-csrf-token');
-
 Route::post('v2/oauth/token', 'Api\AuthController@auth');
 
 Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.credentials'])->group(function () {
