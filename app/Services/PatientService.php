@@ -37,14 +37,14 @@ class PatientService
      *
      * @return string
      */
-    public function fetchPatient(Request $request, $patient) : Patient
+    public function fetchPatient(Request $request, $patient)
     {
         $associations = $request->associations;
 
         return $this->getPatient($patient, $associations);
     }
 
-    public function getPatient(int $patient, string $associations): Patient {
+    public function getPatient(int $patient, string $associations){
         $patient = Patient::where('user_id', $patient);
 
         if(str_contains($associations, "dossier")){
@@ -56,7 +56,8 @@ class PatientService
         if(str_contains($associations, "affiliations")){
             $patient = $patient->with('affiliations.package:id,description_fr');
         }
-        $patient = $patient->firstOrFail();
+        $patient = $patient->first();
+        //$patient = $patient->firstOrFail();
         return $patient;
     }
 
