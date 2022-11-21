@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v2\Teleconsultation;
 
 use App\Http\Controllers\Controller;
+use App\Services\PatientService;
 use App\Services\TeleconsultationService;
 use Illuminate\Http\Request;
 

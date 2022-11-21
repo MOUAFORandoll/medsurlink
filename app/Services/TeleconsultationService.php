@@ -18,6 +18,7 @@ class TeleconsultationService
      * @var string
      */
     protected $secret;
+
     /**
      * @var string
      */
@@ -35,7 +36,17 @@ class TeleconsultationService
      */
     public function fetchTeleconsultations(Request $request) : string
     {
-        return $this->request('GET', "{$this->path}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&page_size={$request->page_size}");
+        $teleconsultations = json_decode($this->request('GET', "{$this->path}?search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
+
+        $items = [];
+        foreach($teleconsultations['data']['data'] as $item){
+            $patient = new PatientService;
+            $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
+            $items[] = $item;
+        }
+        $teleconsultations['data']['data'] = $items;
+
+        return json_encode($teleconsultations);
     }
 
     /**

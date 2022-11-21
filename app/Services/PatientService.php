@@ -41,6 +41,10 @@ class PatientService
     {
         $associations = $request->associations;
 
+        return $this->getPatient($patient, $associations);
+    }
+
+    public function getPatient(int $patient, string $associations): Patient {
         $patient = Patient::where('user_id', $patient);
 
         if(str_contains($associations, "dossier")){
@@ -55,6 +59,7 @@ class PatientService
         $patient = $patient->firstOrFail();
         return $patient;
     }
+
     public function medecin()
     {
         $user = \Auth::guard('api')->user();
