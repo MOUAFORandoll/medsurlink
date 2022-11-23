@@ -153,5 +153,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     Route::group(['prefix' => 'user'], function () {
         Route::get('/medecin', 'UserController@medecin');
     });
-    
+
+    Route::resource('alertes', 'AlerteController');
+
 });
