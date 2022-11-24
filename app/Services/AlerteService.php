@@ -56,7 +56,7 @@ class AlerteService
         $creator = Str::upper($alerte->creator->nom).' '.ucfirst($alerte->creator->prenom);
         $slack_message = "*$creator* a ajouté une nouvelle alerte";
         if($alerte->patient->id != $alerte->creator->id){
-            $slack_message = " pour le patient *$patient*";
+            $slack_message = $slack_message." pour le patient *$patient*";
         }
         $slack_message = $slack_message. "\n*Plainte*: $alerte->plainte";
 
