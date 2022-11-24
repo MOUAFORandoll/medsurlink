@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Mail\AlerteEmail;
+use App\Events\AlerteEvent;
 use App\Models\Alerte;
 use App\Notifications\AlerteNotification;
 use App\Notifications\SouscriptionAlert;
@@ -21,7 +21,8 @@ class AlerteService
         $this->user_id = \Auth::guard('api')->user()->id;
     }
     public function index(Request $request){
-        $alertes = Alerte::with(['patient:id,nom,prenom', 'creator:id,nom,prenom'])->latest()->get();
+        $page = $request->page ? $request->page : 25;
+        $alertes = Alerte::with(['patient:id,nom,prenom', 'creator:id,nom,prenom'])->latest()->paginate($page);
         return $alertes;
     }
 
@@ -32,12 +33,21 @@ class AlerteService
 
         $alerte = $alerte->load('creator:id,nom,prenom', 'patient:id,nom,prenom');
 
+
+        event(new AlerteEvent($alerte));
+
         Notification::send($users, new AlerteNotification("Nouvelle Alerte", $alerte));
+
+
         /* $when = now()->addMinutes(1);
         Mail::to("klfkl@jf.com")->later($when, new AlerteEmail("Nouvelle Alerte", $alerte)); */
-
-        $slack_message = "";
-        $slack_message = $slack_message. "Je teste les messages de Slack";
+        $patient = Str::upper($alerte->patient->nom).' '.ucfirst($alerte->patient->prenom);
+        $creator = Str::upper($alerte->creator->nom).' '.ucfirst($alerte->creator->prenom);
+        $slack_message = "*$creator* a ajouté une nouvelle alerte";
+        if($alerte->patient->id != $alerte->creator->id){
+            $slack_message = " pour le patient *$patient*";
+        }
+        $slack_message = "\n".$slack_message. "*Plainte*: $alerte->plainte";
 
         $env = strtolower(config('app.env'));
         $url_global = "";
@@ -57,7 +67,7 @@ class AlerteService
 
     public function show($alerte){
 
-        $alerte = Alerte::findOrFail($alerte)->load('patient', 'creator');
+        $alerte = Alerte::findOrFail($alerte)->load('creator:id,nom,prenom', 'patient:id,nom,prenom');
         return $alerte;
 
     }
@@ -67,6 +77,13 @@ class AlerteService
         $alerte->update(['patient_id' => $request->patient_id, 'niveau_urgence_id' => $request->niveau_urgence_id, 'statut_id' => $request->statut_id, 'plainte' => $request->plainte]);
         return $alerte;
 
+    }
+
+    public function ChangeStatus(Request $request, $alerte){
+        $alerte = Alerte::findOrFail($alerte);
+        $alerte->statut_id = $request->statut_id;
+        $alerte->save();
+        return $alerte;
     }
 
     public function destroy($alerte){

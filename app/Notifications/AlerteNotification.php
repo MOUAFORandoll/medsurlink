@@ -8,6 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class AlerteNotification extends Notification implements ShouldQueue
@@ -62,5 +63,15 @@ class AlerteNotification extends Notification implements ShouldQueue
         return [
             $this->alerte
         ];
+    }
+
+    public function broadcastOn()
+    {
+        return ['news-action'];
+    }
+
+    public function broadcastAs()
+    {
+        return 'news-action';
     }
 }
