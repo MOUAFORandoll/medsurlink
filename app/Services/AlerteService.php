@@ -14,15 +14,26 @@ use Illuminate\Support\Str;
 
 class AlerteService
 {
-    public  $user_id;
+    public  $user_id, $statut, $niveau_urgence;
 
     public function __construct()
     {
+        $this->statut = new StatutService;
+        $this->niveau_urgence = new NiveauUrgenceService;
         $this->user_id = \Auth::guard('api')->user()->id;
     }
     public function index(Request $request){
         $page = $request->page ? $request->page : 25;
         $alertes = Alerte::with(['patient:id,nom,prenom', 'creator:id,nom,prenom'])->latest()->paginate($page);
+
+        $items = [];
+        foreach($alertes->items() as $item){
+            $item->statut = json_decode($this->statut->fetchStatut($item->statut_id), true)['data'];
+            $item->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($item->niveau_urgence_id), true)['data'];
+            $items[] = $item;
+        }
+        $alertes->data = $items;
+
         return $alertes;
     }
 
@@ -47,7 +58,8 @@ class AlerteService
         if($alerte->patient->id != $alerte->creator->id){
             $slack_message = " pour le patient *$patient*";
         }
-        $slack_message = "\n".$slack_message. "*Plainte*: $alerte->plainte";
+        $slack_message = $slack_message. "\n*Plainte*: $alerte->plainte";
+
 
         $env = strtolower(config('app.env'));
         $url_global = "";
@@ -59,7 +71,7 @@ class AlerteService
             $url_global = config('app.url_prod');
         $url_global = $url_global."/alertes";
 
-        $slack_message = $slack_message. "<$url_global|Voir plus de détails>";
+        $slack_message = $slack_message. " <$url_global|En savoir plus>";
 
         $alerte->setSlackChannel('appel')->notify(new SouscriptionAlert($slack_message,null));
         return $alerte;
@@ -68,6 +80,7 @@ class AlerteService
     public function show($alerte){
 
         $alerte = Alerte::findOrFail($alerte)->load('creator:id,nom,prenom', 'patient:id,nom,prenom');
+        $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
         return $alerte;
 
     }
