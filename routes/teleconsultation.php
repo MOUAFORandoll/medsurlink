@@ -126,6 +126,17 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     });
 
     /**
+     * CRUDS niveau urgences
+     */
+    Route::group(['prefix' => 'statuts'], function () {
+        Route::get('/', 'StatutController@index');
+        Route::post('/', 'StatutController@store');
+        Route::get('/{statut}', 'StatutController@show');
+        Route::patch('/{statut}', 'StatutController@update');
+        Route::delete('/{statut}', 'StatutController@destroy');
+    });
+
+    /**
     * CRUDS rendez-vous
     */
     Route::group(['prefix' => 'rendez_vous'], function () {
