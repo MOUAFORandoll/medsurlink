@@ -24,7 +24,20 @@ class AlerteService
     }
     public function index(Request $request){
         $size = $request->size ? $request->size : 10;
-        $alertes = Alerte::with(['patient:id,nom,prenom', 'creator:id,nom,prenom'])->latest()->paginate($size);
+        $alertes = Alerte::with(['patient:id,nom,prenom', 'creator:id,nom,prenom']);
+        if($request->search != ""){
+            $value = $request->search;
+            $alertes = $alertes->whereHas('patient', function($q) use ($value) {
+                $q->where('nom', 'like', '%' .$value.'%')
+                ->orwhere('prenom', 'like', '%' .$value.'%')
+                ->orwhere('email', 'like', '%' .$value.'%');
+            });
+        }
+        if($request->statut_id != ""){
+            $alertes = $alertes->where('statut_id', $request->statut_id);
+        }
+
+        $alertes = $alertes->latest()->paginate($size);
 
         $items = [];
         foreach($alertes->items() as $item){
@@ -52,8 +65,8 @@ class AlerteService
 
         /* $when = now()->addMinutes(1);
         Mail::to("klfkl@jf.com")->later($when, new AlerteEmail("Nouvelle Alerte", $alerte)); */
-        $patient = Str::upper($alerte->patient->nom).' '.ucfirst($alerte->patient->prenom);
-        $creator = Str::upper($alerte->creator->nom).' '.ucfirst($alerte->creator->prenom);
+        $patient = $alerte->patient->name;
+        $creator = $alerte->creator->name;
         $slack_message = "*$creator* a ajouté une nouvelle alerte";
         if($alerte->patient->id != $alerte->creator->id){
             $slack_message = $slack_message." pour le patient *$patient*";
