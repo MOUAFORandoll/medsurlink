@@ -58,7 +58,7 @@ class AlerteController extends Controller
      */
     public function update(Request $request, $allergie)
     {
-        $this->validate($request, $this->validations());
+        $this->validate($request, $this->validations(true));
         return $this->successResponse($this->alerteService->update($allergie, $request));
     }
 
@@ -72,13 +72,21 @@ class AlerteController extends Controller
         return $this->successResponse($this->alerteService->destroy($allergie));
     }
 
-    public function validations($is_update = null){
-        $rules = [
-            'patient_id' => 'required',
-            'niveau_urgence_id' => 'required',
-            'statut_id' => 'required',
-            'plainte' => 'required'
-        ];
+    public function validations($is_update = false){
+        if($is_update){
+            $rules = [
+                'patient_id' => 'required',
+                'niveau_urgence_id' => 'required',
+                'statut_id' => 'required',
+                'plainte' => 'required'
+            ];
+        }else{
+            $rules = [
+                'patient_id' => 'required',
+                'niveau_urgence_id' => 'required',
+                'plainte' => 'required'
+            ];
+        }
         return $rules;
     }
 }
