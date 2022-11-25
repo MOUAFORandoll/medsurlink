@@ -23,8 +23,8 @@ class AlerteService
         $this->user_id = \Auth::guard('api')->user()->id;
     }
     public function index(Request $request){
-        $page = $request->page ? $request->page : 25;
-        $alertes = Alerte::with(['patient:id,nom,prenom', 'creator:id,nom,prenom'])->latest()->paginate($page);
+        $size = $request->size ? $request->size : 10;
+        $alertes = Alerte::with(['patient:id,nom,prenom', 'creator:id,nom,prenom'])->latest()->paginate($size);
 
         $items = [];
         foreach($alertes->items() as $item){
@@ -39,7 +39,7 @@ class AlerteService
 
     public function store(Request $request){
 
-        $alerte = Alerte::create(['uuid' => Str::uuid(), 'patient_id' => $request->patient_id, 'niveau_urgence_id' => $request->niveau_urgence_id, 'statut_id' => $request->statut_id, 'creator_id' => $this->user_id, 'plainte' => $request->plainte]);
+        $alerte = Alerte::create(['uuid' => Str::uuid(), 'patient_id' => $request->patient_id, 'niveau_urgence_id' => $request->niveau_urgence_id, 'statut_id' => $request->statut_id ?? 1, 'creator_id' => $this->user_id, 'plainte' => $request->plainte]);
         $users = User::role('Assistante')->get();
 
         $alerte = $alerte->load('creator:id,nom,prenom', 'patient:id,nom,prenom');
