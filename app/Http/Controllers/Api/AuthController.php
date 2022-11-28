@@ -86,8 +86,9 @@ class AuthController extends AccessTokenController
             // return "ici";
             Auth::login($user);
             $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name']);
-            $user = $user->makeHidden(['created_at', 'updated_at', 'code_postal', 'email_verified_at', 'adresse', 'quartier', 'deleted_at']);
-
+            $user = $user->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'adresse', 'quartier', 'deleted_at']);
+            $user->unread_notifications = $user->unreadNotifications()->latest()->get();
+            $user->unread_notifications = $user->unreadNotifications->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
             $tokenResponse = parent::issueToken($request);
             $token = $tokenResponse->getContent();
 
