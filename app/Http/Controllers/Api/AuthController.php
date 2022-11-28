@@ -85,9 +85,10 @@ class AuthController extends AccessTokenController
         if(!($user==new User())){
             // return "ici";
             Auth::login($user);
-            $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot']);
-
-
+            $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name']);
+            $user = $user->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'adresse', 'quartier', 'deleted_at']);
+            $user->unread_notifications = $user->unreadNotifications()->latest()->get();
+            $user->unread_notifications = $user->unreadNotifications->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
             $tokenResponse = parent::issueToken($request);
             $token = $tokenResponse->getContent();
 
@@ -105,7 +106,6 @@ class AuthController extends AccessTokenController
                 'start'=>Carbon::now()->format('H:i')
             ]);
             $user['time_slug'] = $time->slug;
-            $user = $user->makeHidden(['created_at']);
             $user['isEtablissement'] = isComptable();
             $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
             // dd($tokenInfo);

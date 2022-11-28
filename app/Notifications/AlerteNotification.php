@@ -61,7 +61,19 @@ class AlerteNotification extends Notification implements ShouldQueue
     public function toArray($notifiable)
     {
         return [
-            $this->alerte
+            "id" => $this->alerte->id,
+            "statut_id" => $this->alerte->statut_id,
+            "plainte" => $this->alerte->plainte,
+            "uuid" => $this->alerte->uuid,
+            "niveau_urgence_id" => $this->alerte->niveau_urgence_id,
+            "creator" => [
+                "id" => $this->alerte->creator->id,
+                "name" => $this->alerte->creator->name,
+            ],
+            "patient" => [
+                "id" => $this->alerte->patient->id,
+                "name" => $this->alerte->patient->name,
+            ]
         ];
     }
 
