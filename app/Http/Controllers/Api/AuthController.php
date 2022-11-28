@@ -85,8 +85,8 @@ class AuthController extends AccessTokenController
         if(!($user==new User())){
             // return "ici";
             Auth::login($user);
-            $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot']);
-
+            $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name']);
+            $user = $user->makeHidden(['created_at', 'updated_at', 'code_postal', 'email_verified_at', 'adresse', 'quartier', 'deleted_at']);
 
             $tokenResponse = parent::issueToken($request);
             $token = $tokenResponse->getContent();
