@@ -12,7 +12,7 @@ class AlerteController extends Controller
     private $alerteService;
 
     /**
-     * AllergieController constructor.
+     * class AlerteController extends Controller
      *
      * @param \App\Services\AlerteService $alerteService
      */
@@ -30,13 +30,13 @@ class AlerteController extends Controller
     }
 
     /**
-     * @param $allergie
+     * @param $alerte
      *
      * @return mixed
      */
-    public function show($allergie)
+    public function show($alerte)
     {
-        return $this->successResponse($this->alerteService->show($allergie));
+        return $this->successResponse($this->alerteService->show($alerte));
     }
 
     /**
@@ -52,24 +52,24 @@ class AlerteController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param                          $allergie
+     * @param                          $alerte
      *
      * @return mixed
      */
-    public function update(Request $request, $allergie)
+    public function update(Request $request, $alerte)
     {
         $this->validate($request, $this->validations(true));
-        return $this->successResponse($this->alerteService->update($allergie, $request));
+        return $this->successResponse($this->alerteService->update($alerte, $request));
     }
 
     /**
-     * @param $allergie
+     * @param $alerte
      *
      * @return mixed
      */
-    public function destroy($allergie)
+    public function destroy($alerte)
     {
-        return $this->successResponse($this->alerteService->destroy($allergie));
+        return $this->successResponse($this->alerteService->destroy($alerte));
     }
 
     public function validations($is_update = false){
