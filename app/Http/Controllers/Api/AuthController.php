@@ -84,8 +84,9 @@ class AuthController extends AccessTokenController
         // return $user;
         if(!($user==new User())){
             // return "ici";
-            $user->roles;
             Auth::login($user);
+            $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot']);
+
 
             $tokenResponse = parent::issueToken($request);
             $token = $tokenResponse->getContent();
@@ -104,6 +105,7 @@ class AuthController extends AccessTokenController
                 'start'=>Carbon::now()->format('H:i')
             ]);
             $user['time_slug'] = $time->slug;
+            $user = $user->makeHidden(['created_at']);
             $user['isEtablissement'] = isComptable();
             $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
             // dd($tokenInfo);
