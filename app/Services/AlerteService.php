@@ -92,7 +92,7 @@ class AlerteService
 
     public function show($alerte){
 
-        $alerte = Alerte::whereId($alerte)->orWhere('uuid', $alerte)->firstOrFail()->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone');
+        $alerte = Alerte::whereId($alerte)->orWhere('uuid', $alerte)->firstOrFail()->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,sexe,date_de_naissance');
         $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
         return $alerte;
 

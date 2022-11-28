@@ -167,4 +167,15 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
 
     Route::resource('alertes', 'AlerteController');
 
+    /**
+    * CRUDS rendez-vous
+    */
+    Route::group(['prefix' => 'notifications'], function () {
+        Route::get('/', 'RendezVousController@index');
+        Route::post('/', 'RendezVousController@store');
+        Route::get('/read_all', 'RendezVousController@show');
+        Route::patch('/{rendez_vous}', 'RendezVousController@update');
+        Route::delete('/{rendez_vous}', 'RendezVousController@destroy');
+    });
+
 });
