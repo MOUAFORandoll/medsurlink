@@ -213,7 +213,7 @@ class User extends Authenticatable implements HasMedia
     }
 
     public function getNameAttribute(){
-        return Str::upper($this->nom).' '.ucfirst($this->prenom);
+        return ucfirst($this->prenom).' '.Str::upper($this->nom);
     }
 
     /**
