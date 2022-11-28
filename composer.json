@@ -32,6 +32,7 @@
         "mpociot/laravel-apidoc-generator": "^4.8",
         "owen-it/laravel-auditing": "*",
         "phpoffice/phpspreadsheet": "^1.14",
+        "predis/predis": "*",
         "profclems/postman-collection-generator": "^1.2",
         "ramsey/uuid": "^3.7",
         "rinvex/countries": "^5.0",
