@@ -21,14 +21,12 @@ class NotificationController extends Controller
         return $this->successResponse($user->unread_notifications);
     }
 
-    /**
-     * @param $alerte
-     *
-     * @return mixed
-     */
-    public function show($alerte)
+
+    public function readAll()
     {
-        return $this->successResponse($this->alerteService->show($alerte));
+        $user = \Auth::guard('api')->user();
+        $user->unreadNotifications()->update(['read_at' => now()]);
+        return $this->successResponse([]);
     }
 
     /**
@@ -36,10 +34,11 @@ class NotificationController extends Controller
      *
      * @return mixed
      */
-    public function store(Request $request)
+    public function markAsRead($notification)
     {
-        $this->validate($request, $this->validations());
-        return $this->successResponse($this->alerteService->store($request));
+        $user = \Auth::guard('api')->user();
+        $user->unreadNotifications()->where('id', $notification)->update(['read_at' => now()]);
+        return $this->successResponse($notification);
     }
 
     /**
