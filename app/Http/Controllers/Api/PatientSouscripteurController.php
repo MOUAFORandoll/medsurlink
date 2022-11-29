@@ -58,7 +58,8 @@ class PatientSouscripteurController extends Controller
             if (!is_null($financeur->financable)){
                 if (!is_null($financeur->financable->user)){
                     $mail = new updateSetting($financeur->financable->user);
-                    Mail::to($financeur->financable->user->email)->send($mail);
+                    $when = now()->addMinutes(1);
+                    Mail::to($financeur->financable->user->email)->later($when, $mail);
                 }
             }
         }
@@ -68,7 +69,8 @@ class PatientSouscripteurController extends Controller
         if ($user->decede == 'non') {
             if (!is_null($patient->user->email)) {
                 $mail = new updateSetting($patient->user);
-                Mail::to($patient->user->email)->send($mail);
+                $when = now()->addMinutes(1);
+                Mail::to($patient->user->email)->later($when, $mail);
             }
         }
         //Notification de mises à jour de compte
@@ -97,7 +99,8 @@ class PatientSouscripteurController extends Controller
                     if (!is_null($patient->souscripteur)) {
                         if (!is_null($patient->souscripteur->user)) {
                             $mail = new updateSetting($patient->souscripteur->user);
-                            Mail::to($patient->souscripteur->user->email)->send($mail);
+                            $when = now()->addMinutes(1);
+                            Mail::to($patient->souscripteur->user->email)->later($when, $mail);
                         }
                     }
                 }
@@ -117,7 +120,8 @@ class PatientSouscripteurController extends Controller
                     if (!is_null($financeur->financable)) {
                         if (!is_null($financeur->financable->user)) {
                             $mail = new updateSetting($financeur->financable->user);
-                            Mail::to($financeur->financable->user->email)->send($mail);
+                            $when = now()->addMinutes(1);
+                            Mail::to($financeur->financable->user->email)->later($when, $mail);
                         }
                     }
                 }
@@ -129,7 +133,8 @@ class PatientSouscripteurController extends Controller
             try {
                 if (!is_null($patient->user->email)) {
                     $mail = new updateSetting($patient->user);
-                    Mail::to($patient->user->email)->send($mail);
+                    $when = now()->addMinutes(1);
+                    Mail::to($patient->user->email)->later($when, $mail);
                 }
 
             } catch (\Swift_TransportException $transportException) {

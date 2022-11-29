@@ -187,7 +187,8 @@ class FactureController extends Controller
 
                 foreach ($souscripteurs as $souscripteur) {
                     $mail = new MailRappel($facture, $souscripteur, $attachPath, $total);
-                    Mail::to($souscripteur->user->email)->send($mail);
+                    $when = now()->addMinutes(1);
+                    Mail::to($souscripteur->user->email)->later($when, $mail);
                     Log::info('envoi de mail de rappel ' . $souscripteur->user->email);
                 }
             }
@@ -232,7 +233,8 @@ class FactureController extends Controller
                 }
                 foreach ($souscripteurs as $souscripteur) {
                     $mail = new MailRecouvrement($facture, $souscripteur, $attachPath,$total);
-                    Mail::to($souscripteur->user->email)->send($mail);
+                    $when = now()->addMinutes(1);
+                    Mail::to($souscripteur->user->email)->later($when, $mail);
                     Log::info('envoi de mail de recouvrement ' . $souscripteur->user->email);
 
                 }

@@ -320,8 +320,8 @@ class PraticienController extends Controller
 
         try{
             $mail = new updateSetting($praticien->user);
-
-            Mail::to($praticien->user->email)->send($mail);
+            $when = now()->addMinutes(1);
+            Mail::to($praticien->user->email)->later($when, $mail);
 
         }catch (\Swift_TransportException $transportException){
             Log::error($transportException->getMessage());

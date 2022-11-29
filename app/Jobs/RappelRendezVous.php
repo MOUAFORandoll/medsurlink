@@ -52,13 +52,15 @@ class RappelRendezVous implements ShouldQueue
             $souscripteur = $rdv->patient->patient->souscripteur;
             if (!is_null($souscripteur)){
                 $mail = new RappelSouscripteur($rdv,$souscripteur);
-                Mail::to($souscripteur->user->email)->send($mail);
+                $when = now()->addMinutes(1);
+                Mail::to($souscripteur->user->email)->later($when, $mail);
                 Log::info('envoi de mail de rappel au souscripteur'.$souscripteur->user->email);
             }
             $financeurs = $rdv->patient->patient->financeurs;
             foreach ($financeurs as $financeur){
                 $mail = new RappelSouscripteur($rdv,$financeur->financable);
-                Mail::to($financeur->financable->user->email)->send($mail);
+                $when = now()->addMinutes(1);
+                Mail::to($financeur->financable->user->email)->later($when, $mail);
                 Log::info('envoi de mail de rappel au souscripteur'.$financeur->financable->user->email);
             }
         }

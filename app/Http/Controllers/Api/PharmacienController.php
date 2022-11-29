@@ -60,7 +60,8 @@ class PharmacienController extends Controller
             $password = str_random(10);
             $user =  User::create($request->except('user_id','sexe','etablissement_id')+['password'=> Hash::make( $password)]);
             $mail = new PharmacienGenerated($user,$password);
-            Mail::to($user->email)->send($mail);
+            $when = now()->addMinutes(1);
+            Mail::to($user->email)->later($when, $mail);
             $user_id = $user->id;
             $user->assignRole('Pharmacien');
         }else{

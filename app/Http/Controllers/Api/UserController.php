@@ -282,14 +282,16 @@ class UserController extends Controller
     public static function sendUserInformationViaMail(User $user,$password){
         if (!is_null($user->email)){
             $mail = new PasswordGenerated($user,$password);
-            Mail::to($user->email)->send($mail);
+            $when = now()->addMinutes(1);
+            Mail::to($user->email)->later($when, $mail);
         }
     }
     public static function sendUserPatientInformationViaMail(User $user,$password){
         if (!is_null($user)){
             if (!is_null($user->email)) {
                 $mail = new PatientPasswordGenerated($user, $password);
-                Mail::to($user->email)->send($mail);
+                $when = now()->addMinutes(1);
+                Mail::to($user->email)->later($when, $mail);
             }
         }
     }
@@ -453,8 +455,8 @@ class UserController extends Controller
 
         try{
             $mail = new updateSetting($user);
-
-            Mail::to($user->email)->send($mail);
+            $when = now()->addMinutes(1);
+            Mail::to($user->email)->later($when, $mail);
 
         }catch (\Swift_TransportException $transportException){
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
@@ -496,8 +498,8 @@ class UserController extends Controller
 
         try{
             $mail = new updateSetting($user);
-
-            Mail::to($user->email)->send($mail);
+            $when = now()->addMinutes(1);
+            Mail::to($user->email)->later($when, $mail);
 
         }catch (\Swift_TransportException $transportException){
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";

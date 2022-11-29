@@ -201,7 +201,8 @@ class ConsultationExamenValidationController extends Controller
          * envoie du mail du souscripteur lui demandant de valider
          */
         if($is_update){
-            Mail::to($examen_validation->souscripteur->user->email)->send(new ValidationFinanciere($examen_validation->souscripteur->user, $examen_validation->consultation->dossier->patient->user, $examens));
+            $when = now()->addMinutes(1);
+            Mail::to($examen_validation->souscripteur->user->email)->later($when,new ValidationFinanciere($examen_validation->souscripteur->user, $examen_validation->consultation->dossier->patient->user, $examens));
         }
 
         return  response()->json(['examen_validation' => $examen_validation]);

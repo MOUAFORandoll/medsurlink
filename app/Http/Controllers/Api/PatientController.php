@@ -301,7 +301,8 @@ class PatientController extends Controller
                 $this->sendSmsToUser($user,null,$identifiant);
 
                 $mail = new PatientAffiliated($souscripteur,$patient);
-                Mail::to($souscripteur->user->email)->send($mail);
+                $when = now()->addMinutes(1);
+                Mail::to($souscripteur->user->email)->later($when, $mail);
             }
 
 
@@ -423,7 +424,8 @@ class PatientController extends Controller
                 $this->sendSmsToUser($user,null,$identifiant);
 
                 $mail = new PatientAffiliated($souscripteur,$patient);
-                Mail::to($souscripteur->user->email)->send($mail);
+                $when = now()->addMinutes(1);
+                Mail::to($souscripteur->user->email)->later($when, $mail);
             }
 
 
@@ -814,7 +816,8 @@ class PatientController extends Controller
 
             if (!is_null($patient->user->email)){
                 $mail = new updateSetting($patient->user);
-                Mail::to($patient->user->email)->send($mail);
+                $when = now()->addMinutes(1);
+                Mail::to($patient->user->email)->later($when, $mail);
             }
 
         }catch (\Swift_TransportException $transportException){

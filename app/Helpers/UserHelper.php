@@ -67,7 +67,8 @@ if(!function_exists('sendUserInformationViaMail')) {
     {
         if (!is_null($user->email)){
             $mail = new PasswordGenerated($user,$password);
-            Mail::to($user->email)->send($mail);
+            $when = now()->addMinutes(1);
+            Mail::to($user->email)->later($when, $mail);
         }
 
     }
@@ -90,7 +91,8 @@ if(!function_exists('notifierMiseAJourCompte')) {
                 sendSmsToUser($user);
 
                 $mail = new PatientAffiliated($souscripteur, $patient);
-                Mail::to($souscripteur->user->email)->send($mail);
+                $when = now()->addMinutes(1);
+                Mail::to($user->email)->later($when, $mail);
             } catch (\Swift_TransportException $transportException) {
                 $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
                 return response()->json(['utilisateur' => $user, "message" => $message]);
