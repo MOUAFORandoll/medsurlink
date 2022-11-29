@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 
-class MedecinToPatient extends Notification
+class MedecinToPatient extends Notification implements ShouldQueue
 {
     use Queueable;
     private $message;
@@ -27,6 +27,8 @@ class MedecinToPatient extends Notification
         } else {
             $this->sender =  'MEDSURLINK';
         }
+        $when = now()->addMinutes(2);
+        $this->delay($when);
     }
 
     /**

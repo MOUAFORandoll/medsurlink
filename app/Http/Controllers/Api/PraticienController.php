@@ -447,6 +447,5 @@ class PraticienController extends Controller
     public function timeActivities() {
         $praticien = Praticien::with('time','user')->withCount('time')->get();
         return response()->json(['praticien' => $praticien]);
-
     }
 }
