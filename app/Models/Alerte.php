@@ -15,7 +15,7 @@ class Alerte extends Model
 
     protected $table = 'alertes';
 
-    protected $fillable = ['uuid', 'patient_id', 'niveau_urgence_id', 'statut_id', 'creator_id', 'plainte'];
+    protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'niveau_urgence_id', 'statut_id', 'creator_id', 'plainte'];
 
     protected $slackChannels= [
         //'appel' => 'https://hooks.slack.com/services/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',
@@ -29,6 +29,9 @@ class Alerte extends Model
     }
 
     public function creator(){
+        return $this->belongsTo(User::class);
+    }
+    public function medecin(){
         return $this->belongsTo(User::class);
     }
 

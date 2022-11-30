@@ -320,8 +320,8 @@ class PraticienController extends Controller
 
         try{
             $mail = new updateSetting($praticien->user);
-
-            Mail::to($praticien->user->email)->send($mail);
+            $when = now()->addMinutes(1);
+            Mail::to($praticien->user->email)->later($when, $mail);
 
         }catch (\Swift_TransportException $transportException){
             Log::error($transportException->getMessage());
@@ -447,6 +447,5 @@ class PraticienController extends Controller
     public function timeActivities() {
         $praticien = Praticien::with('time','user')->withCount('time')->get();
         return response()->json(['praticien' => $praticien]);
-
     }
 }

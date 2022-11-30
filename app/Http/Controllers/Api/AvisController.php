@@ -54,7 +54,8 @@ class AvisController extends Controller
                 MedecinAvis::create(['medecin_id'=>$medecin,'avis_id'=>$avis->id]);
                $user= User::whereId($medecin)->with(['praticien','medecinControle'])->first();
                $mail = new AvisDemande($user, $avis);
-               Mail::to($user->email)->send($mail);
+               $when = now()->addMinutes(1);
+               Mail::to($user->email)->later($when, $mail);
              }
         }
 
@@ -111,7 +112,8 @@ class AvisController extends Controller
                 MedecinAvis::create(['medecin_id'=>$medecin,'avis_id'=>$avis->id]);
                 $user= User::whereId($medecin)->first();
                 $mail = new AvisDemande($user, $avis);
-                Mail::to($user->email)->send($mail);
+                $when = now()->addMinutes(1);
+                Mail::to($user->email)->later($when, $mail);
             }
             //Ici on va retirer les anciens medecins qui ne sont pas parmis les nouveaux
             foreach (array_diff($precedentMedecins,$nouveauMedecins) as $medecin){

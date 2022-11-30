@@ -42,8 +42,8 @@ Route::get('/redirect-mesurlink/redirect/{email}','Api\MedicasureController@stor
 Route::resource('medicasure/souscripteur','Api\MedicasureController');
 
 Route::get('/', function () {
-    event(new AlerteEvent("kjsdjsd sdklsdkl"));
-    return "ttoto";
+    //event(new AlerteEvent("kjsdjsd sdklsdkl"));
+    //return "ttoto";
     return view('welcome');
 });
 

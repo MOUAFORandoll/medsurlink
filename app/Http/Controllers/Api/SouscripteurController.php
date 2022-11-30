@@ -230,7 +230,8 @@ class SouscripteurController extends Controller
         $souscripteur= Souscripteur::with('user')->whereSlug($slug)->first();
         try{
             $mail = new RappelAffiliation($souscripteur);
-            Mail::to($souscripteur->user->email)->send($mail);
+            $when = now()->addMinutes(1);
+            Mail::to($souscripteur->user->email)->later($when, $mail);
         }catch (\Swift_TransportException $transportException){
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
             return response()->json(['souscripteur'=>$souscripteur, "message"=>$message]);
@@ -313,8 +314,8 @@ class SouscripteurController extends Controller
 
         try{
             $mail = new updateSetting($souscripteur->user);
-
-            Mail::to($souscripteur->user->email)->send($mail);
+            $when = now()->addMinutes(1);
+            Mail::to($souscripteur->user->email)->later($when, $mail);
 
         }catch (\Swift_TransportException $transportException){
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";

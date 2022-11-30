@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\MedecinControle;
 use App\Models\Patient;
 use App\Traits\RequestService;
 use App\User;
@@ -71,5 +72,10 @@ class PatientService
         $user->roles = $user->roles->makeHidden(['guard_name', 'created_at', 'updated_at', 'pivot']);
         $user->makeHidden(['quartier', 'created_at', 'updated_at', 'deleted_at', 'adresse', 'isNotice', 'smsEnvoye', 'email_verified_at']);
         return $user;
+    }
+
+    public function getAllMedecinControles(){
+        $medecins = MedecinControle::with(['specialite:id,name','user:id,nom,prenom,email'])->latest()->get(['specialite_id', 'user_id', 'civilite']);
+        return $medecins;
     }
 }

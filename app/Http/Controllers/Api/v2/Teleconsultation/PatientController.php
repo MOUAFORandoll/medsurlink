@@ -28,10 +28,15 @@ class PatientController extends Controller
     {
         $patients = $this->patient->fetchPatients($request);
         return $this->successResponse($patients);
-    }    
+    }
 
     public function show(Request $request, $patient_id){
         $patient = $this->patient->fetchPatient($request, $patient_id);
         return $this->successResponse($patient);
+    }
+
+    public function getAllMedecinControles(){
+        $medecins = $this->patient->getAllMedecinControles();
+        return $this->successResponse($medecins);
     }
 }

@@ -158,6 +158,13 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::delete('/{rendez_vous}', 'PatientController@destroy'); */
     });
 
+     /**
+    * CRUDS medecins
+    */
+    Route::group(['prefix' => 'medecins'], function () {
+        Route::get('/', 'PatientController@getAllMedecinControles');
+    });
+
     /**
      * Informations des utilisateurs connectés
      */
