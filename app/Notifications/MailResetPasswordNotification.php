@@ -46,12 +46,14 @@ class MailResetPasswordNotification extends Notification
     public function toMail( $notifiable ) {
 
         $email = $notifiable->getEmailForPasswordReset();
-        $local = "http://localhost:8080";
-        if (config('app.env') == 'prod'){
-            $online = 'https://www.medsurlink.com';
-        }else{
-            $online = 'https://www.staging.medsurlink.com';
-        }
+        $env = strtolower(config('app.env'));
+        $online = "";
+        if ($env == 'local')
+            $online = config('app.url_loccale');
+        else if ($env == 'staging')
+            $online = config('app.url_stagging');
+        else
+            $online = config('app.url_prod');
         $date = Carbon::now();
         $mail = new MailMessage;
         $users = User::whereEmail($email)->get();
@@ -83,7 +85,7 @@ class MailResetPasswordNotification extends Notification
         }
         if (count($users)>0) {
             $token = $this->token;
-            $mail->from('no-reply@medsurlink.com');
+            $mail->from(config('mail.from.address'));
             $mail->subject(Lang::getFromJson('Reset Password Notification'));
             $mail->line(Lang::getFromJson('You are receiving this email because we received a password reset request for your account.'));
 
@@ -99,7 +101,7 @@ class MailResetPasswordNotification extends Notification
 //            }
 //        }
 
-            $mail->view('emails.password.reset', compact('users', 'email', 'online', 'local', 'token', 'date'));
+            $mail->view('emails.password.reset', compact('users', 'email', 'online', 'token', 'date'));
 //        $mail->line(Lang::getFromJson('This password reset link will expire in :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]));
 //        $mail->line(Lang::getFromJson('If you did not request a password reset, no further action is required.'));
 //

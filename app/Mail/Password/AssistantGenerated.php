@@ -31,7 +31,7 @@ class AssistantGenerated extends Mailable
      */
     public function build()
     {
-        return $this->from('no-reply@medsurlink.com')
+        return $this->from(config('mail.from.address'))
             ->subject(config('app.name').' Account Information')
             ->markdown('emails.password.assistantGenerated');
     }
