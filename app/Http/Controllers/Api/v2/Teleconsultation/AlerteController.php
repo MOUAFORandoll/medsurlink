@@ -66,7 +66,7 @@ class AlerteController extends Controller
         $this->validate($request, [
             'medecin_id' => 'required',
         ]);
-        return $this->successResponse($this->alerteService->assignMedecin($alerte, $request));
+        return $this->successResponse($this->alerteService->assignMedecin($request, $alerte));
     }
 
     /**
