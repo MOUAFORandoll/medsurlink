@@ -14336,7 +14336,7 @@
                         return $instance->getJavascriptRenderer($baseUrl, $basePath);
         }
                     /**
-         * Modify the response and inject the debugbar (or data in headers)
+         * Modify the response and inject the  (or data in headers)
          *
          * @param \Symfony\Component\HttpFoundation\Request $request
          * @param \Symfony\Component\HttpFoundation\Response $response

@@ -62,6 +62,13 @@ class AlerteController extends Controller
         return $this->successResponse($this->alerteService->update($alerte, $request));
     }
 
+    public function assignMedecin(Request $request, $alerte){
+        $this->validate($request, [
+            'medecin_id' => 'required',
+        ]);
+        return $this->successResponse($this->alerteService->assignMedecin($request, $alerte));
+    }
+
     /**
      * @param $alerte
      *
@@ -77,7 +84,7 @@ class AlerteController extends Controller
             $rules = [
                 'patient_id' => 'required',
                 'niveau_urgence_id' => 'required',
-                'statut_id' => 'required',
+                //'statut_id' => 'required',
                 'plainte' => 'required'
             ];
         }else{
