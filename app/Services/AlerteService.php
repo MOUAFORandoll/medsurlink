@@ -14,17 +14,28 @@ use Illuminate\Support\Str;
 
 class AlerteService
 {
-    public  $user_id, $statut, $niveau_urgence;
+    public  $user_id, $statut, $niveau_urgence, $user;
 
     public function __construct()
     {
         $this->statut = new StatutService;
         $this->niveau_urgence = new NiveauUrgenceService;
         $this->user_id = \Auth::guard('api')->user()->id;
+        $this->user = \Auth::guard('api')->user();
     }
     public function index(Request $request){
         $size = $request->size ? $request->size : 10;
         $alertes = Alerte::with(['patient:id,nom,prenom', 'creator:id,nom,prenom']);
+        if($this->user->hasRole('Patient')){
+            $alertes = $alertes->where(['patient_id' => $this->user_id, 'creator_id' => $this->user_id]);
+        }elseif($this->user->hasRole('Souscripteur')){
+            $alertes = $alertes->where('creator_id', $this->user_id);
+        }elseif($this->user->hasRole('Medecin controle')){
+            \Log::alert("kdkkldkld dkkldkld");
+            $alertes = $alertes->where('medecin_id', $this->user_id);
+        }elseif($this->user->hasRole('Assistante')){
+            
+        }
         if($request->search != ""){
             $value = $request->search;
             $alertes = $alertes->whereHas('patient', function($q) use ($value) {
