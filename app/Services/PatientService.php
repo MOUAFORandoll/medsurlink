@@ -46,7 +46,7 @@ class PatientService
     }
 
     public function getPatient(int $patient, string $associations){
-        $patient = Patient::where('user_id', $patient)->orwhereHas('dossier', function ($query) use ($patient) {
+        $patient = Patient::where('user_id', $patient)->orWhere('slug', $patient)->orwhereHas('dossier', function ($query) use ($patient) {
             $query->where('slug', $patient);
         });
 
