@@ -84,7 +84,7 @@ class AlerteController extends Controller
             $rules = [
                 'patient_id' => 'required',
                 'niveau_urgence_id' => 'required',
-                'statut_id' => 'required',
+                //'statut_id' => 'required',
                 'plainte' => 'required'
             ];
         }else{

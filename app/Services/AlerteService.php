@@ -114,7 +114,7 @@ class AlerteService
 
     public function update(Request $request, $alerte){
         $alerte = Alerte::findOrFail($alerte);
-        $alerte->update(['patient_id' => $request->patient_id, 'niveau_urgence_id' => $request->niveau_urgence_id, 'statut_id' => $request->statut_id, 'plainte' => $request->plainte]);
+        $alerte->update(['patient_id' => $request->patient_id, 'niveau_urgence_id' => $request->niveau_urgence_id, 'plainte' => $request->plainte]);// 'statut_id' => $request->statut_id,
         return $alerte;
 
     }
