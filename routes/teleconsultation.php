@@ -173,6 +173,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     });
 
     Route::resource('alertes', 'AlerteController');
+    Route::patch('/alertes/{alerte}/assignMedecin', 'AlerteController@assignMedecin');
 
     /**
     * CRUDS rendez-vous

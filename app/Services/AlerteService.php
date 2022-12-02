@@ -115,6 +115,18 @@ class AlerteService
         return $alerte;
     }
 
+    public function assignMedecin(Request $request, $alerte){
+        $alerte = Alerte::findOrFail($alerte);
+        $alerte->medecin_id = $request->medecin_id;
+        $alerte->statut_id = 2;
+        $alerte->save();
+        event(new AlerteEvent($alerte, "update_alerte"));
+
+        $user = User::findOrFail($request->medecin_id);
+        $user->notify(new AlerteNotification("Nouvelle Alerte", $alerte));
+        return $alerte;
+    }
+
     public function destroy($alerte){
 
         $alerte = Alerte::findOrFail($alerte);
