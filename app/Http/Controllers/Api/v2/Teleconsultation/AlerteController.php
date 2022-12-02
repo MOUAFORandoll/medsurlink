@@ -59,7 +59,7 @@ class AlerteController extends Controller
     public function update(Request $request, $alerte)
     {
         $this->validate($request, $this->validations(true));
-        return $this->successResponse($this->alerteService->update($alerte, $request));
+        return $this->successResponse($this->alerteService->update($request, $alerte));
     }
 
     public function assignMedecin(Request $request, $alerte){
