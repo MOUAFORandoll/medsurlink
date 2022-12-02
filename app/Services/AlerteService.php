@@ -14,17 +14,28 @@ use Illuminate\Support\Str;
 
 class AlerteService
 {
-    public  $user_id, $statut, $niveau_urgence;
+    public  $user_id, $statut, $niveau_urgence, $user;
 
     public function __construct()
     {
         $this->statut = new StatutService;
         $this->niveau_urgence = new NiveauUrgenceService;
         $this->user_id = \Auth::guard('api')->user()->id;
+        $this->user = \Auth::guard('api')->user();
     }
     public function index(Request $request){
         $size = $request->size ? $request->size : 10;
         $alertes = Alerte::with(['patient:id,nom,prenom', 'creator:id,nom,prenom']);
+        if($this->user->hasRole('Patient')){
+            $alertes = $alertes->where(['patient_id' => $this->user_id, 'creator_id' => $this->user_id]);
+        }elseif($this->user->hasRole('Souscripteur')){
+            $alertes = $alertes->where('creator_id', $this->user_id);
+        }elseif($this->user->hasRole('Medecin controle')){
+            \Log::alert("kdkkldkld dkkldkld");
+            $alertes = $alertes->where('medecin_id', $this->user_id);
+        }elseif($this->user->hasRole('Assistante')){
+            
+        }
         if($request->search != ""){
             $value = $request->search;
             $alertes = $alertes->whereHas('patient', function($q) use ($value) {
@@ -94,7 +105,7 @@ class AlerteService
 
         $user = \Auth::guard('api')->user();
         $user->unreadNotifications()->where('data->uuid', $alerte)->update(['read_at' => now()]);
-        $alerte = Alerte::whereId($alerte)->orWhere('uuid', $alerte)->firstOrFail()->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone', 'patient.patient:user_id,sexe,date_de_naissance');
+        $alerte = Alerte::whereId($alerte)->orWhere('uuid', $alerte)->firstOrFail()->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug');
         $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
        
         return $alerte;
@@ -103,7 +114,7 @@ class AlerteService
 
     public function update(Request $request, $alerte){
         $alerte = Alerte::findOrFail($alerte);
-        $alerte->update(['patient_id' => $request->patient_id, 'niveau_urgence_id' => $request->niveau_urgence_id, 'statut_id' => $request->statut_id, 'plainte' => $request->plainte]);
+        $alerte->update(['patient_id' => $request->patient_id, 'niveau_urgence_id' => $request->niveau_urgence_id, 'plainte' => $request->plainte]);// 'statut_id' => $request->statut_id,
         return $alerte;
 
     }
@@ -112,6 +123,18 @@ class AlerteService
         $alerte = Alerte::findOrFail($alerte);
         $alerte->statut_id = $request->statut_id;
         $alerte->save();
+        return $alerte;
+    }
+
+    public function assignMedecin(Request $request, $alerte){
+        $alerte = Alerte::findOrFail($alerte);
+        $alerte->medecin_id = $request->medecin_id;
+        $alerte->statut_id = 2;
+        $alerte->save();
+        event(new AlerteEvent($alerte, "update_alerte"));
+
+        $user = User::findOrFail($request->medecin_id);
+        $user->notify(new AlerteNotification("Nouvelle Alerte", $alerte));
         return $alerte;
     }
 

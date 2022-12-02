@@ -46,7 +46,11 @@ class PatientService
     }
 
     public function getPatient(int $patient, string $associations){
-        $patient = Patient::where('user_id', $patient);
+        $patient = Patient::where('user_id', $patient)->orWhere('slug', $patient)->orwhereHas('dossier', function ($query) use ($patient) {
+            $query->where('slug', $patient);
+        })->orwhereHas('user', function ($query) use ($patient) {
+            $query->where('slug', $patient);
+        });
 
         if(str_contains($associations, "dossier")){
             $patient = $patient->with('dossier:patient_id,id,numero_dossier');
@@ -71,6 +75,10 @@ class PatientService
         }
         $user->roles = $user->roles->makeHidden(['guard_name', 'created_at', 'updated_at', 'pivot']);
         $user->makeHidden(['quartier', 'created_at', 'updated_at', 'deleted_at', 'adresse', 'isNotice', 'smsEnvoye', 'email_verified_at']);
+
+        $user->unread_notifications = $user->unreadNotifications()->latest()->get();
+        $user->unread_notifications = $user->unreadNotifications->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
+
         return $user;
     }
 

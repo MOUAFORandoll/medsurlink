@@ -13,16 +13,17 @@ class AlerteEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $alerte;
+    public $alerte, $status;
     /**
      * Create a new event instance.
      *
      * @return void
      */
 
-    public function __construct(Alerte $alerte)
+    public function __construct(Alerte $alerte, $status = "create_alerte")
     {
         $this->alerte = $alerte;
+        $this->status = $status;
     }
 
     /**
@@ -32,6 +33,6 @@ class AlerteEvent implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return ['create_alerte'];
+        return [$this->status];
     }
 }
