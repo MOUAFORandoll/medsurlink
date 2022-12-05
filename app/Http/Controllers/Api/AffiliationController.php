@@ -411,11 +411,12 @@ class AffiliationController extends Controller
 
         //Ici on determine si le patient a deja une affiliation pour cette année
         $affiliation =  Affiliation::where('patient_id','=',$request->patient_id)->where('package_id', $request->package_id)->where('nom','=','Annuelle')->WhereYear('date_debut',$date_debut)->latest()->get();
-
-        if ($affiliation[0]->package->offre_id != 1) {
-            $msg = $affiliation[0]->package;
-            $message = "Le patient dispose déjà de la même affiliation pour cette année ({$msg->description_fr})";
-            $this->revealError('dejaAffilie',$message);
+        if (count($affiliation)>0) {
+            if ($affiliation[0]->package->offre_id != 1) {
+                $msg = $affiliation[0]->package;
+                $message = "Le patient dispose déjà de la même affiliation pour cette année ({$msg->description_fr})";
+                $this->revealError('dejaAffilie',$message);
+            }
 
         } elseif ($request->nom == "One shot"){
             //On determine si le patient a deja une affiliation oneshot a ce jour
@@ -436,9 +437,11 @@ class AffiliationController extends Controller
             if ($date_fin == $date_debut){
                 $affiliation =  Affiliation::where('patient_id','=',$request->patient_id)->where('package_id', $request->package_id)->where('nom','=','One shot')->whereDate('date_debut',$date_debut)->whereDate('date_fin',$date_fin)->latest()->get();
                 if (count($affiliation)>0){
-                    $msg = $affiliation[0]->package;
-                    $message = "Le patient dispose déjà de la même affiliation pour ce jour {$msg->description_fr})";
-                    $this->revealError('dejaAffilie',$message);
+                    if ($affiliation[0]->package->offre_id != 1) {
+                        $msg = $affiliation[0]->package;
+                        $message = "Le patient dispose déjà de la même affiliation pour ce jour {$msg->description_fr})";
+                        $this->revealError('dejaAffilie',$message);
+                    }
                 }
             }
         }
