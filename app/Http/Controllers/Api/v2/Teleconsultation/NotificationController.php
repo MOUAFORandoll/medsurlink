@@ -14,10 +14,18 @@ class NotificationController extends Controller
      */
     public function index(Request $request)
     {
+        $size = $request->size ? $request->size : 10;
         $user = \Auth::guard('api')->user();
 
-        $user->unread_notifications = $user->unreadNotifications()->latest()->get();
-        $user->unread_notifications = $user->unreadNotifications->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
+        $user->unread_notifications = $user->unreadNotifications()->latest()->paginate($size);
+ 
+        $items = [];
+        foreach($user->unread_notifications->items() as $item){
+            $item = $item->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);;
+            $items[] = $item;
+        }
+        $user->unread_notifications->data = $items;
+
         return $this->successResponse($user->unread_notifications);
     }
 
