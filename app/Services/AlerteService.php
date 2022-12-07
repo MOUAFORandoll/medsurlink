@@ -105,7 +105,7 @@ class AlerteService
 
         $user = \Auth::guard('api')->user();
         $user->unreadNotifications()->where('data->uuid', $alerte)->update(['read_at' => now()]);
-        $alerte = Alerte::whereId($alerte)->orWhere('uuid', $alerte)->firstOrFail()->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug');
+        $alerte = Alerte::whereId($alerte)->orWhere('uuid', $alerte)->firstOrFail()->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
         $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
        
         return $alerte;
@@ -131,6 +131,7 @@ class AlerteService
         $alerte->medecin_id = $request->medecin_id;
         $alerte->statut_id = 2;
         $alerte->save();
+        $alerte = $alerte->load('creator:id,nom,prenom', 'patient:id,nom,prenom');
         event(new AlerteEvent($alerte, "update_alerte"));
 
         $user = User::findOrFail($request->medecin_id);
