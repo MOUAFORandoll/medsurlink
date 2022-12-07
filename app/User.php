@@ -385,7 +385,7 @@ class User extends Authenticatable implements HasMedia
     }
 
     public function dossier(){
-        return $this->hasOne(DossierMedical::class, 'id');
+        return $this->hasOne(DossierMedical::class, 'patient_id', 'id');
     }
 
     public function medecinAvis(){
