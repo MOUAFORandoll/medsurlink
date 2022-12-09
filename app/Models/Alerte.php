@@ -27,6 +27,7 @@ class Alerte extends Model
     public function patient(){
         return $this->belongsTo(User::class);
     }
+    
 
     public function creator(){
         return $this->belongsTo(User::class);

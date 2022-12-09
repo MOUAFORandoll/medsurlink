@@ -4,11 +4,11 @@ use App\Models\Dictionnaire;
 use Psy\Util\Json;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-header('Access-Control-Allow-Origin:  Accept');
+/* header('Access-Control-Allow-Origin:  Accept');
 header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
 header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token, x-csrf-token');
 
-
+ */
 /*
 |--------------------------------------------------------------------------
 | API Routes
