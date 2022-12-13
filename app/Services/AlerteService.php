@@ -25,13 +25,13 @@ class AlerteService
     }
     public function index(Request $request){
         $size = $request->size ? $request->size : 10;
-        $alertes = Alerte::with(['patient:id,nom,prenom', 'creator:id,nom,prenom']);
+
+        $alertes = Alerte::with(['creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug']);
         if($this->user->hasRole('Patient')){
             $alertes = $alertes->where(['patient_id' => $this->user_id, 'creator_id' => $this->user_id]);
         }elseif($this->user->hasRole('Souscripteur')){
             $alertes = $alertes->where('creator_id', $this->user_id);
         }elseif($this->user->hasRole('Medecin controle')){
-            \Log::alert("kdkkldkld dkkldkld");
             $alertes = $alertes->where('medecin_id', $this->user_id);
         }elseif($this->user->hasRole('Assistante')){
             
@@ -98,16 +98,19 @@ class AlerteService
         $slack_message = $slack_message. " <$url_global|En savoir plus>";
 
         $alerte->setSlackChannel('appel')->notify(new SouscriptionAlert($slack_message,null));
+
+        $alerte = $alerte->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
+        $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
         return $alerte;
     }
 
     public function show($alerte){
 
         $user = \Auth::guard('api')->user();
-        $user->unreadNotifications()->where('data->uuid', $alerte)->update(['read_at' => now()]);
+        $user->unreadNotifications()->where('data->id', $alerte)->orWhere('data->uuid', $alerte)->update(['read_at' => now()]);
         $alerte = Alerte::whereId($alerte)->orWhere('uuid', $alerte)->firstOrFail()->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
         $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
-       
+
         return $alerte;
 
     }
