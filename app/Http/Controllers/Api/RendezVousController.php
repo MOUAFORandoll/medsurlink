@@ -209,7 +209,7 @@ class RendezVousController extends Controller
     {
         $this->validatedSlug($slug,$this->table);
 
-        $rdv = RendezVous::with(['patient','praticien','sourceable','initiateur'])
+        $rdv = RendezVous::with(['patient','praticien','sourceable','initiateur','etablissement'])
             ->whereSlug($slug)
             ->first();
 

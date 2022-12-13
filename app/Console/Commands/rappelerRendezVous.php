@@ -92,7 +92,7 @@ class rappelerRendezVous extends Command
                     $mail = new Rappel($rdv);
                     if($rdv->praticien){
                         $when = now()->addMinutes(1);
-                        Mail::to($rdv->praticien->email)->later($when,$mail);;
+                        Mail::to($rdv->praticien->email)->later($when,$mail);
                     }
                 }
                 $patient = mb_strtoupper($rdv->patient->nom).' '.ucfirst($rdv->patient->prenom);
@@ -125,7 +125,7 @@ class rappelerRendezVous extends Command
                 if (!is_null($souscripteur)) {
                     $mail = new RappelSouscripteur($rdv, $souscripteur);
                     $when = now()->addMinutes(1);
-                    Mail::to($financeur->financable->user->email)->later($when, $mail);
+                    Mail::to($souscripteur->user->email)->later($when, $mail);
                     Log::info('envoi de mail de rappel au souscripteur' . $souscripteur->user->email);
                 }
                 $financeurs = $rdv->patient->patient->financeurs;
