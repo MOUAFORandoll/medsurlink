@@ -228,4 +228,8 @@ class Patient extends Model
         })->orderBy('created_at', 'asc');
     }
 
+    public function alerte(){
+        return $this->belongsTo(Alerte::class, 'patient_id');
+    }
+
 }

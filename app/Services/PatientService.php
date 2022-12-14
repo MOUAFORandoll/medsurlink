@@ -50,6 +50,8 @@ class PatientService
             $query->where('slug', $patient);
         })->orwhereHas('user', function ($query) use ($patient) {
             $query->where('slug', $patient);
+        })->orwhereHas('alerte', function ($query) use ($patient) {
+            $query->where('uuid', $patient);
         });
 
         if(str_contains($associations, "dossier")){
