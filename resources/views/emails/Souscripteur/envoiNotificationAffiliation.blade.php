@@ -5,11 +5,11 @@ Une nouvelle affiliation a été ajoutée sur la plateforme
 
 ## Infomations du souscripteur
 
-Nom : <b>{{ auth()->user()->nom }}</b>
+Nom : <b>{{ $souscripteur->user->nom }}</b>
 
-Prénom :<b>{{ auth()->user()->prenom }}</b>
+Prénom :<b>{{ $souscripteur->user->prenom }}</b>
 
-Téléphone du souscripteur :<b>{{auth()->user()->telephone}}</b>
+Téléphone du souscripteur :<b>{{ $souscripteur->user->telephone}}</b>
 
 ## Information sur le type d'affiliation
 
@@ -28,13 +28,13 @@ Numero de téléphone du patient :<b>{{ $patient_telehone }}</b>
 
 Plaintes :
 <ul>
-    @forelse ($plainte as $item)
+    @forelse ($plaintes as $item)
         <li> <b>{{ $item->description }}</b> </li>
     @empty
     @endforelse
 </ul>
 
-Niveau d'urgence :<b>{{ $urgence }}</b>
+Niveau d'urgence :<b> {{ $affiliation->niveau_urgence ? $affiliation->niveau_urgence : $niveau_urgence }}</b>
 
 
 ## Informations sur la personne à contacter
@@ -44,8 +44,6 @@ Nom : <b>{{ $contact_nom }}</b>
 Prénom : <b>{{ $contact_prenom }}</b>
 
 Numero de téléphone de la personne à contacter :<b>{{ $contact_phone }}</b>
-
-
 
 {{ config('app.name') }}
 <div class="div-logo-mail">
