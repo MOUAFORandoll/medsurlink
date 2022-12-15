@@ -34,7 +34,7 @@ Plaintes :
     @endforelse
 </ul>
 
-Niveau d'urgence :<b> {{ $niveau_urgence }}</b>
+Niveau d'urgence :<b> {{ $affiliation->niveau_urgence ? $affiliation->niveau_urgence : $niveau_urgence }}</b>
 
 
 ## Informations sur la personne à contacter
@@ -44,8 +44,6 @@ Nom : <b>{{ $contact_nom }}</b>
 Prénom : <b>{{ $contact_prenom }}</b>
 
 Numero de téléphone de la personne à contacter :<b>{{ $contact_phone }}</b>
-
-
 
 {{ config('app.name') }}
 <div class="div-logo-mail">

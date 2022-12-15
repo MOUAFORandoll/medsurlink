@@ -629,7 +629,8 @@ if(!function_exists('AjoutDuneAffiliation')){
                     // envoie de mail à contract
                     $package = Package::find($commande->type_contrat);
                         $affiliation->motifs()->sync($plaintes);
-                    Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $affiliation->motifs, $request->niveau_urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie,$souscripteur));
+                    // Log::info("affiliation".$affiliation);
+                    Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $affiliation->motifs, $request->niveau_urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie,$souscripteur,$affiliation, $request->urgence));
                     $affiliation_old = Affiliation::where([["patient_id",$patient->user_id],["souscripteur_id",$souscripteur->user_id]])->first();
                     $commande = reduireCommandeRestante($commande->id, $souscripteur->user_id, $patient->user_id, $package->description_fr, $affiliation_old->slug);
 
@@ -655,7 +656,6 @@ if(!function_exists('AjoutDuneAffiliation')){
         }
         else if($request->lien){
             
-
             /**
              * Affiliation par les amas
              */
@@ -700,13 +700,17 @@ if(!function_exists('AjoutDuneAffiliation')){
                     ]);
                 }
                 $affiliation = CreationAffiliation($request, $patient);
+                if($request->plaintes){
+                    $plaintes = AjoutDesPlaintes($affiliation, $request->plaintes);
+                }
+                $affiliation->motifs()->sync($plaintes);
                 $patient->souscripteur_id = $request->souscripteur_id;
                 // $user->nom, $patient->user->prenom, $user->telephone,
                 $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
                 // Log::info('info souscripteur'.$souscripteur);
                 // Log::info('info patient'.$patient);
                 
-                Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($patient->user->nom, $patient->user->prenom, $patient->user->telephone, $affiliation->motifs, $request->niveau_urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie,$souscripteur));
+                Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($patient->user->nom, $patient->user->prenom, $patient->user->telephone, $affiliation->motifs, $request->niveau_urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie,$souscripteur,$affiliation, $request->urgence));
                 $patient->save();
                 
                 $cim = Package::where('id', $request->package_id)->first();
@@ -715,10 +719,8 @@ if(!function_exists('AjoutDuneAffiliation')){
 
                 notifierMiseAJourCompte($souscripteur,$patient);
                 
-                if($request->plaintes){
-                    $plaintes = AjoutDesPlaintes($affiliation, $request->plaintes);
-                }
-                Log::info('affiliation'.$affiliation);
+                
+                // Log::info('affiliation'.$affiliation);
                 return response()->json(['affiliation' => $affiliation]);
             }else{
                 return response()->json(['erreur' => "Le patient n'existe pas"], 419);
@@ -767,7 +769,7 @@ if(!function_exists('AjoutDesPlaintes')){
 if(!function_exists('CreationAffiliation')){
 
     function CreationAffiliation($request, $patient, $commande = null){
-        Log::info('creation affiliation');
+        // Log::info('creation affiliation');
         $affiliation = Affiliation::create([
             "patient_id"=> $request->lien ? $request->patient_id: $patient->user_id,
             "souscripteur_id"=>$request->souscripteur_id,
