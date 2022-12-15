@@ -229,7 +229,7 @@ class Patient extends Model
     }
 
     public function alerte(){
-        return $this->belongsTo(Alerte::class, 'patient_id');
+        return $this->belongsTo(Alerte::class, 'user_id', 'patient_id');
     }
 
 }
