@@ -66,7 +66,7 @@ class AlerteService
         $alerte = Alerte::create(['uuid' => Str::uuid(), 'patient_id' => $request->patient_id, 'niveau_urgence_id' => $request->niveau_urgence_id, 'statut_id' => $request->statut_id ?? 1, 'creator_id' => $request->creator_id ?? $this->user_id, 'plainte' => $request->plainte]);
         $users = User::role('Assistante')->get();
 
-        $alerte = $alerte->load('creator:id,nom,prenom', 'patient:id,nom,prenom');
+        $alerte = $alerte->load('creator:id,nom,prenom', 'patient:id,nom,prenom,telephone');
 
 
         event(new AlerteEvent($alerte));
@@ -134,7 +134,7 @@ class AlerteService
         $alerte->medecin_id = $request->medecin_id;
         $alerte->statut_id = 2;
         $alerte->save();
-        $alerte = $alerte->load('creator:id,nom,prenom', 'patient:id,nom,prenom');
+        $alerte = $alerte->load('creator:id,nom,prenom', 'patient:id,nom,prenom,telephone');
         event(new AlerteEvent($alerte, "update_alerte"));
 
         $user = User::findOrFail($request->medecin_id);

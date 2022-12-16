@@ -19,7 +19,7 @@ class PatientService
     {
         $value = $request->search;
         $size = $request->size ?? 25;
-        $patients = Patient::with(['dossier:patient_id,id,numero_dossier', 'user:id,nom,prenom,email,slug','affiliations.package:id,description_fr'])
+        $patients = Patient::with(['dossier:patient_id,id,numero_dossier', 'user:id,nom,prenom,email,telephone,slug','affiliations.package:id,description_fr'])
             ->whereHas('user', function($q) use ($value) {
                 $q->where('nom', 'like', '%' .$value.'%')
                 ->orwhere('prenom', 'like', '%' .$value.'%')
@@ -58,7 +58,7 @@ class PatientService
             $patient = $patient->with('dossier:patient_id,id,numero_dossier');
         }
         if(str_contains($associations, "user")){
-            $patient = $patient->with('user:id,nom,prenom,email,slug');
+            $patient = $patient->with('user:id,nom,prenom,email,telephone,slug');
         }
         if(str_contains($associations, "affiliations")){
             $patient = $patient->with('affiliations.package:id,description_fr');
