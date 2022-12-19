@@ -463,7 +463,7 @@ if(!function_exists('ProcessAfterPayment'))
                 }
                 $affiliation_old->save();
         }
-        if($affiliation == ''){
+        // if($affiliation == ''){
             $affiliation = AffiliationSouscripteur::create([
                 'user_id'=>$payment->souscripteur_id,
                 'type_contrat'=>$payment->commande->offres_packages_id,
@@ -471,15 +471,24 @@ if(!function_exists('ProcessAfterPayment'))
                 'nombre_restant'=>$payment->commande->quantite,
                 'montant'=>$payment->montant,
                 'cim_id'=>$payment->commande->id,
-                'date_paiement'=>null,
+                'date_paiement'=> null,
             ]);
-        }else{
-            $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
-            if($payment->status_contrat != "Renouvelé"){
-                $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
-            }
-            $affiliation->save();
-        }
+        // }else{
+        //     $affiliation = AffiliationSouscripteur::create([
+        //         'user_id'=>$payment->souscripteur_id,
+        //         'type_contrat'=>$payment->commande->offres_packages_id,
+        //         'nombre_paye'=>$payment->commande->quantite,
+        //         'nombre_restant'=>$payment->commande->quantite,
+        //         'montant'=>$payment->montant,
+        //         'cim_id'=>$payment->commande->id,
+        //         'date_paiement'=>'2023-01-20',
+        //     ]);
+        //     // $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
+        //     // if($payment->status_contrat != "Renouvelé"){
+        //     //     $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
+        //     // }
+        //     // $affiliation->save();
+        // }
        /**
         * envoie de la facture au souscripteur
         */
