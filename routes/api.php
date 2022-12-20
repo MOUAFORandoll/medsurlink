@@ -4,11 +4,11 @@ use App\Models\Dictionnaire;
 use Psy\Util\Json;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-header('Access-Control-Allow-Origin:  Accept');
+/* header('Access-Control-Allow-Origin:  Accept');
 header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
 header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token, x-csrf-token');
 
-
+ */
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -424,8 +424,10 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::post('patient/add-etablissement','Api\EtablissementPatientController@ajouterPatientAEtablissement');
     Route::resource('medecin-controle','Api\MedecinControleController')->only(['index']);
     Route::resource('praticien','Api\PraticienController')->only(['index']);
+
     // timeActivities
     Route::get('/timeactivities','Api\PraticienController@timeActivities');
+
     Route::get('/lastestaffiliation','Api\AffiliationController@getLastestAffiliation');
     
     Route::resource('association','Api\AssociationController');

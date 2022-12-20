@@ -5,7 +5,7 @@ Vous avez un Rendez-vous planifié avec le Patient **{{strtoupper($rdv->patient-
 le **{{\Carbon\Carbon::parse($rdv->date)->format('d/m/Y')}}** à **{{\Carbon\Carbon::parse($rdv->date)->format('H').'h'.\Carbon\Carbon::parse($rdv->date)->format('i')}}**.
 
 Si ce Rendez-vous est modifié Prière de Prévenir directement M./Mme **{{strtoupper($rdv->patient->nom)}}** sur son téléphone **{{strtoupper($rdv->patient->telephone)}}**,
-et de mettre à jour le nouveau Rendez-vous sur **<a href="{{url(config('app.frontend_url')).'/rendez-vous'}}">Medsurkink</a>**.
+et de mettre à jour le nouveau Rendez-vous sur le lien **<a href="{{url(config('app.url_loccale')).'/appointments'}}">Medsurkink</a>**.
 
 Salutations cordiales.
 

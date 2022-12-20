@@ -2,24 +2,34 @@
 
 namespace App\Exceptions;
 
+use App\Traits\ApiResponse;
 use Exception;
+use Illuminate\Http\Response;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\RelationNotFoundException;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class Handler extends ExceptionHandler
 {
+    use ApiResponse;
     /**
      * A list of the exception types that are not reported.
      *
      * @var array
      */
     protected $dontReport = [
-        //
+        AuthorizationException::class,
+        HttpException::class,
+        ModelNotFoundException::class,
+        ValidationException::class
     ];
 
     /**
@@ -52,6 +62,44 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof HttpException) {
+            $errorCode = $exception->getStatusCode();
+            $errorMessage = Response::$statusTexts[$errorCode];
+            return $this->errorResponse($errorMessage, $errorCode);
+        }
+
+        if ($exception instanceof ModelNotFoundException) {
+            $model = strtolower(class_basename($exception->getModel()));
+            return $this->errorResponse(
+                "Does not exist any instance of {$model} with a given id",
+                Response::HTTP_NOT_FOUND);
+        }
+
+        if ($exception instanceof AuthorizationException) {
+            return $this->errorResponse(
+                $exception->getMessage(),
+                Response::HTTP_FORBIDDEN);
+        }
+
+        if ($exception instanceof AuthenticationException) {
+            return $this->errorResponse(
+                $exception->getMessage(),
+                Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($exception instanceof ValidationException) {
+            $errors = $exception->validator->errors()->getMessages();
+            return $this->errorResponse(
+                $errors,
+                Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        if ($exception instanceof ClientException) {
+            $errorMessage = $exception->getResponse()->getBody();
+            $errorCode = $exception->getCode();
+
+            return $this->errorMessage($errorMessage, $errorCode);
+        }
 
         if ($exception instanceof RelationNotFoundException){
             return  response()->json(['error'=>$exception->getMessage(),'type'=>'Eloquent'],422);
@@ -85,7 +133,7 @@ class Handler extends ExceptionHandler
                 return response()->json($json, 401);
             }
         }
-        if ($request->is('api/*') || $request->wantsJson())
+        /* if ($request->is('api/*') || $request->wantsJson())
         {
             if($exception instanceof AuthenticationException){
                 $json = [
@@ -94,8 +142,13 @@ class Handler extends ExceptionHandler
                 ];
                 return response()->json($json, 401);
             }
+        } */
+        if (config('app.debug')) {
+            return parent::render($request, $exception);
         }
-        
-        return parent::render($request, $exception);
+
+        return $this->errorResponse(
+            "Unexpected error. Try later!",
+            Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
