@@ -62,13 +62,13 @@ class AlerteService
                 $alerte = Alerte::find($item->id);
                 $alerte->statut_id = 3;
                 $alerte->save();
+                $item->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
 
+            }else{
+                $item->statut = json_decode($this->statut->fetchStatut($item->statut_id), true)['data'];
             }
-
-            $item->statut = json_decode($this->statut->fetchStatut($item->statut_id), true)['data'];
             $item->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($item->niveau_urgence_id), true)['data'];
             $items[] = $item;
-
         }
         $alertes->data = $items;
 
