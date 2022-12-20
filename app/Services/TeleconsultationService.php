@@ -89,4 +89,15 @@ class TeleconsultationService
     {
         return $this->request('DELETE', "{$this->path}/{$teleconsultation}");
     }
+
+     /**
+     * @param $teleconsultation
+     *
+     * @return string
+     */
+    public function searchTeleconsultation($patient_id, $creator, $created_at) : string
+    {
+        return $this->request('GET', "{$this->path}/{$patient_id}/{$creator}/{$created_at}");
+    }
+
 }

@@ -14,11 +14,12 @@ use Illuminate\Support\Str;
 
 class AlerteService
 {
-    public  $user_id, $statut, $niveau_urgence, $user;
+    public  $user_id, $statut, $niveau_urgence, $user, $teleconsultation;
 
     public function __construct()
     {
         $this->statut = new StatutService;
+        $this->teleconsultation = new TeleconsultationService;
         $this->niveau_urgence = new NiveauUrgenceService;
         $this->user_id = \Auth::guard('api')->user()->id;
         $this->user = \Auth::guard('api')->user();
@@ -52,9 +53,22 @@ class AlerteService
 
         $items = [];
         foreach($alertes->items() as $item){
+
+            /**
+             * ici nous changeons le statut de l'alerte lorsque la téléconsultation a eu lieu
+             */
+            $tele = json_decode($this->teleconsultation->searchTeleconsultation($item->patient_id, $item->medecin_id, $item->created_at->format('Y-m-d')));
+            if($tele){
+                $alerte = Alerte::find($item->id);
+                $alerte->statut_id = 3;
+                $alerte->save();
+
+            }
+
             $item->statut = json_decode($this->statut->fetchStatut($item->statut_id), true)['data'];
             $item->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($item->niveau_urgence_id), true)['data'];
             $items[] = $item;
+
         }
         $alertes->data = $items;
 
