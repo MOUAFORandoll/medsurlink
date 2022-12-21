@@ -30,8 +30,8 @@
         "lcobucci/jwt": "3.3.3",
         "maatwebsite/excel": "^3.1",
         "mpociot/laravel-apidoc-generator": "^4.8",
-        "owen-it/laravel-auditing": "*",
         "phpoffice/phpspreadsheet": "^1.14",
+        "predis/predis": "*",
         "profclems/postman-collection-generator": "^1.2",
         "ramsey/uuid": "^3.7",
         "rinvex/countries": "^5.0",
@@ -40,7 +40,6 @@
         "stripe/stripe-php": "^7.87"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.2",
         "beyondcode/laravel-dump-server": "^1.0",
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",

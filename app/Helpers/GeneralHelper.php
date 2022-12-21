@@ -204,7 +204,8 @@ if(!function_exists('formatTelephone'))
         //return view('impression_offre');
         try {
             $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
-            Mail::to($email_souscripteur)->cc("contrat@medicasure.com")->send(new AchatOffre($pdf['output'], $nom_souscripteur, $description));
+            $when = now()->addMinutes(1);
+            Mail::to($email_souscripteur)->cc("contrat@medicasure.com")->later($when, new AchatOffre($pdf['output'], $nom_souscripteur, $description));
         }catch (\Exception $exception){
             //$exception
         }
@@ -358,7 +359,8 @@ if(!function_exists('EnvoieDeFactureApresPaiementPrestation'))
         //return view('impression_offre');
         try {
             $pdf = generationPdfPaiementPrestation($commande_id, $commande_date, $montant_total, $echeance, $description, $mode_paiement, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
-            Mail::to($email_souscripteur)->cc("contrat@medicasure.com")->send(new PaiementPrestation($pdf['output'], $nom_souscripteur, $beneficiaire, $description));
+            $when = now()->addMinutes(1);
+            Mail::to($email_souscripteur)->cc("contrat@medicasure.com")->later($when, new PaiementPrestation($pdf['output'], $nom_souscripteur, $beneficiaire, $description));
         }catch (\Exception $exception){
             //$exception
         }
@@ -463,7 +465,7 @@ if(!function_exists('ProcessAfterPayment'))
                 }
                 $affiliation_old->save();
         }
-        if($affiliation == ''){
+        // if($affiliation == ''){
             $affiliation = AffiliationSouscripteur::create([
                 'user_id'=>$payment->souscripteur_id,
                 'type_contrat'=>$payment->commande->offres_packages_id,
@@ -471,15 +473,24 @@ if(!function_exists('ProcessAfterPayment'))
                 'nombre_restant'=>$payment->commande->quantite,
                 'montant'=>$payment->montant,
                 'cim_id'=>$payment->commande->id,
-                'date_paiement'=>null,
+                'date_paiement'=> null,
             ]);
-        }else{
-            $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
-            if($payment->status_contrat != "Renouvelé"){
-                $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
-            }
-            $affiliation->save();
-        }
+        // }else{
+        //     $affiliation = AffiliationSouscripteur::create([
+        //         'user_id'=>$payment->souscripteur_id,
+        //         'type_contrat'=>$payment->commande->offres_packages_id,
+        //         'nombre_paye'=>$payment->commande->quantite,
+        //         'nombre_restant'=>$payment->commande->quantite,
+        //         'montant'=>$payment->montant,
+        //         'cim_id'=>$payment->commande->id,
+        //         'date_paiement'=>'2023-01-20',
+        //     ]);
+        //     // $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
+        //     // if($payment->status_contrat != "Renouvelé"){
+        //     //     $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
+        //     // }
+        //     // $affiliation->save();
+        // }
        /**
         * envoie de la facture au souscripteur
         */
@@ -629,8 +640,8 @@ if(!function_exists('AjoutDuneAffiliation')){
                     // envoie de mail à contract
                     $package = Package::find($commande->type_contrat);
                         $affiliation->motifs()->sync($plaintes);
-                    // Log::info("affiliation".$affiliation);
-                    Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $affiliation->motifs, $request->niveau_urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie,$souscripteur,$affiliation, $request->urgence));
+                    $when = now()->addMinutes(1);
+                    Mail::to("contrat@medicasure.com")->later($when, new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $affiliation->motifs, $request->niveau_urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie,$souscripteur,$affiliation, $request->urgence));
                     $affiliation_old = Affiliation::where([["patient_id",$patient->user_id],["souscripteur_id",$souscripteur->user_id]])->first();
                     $commande = reduireCommandeRestante($commande->id, $souscripteur->user_id, $patient->user_id, $package->description_fr, $affiliation_old->slug);
 

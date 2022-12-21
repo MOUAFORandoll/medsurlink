@@ -18,6 +18,7 @@ class Cors
         header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH");
         header("Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token, x-csrf-token");
+
         //ALLOW OPTIONS METHOD
         $headers = [
             'Access-Control-Allow-Methods' => 'POST, GET, OPTIONS, PUT, DELETE, PATCH',
@@ -32,5 +33,10 @@ class Cors
             $response->header($key, $value);
         }
         return $response;
-    }
+
+       /*  return $next($request)
+        ->header('Access-Control-Allow-Origin', '*')
+        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH')
+        ->header('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token, x-csrf-token');
+    */ }
 }

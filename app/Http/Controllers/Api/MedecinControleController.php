@@ -312,8 +312,8 @@ class MedecinControleController extends Controller
 
         try{
             $mail = new updateSetting($medecin->user);
-
-            Mail::to($medecin->user->email)->send($mail);
+            $when = now()->addMinutes(1);
+            Mail::to($medecin->user->email)->later($when, $mail);
 
         }catch (\Swift_TransportException $transportException){
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";

@@ -32,6 +32,7 @@ use App\Notifications\MedecinToPatient;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
@@ -179,7 +180,7 @@ class User extends Authenticatable implements HasMedia
         'assistante',
     ];
 
-    protected $appends = ['signature'];
+    protected $appends = ['signature', 'name'];
 
     protected $slackChannels= [
         'test' => 'https://hooks.slack.com/services/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',
@@ -210,6 +211,11 @@ class User extends Authenticatable implements HasMedia
         }
         return $this->slack_url;
     }
+
+    public function getNameAttribute(){
+        return ucfirst($this->prenom).' '.Str::upper($this->nom);
+    }
+
     /**
      * @param $name
      * @return $this
@@ -379,7 +385,7 @@ class User extends Authenticatable implements HasMedia
     }
 
     public function dossier(){
-        return $this->hasOne(DossierMedical::class, 'id');
+        return $this->hasOne(DossierMedical::class, 'patient_id', 'id');
     }
 
     public function medecinAvis(){
