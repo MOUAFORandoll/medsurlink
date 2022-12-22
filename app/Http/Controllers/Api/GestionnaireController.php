@@ -267,8 +267,8 @@ class GestionnaireController extends Controller
 
         try{
         $mail = new updateSetting($gestionnaire->user);
-
-        Mail::to($gestionnaire->user->email)->send($mail);
+        $when = now()->addMinutes(1);
+        Mail::to($gestionnaire->user->email)->later($when, $mail);
 
         }catch (\Swift_TransportException $transportException){
             $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";

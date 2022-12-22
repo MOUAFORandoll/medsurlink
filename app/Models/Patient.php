@@ -176,13 +176,13 @@ class Patient extends Model
             $user = Auth::user();
             $userRoles = $user->getRoleNames();
             if(gettype($userRoles->search('Patient')) == 'integer'){
-                $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
+                $user = User::with(['patient'])->whereId(Auth::id())->first();
                 $builder->where('user_id',$user->id);
 
             }else if(gettype($userRoles->search('Assistante')) == 'integer'){
                 return $builder;
                  } else if(gettype($userRoles->search('Souscripteur')) == 'integer'){
-                $user = \App\User::with(['patient'])->whereId(Auth::id())->first();
+                $user = User::with(['patient'])->whereId(Auth::id())->first();
                 //Récupération des patiens du souscripteur
                 $patients = $user->souscripteur->patients;
                 $patientsId = [];
@@ -226,6 +226,10 @@ class Patient extends Model
         return $query->where(function ($query) use($intervalle_debut, $intervalle_fin) {
             $query->whereDate('created_at', '>=', $intervalle_debut)->whereDate('created_at', '<=', $intervalle_fin);
         })->orderBy('created_at', 'asc');
+    }
+
+    public function alerte(){
+        return $this->belongsTo(Alerte::class, 'user_id', 'patient_id');
     }
 
 }

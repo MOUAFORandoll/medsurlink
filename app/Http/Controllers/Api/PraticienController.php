@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\PersonnalErrors;
-use App\Http\Requests\PraticienStoreRequest;
-use App\Http\Requests\PraticienUpdateRequest;
-use App\Mail\updateSetting;
 use App\Models\Comptable;
-use App\Models\EtablissementExercice;
-use App\Models\EtablissementExercicePraticien;
 use App\Models\Praticien;
+use App\Mail\updateSetting;
+use App\Models\TimeActivite;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use App\Models\EtablissementExercice;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\PraticienStoreRequest;
+use App\Http\Requests\PraticienUpdateRequest;
+use App\Models\EtablissementExercicePraticien;
+use App\Http\Controllers\Traits\PersonnalErrors;
 
 class PraticienController extends Controller
 {
@@ -319,8 +320,8 @@ class PraticienController extends Controller
 
         try{
             $mail = new updateSetting($praticien->user);
-
-            Mail::to($praticien->user->email)->send($mail);
+            $when = now()->addMinutes(1);
+            Mail::to($praticien->user->email)->later($when, $mail);
 
         }catch (\Swift_TransportException $transportException){
             Log::error($transportException->getMessage());
@@ -441,5 +442,10 @@ class PraticienController extends Controller
 
         $praticien = Praticien::with('etablissements','specialite','user')->whereUserId($praticien->user_id)->first();
         return response()->json(['praticien'=>$praticien]);
+    }
+
+    public function timeActivities() {
+        $praticien = Praticien::with('time','user')->withCount('time')->get();
+        return response()->json(['praticien' => $praticien]);
     }
 }

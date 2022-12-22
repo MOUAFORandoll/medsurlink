@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\SlackMessage;
 
-class SouscriptionAlert extends Notification
+class SouscriptionAlert extends Notification implements ShouldQueue
 {
     use Queueable;
     private $message;
@@ -21,12 +21,14 @@ class SouscriptionAlert extends Notification
     public function __construct($message,$sender=null)
     {
         $this->message = $message;
-        
+
         if(!is_null($sender)) {
             $this->sender = $sender;
         } else {
             $this->sender =  'MEDSURLINK';
         }
+        $when = now()->addMinutes(2);
+        $this->delay($when);
     }
 
     /**

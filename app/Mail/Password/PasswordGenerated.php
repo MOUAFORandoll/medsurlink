@@ -31,7 +31,7 @@ class PasswordGenerated extends Mailable
      */
     public function build()
     {
-        return $this->from('no-reply@medsurlink.com')
+        return $this->from(config('mail.from.address'))
             ->subject('Medicasure | Vos accès Medsurlink')
             ->markdown('emails.password.passwordGenerated');
     }

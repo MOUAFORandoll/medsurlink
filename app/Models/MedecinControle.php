@@ -97,7 +97,7 @@ class MedecinControle extends Model
         return $this->morphMany(Auteur::class, 'auteurable');
     }
     public function user(){
-        return $this->belongsTo(User::class,'user_id','id');
+        return $this->belongsTo(User::class,'user_id','id')->withTrashed();
     }
 
     public function etablissements(){

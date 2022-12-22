@@ -91,7 +91,8 @@ class rappelerRendezVous extends Command
                 if (is_null($rdv->nom_medecin)) {
                     $mail = new Rappel($rdv);
                     if($rdv->praticien){
-                        Mail::to($rdv->praticien->email)->send($mail);
+                        $when = now()->addMinutes(1);
+                        Mail::to($rdv->praticien->email)->later($when,$mail);
                     }
                 }
                 $patient = mb_strtoupper($rdv->patient->nom).' '.ucfirst($rdv->patient->prenom);
@@ -114,21 +115,25 @@ class rappelerRendezVous extends Command
         $url_global = $url_global."/appointments";
 
         $slack_notification = $slack_notification. "<$url_global|Voir plus de détails>";
-        $rdv->setSlackChannel('appel')->notify(new SouscriptionAlert($slack_notification,null));
+        if (isset($rdv)){
+            $rdv->setSlackChannel('appel')->notify(new SouscriptionAlert($slack_notification,null));
+        }
 
         foreach ($rdvs as $rdv){
             if($rdv->patient->decede == 'non') {
                 $souscripteur = $rdv->patient->patient->souscripteur;
                 if (!is_null($souscripteur)) {
                     $mail = new RappelSouscripteur($rdv, $souscripteur);
-                    Mail::to($souscripteur->user->email)->send($mail);
+                    $when = now()->addMinutes(1);
+                    Mail::to($souscripteur->user->email)->later($when, $mail);
                     Log::info('envoi de mail de rappel au souscripteur' . $souscripteur->user->email);
                 }
                 $financeurs = $rdv->patient->patient->financeurs;
                 foreach ($financeurs as $financeur) {
                     if($financeur->financable->user){
                         $mail = new RappelSouscripteur($rdv, $financeur->financable);
-                        Mail::to($financeur->financable->user->email)->send($mail);
+                        $when = now()->addMinutes(1);
+                        Mail::to($financeur->financable->user->email)->later($when, $mail);
                         Log::info('envoi de mail de rappel au souscripteur' . $financeur->financable->user->email);
                     }
                 }

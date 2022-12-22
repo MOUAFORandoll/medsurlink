@@ -657,6 +657,7 @@ class ConsultationMedecineGeneraleController extends Controller
                         ->where('contributable_type', 'App\User')
                         ->where('operationable_id', $consultation->id)
                         ->where('operationable_type', 'Consultation')
+                        ->withTrashed()
                         ->first();
 
                     $contributeur->delete();

@@ -1,10 +1,12 @@
 <?php
 
+use App\Events\AlerteEvent;
 use App\Models\AffiliationSouscripteur;
 use App\Models\CommandePackage;
 use App\Models\ContratIntermediationMedicale;
 use App\Models\CompteRenduOperatoire;
 use App\Models\ConsultationExamenValidation;
+use App\Models\ConsultationMedecineGenerale;
 use App\Models\DossierMedical;
 use App\Models\ExamenComplementaire;
 use App\Models\ExamenEtablissementPrix;
@@ -40,6 +42,8 @@ Route::get('/redirect-mesurlink/redirect/{email}','Api\MedicasureController@stor
 Route::resource('medicasure/souscripteur','Api\MedicasureController');
 
 Route::get('/', function () {
+    //event(new AlerteEvent("kjsdjsd sdklsdkl"));
+    //return "ttoto";
     return view('welcome');
 });
 
@@ -120,6 +124,13 @@ Route::get('impression/facture-offre/{affiliation}', function ($affiliation) {
     $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
     return $pdf['stream'];
 })->name('facture.offre');
+
+Route::get('visualiser-consultation-medecine/{slug}',function ($slug){
+    $pdf = visualiser($slug);
+    return $pdf;
+})->name('visualiser.consultation');
+
+// Route::get('visualiser-consultation-medecine/{slug}','Api\ImprimerController@visualiser');
 
 Route::get('impression/prestation/{paiement_uuid}', function ($paiement_uuid) {
 

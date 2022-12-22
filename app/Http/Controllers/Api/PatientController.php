@@ -301,7 +301,8 @@ class PatientController extends Controller
                 $this->sendSmsToUser($user,null,$identifiant);
 
                 $mail = new PatientAffiliated($souscripteur,$patient);
-                Mail::to($souscripteur->user->email)->send($mail);
+                $when = now()->addMinutes(1);
+                Mail::to($souscripteur->user->email)->later($when, $mail);
             }
 
 
@@ -423,7 +424,8 @@ class PatientController extends Controller
                 $this->sendSmsToUser($user,null,$identifiant);
 
                 $mail = new PatientAffiliated($souscripteur,$patient);
-                Mail::to($souscripteur->user->email)->send($mail);
+                $when = now()->addMinutes(1);
+                Mail::to($souscripteur->user->email)->later($when, $mail);
             }
 
 
@@ -542,8 +544,7 @@ class PatientController extends Controller
                                                                             ->orwhere('email', 'like', '%' .$value.'%')
                                                                             ;})
                             ->orwhereHas('dossier', function($q) use ($value) {$q->where('numero_dossier', 'like', '%' .$value.'%');})
-                            ->orwhere('age', 'like', '%' .$value.'%')
-                            ->latest()->get();
+                            ->orwhere('age', 'like', '%' .$value.'%')->get();
         return $patients;
         // $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable'])->where('age', '=', intval($value))->orWhereHas('user', function($q) use ($value){ $q->Where('nom', 'like', '%'.strtolower($value).'%'); $q->orWhere('prenom', 'like', '%'.strtolower($value).'%'); $q->orWhere('email', 'like', '%'.strtolower($value).'%');})->orWhereHas('dossier', function($q) use ($value){ $q->Where('numero_dossier', '=', intval($value)); })->restrictUser()->latest()->get();
         // return $patients;
@@ -815,7 +816,8 @@ class PatientController extends Controller
 
             if (!is_null($patient->user->email)){
                 $mail = new updateSetting($patient->user);
-                Mail::to($patient->user->email)->send($mail);
+                $when = now()->addMinutes(1);
+                Mail::to($patient->user->email)->later($when, $mail);
             }
 
         }catch (\Swift_TransportException $transportException){

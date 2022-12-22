@@ -40,7 +40,7 @@ class NouvelAffiliation extends Mailable
     public function build()
     {
 
-        return $this->from('no-reply@medsurlink.com')->subject("Nouvelle affiliation")
+        return $this->from(config('mail.from.address'))->subject("Nouvelle affiliation")
                 ->markdown('emails.Souscripteur.envoiNotificationAffiliation');
     }
 }

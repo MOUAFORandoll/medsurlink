@@ -14,7 +14,8 @@ if(!function_exists('informedPatientOfRapport'))
             if ($user->decede == 'non'){
                 try{
                     $mail = new \App\Mail\InformedPatientOfRapport($user);
-                    \Illuminate\Support\Facades\Mail::to($user->email)->send($mail);
+                    $when = now()->addMinutes(1);
+                    \Illuminate\Support\Facades\Mail::to($user->email)->later($when, $mail);
                 } catch (\Swift_TransportException $transportException){
                     $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
                     return response()->json(['patient'=>$user, "message"=>$message]);
@@ -37,7 +38,8 @@ if(!function_exists('informedSouscripteurOfRapport'))
             if($souscripteur->user->email != $patient->user->email){
                 try {
                     $mail = new \App\Mail\InformedSouscripteurOfRapport($souscripteur,$patient);
-                    \Illuminate\Support\Facades\Mail::to($souscripteur->user->email)->send($mail);
+                    $when = now()->addMinutes(1);
+                    \Illuminate\Support\Facades\Mail::to($souscripteur->user->email)->later($when, $mail);
                 } catch (\Swift_TransportException $transportException){
                     $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
                     return response()->json(['patient'=>$souscripteur->user, "message"=>$message]);

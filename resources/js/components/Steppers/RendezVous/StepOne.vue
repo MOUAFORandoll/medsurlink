@@ -66,7 +66,7 @@
                     <div class="invalid-feedback" v-if="!$v.form.dpicker1.required">
                         {{ $t('message.requiredField') }}
                     </div>
-                </div>
+                </div> 
 
                 <div class="col-sm-12 col-md-6">
                     <div class="input-group mb-2">
