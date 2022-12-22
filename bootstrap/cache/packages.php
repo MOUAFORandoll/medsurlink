@@ -11,17 +11,6 @@
       'HistoryStorage' => 'Antonrom\\ModelChangesHistory\\Facade\\HistoryStorage',
     ),
   ),
-  'barryvdh/laravel-debugbar' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Barryvdh\\Debugbar\\ServiceProvider',
-    ),
-    'aliases' => 
-    array (
-      'Debugbar' => 'Barryvdh\\Debugbar\\Facade',
-    ),
-  ),
   'barryvdh/laravel-dompdf' => 
   array (
     'providers' => 
@@ -50,13 +39,6 @@
     array (
       'PDF' => 'Barryvdh\\Snappy\\Facades\\SnappyPdf',
       'SnappyImage' => 'Barryvdh\\Snappy\\Facades\\SnappyImage',
-    ),
-  ),
-  'beyondcode/laravel-dump-server' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'BeyondCode\\DumpServer\\DumpServerServiceProvider',
     ),
   ),
   'cviebrock/eloquent-sluggable' => 
