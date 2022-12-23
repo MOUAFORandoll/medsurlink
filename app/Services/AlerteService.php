@@ -110,7 +110,7 @@ class AlerteService
             $url_global = config('app.url_stagging');
         else
             $url_global = config('app.url_prod');
-        $url_global = $url_global."/alertes";
+        $url_global = $url_global."/alertes?uuid=".$alerte->uuid; 
 
         $slack_message = $slack_message. " <$url_global|En savoir plus>";
 
@@ -118,6 +118,7 @@ class AlerteService
 
         $alerte = $alerte->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
         $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
+        $alerte->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($alerte->niveau_urgence_id), true)['data'];
         return $alerte;
     }
 
@@ -127,6 +128,7 @@ class AlerteService
         $user->unreadNotifications()->where('data->id', $alerte)->orWhere('data->uuid', $alerte)->update(['read_at' => now()]);
         $alerte = Alerte::whereId($alerte)->orWhere('uuid', $alerte)->firstOrFail()->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
         $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
+        $alerte->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($alerte->niveau_urgence_id), true)['data'];
 
         return $alerte;
 
@@ -134,7 +136,15 @@ class AlerteService
 
     public function update(Request $request, $alerte){
         $alerte = Alerte::findOrFail($alerte);
-        $alerte->update(['patient_id' => $request->patient_id, 'niveau_urgence_id' => $request->niveau_urgence_id, 'plainte' => $request->plainte]);// 'statut_id' => $request->statut_id,
+        $alerte->patient_id = $request->patient_id;
+        $alerte->niveau_urgence_id = $request->niveau_urgence_id;
+        $alerte->plainte = $request->plainte;
+        $alerte->creator_id = $request->creator_id ?? $this->user_id;
+
+        $alerte->save();
+        $alerte = $alerte->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
+        $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
+        $alerte->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($alerte->niveau_urgence_id), true)['data'];
         return $alerte;
 
     }
@@ -143,6 +153,9 @@ class AlerteService
         $alerte = Alerte::findOrFail($alerte);
         $alerte->statut_id = $request->statut_id;
         $alerte->save();
+        $alerte = $alerte->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
+        $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
+        $alerte->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($alerte->niveau_urgence_id), true)['data'];
         return $alerte;
     }
 
@@ -156,6 +169,9 @@ class AlerteService
 
         $user = User::findOrFail($request->medecin_id);
         $user->notify(new AlerteNotification("Nouvelle Alerte", $alerte));
+        $alerte = $alerte->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
+        $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
+        $alerte->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($alerte->niveau_urgence_id), true)['data'];
         return $alerte;
     }
 
