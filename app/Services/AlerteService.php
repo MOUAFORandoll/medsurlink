@@ -43,7 +43,7 @@ class AlerteService
                 $q->where('nom', 'like', '%' .$value.'%')
                 ->orwhere('prenom', 'like', '%' .$value.'%')
                 ->orwhere('email', 'like', '%' .$value.'%');
-            });
+            })->orWhere('plainte', 'like', '%' .$value.'%');
         }
         if($request->statut_id != ""){
             $alertes = $alertes->where('statut_id', $request->statut_id);
@@ -58,7 +58,6 @@ class AlerteService
              * ici nous changeons le statut de l'alerte lorsque la téléconsultation a eu lieu
              */
             $tele = null;
-            \Log::alert($item->medecin_id);
             if($item->medecin_id != null){
                 $tele = json_decode($this->teleconsultation->searchTeleconsultation($item->patient_id, $item->medecin_id, $item->created_at->format('Y-m-d')));
             }
