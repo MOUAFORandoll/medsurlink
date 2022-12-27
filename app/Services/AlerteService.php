@@ -68,7 +68,7 @@ class AlerteService
                 $alerte = Alerte::find($item->id);
                 $alerte->statut_id = 3;
                 $alerte->save();
-                $item->statut = $statuts->where('id', $item->statut_id)->first();
+                $item->statut = $statuts->where('id', 3)->first();
 
             }else{
                 $item->statut = $statuts->where('id', $item->statut_id)->first();
