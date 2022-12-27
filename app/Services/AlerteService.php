@@ -52,6 +52,9 @@ class AlerteService
         $alertes = $alertes->latest()->paginate($size);
 
         $items = [];
+        $statuts = collect(json_decode($this->statut->fetchStatuts($request), true)['data']);
+        $niveau_urgences = collect(json_decode($this->niveau_urgence->fetchNiveauUrgences($request), true)['data']);
+
         foreach($alertes->items() as $item){
 
             /**
@@ -65,12 +68,12 @@ class AlerteService
                 $alerte = Alerte::find($item->id);
                 $alerte->statut_id = 3;
                 $alerte->save();
-                $item->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
+                $item->statut = $statuts->where('id', $item->statut_id)->first();
 
             }else{
-                $item->statut = json_decode($this->statut->fetchStatut($item->statut_id), true)['data'];
+                $item->statut = $statuts->where('id', $item->statut_id)->first();
             }
-            $item->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($item->niveau_urgence_id), true)['data'];
+            $item->niveau_urgence = $niveau_urgences->where('id', $item->niveau_urgence_id)->first();
             $items[] = $item;
         }
         $alertes->data = $items;
@@ -117,7 +120,7 @@ class AlerteService
         $alerte->setSlackChannel('appel')->notify(new SouscriptionAlert($slack_message,null));
 
         $alerte = $alerte->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
-        $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
+        $alerte->statut = $$statuts;
         $alerte->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($alerte->niveau_urgence_id), true)['data'];
         return $alerte;
     }
