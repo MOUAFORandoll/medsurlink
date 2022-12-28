@@ -142,6 +142,7 @@ class User extends Authenticatable implements HasMedia
     use SlugRoutable;
     use RestrictSoftDeletes;
 
+
     protected $guard_name = 'api';
     /**
      * The attributes that are mass assignable.

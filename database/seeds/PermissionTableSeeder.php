@@ -20,7 +20,7 @@ class PermissionTableSeeder extends Seeder
            'Administrer les roles & permissions',
         //Patient
            'Consulter profils patient',
-           'Creer patients',
+           'Créer patients',
            'Modifier patients',
            'Supprimer patients',
            'Consulter patients',
@@ -29,7 +29,7 @@ class PermissionTableSeeder extends Seeder
         //Consultations
            'Imprimer consultations',
            'Consulter consultations',
-           'Creer consultations',
+           'Créer consultations',
            'Modifier consultations',
            'Supprimer consultations',
            'Transmettre consultation',
@@ -43,7 +43,7 @@ class PermissionTableSeeder extends Seeder
            'Consulter profils praticien',
         //Resultats laboratoire
            'Consulter resultats laboratoire',
-           'Creer résultats laboratoire',
+           'Créer résultats laboratoire',
            'Modifier resultats laboratoire',
            'Supprimer resultats laboratoire',
            'Transmettre resultats laboratoire', 
@@ -53,7 +53,7 @@ class PermissionTableSeeder extends Seeder
            'Archiver resultats laboratoire transmises',
         //Resultats imagerie
            'Consulter resultats imagerie',
-           'Creer resultats imagerie',
+           'Créer resultats imagerie',
            'Modifier resultats imagerie',
            'Supprimer  resultats imagerie',
            'Transmettre résultats imagerie',
@@ -66,38 +66,38 @@ class PermissionTableSeeder extends Seeder
            'Consulter profils medecin controle',
           
         //Profils profils utilisateurs 
-           'Creer profils utilisateurs',
+           'Créer profils utilisateurs',
            'Consulter profils utilisateurs',
            'Modifier profils utilisateurs',
            'Desactiver  profils utilisateurs',
         //Profils dossier médical
            'Consulter dossier médical',
-           'Creer  dossier médical',
+           'Créer  dossier médical',
            'Modifier dossier médical',
         //Profils souscriptions affiliations
            'Consulter souscriptions affiliations',
-           'Creer souscriptions affiliations',
+           'Créer souscriptions affiliations',
            'Modifier souscriptions affiliations',
         //Rendez-vous
            'Supprimer  rendez-vous',
            'Consulter souscriptions rendez-vous',
-           'Creer souscriptions rendez-vous',
+           'Créer souscriptions rendez-vous',
            'Modifier souscriptions rendez-vous',
         //e-prescriptions   
            'Supprimer  e-prescriptions',
            'Consulter souscriptions e-prescriptions',
-           'Creer souscriptions e-prescriptions',
+           'Créer souscriptions e-prescriptions',
            'Modifier souscriptions e-prescriptions',
         //Téléconsultation
            'Supprimer Téléconsultation',
            'Consulter Téléconsultation',
-           'Creer Téléconsultation',
+           'Créer Téléconsultation',
            'Modifier Téléconsultation',
         //Monitoring des paramètres
            'Monitoring des paramètres',
         //Recommandation
            'Supprimer  Recommandation',
-           'Creer  Recommandation',
+           'Créer  Recommandation',
            'Consulter  Recommandation',
            'Modifier  Recommandation',
         //Chat
@@ -107,44 +107,63 @@ class PermissionTableSeeder extends Seeder
         //Géolocalisation
            'Géolocalisez',
         //souscriptions assureurs
-           'Creer souscriptions assureurs',
+           'Créer souscriptions assureurs',
            'Modifier souscriptions assureurs',
            'Desactiver souscriptions assureurs',
         //validation
            'Effectuer validation financieres',
            'Effectuer validation médical',
         //Formations
-           'Creer formations',
+           'Créer formations',
            'Modifier formations',
            'Supprimer formations',
            'Consulter formations',
         //Avis-medicaux
-           'Creer avis-medicaux',
+           'Créer avis-medicaux',
            'Modifier avis-medicaux',
            'Supprimer avis-medicaux',
            'Consulter avis-medicaux',
         //Comptable
-           'Creer comptable',
+           'Créer comptable',
            'Modifier comptable',
            'Supprimer comptable',
            'Consulter comptable',
-           'Creer souscripteur',
+           'Créer souscripteur',
            'Modifier souscripteur',
            'Supprimer souscripteur',
         //Partenaires   
-           'Creer partenaires',
+           'Créer partenaires',
            'Modifier partenaires',
            'Supprimer partenaires',
            'Consulter partenaires',
         //Association
-           'Creer association',
+           'Créer association',
            'Modifier association',
            'Supprimer association',
            'Consulter association',
         //Activite
-           'Creer activite',
+           'Créer activite',
            'Modifier activite',
            'Consulter activite patients',
+         
+         /**
+          * Gestion des alertes
+          */
+          'Créer une alerte',
+          'Modifier une alerte',
+          'Afficher une alerte',
+          'Listing des alertes',
+          'Supprimer une alerte',
+          'Affecter un médecin controle à une alerte',
+          'Rejetter une alerte',
+         
+          /* Gestion des teleconsultations
+          */
+          'Créer une téléconsultation',
+          'Modifier une téléconsultation',
+          'Afficher une téléconsultation',
+          'Listing des téléconsultations',
+          'Supprimer une téléconsultation'
         ];
 
 
