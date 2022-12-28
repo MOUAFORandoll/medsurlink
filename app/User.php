@@ -207,7 +207,7 @@ class User extends Authenticatable implements HasMedia
 
     public function routeNotificationForSlack(){
         if($this->slack_url === null){
-            return $this->slackChannels['test'];
+            return $this->slackChannels['affilie'];
         }
         return $this->slack_url;
     }
