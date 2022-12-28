@@ -105,7 +105,7 @@ class PatientMedecinControle extends Model
 
     public function routeNotificationForSlack(){
         if($this->slack_url === null){
-            return $this->slackChannels['test'];
+            return $this->slackChannels['appel'];
         }
         return $this->slack_url;
     }

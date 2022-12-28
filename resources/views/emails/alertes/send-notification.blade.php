@@ -1,6 +1,6 @@
 <?php
-//
-$url_global = "";
+
+    $url_global = "";
         $env = strtolower(config('app.env'));
         if ($env == 'local')
             $url_global = config('app.url_loccale');
@@ -26,7 +26,7 @@ $url_global = "";
             Email : <strong>{{$alerte->patient->email}}</strong><br>
             Telephone : <strong>{{$alerte->patient->telephone}}</strong><br>
             <br>
-            <p><strong>Informations sur l'emetteur :</strong></p>
+            <p><strong>Informations sur le sous :</strong></p>
             Nom : <strong>{{$alerte->creator->name}}</strong><br>
             Email : <strong>{{$alerte->creator->email}}</strong><br>
             Telephone : <strong>{{$alerte->creator->telephone}}</strong><br>
