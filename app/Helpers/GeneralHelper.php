@@ -227,8 +227,9 @@ if(!function_exists('generationPdfFactureOffre'))
             //$exception
         }
     }
-
-    function visualiser($slug)
+}
+if(!function_exists('visualiser')){
+function visualiser($slug)
     {
         $consultationMedecine = ConsultationMedecineGenerale::with('operationables.contributable','files')->whereSlug($slug)->first();
 
@@ -346,7 +347,6 @@ if(!function_exists('generationPdfFactureOffre'))
         // response()->json(['link' => route('facture.offre', $commande_id)]);
     }
 }
-
 
 if(!function_exists('EnvoieDeFactureApresPaiementPrestation'))
 {
