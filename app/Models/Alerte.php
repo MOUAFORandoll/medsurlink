@@ -18,8 +18,8 @@ class Alerte extends Model
     protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'niveau_urgence_id', 'statut_id', 'creator_id', 'plainte'];
 
     protected $slackChannels= [
-        'appel' => 'https://hooks.slack.com/services/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',
-        //'appel' => 'https://hooks.slack.com/services/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'
+        //'appel' => 'https://hooks.slack.com/services/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',
+        'appel' => 'https://hooks.slack.com/services/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'
     ];
 
     protected $slack_url = null;
