@@ -65,8 +65,8 @@ class MotifController extends Controller
      *
      * @return mixed
      */
-    public function destroy($motif)
+    public function destroy($relation_id, $motif, $relation)
     {
-        return $this->successResponse($this->motifs->deleteMotif($motif));
+        return $this->successResponse($this->motifs->deleteMotif($relation_id, $motif, $relation));
     }
 }
