@@ -145,7 +145,6 @@ class PermissionTableSeeder extends Seeder
            'Créer activite',
            'Modifier activite',
            'Consulter activite patients',
-         
          /**
           * Gestion des alertes
           */
@@ -156,7 +155,6 @@ class PermissionTableSeeder extends Seeder
           'Supprimer une alerte',
           'Affecter un médecin controle à une alerte',
           'Rejetter une alerte',
-         
           /* Gestion des teleconsultations
           */
           'Créer une téléconsultation',
