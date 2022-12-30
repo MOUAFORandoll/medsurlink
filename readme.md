@@ -102,5 +102,7 @@ php artisan migrate --path=/database/migrations/2022_11_22_135726_create_jobs_ta
 
 php artisan queue:work --queue=high,default
 
+
+## Execution des permissions des alertes
 php artisan db:seed --class=PermissionTableSeeder
 php artisan db:seed --class=RoleTableSeeder
