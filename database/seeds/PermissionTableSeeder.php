@@ -161,7 +161,12 @@ class PermissionTableSeeder extends Seeder
           'Modifier une téléconsultation',
           'Afficher une téléconsultation',
           'Listing des téléconsultations',
-          'Supprimer une téléconsultation'
+          'Supprimer une téléconsultation',
+
+         /* Gestion des notifications
+          */
+          'Listing des notifications',
+          'Afficher une notification'
         ];
 
 
