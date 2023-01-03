@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Alerte;
 use Carbon\Carbon;
 use App\Models\Patient;
 use App\Models\Praticien;

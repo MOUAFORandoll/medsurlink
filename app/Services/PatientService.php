@@ -16,7 +16,7 @@ class PatientService
      * Summary of user_id
      * @var mixed
      */
-    public  $user_id;
+    public  $user_id, $user;
 
     public function __construct()
     {
@@ -36,7 +36,10 @@ class PatientService
         if($this->user->hasRole('Souscripteur')){
             $patients = $patients->where('souscripteur_id', $this->user_id);
         }elseif($this->user->hasRole('Medecin controle')){
-            //$alertes = $alertes->where('medecin_id', $this->user_id);
+            $user_id = $this->user_id;
+            $patients = $patients->whereHas('alerte', function ($query) use($user_id) {
+                $query->where('medecin_id', $user_id);
+            });
         }elseif($this->user->hasRole('Assistante')){
 
         }
@@ -51,8 +54,6 @@ class PatientService
                 $q->where('numero_dossier', 'like', '%' .$value.'%');
             })
             ->orwhere('age', 'like', '%' .$value.'%');
-
-        //patients
 
         return $patients->paginate($size);
     }
