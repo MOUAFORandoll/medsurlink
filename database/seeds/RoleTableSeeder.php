@@ -63,6 +63,8 @@ class RoleTableSeeder extends Seeder
          $this->setPermissionRole(103,2);
          $this->setPermissionRole(104,2);
          $this->setPermissionRole(105,2);
+         $this->setPermissionRole(113, 2);
+         $this->setPermissionRole(114, 2);
 
 //       Definition des permissions du souscripteur
         $this->setPermissionRole(2,3);
@@ -78,6 +80,8 @@ class RoleTableSeeder extends Seeder
         $this->setPermissionRole(103,3);
         $this->setPermissionRole(104,3);
         $this->setPermissionRole(105,3);
+        $this->setPermissionRole(113, 3);
+        $this->setPermissionRole(114, 3);
 
 //        Definition des permissions du praticien
         $this->setPermissionRole(2,4);
@@ -100,6 +104,8 @@ class RoleTableSeeder extends Seeder
         $this->setPermissionRole(25,4);
         $this->setPermissionRole(26,4);
         $this->setPermissionRole(27,4);
+        $this->setPermissionRole(113, 4);
+        $this->setPermissionRole(114, 4);
 
 //        Definition des permissions du medecin controle
         $this->setPermissionRole(2,5);
@@ -118,6 +124,8 @@ class RoleTableSeeder extends Seeder
         $this->setPermissionRole(110, 5);
         $this->setPermissionRole(111, 5);
         $this->setPermissionRole(112, 5);
+        $this->setPermissionRole(113, 5);
+        $this->setPermissionRole(114, 5);
 
 
 //        Definition des permissions du gestionnaire
@@ -131,6 +139,8 @@ class RoleTableSeeder extends Seeder
         $this->setPermissionRole(42,6);
         $this->setPermissionRole(43,6);
         $this->setPermissionRole(44,6);
+        $this->setPermissionRole(113, 6);
+        $this->setPermissionRole(114, 6);
 
 
 
@@ -143,6 +153,8 @@ class RoleTableSeeder extends Seeder
         $this->setPermissionRole(105,12);
         $this->setPermissionRole(106,12);
         $this->setPermissionRole(107,12);
+        $this->setPermissionRole(113, 12);
+        $this->setPermissionRole(114, 12);
 
     }
 
