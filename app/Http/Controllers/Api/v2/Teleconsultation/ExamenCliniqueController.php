@@ -65,8 +65,8 @@ class ExamenCliniqueController extends Controller
      *
      * @return mixed
      */
-    public function destroy($examen_clinique)
+    public function destroy($relation_id, $examen_clinique, $relation)
     {
-        return $this->successResponse($this->examenCliniqueService->deleteExamenClinique($examen_clinique));
+        return $this->successResponse($this->examenCliniqueService->deleteExamenClinique($relation_id, $examen_clinique, $relation));
     }
 }
