@@ -13,14 +13,39 @@ class PatientService
     use RequestService;
 
     /**
+     * Summary of user_id
+     * @var mixed
+     */
+    public  $user_id, $user;
+
+    public function __construct()
+    {
+        $this->user_id = \Auth::guard('api')->user()->id;
+        $this->user = \Auth::guard('api')->user();
+    }
+
+    /**
      * @return array
      */
     public function fetchPatients(Request $request)
     {
         $value = $request->search;
         $size = $request->size ?? 25;
-        $patients = Patient::with(['dossier:patient_id,id,numero_dossier', 'user:id,nom,prenom,email,telephone,slug','affiliations.package:id,description_fr'])
-            ->whereHas('user', function($q) use ($value) {
+
+        $patients = Patient::query();
+        if($this->user->hasRole('Souscripteur')){
+            $patients = $patients->where('souscripteur_id', $this->user_id);
+        }elseif($this->user->hasRole('Medecin controle')){
+            $user_id = $this->user_id;
+            $patients = $patients->whereHas('alerte', function ($query) use($user_id) {
+                $query->where('medecin_id', $user_id);
+            });
+        }elseif($this->user->hasRole('Assistante')){
+
+        }
+
+        $patients = $patients->with(['dossier:patient_id,id,numero_dossier', 'user:id,nom,prenom,email,telephone,slug','affiliations.package:id,description_fr'])
+        ->whereHas('user', function($q) use ($value) {
                 $q->where('nom', 'like', '%' .$value.'%')
                 ->orwhere('prenom', 'like', '%' .$value.'%')
                 ->orwhere('email', 'like', '%' .$value.'%');

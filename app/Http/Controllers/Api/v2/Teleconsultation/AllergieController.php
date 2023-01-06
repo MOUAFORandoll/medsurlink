@@ -65,8 +65,8 @@ class AllergieController extends Controller
      *
      * @return mixed
      */
-    public function destroy($allergie)
+    public function destroy($relation_id, $allergie, $relation)
     {
-        return $this->successResponse($this->allergieService->deleteAllergie($allergie));
+        return $this->successResponse($this->allergieService->deleteAllergie($relation_id, $allergie, $relation));
     }
 }

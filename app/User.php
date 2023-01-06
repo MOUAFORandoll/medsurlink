@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Alerte;
 use Carbon\Carbon;
 use App\Models\Patient;
 use App\Models\Praticien;
@@ -141,6 +142,7 @@ class User extends Authenticatable implements HasMedia
     use SluggableScopeHelpers;
     use SlugRoutable;
     use RestrictSoftDeletes;
+
 
     protected $guard_name = 'api';
     /**

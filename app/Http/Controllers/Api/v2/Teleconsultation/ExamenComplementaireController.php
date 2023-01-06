@@ -61,12 +61,14 @@ class ExamenComplementaireController extends Controller
     }
 
     /**
-     * @param $examen_complementaire
      *
+     * @param mixed $relation_id
+     * @param mixed $examen_complementaire
+     * @param mixed $relation
      * @return mixed
      */
-    public function destroy($examen_complementaire)
+    public function destroy($relation_id, $examen_complementaire, $relation)
     {
-        return $this->successResponse($this->examenComplementaire->deleteExamenComplementaire($examen_complementaire));
+        return $this->successResponse($this->examenComplementaire->deleteExamenComplementaire($relation_id, $examen_complementaire, $relation));
     }
 }
