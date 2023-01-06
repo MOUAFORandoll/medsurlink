@@ -76,7 +76,7 @@ class AffiliationSouscripteur extends Model
 
     public function routeNotificationForSlack(){
         if($this->slack_url === null){
-            return $this->slackChannels['test'];
+            return $this->slackChannels['souscription'];
         }
         return $this->slack_url;
     }

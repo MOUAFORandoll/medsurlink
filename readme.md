@@ -101,3 +101,8 @@ php artisan migrate --path=/database/migrations/2022_11_21_174813_create_notific
 php artisan migrate --path=/database/migrations/2022_11_22_135726_create_jobs_table.php
 
 php artisan queue:work --queue=high,default
+
+
+## Execution des permissions des alertes
+php artisan db:seed --class=PermissionTableSeeder
+php artisan db:seed --class=RoleTableSeeder

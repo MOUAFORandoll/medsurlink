@@ -24,7 +24,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::post('/', 'AllergieController@store');
         Route::get('/{allergie}', 'AllergieController@show');
         Route::patch('/{allergie}', 'AllergieController@update');
-        Route::delete('/{allergie}', 'AllergieController@destroy');
+        Route::delete('/{relation_id}/{allergie}/{relation}', 'AllergieController@destroy');
     });
 
     /**
@@ -89,7 +89,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::post('/', 'ExamenCliniqueController@store');
         Route::get('/{examen_clinique}', 'ExamenCliniqueController@show');
         Route::patch('/{examen_clinique}', 'ExamenCliniqueController@update');
-        Route::delete('/{examen_clinique}', 'ExamenCliniqueController@destroy');
+        Route::delete('/{relation_id}/{examen_clinique}/{relation}', 'ExamenCliniqueController@destroy');
     });
 
     /**
@@ -100,7 +100,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::post('/', 'ExamenComplementaireController@store');
         Route::get('/{examen_complementaire}', 'ExamenComplementaireController@show');
         Route::patch('/{examen_complementaire}', 'ExamenComplementaireController@update');
-        Route::delete('/{examen_complementaire}', 'ExamenComplementaireController@destroy');
+        Route::delete('/{relation_id}/{examen_complementaire}/{relation}', 'ExamenComplementaireController@destroy');
     });
 
     /**
@@ -111,7 +111,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::post('/', 'MotifController@store');
         Route::get('/{motif}', 'MotifController@show');
         Route::patch('/{motif}', 'MotifController@update');
-        Route::delete('/{motif}', 'MotifController@destroy');
+        Route::delete('/{relation_id}/{motif}/{relation}', 'MotifController@destroy');
     });
 
     /**
