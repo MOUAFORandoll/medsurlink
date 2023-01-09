@@ -86,6 +86,11 @@ class AlerteService
         $alerte = Alerte::create(['uuid' => Str::uuid(), 'patient_id' => $request->patient_id, 'niveau_urgence_id' => $request->niveau_urgence_id, 'statut_id' => $request->statut_id ?? 1, 'creator_id' => $request->creator_id ?? $this->user_id, 'plainte' => $request->plainte]);
         $users = User::role('Assistante')->get();
 
+        if(!is_null($request->audio)){
+            $alerte->addMedia($request->audio)->toMediaCollection('audio');
+            $alerte = $alerte->fresh();
+        }
+
         $alerte = $alerte->load('creator:id,nom,prenom', 'patient:id,nom,prenom,telephone');
 
 
@@ -145,6 +150,15 @@ class AlerteService
         $alerte->creator_id = $request->creator_id ?? $this->user_id;
 
         $alerte->save();
+
+        if(!is_null($request->audio)){
+            if($alerte->getMedia('audio')->count() > 0){
+                $alerte->clearMediaCollection('audio');
+            }
+            $alerte->addMedia($request->audio)->toMediaCollection('audio');
+            $alerte = $alerte->fresh();
+        }
+
         $alerte = $alerte->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
         $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
         $alerte->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($alerte->niveau_urgence_id), true)['data'];

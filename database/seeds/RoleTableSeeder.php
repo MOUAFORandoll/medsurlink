@@ -41,7 +41,6 @@ class RoleTableSeeder extends Seeder
                     'guard_name'=>'api'
                 ]);
             }
-            
         }
 
         //Definition des permissions du super-admin

@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class Alerte extends Model
 {
@@ -16,6 +17,8 @@ class Alerte extends Model
     protected $table = 'alertes';
 
     protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'niveau_urgence_id', 'statut_id', 'creator_id', 'plainte'];
+
+    protected $appends = ['audio'];
 
     protected $slackChannels= [
         //'appel' => 'https://hooks.slack.com/services/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',
@@ -27,7 +30,7 @@ class Alerte extends Model
     public function patient(){
         return $this->belongsTo(User::class);
     }
-    
+
 
     public function creator(){
         return $this->belongsTo(User::class);
@@ -62,6 +65,17 @@ class Alerte extends Model
         $this->slack_url = $url;
 
         return $this;
+    }
+
+    public function getAudioAttribute(){
+        if ($this->getFirstMedia('audio')) {
+            $arrayLinks = explode("public/", $this->getFirstMedia('audio')->getPath());
+            $link = Storage::url($arrayLinks[count($arrayLinks) - 1]);
+          } else {
+            return null;
+          }
+          $this->makeHidden('media');
+          return asset($link);
     }
 
 
