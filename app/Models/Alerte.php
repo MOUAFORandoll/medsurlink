@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
-class Alerte extends Model
+class Alerte extends Model implements HasMedia
 {
-    use Notifiable, HasChangesHistory, SoftDeletes;
+    use Notifiable, HasMediaTrait, HasChangesHistory, SoftDeletes;
 
 
     protected $table = 'alertes';
