@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers\Api\v2\Globale;
 
-use App\Http\Controllers\Controller;
-use App\Services\AlerteService;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use App\Services\PermissionService;
+use App\Http\Controllers\Controller;
+use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
 
-    private $alerteService;
+    private $permissionService;
 
     /**
-     * class AlerteController extends Controller
+     * class PermissionController extends Controller
      *
-     * @param \App\Services\AlerteService $alerteService
+     * @param \App\Services\PermissionService $permissionService
      */
-    public function __construct(AlerteService $alerteService)
+    public function __construct(PermissionService $permissionService)
     {
-        $this->alerteService = $alerteService;
+        $this->permissionService = $permissionService;
     }
 
     /**
@@ -26,7 +28,7 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->successResponse($this->alerteService->index($request));
+        return $this->successResponse($this->permissionService->index($request));
     }
 
     /**
@@ -34,9 +36,9 @@ class PermissionController extends Controller
      *
      * @return mixed
      */
-    public function show($alerte)
+    public function show($permission)
     {
-        return $this->successResponse($this->alerteService->show($alerte));
+        return $this->successResponse($this->permissionService->show($permission));
     }
 
     /**
@@ -47,7 +49,7 @@ class PermissionController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, $this->validations());
-        return $this->successResponse($this->alerteService->store($request));
+        return $this->successResponse($this->permissionService->store($request));
     }
 
     /**
@@ -59,14 +61,15 @@ class PermissionController extends Controller
     public function update(Request $request, $alerte)
     {
         $this->validate($request, $this->validations(true));
-        return $this->successResponse($this->alerteService->update($request, $alerte));
+        return $this->successResponse($this->permissionService->update($request, $alerte));
     }
 
-    public function assignMedecin(Request $request, $alerte){
-        $this->validate($request, [
-            'medecin_id' => 'required',
-        ]);
-        return $this->successResponse($this->alerteService->assignMedecin($request, $alerte));
+    public function assignRole(Request $request, $permission){
+        return $this->successResponse($this->permissionService->assignRole($request, $permission));
+    }
+
+    public function removeRole($permission, $role){
+        return $this->successResponse($this->permissionService->removeRole($role, $permission));
     }
 
     /**
@@ -74,24 +77,19 @@ class PermissionController extends Controller
      *
      * @return mixed
      */
-    public function destroy($alerte)
+    public function destroy($permission)
     {
-        return $this->successResponse($this->alerteService->destroy($alerte));
+        return $this->successResponse($this->permissionService->destroy($permission));
     }
 
     public function validations($is_update = false){
         if($is_update){
             $rules = [
-                'patient_id' => 'required',
-                'niveau_urgence_id' => 'required',
-                //'statut_id' => 'required',
-                'plainte' => 'required'
+                'name' => 'required',
             ];
         }else{
             $rules = [
-                'patient_id' => 'required',
-                'niveau_urgence_id' => 'required',
-                'plainte' => 'required'
+                'name' => 'required',
             ];
         }
         return $rules;
