@@ -524,7 +524,7 @@ class UserController extends Controller
         }else{
             if(!is_null($request->consentement)){
                 $patient = $user->patient;
-                
+
                 $patient->consentement = $request->consentement;
                 $patient->restriction = $request->restriction;
                 $patient->save();
