@@ -33,7 +33,7 @@ class BigBlueButtonService
         $patient = User::find($user_id);
         $bbb = new BigBlueButton();
         $createParams = new CreateMeetingParameters("meetingId", "Téléconsultation de {$patient->name} par Dr {$this->user->name}");
-        $createParams = $createParams->setModeratorPassword("9UqG@CQAE6dfB")->setAttendeePassword("9UqG@CQAE6dfB");
+        $createParams = $createParams->setModeratorPassword(config('app.bigbluebuttom_pass'))->setAttendeePassword(config('app.bigbluebuttom_pass'));
         $createParams->setRecord(true);
         $createParams->setAllowStartStopRecording(true);
         $createParams->setLogoutUrl($this->url_global."/teleconsultations/create");
@@ -42,7 +42,7 @@ class BigBlueButtonService
         if($response->getReturnCode() == 'FAILED') {
             return 'Can\'t create room! please contact our administrator.';
         }else {
-            $joinMeetingParams = new JoinMeetingParameters("meetingId", $this->user->name, "9UqG@CQAE6dfB");
+            $joinMeetingParams = new JoinMeetingParameters("meetingId", $this->user->name, config('app.bigbluebuttom_pass'));
             $joinMeetingParams->setRedirect(true);
             $url = $bbb->getJoinMeetingURL($joinMeetingParams);
             return $url;
@@ -53,7 +53,7 @@ class BigBlueButtonService
     {
         $patient = User::find($user_id);
         $bbb = new BigBlueButton();
-        $joinMeetingParams = new JoinMeetingParameters("meetingId", $patient->name, "9UqG@CQAE6dfB");
+        $joinMeetingParams = new JoinMeetingParameters("meetingId", $patient->name, config('app.bigbluebuttom_pass'));
         $joinMeetingParams->setRedirect(true);
         $url = $bbb->getJoinMeetingURL($joinMeetingParams);
         return $url;

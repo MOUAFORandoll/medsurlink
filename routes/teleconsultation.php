@@ -14,7 +14,13 @@
 
 Route::post('v2/oauth/token', 'Api\AuthController@auth');
 
+/**
+ * Signature
+ */
+Route::post('v2/signature/user','Api\UserController@signature');
+
 Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.credentials'])->group(function () {
+
 
     /**
      * CRUDS allergies
@@ -46,6 +52,14 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::patch('/{teleconsultation}', 'TeleconsultationController@update');
         Route::delete('/{teleconsultation}', 'TeleconsultationController@destroy');
     });
+
+    /**
+     * CRUD TELECONSULTATIONS
+     */
+    Route::group(['prefix' => 'mettings'], function () {
+        Route::get('/create/{user_id}', 'BigBlueButtonController@createMetting');
+        Route::get('/join/{user_id}', 'BigBlueButtonController@joinMetting');
+     });
 
      /**
      * CRUDS anamneses
