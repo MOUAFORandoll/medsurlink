@@ -15,7 +15,12 @@ class CreateMettingsTable extends Migration
     {
         Schema::create('mettings', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->uuid('uuid');
+            $table->bigInteger('patient_id');
+            $table->bigInteger('medecin_id');
+            $table->string('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

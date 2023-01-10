@@ -512,11 +512,11 @@ class UserController extends Controller
 
     public function signature(Request $request){
         $user  = User::find($request->id);
-        
+
         if($request->souscripteur){
             if(!is_null($request->consentement)){
                 $souscripteur = $user->souscripteur;
-                
+
                 $souscripteur->consentement = $request->consentement;
                 $souscripteur->save();
             }
