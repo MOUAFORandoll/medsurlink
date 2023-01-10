@@ -17,7 +17,7 @@ Route::post('v2/oauth/token', 'Api\AuthController@auth');
 /**
  * Signature
  */
-Route::post('v2/signature/user','Api\UserController@signature');
+Route::post('v2/signature/user', 'Api\UserController@signature')->middleware(['client.credentials']);
 
 Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.credentials'])->group(function () {
 
