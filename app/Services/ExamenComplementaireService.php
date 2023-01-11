@@ -74,8 +74,8 @@ class ExamenComplementaireService
      *
      * @return string
      */
-    public function deleteExamenComplementaire($examen_complementaire) : string
+    public function deleteExamenComplementaire($relation_id, $examen_complementaire, $relation) : string
     {
-        return $this->request('DELETE', "{$this->path}/{$examen_complementaire}");
+        return $this->request('DELETE', "{$this->path}/{$relation_id}/{$examen_complementaire}/{$relation}");
     }
 }

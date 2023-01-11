@@ -8,19 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
-class Alerte extends Model implements HasMedia
+class Metting extends Model
 {
-    use Notifiable, HasMediaTrait, HasChangesHistory, SoftDeletes;
+    use Notifiable, HasChangesHistory, SoftDeletes;
 
 
-    protected $table = 'alertes';
+    protected $table = 'mettings';
 
-    protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'niveau_urgence_id', 'statut_id', 'creator_id', 'plainte'];
+    protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'name'];
 
-    protected $appends = ['audio'];
 
     protected $slackChannels= [
         //'appel' => 'https://hooks.slack.com/services/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',
@@ -30,11 +27,6 @@ class Alerte extends Model implements HasMedia
     protected $slack_url = null;
 
     public function patient(){
-        return $this->belongsTo(User::class);
-    }
-
-
-    public function creator(){
         return $this->belongsTo(User::class);
     }
     public function medecin(){
@@ -67,17 +59,6 @@ class Alerte extends Model implements HasMedia
         $this->slack_url = $url;
 
         return $this;
-    }
-
-    public function getAudioAttribute(){
-        if ($this->getFirstMedia('audio')) {
-            $arrayLinks = explode("public/", $this->getFirstMedia('audio')->getPath());
-            $link = Storage::url($arrayLinks[count($arrayLinks) - 1]);
-          } else {
-            return null;
-          }
-          $this->makeHidden('media');
-          return asset($link);
     }
 
 

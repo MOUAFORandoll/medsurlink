@@ -74,8 +74,8 @@ class AllergieService
      *
      * @return string
      */
-    public function deleteAllergie($allergie) : string
+    public function deleteAllergie($relation_id, $allergie, $relation) : string
     {
-        return $this->request('DELETE', "{$this->path}/{$allergie}");
+        return $this->request('DELETE', "{$this->path}/{$relation_id}/{$allergie}/{$relation}");
     }
 }

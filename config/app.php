@@ -66,6 +66,11 @@ return [
     'url_stagging' => "https://www.staging.medsurlink.com",
     'url_prod' => "https://www.medsurlink.com",
 
+    'teleconsultation_loccale' => "http://localhost:8081",
+    'teleconsultation_stagging' => "https://staging-teleconsultations.medsurlink.com",
+    'teleconsultation_prod' => "https://teleconsultations.medsurlink.com",
+    'bigbluebuttom_pass' => "9UqG@CQAE6dfB",
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -77,7 +82,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Africa/Douala',
 
     /*
     |--------------------------------------------------------------------------

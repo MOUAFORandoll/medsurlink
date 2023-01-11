@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Alerte;
 use Carbon\Carbon;
 use App\Models\Patient;
 use App\Models\Praticien;
@@ -142,6 +143,7 @@ class User extends Authenticatable implements HasMedia
     use SlugRoutable;
     use RestrictSoftDeletes;
 
+
     protected $guard_name = 'api';
     /**
      * The attributes that are mass assignable.
@@ -207,7 +209,7 @@ class User extends Authenticatable implements HasMedia
 
     public function routeNotificationForSlack(){
         if($this->slack_url === null){
-            return $this->slackChannels['test'];
+            return $this->slackChannels['affilie'];
         }
         return $this->slack_url;
     }

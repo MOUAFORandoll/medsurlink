@@ -74,8 +74,8 @@ class ExamenCliniqueService
      *
      * @return string
      */
-    public function deleteExamenClinique($examen_clinique) : string
+    public function deleteExamenClinique($relation_id, $examen_clinique, $relation) : string
     {
-        return $this->request('DELETE', "{$this->path}/{$examen_clinique}");
+        return $this->request('DELETE', "{$this->path}/{$relation_id}/{$examen_clinique}/{$relation}");
     }
 }

@@ -18,6 +18,9 @@ use App\Models\PaymentOffre;
 use App\Models\RendezVous;
 use App\User;
 use Barryvdh\DomPDF\Facade as PDF;
+use BigBlueButton\BigBlueButton;
+use BigBlueButton\Parameters\CreateMeetingParameters;
+use BigBlueButton\Parameters\JoinMeetingParameters;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,9 +46,40 @@ Route::resource('medicasure/souscripteur','Api\MedicasureController');
 
 Route::get('/', function () {
     //event(new AlerteEvent("kjsdjsd sdklsdkl"));
-    //return "ttoto";
+    $bbb = new BigBlueButton();
+    $createParams = new CreateMeetingParameters("meetingId", "Téléconsultation de Berthold feujo par Dr KADJI");
+    $createParams = $createParams->setModeratorPassword("9UqG@CQAE6dfB")->setAttendeePassword("9UqG@CQAE6dfB");
+    $createParams->setRecord(true);
+	$createParams->setAllowStartStopRecording(true);
+    $createParams->setLogoutUrl("http://localhost:8081/teleconsultations/create");
+
+    $response = $bbb->createMeeting($createParams);
+    if($response->getReturnCode() == 'FAILED') {
+        return 'Can\'t create room! please contact our administrator.';
+    }else {
+        $joinMeetingParams = new JoinMeetingParameters("meetingId", "CHarly kadji", "9UqG@CQAE6dfB");
+        $joinMeetingParams->setRedirect(true);
+        $url = $bbb->getJoinMeetingURL($joinMeetingParams);
+        return response()->json(['url' => $url]);
+    }
+
+    return "tt oto";
     return view('welcome');
 });
+
+Route::get('/join', function () {
+
+    $bbb = new BigBlueButton();
+    $joinMeetingParams = new JoinMeetingParameters("meetingId", "Berthold feujo", "9UqG@CQAE6dfB");
+    $joinMeetingParams->setRedirect(true);
+    $url = $bbb->getJoinMeetingURL($joinMeetingParams);
+    return response()->json(['url' => $url]);
+
+    return "tt oto";
+    return view('welcome');
+});
+
+
 
 Route::get('/public/storage/DossierMedicale/{fileNumber}/{typeConsultation}/{consultation}/{image}/{resource?}', function ($fileNumber,$typeConsultation,$consultation,$image,$resource='') {
     $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/'.$typeConsultation.'/'.$consultation.'/'.$image.($resource ? '/'.$resource :'');

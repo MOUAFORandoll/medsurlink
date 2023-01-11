@@ -74,8 +74,8 @@ class MotifService
      *
      * @return string
      */
-    public function deleteMotif($motif) : string
+    public function deleteMotif($relation_id, $motif, $relation) : string
     {
-        return $this->request('DELETE', "{$this->path}/{$motif}");
+        return $this->request('DELETE', "{$this->path}/{$relation_id}/{$motif}/{$relation}");
     }
 }
