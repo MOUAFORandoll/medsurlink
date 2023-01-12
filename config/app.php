@@ -69,7 +69,10 @@ return [
     'teleconsultation_loccale' => "http://localhost:8081",
     'teleconsultation_stagging' => "https://staging-teleconsultations.medsurlink.com",
     'teleconsultation_prod' => "https://teleconsultations.medsurlink.com",
-    'bigbluebuttom_pass' => "9UqG@CQAE6dfB",
+    'password' => [
+        'moderator' => "9UqG@CQAE6dfB",
+        'attendee' => "8UqG@CQAE9dfB",
+    ],
 
     /*
     |--------------------------------------------------------------------------
