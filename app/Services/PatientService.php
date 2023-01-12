@@ -100,12 +100,13 @@ class PatientService
         if($user->medecinControle != null){
             $user->medecin = $user->medecinControle->makeHidden(['deleted_at', 'created_at', 'updated_at']);
         }
-        $user->roles = $user->roles->makeHidden(['guard_name', 'created_at', 'updated_at', 'pivot']);
+        $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name', 'permissions']);
+        $permissions = $user->roles[0]->permissions->pluck('name');
         $user->makeHidden(['quartier', 'created_at', 'updated_at', 'deleted_at', 'adresse', 'isNotice', 'smsEnvoye', 'email_verified_at']);
 
         $user->unread_notifications = $user->unreadNotifications()->latest()->take(3)->get();
         $user->unread_notifications = $user->unreadNotifications->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
-
+        $user->permissions = $permissions;
         return $user;
     }
 
