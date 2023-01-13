@@ -18,7 +18,7 @@ class Alerte extends Model implements HasMedia
 
     protected $table = 'alertes';
 
-    protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'niveau_urgence_id', 'statut_id', 'creator_id', 'plainte'];
+    protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'niveau_urgence_id', 'teleconsultation_id', 'statut_id', 'creator_id', 'plainte'];
 
     protected $appends = ['audio'];
 

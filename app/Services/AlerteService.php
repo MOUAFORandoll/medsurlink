@@ -60,18 +60,22 @@ class AlerteService
             /**
              * ici nous changeons le statut de l'alerte lorsque la téléconsultation a eu lieu
              */
-            $tele = null;
-            if($item->medecin_id != null){
-                $tele = json_decode($this->teleconsultation->searchTeleconsultation($item->patient_id, $item->medecin_id, $item->created_at->format('Y-m-d')));
-            }
-            if($tele){
-                $alerte = Alerte::find($item->id);
-                $alerte->statut_id = 3;
-                $alerte->save();
-                $item->statut = $statuts->where('id', 3)->first();
-
-            }else{
+            if($item->statut_id == 3){
                 $item->statut = $statuts->where('id', $item->statut_id)->first();
+            }else{
+                $tele = null;
+                if($item->medecin_id != null){
+                    $tele = json_decode($this->teleconsultation->searchTeleconsultation($item->patient_id, $item->medecin_id, $item->created_at->format('Y-m-d')));
+                }
+                if($tele){
+                    $alerte = Alerte::find($item->id);
+                    $alerte->statut_id = 3;
+                    $alerte->teleconsultation_id = $tele->id;
+                    $alerte->save();
+                    $item->statut = $statuts->where('id', 3)->first();
+                }else{
+                    $item->statut = $statuts->where('id', $item->statut_id)->first();
+                }
             }
             $item->niveau_urgence = $niveau_urgences->where('id', $item->niveau_urgence_id)->first();
             $items[] = $item;
@@ -142,8 +146,8 @@ class AlerteService
 
     }
 
-    public function getAlerte($patient_id, $medecin_id, $date){
-        $alerte = Alerte::where(['patient_id' => $patient_id, 'medecin_id' => $medecin_id, 'statut_id' => 3])->whereDate('updated_at', '<', $date)->latest()->first();
+    public function getAlerte($teleconsultation_id){
+        $alerte = Alerte::where('teleconsultation_id', $teleconsultation_id)->first();
         return $alerte;
     }
 

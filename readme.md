@@ -111,3 +111,5 @@ php artisan db:seed --class=RoleTableSeeder
 
 php artisan migrate --path=/database/migrations/2023_01_10_153838_create_mettings_table.php
 
+php artisan migrate --path=/database/migrations/2023_01_13_165110_add_teleconsultation_id_to_alertes_table.php
+
