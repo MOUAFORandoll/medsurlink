@@ -134,13 +134,20 @@ class AlerteService
 
         $user = \Auth::guard('api')->user();
         $user->unreadNotifications()->where('data->id', $alerte)->orWhere('data->uuid', $alerte)->update(['read_at' => now()]);
-        $alerte = Alerte::whereId($alerte)->orWhere('uuid', $alerte)->firstOrFail()->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
+        $alerte = Alerte::whereId($alerte)->orWhere('uuid', $alerte)->latest()->firstOrFail()->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
         $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
         $alerte->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($alerte->niveau_urgence_id), true)['data'];
 
         return $alerte;
 
     }
+
+    public function getAlerte($patient_id, $medecin_id, $date){
+        $alerte = Alerte::where(['patient_id' => $patient_id, 'medecin_id' => $medecin_id, 'statut_id' => 3])->whereDate('updated_at', '<', $date)->latest()->first();
+        return $alerte;
+    }
+
+
 
     public function update(Request $request, $alerte){
         $alerte = Alerte::findOrFail($alerte);

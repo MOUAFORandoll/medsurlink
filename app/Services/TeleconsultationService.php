@@ -41,7 +41,9 @@ class TeleconsultationService
         $items = [];
         foreach($teleconsultations['data']['data'] as $item){
             $patient = new PatientService;
+            $alerte = new AlerteService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
+            $item['alerte'] = $alerte->getAlerte($item['patient_id'], $item['creator'], $item['created_at']);
             $items[] = $item;
         }
         $teleconsultations['data']['data'] = $items;
