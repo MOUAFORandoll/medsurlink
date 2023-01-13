@@ -60,18 +60,22 @@ class AlerteService
             /**
              * ici nous changeons le statut de l'alerte lorsque la téléconsultation a eu lieu
              */
-            $tele = null;
-            if($item->medecin_id != null){
-                $tele = json_decode($this->teleconsultation->searchTeleconsultation($item->patient_id, $item->medecin_id, $item->created_at->format('Y-m-d')));
-            }
-            if($tele){
-                $alerte = Alerte::find($item->id);
-                $alerte->statut_id = 3;
-                $alerte->save();
-                $item->statut = $statuts->where('id', 3)->first();
-
-            }else{
+            if($item->statut_id == 3){
                 $item->statut = $statuts->where('id', $item->statut_id)->first();
+            }else{
+                $tele = null;
+                if($item->medecin_id != null){
+                    $tele = json_decode($this->teleconsultation->searchTeleconsultation($item->patient_id, $item->medecin_id, $item->created_at->format('Y-m-d')));
+                }
+                if($tele){
+                    $alerte = Alerte::find($item->id);
+                    $alerte->statut_id = 3;
+                    $alerte->teleconsultation_id = $tele->id;
+                    $alerte->save();
+                    $item->statut = $statuts->where('id', 3)->first();
+                }else{
+                    $item->statut = $statuts->where('id', $item->statut_id)->first();
+                }
             }
             $item->niveau_urgence = $niveau_urgences->where('id', $item->niveau_urgence_id)->first();
             $items[] = $item;
@@ -134,13 +138,20 @@ class AlerteService
 
         $user = \Auth::guard('api')->user();
         $user->unreadNotifications()->where('data->id', $alerte)->orWhere('data->uuid', $alerte)->update(['read_at' => now()]);
-        $alerte = Alerte::whereId($alerte)->orWhere('uuid', $alerte)->firstOrFail()->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
+        $alerte = Alerte::whereId($alerte)->orWhere('uuid', $alerte)->latest()->firstOrFail()->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
         $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
         $alerte->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($alerte->niveau_urgence_id), true)['data'];
 
         return $alerte;
 
     }
+
+    public function getAlerte($teleconsultation_id){
+        $alerte = Alerte::where('teleconsultation_id', $teleconsultation_id)->first();
+        return $alerte;
+    }
+
+
 
     public function update(Request $request, $alerte){
         $alerte = Alerte::findOrFail($alerte);
