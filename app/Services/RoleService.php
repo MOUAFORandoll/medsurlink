@@ -1,10 +1,11 @@
-
 <?php
+
+namespace App\Services;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-// namespace App\Services;
+
 
 
 
@@ -27,6 +28,10 @@ class RoleService
     public function create()
     {
         // Create role
+    }
+
+    public function show(Role $role){
+
     }
 
     public function store(Request $request)
