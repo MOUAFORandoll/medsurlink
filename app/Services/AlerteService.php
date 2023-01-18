@@ -164,9 +164,11 @@ class AlerteService
 
         if(!is_null($request->audio)){
             if($alerte->getMedia('audio')->count() > 0){
-                $alerte->clearMediaCollection('audio');
+                //$alerte->clearMediaCollection('audio');
+                $alerte->addMedia($request->audio)->toMediaCollection('audio1');
+            }else{
+                $alerte->addMedia($request->audio)->toMediaCollection('audio');
             }
-            $alerte->addMedia($request->audio)->toMediaCollection('audio');
             $alerte = $alerte->fresh();
         }
 
