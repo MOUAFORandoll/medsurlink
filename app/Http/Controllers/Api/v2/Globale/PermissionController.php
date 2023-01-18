@@ -32,7 +32,7 @@ class PermissionController extends Controller
     }
 
     /**
-     * @param $alerte
+     * @param $permission
      *
      * @return mixed
      */
@@ -54,14 +54,14 @@ class PermissionController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param                          $alerte
+     * @param                          $permission
      *
      * @return mixed
      */
-    public function update(Request $request, $alerte)
+    public function update(Request $request, $permission)
     {
         $this->validate($request, $this->validations(true));
-        return $this->successResponse($this->permissionService->update($request, $alerte));
+        return $this->successResponse($this->permissionService->update($request, $permission));
     }
 
     public function assignRole(Request $request, $permission){
@@ -73,7 +73,7 @@ class PermissionController extends Controller
     }
 
     /**
-     * @param $alerte
+     * @param $permission
      *
      * @return mixed
      */
