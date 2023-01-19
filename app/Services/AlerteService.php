@@ -126,7 +126,7 @@ class AlerteService
 
         $slack_message = $slack_message. " <$url_global|En savoir plus>";
 
-        $alerte->setSlackChannel('appel')->notify(new SouscriptionAlert($slack_message,null));
+        $alerte->getSlackChannel()->notify(new SouscriptionAlert($slack_message,null));
 
         $alerte = $alerte->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
         $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];

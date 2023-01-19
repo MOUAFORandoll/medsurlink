@@ -23,8 +23,8 @@ class Alerte extends Model implements HasMedia
     protected $appends = ['audio', 'audio1'];
 
     protected $slackChannels= [
-        //'appel' => 'https://hooks.slack.com/services/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',
-        'appel' => 'https://hooks.slack.com/services/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'
+        'test' => 'https://hooks.slack.com/services/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',
+        'teleconsultation' => 'https://hooks.slack.com/services/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'
     ];
 
     protected $slack_url = null;
@@ -57,6 +57,15 @@ class Alerte extends Model implements HasMedia
         }
 
         return $this;
+    }
+
+    public function getSlackChannel(){
+        $env = strtolower(config('app.env'));
+        if ($env == 'production')
+            return $this->setSlackUrl($this->setSlackUrl($this->slackChannels["teleconsultation"]));
+        else
+            return $this->setSlackUrl($this->setSlackUrl($this->slackChannels["test"]));
+
     }
 
     /**

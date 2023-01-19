@@ -187,7 +187,7 @@ class User extends Authenticatable implements HasMedia
     protected $slackChannels= [
         'test' => 'https://hooks.slack.com/services/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',
         'test2' => 'https://hooks.slack.com/services/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',
-        'affilie' => 'https://hooks.slack.com/services/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',
+        'affilie' => 'https://hooks.slack.com/services/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',
         'appel' => 'https://hooks.slack.com/services/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'
     ];
 

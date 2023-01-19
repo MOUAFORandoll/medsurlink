@@ -9,13 +9,10 @@ use Illuminate\Notifications\Notification;
 
 class SmsChannel
 {
-//    protected $base_uri = 'sms.smartworldafriq.com';
-    protected $base_uri = 'http://193.105.74.159/api/v3/sendsms/json';
-//    private $login = 'MEDICASURE';
-//    private $password = 'MedsurSMS20';
-    private $login = 'medicasure';
-    private $password = 'MediCasure20@';
-    private $json = [];
+    protected $base_uri = "https://smsvas.com/bulk/public/index.php/api/v1/sendsms";
+
+    private $login = 'kadji@medicasure.com';
+    private $password = 'MediCasure';
 
     /**
      * Send the given notification.
@@ -29,40 +26,18 @@ class SmsChannel
     {
         $details = $notification->toSms($notifiable);
 
-        $this->json = [
-            'authentication' => [
-                "username" => $this->login,
-                "password" => $this->password
-            ],
-            "messages" => array(
-                [
-                    "sender" => $details['from'],
-                    "text" => $details['message'],
-                    "type" => "longSMS",
-                    "datacoding" => "8",
-                    "recipients" => array(
-                        [
-                            "gsm" => $details['to'],
-                        ]
-                    )
-                ]
-            ),
-        ];
-
 
         // Send notification to the $notifiable instance...
-        $client = new Client([
-            'base_uri' => $this->base_uri
-        ]);
+        $client = new Client(['base_uri' => $this->base_uri]);
 
         try{
-            $client->request(
-                'POST',
-                $this->base_uri,
-                [
-                    'json' => $this->json
-                ]
-            );
+            $client->request('POST', $this->base_uri, [
+                "user" => $this->login,
+                "password" => $this->password,
+                "senderid" => $details['from'],
+                "sms" => $details['message'],
+                "mobiles" => $details['to']
+            ]);
         } catch (Exception $ex) {}
     }
 }
