@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Alerte;
+use App\Models\Allergie;
+use App\Models\Antecedent;
 use App\Traits\RequestService;
 use Illuminate\Http\Request;
 
@@ -59,6 +62,25 @@ class TeleconsultationService
     public function fetchTeleconsultation($teleconsultation) : string
     {
         return $this->request('GET', "{$this->path}/{$teleconsultation}");
+    }
+
+    public function fetchAlerte($medecin_id, $patient_id){
+        $alerte = Alerte::where(['patient_id' => $patient_id, 'medecin_id' => $medecin_id, 'statut_id' => 2, 'teleconsultation_id' => NULL])->latest()->first();
+        return $alerte ?? null;
+    }
+
+    public function fetchAllergies($patient_id){
+        $allergies = Allergie::whereHas('dossiers', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->latest()->get();
+        return $allergies;
+    }
+
+    public function fetchAntecedents($patient_id){
+        $antecedents = Antecedent::whereHas('dossier', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->latest()->get();
+        return $antecedents;
     }
 
     /**

@@ -42,10 +42,11 @@ class Alerte extends Model implements HasMedia
     }
 
     public function routeNotificationForSlack(){
-        if($this->slack_url === null){
-            return $this->slackChannels['appel'];
-        }
-        return $this->slack_url;
+        $env = strtolower(config('app.env'));
+        if ($env == 'production')
+            return $this->slackChannels["teleconsultation"];
+        else
+            return $this->slackChannels["test"];
     }
     /**
      * @param $name
@@ -65,7 +66,6 @@ class Alerte extends Model implements HasMedia
             return $this->setSlackUrl($this->setSlackUrl($this->slackChannels["teleconsultation"]));
         else
             return $this->setSlackUrl($this->setSlackUrl($this->slackChannels["test"]));
-
     }
 
     /**

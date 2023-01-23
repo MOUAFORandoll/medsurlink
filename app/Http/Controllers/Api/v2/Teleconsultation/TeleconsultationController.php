@@ -51,6 +51,16 @@ class TeleconsultationController extends Controller
     }
 
     /**
+     * Summary of alerte
+     * @param mixed $medecin_id
+     * @param mixed $patient_id
+     * @return mixed
+     */
+    public function alerte($medecin_id, $patient_id){
+        return $this->successResponse($this->teleconsultation->fetchAlerte($medecin_id, $patient_id));
+    }
+
+    /**
      * @param \Illuminate\Http\Request $request
      * @param                          $teleconsultation
      *
