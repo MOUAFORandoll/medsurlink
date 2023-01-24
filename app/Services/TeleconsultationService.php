@@ -93,12 +93,14 @@ class TeleconsultationService
         $antecedents_courant = Antecedent::whereHas('dossier', function ($query) use ($patient_id) {
             $query->where('patient_id', $patient_id);
         })->latest()->get();
+        return $antecedents_courant;
         if($antecedents_courant->count() > 0){
             $antecedents_back = json_decode($this->antecedent->fetchPatientAntecedent($patient_id));
-            dd($antecedents_back->data);
             $antecedents = array_merge($antecedents_back->data, $antecedents_courant);
+
         }else{
             $antecedents = json_decode($this->antecedent->fetchPatientAntecedent($patient_id));
+            $antecedents = $antecedents->data;
         }
         return $antecedents;
     }
