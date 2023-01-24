@@ -8,6 +8,8 @@ use App\Models\Antecedent;
 use App\Traits\RequestService;
 use Illuminate\Http\Request;
 
+use function GuzzleHttp\json_decode;
+
 class TeleconsultationService
 {
     use RequestService;
@@ -21,6 +23,8 @@ class TeleconsultationService
      * @var string
      */
     protected $secret;
+    
+    public $allergie, $antecedent;
 
     /**
      * @var string
@@ -32,6 +36,8 @@ class TeleconsultationService
         $this->baseUri = config('services.teleconsultations.base_uri');
         $this->secret = config('services.teleconsultations.secret');
         $this->path = "/api/v1/teleconsultations";
+        $this->allergie = new AllergieService;
+        $this->antecedent = new AntecedentService;
     }
 
     /**
@@ -70,16 +76,30 @@ class TeleconsultationService
     }
 
     public function fetchAllergies($patient_id){
-        $allergies = Allergie::whereHas('dossiers', function ($query) use ($patient_id) {
+        $allergies_courant = Allergie::whereHas('dossiers', function ($query) use ($patient_id) {
             $query->where('patient_id', $patient_id);
         })->latest()->get();
+        if($allergies_courant->count() > 0){
+            $allergies_back = json_decode($this->allergie->fetchPatientAllergie($patient_id));
+            $allergies = array_merge($allergies_back->data, $allergies_courant);
+        }else{
+            $allergies = json_decode($this->allergie->fetchPatientAllergie($patient_id));
+            $allergies = $allergies->data;
+        }
         return $allergies;
     }
 
     public function fetchAntecedents($patient_id){
-        $antecedents = Antecedent::whereHas('dossier', function ($query) use ($patient_id) {
+        $antecedents_courant = Antecedent::whereHas('dossier', function ($query) use ($patient_id) {
             $query->where('patient_id', $patient_id);
         })->latest()->get();
+        if($antecedents_courant->count() > 0){
+            $antecedents_back = json_decode($this->antecedent->fetchPatientAntecedent($patient_id));
+            dd($antecedents_back->data);
+            $antecedents = array_merge($antecedents_back->data, $antecedents_courant);
+        }else{
+            $antecedents = json_decode($this->antecedent->fetchPatientAntecedent($patient_id));
+        }
         return $antecedents;
     }
 
