@@ -60,6 +60,13 @@ class TeleconsultationController extends Controller
         return $this->successResponse($this->teleconsultation->fetchAlerte($medecin_id, $patient_id));
     }
 
+    public function fetchAllergies($patient_id){
+        return $this->successResponse($this->teleconsultation->fetchAllergies($patient_id));
+    }
+    public function fetchAntecedents($patient_id){
+        return $this->successResponse($this->teleconsultation->fetchAntecedents($patient_id));
+    }
+
     /**
      * @param \Illuminate\Http\Request $request
      * @param                          $teleconsultation

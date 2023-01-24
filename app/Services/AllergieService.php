@@ -58,6 +58,16 @@ class AllergieService
         return $this->request('POST', "{$this->path}", $data);
     }
 
+      /**
+     * @param $patient_id
+     *
+     * @return string
+     */
+    public function fetchPatientAllergie($patient_id) : string
+    {
+        return $this->request('GET', "{$this->path}/patient/{$patient_id}");
+    }
+
     /**
      * @param $allergie
      * @param $data
