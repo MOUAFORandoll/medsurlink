@@ -50,6 +50,10 @@ class TeleconsultationController extends Controller
         return $this->successResponse($this->teleconsultation->createTeleconsultation($request->all()));
     }
 
+    public function printTeleconsultation($teleconsultation_id){
+        return $this->successResponse($this->teleconsultation->printTeleconsultation($teleconsultation_id));
+    }
+
     /**
      * Summary of alerte
      * @param mixed $medecin_id

@@ -24,7 +24,7 @@ class TeleconsultationService
      */
     protected $secret;
     
-    public $allergie, $antecedent;
+    public $allergie, $antecedent, $statut, $niveau_urgence;
 
     /**
      * @var string
@@ -38,6 +38,8 @@ class TeleconsultationService
         $this->path = "/api/v1/teleconsultations";
         $this->allergie = new AllergieService;
         $this->antecedent = new AntecedentService;
+        $this->statut = new StatutService;
+        $this->niveau_urgence = new NiveauUrgenceService;
     }
 
     /**
@@ -72,6 +74,11 @@ class TeleconsultationService
 
     public function fetchAlerte($medecin_id, $patient_id){
         $alerte = Alerte::where(['patient_id' => $patient_id, 'medecin_id' => $medecin_id, 'statut_id' => 2, 'teleconsultation_id' => NULL])->latest()->first();
+        if(!is_null($alerte)){
+            $alerte = $alerte->load('creator:id,nom,prenom,email,telephone', 'patient:id,nom,prenom,email,telephone,slug', 'patient.dossier:patient_id,slug', 'patient.patient:user_id,sexe,date_de_naissance,slug', 'medecin:id,nom,prenom,email,telephone,slug');
+            $alerte->statut = json_decode($this->statut->fetchStatut($alerte->statut_id), true)['data'];
+            $alerte->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($alerte->niveau_urgence_id), true)['data'];
+        }
         return $alerte ?? null;
     }
 
@@ -79,29 +86,29 @@ class TeleconsultationService
         $allergies_courant = Allergie::whereHas('dossiers', function ($query) use ($patient_id) {
             $query->where('patient_id', $patient_id);
         })->latest()->get();
-        if($allergies_courant->count() > 0){
-            $allergies_back = json_decode($this->allergie->fetchPatientAllergie($patient_id));
-            $allergies = array_merge($allergies_back->data, $allergies_courant);
-        }else{
-            $allergies = json_decode($this->allergie->fetchPatientAllergie($patient_id));
-            $allergies = $allergies->data;
-        }
+
+        $allergies_back = json_decode($this->allergie->fetchPatientAllergie($patient_id));
+        $allergies_back = collect($allergies_back->data);
+        $allergies = $allergies_back->merge($allergies_courant);
+        $allergies = $allergies->toArray();
+
         return $allergies;
+    }
+
+    public function printTeleconsultation($teleconsultation_id){
+        return route('teleconsultations.print', $teleconsultation_id);
     }
 
     public function fetchAntecedents($patient_id){
         $antecedents_courant = Antecedent::whereHas('dossier', function ($query) use ($patient_id) {
             $query->where('patient_id', $patient_id);
         })->latest()->get();
-        return $antecedents_courant;
-        if($antecedents_courant->count() > 0){
-            $antecedents_back = json_decode($this->antecedent->fetchPatientAntecedent($patient_id));
-            $antecedents = array_merge($antecedents_back->data, $antecedents_courant);
 
-        }else{
-            $antecedents = json_decode($this->antecedent->fetchPatientAntecedent($patient_id));
-            $antecedents = $antecedents->data;
-        }
+        $antecedents_back = json_decode($this->antecedent->fetchPatientAntecedent($patient_id));
+        $antecedents_back = collect($antecedents_back->data);
+        $antecedents = $antecedents_back->merge($antecedents_courant);
+        $antecedents = $antecedents->toArray();
+
         return $antecedents;
     }
 

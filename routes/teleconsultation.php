@@ -52,6 +52,9 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::get('/create/{medecin_id}/{patient_id}', 'TeleconsultationController@alerte');
         Route::get('/allergies/{patient_id}', 'TeleconsultationController@fetchAllergies');
         Route::get('/antecedents/{patient_id}', 'TeleconsultationController@fetchAntecedents');
+        Route::get('/print/{teleconsultation_id}', 'TeleconsultationController@printTeleconsultation');
+
+
         Route::get('/{teleconsultation}', 'TeleconsultationController@show');
         Route::patch('/{teleconsultation}', 'TeleconsultationController@update');
         Route::delete('/{teleconsultation}', 'TeleconsultationController@destroy');

@@ -129,6 +129,15 @@ Route::get('impression/facture-offre/{affiliation}', function ($affiliation) {
     return $pdf['stream'];
 })->name('facture.offre');
 
+Route::get('teleconsultations/print/{teleconsultation_id}', function ($teleconsultation_id) {
+
+    $pdf = PDF::loadView('pdf.teleconsultations.rapport', ['teleconsultation_id' => $teleconsultation_id]);
+    //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+    return $pdf->stream("Téléconsultation de Berthold Feujo du 25 jan. 2023 par Dr. Kadji" . ".pdf");
+
+})->name('teleconsultations.print');
+
+
 Route::get('visualiser-consultation-medecine/{slug}',function ($slug){
     $pdf = visualiser($slug);
     return $pdf;
