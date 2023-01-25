@@ -6,7 +6,8 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,500,500i,600,700,800,900&display=swap" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
 
-    <title>Téléconsultation de Berthold FEUJO par Dr. Charky KADJI</title>
+    <title>Téléconsultation de {{ $patient->user->name }} du {{ $date }} par {{ $medecin->civilite }} {{ $medecin->user->name }}</title>
+
     <style>
         body {
             font-size: 0.9em;
@@ -156,19 +157,19 @@
     </div>
 
         <div class="justify-content-center"> Allergies Information </div>
-            <table style="width: 100%">
-                <thead>
-                    <td class="title-table">Description</td>
-                    <td class="title-table">Date debut</td>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Description allergie</td><td>12/02/2023</td>
-                    </tr>
-                    <tr>
-                        <td>Description allergie</td><td>12/02/2023</td>
-                    </tr>
-                </tbody>
+        <table style="width: 100%">
+            <thead>
+                <td class="title-table">Description</td>
+                <td class="title-table">Date debut</td>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Description allergie</td><td>12/02/2023</td>
+                </tr>
+                <tr>
+                    <td>Description allergie</td><td>12/02/2023</td>
+                </tr>
+            </tbody>
         </table>
 
 
@@ -332,76 +333,52 @@
     </div>
 
 
-<h4></h4>
-<p>Je vous remercie de m'avoir adressé votre patient(e) et vous adresse mes salutations confraternelles.</p>
-<p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
+    <h4></h4>
+    <p>Je vous remercie de m'avoir adressé votre patient(e) et vous adresse mes salutations confraternelles.</p>
+    <p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
 
 
-<h4 class="sous-titre-rapport">Medecin(s) ayant revisité votre consultation</h4>
-<div style="display: inline">
-    <div>
-        {{-- <img width="300px" height="auto" src={{public_path('/storage/'.$medecin->signature)}} /> --}}
-        image signature
+    <h4 class="sous-titre-rapport">Medecin(s) ayant revisité votre consultation</h4>
+    <div style="display: inline">
+        <div>
+            {{-- <img width="300px" height="auto" src={{public_path('/storage/'.$medecin->signature)}} /> --}}
+            image signature
+        </div>
+
+        <p>Dr. Charly KADJI</p>
+        <p>Numéro d'ordre: 168287</p>
     </div>
 
-    <p>Dr. Charly KADJI</p>
-    <p>Numéro d'ordre: 168287</p>
-</div>
+    <div style="display: inline">
+        <p>Généré par <b>Dr. Charly KADJI</b></p>
+        <p>Numéro d'ordre: 17898</p>
+        <p style="text-align: right"> Date de création : <b>{{\Carbon\Carbon::parse()->format('d/m/Y')}}</b></p>
 
-<div style="display: inline">
-    <p>Généré par <b>{{$praticiens->civilite}} {{is_null($praticiens->user->prenom) ? "" :  $praticiens->user->prenom }} {{$praticiens->user->nom}}</b></p>
-    <p>Numéro d'ordre: {{$praticiens->numero_ordre}}</p>
-    <p style="text-align: right"> Date de création : <b>{{\Carbon\Carbon::parse()->format('d/m/Y')}}</b></p>
+        <div>
+            {{-- <img  style="float: right" width="300px" height="auto" src={{public_path('/storage/'.$signature)}} /> --}}
+            image signature
+        </div>
+    </div>
 
-    @isset($signature)
-        @if(!is_null($signature) && strlen($signature)>0)
-            <div>
-                <img  style="float: right" width="300px" height="auto" src={{public_path('/storage/'.$signature)}} />
-            </div>
-        @endif
-    @endisset
-</div>
-@if(count($consultationMedecine->operationables) >0)
     <h4 class="sous-titre-rapport">Contributeurs</h4>
-    @foreach($mContributeurs as $medecin)
-        @if(!is_null($medecin->user))
-            <div style="display: inline">
-                @if(!is_null($medecin->signature))
-                    <div>
-                        <img width="300px" height="auto" src={{public_path('/storage/'.$medecin->signature)}} />
-                    </div>
-                @endif
 
-                <p>{{$medecin->civilite}} {{is_null($medecin->user->prenom) ? "" :  $medecin->user->prenom }} {{$medecin->user->nom}}</p>
+    <div style="display: inline">
+        <div>
+            {{-- <img width="300px" height="auto" src={{public_path('/storage/'.$medecin->signature)}} /> --}}
+            image signature
+        </div>
+        <p>Dr. TESSA</p>
+        <p>Numéro d'ordre: 86856797</p>
+    </div>
+    <div style="display: inline">
+        <div>
+           {{--  <img width="300px" height="auto" src={{public_path('/storage/'.$praticien->signature)}} /> --}}
+           image signature
+        </div>
 
-                @if(!is_null($medecin->numero_ordre))
-                    @if($medecin->numero_ordre != 'null' && strlen($medecin->numero_ordre ) >0)
-                        <p>Numéro d'ordre: {{$medecin->numero_ordre}}</p>
-                    @endif
-                @endif
-            </div>
-        @endif
-    @endforeach
-    @foreach($pContributeurs as $praticien)
-        @if(!is_null($praticien->user))
-            <div style="display: inline">
-                @if(!is_null($praticien->signature))
-                    <div>
-                        <img width="300px" height="auto" src={{public_path('/storage/'.$praticien->signature)}} />
-                    </div>
-                @endif
-
-                <p>{{$praticien->civilite}} {{is_null($praticien->user->prenom) ? "" :  $praticien->user->prenom }} {{$praticien->user->nom}}</p>
-
-                @if(!is_null($praticien->numero_ordre))
-                    @if($praticien->numero_ordre != 'null' && strlen($praticien->numero_ordre ) >0)
-                        <p>Numéro d'ordre: {{$praticien->numero_ordre}}</p>
-                    @endif
-                @endif
-            </div>
-        @endif
-    @endforeach
-@endif
+        <p>Dr. KAMDEM JULLES</p>
+        <p>Numéro d'ordre: 189688</p>
+    </div>
 
 </body>
 </html>
