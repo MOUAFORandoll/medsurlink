@@ -9,7 +9,6 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use function GuzzleHttp\Psr7\str;
 
 /**
  * App\Models\Allergie
