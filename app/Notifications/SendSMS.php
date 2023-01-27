@@ -34,7 +34,7 @@ class SendSMS extends Notification
             $this->sender = $sender;
         } else {
             $this->sender =  'MEDSURLINK';
-//            $this->sender =  config('app.name', 'Medicasure');
+//            $this->sender =  config('app.name', 'MEDSURLINK');
         }
 
     }

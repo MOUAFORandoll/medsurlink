@@ -39,6 +39,16 @@ class AntecedentService
     }
 
     /**
+     * @param $patient_id
+     *
+     * @return string
+     */
+    public function fetchPatientAntecedent($patient_id) : string
+    {
+        return $this->request('GET', "{$this->path}/patient/{$patient_id}");
+    }
+
+    /**
      * @param $antecedent
      *
      * @return string
@@ -47,6 +57,7 @@ class AntecedentService
     {
         return $this->request('GET', "{$this->path}/{$antecedent}");
     }
+
 
     /**
      * @param $data

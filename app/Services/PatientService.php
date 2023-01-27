@@ -93,6 +93,11 @@ class PatientService
         return $patient;
     }
 
+    public function getMedecin($medecin_id){
+        $medecin = MedecinControle::with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $medecin_id)->get(['specialite_id', 'user_id', 'civilite']);
+        return $medecin;
+    }
+
     public function medecin()
     {
         $user = \Auth::guard('api')->user();
