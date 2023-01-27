@@ -197,7 +197,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     Route::patch('/alertes/{alerte}/assignMedecin', 'AlerteController@assignMedecin');
 
     /**
-    * CRUDS rendez-vous
+    * CRUDS notifications
     */
     Route::group(['prefix' => 'notifications'], function () {
         Route::get('/', 'NotificationController@index');
@@ -207,6 +207,17 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         /* Route::post('/', 'NotificationController@store');
         Route::patch('/{rendez_vous}', 'NotificationController@update');
         Route::delete('/{rendez_vous}', 'NotificationController@destroy'); */
+    });
+
+    /**
+    * CRUDS diagnostics
+    */
+    Route::group(['prefix' => 'diagnostics'], function () {
+        Route::get('/', 'DiagnosticController@index');
+        Route::post('/', 'DiagnosticController@store');
+        Route::get('/{diagnostic}', 'DiagnosticController@show');
+        Route::patch('/{diagnostic}', 'DiagnosticController@update');
+        Route::delete('/{diagnostic}', 'DiagnosticController@destroy');
     });
 
 });
