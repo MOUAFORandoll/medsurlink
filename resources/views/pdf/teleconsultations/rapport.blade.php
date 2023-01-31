@@ -200,13 +200,16 @@
                     @endforelse
         </p>.
 
-        <h4 class="sous-titre-rapport">Motif(s) de téléconsultation</h4>
-        @forelse ($teleconsultation['motifs'] as $motif)
+        @if(count($teleconsultation['motifs']) > 0)
+            <h4 class="sous-titre-rapport">Motif(s) de téléconsultation</h4>
             <ol>
-                <li>{{ $motif['description'] }}</li>
+                @forelse ($teleconsultation['motifs'] as $motif)
+                    <li>{{ $motif['description'] }}</li>
+                @empty 
+                @endforelse
             </ol>
-        @empty 
-        @endforelse
+        @endif
+
 
         {{-- <h4 class="sous-titre-rapport">Mode de vie</h4>
         <div class="divTable">
@@ -239,34 +242,37 @@
                 </div>
             </div>
         </div> --}}
-        <h4 class="sous-titre-rapport">Antédédents</h4>
-        <div class="divTable">
-            <div class="divTableBody">
-                <div class="divTableRow">
-                    <div class="divTableCell">
-                        <table style="width: 100%">
-                            <thead>
-                                <tr>
-                                    <th class="title-table">Type</th>
-                                    <th class="title-table">Description</th>
-                                    <th class="title-table">Date début</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($teleconsultation['antededents'] as $antededent)
+        @if (count($teleconsultation['antededents'])>0)
+            <h4 class="sous-titre-rapport">Antédédents</h4>
+            <div class="divTable">
+                <div class="divTableBody">
+                    <div class="divTableRow">
+                        <div class="divTableCell">
+                            <table style="width: 100%">
+                                <thead>
                                     <tr>
-                                        <td>{{ $antededent['type']['libelle'] }}</td>
-                                        <td>{!! $antededent['description'] !!}</td>
-                                        <td>{{ $antededent['date'] }}</td>
+                                        <th class="title-table">Type</th>
+                                        <th class="title-table">Description</th>
+                                        <th class="title-table">Date début</th>
                                     </tr>
-                                @empty
-                                @endforelse
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @forelse ($teleconsultation['antededents'] as $antededent)
+                                        <tr>
+                                            <td>{{ $antededent['type']['libelle'] }}</td>
+                                            <td>{!! $antededent['description'] !!}</td>
+                                            <td>{{ $antededent['date'] }}</td>
+                                        </tr>
+                                    @empty
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
+
         {{-- <h4 class="sous-titre-rapport">Parametres</h4>
         <div class="row" >
             <div class="list">Poids (kg) : <strong></strong> </div>
@@ -281,81 +287,93 @@
         </div> --}}
     </div>
 
-    <h4 class="sous-titre-rapport">Allergies</h4>
-    <span>
-        @forelse ($teleconsultation['allergies'] as $allergie)
-            {{ $allergie['description'] }}
-            @if(!$loop->last)
-            {{", "}}
-            @else
-            {{"."}}
-            @endif
-        @empty 
-        @endforelse
-    </span>
+    @if (count($teleconsultation['allergies'])>0)
+        <h4 class="sous-titre-rapport">Allergies</h4>
+        <span>
+            @forelse ($teleconsultation['allergies'] as $allergie)
+                {{ $allergie['description'] }}
+                @if(!$loop->last)
+                {{", "}}
+                @else
+                {{"."}}
+                @endif
+            @empty 
+            @endforelse
+        </span>
+    @endif
 
-    <h4 class="sous-titre-rapport">Anamnèse</h4>
-    <div class="row">
-        @forelse ($teleconsultation['anamneses'] as $anamnese)
-            <span>{{$loop->iteration}}. {!! $anamnese['fr_description'] !!}</span>
-            <div class="row">
-                Description de l'anamnèse:
-                {!! json_decode($anamnese['pivot']['data'])->anamnese !!}
-            </div>
-        @empty
-        @endforelse
-    </div>
-
-    <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4>
-    <div class="row">
-        <ol>
-            @forelse ($teleconsultation['examen_cliniques'] as $examen_clinique)
-                <li>{{ $examen_clinique['fr_description'] }}</li>
+    @if (count($teleconsultation['anamneses'])>0)
+        <h4 class="sous-titre-rapport">Anamnèse</h4>
+        <div class="row">
+            @forelse ($teleconsultation['anamneses'] as $anamnese)
+                <span>{{$loop->iteration}}. {!! $anamnese['fr_description'] !!}</span>
+                <div class="row">
+                    Description de l'anamnèse:
+                    {!! json_decode($anamnese['pivot']['data'])->anamnese !!}
+                </div>
             @empty
             @endforelse
-        </ol>
-        <span>Description examen clinique: {!! $teleconsultation['description_examen_clinique'] !!}</span>
+        </div>
+    @endif
 
-    </div>
+    @if (count($teleconsultation['examen_cliniques'])>0)
+        <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4>
+        <div class="row">
+            <ol>
+                @forelse ($teleconsultation['examen_cliniques'] as $examen_clinique)
+                    <li>{{ $examen_clinique['fr_description'] }}</li>
+                @empty
+                @endforelse
+            </ol>
+            <span>Description examen clinique: {!! $teleconsultation['description_examen_clinique'] !!}</span>
 
-    <h4 class="sous-titre-rapport">Examen(s) complémentaire(s)</h4>
-    <div class="row">
-        <ol>
-            @forelse ($teleconsultation['examen_complementaires'] as $examen_complementaire)
-                <li>{{ $examen_complementaire['fr_description'] }}</li>
-            @empty
-            @endforelse
-        </ol>
-    </div>
+        </div>
+    @endif
 
-    <h4 class="sous-titre-rapport">Diagnostic ICD</h4>
-    <div class="row">
-        <ol>
-            @forelse ($teleconsultation['diagnostics'] as $diagnostic)
-                <li><span style="padding:0 40px 0 0;">{{ $diagnostic['code_icd'] }}</span> {{ $diagnostic['name'] }}</li>
-            @empty
-            @endforelse
-        </ol>
-    </div>
-    <div class="row">
-        <h4 class="sous-titre-rapport">Description du Diagnostic</h4>
-        {!! $teleconsultation['description_diagnostic'] !!}
-    </div>
+    @if (count($teleconsultation['examen_complementaires'])>0)
+        <h4 class="sous-titre-rapport">Examen(s) complémentaire(s)</h4>
+        <div class="row">
+            <ol>
+                @forelse ($teleconsultation['examen_complementaires'] as $examen_complementaire)
+                    <li>{{ $examen_complementaire['fr_description'] }}</li>
+                @empty
+                @endforelse
+            </ol>
+        </div>
+    @endif
+
+    @if (count($teleconsultation['diagnostics'])>0)
+        <h4 class="sous-titre-rapport">Diagnostic ICD</h4>
+        <div class="row">
+            <ol>
+                @forelse ($teleconsultation['diagnostics'] as $diagnostic)
+                    <li><span style="padding:0 40px 0 0;">{{ $diagnostic['code_icd'] }}</span> {{ $diagnostic['name'] }}</li>
+                @empty
+                @endforelse
+            </ol>
+        </div>
+        <div class="row">
+            <h4 class="sous-titre-rapport">Description du Diagnostic</h4>
+            {!! $teleconsultation['description_diagnostic'] !!}
+        </div>
+    @endif
 
     <div class="row">
         <h4 class="sous-titre-rapport">Conduite à tenir</h4>
         {!! $teleconsultation['cat'] !!}
     </div>
 
-    <div class="row">
-        <h4 class="sous-titre-rapport">Ordonnances</h4>
-        <ol>
-            @forelse ($teleconsultation['ordonnances'] as $ordonnance)
-                <li>{!! $ordonnance['description'] !!}</li>
-            @empty
-            @endforelse
-        </ol>
-    </div>
+    @if (count($teleconsultation['ordonnances'])>0)
+        <div class="row">
+            <h4 class="sous-titre-rapport">Ordonnances</h4>
+            <ol>
+                @forelse ($teleconsultation['ordonnances'] as $ordonnance)
+                    <li>{!! $ordonnance['description'] !!}</li>
+                @empty
+                @endforelse
+            </ol>
+        </div>
+    @endif
 
 
     <h4></h4>
@@ -363,7 +381,7 @@
     <p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
 
     <h4 class="sous-titre-rapport">Medecin ayant fait votre téléconsultation</h4>
- 
+
     <div>
         <div>
             <img width="300px" style="margin-top: 200px;" height="auto" src="{{ public_path('/storage/'.explode('storage', $medecin->user->signature)[1]) }}" />
