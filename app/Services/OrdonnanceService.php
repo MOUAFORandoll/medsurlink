@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Traits\RequestService;
 use Illuminate\Http\Request;
 
-class ExamenCliniqueService
+class OrdonnanceService
 {
     use RequestService;
 
@@ -27,25 +27,25 @@ class ExamenCliniqueService
     {
         $this->baseUri = config('services.teleconsultations.base_uri');
         $this->secret = config('services.teleconsultations.secret');
-        $this->path = "/api/v1/examen_cliniques";
+        $this->path = "/api/v1/ordonnances";
     }
 
     /**
      * @return string
      */
-    public function fetchExamenCliniques(Request $request) : string
+    public function fetchOrdonnances(Request $request) : string
     {
         return $this->request('GET', "{$this->path}?search={$request->search}&page={$request->page}&page_size={$request->page_size}");
     }
 
     /**
-     * @param $examen_clinique
+     * @param $ordonnance
      *
      * @return string
      */
-    public function fetchExamenClinique($examen_clinique) : string
+    public function fetchOrdonnance($ordonnance) : string
     {
-        return $this->request('GET', "{$this->path}/{$examen_clinique}");
+        return $this->request('GET', "{$this->path}/{$ordonnance}");
     }
 
     /**
@@ -53,29 +53,39 @@ class ExamenCliniqueService
      *
      * @return string
      */
-    public function createExamenClinique($data) : string
+    public function createOrdonnance($data) : string
     {
         return $this->request('POST', "{$this->path}", $data);
     }
 
+      /**
+     * @param $patient_id
+     *
+     * @return string
+     */
+    public function fetchPatientOrdonnance($patient_id) : string
+    {
+        return $this->request('GET', "{$this->path}/patient/{$patient_id}");
+    }
+
     /**
-     * @param $examen_clinique
+     * @param $ordonnance
      * @param $data
      *
      * @return string
      */
-    public function updateExamenClinique($examen_clinique, $data) : string
+    public function updateOrdonnance($ordonnance, $data) : string
     {
-        return $this->request('PATCH', "{$this->path}/{$examen_clinique}", $data);
+        return $this->request('PATCH', "{$this->path}/{$ordonnance}", $data);
     }
 
     /**
-     * @param $examen_clinique
+     * @param $ordonnance
      *
      * @return string
      */
-    public function deleteExamenClinique($relation_id, $examen_clinique, $relation) : string
+    public function deleteOrdonnance($relation_id, $ordonnance, $relation) : string
     {
-        return $this->request('DELETE', "{$this->path}/{$relation_id}/{$examen_clinique}/{$relation}");
+        return $this->request('DELETE', "{$this->path}/{$relation_id}/{$ordonnance}/{$relation}");
     }
 }

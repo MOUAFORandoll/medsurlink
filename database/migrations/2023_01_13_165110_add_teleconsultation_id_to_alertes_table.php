@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddCreatorToLigneDeTempsTable extends Migration
+class AddTeleconsultationIdToAlertesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddCreatorToLigneDeTempsTable extends Migration
      */
     public function up()
     {
-        Schema::table('ligne_de_temps', function (Blueprint $table) {
-            $table->bigInteger('creator')->nullable();
+        Schema::table('alertes', function (Blueprint $table) {
+            $table->bigInteger('teleconsultation_id')->after('niveau_urgence_id')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddCreatorToLigneDeTempsTable extends Migration
      */
     public function down()
     {
-        Schema::table('ligne_de_temps', function (Blueprint $table) {
-            $table->dropColumn(['creator']);
+        Schema::table('alertes', function (Blueprint $table) {
+            $table->dropColumn(['teleconsultation_id']);
         });
     }
 }
