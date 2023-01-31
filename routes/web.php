@@ -153,7 +153,7 @@ Route::get('teleconsultations/print/{teleconsultation_id}', function ($teleconsu
 
     $pdf = PDF::loadView('pdf.teleconsultations.rapport', ['teleconsultation' => $teleconsultation, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date, '']);
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
-    //return $teleconsultation;
+  
 
     return $pdf->stream("Téléconsultation de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
 
