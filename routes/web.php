@@ -147,14 +147,13 @@ Route::get('teleconsultations/print/{teleconsultation_id}', function ($teleconsu
             $query->where('uuid', $patient_id);
         })->with('user:id,nom,prenom,email,telephone,slug')->first();
 
-    $medecin = MedecinControle::with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $teleconsultation['creator'])->get(['specialite_id', 'user_id', 'civilite'])->first();
+    $medecin = MedecinControle::with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $teleconsultation['creator'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
     $date = Carbon::parse($teleconsultation['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
 
-
     $pdf = PDF::loadView('pdf.teleconsultations.rapport', ['teleconsultation' => $teleconsultation, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date, '']);
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
-
+    //return $teleconsultation;
 
     return $pdf->stream("Téléconsultation de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
 
