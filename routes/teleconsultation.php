@@ -228,7 +228,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::post('/', 'OrdonnanceController@store');
         Route::get('/{ordonnance}', 'OrdonnanceController@show');
         Route::patch('/{ordonnance}', 'OrdonnanceController@update');
-        Route::delete('/{ordonnance}', 'OrdonnanceController@destroy');
+        Route::delete('/{relation_id}/{ordonnance}/{relation}', 'OrdonnanceController@destroy');
     });
 
 
