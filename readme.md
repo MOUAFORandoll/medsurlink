@@ -106,3 +106,12 @@ php artisan queue:work --queue=high,default
 ## Execution des permissions des alertes
 php artisan db:seed --class=PermissionTableSeeder
 php artisan db:seed --class=RoleTableSeeder
+
+## Creation des mettings
+
+php artisan migrate --path=/database/migrations/2023_01_10_153838_create_mettings_table.php
+
+php artisan migrate --path=/database/migrations/2023_01_13_165110_add_teleconsultation_id_to_alertes_table.php
+
+php artisan migrate --path=/database/migrations/2023_01_20_095229_create_failed_jobs_table.php
+

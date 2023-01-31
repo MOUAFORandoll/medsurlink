@@ -7,19 +7,24 @@ use App\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
-class Alerte extends Model
+class Alerte extends Model implements HasMedia
 {
-    use Notifiable, HasChangesHistory, SoftDeletes;
+    use Notifiable, HasMediaTrait, HasChangesHistory, SoftDeletes;
 
 
     protected $table = 'alertes';
 
-    protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'niveau_urgence_id', 'statut_id', 'creator_id', 'plainte'];
+    protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'niveau_urgence_id', 'teleconsultation_id', 'statut_id', 'creator_id', 'plainte'];
+
+    protected $appends = ['audio', 'audio1'];
 
     protected $slackChannels= [
-        //'appel' => 'https://hooks.slack.com/services/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',
-        'appel' => 'https://hooks.slack.com/services/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'
+        'test' => 'https://hooks.slack.com/services/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',
+        'teleconsultation' => 'https://hooks.slack.com/services/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'
     ];
 
     protected $slack_url = null;
@@ -27,7 +32,7 @@ class Alerte extends Model
     public function patient(){
         return $this->belongsTo(User::class);
     }
-    
+
 
     public function creator(){
         return $this->belongsTo(User::class);
@@ -37,10 +42,11 @@ class Alerte extends Model
     }
 
     public function routeNotificationForSlack(){
-        if($this->slack_url === null){
-            return $this->slackChannels['appel'];
-        }
-        return $this->slack_url;
+        $env = strtolower(config('app.env'));
+        if ($env == 'production')
+            return $this->slackChannels["teleconsultation"];
+        else
+            return $this->slackChannels["test"];
     }
     /**
      * @param $name
@@ -54,6 +60,14 @@ class Alerte extends Model
         return $this;
     }
 
+    public function getSlackChannel(){
+        $env = strtolower(config('app.env'));
+        if ($env == 'production')
+            return $this->setSlackUrl($this->setSlackUrl($this->slackChannels["teleconsultation"]));
+        else
+            return $this->setSlackUrl($this->setSlackUrl($this->slackChannels["test"]));
+    }
+
     /**
      * @param $url
      * @return $this
@@ -64,5 +78,26 @@ class Alerte extends Model
         return $this;
     }
 
+    public function getAudioAttribute(){
+        if ($this->getFirstMedia('audio')) {
+            $arrayLinks = explode("public/", $this->getFirstMedia('audio')->getPath());
+            $link = Storage::url($arrayLinks[count($arrayLinks) - 1]);
+        } else {
+            return null;
+        }
+        $this->makeHidden('media');
+        return asset($link);
+    }
+
+    public function getAudio1Attribute(){
+        if ($this->getFirstMedia('audio1')) {
+            $arrayLinks = explode("public/", $this->getFirstMedia('audio1')->getPath());
+            $link = Storage::url($arrayLinks[count($arrayLinks) - 1]);
+        } else {
+            return null;
+        }
+        $this->makeHidden('media');
+        return asset($link);
+    }
 
 }

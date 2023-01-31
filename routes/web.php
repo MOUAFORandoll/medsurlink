@@ -11,13 +11,17 @@ use App\Models\DossierMedical;
 use App\Models\ExamenComplementaire;
 use App\Models\ExamenEtablissementPrix;
 use App\Models\LigneDeTemps;
+use App\Models\MedecinControle;
 use App\Models\Patient;
 use App\Models\PatientSouscripteur;
 use App\Models\Payment;
 use App\Models\PaymentOffre;
 use App\Models\RendezVous;
+use App\Services\PatientService;
+use App\Services\TeleconsultationService;
 use App\User;
 use Barryvdh\DomPDF\Facade as PDF;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,10 +46,14 @@ Route::get('/redirect-mesurlink/redirect/{email}','Api\MedicasureController@stor
 Route::resource('medicasure/souscripteur','Api\MedicasureController');
 
 Route::get('/', function () {
-    //event(new AlerteEvent("kjsdjsd sdklsdkl"));
-    //return "ttoto";
     return view('welcome');
 });
+
+Route::get('/join', function () {
+    return view('welcome');
+});
+
+
 
 Route::get('/public/storage/DossierMedicale/{fileNumber}/{typeConsultation}/{consultation}/{image}/{resource?}', function ($fileNumber,$typeConsultation,$consultation,$image,$resource='') {
     $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/'.$typeConsultation.'/'.$consultation.'/'.$image.($resource ? '/'.$resource :'');
@@ -124,6 +132,33 @@ Route::get('impression/facture-offre/{affiliation}', function ($affiliation) {
     $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
     return $pdf['stream'];
 })->name('facture.offre');
+
+Route::get('teleconsultations/print/{teleconsultation_id}', function ($teleconsultation_id) {
+
+    $teleconsultation = new TeleconsultationService;
+    $teleconsultation = json_decode($teleconsultation->fetchTeleconsultation($teleconsultation_id), true)['data'];
+    $patient_id = $teleconsultation['patient_id'];
+
+    $patient = Patient::where('user_id', $patient_id)->orWhere('slug', $patient_id)->orwhereHas('dossier', function ($query) use ($patient_id) {
+            $query->where('slug', $patient_id);
+        })->orwhereHas('user', function ($query) use ($patient_id) {
+            $query->where('slug', $patient_id);
+        })->orwhereHas('alerte', function ($query) use ($patient_id) {
+            $query->where('uuid', $patient_id);
+        })->with('user:id,nom,prenom,email,telephone,slug')->first();
+
+    $medecin = MedecinControle::with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $teleconsultation['creator'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+
+    $date = Carbon::parse($teleconsultation['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
+
+    $pdf = PDF::loadView('pdf.teleconsultations.rapport', ['teleconsultation' => $teleconsultation, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date, '']);
+    //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+  
+
+    return $pdf->stream("Téléconsultation de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
+
+})->name('teleconsultations.print');
+
 
 Route::get('visualiser-consultation-medecine/{slug}',function ($slug){
     $pdf = visualiser($slug);
