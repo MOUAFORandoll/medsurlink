@@ -37,6 +37,7 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
 use App\Models\ConsultationMedecineGenerale;
 use App\Http\Controllers\Traits\PersonnalErrors;
+use Illuminate\Support\Facades\Log;
 
 if(!function_exists('sendSMS'))
 {
@@ -205,8 +206,27 @@ if(!function_exists('formatTelephone'))
         try {
             $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
             $when = now()->addMinutes(1);
-            Mail::to($email_souscripteur)->cc("contrat@medicasure.com")->later($when, new AchatOffre($pdf['output'], $nom_souscripteur, $description));
+            Mail::to($email_souscripteur)->cc("contrat@medicasure.com")->send(new AchatOffre($pdf['output'], $nom_souscripteur, $description));
         }catch (\Exception $exception){
+            Log::alert("erreur ", [
+                "getFile" => $exception->getFile(),
+                "getMessage" => $exception->getMessage(),
+                "getLine" => $exception->getLine(),
+                "commande_id" => $commande_id,
+                "commande_date" => $commande_date,
+                "montant_total" => $montant_total,
+                "echeance" => $echeance,
+                "description" => $description,
+                "quantite" => $quantite,
+                "prix_unitaire" => $prix_unitaire,
+                "nom_souscripteur" => $nom_souscripteur,
+                "email_souscripteur" => $email_souscripteur,
+                "rue" => $rue,
+                "adresse" => $adresse,
+                "ville" => $ville,
+                "pays" => $pays,
+                "beneficiaire" => $beneficiaire
+            ]);
             //$exception
         }
     }
@@ -224,7 +244,23 @@ if(!function_exists('generationPdfFactureOffre'))
             $pdf = PDF::loadView('impression_offre', ['commande_id' => $commande_id, 'commande_date' => $commande_date, 'montant_total' => number_format($montant_total, 2, ',', ' '), 'echeance' => $echeance, 'description' => mb_strtoupper($description), 'quantite' => $quantite, 'prix_unitaire' => number_format($prix_unitaire, 2, ',', ' '), 'nom_souscripteur' => $nom_souscripteur, 'email_souscripteur' => $email_souscripteur, 'rue' => $rue, 'adresse' => $adresse, 'ville' => $ville, 'pays' => $pays, 'beneficiaire' => $beneficiaire]);
             return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
         }catch (\Exception $exception){
-            //$exception
+            Log::alert("generationPdfFactureOffre ", [
+                "exception" => $exception->getMessage(),
+                "commande_id" => $commande_id,
+                "commande_date" => $commande_date,
+                "montant_total" => $montant_total,
+                "echeance" => $echeance,
+                "description" => $description,
+                "quantite" => $quantite,
+                "prix_unitaire" => $prix_unitaire,
+                "nom_souscripteur" => $nom_souscripteur,
+                "email_souscripteur" => $email_souscripteur,
+                "rue" => $rue,
+                "adresse" => $adresse,
+                "ville" => $ville,
+                "pays" => $pays,
+                "beneficiaire" => $beneficiaire
+            ]);
         }
     }
 }
@@ -465,7 +501,7 @@ if(!function_exists('ProcessAfterPayment'))
                 }
                 $affiliation_old->save();
         }
-        if($affiliation == ''){
+        // if($affiliation == ''){
             $affiliation = AffiliationSouscripteur::create([
                 'user_id'=>$payment->souscripteur_id,
                 'type_contrat'=>$payment->commande->offres_packages_id,
@@ -473,15 +509,24 @@ if(!function_exists('ProcessAfterPayment'))
                 'nombre_restant'=>$payment->commande->quantite,
                 'montant'=>$payment->montant,
                 'cim_id'=>$payment->commande->id,
-                'date_paiement'=>null,
+                'date_paiement'=> null,
             ]);
-        }else{
-            $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
-            if($payment->status_contrat != "Renouvelé"){
-                $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
-            }
-            $affiliation->save();
-        }
+        // }else{
+        //     $affiliation = AffiliationSouscripteur::create([
+        //         'user_id'=>$payment->souscripteur_id,
+        //         'type_contrat'=>$payment->commande->offres_packages_id,
+        //         'nombre_paye'=>$payment->commande->quantite,
+        //         'nombre_restant'=>$payment->commande->quantite,
+        //         'montant'=>$payment->montant,
+        //         'cim_id'=>$payment->commande->id,
+        //         'date_paiement'=>'2023-01-20',
+        //     ]);
+        //     // $affiliation->nombre_paye =$affiliation->nombre_paye + (int)$payment->commande->quantite;
+        //     // if($payment->status_contrat != "Renouvelé"){
+        //     //     $affiliation->nombre_restant =$affiliation->nombre_restant + (int)$payment->commande->quantite;
+        //     // }
+        //     // $affiliation->save();
+        // }
        /**
         * envoie de la facture au souscripteur
         */
@@ -515,9 +560,9 @@ if(!function_exists('ProcessAfterPayment'))
         $url_global = $url_global."/payment-management/medicasure";
         $message = "*$nom_souscripteur* a acheté $quantite $description à *$montant_total Euros*\nemail: $email_souscripteur \ntéléphone: $telephone \n <$url_global|*Cliquer ici pour plus de détails*>";
         // Send notification to affilié channel
-        if($env == 'production'){
-            $affiliation->setSlackChannel('souscription')->notify(new SouscriptionAlert($message,null));
-        }
+
+        $affiliation->getSlackChannel()->notify(new SouscriptionAlert($message,null));
+
 
         EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
 
@@ -632,7 +677,7 @@ if(!function_exists('AjoutDuneAffiliation')){
                     $package = Package::find($commande->type_contrat);
                         $affiliation->motifs()->sync($plaintes);
                     $when = now()->addMinutes(1);
-                    Mail::to($email_souscripteur)->cc("contrat@medicasure.com")->later($when, new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $affiliation->motifs, $request->urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie));
+                    Mail::to("contrat@medicasure.com")->later($when, new NouvelAffiliation($user->nom, $user->prenom, $user->telephone, $affiliation->motifs, $request->niveau_urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie,$souscripteur,$affiliation, $request->urgence));
                     $affiliation_old = Affiliation::where([["patient_id",$patient->user_id],["souscripteur_id",$souscripteur->user_id]])->first();
                     $commande = reduireCommandeRestante($commande->id, $souscripteur->user_id, $patient->user_id, $package->description_fr, $affiliation_old->slug);
 
@@ -657,11 +702,12 @@ if(!function_exists('AjoutDuneAffiliation')){
 
         }
         else if($request->lien){
+            
             /**
              * Affiliation par les amas
              */
             app('App\Http\Controllers\Api\AffiliationController')->Affiliated($request);
-            $patient = Patient::where('user_id', $request->patient_id)->first();
+            $patient = Patient::with('user')->where('user_id', $request->patient_id)->first();
             if($patient){
                 $package_id = $request->package_id;
                 $souscripteur_id = $request->souscripteur_id;
@@ -701,18 +747,27 @@ if(!function_exists('AjoutDuneAffiliation')){
                     ]);
                 }
                 $affiliation = CreationAffiliation($request, $patient);
+                if($request->plaintes){
+                    $plaintes = AjoutDesPlaintes($affiliation, $request->plaintes);
+                }
+                $affiliation->motifs()->sync($plaintes);
                 $patient->souscripteur_id = $request->souscripteur_id;
-                $patient->save();
+                // $user->nom, $patient->user->prenom, $user->telephone,
+                $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
+                // Log::info('info souscripteur'.$souscripteur);
+                // Log::info('info patient'.$patient);
 
+                $when = now()->addMinutes(1);
+                Mail::to("contrat@medicasure.com")->later($when, new NouvelAffiliation($patient->user->nom, $patient->user->prenom, $patient->user->telephone, $affiliation->motifs, $request->niveau_urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie,$souscripteur,$affiliation, $request->urgence));
+                $patient->save();
+                
                 $cim = Package::where('id', $request->package_id)->first();
                 $affiliation_old = Affiliation::where([["patient_id",$patient->user_id],["souscripteur_id",$request->souscripteur_id]])->first();
                 $commande = reduireCommandeRestante($commande->id,  $request->souscripteur_id, $request->patient_id, $cim->description_fr, $affiliation_old->slug);
 
+                notifierMiseAJourCompte($souscripteur,$patient);
 
-                if($request->plaintes){
-                    AjoutDesPlaintes($affiliation, $request->plaintes);
-                }
-
+                // Log::info('affiliation'.$affiliation);
                 return response()->json(['affiliation' => $affiliation]);
             }else{
                 return response()->json(['erreur' => "Le patient n'existe pas"], 419);
@@ -761,6 +816,7 @@ if(!function_exists('AjoutDesPlaintes')){
 if(!function_exists('CreationAffiliation')){
 
     function CreationAffiliation($request, $patient, $commande = null){
+        // Log::info('creation affiliation');
         $affiliation = Affiliation::create([
             "patient_id"=> $request->lien ? $request->patient_id: $patient->user_id,
             "souscripteur_id"=>$request->souscripteur_id,

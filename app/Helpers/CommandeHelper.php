@@ -55,10 +55,8 @@ if(!function_exists('reduireCommandeRestante')) {
         $url_global = $url_global."/affiliation/".$affiliation_slug."#generale";
         $message = "Une Nouvelle Affiliation a été enregistrée pour le patient *$nom_patient* par le Souscripteur *$nom_souscripteur*.\n L'affiliation Concerne un  *$description* à *$commande->montant Euros*\n\n*Infomations du souscripteur*:\n Nom: $nom_souscripteur \nAdresse e-mail: $souscripteur->email \nTéléphone: $souscripteur->telephone \n\n *Informations du patient*:\n Nom: $nom_patient \nAdresse e-mail: $patient->email \nTéléphone: $patient->telephone \n\n<$url_global|*Cliquer ici pour plus de détails*>";
         // Send notification to affilié channel
-        if($env == 'production'){
-            $commande->setSlackChannel('souscription')->notify(new SouscriptionAlert($message,null));
-        }
-        
+        $commande->getSlackChannel()->notify(new SouscriptionAlert($message,null));
+
 
 
 

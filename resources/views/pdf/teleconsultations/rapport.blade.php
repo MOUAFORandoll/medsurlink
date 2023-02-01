@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,500,500i,600,700,800,900&display=swap" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
 
-    <title>Téléconsultation de {{ $patient->user->name }} du {{ $date }} par {{ $medecin->civilite }} {{ $medecin->user->name }}</title>
+    <title>Téléconsultation de {{ $patient->user->name }} du {{ $date }} par {{ $medecin->civilite ?? '' }} {{ $medecin->user->name }}</title>
 
     <style>
         body {
@@ -309,7 +309,7 @@
                 <span>{{$loop->iteration}}. {!! $anamnese['fr_description'] !!}</span>
                 <div class="row">
                     Description de l'anamnèse:
-                    {!! json_decode($anamnese['pivot']['data'])->anamnese !!}
+                    {!! isset(json_decode($anamnese['pivot']['data'])->anamnese) ? json_decode($anamnese['pivot']['data'])->anamnese : '' !!}
                 </div>
             @empty
             @endforelse
@@ -387,7 +387,7 @@
             <img width="300px" style="margin-top: 200px;" height="auto" src="{{ public_path('/storage/'.explode('storage', $medecin->user->signature)[1]) }}" />
         </div>
 
-        <p><b>{{ $medecin->civilite }}  {{ $medecin->user->name }}</b></p>
+        <p><b>{{ $medecin->civilite ?? '' }}  {{ $medecin->user->name }}</b></p>
         <p>Numéro d'ordre: {{ $medecin->numero_ordre }}</p>
         <p style="text-align: right"> Fait le : <b>{{ $date }}</b></p>
     </div>
