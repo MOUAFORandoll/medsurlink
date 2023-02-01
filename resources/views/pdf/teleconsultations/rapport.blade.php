@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,500,500i,600,700,800,900&display=swap" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
 
-    <title>Téléconsultation de {{ $patient->user->name }} du {{ $date }} par {{ $medecin->civilite }} {{ $medecin->user->name }}</title>
+    <title>Téléconsultation de {{ $patient->user->name }} du {{ $date }} par {{ $medecin->civilite ?? '' }} {{ $medecin->user->name }}</title>
 
     <style>
         body {
@@ -141,22 +141,26 @@
             width: 100%;
         }
         .row p{
-            font-size: 12px;
+            font-size: 14px;
         }
         .p{
-            font-size: 12px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
+    @php
+        use Carbon\Carbon;
+    @endphp
 
     <div class="justify-content-center">
-        <h2>Berthold feujo</h2>
-        <h3>12 janvier 2023</h3>
-        <h3>Sexe : Masculin</h3>
+        <h2>{{ $patient->user->name }}</h2>
+        <h3>{{ Carbon::parse($patient->date_de_naissance)->locale(config('app.locale'))->translatedFormat('jS F Y') }}</h3>
+        <h3>Sexe : {{ $patient->sexe == "M" ? "Masculin" : "Féminin" }}</h3>
     </div>
+    {{--  $teleconsultation  --}}
 
-        <div class="justify-content-center"> Allergies Information </div>
+      {{--   <div class="justify-content-center"> Allergies Information </div>
         <table style="width: 100%">
             <thead>
                 <td class="title-table">Description</td>
@@ -170,7 +174,7 @@
                     <td>Description allergie</td><td>12/02/2023</td>
                 </tr>
             </tbody>
-        </table>
+        </table> --}}
 
 
     <div style="color: black">
@@ -178,23 +182,36 @@
             <div class="rapport-logo-wrapper">
                 <img src="{{public_path('/images/logo.png')}}" class="logo-rapport" alt="" />
             </div>
-            <p style="text-align: center"><b>Réseau Médicasure</b></p>
+            <p style="text-align: center"><b>{{ $teleconsultation["etablissements"][0]["name"] }}</b></p>
         </div>
-        <p class="titre-rapport"><strong>Rapport de consultation</strong></p>
+        <p class="titre-rapport"><strong>Rapport de téléconsultation</strong></p>
         <br>
         <p>Honorée Consoeur, Honoré Confrère,</p>
-        <p>J'ai vu en date du <strong>20 Janvier 2023</strong>, pour une consultation de<b> médecine générale</b>, votre patient(e)
-            <strong>Berthold FEUJO</strong> né(e) le <strong>20/10/2019</strong>
-            pour: mal au vendre, à la tête, au pied
+        <p>J'ai vu en date du <strong>{{ Carbon::parse($teleconsultation["created_at"])->locale(config('app.locale'))->translatedFormat('jS F Y') }}</strong>, pour une téléconsultation médicale de type <b> {{ $teleconsultation['type']['libelle'] }}</b>, votre patient(e)
+            <strong>{{ $patient->user->name }}</strong> né(e) le <strong> {{ Carbon::parse($patient->date_de_naissance)->locale(config('app.locale'))->translatedFormat('jS F Y') }} </strong>
+            pour:  @forelse ($teleconsultation['motifs'] as $motif)
+                        {{ $motif['description'] }}
+                        @if(!$loop->last)
+                        {{", "}}
+                        @else
+                        {{"."}}
+                        @endif
+                    @empty 
+                    @endforelse
         </p>.
 
-        <h4 class="sous-titre-rapport">Motif(s) de Consultation</h4>
-        <p>Motif de téléconsultation 1</p>
-        <p>Motif de téléconsultation 2</p>
-        <p>Motif de téléconsultation 3</p>
-        <p>Motif de téléconsultation 4</p>
+        @if(count($teleconsultation['motifs']) > 0)
+            <h4 class="sous-titre-rapport">Motif(s) de téléconsultation</h4>
+            <ol>
+                @forelse ($teleconsultation['motifs'] as $motif)
+                    <li>{{ $motif['description'] }}</li>
+                @empty 
+                @endforelse
+            </ol>
+        @endif
 
-        <h4 class="sous-titre-rapport">Mode de vie</h4>
+
+        {{-- <h4 class="sous-titre-rapport">Mode de vie</h4>
         <div class="divTable">
             <div class="divTableBody">
                 <div class="divTableRow">
@@ -224,34 +241,39 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <h4 class="sous-titre-rapport">Antédédents</h4>
-        <div class="divTable">
+        </div> --}}
+        @if (count($teleconsultation['antededents'])>0)
+            <h4 class="sous-titre-rapport">Antédédents</h4>
+            <div class="divTable">
                 <div class="divTableBody">
                     <div class="divTableRow">
-
                         <div class="divTableCell">
                             <table style="width: 100%">
                                 <thead>
-                                    <td class="title-table">Type</td>
-                                    <td class="title-table">Description</td>
-                                    <td class="title-table">Date debut</td>
+                                    <tr>
+                                        <th class="title-table">Type</th>
+                                        <th class="title-table">Description</th>
+                                        <th class="title-table">Date début</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                <tr></tr>
-                                    <tr>
-                                        <td>TYpe</td>
-                                        <td>Description</td>
-                                        <td>20/12/2022</td>
-                                    </tr>
+                                    @forelse ($teleconsultation['antededents'] as $antededent)
+                                        <tr>
+                                            <td>{{ $antededent['type']['libelle'] }}</td>
+                                            <td>{!! $antededent['description'] !!}</td>
+                                            <td>{{ $antededent['date'] }}</td>
+                                        </tr>
+                                    @empty
+                                    @endforelse
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>
-        </div>
-        <h4 class="sous-titre-rapport">Parametres</h4>
+            </div>
+        @endif
+
+        {{-- <h4 class="sous-titre-rapport">Parametres</h4>
         <div class="row" >
             <div class="list">Poids (kg) : <strong></strong> </div>
             <div class="list">Taille (cm): <strong></strong></div>
@@ -262,123 +284,114 @@
             <div class="list">Fréquence cardiaque (bpm) : <strong></strong></div>
             <div class="list">Fréquence respiratoire (cpm) : <strong></strong></div>
             <div class="list">sato2 (%) : <strong></strong></div>
-        </div>
+        </div> --}}
     </div>
 
-    <h4 class="sous-titre-rapport">Allergies</h4>
-    <span> au miel, jksd sdklsd dskl, dsklsdklsd klsdklds, dskkldskl</span>
+    @if (count($teleconsultation['allergies'])>0)
+        <h4 class="sous-titre-rapport">Allergies</h4>
+        <span>
+            @forelse ($teleconsultation['allergies'] as $allergie)
+                {{ $allergie['description'] }}
+                @if(!$loop->last)
+                {{", "}}
+                @else
+                {{"."}}
+                @endif
+            @empty 
+            @endforelse
+        </span>
+    @endif
 
-    <div class="divTable">
-        <h4 class="sous-titre-rapport">Traitement actuel</h4>
-        <div class="divTableBody">
-            <div class="divTableRow">
-                <div>
-                    <span>sdjkjkfsjksf sfjkfsjksf sfjksf fsksfk</span>
+    @if (count($teleconsultation['anamneses'])>0)
+        <h4 class="sous-titre-rapport">Anamnèse</h4>
+        <div class="row">
+            @forelse ($teleconsultation['anamneses'] as $anamnese)
+                <span>{{$loop->iteration}}. {!! $anamnese['fr_description'] !!}</span>
+                <div class="row">
+                    Description de l'anamnèse:
+                    {!! isset(json_decode($anamnese['pivot']['data'])->anamnese) ? json_decode($anamnese['pivot']['data'])->anamnese : '' !!}
                 </div>
-                <div>
-                    <span>sdjkjkfsjksf sfjkfsjksf sfjksf fsksfk</span>
-                </div>
-            </div>
+            @empty
+            @endforelse
         </div>
-    </div>
+    @endif
 
-    <h4 class="sous-titre-rapport">Anamnèse</h4>
-    <div class="row">
-        <div class="column">1</div>
-        <div class="column">
-            <span class="p">Anamnèse liste -</span>
+    @if (count($teleconsultation['examen_cliniques'])>0)
+        <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4>
+        <div class="row">
+            <ol>
+                @forelse ($teleconsultation['examen_cliniques'] as $examen_clinique)
+                    <li>{{ $examen_clinique['fr_description'] }}</li>
+                @empty
+                @endforelse
+            </ol>
+            <span>Description examen clinique: {!! $teleconsultation['description_examen_clinique'] !!}</span>
 
         </div>
-    </div>
-    <div class="row">
-        Description de l'anamnèse
-    </div>
+    @endif
 
-    <h4 class="sous-titre-rapport">Examen(s) clinique(s)</h4>
-    <div class="row">
-        <div class="column">1</div>
-        <div class="column">
-            <span class="p">Examen(s) clinique liste -</span>
+    @if (count($teleconsultation['examen_complementaires'])>0)
+        <h4 class="sous-titre-rapport">Examen(s) complémentaire(s)</h4>
+        <div class="row">
+            <ol>
+                @forelse ($teleconsultation['examen_complementaires'] as $examen_complementaire)
+                    <li>{{ $examen_complementaire['fr_description'] }}</li>
+                @empty
+                @endforelse
+            </ol>
         </div>
-    </div>
-    <div class="row">
-        Examen(s) clinique description
-    </div>
+    @endif
 
-    <h4 class="sous-titre-rapport">Examen(s) complémentaire(s)</h4>
-    <div class="row">
-        <div class="column">1</div>
-        <div class="column">
-            <span class="p">ksdklklsd sdkdsm -</span>
+    @if (count($teleconsultation['diagnostics'])>0)
+        <h4 class="sous-titre-rapport">Diagnostic ICD</h4>
+        <div class="row">
+            <ol>
+                @forelse ($teleconsultation['diagnostics'] as $diagnostic)
+                    <li><span style="padding:0 40px 0 0;">{{ $diagnostic['code_icd'] }}</span> {{ $diagnostic['name'] }}</li>
+                @empty
+                @endforelse
+            </ol>
         </div>
-    </div>
-    <div class="row">
-        Description des examens complémentaires
-    </div>
+        <div class="row">
+            <h4 class="sous-titre-rapport">Description du Diagnostic</h4>
+            {!! $teleconsultation['description_diagnostic'] !!}
+        </div>
+    @endif
 
-    <h4 class="sous-titre-rapport">Diagnostic ICD</h4>
     <div class="row">
-        <div class="column" style="width: 20%">Code ICD</div>
-        <div class="column" style="width: 80%"><p class="p">Diagnotic code</p></div>
-    </div>
-    <div class="row">
-        <h4 class="sous-titre-rapport">Diagnostic</h4>
-        <p class="p">Liste des éléments du diagnotic</p>
-
         <h4 class="sous-titre-rapport">Conduite à tenir</h4>
-        <p>Conduite à tenir</p>
-        <h4 class="sous-titre-rapport">Consulter les pièces jointes</h4>
-        <a href="#">télécharger les pièces</a><br>
-        <a href="#">télécharger des autres pièces</a><br>
+        {!! $teleconsultation['cat'] !!}
     </div>
+
+    @if (count($teleconsultation['ordonnances'])>0)
+        <div class="row">
+            <h4 class="sous-titre-rapport">Ordonnances</h4>
+            <ol>
+                @forelse ($teleconsultation['ordonnances'] as $ordonnance)
+                    <li>{!! $ordonnance['description'] !!}</li>
+                @empty
+                @endforelse
+            </ol>
+        </div>
+    @endif
 
 
     <h4></h4>
     <p>Je vous remercie de m'avoir adressé votre patient(e) et vous adresse mes salutations confraternelles.</p>
     <p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
 
+    <h4 class="sous-titre-rapport">Medecin ayant fait votre téléconsultation</h4>
 
-    <h4 class="sous-titre-rapport">Medecin(s) ayant revisité votre consultation</h4>
-    <div style="display: inline">
+    <div>
         <div>
-            {{-- <img width="300px" height="auto" src={{public_path('/storage/'.$medecin->signature)}} /> --}}
-            image signature
+            <img width="300px" style="margin-top: 200px;" height="auto" src="{{ public_path('/storage/'.explode('storage', $medecin->user->signature)[1]) }}" />
         </div>
 
-        <p>Dr. Charly KADJI</p>
-        <p>Numéro d'ordre: 168287</p>
+        <p><b>{{ $medecin->civilite ?? '' }}  {{ $medecin->user->name }}</b></p>
+        <p>Numéro d'ordre: {{ $medecin->numero_ordre }}</p>
+        <p style="text-align: right"> Fait le : <b>{{ $date }}</b></p>
     </div>
 
-    <div style="display: inline">
-        <p>Généré par <b>Dr. Charly KADJI</b></p>
-        <p>Numéro d'ordre: 17898</p>
-        <p style="text-align: right"> Date de création : <b>{{\Carbon\Carbon::parse()->format('d/m/Y')}}</b></p>
-
-        <div>
-            {{-- <img  style="float: right" width="300px" height="auto" src={{public_path('/storage/'.$signature)}} /> --}}
-            image signature
-        </div>
-    </div>
-
-    <h4 class="sous-titre-rapport">Contributeurs</h4>
-
-    <div style="display: inline">
-        <div>
-            {{-- <img width="300px" height="auto" src={{public_path('/storage/'.$medecin->signature)}} /> --}}
-            image signature
-        </div>
-        <p>Dr. TESSA</p>
-        <p>Numéro d'ordre: 86856797</p>
-    </div>
-    <div style="display: inline">
-        <div>
-           {{--  <img width="300px" height="auto" src={{public_path('/storage/'.$praticien->signature)}} /> --}}
-           image signature
-        </div>
-
-        <p>Dr. KAMDEM JULLES</p>
-        <p>Numéro d'ordre: 189688</p>
-    </div>
 
 </body>
 </html>

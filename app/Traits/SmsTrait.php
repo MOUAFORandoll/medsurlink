@@ -14,7 +14,7 @@ trait SmsTrait
      * @param $message
      * @param null $sender
      */
-    public function sendSMS($telephone, $message, $sender = null)
+    public function sendSMS($telephone, $message, $sender = "MEDSURLINK")
     {
         sendSMS($telephone, $message, $sender);
     }
@@ -25,7 +25,7 @@ trait SmsTrait
      * @param $user
      * @param null $sender
      */
-    function sendSmsToUser($user, $sender = null) {
+    function sendSmsToUser($user, $sender = "MEDSURLINK") {
         if (!is_null($user)){
             try {
 //                $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
@@ -43,7 +43,7 @@ trait SmsTrait
      * @param $user
      * @param null $sender
      */
-    function RappelerRdvViaSMSTo($user,$praticien,$date,$heure,$sender = null) {
+    function RappelerRdvViaSMSTo($user, $praticien, $date, $heure, $sender = "MEDSURLINK") {
         if (!is_null($user)){
             try {
                 $nom = strtoupper($user->nom);
