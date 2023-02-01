@@ -37,6 +37,7 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
 use App\Models\ConsultationMedecineGenerale;
 use App\Http\Controllers\Traits\PersonnalErrors;
+use Illuminate\Support\Facades\Log;
 
 if(!function_exists('sendSMS'))
 {
@@ -205,8 +206,27 @@ if(!function_exists('formatTelephone'))
         try {
             $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
             $when = now()->addMinutes(1);
-            Mail::to($email_souscripteur)->cc("contrat@medicasure.com")->later($when, new AchatOffre($pdf['output'], $nom_souscripteur, $description));
+            Mail::to($email_souscripteur)->cc("contrat@medicasure.com")->send(new AchatOffre($pdf['output'], $nom_souscripteur, $description));
         }catch (\Exception $exception){
+            Log::alert("erreur ", [
+                "getFile" => $exception->getFile(),
+                "getMessage" => $exception->getMessage(),
+                "getLine" => $exception->getLine(),
+                "commande_id" => $commande_id,
+                "commande_date" => $commande_date,
+                "montant_total" => $montant_total,
+                "echeance" => $echeance,
+                "description" => $description,
+                "quantite" => $quantite,
+                "prix_unitaire" => $prix_unitaire,
+                "nom_souscripteur" => $nom_souscripteur,
+                "email_souscripteur" => $email_souscripteur,
+                "rue" => $rue,
+                "adresse" => $adresse,
+                "ville" => $ville,
+                "pays" => $pays,
+                "beneficiaire" => $beneficiaire
+            ]);
             //$exception
         }
     }
@@ -224,7 +244,23 @@ if(!function_exists('generationPdfFactureOffre'))
             $pdf = PDF::loadView('impression_offre', ['commande_id' => $commande_id, 'commande_date' => $commande_date, 'montant_total' => number_format($montant_total, 2, ',', ' '), 'echeance' => $echeance, 'description' => mb_strtoupper($description), 'quantite' => $quantite, 'prix_unitaire' => number_format($prix_unitaire, 2, ',', ' '), 'nom_souscripteur' => $nom_souscripteur, 'email_souscripteur' => $email_souscripteur, 'rue' => $rue, 'adresse' => $adresse, 'ville' => $ville, 'pays' => $pays, 'beneficiaire' => $beneficiaire]);
             return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
         }catch (\Exception $exception){
-            //$exception
+            Log::alert("generationPdfFactureOffre ", [
+                "exception" => $exception->getMessage(),
+                "commande_id" => $commande_id,
+                "commande_date" => $commande_date,
+                "montant_total" => $montant_total,
+                "echeance" => $echeance,
+                "description" => $description,
+                "quantite" => $quantite,
+                "prix_unitaire" => $prix_unitaire,
+                "nom_souscripteur" => $nom_souscripteur,
+                "email_souscripteur" => $email_souscripteur,
+                "rue" => $rue,
+                "adresse" => $adresse,
+                "ville" => $ville,
+                "pays" => $pays,
+                "beneficiaire" => $beneficiaire
+            ]);
         }
     }
 }
@@ -524,9 +560,9 @@ if(!function_exists('ProcessAfterPayment'))
         $url_global = $url_global."/payment-management/medicasure";
         $message = "*$nom_souscripteur* a acheté $quantite $description à *$montant_total Euros*\nemail: $email_souscripteur \ntéléphone: $telephone \n <$url_global|*Cliquer ici pour plus de détails*>";
         // Send notification to affilié channel
-        if($env == 'production'){
-            $affiliation->setSlackChannel('souscription')->notify(new SouscriptionAlert($message,null));
-        }
+
+        $affiliation->getSlackChannel()->notify(new SouscriptionAlert($message,null));
+
 
         EnvoieDeFactureApresSouscription($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
 
