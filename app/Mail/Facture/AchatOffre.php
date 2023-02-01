@@ -37,3 +37,5 @@ class AchatOffre extends Mailable
                 ->attachData($this->pdf,"$this->cim_title du ".date('d-m-Y').".pdf");
     }
 }
+
+
