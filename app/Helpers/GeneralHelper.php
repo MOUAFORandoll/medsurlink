@@ -37,7 +37,7 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
 use App\Models\ConsultationMedecineGenerale;
 use App\Http\Controllers\Traits\PersonnalErrors;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 if(!function_exists('sendSMS'))
 {
