@@ -3,13 +3,15 @@
 namespace App\Channels;
 
 use App\Traits\RequestService;
+use Illuminate\Support\Facades\Log;
+
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Notifications\Notification;
 
 class SmsChannel
 {
     use RequestService;
-    protected $base_uri = "https://smsvas.com/bulk/public/index.php/api/v1/sendsms";
+    protected $baseUri = "https://smsvas.com/bulk/public/index.php/api/v1/sendsms";
 
     private $login = 'kadji@medicasure.com';
     private $password = 'MediCasure';
@@ -27,7 +29,7 @@ class SmsChannel
         $details = $notification->toSms($notifiable);
 
         try{
-            $this->request('POST', "{$this->base_uri}", [
+            $this->request('POST', "{$this->baseUri}", [
                 "user" => $this->login,
                 "password" => $this->password,
                 "senderid" => $details['from'],
@@ -35,7 +37,16 @@ class SmsChannel
                 "mobiles" => $details['to']
             ]);
         } catch (\Exception $ex) {
-            \Log::alert("Erreur d'envoie de SMS", $ex->getMessage());
+            Log::alert("erreur ", [
+                "getFile" => $ex->getFile(),
+                "getMessage" => $ex->getMessage(),
+                "getLine" => $ex->getLine(),
+                "user" => $this->login,
+                "password" => $this->password,
+                "senderid" => $details['from'],
+                "sms" => $details['message'],
+                "mobiles" => $details['to']
+            ]);
         }
     }
 }

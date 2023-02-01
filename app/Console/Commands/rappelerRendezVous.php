@@ -116,7 +116,7 @@ class rappelerRendezVous extends Command
 
         $slack_notification = $slack_notification. "<$url_global|Voir plus de détails>";
         if (isset($rdv)){
-            $rdv->setSlackChannel('appel')->notify(new SouscriptionAlert($slack_notification,null));
+            $rdv->getSlackChannel()->notify(new SouscriptionAlert($slack_notification,null));
         }
 
         foreach ($rdvs as $rdv){
