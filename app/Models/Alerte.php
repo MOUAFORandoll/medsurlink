@@ -63,9 +63,9 @@ class Alerte extends Model implements HasMedia
     public function getSlackChannel(){
         $env = strtolower(config('app.env'));
         if ($env == 'production')
-            return $this->setSlackUrl($this->setSlackUrl($this->slackChannels["teleconsultation"]));
+            return $this->setSlackUrl($this->slackChannels["teleconsultation"]);
         else
-            return $this->setSlackUrl($this->setSlackUrl($this->slackChannels["test"]));
+            return $this->setSlackUrl($this->slackChannels["test"]);
     }
 
     /**

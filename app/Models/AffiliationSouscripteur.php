@@ -69,27 +69,29 @@ class AffiliationSouscripteur extends Model
     ];
 
     protected $slackChannels= [
+        'test' => 'https://hooks.slack.com/services/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',
         'souscription' => 'https://hooks.slack.com/services/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'
     ];
 
     protected $slack_url = null;
 
     public function routeNotificationForSlack(){
-        if($this->slack_url === null){
-            return $this->slackChannels['souscription'];
-        }
-        return $this->slack_url;
+        $env = strtolower(config('app.env'));
+        if ($env == 'production')
+            return $this->slackChannels["souscription"];
+        else
+            return $this->slackChannels["test"];
     }
-    /**
-     * @param $name
-     * @return $this
-     */
-    public function setSlackChannel($name){
-        if(isset($this->slackChannels[$name])){
-            $this->setSlackUrl($this->slackChannels[$name]);
-        }
-        return $this;
+
+
+    public function getSlackChannel(){
+        $env = strtolower(config('app.env'));
+        if ($env == 'production')
+            return $this->setSlackUrl($this->setSlackUrl($this->slackChannels["souscription"]));
+        else
+            return $this->setSlackUrl($this->setSlackUrl($this->slackChannels["test"]));
     }
+
 
     /**
      * @param $url

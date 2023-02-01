@@ -98,7 +98,7 @@ class RendezVous extends Model
 
     protected $slackChannels= [
         'appel' => 'https://hooks.slack.com/services/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',
-        'test' => 'https://hooks.slack.com/services/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'
+        'test' => 'https://hooks.slack.com/services/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'
     ];
 
     protected $slack_url = null;
@@ -191,10 +191,11 @@ class RendezVous extends Model
     }
 
     public function routeNotificationForSlack(){
-        if($this->slack_url === null){
-            return $this->slackChannels['appel'];
-        }
-        return $this->slack_url;
+        $env = strtolower(config('app.env'));
+        if ($env == 'production')
+            return $this->slackChannels["appel"];
+        else
+            return $this->slackChannels["test"];
     }
     /**
      * @param $name
@@ -206,6 +207,14 @@ class RendezVous extends Model
         }
 
         return $this;
+    }
+
+    public function getSlackChannel(){
+        $env = strtolower(config('app.env'));
+        if ($env == 'production')
+            return $this->setSlackUrl($this->slackChannels["appel"]);
+        else
+            return $this->setSlackUrl($this->slackChannels["test"]);
     }
 
     /**
