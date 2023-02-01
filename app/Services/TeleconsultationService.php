@@ -24,7 +24,7 @@ class TeleconsultationService
      */
     protected $secret;
     
-    public $allergie, $antecedent, $statut, $niveau_urgence;
+    public $allergie, $antecedent, $statut, $niveau_urgence, $user_id;
 
     /**
      * @var string
@@ -40,6 +40,7 @@ class TeleconsultationService
         $this->antecedent = new AntecedentService;
         $this->statut = new StatutService;
         $this->niveau_urgence = new NiveauUrgenceService;
+        $this->user_id = \Auth::guard('api')->user()->id;
     }
 
     /**
@@ -47,7 +48,7 @@ class TeleconsultationService
      */
     public function fetchTeleconsultations(Request $request) : string
     {
-        $teleconsultations = json_decode($this->request('GET', "{$this->path}?search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
+        $teleconsultations = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
 
         $items = [];
         foreach($teleconsultations['data']['data'] as $item){

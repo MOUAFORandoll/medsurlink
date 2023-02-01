@@ -143,6 +143,12 @@ class AuthController extends AccessTokenController
         ]);
         $user['time_slug'] = $time->slug;
         $user['isEtablissement'] = isComptable();
+        $permissions = $user->roles[0]->permissions->pluck('name');
+        $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name', 'permissions']);
+        $user = $user->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'adresse', 'quartier', 'deleted_at']);
+        $user->unread_notifications = $user->unreadNotifications()->latest()->get();
+        $user->unread_notifications = $user->unreadNotifications->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
+        $user->permissions = $permissions;
         $tokenInfo->put('token_expires_at', Carbon::parse()->addSeconds(3600));
         $tokenInfo->put('user', $user);
         $tokenInfo->put('access_token', $token);
