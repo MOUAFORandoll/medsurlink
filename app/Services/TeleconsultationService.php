@@ -40,7 +40,10 @@ class TeleconsultationService
         $this->antecedent = new AntecedentService;
         $this->statut = new StatutService;
         $this->niveau_urgence = new NiveauUrgenceService;
-        $this->user_id = \Auth::guard('api')->user()->id;
+        if(\Auth::guard('api')->user()){
+            $this->user_id = \Auth::guard('api')->user()->id;
+        }
+
     }
 
     /**
