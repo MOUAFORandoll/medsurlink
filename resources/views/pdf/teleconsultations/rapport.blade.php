@@ -388,7 +388,6 @@
                 <img width="280px" style="margin-top: 200px;" height="auto" src="{{ public_path('/storage/'.explode('storage', $medecin->user->signature)[1]) }}" />
             </div>
         @endisset
-       
 
         <p><b>{{ $medecin->civilite ?? '' }}  {{ $medecin->user->name }}</b></p>
         <p>Numéro d'ordre: {{ $medecin->numero_ordre }}</p>
