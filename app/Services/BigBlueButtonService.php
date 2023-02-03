@@ -58,7 +58,7 @@ class BigBlueButtonService
                         ->setAttendeePassword(config('app.password.attendee'));
         $createParams->setRecord(true);
         $createParams->setAllowStartStopRecording(true);
-        $createParams->setLogoutUrl($this->url_global."/teleconsultations/create");
+        $createParams->setLogoutUrl($this->url_global."/teleconsultations");
 
 
         $response = $bbb->createMeeting($createParams);
@@ -79,7 +79,14 @@ class BigBlueButtonService
         $bbb = new BigBlueButton();
         $joinMeetingParams = new JoinMeetingParameters($metting->id, $patient->name, config('app.password.attendee'));
         $joinMeetingParams->setRedirect(true);
-        $url = $bbb->getJoinMeetingURL($joinMeetingParams);
+
+        $shortener = app('url.shortener');
+
+        $url = $shortener->shorten($bbb->getJoinMeetingURL($joinMeetingParams));
+        if($patient->telephone){
+            sendSMS($patient->telephone, "Hello {$patient->name}, accedez a votre teleconsultation via le lien suivant:\n {$url}");
+        }
+
         return $url;
     }
 
@@ -87,6 +94,7 @@ class BigBlueButtonService
         $endMeetingParams = new EndMeetingParameters($meetingID, config('app.password.moderator'));
         $response = $bbb->endMeeting($endMeetingParams);
     }
+
 
 
 }

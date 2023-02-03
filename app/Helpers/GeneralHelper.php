@@ -48,7 +48,7 @@ if(!function_exists('sendSMS'))
      * @param $message
      * @param $sender
      */
-    function sendSMS($telephone, $message, $sender = null) {
+    function sendSMS($telephone, $message, $sender = 'MEDSURLINK') {
         // To not to trigger an error while sending the message, check if the telephone is well formatted
 
         $response = formatTelephone($telephone);
@@ -75,8 +75,7 @@ if(!function_exists('sendSmsToUser'))
         if (!is_null($user)){
             if ($user->decede == 'non'){
                 try {
-                    $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
-                    sendSMS($user->telephone,trans('sms.accountUpdated',['nom'=>$nom],'fr'),$sender);
+                    sendSMS($user->telephone,trans('sms.accountUpdated',['nom' => $user->name],'fr'), $sender);
                 }catch (\Exception $exception){
                     //$exception
                 }
