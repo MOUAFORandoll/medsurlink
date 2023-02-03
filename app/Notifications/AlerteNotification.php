@@ -25,7 +25,7 @@ class AlerteNotification extends Notification implements ShouldQueue
     {
         $this->subject = $subject;
         $this->alerte = $alerte;
-        $when = now()->addMinutes(2);
+        $when = now()->addMinutes(1);
         $this->delay($when);
     }
 
