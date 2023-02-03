@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f8d5f14a6fc7289017fd2c62eb6f702",
+    "content-hash": "2cea9b267cb86487f06004bba2bf7a8f",
     "packages": [
         {
             "name": "antonrom00/laravel-model-changes-history",
@@ -3161,6 +3161,76 @@
                 "source": "https://github.com/kobalazs/laravel-restrict-soft-deletes/tree/master"
             },
             "time": "2018-11-13T16:21:33+00:00"
+        },
+        {
+            "name": "laracrafts/laravel-url-shortener",
+            "version": "v0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LaraCrafts/laravel-url-shortener.git",
+                "reference": "aa0fd5949b0bc15930d94438d065d69a80abddda"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LaraCrafts/laravel-url-shortener/zipball/aa0fd5949b0bc15930d94438d065d69a80abddda",
+                "reference": "aa0fd5949b0bc15930d94438d065d69a80abddda",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.2",
+                "guzzlehttp/promises": "^1.0",
+                "guzzlehttp/psr7": "^1.4",
+                "illuminate/support": "^5.1 || ^6.0 || ^7.0",
+                "php": "^7.1",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "illuminate/routing": "^5.1 || ^6.0 || ^7.0",
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "\\LaraCrafts\\UrlShortener\\UrlShortenerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaraCrafts\\UrlShortener\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Choraimy Kroonstuiver",
+                    "homepage": "https://github.com/axlon"
+                },
+                {
+                    "name": "László Görög",
+                    "email": "contact@nergal.xyz"
+                }
+            ],
+            "description": "Powerful URL shortening tools in Laravel",
+            "keywords": [
+                "bit.ly",
+                "laravel",
+                "lumen",
+                "shorte.st",
+                "shortener",
+                "shortening",
+                "tinyurl",
+                "url"
+            ],
+            "support": {
+                "issues": "https://github.com/LaraCrafts/laravel-url-shortener/issues",
+                "source": "https://github.com/LaraCrafts/laravel-url-shortener/tree/master"
+            },
+            "time": "2020-03-03T20:09:14+00:00"
         },
         {
             "name": "laravel/framework",
