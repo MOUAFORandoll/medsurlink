@@ -16,7 +16,9 @@ class Metting extends Model
 
     protected $table = 'mettings';
 
-    protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'name'];
+    protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'url', 'statut', 'name'];
+
+    // statut 2 encours, 3 terminer
 
 
     protected $slackChannels= [

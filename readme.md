@@ -115,3 +115,5 @@ php artisan migrate --path=/database/migrations/2023_01_13_165110_add_teleconsul
 
 php artisan migrate --path=/database/migrations/2023_01_20_095229_create_failed_jobs_table.php
 
+php artisan migrate --path=/database/migrations/2023_02_06_152044_add_url_to_mettings_table.php
+

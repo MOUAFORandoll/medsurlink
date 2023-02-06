@@ -57,8 +57,10 @@ class TeleconsultationService
         foreach($teleconsultations['data']['data'] as $item){
             $patient = new PatientService;
             $alerte = new AlerteService;
+            $video = new BigBlueButtonService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $item['alerte'] = $alerte->getAlerte($item['id']);
+            $item['video'] = $video->getRecordings($item['patient_id'], $item['creator'], $item['created_at']);
             $items[] = $item;
         }
         $teleconsultations['data']['data'] = $items;
