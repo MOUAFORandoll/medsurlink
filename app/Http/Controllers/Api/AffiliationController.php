@@ -33,13 +33,24 @@ class AffiliationController extends Controller
         $size = $request->size ? $request->size : 5;
 
         if($request->sortCIM == 7 || $request->sortCIM == 14 || $request->sortCIM == 30){
-            $affiliations = Affiliation::has('patient.user')->whereDateBetween('date_fin', Carbon::now()->format('Y-m-d'), Carbon::now()->addDays($request->sortCIM)->format('Y-m-d'))->with(['patient','patient.dossier','package','patient.financeurs.lien'])->orderBy('date_fin', 'desc')->latest()->paginate($size);
+            $affiliations = Affiliation::has('patient.user')->whereDateBetween('date_fin', Carbon::now()->format('Y-m-d'), Carbon::now()->addDays($request->sortCIM)->format('Y-m-d'))->with(['patient','patient.dossier','package','patient.financeurs.lien']);
         }elseif($request->sortCIM == ""){
-            $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien'])->orderBy('date_fin', 'desc')->latest()->paginate($size);
+            $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien']);
         }else{
-            $affiliations = Affiliation::has('patient.user')->whereDate('date_fin', '<', Carbon::now()->format('Y-m-d'))->with(['patient','patient.dossier','package','patient.financeurs.lien'])->orderBy('date_fin', 'desc')->latest()->paginate($size);
+            $affiliations = Affiliation::has('patient.user')->whereDate('date_fin', '<', Carbon::now()->format('Y-m-d'))->with(['patient','patient.dossier','package','patient.financeurs.lien']);
         }
-    //    ->latest()->paginate($size);
+
+        if($request->search != ""){
+            $value = $request->search;
+            $affiliations = $affiliations->whereHas('patient.user', function($q) use ($value) {
+                $q->where('nom', 'like', '%' .$value.'%')
+                ->orwhere('prenom', 'like', '%' .$value.'%')
+                ->orwhere('email', 'like', '%' .$value.'%');
+            });
+        }
+
+        $affiliations = $affiliations->orderBy('date_fin', 'desc')->latest()->paginate($size);
+
         foreach ($affiliations as $affiliation){
             if(is_null($affiliation->cloture)){
                 $affiliation->cloture()->create([]);
@@ -413,12 +424,11 @@ class AffiliationController extends Controller
 
         //Ici on determine si le patient a deja une affiliation pour cette année
         $affiliation =  Affiliation::where('patient_id','=',$request->patient_id)->where('package_id', $request->package_id)->where('nom','=','Annuelle')->WhereYear('date_debut',$date_debut)->latest()->get();
+
         if (count($affiliation)>0) {
-            if ($affiliation[0]->package->offre_id != 1) {
-                $msg = $affiliation[0]->package;
-                $message = "Le patient dispose déjà de la même affiliation pour cette année ({$msg->description_fr})";
-                $this->revealError('dejaAffilie',$message);
-            }
+            $msg = $affiliation[0]->package;
+            $message = "Le patient dispose déjà de la même affiliation pour cette année ({$msg->description_fr})";
+            $this->revealError('dejaAffilie',$message);
 
         } elseif ($request->nom == "One shot"){
             //On determine si le patient a deja une affiliation oneshot a ce jour
@@ -439,11 +449,9 @@ class AffiliationController extends Controller
             if ($date_fin == $date_debut){
                 $affiliation =  Affiliation::where('patient_id','=',$request->patient_id)->where('package_id', $request->package_id)->where('nom','=','One shot')->whereDate('date_debut',$date_debut)->whereDate('date_fin',$date_fin)->latest()->get();
                 if (count($affiliation)>0){
-                    if ($affiliation[0]->package->offre_id != 1) {
-                        $msg = $affiliation[0]->package;
-                        $message = "Le patient dispose déjà de la même affiliation pour ce jour {$msg->description_fr})";
-                        $this->revealError('dejaAffilie',$message);
-                    }
+                    $msg = $affiliation[0]->package;
+                    $message = "Le patient dispose déjà de la même affiliation pour ce jour {$msg->description_fr})";
+                    $this->revealError('dejaAffilie',$message);
                 }
             }
         }
