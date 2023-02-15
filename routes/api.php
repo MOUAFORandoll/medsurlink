@@ -272,7 +272,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::post('/contrat-prepaye-store-patient-unpaid','Api\AffiliationSouscripteurController@storePatientBeforePayment');
     Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
     Route::get('/get-commande-from-cim','Api\AffiliationSouscripteurController@getSouscripteurFromCIM');
-    Route::resource('rdvs','Api\RendezVousController');
+    // Route::resource('rdvs','Api\RendezVousController');
 
     /**
      * recherche d'un établisseùent
