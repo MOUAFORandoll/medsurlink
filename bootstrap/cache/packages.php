@@ -73,6 +73,13 @@
       'Image' => 'Intervention\\Image\\Facades\\Image',
     ),
   ),
+  'laracrafts/laravel-url-shortener' => 
+  array (
+    'providers' => 
+    array (
+      0 => '\\LaraCrafts\\UrlShortener\\UrlShortenerServiceProvider',
+    ),
+  ),
   'laravel/passport' => 
   array (
     'providers' => 
