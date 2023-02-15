@@ -4,49 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ba4692d553e9872da550e719833686a7",
+    "content-hash": "2cea9b267cb86487f06004bba2bf7a8f",
     "packages": [
-        {
-            "name": "ahmedsaoud31/laravel-permission-to-vuejs",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ahmedsaoud31/laravel-permission-to-vuejs.git",
-                "reference": "8c81e4351eb2ac56f5a1f621995a5d6cd2bf99c3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ahmedsaoud31/laravel-permission-to-vuejs/zipball/8c81e4351eb2ac56f5a1f621995a5d6cd2bf99c3",
-                "reference": "8c81e4351eb2ac56f5a1f621995a5d6cd2bf99c3",
-                "shasum": ""
-            },
-            "require": {
-                "spatie/laravel-permission": ">=2.0"
-            },
-            "default-branch": true,
-            "type": "plugin",
-            "autoload": {
-                "psr-4": {
-                    "LaravelAndVueJS\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ahmed Abeoelsaoud",
-                    "email": "ahmedsaoud31@gmail.com"
-                }
-            ],
-            "description": "Laravel Permission Package To Use it in VueJs",
-            "support": {
-                "issues": "https://github.com/ahmedsaoud31/laravel-permission-to-vuejs/issues",
-                "source": "https://github.com/ahmedsaoud31/laravel-permission-to-vuejs/tree/master"
-            },
-            "time": "2022-08-05T21:55:05+00:00"
-        },
         {
             "name": "antonrom00/laravel-model-changes-history",
             "version": "dev-master",
@@ -378,6 +337,65 @@
                 "source": "https://github.com/barryvdh/ReflectionDocBlock/tree/v2.1.0"
             },
             "time": "2022-10-31T15:35:43+00:00"
+        },
+        {
+            "name": "bigbluebutton/bigbluebutton-api-php",
+            "version": "2.0.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bigbluebutton/bigbluebutton-api-php.git",
+                "reference": "bae7b32f71119e6c0bc4015ea12ef4a0feeb694d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bigbluebutton/bigbluebutton-api-php/zipball/bae7b32f71119e6c0bc4015ea12ef4a0feeb694d",
+                "reference": "bae7b32f71119e6c0bc4015ea12ef4a0feeb694d",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-mbstring": "*",
+                "ext-simplexml": "*",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "composer/composer": "^1.10.0",
+                "ext-mbstring": "*",
+                "fakerphp/faker": "^1.14",
+                "friendsofphp/php-cs-fixer": "2.*",
+                "php-coveralls/php-coveralls": "^2.4.0",
+                "phpunit/phpunit": "^8",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "BigBlueButton\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Ghazi Triki",
+                    "email": "ghazi.nocturne@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "BigBlueButton PHP API Library for PHP",
+            "homepage": "http://bigbluebutton.org/",
+            "keywords": [
+                "api",
+                "bbb",
+                "bigbluebutton"
+            ],
+            "support": {
+                "issues": "https://github.com/bigbluebutton/bigbluebutton-api-php/issues",
+                "source": "https://github.com/bigbluebutton/bigbluebutton-api-php/tree/2.0.13"
+            },
+            "time": "2021-06-11T20:48:11+00:00"
         },
         {
             "name": "cocur/slugify",
@@ -3143,6 +3161,76 @@
                 "source": "https://github.com/kobalazs/laravel-restrict-soft-deletes/tree/master"
             },
             "time": "2018-11-13T16:21:33+00:00"
+        },
+        {
+            "name": "laracrafts/laravel-url-shortener",
+            "version": "v0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LaraCrafts/laravel-url-shortener.git",
+                "reference": "aa0fd5949b0bc15930d94438d065d69a80abddda"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LaraCrafts/laravel-url-shortener/zipball/aa0fd5949b0bc15930d94438d065d69a80abddda",
+                "reference": "aa0fd5949b0bc15930d94438d065d69a80abddda",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.2",
+                "guzzlehttp/promises": "^1.0",
+                "guzzlehttp/psr7": "^1.4",
+                "illuminate/support": "^5.1 || ^6.0 || ^7.0",
+                "php": "^7.1",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "illuminate/routing": "^5.1 || ^6.0 || ^7.0",
+                "phpunit/phpunit": "^7.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "\\LaraCrafts\\UrlShortener\\UrlShortenerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaraCrafts\\UrlShortener\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Choraimy Kroonstuiver",
+                    "homepage": "https://github.com/axlon"
+                },
+                {
+                    "name": "László Görög",
+                    "email": "contact@nergal.xyz"
+                }
+            ],
+            "description": "Powerful URL shortening tools in Laravel",
+            "keywords": [
+                "bit.ly",
+                "laravel",
+                "lumen",
+                "shorte.st",
+                "shortener",
+                "shortening",
+                "tinyurl",
+                "url"
+            ],
+            "support": {
+                "issues": "https://github.com/LaraCrafts/laravel-url-shortener/issues",
+                "source": "https://github.com/LaraCrafts/laravel-url-shortener/tree/master"
+            },
+            "time": "2020-03-03T20:09:14+00:00"
         },
         {
             "name": "laravel/framework",
@@ -11438,7 +11526,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "ahmedsaoud31/laravel-permission-to-vuejs": 20,
         "antonrom00/laravel-model-changes-history": 20,
         "gbrock/laravel-table": 20,
         "kobalazs/laravel-restrict-soft-deletes": 20

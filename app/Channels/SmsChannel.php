@@ -2,20 +2,19 @@
 
 namespace App\Channels;
 
-use Exception;
-use GuzzleHttp\Client;
+use App\Traits\RequestService;
+use Illuminate\Support\Facades\Log;
+
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Notifications\Notification;
 
 class SmsChannel
 {
-//    protected $base_uri = 'sms.smartworldafriq.com';
-    protected $base_uri = 'http://193.105.74.159/api/v3/sendsms/json';
-//    private $login = 'MEDICASURE';
-//    private $password = 'MedsurSMS20';
-    private $login = 'medicasure';
-    private $password = 'MediCasure20@';
-    private $json = [];
+    use RequestService;
+    protected $baseUri = "https://smsvas.com/bulk/public/index.php/api/v1/sendsms";
+
+    private $login = 'kadji@medicasure.com';
+    private $password = 'MediCasure';
 
     /**
      * Send the given notification.
@@ -29,40 +28,25 @@ class SmsChannel
     {
         $details = $notification->toSms($notifiable);
 
-        $this->json = [
-            'authentication' => [
-                "username" => $this->login,
-                "password" => $this->password
-            ],
-            "messages" => array(
-                [
-                    "sender" => $details['from'],
-                    "text" => $details['message'],
-                    "type" => "longSMS",
-                    "datacoding" => "8",
-                    "recipients" => array(
-                        [
-                            "gsm" => $details['to'],
-                        ]
-                    )
-                ]
-            ),
-        ];
-
-
-        // Send notification to the $notifiable instance...
-        $client = new Client([
-            'base_uri' => $this->base_uri
-        ]);
-
         try{
-            $client->request(
-                'POST',
-                $this->base_uri,
-                [
-                    'json' => $this->json
-                ]
-            );
-        } catch (Exception $ex) {}
+            $this->request('POST', "{$this->baseUri}", [
+                "user" => $this->login,
+                "password" => $this->password,
+                "senderid" => $details['from'],
+                "sms" => $details['message'],
+                "mobiles" => $details['to']
+            ]);
+        } catch (\Exception $ex) {
+            Log::alert("erreur ", [
+                "getFile" => $ex->getFile(),
+                "getMessage" => $ex->getMessage(),
+                "getLine" => $ex->getLine(),
+                "user" => $this->login,
+                "password" => $this->password,
+                "senderid" => $details['from'],
+                "sms" => $details['message'],
+                "mobiles" => $details['to']
+            ]);
+        }
     }
 }
