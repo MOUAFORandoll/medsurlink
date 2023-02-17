@@ -67,8 +67,8 @@ class PatientMedecinControle extends Model
     protected $slackChannels= [
         'test' => 'https://hooks.slack.com/services/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',
         'test2' => 'https://hooks.slack.com/services/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',
-        'affilie' => 'https://hooks.slack.com/services/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',
-        'appel' => 'https://hooks.slack.com/services/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'
+        'affilie' => 'https://hooks.slack.com/services/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',
+        'appel' => 'https://hooks.slack.com/services/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'
     ];
     // https://hooks.slack.com/services/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
     protected $slack_url = null;
