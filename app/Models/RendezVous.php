@@ -97,7 +97,7 @@ class RendezVous extends Model
     protected $hidden = ['initiateur','updated_at'];
 
     protected $slackChannels= [
-        'appel' => 'https://hooks.slack.com/services/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',
+        'appel' => 'https://hooks.slack.com/services/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',
         'test' => 'https://hooks.slack.com/services/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'
     ];
 
