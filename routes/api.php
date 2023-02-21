@@ -269,6 +269,7 @@ Route::group(['middleware' => ['auth:api','role:Admin|Patient|Medecin controle|S
     Route::post('affiliation-status','Api\AffiliationController@updateStatus');
     // getLastestAffiliation
     Route::post('/contrat-prepaye-store-patient','Api\AffiliationSouscripteurController@storePatient');
+    Route::post('/contrat-prepaye-store-affiliation','Api\AffiliationSouscripteurController@addExistingAffiliation');
     Route::post('/contrat-prepaye-store-patient-unpaid','Api\AffiliationSouscripteurController@storePatientBeforePayment');
     Route::get('/commande-restante/{id}','Api\AffiliationSouscripteurController@affiliationRestante');
     Route::get('/get-commande-from-cim','Api\AffiliationSouscripteurController@getSouscripteurFromCIM');
