@@ -60,7 +60,7 @@ class TeleconsultationService
             $video = new BigBlueButtonService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $item['alerte'] = $alerte->getAlerte($item['id']);
-            $item['url'] = $video->getRecordings($item['patient_id'], $item['creator'], $item['created_at']);
+            //$item['url'] = $video->getRecordings($item['patient_id'], $item['creator'], $item['created_at']);
             $items[] = $item;
         }
         $teleconsultations['data']['data'] = $items;
