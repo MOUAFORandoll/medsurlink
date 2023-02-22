@@ -21,7 +21,7 @@ class Metting extends Model
 
     protected $slackChannels= [
         //'appel' => 'https://hooks.slack.com/services/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',
-        'appel' => 'https://hooks.slack.com/services/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'
+        'appel' => 'https://hooks.slack.com/services/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'
     ];
 
     protected $slack_url = null;
