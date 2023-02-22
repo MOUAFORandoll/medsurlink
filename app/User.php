@@ -207,11 +207,18 @@ class User extends Authenticatable implements HasMedia
         ];
     }
 
+    // public function routeNotificationForSlack(){
+    //     if($this->slack_url === null){
+    //         return $this->slackChannels['affilie'];
+    //     }
+    //     return $this->slack_url;
+    // }
     public function routeNotificationForSlack(){
-        if($this->slack_url === null){
-            return $this->slackChannels['affilie'];
-        }
-        return $this->slack_url;
+        $env = strtolower(config('app.env'));
+        if ($env == 'production')
+            return $this->slackChannels["appel"];
+        else
+            return $this->slackChannels["test"];
     }
 
     public function getNameAttribute(){
