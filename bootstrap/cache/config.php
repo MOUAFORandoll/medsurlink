@@ -179,10 +179,11 @@
       25 => 'Gbrock\\Table\\Providers\\TableServiceProvider',
       26 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
       27 => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
-      28 => 'App\\Providers\\AppServiceProvider',
-      29 => 'App\\Providers\\AuthServiceProvider',
-      30 => 'App\\Providers\\EventServiceProvider',
-      31 => 'App\\Providers\\RouteServiceProvider',
+      28 => 'LaraCrafts\\UrlShortener\\UrlShortenerServiceProvider',
+      29 => 'App\\Providers\\AppServiceProvider',
+      30 => 'App\\Providers\\AuthServiceProvider',
+      31 => 'App\\Providers\\EventServiceProvider',
+      32 => 'App\\Providers\\RouteServiceProvider',
     ),
     'aliases' => 
     array (

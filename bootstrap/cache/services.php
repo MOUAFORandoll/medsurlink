@@ -49,10 +49,11 @@
     45 => 'Gbrock\\Table\\Providers\\TableServiceProvider',
     46 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
     47 => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
-    48 => 'App\\Providers\\AppServiceProvider',
-    49 => 'App\\Providers\\AuthServiceProvider',
-    50 => 'App\\Providers\\EventServiceProvider',
-    51 => 'App\\Providers\\RouteServiceProvider',
+    48 => 'LaraCrafts\\UrlShortener\\UrlShortenerServiceProvider',
+    49 => 'App\\Providers\\AppServiceProvider',
+    50 => 'App\\Providers\\AuthServiceProvider',
+    51 => 'App\\Providers\\EventServiceProvider',
+    52 => 'App\\Providers\\RouteServiceProvider',
   ),
   'eager' => 
   array (
@@ -88,10 +89,11 @@
     29 => 'Barryvdh\\Snappy\\ServiceProvider',
     30 => 'Gbrock\\Table\\Providers\\TableServiceProvider',
     31 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
-    32 => 'App\\Providers\\AppServiceProvider',
-    33 => 'App\\Providers\\AuthServiceProvider',
-    34 => 'App\\Providers\\EventServiceProvider',
-    35 => 'App\\Providers\\RouteServiceProvider',
+    32 => 'LaraCrafts\\UrlShortener\\UrlShortenerServiceProvider',
+    33 => 'App\\Providers\\AppServiceProvider',
+    34 => 'App\\Providers\\AuthServiceProvider',
+    35 => 'App\\Providers\\EventServiceProvider',
+    36 => 'App\\Providers\\RouteServiceProvider',
   ),
   'deferred' => 
   array (
