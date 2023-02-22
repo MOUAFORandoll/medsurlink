@@ -203,7 +203,6 @@ class DossierMedicalController extends Controller
         $validation = validatedSlug($slug,$this->table);
         // if(!is_null($validation))
         //     return $validation;
-
                  $dossier = DossierMedical::with([
                 'allergies'=> function ($query) {
                     $query->orderBy('date', 'desc');
