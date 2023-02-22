@@ -416,6 +416,10 @@ class AffiliationSouscripteurController extends Controller
         AjoutDuneAffiliation($request);
     }
 
+    public function addExistingAffiliation(Request $request){
+        AddExistingAffiliationPatient($request);
+    }
+
     /**
      * Display the specified resource.
      *

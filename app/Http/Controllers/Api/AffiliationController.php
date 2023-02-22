@@ -33,6 +33,7 @@ class AffiliationController extends Controller
         $size = $request->size ? $request->size : 5;
 
         if($request->sortCIM == 7 || $request->sortCIM == 14 || $request->sortCIM == 30){
+<<<<<<< HEAD
             $affiliations = Affiliation::has('patient.user')->whereDateBetween('date_fin', Carbon::now()->format('Y-m-d'), Carbon::now()->addDays($request->sortCIM)->format('Y-m-d'))->with(['patient','patient.dossier','package','patient.financeurs.lien']);
         }elseif($request->sortCIM == ""){
             $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien']);
@@ -51,6 +52,15 @@ class AffiliationController extends Controller
 
         $affiliations = $affiliations->orderBy('date_fin', 'desc')->latest()->paginate($size);
 
+=======
+            $affiliations = Affiliation::has('patient.user')->whereDateBetween('date_fin', Carbon::now()->format('Y-m-d'), Carbon::now()->addDays($request->sortCIM)->format('Y-m-d'))->with(['patient','patient.dossier','package','patient.financeurs.lien'])->orderBy('date_fin', 'desc')->latest()->paginate($size);
+        }elseif($request->sortCIM == ""){
+            $affiliations = Affiliation::has('patient.user')->with(['patient','patient.dossier','package','patient.financeurs.lien'])->orderBy('date_fin', 'desc')->latest()->paginate($size);
+        }else{
+            $affiliations = Affiliation::has('patient.user')->whereDate('date_fin', '<', Carbon::now()->format('Y-m-d'))->with(['patient','patient.dossier','package','patient.financeurs.lien'])->orderBy('date_fin', 'desc')->latest()->paginate($size);
+        }
+    //    ->latest()->paginate($size);
+>>>>>>> 3f7a3f254ec5e54d0abfaf70bf4aacbb1fc8ea93
         foreach ($affiliations as $affiliation){
             if(is_null($affiliation->cloture)){
                 $affiliation->cloture()->create([]);
