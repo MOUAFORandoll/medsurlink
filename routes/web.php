@@ -18,6 +18,10 @@ use App\Models\Payment;
 use App\Models\PaymentOffre;
 use App\Models\RendezVous;
 use App\Services\PatientService;
+
+use BigBlueButton\BigBlueButton;
+use BigBlueButton\Parameters\GetRecordingsParameters;
+
 use App\Services\TeleconsultationService;
 use App\User;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -46,6 +50,13 @@ Route::get('/redirect-mesurlink/redirect/{email}','Api\MedicasureController@stor
 Route::resource('medicasure/souscripteur','Api\MedicasureController');
 
 Route::get('/', function () {
+    $recordingParams = new GetRecordingsParameters();
+    $recordingParams->setMeetingId(174);
+    $bbb = new BigBlueButton();
+    $response = $bbb->getRecordings($recordingParams);
+    if ($response->getReturnCode() == 'SUCCESS') {
+        return $response->getRawXml()->recordings->recording->playback->format->url;
+    }
     return view('welcome');
 });
 

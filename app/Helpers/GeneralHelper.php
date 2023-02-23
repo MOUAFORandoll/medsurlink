@@ -48,7 +48,7 @@ if(!function_exists('sendSMS'))
      * @param $message
      * @param $sender
      */
-    function sendSMS($telephone, $message, $sender = null) {
+    function sendSMS($telephone, $message, $sender = 'MEDSURLINK') {
         // To not to trigger an error while sending the message, check if the telephone is well formatted
 
         $response = formatTelephone($telephone);
@@ -75,8 +75,7 @@ if(!function_exists('sendSmsToUser'))
         if (!is_null($user)){
             if ($user->decede == 'non'){
                 try {
-                    $nom = (is_null($user->prenom) ? "" : ucfirst($user->prenom) ." ") . "". strtoupper( $user->nom);
-                    sendSMS($user->telephone,trans('sms.accountUpdated',['nom'=>$nom],'fr'),$sender);
+                    sendSMS($user->telephone,trans('sms.accountUpdated',['nom' => $user->name],'fr'), $sender);
                 }catch (\Exception $exception){
                     //$exception
                 }
@@ -776,6 +775,78 @@ if(!function_exists('AjoutDuneAffiliation')){
     }
 }
 
+if(!function_exists('AddExistingAffiliationPatient')){
+    function AddExistingAffiliationPatient(Request $request){
+        app('App\Http\Controllers\Api\AffiliationController')->Affiliated($request);
+            $patient = Patient::with('user')->where('user_id', $request->patient_id)->first();
+            if($patient){
+                $package_id = $request->package_id;
+                $souscripteur_id = $request->souscripteur_id;
+                $souscription = CommandePackage::where(['souscripteur_id'=> $souscripteur_id, 'offres_packages_id'=> $package_id])->latest()->first();
+                
+                // Ajout du souscripteur à la liste des souscripteurs du patient
+                CreationPatientSouscripteur($request, $patient);
+                //reduction du nombre de commande du Souscripteur
+                if(is_null($souscription)){
+                    $souscription =  CommandePackage::create([
+                        "date_commande" => Carbon::now()->toDateTimeString(),
+                        'quantite' =>1,
+                        'offres_packages_id' =>$request->get('package_id'),
+                        'souscripteur_id' => $request->souscripteur_id,
+                    ]);
+                    $package = $souscription->offres_package;
+                    PaymentOffre::create([
+                        "date_payment" => Carbon::now()->toDateTimeString(),
+                        "montant" => 1 * $package->montant,
+                        'status' => 'SUCCESS',
+                        'commande_id' =>$souscription->id,
+                        'souscripteur_id' => $request->souscripteur_id,
+                    ]);
+                }
+
+
+                $commande = AffiliationSouscripteur::where(['user_id'=> $souscription->souscripteur_id, 'cim_id' => $souscription->id])->where('nombre_restant', '>', 0)->latest()->first();
+                if(is_null($commande)){
+                    $package = $souscription->offres_package;
+                    $commande = AffiliationSouscripteur::create([
+                        'user_id'=> $request->souscripteur_id,
+                        'nombre_paye'=> 1,
+                        'nombre_restant'=> 1,
+                        'montant' => $package->montant,
+                        'cim_id'=>$request->package_id,
+                        'date_paiement'=>null,
+                    ]);
+                }
+                $affiliation = CreationAffiliationExistingPatient($request, $patient);
+                if($request->plaintes){
+                    $plaintes = AjoutDesPlaintes($affiliation, $request->plaintes);
+                }
+                $affiliation->motifs()->sync($plaintes);
+                $patient->souscripteur_id = $request->souscripteur_id;
+                // $user->nom, $patient->user->prenom, $user->telephone,
+                $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
+                // Log::info('info souscripteur'.$souscripteur);
+                // Log::info('info patient'.$patient);
+
+                $when = now()->addMinutes(1);
+                Mail::to("contrat@medicasure.com")->later($when, new NouvelAffiliation($patient->user->nom, $patient->user->prenom, $patient->user->telephone, $affiliation->motifs, $request->niveau_urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie,$souscripteur,$affiliation, $request->urgence));
+                $patient->save();
+                
+                $cim = Package::where('id', $request->package_id)->first();
+                $affiliation_old = Affiliation::where([["patient_id",$patient->user_id],["souscripteur_id",$request->souscripteur_id]])->first();
+                $commande = reduireCommandeRestante($commande->id,  $request->souscripteur_id, $request->patient_id, $cim->description_fr, $affiliation_old->slug);
+
+                notifierMiseAJourCompte($souscripteur,$patient);
+
+                // Log::info('affiliation'.$affiliation);
+                return response()->json(['affiliation' => $affiliation]);
+            }else{
+                return response()->json(['erreur' => "Le patient n'existe pas"], 419);
+            }
+
+    }
+}
+
 /**
  * fonction de recuperation des plaintes
  */
@@ -824,6 +895,39 @@ if(!function_exists('CreationAffiliation')){
             "date_signature"=>Carbon::now(),
             "status_contrat"=> $request->lien ? $request->status_contrat: "Généré",
             "status_paiement"=> $request->lien ? $request->status_paiement: "PAYE",
+            "renouvelle"=>0,
+            "expire"=>0,
+            "code_contrat"=>$patient->dossier->numero_dossier,
+            "niveau_urgence"=>$request->lien ?$request->niveau_urgence: $request->urgence,
+            "plainte" => $request->plainte,
+            "contact_firstName" => $request->contact_firstName,
+            "contact_name" => $request->contact_name,
+            "contact_phone" => $request->contact_phone,
+            'personne_contact' => $request->personne_contact,
+            'paye_par_affilie' => $request->paye_par_affilie,
+            'selected' => $request->selected,
+            "nombre_envois_email"=>0,
+            "expire_email"=>0,
+            "nom"=>'Annuelle',
+            "date_debut"=>  $request->date_debut ?? Carbon::now(),
+            "date_fin"=>Carbon::now()->addYears(1)->format('Y-m-d')
+        ]);
+        return $affiliation;
+    }
+
+}
+
+if(!function_exists('CreationAffiliationExistingPatient')){
+
+    function CreationAffiliationExistingPatient($request, $patient, $commande = null){
+        // Log::info('creation affiliation');
+        $affiliation = Affiliation::create([
+            "patient_id"=> $request->lien ? $request->patient_id: $patient->user_id,
+            "souscripteur_id"=>$request->souscripteur_id,
+            "package_id"=>$request->lien ? $request->package_id : $commande->type_contrat,
+            "date_signature"=>Carbon::now(),
+            "status_contrat"=>  "Actif",
+            "status_paiement"=> "PAYE",
             "renouvelle"=>0,
             "expire"=>0,
             "code_contrat"=>$patient->dossier->numero_dossier,

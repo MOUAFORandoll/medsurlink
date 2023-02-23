@@ -231,5 +231,16 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::delete('/{relation_id}/{ordonnance}/{relation}', 'OrdonnanceController@destroy');
     });
 
+    /**
+    * CRUDS Prescription
+    */
+    Route::group(['prefix' => 'prescriptions'], function () {
+        Route::get('/', 'PrescriptionController@index');
+        Route::post('/', 'PrescriptionController@store');
+        Route::get('/{prescription}', 'PrescriptionController@show');
+        Route::patch('/{prescription}', 'PrescriptionController@update');
+        Route::delete('/{prescription}', 'PrescriptionController@destroy');
+    });
+
 
 });

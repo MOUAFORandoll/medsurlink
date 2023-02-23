@@ -12,7 +12,9 @@ use BigBlueButton\BigBlueButton;
 use BigBlueButton\Parameters\CreateMeetingParameters;
 use BigBlueButton\Parameters\JoinMeetingParameters;
 use BigBlueButton\Parameters\EndMeetingParameters;
+use BigBlueButton\Parameters\GetRecordingsParameters;
 use BigBlueButton\Parameters\IsMeetingRunningParameters;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 class BigBlueButtonService
@@ -58,7 +60,7 @@ class BigBlueButtonService
                         ->setAttendeePassword(config('app.password.attendee'));
         $createParams->setRecord(true);
         $createParams->setAllowStartStopRecording(true);
-        $createParams->setLogoutUrl($this->url_global."/teleconsultations/create");
+        $createParams->setLogoutUrl($this->url_global."/teleconsultations");
 
 
         $response = $bbb->createMeeting($createParams);
@@ -79,7 +81,14 @@ class BigBlueButtonService
         $bbb = new BigBlueButton();
         $joinMeetingParams = new JoinMeetingParameters($metting->id, $patient->name, config('app.password.attendee'));
         $joinMeetingParams->setRedirect(true);
-        $url = $bbb->getJoinMeetingURL($joinMeetingParams);
+
+        $shortener = app('url.shortener');
+
+        $url = $shortener->shorten($bbb->getJoinMeetingURL($joinMeetingParams));
+        if($patient->telephone){
+            sendSMS($patient->telephone, "Hello {$patient->name}, accedez a votre teleconsultation via le lien suivant:\n {$url}");
+        }
+
         return $url;
     }
 
@@ -88,5 +97,33 @@ class BigBlueButtonService
         $response = $bbb->endMeeting($endMeetingParams);
     }
 
+    public function getRecordings($patient_id, $medecin_id, $date_teleconsultation){
+        $metting = Metting::where(['patient_id' => $patient_id, 'medecin_id' => $medecin_id, 'statut' => 3])->whereDate('created_at', Carbon::parse($date_teleconsultation)->format('Y-m-d'))->latest()->first();
+        if(!is_null($metting)){
+            return $metting->url;
+        }else{
+            $metting = Metting::where(['patient_id' => $patient_id, 'medecin_id' => $medecin_id, 'statut' => 2])->whereDate('created_at', Carbon::parse($date_teleconsultation)->format('Y-m-d'))->latest()->first();
+
+            if(!is_null($metting)){
+                if(!is_null($metting->url)){
+                    $metting->statut = 3;
+                    $metting->save();
+                    return $metting->url;
+                }else{
+                    $recordingParams = new GetRecordingsParameters();
+                    $recordingParams->setMeetingId($metting->id);
+                    $bbb = new BigBlueButton();
+                    $response = $bbb->getRecordings($recordingParams);
+                    if ($response->getReturnCode() == 'SUCCESS') {
+                        $metting->url = isset($response->getRawXml()->recordings->recording->playback) ? $response->getRawXml()->recordings->recording->playback->format->url : null;
+                        $metting->statut = 3;
+                        $metting->save();
+                        return $metting->url;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
 }
