@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Notifications\SendSMS;
 use App\SMS;
+use Log;
 
 trait SmsTrait
 {
@@ -47,8 +48,11 @@ trait SmsTrait
         if (!is_null($user)){
             try {
                 $nom = strtoupper($user->nom);
-                $praticien = strtoupper($praticien);
+                $praticienPhone = $praticien->telephone;
+                Log::alert($praticienPhone);
+                $praticien = strtoupper($praticien->name);
                 sendSMS($user->telephone,trans('sms.rappelerRendezVous',['nom'=>$nom,'date'=>$date,'heure'=>$heure,'praticien'=>$praticien],'fr'),$sender);
+                sendSMS($praticienPhone,trans('sms.rappelerRendezVousPraticien',['nom'=>$nom,'date'=>$date,'heure'=>$heure,'praticien'=>$praticien],'fr'),$sender);
 
              }catch (\Exception $exception){
                 //$exception

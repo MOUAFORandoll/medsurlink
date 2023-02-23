@@ -86,7 +86,7 @@ class rappelerRendezVous extends Command
             }
 
             if($rdv->patient->decede == 'non'){
-                $this->RappelerRdvViaSMSTo($rdv->patient,$praticien,$date,$heure);
+                $this->RappelerRdvViaSMSTo($rdv->patient,$rdv->praticien,$date,$heure);
 
                 if (is_null($rdv->nom_medecin)) {
                     $mail = new Rappel($rdv);

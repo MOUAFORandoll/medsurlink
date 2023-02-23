@@ -190,6 +190,7 @@ return [
         'Gbrock\Table\Providers\TableServiceProvider',
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
+        LaraCrafts\UrlShortener\UrlShortenerServiceProvider::class,
 
 
         /*
