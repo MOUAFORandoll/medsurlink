@@ -755,9 +755,8 @@ if(!function_exists('AjoutDuneAffiliation')){
                 $souscripteur = Souscripteur::with('user')->where('user_id','=',$souscripteur_id)->first();
                 // Log::info('info souscripteur'.$souscripteur);
                 // Log::info('info patient'.$patient);
-
-                $when = now()->addMinutes(1);
-                Mail::to("contrat@medicasure.com")->later($when, new NouvelAffiliation($patient->user->nom, $patient->user->prenom, $patient->user->telephone, $affiliation->motifs, $request->niveau_urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie,$souscripteur,$affiliation, $request->urgence));
+                
+                Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($patient->user->nom, $patient->user->prenom, $patient->user->telephone, $affiliation->motifs, $request->niveau_urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie,$souscripteur,$affiliation, $request->urgence));
                 $patient->save();
                 
                 $cim = Package::where('id', $request->package_id)->first();
@@ -765,7 +764,8 @@ if(!function_exists('AjoutDuneAffiliation')){
                 $commande = reduireCommandeRestante($commande->id,  $request->souscripteur_id, $request->patient_id, $cim->description_fr, $affiliation_old->slug);
 
                 notifierMiseAJourCompte($souscripteur,$patient);
-
+                
+                
                 // Log::info('affiliation'.$affiliation);
                 return response()->json(['affiliation' => $affiliation]);
             }else{
