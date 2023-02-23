@@ -15,6 +15,7 @@ use BigBlueButton\Parameters\EndMeetingParameters;
 use BigBlueButton\Parameters\GetRecordingsParameters;
 use BigBlueButton\Parameters\IsMeetingRunningParameters;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Str;
 
 class BigBlueButtonService
@@ -55,9 +56,7 @@ class BigBlueButtonService
     public function stroreMetting($metting_id, $name){
         $bbb = new BigBlueButton();
         $createParams = new CreateMeetingParameters($metting_id, $name);
-        $createParams = $createParams
-                        ->setModeratorPassword(config('app.password.moderator'))
-                        ->setAttendeePassword(config('app.password.attendee'));
+        $createParams = $createParams->setModeratorPassword(config('app.password.moderator'))->setAttendeePassword(config('app.password.attendee'));
         $createParams->setRecord(true);
         $createParams->setAllowStartStopRecording(true);
         $createParams->setLogoutUrl($this->url_global."/teleconsultations");
@@ -93,8 +92,13 @@ class BigBlueButtonService
     }
 
     public function endMeetingParameters($bbb, $meetingID){
-        $endMeetingParams = new EndMeetingParameters($meetingID, config('app.password.moderator'));
-        $response = $bbb->endMeeting($endMeetingParams);
+        try{
+            $endMeetingParams = new EndMeetingParameters($meetingID, config('app.password.moderator'));
+            $response = $bbb->endMeeting($endMeetingParams);
+        }
+        catch(Exception $ex){
+
+        }
     }
 
     public function getRecordings($patient_id, $medecin_id, $date_teleconsultation){
