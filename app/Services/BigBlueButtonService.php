@@ -56,9 +56,7 @@ class BigBlueButtonService
     public function stroreMetting($metting_id, $name){
         $bbb = new BigBlueButton();
         $createParams = new CreateMeetingParameters($metting_id, $name);
-        $createParams = $createParams
-                        ->setModeratorPassword(config('app.password.moderator'))
-                        ->setAttendeePassword(config('app.password.attendee'));
+        $createParams = $createParams->setModeratorPassword(config('app.password.moderator'))->setAttendeePassword(config('app.password.attendee'));
         $createParams->setRecord(true);
         $createParams->setAllowStartStopRecording(true);
         $createParams->setLogoutUrl($this->url_global."/teleconsultations");
