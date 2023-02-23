@@ -70,7 +70,7 @@ class PatientMedecinControle extends Model
         'affilie' => 'https://hooks.slack.com/services/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',
         'appel' => 'https://hooks.slack.com/services/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'
     ];
-
+    // https://hooks.slack.com/services/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
     protected $slack_url = null;
 
     public function sluggable()
