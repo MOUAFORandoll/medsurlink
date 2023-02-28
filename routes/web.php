@@ -161,7 +161,7 @@ Route::get('teleconsultations/print/{teleconsultation_id}', function ($teleconsu
 
     \Log::alert("patient", [$patient]);
 
-    $medecin = MedecinControle::with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $teleconsultation['creator'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $teleconsultation['creator'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
     \Log::alert("medecin", [$medecin]);
 
