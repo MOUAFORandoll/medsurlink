@@ -150,12 +150,13 @@ Route::get('teleconsultations/print/{teleconsultation_id}', function ($teleconsu
     $teleconsultation = json_decode($teleconsultation->fetchTeleconsultation($teleconsultation_id), true)['data'];
     $patient_id = $teleconsultation['patient_id'];
 
-    $patient = Patient::where('user_id', $patient_id)->orWhere('slug', $patient_id)->orwhereHas('dossier', function ($query) use ($patient_id) {
-            $query->where('slug', $patient_id);
+    $patient = Patient::where('user_id', $patient_id)->orWhere('slug', $patient_id)
+        ->orwhereHas('dossier', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
         })->orwhereHas('user', function ($query) use ($patient_id) {
-            $query->where('slug', $patient_id);
+            $query->where('id', $patient_id);
         })->orwhereHas('alerte', function ($query) use ($patient_id) {
-            $query->where('uuid', $patient_id);
+            $query->where('patient_id', $patient_id);
         })->with('user:id,nom,prenom,email,telephone,slug')->first();
 
     $medecin = MedecinControle::with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $teleconsultation['creator'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
@@ -164,7 +165,6 @@ Route::get('teleconsultations/print/{teleconsultation_id}', function ($teleconsu
 
     $pdf = PDF::loadView('pdf.teleconsultations.rapport', ['teleconsultation' => $teleconsultation, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date, '']);
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
-  
 
     return $pdf->stream("Téléconsultation de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
 
