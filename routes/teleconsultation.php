@@ -242,5 +242,37 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::delete('/{prescription}', 'PrescriptionController@destroy');
     });
 
+    /**
+     * CRUD Examen Analyse
+     */
+    Route::group(['prefix' => 'examen_analyses'], function () {
+        Route::get('/', 'ExamenAnalyseController@index');
+        Route::post('/', 'ExamenAnalyseController@store');
+        Route::get('/{examen_analyse}', 'ExamenAnalyseController@show');
+        Route::patch('/{examen_analyse}', 'ExamenAnalyseController@update');
+        Route::delete('/{examen_analyse}', 'ExamenAnalyseController@destroy');
+    });
+
+    /**
+     * CRUD Prescription Imagerie
+     */
+    Route::group(['prefix' => 'prescription_imageries'], function () {
+        Route::get('/', 'PrescriptionImagerieController@index');
+        Route::post('/', 'PrescriptionImagerieController@store');
+        Route::get('/{prescription_imagerie}', 'PrescriptionImagerieController@show');
+        Route::patch('/{prescription_imagerie}', 'PrescriptionImagerieController@update');
+        Route::delete('/{prescription_imagerie}', 'PrescriptionImagerieController@destroy');
+    });
+
+    /**
+     * CRUD Bon Prise En Charge
+     */
+    Route::group(['prefix' => 'bon_prises_en_charges'], function () {
+        Route::get('/', 'BonPriseEnChargeController@index');
+        Route::post('/', 'BonPriseEnChargeController@store');
+        Route::get('/{bon_prise_en_charge}', 'BonPriseEnChargeController@show');
+        Route::patch('/{bon_prise_en_charge}', 'BonPriseEnChargeController@update');
+        Route::delete('/{bon_prise_en_charge}', 'BonPriseEnChargeController@destroy');
+    });
 
 });
