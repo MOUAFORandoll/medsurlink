@@ -383,9 +383,9 @@
     <h4 class="sous-titre-rapport">Medecin ayant fait votre téléconsultation</h4>
 
     <div>
-        @isset(explode('storage', $medecin->user->signature)[1]))
+        @isset(explode('storage', $medecin->user->signature)[1])
             <div>
-                <img width="28px" style="margin-top: 200px;" height="auto" src="{{ public_path('/storage/'.explode('storage', $medecin->user->signature)[1]) }}" />
+                <img style="width: 270px;"  src="{{ public_path('/storage/'.explode('storage', $medecin->user->signature)[1]) }}" />
             </div>
         @endisset
 
