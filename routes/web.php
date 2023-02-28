@@ -159,11 +159,8 @@ Route::get('teleconsultations/print/{teleconsultation_id}', function ($teleconsu
             $query->where('patient_id', $patient_id);
         })->with('user:id,nom,prenom,email,telephone,slug')->first();
 
-    \Log::alert("patient", [$patient]);
 
     $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $teleconsultation['creator'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
-
-    \Log::alert("medecin", [$medecin]);
 
     $date = Carbon::parse($teleconsultation['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
 
