@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v2\Teleconsultation;
 
 use App\Http\Controllers\Controller;
+use App\Models\DossierMedical;
 use App\Services\PatientService;
 use App\Services\TeleconsultationService;
 use Illuminate\Http\Request;
@@ -20,6 +21,19 @@ class TeleconsultationController extends Controller
     public function __construct(TeleconsultationService $teleconsultation)
     {
         $this->teleconsultation = $teleconsultation;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTeleconsultations($patient_id, Request $request)
+    {
+        $dossier = DossierMedical::whereSlug($patient_id)->first();
+        if(!is_null($dossier)){
+            $patient_id = $dossier->patient_id;
+        }
+        
+        return $this->successResponse($this->teleconsultation->getTeleconsultations($patient_id, $request));
     }
 
     /**

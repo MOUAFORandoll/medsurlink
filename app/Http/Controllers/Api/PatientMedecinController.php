@@ -68,14 +68,12 @@ class PatientMedecinController extends Controller
                         "medecin_control_id" => $m['id'],
                         "creator" => Auth::id(),
                     ]);
-                    //dd($patientMedecin);
+
                     $patient = Patient::where("user_id",$request->patient_id)->first();
                     $medecin = User::whereId($request->medecin_control_id)->first();
                     $message = "<@".$medecin->slack."> a été affecté au patient ".mb_strtoupper($patient->user->nom). " " .ucfirst($patient->user->prenom)." comme médecin referent";
-                    // Send notification to affilié channel
-                    $patientMedecin->setSlackChannel('affilie')->notify(new MedecinToPatient($message,null));
-                    // Send notification to appel channel
-                    $patientMedecin->setSlackChannel('appel')->notify(new MedecinToPatient($message,null));
+
+                    $this->sendToSlack($patientMedecin, $message);
                     if(!is_null($affiliation)){
                         DelaiOperation::create(
                             [
@@ -134,7 +132,7 @@ class PatientMedecinController extends Controller
      *  Transfère  des patients d'un médécin controle à une autre
      */
     public function transfertPatientFromOneMedecinToAnother(Request $request){
-        
+
         $this->validate($request, [
             'ancien_medecin_referent' => 'required|numeric',
             'nouveau_medecin_referent' => 'required|numeric'
@@ -234,17 +232,19 @@ class PatientMedecinController extends Controller
                 // dd($patient);
                 $medecin = User::whereId($patientMedecin->medecin_control_id)->first();
                 $message = "<@".$medecin->slack."> a été retiré au patient ".mb_strtoupper($patient->user->nom). " " .ucfirst($patient->user->prenom)." comme médecin referent";
-                            // Send notification to affilié channel
-                $patientMedecin->setSlackChannel('affilie')
-                ->notify(new MedecinToPatient($message,null));
-                // Send notification to appel channel
-                $patientMedecin->setSlackChannel('appel')
-                ->notify(new MedecinToPatient($message,null));
+                // Send notification to affilié channel
+                $this->sendToSlack($patientMedecin, $message);
             });
             
             return response()->json(['patientMedecin'=>$patientMedecin]);
         }else{
             return response()->json(['error'=>""]);
         }
+    }
+
+    public function sendToSlack($patientMedecin, $message){
+        $patientMedecin->getAffilieSlackChannel()->notify(new MedecinToPatient($message,null));
+                    // Send notification to appel channel
+        $patientMedecin->getAppelSlackChannel()->notify(new MedecinToPatient($message,null));
     }
 }

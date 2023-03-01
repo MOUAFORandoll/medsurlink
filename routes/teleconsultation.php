@@ -18,6 +18,7 @@ Route::post('v2/oauth/token', 'Api\AuthController@auth');
  * Signature
  */
 Route::post('v2/signature/user', 'Api\UserController@signature')->middleware('auth:api');
+Route::get('timelines/{slug}/patient', 'Api\LigneDeTempsController@listingPatient')->middleware('auth:api');
 
 Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.credentials'])->group(function () {
 
@@ -53,7 +54,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::get('/allergies/{patient_id}', 'TeleconsultationController@fetchAllergies');
         Route::get('/antecedents/{patient_id}', 'TeleconsultationController@fetchAntecedents');
         Route::get('/print/{teleconsultation_id}', 'TeleconsultationController@printTeleconsultation');
-
+        Route::get('/patient/{patient_id}', 'TeleconsultationController@getTeleconsultations');
 
         Route::get('/{teleconsultation}', 'TeleconsultationController@show');
         Route::patch('/{teleconsultation}', 'TeleconsultationController@update');
