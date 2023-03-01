@@ -276,4 +276,15 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::delete('/{bon_prise_en_charge}', 'BonPriseEnChargeController@destroy');
     });
 
+    /**
+     * CRUD OptionFinancement
+     */
+    Route::group(['prefix' => 'options_financements'], function () {
+        Route::get('/', 'OptionFinancementController@index');
+        Route::post('/', 'OptionFinancementController@store');
+        Route::get('/{options_financement}', 'OptionFinancementController@show');
+        Route::patch('/{options_financement}', 'OptionFinancementController@update');
+        Route::delete('/{options_financement}', 'OptionFinancementController@destroy');
+    });
+
 });
