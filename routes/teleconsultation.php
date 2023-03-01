@@ -18,7 +18,7 @@ Route::post('v2/oauth/token', 'Api\AuthController@auth');
  * Signature
  */
 Route::post('v2/signature/user', 'Api\UserController@signature')->middleware('auth:api');
-Route::get('timelines/{slug}/patient', 'Api\LigneDeTempsController@listingPatient')->middleware('auth:api');
+Route::get('v2/timelines/{slug}/patient', 'Api\LigneDeTempsController@listingPatient')->middleware('auth:api');
 
 Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.credentials'])->group(function () {
 
@@ -286,5 +286,16 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::patch('/{options_financement}', 'OptionFinancementController@update');
         Route::delete('/{options_financement}', 'OptionFinancementController@destroy');
     });
+
+    /**
+     * CRUD RaisonPrescription
+     */
+   /*  Route::group(['prefix' => 'raison_prescriptions'], function () {
+        Route::get('/', 'RaisonPrescriptionController@index');
+        Route::post('/', 'RaisonPrescriptionController@store');
+        Route::get('/{raison_prescription}', 'RaisonPrescriptionController@show');
+        Route::patch('/{raison_prescription}', 'RaisonPrescriptionController@update');
+        Route::delete('/{raison_prescription}', 'RaisonPrescriptionController@destroy');
+    }); */
 
 });
