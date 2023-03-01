@@ -1758,3 +1758,787 @@ Stack trace:
 [stacktrace]
 #0 {main}
 "} 
+[2023-03-01 20:10:04] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:05] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:05] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:06] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:06] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:08] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:09] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:09] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:10] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:11] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:11] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:13] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:14] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:15] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:15] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:16] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:16] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:18] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:19] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:20] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:20] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:21] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:21] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:23] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:24] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:24] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:25] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:26] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:26] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:28] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:29] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:29] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:30] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:31] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:31] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:33] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:34] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:34] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:35] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:36] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:36] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:38] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:39] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:40] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:40] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:41] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:10:41] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:17:11] local.ERROR: Uncaught Symfony\Component\Finder\Exception\DirectoryNotFoundException: The "D:\medicasure\medsurLink\medicalink-app\resources\views" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\Component\Finder\Finder->in()
+#1 Command line code(1): Illuminate\Filesystem\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught Symfony\\Component\\Finder\\Exception\\DirectoryNotFoundException: The \"D:\\medicasure\\medsurLink\\medicalink-app\esources\\views\" directory does not exist. in /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603
+Stack trace:
+#0 /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Filesystem/Filesystem.php(414): Symfony\\Component\\Finder\\Finder->in()
+#1 Command line code(1): Illuminate\\Filesystem\\Filesystem->files()
+#2 Command line code(1): getViews()
+#3 {main}
+  thrown at /home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/symfony/finder/Finder.php:603)
+[stacktrace]
+#0 {main}
+"} 
+[2023-03-01 20:17:11] local.ERROR: Uncaught ReflectionException: Class App\Policies\ModelPolicy does not exist in Command line code:1
+Stack trace:
+#0 Command line code(1): ReflectionClass->__construct()
+#1 [internal function]: {closure}()
+#2 Command line code(1): array_map()
+#3 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\Debug\\Exception\\FatalErrorException(code: 1): Uncaught ReflectionException: Class App\\Policies\\ModelPolicy does not exist in Command line code:1
+Stack trace:
+#0 Command line code(1): ReflectionClass->__construct()
+#1 [internal function]: {closure}()
+#2 Command line code(1): array_map()
+#3 {main}
+  thrown at Command line code:1)
+[stacktrace]
+#0 {main}
+"} 
