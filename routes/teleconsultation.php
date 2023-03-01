@@ -290,12 +290,12 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     /**
      * CRUD RaisonPrescription
      */
-   /*  Route::group(['prefix' => 'raison_prescriptions'], function () {
+    Route::group(['prefix' => 'raison_prescriptions'], function () {
         Route::get('/', 'RaisonPrescriptionController@index');
         Route::post('/', 'RaisonPrescriptionController@store');
         Route::get('/{raison_prescription}', 'RaisonPrescriptionController@show');
         Route::patch('/{raison_prescription}', 'RaisonPrescriptionController@update');
         Route::delete('/{raison_prescription}', 'RaisonPrescriptionController@destroy');
-    }); */
+    });
 
 });
