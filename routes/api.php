@@ -370,9 +370,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
     Route::resource('pharmacien','Api\PharmacienController');
     Route::resource('role','Api\RoleController');
     Route::get('timelines/{slug}/patient', 'Api\LigneDeTempsController@listingPatient');
-
-
-
 });
 Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
 // Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');

@@ -235,7 +235,7 @@ class PatientMedecinController extends Controller
                 // Send notification to affilié channel
                 $this->sendToSlack($patientMedecin, $message);
             });
-            
+
             return response()->json(['patientMedecin'=>$patientMedecin]);
         }else{
             return response()->json(['error'=>""]);
@@ -243,8 +243,14 @@ class PatientMedecinController extends Controller
     }
 
     public function sendToSlack($patientMedecin, $message){
+
         $patientMedecin->getAffilieSlackChannel()->notify(new MedecinToPatient($message,null));
                     // Send notification to appel channel
         $patientMedecin->getAppelSlackChannel()->notify(new MedecinToPatient($message,null));
+
+
+       /*  $patientMedecin->setSlackChannel('affilie')->notify(new MedecinToPatient($message,null));
+            // Send notification to appel channel
+        $patientMedecin->setSlackChannel('appel')->notify(new MedecinToPatient($message,null)); */
     }
 }

@@ -136,6 +136,7 @@ class PatientMedecinControle extends Model
             return $this->setSlackUrl($this->slackChannels["test"]);
     }
 
+
     /**
      * @param $url
      * @return $this
