@@ -47,6 +47,7 @@ return [
     'teleconsultations' => [
         'base_uri' => env('TELECONSULTATIONS_SERVICE_BASE_URI', "http://localhost:8002"),
         //'base_uri' => env('TELECONSULTATIONS_SERVICE_BASE_URI', "http://staging-back-teleconsultations.medsurlink.com"),
+        //'base_uri' => env('TELECONSULTATIONS_SERVICE_BASE_URI', "http://back-teleconsultations.medsurlink.com"),
         'secret' => env('TELECONSULTATIONS_SERVICE_SECRET', "EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr"),
     ]
 

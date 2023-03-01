@@ -16,12 +16,14 @@ class Metting extends Model
 
     protected $table = 'mettings';
 
-    protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'name'];
+    protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'url', 'statut', 'name'];
+
+    // statut 2 encours, 3 terminer
 
 
     protected $slackChannels= [
         //'appel' => 'https://hooks.slack.com/services/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',
-        'appel' => 'https://hooks.slack.com/services/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'
+        'appel' => 'https://hooks.slack.com/services/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'
     ];
 
     protected $slack_url = null;
@@ -34,10 +36,11 @@ class Metting extends Model
     }
 
     public function routeNotificationForSlack(){
-        if($this->slack_url === null){
-            return $this->slackChannels['appel'];
-        }
-        return $this->slack_url;
+        $env = strtolower(config('app.env'));
+        if ($env == 'production')
+            return $this->slackChannels["appel"];
+        else
+            return $this->slackChannels["test"];
     }
     /**
      * @param $name

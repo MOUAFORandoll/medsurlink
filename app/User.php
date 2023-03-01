@@ -185,10 +185,10 @@ class User extends Authenticatable implements HasMedia
     protected $appends = ['signature', 'name'];
 
     protected $slackChannels= [
-        'test' => 'https://hooks.slack.com/services/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',
+        'test' => 'https://hooks.slack.com/services/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',
         'test2' => 'https://hooks.slack.com/services/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',
         'affilie' => 'https://hooks.slack.com/services/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',
-        'appel' => 'https://hooks.slack.com/services/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'
+        'appel' => 'https://hooks.slack.com/services/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'
     ];
 
     protected $slack_url = null;
@@ -207,11 +207,18 @@ class User extends Authenticatable implements HasMedia
         ];
     }
 
+    // public function routeNotificationForSlack(){
+    //     if($this->slack_url === null){
+    //         return $this->slackChannels['affilie'];
+    //     }
+    //     return $this->slack_url;
+    // }
     public function routeNotificationForSlack(){
-        if($this->slack_url === null){
-            return $this->slackChannels['affilie'];
-        }
-        return $this->slack_url;
+        $env = strtolower(config('app.env'));
+        if ($env == 'production')
+            return $this->slackChannels["appel"];
+        else
+            return $this->slackChannels["test"];
     }
 
     public function getNameAttribute(){

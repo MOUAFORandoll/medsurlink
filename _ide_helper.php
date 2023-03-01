@@ -12432,6 +12432,33 @@
         {
                         return \Illuminate\Routing\UrlGenerator::hasMacro($name);
         }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function shorten(...$parameters)
+        {
+                        return \Illuminate\Routing\UrlGenerator::shorten(...$parameters);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function shortenAsync(...$parameters)
+        {
+                        return \Illuminate\Routing\UrlGenerator::shortenAsync(...$parameters);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function shortener()
+        {
+                        return \Illuminate\Routing\UrlGenerator::shortener();
+        }
          
     }
             /**
