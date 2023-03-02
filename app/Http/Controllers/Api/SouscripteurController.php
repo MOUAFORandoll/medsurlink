@@ -11,6 +11,7 @@ use App\Mail\RappelAffiliation;
 use App\Models\Souscripteur;
 use App\Models\AffiliationSouscripteur;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Netpok\Database\Support\DeleteRestrictionException;
 
@@ -72,6 +73,21 @@ class SouscripteurController extends Controller
         })->with(['user:id,nom,prenom,email'])->select('user_id')->get();
         return response()->json(['souscripteurs'=>$souscripteurs]);
 
+    }
+
+    /**
+     * Listing des souscripteurs d'un patient
+     */
+    public function listingSouscripteurPatients(Request $request){
+        $patient_id = $request->patient_id;
+        $souscripteurs = Souscripteur::whereHas('patients', function($query) use ($patient_id){
+            $query->where('user_id', $patient_id);
+        })
+        ->orwhereHas('financeurs', function($query) use ($patient_id){
+            $query->where('patient_id', $patient_id);
+        })->with(['user:id,nom,prenom,email'])->select('user_id')->get();
+
+        return response()->json(['souscripteurs'=>$souscripteurs]);
     }
 
     /**
