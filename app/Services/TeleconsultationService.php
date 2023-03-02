@@ -60,6 +60,30 @@ class TeleconsultationService
             $video = new BigBlueButtonService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $item['alerte'] = $alerte->getAlerte($item['id']);
+            $item['pdf'] =  route('teleconsultations.print', $item['uuid']);
+            $item['url'] = $video->getRecordings($item['patient_id'], $item['creator'], $item['created_at']);
+            $items[] = $item;
+        }
+        $teleconsultations['data']['data'] = $items;
+
+        return json_encode($teleconsultations);
+    }
+    /**
+     *  recupération des téléconsultations d'un patient spécifique
+     */
+    public function getTeleconsultations($patient_id, Request $request) : string
+    {
+        $teleconsultations = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?user_id={$patient_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
+
+        $items = [];
+        foreach($teleconsultations['data']['data'] as $item){
+            $patient = new PatientService;
+            $alerte = new AlerteService;
+            $video = new BigBlueButtonService;
+            $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
+            $item['medecin'] = $patient->getMedecin($item['creator']);
+            $item['alerte'] = $alerte->getAlerte($item['id']);
+            $item['pdf'] =  route('teleconsultations.print', $item['uuid']);
             $item['url'] = $video->getRecordings($item['patient_id'], $item['creator'], $item['created_at']);
             $items[] = $item;
         }

@@ -35,7 +35,7 @@ class AlerteService
         }elseif($this->user->hasRole('Medecin controle')){
             $alertes = $alertes->where('medecin_id', $this->user_id);
         }elseif($this->user->hasRole('Assistante')){
-            
+
         }
         if($request->search != ""){
             $value = $request->search;
@@ -122,7 +122,7 @@ class AlerteService
             $url_global = config('app.url_stagging');
         else
             $url_global = config('app.url_prod');
-        $url_global = $url_global."/alertes?uuid=".$alerte->uuid; 
+        $url_global = $url_global."/alertes?uuid=".$alerte->uuid;
 
         $slack_message = $slack_message. " <$url_global|En savoir plus>";
 
