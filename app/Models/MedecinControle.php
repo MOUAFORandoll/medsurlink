@@ -8,6 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Str;
 
 /**
  * App\Models\MedecinControle
@@ -87,6 +88,12 @@ class MedecinControle extends Model
         'slug',
         'signature'
     ];
+
+    protected $appends = ['name'];
+
+    public function getNameAttribute(){
+        return $this->civilite.' '.ucfirst($this->user->prenom).' '.Str::upper($this->user->nom);
+    }
 
     public function specialite(){
         return $this->belongsTo(Specialite::class,'specialite_id','id');

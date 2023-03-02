@@ -370,9 +370,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Medecin contr
     Route::resource('pharmacien','Api\PharmacienController');
     Route::resource('role','Api\RoleController');
     Route::get('timelines/{slug}/patient', 'Api\LigneDeTempsController@listingPatient');
-
-
-
 });
 Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
 // Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
@@ -416,6 +413,8 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::resource('consultation-type','Api\ConsultationTypeController')->except(['create','edit']);
     Route::resource('souscripteur','Api\SouscripteurController')->except('show');
     Route::get('search/souscripteurs/{souscripteur_search}', 'Api\SouscripteurController@listingSouscripteur');
+    Route::get('patients/souscripteurs', 'Api\SouscripteurController@listingSouscripteurPatients');
+    
     Route::get('search/patients/{patient_search}', 'Api\PatientController@listingPatients');
     Route::post('patient','Api\PatientController@store')->name('patient.store');
     //Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');

@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://www.staging-back.medsurlink.com/api'),
+    'url' => env('APP_URL', 'https://www.back.medsurlink.com/api'),
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -73,6 +73,7 @@ return [
         'moderator' => "9UqG@CQAE6dfB",
         'attendee' => "8UqG@CQAE9dfB",
     ],
+
 
     /*
     |--------------------------------------------------------------------------
