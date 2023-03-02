@@ -43,18 +43,20 @@ class PatientService
         }elseif($this->user->hasRole('Assistante')){
 
         }
-
-        $patients = $patients->with(['dossier:patient_id,id,numero_dossier', 'user:id,nom,prenom,email,telephone,slug','affiliations.package:id,description_fr'])
-        ->whereHas('user', function($q) use ($value) {
-                $q->where('nom', 'like', '%' .$value.'%')
-                ->orwhere('prenom', 'like', '%' .$value.'%')
-                ->orwhere('email', 'like', '%' .$value.'%');
-            })
-            ->orwhereHas('dossier', function($q) use ($value) {
-                $q->where('numero_dossier', 'like', '%' .$value.'%');
-            })
-            ->orwhere('age', 'like', '%' .$value.'%');
-
+        if(!is_null($value)){
+            $patients = $patients->with(['dossier:patient_id,id,numero_dossier', 'user:id,nom,prenom,email,telephone,slug','affiliations.package:id,description_fr'])
+            ->whereHas('user', function($q) use ($value) {
+                    $q->where('nom', 'like', '%' .$value.'%')
+                    ->orwhere('prenom', 'like', '%' .$value.'%')
+                    ->orwhere('email', 'like', '%' .$value.'%');
+                })
+                ->orwhereHas('dossier', function($q) use ($value) {
+                    $q->where('numero_dossier', 'like', '%' .$value.'%');
+                })
+                ->orwhere('age', 'like', '%' .$value.'%');
+        }else{
+            $patients = $patients->with(['dossier:patient_id,id,numero_dossier', 'user:id,nom,prenom,email,telephone,slug','affiliations.package:id,description_fr']);
+        }
         return $patients->paginate($size);
     }
 
