@@ -39,6 +39,12 @@ class TypeController extends Controller
         return $this->successResponse($this->type->fetchType($type));
     }
 
+    public function getExamens($type)
+    {
+        return $this->successResponse($this->type->fetchTypeExamens($type));
+    }
+
+
     /**
      * @param \Illuminate\Http\Request $request
      *
