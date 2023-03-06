@@ -33,7 +33,7 @@ class AlerteService
         }elseif($this->user->hasRole('Souscripteur')){
             $alertes = $alertes->where('creator_id', $this->user_id);
         }elseif($this->user->hasRole('Medecin controle')){
-            $alertes = $alertes->where('medecin_id', $this->user_id);
+            //$alertes = $alertes->where('medecin_id', $this->user_id);
         }elseif($this->user->hasRole('Assistante')){
 
         }
