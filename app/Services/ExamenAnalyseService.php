@@ -51,6 +51,7 @@ class ExamenAnalyseService
         foreach($examen_analyses['data']['data'] as $item){
             $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
+            $item['medecin'] = $patient->getMedecin($item['medecin_id']);
             $items[] = $item;
         }
         $examen_analyses['data']['data'] = $items;
