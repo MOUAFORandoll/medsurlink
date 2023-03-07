@@ -41,6 +41,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     Route::group(['prefix' => 'types'], function () {
         Route::get('/', 'TypeController@index');
         Route::get('/{type}', 'TypeController@show');
+        Route::get('/examens/{type}', 'TypeController@getExamens');
     });
 
     /**

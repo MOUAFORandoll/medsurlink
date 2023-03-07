@@ -28,11 +28,10 @@ class TeleconsultationController extends Controller
      */
     public function getTeleconsultations($patient_id, Request $request)
     {
-        $dossier = DossierMedical::whereSlug($patient_id)->first();
+        $dossier = DossierMedical::whereSlug($patient_id)->latest()->first();
         if(!is_null($dossier)){
             $patient_id = $dossier->patient_id;
         }
-        
         return $this->successResponse($this->teleconsultation->getTeleconsultations($patient_id, $request));
     }
 

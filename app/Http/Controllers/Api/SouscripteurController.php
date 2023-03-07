@@ -11,6 +11,7 @@ use App\Mail\RappelAffiliation;
 use App\Models\Souscripteur;
 use App\Models\AffiliationSouscripteur;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Netpok\Database\Support\DeleteRestrictionException;
 
@@ -62,16 +63,42 @@ class SouscripteurController extends Controller
         return response()->json(['souscripteurs'=>$souscripteurs]);
     }
 
-    public function listingSouscripteur($souscripteur_search){
-        $souscripteurs = Souscripteur::whereHas('user', function($query) use ($souscripteur_search){
-            $query->where('nom', 'like',  '%'.$souscripteur_search.'%')
-            ->orwhere('prenom', 'like',  '%'.$souscripteur_search.'%')
-            ->orwhere('email', 'like',  '%'.$souscripteur_search.'%')
-            ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$souscripteur_search.'%')
-            ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$souscripteur_search.'%');
-        })->with(['user:id,nom,prenom,email'])->select('user_id')->get();
+    public function listingSouscripteur($souscripteur_search, Request $request){
+        if($request->patient_id == ""){
+            $patient_id = $request->patient_id;
+            $souscripteurs = Souscripteur::whereHas('patients', function($query) use ($patient_id){
+                $query->where('user_id', $patient_id);
+            })
+            ->orwhereHas('financeurs', function($query) use ($patient_id){
+                $query->where('patient_id', $patient_id);
+            })->with(['user:id,nom,prenom,email'])->select('user_id')->get();
+        }else{
+            $souscripteurs = Souscripteur::whereHas('user', function($query) use ($souscripteur_search){
+                $query->where('nom', 'like',  '%'.$souscripteur_search.'%')
+                ->orwhere('prenom', 'like',  '%'.$souscripteur_search.'%')
+                ->orwhere('email', 'like',  '%'.$souscripteur_search.'%')
+                ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$souscripteur_search.'%')
+                ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$souscripteur_search.'%');
+            })->with(['user:id,nom,prenom,email'])->select('user_id')->get();
+        }
+
         return response()->json(['souscripteurs'=>$souscripteurs]);
 
+    }
+
+    /**
+     * Listing des souscripteurs d'un patient
+     */
+    public function listingSouscripteurPatients(Request $request){
+        $patient_id = $request->patient_id;
+        $souscripteurs = Souscripteur::whereHas('patients', function($query) use ($patient_id){
+            $query->where('user_id', $patient_id);
+        })
+        ->orwhereHas('financeurs', function($query) use ($patient_id){
+            $query->where('patient_id', $patient_id);
+        })->with(['user:id,nom,prenom,email'])->select('user_id')->get();
+
+        return response()->json(['souscripteurs'=>$souscripteurs]);
     }
 
     /**

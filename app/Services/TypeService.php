@@ -49,6 +49,17 @@ class TypeService
     }
 
     /**
+     * @param $type
+     *
+     * @return string
+     */
+    public function fetchTypeExamens($type) : string
+    {
+        return $this->request('GET', "{$this->path}/examens/{$type}");
+    }
+
+
+    /**
      * @param $data
      *
      * @return string

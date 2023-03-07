@@ -51,6 +51,7 @@ class PrescriptionImagerieService
         foreach($prescription_imageries['data']['data'] as $item){
             $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
+            $item['medecin'] = $patient->getMedecin($item['medecin_id']);
             $items[] = $item;
         }
         $prescription_imageries['data']['data'] = $items;
