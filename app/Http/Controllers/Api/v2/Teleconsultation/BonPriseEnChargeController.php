@@ -29,13 +29,13 @@ class BonPriseEnChargeController extends Controller
     }
 
     /**
-     * @param $examenAnalyse
+     * @param $bon_prise_en_charge
      *
      * @return mixed
      */
-    public function show($examenAnalyse)
+    public function show($bon_prise_en_charge)
     {
-        return $this->successResponse($this->bonPriseEnChargeService->fetchBonPriseEnCharge($examenAnalyse));
+        return $this->successResponse($this->bonPriseEnChargeService->fetchBonPriseEnCharge($bon_prise_en_charge));
     }
 
     /**
@@ -50,22 +50,22 @@ class BonPriseEnChargeController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param                          $examenAnalyse
+     * @param                          $bon_prise_en_charge
      *
      * @return mixed
      */
-    public function update(Request $request, $examenAnalyse)
+    public function update(Request $request, $bon_prise_en_charge)
     {
-        return $this->successResponse($this->bonPriseEnChargeService->updateBonPriseEnCharge($examenAnalyse, $request->all()));
+        return $this->successResponse($this->bonPriseEnChargeService->updateBonPriseEnCharge($bon_prise_en_charge, $request->all()));
     }
 
     /**
-     * @param $examenAnalyse
+     * @param $bon_prise_en_charge
      *
      * @return mixed
      */
-    public function destroy($examenAnalyse)
+    public function destroy($bon_prise_en_charge)
     {
-        return $this->successResponse($this->bonPriseEnChargeService->deleteBonPriseEnCharge($examenAnalyse));
+        return $this->successResponse($this->bonPriseEnChargeService->deleteBonPriseEnCharge($bon_prise_en_charge));
     }
 }
