@@ -52,6 +52,7 @@ class ExamenAnalyseService
             $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $item['medecin'] = $patient->getMedecin($item['medecin_id']);
+            $item['pdf'] =  route('examen_analyses.print', $item['uuid']);
             $items[] = $item;
         }
         $examen_analyses['data']['data'] = $items;

@@ -17,6 +17,8 @@ use App\Models\PatientSouscripteur;
 use App\Models\Payment;
 use App\Models\PaymentOffre;
 use App\Models\RendezVous;
+use App\Services\BonpriseEnChargeService;
+use App\Services\ExamenAnalyseService;
 use App\Services\PatientService;
 
 use BigBlueButton\BigBlueButton;
@@ -160,7 +162,7 @@ Route::get('teleconsultations/print/{teleconsultation_id}', function ($teleconsu
         })->with('user:id,nom,prenom,email,telephone,slug')->first();
 
 
-    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $teleconsultation['creator'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name', 'user:id,nom,prenom,telephone,email'])->where('user_id', $teleconsultation['creator'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
     $date = Carbon::parse($teleconsultation['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
 
@@ -170,6 +172,56 @@ Route::get('teleconsultations/print/{teleconsultation_id}', function ($teleconsu
     return $pdf->stream("Téléconsultation de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
 
 })->name('teleconsultations.print');
+
+Route::get('bon-prises-en-charges/print/{bon_prise_en_charge_id}', function ($bon_prise_en_charge_id) {
+    $bon_prise_en_charge = new BonpriseEnChargeService;
+    $bon_prise_en_charge = json_decode($bon_prise_en_charge->fetchBonPriseEnCharge($bon_prise_en_charge_id), true)['data'];
+    $patient_id = $bon_prise_en_charge['patient_id'];
+
+    $patient = Patient::where('user_id', $patient_id)->orWhere('slug', $patient_id)
+        ->orwhereHas('dossier', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->orwhereHas('user', function ($query) use ($patient_id) {
+            $query->where('id', $patient_id);
+        })->orwhereHas('alerte', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug')->first();
+
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $bon_prise_en_charge['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+
+    $date = Carbon::parse($bon_prise_en_charge['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
+
+    $pdf = PDF::loadView('pdf.teleconsultations.bon_prise_en_charge', ['bon_prise_en_charge' => $bon_prise_en_charge, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
+    //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+
+    return $pdf->stream("Bon de prise en charge de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
+
+})->name('bon_prise_en_charges.print');
+
+Route::get('examens-analyses/print/{examen_analyse_id}', function ($examen_analyse_id) {
+    $examen_analyse = new ExamenAnalyseService;
+    $examen_analyse = json_decode($examen_analyse->fetchExamenAnalyse($examen_analyse_id), true)['data'];
+    $patient_id = $examen_analyse['patient_id'];
+
+    $patient = Patient::where('user_id', $patient_id)->orWhere('slug', $patient_id)
+        ->orwhereHas('dossier', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->orwhereHas('user', function ($query) use ($patient_id) {
+            $query->where('id', $patient_id);
+        })->orwhereHas('alerte', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug')->first();
+
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $examen_analyse['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+
+    $date = Carbon::parse($examen_analyse['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
+
+    $pdf = PDF::loadView('pdf.teleconsultations.examen_analyse', ['examen_analyse' => $examen_analyse, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
+    //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+
+    return $pdf->stream("Bulletin d'examens d'analyses biomédicales de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
+
+})->name('examen_analyses.print');
 
 
 Route::get('visualiser-consultation-medecine/{slug}',function ($slug){
