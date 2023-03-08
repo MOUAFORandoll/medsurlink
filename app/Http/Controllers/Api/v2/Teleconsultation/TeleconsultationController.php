@@ -60,7 +60,6 @@ class TeleconsultationController extends Controller
      */
     public function store(Request $request)
     {
-        $request->request->add(['creator' => auth()->user()->id]);
         return $this->successResponse($this->teleconsultation->createTeleconsultation($request->all()));
     }
 
