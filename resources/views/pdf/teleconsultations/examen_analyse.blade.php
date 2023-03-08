@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,500,500i,600,700,800,900&display=swap" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
 
-    <title>Bulletin d'analyses biologiques de {{ $patient->user->name }} du {{ $date }} par {{ $medecin->civilite ?? '' }} {{ $medecin->user->name }}</title>
+    <title>Bulletin d'examens d'analyses biomédicales de {{ $patient->user->name }} du {{ $date }} par {{ $medecin->civilite ?? '' }} {{ $medecin->user->name }}</title>
 
     <style>
         body {
@@ -58,6 +58,10 @@
             text-transform: uppercase;
             color:#00ada7;
             /*font-size:0.8em;*/
+        }
+        .titre{
+            text-transform: uppercase;
+            color:#00ada7;
         }
 
         .sous-titre-rapport::after{
@@ -153,20 +157,44 @@
         use Carbon\Carbon;
     @endphp
 
-   {{--  <div class="justify-content-center">
+    <div class="justify-content-center">
         <h2>{{ $patient->user->name }}</h2>
         <h3>{{ Carbon::parse($patient->date_de_naissance)->locale(config('app.locale'))->translatedFormat('jS F Y') }}</h3>
         <h3>Sexe : {{ $patient->sexe == "M" ? "Masculin" : "Féminin" }}</h3>
-    </div> --}}
+    </div>
 
-    <p> Honorée Consoeur, Honoré Confrère, bonjour</p>
+    <h4><span class="titre">Prescipteur:</span> <b>{{ $medecin->civilite ?? '' }}  {{ $medecin->user->name }}</b> </h4>
+    @if(count($examen_analyse['etablissements']) > 0)
+        <h4><span class="titre">Etablissement:</span> <b>{{ $examen_analyse['etablissements'][0]['name'] }}</b> </h4>
+    @endif
+
+    <h4 class="sous-titre-rapport">Renseignement clinique</h4>
+    <p>{!! $examen_analyse['renseignement_clinique'] !!}</p>
+
+
+    @if (count($examen_analyse['examen_complementaires'])>0)
+        <h4 class="sous-titre-rapport">Examens à réaliser</h4>
+        <div class="row">
+            <ol>
+                @forelse ($examen_analyse['examen_complementaires'] as $examen_complementaire)
+                    <li>{{ $examen_complementaire['fr_description'] }}</li>
+                @empty
+                @endforelse
+            </ol>
+        </div>
+    @endif
+
+
+
+ {{--    <p> Honorée Consoeur, Honoré Confrère, bonjour</p>
     <p>Voudriez-vous prendre contact avec {{ $patient->sexe == "M" ? "monsieur" : "madame" }} {{ $patient->user->name }} Patient{{ $patient->sexe == "M" ? "" : "e" }} né{{ $patient->sexe == "M" ? "" : "e" }} le {{ Carbon::parse($patient->date_de_naissance)->locale(config('app.locale'))->translatedFormat('jS F Y') }}, résidant à {{ $patient->user->ville }} – {{ $patient->user->pays }}
-        @if (count($examen_analyse['teleconsultations']))
+        @if(count($examen_analyse['teleconsultations']) > 0)
             , en vue d'une consultation de {{ $examen_analyse['teleconsultations'][0]['type']['libelle'] }} le {{ Carbon::parse($examen_analyse['created_at'])->format('d-M-Y') }}
         @endif
     </p>
     <p>Contact Patient{{ $patient->sexe == "M" ? "" : "e" }} : <a href="tel:+{{$patient->user->telephone}}">{{ number_format($patient->user->telephone, 0,","," ")  }}</a>  </p>
 
+ --}}
 
     {{-- @if(count($examen_analyse['motifs']) > 0)
         <h4 class="sous-titre-rapport">Motifs de consultations</h4>
@@ -178,7 +206,7 @@
         </ol>
     @endif --}}
 
-    <h4 class="sous-titre-rapport">Niveau d'urgence: {{ $examen_analyse['niveau_urgence']['id'] }}</h4>
+   {{--  <h4 class="sous-titre-rapport">Niveau d'urgence: {{ $examen_analyse['niveau_urgence']['id'] }}</h4>
     <p>{{ $examen_analyse['niveau_urgence']['description'] }}</p>
 
     @if(count($examen_analyse['option_financements']) > 0)
@@ -199,12 +227,12 @@
             @empty 
             @endforelse
         </ol>
-    @endif
+    @endif --}}
 
     {{-- <h4 class="sous-titre-rapport">Plainte</h4>
     <p>{{ $examen_analyse['plainte'] }}</p> --}}
 
-    @if (count($examen_analyse['examen_complementaires'])>0)
+   {{--  @if (count($examen_analyse['examen_complementaires'])>0)
         <h4 class="sous-titre-rapport">Examens complémentaires pouvant être réalisés si la Clinique le justifie:</h4>
         <div class="row">
             <ol>
@@ -220,13 +248,13 @@
     <p>Je vous remercie d’avance de votre diligence.</p>
     <p>Sincères salutations</p>
     <p>NB: En cas d’urgence médicale, prière de prendre contact téléphonique avec le médecin referent. </p>
-
+ --}}
 
     <div>
-        <p><b>{{ $medecin->civilite ?? '' }}  {{ $medecin->user->name }}</b> <br>
+        <p>
+            Date de prescription: {{ Carbon::parse($examen_analyse['date_heure'])->format('d-m-Y à H:i') }} <br>
             Numéro d'ordre: {{ $medecin->numero_ordre }} <br>
             Téléphone:  {{ number_format($medecin->user->telephone, 0,","," ")  }} <br>
-            Fait le : <b>{{ $date }}</b><br>
         </p>
         <p></p>
         @isset(explode('storage', $medecin->user->signature)[1])

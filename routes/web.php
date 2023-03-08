@@ -219,7 +219,7 @@ Route::get('examens-analyses/print/{examen_analyse_id}', function ($examen_analy
     $pdf = PDF::loadView('pdf.teleconsultations.examen_analyse', ['examen_analyse' => $examen_analyse, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
 
-    return $pdf->stream("Bulletin d'analyses biologiques {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
+    return $pdf->stream("Bulletin d'examens d'analyses biomédicales de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
 
 })->name('examen_analyses.print');
 

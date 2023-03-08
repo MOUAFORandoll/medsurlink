@@ -185,6 +185,9 @@
     <h4 class="sous-titre-rapport">Bulletin d’examens / Ordonnances Disponibles</h4>
     <p>{{ $bon_prise_en_charge['plainte'] }}</p>
 
+    <h4 class="sous-titre-rapport">Rapports / Résultats disponibles</h4>
+    <p>{{ $bon_prise_en_charge['plainte'] }}</p>
+
    {{--  <h4 class="sous-titre-rapport">Niveau d'urgence: {{ $bon_prise_en_charge['niveau_urgence']['id'] }}</h4>
     <p>{{ $bon_prise_en_charge['niveau_urgence']['description'] }}</p>
 
