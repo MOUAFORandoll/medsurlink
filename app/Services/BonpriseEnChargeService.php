@@ -51,6 +51,8 @@ class BonpriseEnChargeService
         foreach($bon_prise_en_charges['data']['data'] as $item){
             $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
+            $item['medecin'] = $patient->getMedecin($item['medecin_id']);
+            $item['pdf'] =  route('bon_prise_en_charges.print', $item['uuid']);
             $items[] = $item;
         }
         $bon_prise_en_charges['data']['data'] = $items;

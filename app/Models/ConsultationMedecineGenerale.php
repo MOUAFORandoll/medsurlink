@@ -195,6 +195,7 @@ class ConsultationMedecineGenerale extends Model
         "nbreAnnee",
         "creator",
         "diasgnostic",
+        "diagnostic_complementaire",
         "nutrition",
         "lipide",
         "glucide",
