@@ -46,6 +46,7 @@ class ExamenAnalyseController extends Controller
      */
     public function store(Request $request)
     {
+        $request->request->add(['creator' => \Auth::guard('api')->user()->id]);
         return $this->successResponse($this->examenAnalyseService->createExamenAnalyse($request->all()));
     }
 
