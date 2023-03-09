@@ -52,7 +52,6 @@ class ExamenAnalyseService
             $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $item['medecin'] = $patient->getMedecin($item['medecin_id']);
-            $item['pdf'] =  route('examen_analyses.print', $item['uuid']);
             $items[] = $item;
         }
         $examen_analyses['data']['data'] = $items;
@@ -65,9 +64,16 @@ class ExamenAnalyseService
      *
      * @return string
      */
-    public function fetchExamenAnalyse($examen_analyse) : string
+    public function fetchExamenAnalyse($uuid) : string
     {
-        return $this->request('GET', "{$this->path}/{$examen_analyse}");
+        $patient = new PatientService;
+
+        $examen_analyse = json_decode($this->request('GET', "{$this->path}/{$uuid}"));
+        $examen_analyse->data->patient = $patient->getPatient($examen_analyse->data->patient_id, "dossier,affiliations,user");
+        $examen_analyse->data->medecin = $patient->getMedecin($examen_analyse->data->medecin_id);
+        $examen_analyse->data->pdf =  route('examen_analyses.print', $examen_analyse->data->uuid);
+
+        return json_encode($examen_analyse);
     }
 
     /**
