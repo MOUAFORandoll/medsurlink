@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\PersonnalErrors;
-use App\Http\Requests\SouscripteurStoreRequest;
-use App\Http\Requests\SouscripteurUpdateRequest;
 use App\Mail\updateSetting;
-use App\Mail\RappelAffiliation;
 use App\Models\Souscripteur;
-use App\Models\AffiliationSouscripteur;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
+use App\Mail\RappelAffiliation;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use App\Models\AffiliationSouscripteur;
+use App\Http\Requests\SouscripteurStoreRequest;
+use App\Http\Controllers\Traits\PersonnalErrors;
+use App\Http\Requests\SouscripteurUpdateRequest;
 use Netpok\Database\Support\DeleteRestrictionException;
 
 class SouscripteurController extends Controller
@@ -64,7 +65,9 @@ class SouscripteurController extends Controller
     }
 
     public function listingSouscripteur($souscripteur_search, Request $request){
-        if($request->patient_id == ""){
+
+
+        if(!is_null($request->patient_id)){
             $patient_id = $request->patient_id;
             $souscripteurs = Souscripteur::whereHas('patients', function($query) use ($patient_id){
                 $query->where('user_id', $patient_id);
