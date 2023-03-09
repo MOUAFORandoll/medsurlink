@@ -60,6 +60,8 @@ class TeleconsultationController extends Controller
      */
     public function store(Request $request)
     {
+        $dossier = DossierMedical::wherePatientId($request->patient_id)->first();
+        $request->request->add(['dossier_medical_id' => $dossier->id]);
         return $this->successResponse($this->teleconsultation->createTeleconsultation($request->all()));
     }
 
