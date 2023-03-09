@@ -269,7 +269,7 @@
   ),
   'broadcasting' => 
   array (
-    'default' => 'redis',
+    'default' => 'log',
     'connections' => 
     array (
       'pusher' => 
@@ -301,7 +301,7 @@
   ),
   'cache' => 
   array (
-    'default' => 'redis',
+    'default' => 'file',
     'stores' => 
     array (
       'apc' => 
@@ -360,7 +360,7 @@
         'endpoint' => NULL,
       ),
     ),
-    'prefix' => 'medsurlink_cache',
+    'prefix' => 'laravel_cache',
   ),
   'database' => 
   array (
@@ -439,7 +439,7 @@
       'options' => 
       array (
         'cluster' => 'predis',
-        'prefix' => 'Medsurlink_',
+        'prefix' => 'Laravel_',
       ),
       'default' => 
       array (
@@ -951,7 +951,7 @@
   ),
   'queue' => 
   array (
-    'default' => 'redis',
+    'default' => 'sync',
     'connections' => 
     array (
       'sync' => 
@@ -1051,7 +1051,7 @@
       0 => 2,
       1 => 100,
     ),
-    'cookie' => 'medsurlink_session',
+    'cookie' => 'laravel_session',
     'path' => '/',
     'domain' => NULL,
     'secure' => false,
