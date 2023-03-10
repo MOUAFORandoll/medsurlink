@@ -65,9 +65,17 @@ class BonpriseEnChargeService
      *
      * @return string
      */
-    public function fetchBonPriseEnCharge($bon_prise_en_charge) : string
+    public function fetchBonPriseEnCharge($uuid) : string
     {
-        return $this->request('GET', "{$this->path}/{$bon_prise_en_charge}");
+
+        $patient = new PatientService;
+
+        $bon_prise_en_charge = json_decode($this->request('GET', "{$this->path}/{$uuid}"));
+        $bon_prise_en_charge->data->patient = $patient->getPatient($bon_prise_en_charge->data->patient_id, "dossier,affiliations,user");
+        $bon_prise_en_charge->data->medecin = $patient->getMedecin($bon_prise_en_charge->data->medecin_id);
+        $bon_prise_en_charge->data->pdf =  route('bon_prise_en_charges.print', $bon_prise_en_charge->data->uuid);
+
+        return json_encode($bon_prise_en_charge);
     }
 
     /**
