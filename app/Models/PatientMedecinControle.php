@@ -104,7 +104,7 @@ class PatientMedecinControle extends Model
     public function routeNotificationForSlack(){
         $env = strtolower(config('app.env'));
         if ($env == 'production')
-            return $this->slackChannels["appel"] || $this->slackChannels["affilie"];
+            return $this->slackChannels["appel"];
         else
             return $this->slackChannels["appel"];
     }
