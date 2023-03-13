@@ -253,6 +253,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::get('/{examen_analyse}', 'ExamenAnalyseController@show');
         Route::patch('/{examen_analyse}', 'ExamenAnalyseController@update');
         Route::delete('/{examen_analyse}', 'ExamenAnalyseController@destroy');
+        Route::get('patient/{patient_id}/informations', 'ExamenAnalyseController@getPatientBulletins');
     });
 
     /**

@@ -76,6 +76,20 @@ class ExamenAnalyseService
         return json_encode($examen_analyse);
     }
 
+    public function getPatientBulletins($patient_id) : string{
+        $examen_analyses = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}/informations"));
+        $examen_imageries = $examen_analyses->data->examen_imageries;
+        $ordonnances = $examen_analyses->data->ordonnances;
+        $examen_analyses = $examen_analyses->data->examen_analyses;
+        $examen_analyse_items = [];
+        foreach($examen_analyses as $item){
+            $item->pdf = route('examen_analyses.print', $item->uuid);
+            $examen_analyse_items[] = $item;
+        }
+        return json_encode(["data" => ["examen_analyses" => $examen_analyse_items, "examen_imageries" => $examen_imageries, "ordonnances" => $ordonnances]]);
+        //return $this->request('GET', "{$this->path}/patient/{$patient_id}/informations");
+    }
+
     /**
      * @param $data
      *
