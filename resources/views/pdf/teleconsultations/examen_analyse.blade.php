@@ -182,6 +182,27 @@
                 @endforelse
             </ol>
         </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th><th>Catégorie</th><th>Examens</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($examen_analyse['type_examens'] as $type_examen)
+                    <tr>
+                        <td rowspan="{{ count($type_examen['examen_complementaires']) }}">{{ $loop->iteration }}</td>
+                        <td rowspan="{{ count($type_examen['examen_complementaires']) }}">{{ $type_examen['libelle'] }}</td>
+                        @forelse ($type_examen['examen_complementaires'] as $item)
+                            <td>kld</td></tr><tr>
+                        @empty
+                        @endforelse
+                    </tr>
+                @empty
+                @endforelse
+            </tbody>
+               
+        </table>
     @endif
 
 
