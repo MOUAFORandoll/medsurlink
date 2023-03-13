@@ -224,6 +224,36 @@ Route::get('examens-analyses/print/{examen_analyse_id}', function ($examen_analy
 })->name('examen_analyses.print');
 
 
+Route::get('prescription-imageries/print/{prescription_imagerie_id}', function ($prescription_imagerie_id) {
+    return $prescription_imagerie_id;
+   /*  $examen_analyse = new ExamenAnalyseService;
+    $examen_analyse = json_decode($examen_analyse->fetchExamenAnalyse($examen_analyse_id), true)['data'];
+    $patient_id = $examen_analyse['patient_id'];
+
+    $patient = Patient::where('user_id', $patient_id)->orWhere('slug', $patient_id)
+        ->orwhereHas('dossier', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->orwhereHas('user', function ($query) use ($patient_id) {
+            $query->where('id', $patient_id);
+        })->orwhereHas('alerte', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug')->first();
+
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $examen_analyse['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+
+    $date = Carbon::parse($examen_analyse['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
+
+    $pdf = PDF::loadView('pdf.teleconsultations.examen_analyse', ['examen_analyse' => $examen_analyse, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
+    //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+
+    return $pdf->stream("Bulletin d'examens d'analyses biomédicales de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
+ */
+})->name('prescription_imageries.print');
+
+
+//route('prescription_imageries.print', $prescription_imagerie->data->uuid);
+
+
 Route::get('visualiser-consultation-medecine/{slug}',function ($slug){
     $pdf = visualiser($slug);
     return $pdf;
@@ -254,6 +284,7 @@ Route::get('impression/prestation/{paiement_uuid}', function ($paiement_uuid) {
     $pdf = generationPdfPaiementPrestation($payment_id, $commande_date, $montant_total, $echeance, $description, $mode_paiement, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
     return $pdf['stream'];
 })->name('facture.paiement.prestation');
+
 
 Route::get('bilans/{patient}', function ($patient) {
     try {
