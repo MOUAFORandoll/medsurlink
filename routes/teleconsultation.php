@@ -253,6 +253,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::get('/{examen_analyse}', 'ExamenAnalyseController@show');
         Route::patch('/{examen_analyse}', 'ExamenAnalyseController@update');
         Route::delete('/{examen_analyse}', 'ExamenAnalyseController@destroy');
+        Route::get('patient/{patient_id}/informations', 'ExamenAnalyseController@getPatientBulletins');
     });
 
     /**
@@ -297,6 +298,28 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::get('/{raison_prescription}', 'RaisonPrescriptionController@show');
         Route::patch('/{raison_prescription}', 'RaisonPrescriptionController@update');
         Route::delete('/{raison_prescription}', 'RaisonPrescriptionController@destroy');
+    });
+
+        /**
+     * CRUD Examens Pertinents
+     */
+    Route::group(['prefix' => 'examens_pertinents'], function () {
+        Route::get('/', 'ExamenPertinentPrecedentController@index');
+        Route::post('/', 'ExamenPertinentPrecedentController@store');
+        Route::get('/{examen_pertinent}', 'ExamenPertinentPrecedentController@show');
+        Route::patch('/{examen_pertinent}', 'ExamenPertinentPrecedentController@update');
+        Route::delete('/{examen_pertinent}', 'ExamenPertinentPrecedentController@destroy');
+    });
+
+    /**
+     * CRUD Information supplementaires
+     */
+    Route::group(['prefix' => 'informations_supplementaires'], function () {
+        Route::get('/', 'InformationSupplementaireController@index');
+        Route::post('/', 'InformationSupplementaireController@store');
+        Route::get('/{informations_supplementaire}', 'InformationSupplementaireController@show');
+        Route::patch('/{informations_supplementaire}', 'InformationSupplementaireController@update');
+        Route::delete('/{informations_supplementaire}', 'InformationSupplementaireController@destroy');
     });
 
 });
