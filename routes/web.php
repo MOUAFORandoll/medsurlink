@@ -20,7 +20,7 @@ use App\Models\RendezVous;
 use App\Services\BonpriseEnChargeService;
 use App\Services\ExamenAnalyseService;
 use App\Services\PatientService;
-
+use App\Services\PrescriptionImagerieService;
 use BigBlueButton\BigBlueButton;
 use BigBlueButton\Parameters\GetRecordingsParameters;
 
@@ -225,10 +225,9 @@ Route::get('examens-analyses/print/{examen_analyse_id}', function ($examen_analy
 
 
 Route::get('prescription-imageries/print/{prescription_imagerie_id}', function ($prescription_imagerie_id) {
-    return $prescription_imagerie_id;
-   /*  $examen_analyse = new ExamenAnalyseService;
-    $examen_analyse = json_decode($examen_analyse->fetchExamenAnalyse($examen_analyse_id), true)['data'];
-    $patient_id = $examen_analyse['patient_id'];
+    $prescription_imagerie = new PrescriptionImagerieService;
+    $prescription_imagerie = json_decode($prescription_imagerie->fetchPrescriptionImagerie($prescription_imagerie_id), true)['data'];
+    $patient_id = $prescription_imagerie['patient_id'];
 
     $patient = Patient::where('user_id', $patient_id)->orWhere('slug', $patient_id)
         ->orwhereHas('dossier', function ($query) use ($patient_id) {
@@ -239,15 +238,15 @@ Route::get('prescription-imageries/print/{prescription_imagerie_id}', function (
             $query->where('patient_id', $patient_id);
         })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug')->first();
 
-    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $examen_analyse['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $prescription_imagerie['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
-    $date = Carbon::parse($examen_analyse['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
+    $date = Carbon::parse($prescription_imagerie['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
 
-    $pdf = PDF::loadView('pdf.teleconsultations.examen_analyse', ['examen_analyse' => $examen_analyse, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
+    $pdf = PDF::loadView('pdf.teleconsultations.prescription_imagerie', ['prescription_imagerie' => $prescription_imagerie, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
 
-    return $pdf->stream("Bulletin d'examens d'analyses biomédicales de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
- */
+    return $pdf->stream("Prescription imageries de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
+
 })->name('prescription_imageries.print');
 
 
