@@ -180,7 +180,7 @@
     @endif
 
     <h4 class="sous-titre-rapport">Plainte</h4>
-    <p>{{ $bon_prise_en_charge['plainte'] }}</p>
+    <p>{!! $bon_prise_en_charge['plainte'] !!}</p>
 
     <h4 class="sous-titre-rapport">Bulletin d’examens / Ordonnances Disponibles</h4>
     <p>{{ $bon_prise_en_charge['plainte'] }}</p>
