@@ -45,6 +45,7 @@ class PrescriptionImagerieController extends Controller
      */
     public function store(Request $request)
     {
+        $request->request->add(['creator' => \Auth::guard('api')->user()->id]);
         return $this->successResponse($this->prescriptionImagerieService->createPrescriptionImagerie($request->all()));
     }
 

@@ -106,7 +106,7 @@ class PatientMedecinControle extends Model
         if ($env == 'production')
             return $this->slackChannels["appel"] || $this->slackChannels["affilie"];
         else
-            return $this->slackChannels["test"];
+            return $this->slackChannels["appel"];
     }
     /**
      * @param $name
@@ -120,20 +120,20 @@ class PatientMedecinControle extends Model
         return $this;
     }
 
-    public function getAffilieSlackChannel(){
+    public function getAffilieSlackChannel($affilie = "affilie"){
         $env = strtolower(config('app.env'));
         if ($env == 'production')
-            return $this->setSlackUrl($this->slackChannels["affilie"]);
+            return $this->setSlackUrl($this->slackChannels[$affilie]);
         else
-            return $this->setSlackUrl($this->slackChannels["test"]);
+            return $this->setSlackUrl($this->slackChannels["affilie"]);
     }
 
-    public function getAppelSlackChannel(){
+    public function getAppelSlackChannel($appel = "appel"){
         $env = strtolower(config('app.env'));
         if ($env == 'production')
-            return $this->setSlackUrl($this->slackChannels["appel"]);
+            return $this->setSlackUrl($this->slackChannels[$appel]);
         else
-            return $this->setSlackUrl($this->slackChannels["test"]);
+            return $this->setSlackUrl($this->slackChannels["appel"]);
     }
 
 

@@ -72,7 +72,7 @@ class PrescriptionImagerieService
         $prescription_imagerie = json_decode($this->request('GET', "{$this->path}/{$uuid}"));
         $prescription_imagerie->data->patient = $patient->getPatient($prescription_imagerie->data->patient_id, "dossier,affiliations,user");
         $prescription_imagerie->data->medecin = $patient->getMedecin($prescription_imagerie->data->medecin_id);
-        //$prescription_imagerie->data->pdf =  route('prescription_imageries.print', $prescription_imagerie->data->uuid);
+        $prescription_imagerie->data->pdf =  route('prescription_imageries.print', $prescription_imagerie->data->uuid);
 
         return json_encode($prescription_imagerie);
     }
