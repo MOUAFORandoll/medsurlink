@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,500,500i,600,700,800,900&display=swap" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
 
-    <title>Bulletin d'examens d'analyses biomédicales de {{ $patient->user->name }} du {{ $date }} par {{ $medecin->civilite ?? '' }} {{ $medecin->user->name }}</title>
+    <title>Prescription imageries de {{ $patient->user->name }} du {{ $date }} par {{ $medecin->civilite ?? '' }} {{ $medecin->user->name }}</title>
 
     <style>
         body {
@@ -164,24 +164,29 @@
     </div>
 
     <h4><span class="titre">Prescipteur:</span> <b>{{ $medecin->civilite ?? '' }}  {{ $medecin->user->name }}</b> </h4>
-    @if(count($examen_analyse['etablissements']) > 0)
-        <h4><span class="titre">Etablissement:</span> <b>{{ $examen_analyse['etablissements'][0]['name'] }}</b> </h4>
+    @if(count($prescription_imagerie['etablissements']) > 0)
+        <h4><span class="titre">Etablissement:</span> <b>{{ $prescription_imagerie['etablissements'][0]['name'] }}</b> </h4>
     @endif
 
-    <h4 class="sous-titre-rapport">Renseignement clinique</h4>
-    <p>{!! $examen_analyse['renseignement_clinique'] !!}</p>
+    <h4 class="sous-titre-rapport">Informations cliniques pertinentes</h4>
+    <p>{!! $prescription_imagerie['information_clinique'] !!}</p>
+
+    <h4 class="sous-titre-rapport">Explication de la demande de diagnostic</h4>
+    <p>{!! $prescription_imagerie['explication_demande_diagnostic'] !!}</p>
+
+    @if(count($prescription_imagerie['information_supplementaires']) > 0)
+        <h4 class="sous-titre-rapport">Informations supplémentaires pertinentes</h4>
+        <ol>
+            @forelse ($prescription_imagerie['information_supplementaires'] as $information)
+                <li>{{ $information['libelle'] }}</li>
+            @empty
+            @endforelse
+        </ol>
+    @endif 
 
 
-    @if (count($examen_analyse['examen_complementaires'])>0)
+    @if (count($prescription_imagerie['examen_complementaires'])>0)
         <h4 class="sous-titre-rapport">Examens à réaliser</h4>
-        {{-- <div class="row">
-            <ol>
-                @forelse ($examen_analyse['examen_complementaires'] as $examen_complementaire)
-                    <li>{{ $examen_complementaire['fr_description'] }}</li>
-                @empty
-                @endforelse
-            </ol>
-        </div> --}}
         <table>
             <thead>
                 <tr>
@@ -189,7 +194,7 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse ($examen_analyse['type_examens'] as $type_examen)
+                @forelse ($prescription_imagerie['type_examens'] as $type_examen)
                     <tr>
                         <td rowspan="{{ count($type_examen['examen_complementaires']) }}">{{ $loop->iteration }}</td>
                         <td rowspan="{{ count($type_examen['examen_complementaires']) }}">{{ $type_examen['libelle'] }}</td>
@@ -209,44 +214,55 @@
     @endif
 
 
+    @if(count($prescription_imagerie['examens_pertinents']) > 0)
+        <h4 class="sous-titre-rapport">Examens pertinents précédents relatifs à la demande de diagnostic</h4>
+        <ol>
+            @forelse ($prescription_imagerie['examens_pertinents'] as $examens_pertinent)
+                <li>{{ $examens_pertinent['libelle'] }}</li>
+            @empty
+            @endforelse
+        </ol>
+    @endif 
+
+
 
  {{--    <p> Honorée Consoeur, Honoré Confrère, bonjour</p>
     <p>Voudriez-vous prendre contact avec {{ $patient->sexe == "M" ? "monsieur" : "madame" }} {{ $patient->user->name }} Patient{{ $patient->sexe == "M" ? "" : "e" }} né{{ $patient->sexe == "M" ? "" : "e" }} le {{ Carbon::parse($patient->date_de_naissance)->locale(config('app.locale'))->translatedFormat('jS F Y') }}, résidant à {{ $patient->user->ville }} – {{ $patient->user->pays }}
-        @if(count($examen_analyse['teleconsultations']) > 0)
-            , en vue d'une consultation de {{ $examen_analyse['teleconsultations'][0]['type']['libelle'] }} le {{ Carbon::parse($examen_analyse['created_at'])->format('d-M-Y') }}
+        @if(count($prescription_imagerie['teleconsultations']) > 0)
+            , en vue d'une consultation de {{ $prescription_imagerie['teleconsultations'][0]['type']['libelle'] }} le {{ Carbon::parse($prescription_imagerie['created_at'])->format('d-M-Y') }}
         @endif
     </p>
     <p>Contact Patient{{ $patient->sexe == "M" ? "" : "e" }} : <a href="tel:+{{$patient->user->telephone}}">{{ number_format($patient->user->telephone, 0,","," ")  }}</a>  </p>
 
  --}}
 
-    {{-- @if(count($examen_analyse['motifs']) > 0)
+    {{-- @if(count($prescription_imagerie['motifs']) > 0)
         <h4 class="sous-titre-rapport">Motifs de consultations</h4>
         <ol>
-            @forelse ($examen_analyse['motifs'] as $motif)
+            @forelse ($prescription_imagerie['motifs'] as $motif)
                 <li>{{ $motif['description'] }}</li>
             @empty 
             @endforelse
         </ol>
     @endif --}}
 
-   {{--  <h4 class="sous-titre-rapport">Niveau d'urgence: {{ $examen_analyse['niveau_urgence']['id'] }}</h4>
-    <p>{{ $examen_analyse['niveau_urgence']['description'] }}</p>
+   {{--  <h4 class="sous-titre-rapport">Niveau d'urgence: {{ $prescription_imagerie['niveau_urgence']['id'] }}</h4>
+    <p>{{ $prescription_imagerie['niveau_urgence']['description'] }}</p>
 
-    @if(count($examen_analyse['option_financements']) > 0)
+    @if(count($prescription_imagerie['option_financements']) > 0)
         <h4 class="sous-titre-rapport">Options de financements</h4>
         <ol>
-            @forelse ($examen_analyse['option_financements'] as $option_financement)
+            @forelse ($prescription_imagerie['option_financements'] as $option_financement)
                 <li>{{ $option_financement['libelle'] }}</li>
             @empty 
             @endforelse
         </ol>
     @endif
 
-    @if(count($examen_analyse['raison_prescriptions']) > 0)
+    @if(count($prescription_imagerie['raison_prescriptions']) > 0)
         <h4 class="sous-titre-rapport">Raison de prescription</h4>
         <ol>
-            @forelse ($examen_analyse['raison_prescriptions'] as $raison_prescription)
+            @forelse ($prescription_imagerie['raison_prescriptions'] as $raison_prescription)
                 <li>{{ $raison_prescription['libelle'] }}</li>
             @empty 
             @endforelse
@@ -254,13 +270,13 @@
     @endif --}}
 
     {{-- <h4 class="sous-titre-rapport">Plainte</h4>
-    <p>{{ $examen_analyse['plainte'] }}</p> --}}
+    <p>{{ $prescription_imagerie['plainte'] }}</p> --}}
 
-   {{--  @if (count($examen_analyse['examen_complementaires'])>0)
+   {{--  @if (count($prescription_imagerie['examen_complementaires'])>0)
         <h4 class="sous-titre-rapport">Examens complémentaires pouvant être réalisés si la Clinique le justifie:</h4>
         <div class="row">
             <ol>
-                @forelse ($examen_analyse['examen_complementaires'] as $examen_complementaire)
+                @forelse ($prescription_imagerie['examen_complementaires'] as $examen_complementaire)
                     <li>{{ $examen_complementaire['fr_description'] }}</li>
                 @empty
                 @endforelse
@@ -276,7 +292,7 @@
 
     <div>
         <p>
-            Date de prescription: {{ Carbon::parse($examen_analyse['date_heure'])->format('d-m-Y à H:i') }} <br>
+            Date de prescription: {{ Carbon::parse($prescription_imagerie['date_heure'])->format('d-m-Y à H:i') }} <br>
             Numéro d'ordre: {{ $medecin->numero_ordre }} <br>
             Téléphone:  {{ number_format($medecin->user->telephone, 0,","," ")  }} <br>
         </p>
