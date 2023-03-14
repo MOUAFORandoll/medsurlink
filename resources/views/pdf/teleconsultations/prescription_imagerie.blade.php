@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,500,500i,600,700,800,900&display=swap" rel="stylesheet">
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
 
-    <title>Bulletin d'examens d'analyses biomédicales de {{ $patient->user->name }} du {{ $date }} par {{ $medecin->civilite ?? '' }} {{ $medecin->user->name }}</title>
+    <title>Prescription imageries de {{ $patient->user->name }} du {{ $date }} par {{ $medecin->civilite ?? '' }} {{ $medecin->user->name }}</title>
 
     <style>
         body {
@@ -168,20 +168,25 @@
         <h4><span class="titre">Etablissement:</span> <b>{{ $prescription_imagerie['etablissements'][0]['name'] }}</b> </h4>
     @endif
 
-    <h4 class="sous-titre-rapport">Renseignement clinique</h4>
-    <p>{!! $prescription_imagerie['renseignement_clinique'] !!}</p>
+    <h4 class="sous-titre-rapport">Informations cliniques pertinentes</h4>
+    <p>{!! $prescription_imagerie['information_clinique'] !!}</p>
+
+    <h4 class="sous-titre-rapport">Explication de la demande de diagnostic</h4>
+    <p>{!! $prescription_imagerie['explication_demande_diagnostic'] !!}</p>
+
+    @if(count($prescription_imagerie['information_supplementaires']) > 0)
+        <h4 class="sous-titre-rapport">Informations supplémentaires pertinentes</h4>
+        <ol>
+            @forelse ($prescription_imagerie['information_supplementaires'] as $information)
+                <li>{{ $information['libelle'] }}</li>
+            @empty
+            @endforelse
+        </ol>
+    @endif 
 
 
     @if (count($prescription_imagerie['examen_complementaires'])>0)
         <h4 class="sous-titre-rapport">Examens à réaliser</h4>
-        {{-- <div class="row">
-            <ol>
-                @forelse ($prescription_imagerie['examen_complementaires'] as $examen_complementaire)
-                    <li>{{ $examen_complementaire['fr_description'] }}</li>
-                @empty
-                @endforelse
-            </ol>
-        </div> --}}
         <table>
             <thead>
                 <tr>
@@ -207,6 +212,17 @@
 
         </table>
     @endif
+
+
+    @if(count($prescription_imagerie['examens_pertinents']) > 0)
+        <h4 class="sous-titre-rapport">Examens pertinents précédents relatifs à la demande de diagnostic</h4>
+        <ol>
+            @forelse ($prescription_imagerie['examens_pertinents'] as $examens_pertinent)
+                <li>{{ $examens_pertinent['libelle'] }}</li>
+            @empty
+            @endforelse
+        </ol>
+    @endif 
 
 
 
