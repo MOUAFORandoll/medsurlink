@@ -179,6 +179,20 @@
         </ol>
     @endif
 
+    @if($bon_prise_en_charge['ligne_temps'] !="")
+        <h4 class="sous-titre-rapport">Motifs principaux de consultation initiale</h4>
+        <ol>
+            @if (count($bon_prise_en_charge['ligne_temps']['motifs']) > 0)
+                @forelse ($bon_prise_en_charge['ligne_temps']['motifs'] as $motif)
+                    <li>{{ $motif['description'] }}</li>
+                @empty 
+                @endforelse
+            @else
+                <li>{{ $bon_prise_en_charge['ligne_temps']['motif']['description'] }}</li>
+            @endif
+        </ol>
+    @endif
+
     <h4 class="sous-titre-rapport">Plainte</h4>
     <p>{!! $bon_prise_en_charge['plainte'] !!}</p>
 
