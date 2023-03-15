@@ -246,6 +246,34 @@ Route::get('prescription-imageries/print/{prescription_imagerie_id}', function (
 })->name('prescription_imageries.print');
 
 
+Route::get('ordonnances/print/{bon_prise_en_charge_id}/{ordonnance_id}', function ($bon_prise_en_charge_id, $ordonnance_id) {
+    $bon_prise_en_charge = new BonpriseEnChargeService;
+    $bon_prise_en_charge = json_decode($bon_prise_en_charge->fetchBonPriseEnCharge($bon_prise_en_charge_id), true)['data'];
+    $ordonnances = collect($bon_prise_en_charge['ordonnances']);
+    $patient_id = $bon_prise_en_charge['patient_id'];
+
+    $ordonnance = $ordonnances->where('id', $ordonnance_id)->first();
+    $patient = Patient::where('user_id', $patient_id)->orWhere('slug', $patient_id)
+        ->orwhereHas('dossier', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->orwhereHas('user', function ($query) use ($patient_id) {
+            $query->where('id', $patient_id);
+        })->orwhereHas('alerte', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug')->first();
+
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $bon_prise_en_charge['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+
+    $date = Carbon::parse($ordonnance['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
+
+    $pdf = PDF::loadView('pdf.teleconsultations.ordonnance', ['ordonnance' => $ordonnance, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
+    //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+
+    return $pdf->stream("Ordonnance de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
+
+})->name('ordonnances.print');
+
+
 //route('prescription_imageries.print', $prescription_imagerie->data->uuid);
 
 

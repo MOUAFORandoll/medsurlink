@@ -163,7 +163,7 @@
     <p>Concerne {{ $patient->sexe == "M" ? "M." : "Mme" }} {{ $patient->user->name }}, patient{{ $patient->sexe == "M" ? "" : "e" }} né{{ $patient->sexe == "M" ? "" : "e" }} le {{ Carbon::parse($patient->date_de_naissance)->locale(config('app.locale'))->translatedFormat('jS F Y') }}, résidant à {{ $patient->user->ville }} – {{ $patient->user->pays }}</p>
     <p> Honorée Consoeur, Honoré Confrère, bonjour</p>
     <p>Voudriez-vous prendre contact avec {{ $patient->sexe == "M" ? "le" : "la" }} patient{{ $patient->sexe == "M" ? "" : "e" }} sus mentionnée
-        @if (count($bon_prise_en_charge['teleconsultations']))
+        @if (count($bon_prise_en_charge['teleconsultations']) > 0)
             en vue d'une consultation de {{ $bon_prise_en_charge['teleconsultations'][0]['type']['libelle'] }} le {{ Carbon::parse($bon_prise_en_charge['rendez_vous'][0]['date'])->locale(config('app.locale'))->translatedFormat('jS F Y') }}
         @endif
     </p>
