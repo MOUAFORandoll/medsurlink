@@ -7,53 +7,48 @@
     <title>@yield('title')</title>
     <style>
 
-        html, body{
-            margin: 0;
-            padding: 0;
+        @page { 
+            margin: 140px 0px; 
         }
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            height: 100px;
+        #header { 
+            position: fixed; 
+            left: 0px; 
+            top: -140px; 
+            right: 0px; 
+            height: 100px; 
             background-image: url("{{ public_path('images/pdf/header.png') }}");
             background-position: center;
-            background-size: cover;
+            background-size: cover; 
+            text-align: center;
             padding-top: 2rem;
-            padding-left: 2rem;
+            padding-left: 2rem; 
         }
 
-        footer{
-            position: fixed ;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            width: 100%;
-            height: 60px;
+        #footer { 
+            position: fixed; 
+            left: 0px; 
+            bottom: -140px; 
+            right: 0px; 
+            height: 70px;
             background-image: url("{{ public_path('images/pdf/footer.png') }}");
             background-position: center;
             background-size: cover;
-            padding: 1rem;
+            padding-top: 1rem;
         }
-        .container{
-            /* margin-top: 8rem;
-            margin-bottom: 8rem; */
-        }
-        /* footer:before{
-            content: "Page " counter(page)
-        } */
 
-        footer li{
+        #footer .page:after { 
+            content: counter(page, upper-roman); 
+        }
+
+        #footer li{
             font-size: 14px;
         }
 
-        footer ul .info{
+        #footer ul .info{
             color: #f2f2f2;
         }
 
-        footer ul .title{
+        #footer ul .title{
             color: #2dcecc;
         }
         .img{
@@ -91,13 +86,9 @@
             text-transform: uppercase;
         }
 
-        .li-top{
-            margin-bottom: 1rem;
-        }
-
-        li.li-top span:nth-child(2){
+        /* li.li-top span:nth-child(2){
             margin-right: 2rem;
-        }
+        } */
 
         li.li-bottom .span{
             margin-left: 14rem;
@@ -140,6 +131,22 @@
             color: #32325d;
         }
 
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+
         ul, li{
             margin: 0;
             padding: 0;
@@ -155,11 +162,19 @@
         .mt-2{
             margin-top: 2rem;
         }
+
+        .w-content{
+            width: fit-content;
+        }
+
+        .text-center{
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     @include('pdf.includes.header')
-    @yield('content')
     @include('pdf.includes.footer')
+    @yield('content')
 </body>
 </html>

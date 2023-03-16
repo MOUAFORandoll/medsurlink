@@ -7,7 +7,7 @@
                 <img src="{{public_path('/images/pdf/logo-white.png')}}" class="logo-rapport" alt="" />
             </div>
         </header>
-        <div class="container default-margin">
+        <div class="container ">
             <div class="info-user">
                 <h2>Identification de tatio william</h2>
                 <ul class="list-none">
