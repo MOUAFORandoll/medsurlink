@@ -33,7 +33,7 @@
             background-image: url("{{ public_path('images/pdf/footer.png') }}");
             background-position: center;
             background-size: cover;
-            padding-top: 1rem;
+            padding-top: .5rem;
         }
 
         #footer .page:after { 
@@ -76,8 +76,13 @@
             padding-top: 1.5rem;
         }
 
+        .info-user .li-top{
+            margin-bottom: 1rem;
+        }
+
         .info-user ul .title{
             color: #2dcecc;
+            font-size: 18px;
         }
 
         .info-user ul .info{
@@ -91,7 +96,7 @@
         } */
 
         li.li-bottom .span{
-            margin-left: 14rem;
+            margin-left: 13rem;
         }
 
         .content{
@@ -135,12 +140,14 @@
             font-family: arial, sans-serif;
             border-collapse: collapse;
             width: 100%;
+            color: #32325d;
         }
 
         td, th {
             border: 1px solid #dddddd;
             text-align: left;
             padding: 8px;
+            color: #32325d;
         }
 
         tr:nth-child(even) {
@@ -169,6 +176,18 @@
 
         .text-center{
             text-align: center;
+        }
+
+        .p-0{
+            padding: 0;
+        }
+
+        .m-0{
+            margin: 0;
+        }
+
+        .white{
+            color: #fff;
         }
     </style>
 </head>

@@ -4,7 +4,7 @@
 @section('content')
   <div id="content" class="default-margin">
     <div class="info-user">
-      <h2>Identification de tatio william</h2>
+      <h2>Identification du patient</h2>
       <ul class="list-none">
           <li class="li-top">
               <span>
@@ -62,29 +62,7 @@
               Necessitatibus voluptas quos doloribus. Quia saepe ut vel eaque est consequatur excepturi nam.
               Et voluptate illum quia molestiae. Est dolorem unde architecto sunt voluptas voluptatibus aut ea. 
           </p>
-      </fieldset>
-      <div class="content-text">
-        <p>
-            N’hésitez pas à archiver votre rapport de prise en charge dans le dossier medical du patient sur Medsurlink <strong>medsurlink.com</strong>. 
-        </p>
-        <p>
-            Si vous rencontrez des difficultés, n’hésitez pas à nous le transmettre par mail à <strong>medical@medicasure.com</strong>.
-        </p>
-        <p>
-          Je vous remercie d’avance de votre diligence. 
-        </p>
-        <p>
-          Sincères salutations 
-        </p>
-      </div>
-      <div class="content-text">
-        <p><strong>Dr. Romarie VANDERBIST</strong></p>
-        <p>
-          Numéro d’ordre : 0000000000
-        </p>
-        <p>Téléphone : </p>
-        <p>Fait le : <strong>9 mars 2023</strong></p>
-      </div>
+      </fieldset><br>
 
       <table>
         <tr>
@@ -103,6 +81,30 @@
           <td>Mexico</td>
         </tr>
       </table>
+
+      <div class="content-text">
+        <p>
+            N’hésitez pas à archiver votre rapport de prise en charge dans le dossier medical du patient sur Medsurlink <strong>medsurlink.com</strong>. 
+        </p>
+        <p>
+            Si vous rencontrez des difficultés, n’hésitez pas à nous le transmettre par mail à <strong>medical@medicasure.com</strong>.
+        </p>
+        <p>
+          Je vous remercie d’avance de votre diligence. 
+        </p>
+        <p>
+          Sincères salutations 
+        </p>
+      </div>
+
+      <div class="content-text">
+        <p>
+          <strong>Dr. Romarie VANDERBIST</strong><br />
+          Numéro d’ordre : 0000000000<br />
+          Téléphone : <br />
+          Fait le : <strong>9 mars 2023</strong>
+        </p>
+      </div>
     </div>
   </div>
 @endsection
