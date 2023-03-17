@@ -82,7 +82,7 @@ class TeleconsultationService
             $item['medecin'] = $patient->getMedecin($item['creator']);
             $item['alerte'] = $alerte->getAlerte($item['id']);
             $item['pdf'] =  route('teleconsultations.print', $item['uuid']);
-            $item['url'] = $video->getRecordings($item['patient_id'], $item['creator'], $item['created_at']);
+            //$item['url'] = $video->getRecordings($item['patient_id'], $item['creator'], $item['created_at']);
             $items[] = $item;
         }
         $teleconsultations['data']['data'] = $items;

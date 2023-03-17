@@ -20,7 +20,7 @@ use App\Models\RendezVous;
 use App\Services\BonpriseEnChargeService;
 use App\Services\ExamenAnalyseService;
 use App\Services\PatientService;
-
+use App\Services\PrescriptionImagerieService;
 use BigBlueButton\BigBlueButton;
 use BigBlueButton\Parameters\GetRecordingsParameters;
 
@@ -52,14 +52,10 @@ Route::get('/redirect-mesurlink/redirect/{email}','Api\MedicasureController@stor
 Route::resource('medicasure/souscripteur','Api\MedicasureController');
 
 Route::get('/', function () {
-    $recordingParams = new GetRecordingsParameters();
-    $recordingParams->setMeetingId(174);
-    $bbb = new BigBlueButton();
-    $response = $bbb->getRecordings($recordingParams);
-    if ($response->getReturnCode() == 'SUCCESS') {
-        return $response->getRawXml()->recordings->recording->playback->format->url;
-    }
-    return view('welcome');
+    $pdf = PDF::loadView('pdf.teleconsultations.test');
+    //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+
+    return $pdf->stream("Prescription imageries de" . ".pdf");
 });
 
 Route::get('/join', function () {
@@ -224,6 +220,63 @@ Route::get('examens-analyses/print/{examen_analyse_id}', function ($examen_analy
 })->name('examen_analyses.print');
 
 
+Route::get('prescription-imageries/print/{prescription_imagerie_id}', function ($prescription_imagerie_id) {
+    $prescription_imagerie = new PrescriptionImagerieService;
+    $prescription_imagerie = json_decode($prescription_imagerie->fetchPrescriptionImagerie($prescription_imagerie_id), true)['data'];
+    $patient_id = $prescription_imagerie['patient_id'];
+
+    $patient = Patient::where('user_id', $patient_id)->orWhere('slug', $patient_id)
+        ->orwhereHas('dossier', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->orwhereHas('user', function ($query) use ($patient_id) {
+            $query->where('id', $patient_id);
+        })->orwhereHas('alerte', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug')->first();
+
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $prescription_imagerie['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+
+    $date = Carbon::parse($prescription_imagerie['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
+
+    $pdf = PDF::loadView('pdf.teleconsultations.prescription_imagerie', ['prescription_imagerie' => $prescription_imagerie, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
+    //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+
+    return $pdf->stream("Prescription imageries de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
+
+})->name('prescription_imageries.print');
+
+
+Route::get('ordonnances/print/{bon_prise_en_charge_id}/{ordonnance_id}', function ($bon_prise_en_charge_id, $ordonnance_id) {
+    $bon_prise_en_charge = new BonpriseEnChargeService;
+    $bon_prise_en_charge = json_decode($bon_prise_en_charge->fetchBonPriseEnCharge($bon_prise_en_charge_id), true)['data'];
+    $ordonnances = collect($bon_prise_en_charge['ordonnances']);
+    $patient_id = $bon_prise_en_charge['patient_id'];
+
+    $ordonnance = $ordonnances->where('id', $ordonnance_id)->first();
+    $patient = Patient::where('user_id', $patient_id)->orWhere('slug', $patient_id)
+        ->orwhereHas('dossier', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->orwhereHas('user', function ($query) use ($patient_id) {
+            $query->where('id', $patient_id);
+        })->orwhereHas('alerte', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug')->first();
+
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $bon_prise_en_charge['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+
+    $date = Carbon::parse($ordonnance['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
+
+    $pdf = PDF::loadView('pdf.teleconsultations.ordonnance', ['ordonnance' => $ordonnance, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
+    //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+
+    return $pdf->stream("Ordonnance de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
+
+})->name('ordonnances.print');
+
+
+//route('prescription_imageries.print', $prescription_imagerie->data->uuid);
+
+
 Route::get('visualiser-consultation-medecine/{slug}',function ($slug){
     $pdf = visualiser($slug);
     return $pdf;
@@ -254,6 +307,7 @@ Route::get('impression/prestation/{paiement_uuid}', function ($paiement_uuid) {
     $pdf = generationPdfPaiementPrestation($payment_id, $commande_date, $montant_total, $echeance, $description, $mode_paiement, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
     return $pdf['stream'];
 })->name('facture.paiement.prestation');
+
 
 Route::get('bilans/{patient}', function ($patient) {
     try {

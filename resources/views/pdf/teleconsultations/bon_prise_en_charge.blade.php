@@ -163,7 +163,7 @@
     <p>Concerne {{ $patient->sexe == "M" ? "M." : "Mme" }} {{ $patient->user->name }}, patient{{ $patient->sexe == "M" ? "" : "e" }} né{{ $patient->sexe == "M" ? "" : "e" }} le {{ Carbon::parse($patient->date_de_naissance)->locale(config('app.locale'))->translatedFormat('jS F Y') }}, résidant à {{ $patient->user->ville }} – {{ $patient->user->pays }}</p>
     <p> Honorée Consoeur, Honoré Confrère, bonjour</p>
     <p>Voudriez-vous prendre contact avec {{ $patient->sexe == "M" ? "le" : "la" }} patient{{ $patient->sexe == "M" ? "" : "e" }} sus mentionnée
-        @if (count($bon_prise_en_charge['teleconsultations']))
+        @if (count($bon_prise_en_charge['teleconsultations']) > 0)
             en vue d'une consultation de {{ $bon_prise_en_charge['teleconsultations'][0]['type']['libelle'] }} le {{ Carbon::parse($bon_prise_en_charge['rendez_vous'][0]['date'])->locale(config('app.locale'))->translatedFormat('jS F Y') }}
         @endif
     </p>
@@ -179,8 +179,22 @@
         </ol>
     @endif
 
+    @if($bon_prise_en_charge['ligne_temps'] !="")
+        <h4 class="sous-titre-rapport">Motifs principaux de consultation initiale</h4>
+        <ol>
+            @if (count($bon_prise_en_charge['ligne_temps']['motifs']) > 0)
+                @forelse ($bon_prise_en_charge['ligne_temps']['motifs'] as $motif)
+                    <li>{{ $motif['description'] }}</li>
+                @empty 
+                @endforelse
+            @else
+                <li>{{ $bon_prise_en_charge['ligne_temps']['motif']['description'] }}</li>
+            @endif
+        </ol>
+    @endif
+
     <h4 class="sous-titre-rapport">Plainte</h4>
-    <p>{{ $bon_prise_en_charge['plainte'] }}</p>
+    <p>{!! $bon_prise_en_charge['plainte'] !!}</p>
 
     <h4 class="sous-titre-rapport">Bulletin d’examens / Ordonnances Disponibles</h4>
     <p>{{ $bon_prise_en_charge['plainte'] }}</p>
@@ -188,40 +202,6 @@
     <h4 class="sous-titre-rapport">Rapports / Résultats disponibles</h4>
     <p>{{ $bon_prise_en_charge['plainte'] }}</p>
 
-   {{--  <h4 class="sous-titre-rapport">Niveau d'urgence: {{ $bon_prise_en_charge['niveau_urgence']['id'] }}</h4>
-    <p>{{ $bon_prise_en_charge['niveau_urgence']['description'] }}</p>
-
-    @if(count($bon_prise_en_charge['option_financements']) > 0)
-        <h4 class="sous-titre-rapport">Options de financements</h4>
-        <ol>
-            @forelse ($bon_prise_en_charge['option_financements'] as $option_financement)
-                <li>{{ $option_financement['libelle'] }}</li>
-            @empty 
-            @endforelse
-        </ol>
-    @endif
-
-    @if(count($bon_prise_en_charge['raison_prescriptions']) > 0)
-        <h4 class="sous-titre-rapport">Raison de prescription</h4>
-        <ol>
-            @forelse ($bon_prise_en_charge['raison_prescriptions'] as $raison_prescription)
-                <li>{{ $raison_prescription['libelle'] }}</li>
-            @empty 
-            @endforelse
-        </ol>
-    @endif
-
-    @if (count($bon_prise_en_charge['examen_complementaires'])>0)
-        <h4 class="sous-titre-rapport">Examens complémentaires pouvant être réalisés si la Clinique le justifie:</h4>
-        <div class="row">
-            <ol>
-                @forelse ($bon_prise_en_charge['examen_complementaires'] as $examen_complementaire)
-                    <li>{{ $examen_complementaire['fr_description'] }}</li>
-                @empty
-                @endforelse
-            </ol>
-        </div>
-    @endif --}}
     <p>N’hésitez pas à archiver votre rapport de prise en charge dans le dossier medical du patient sur Medsurlink <a href="https://www.medsurlink.com" target="_blank">medsurlink.com</a>.</p>
     <p>Si vous rencontrez des difficultés, n’hésitez pas à nous le transmettre par mail à  <a href="mailto:medical@medicasure.com" target="_blank">medical@medicasure.com</a> .</p>
     <p>Je vous remercie d’avance de votre diligence.</p>
@@ -245,3 +225,91 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+@extends('pdf.layouts.pdf')
+@section('title', 'Le titre')
+@section('content')
+  <div id="content" class="default-margin">
+    @include('pdf.includes.identification_patient')
+    <div class="content mt-2">
+      <h1>Bon de prise en charge</h1>
+      <div class="content-text">
+          <p>
+              Concerne <strong>Mme Terfa DOUALA</strong>, patiente née le <strong>1er janvier 2004</strong>, résidant à <strong>Mbouda – Cameroon</strong> 
+          </p>
+          <p>
+              Honorée Consœur, Honoré Confrère, bonjour <br /><br />
+              Voudriez-vous prendre contact avec la patiente sus mentionnée en vue d'une consultation de Ostéoarticulaire le <strong>4 avril 2022</strong> <br /><br />
+              Contact Patiente : <strong>237 674 315 311</strong>
+          </p>
+      </div>
+      <fieldset class="content-field mt-2">
+          <legend>MOTIFS PRINCIPAUX DE CONSULTATION INITIALE</legend>
+          <ul class="content-field-list list-none">
+              <li>1. Tuméfaction/gonflement loc. peau</li>
+              <li>2. Douleur abdominale</li>
+              <li>3. Prolapsus hémorrhoidaire</li>
+          </ul>
+      </fieldset>
+      <fieldset class="content-field mt-2">
+          <legend>Plaintes</legend>
+          <p>
+              Necessitatibus voluptas quos doloribus. Quia saepe ut vel eaque est consequatur excepturi nam.
+              Et voluptate illum quia molestiae. Est dolorem unde architecto sunt voluptas voluptatibus aut ea.
+          </p>
+      </fieldset>
+      <fieldset class="content-field mt-2">
+          <legend>BULLETIN D’EXAMENS / ORDONNANCES DISPONIBLES</legend>
+          <p>
+              Necessitatibus voluptas quos doloribus. Quia saepe ut vel eaque est consequatur excepturi nam.
+              Et voluptate illum quia molestiae. Est dolorem unde architecto sunt voluptas voluptatibus aut ea. 
+          </p>
+      </fieldset><br>
+
+      <table>
+        <tr>
+          <th>#</th>
+          <th>Catégories</th>
+          <th>Examen</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>ORH</td>
+          <td>Germany</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>NFS</td>
+          <td>Mexico</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>NFS</td>
+          <td>Mexico</td>
+        </tr>
+      </table>
+
+      <div class="content-text">
+        <p>
+            N’hésitez pas à archiver votre rapport de prise en charge dans le dossier medical du patient sur Medsurlink <strong>medsurlink.com</strong>. 
+        </p>
+        <p>
+            Si vous rencontrez des difficultés, n’hésitez pas à nous le transmettre par mail à <strong>medical@medicasure.com</strong>.
+        </p>
+        <p>
+          Je vous remercie d’avance de votre diligence. <br/>
+          Sincères salutations
+        </p>
+      </div>
+      @include('pdf.includes.signature_medecin')
+    </div>
+  </div>
+@endsection
+
