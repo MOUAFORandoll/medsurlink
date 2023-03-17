@@ -50,6 +50,11 @@
             font-size: 12px;
         }
 
+        ol li{
+            font-size: 16px;
+            color: #32325d;
+        }
+
         #footer ul .info{
             color: #f2f2f2;
         }
@@ -94,7 +99,7 @@
         .info-user ul .info{
             color: #32325d;
             font-weight: 600;
-            text-transform: uppercase;
+            /*text-transform: uppercase;*/
         }
 
         /* li.li-top span:nth-child(2){
