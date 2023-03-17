@@ -1,7 +1,7 @@
 
 <div id="footer">
     {{-- <p class="page">Page </p> --}}
-    <h3 class="text-center p-0 m-0 white">Contact Medsurlink : </h3>
+    <h4 class="text-center p-0 m-0 white">Contact Medsurlink : </h4>
     <ul class="list-none">
         <li class="li-top text-center">
             <span>

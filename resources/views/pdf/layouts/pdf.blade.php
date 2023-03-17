@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,500,500i,600,700,800,900&display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
+
+
     <title>@yield('title')</title>
     <style>
 
         @page { 
             margin: 140px 0px; 
+            font-family: 'Montserrat', sans-serif;
         }
         #header { 
             position: fixed; 
@@ -33,7 +39,7 @@
             background-image: url("{{ public_path('images/pdf/footer.png') }}");
             background-position: center;
             background-size: cover;
-            padding-top: .5rem;
+            padding-top: .25rem;
         }
 
         #footer .page:after { 
@@ -41,7 +47,7 @@
         }
 
         #footer li{
-            font-size: 14px;
+            font-size: 12px;
         }
 
         #footer ul .info{
@@ -111,7 +117,6 @@
         }
 
         .content p{
-            font-size: 1.2rem;
             font-weight: normal;
             color: #32325d;
         }

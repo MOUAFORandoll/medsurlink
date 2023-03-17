@@ -3,32 +3,7 @@
 @section('title', 'Le titre')
 @section('content')
   <div id="content" class="default-margin">
-    <div class="info-user">
-      <h2>Identification du patient</h2>
-      <ul class="list-none">
-          <li class="li-top">
-              <span>
-                  <span class="title">Nom: </span>
-                  <span class="info">TATIO WILLIAM TCHUIFANG TATIO WILLIAM</span>
-              </span>
-              <span>
-                  <span class="title">Age: </span>
-                  <span class="info">25</span>
-              </span>
-          </li>
-          <li class="li-bottom">
-              <span>
-                  <span class="title">Date de naissance: </span>
-                  <span class="info">25/05/1995</span>
-              </span>
-              <span class="span">
-                  <span class="title">Numéro de dossier: </span>
-                  <span class="info">5926277</span>
-              </span>
-          </li>
-      </ul>
-    </div>
-
+    @include('pdf.includes.identification_patient')
     <div class="content mt-2">
       <h1>Bon de prise en charge</h1>
       <div class="content-text">
@@ -80,6 +55,11 @@
           <td>NFS</td>
           <td>Mexico</td>
         </tr>
+        <tr>
+          <td>3</td>
+          <td>NFS</td>
+          <td>Mexico</td>
+        </tr>
       </table>
 
       <div class="content-text">
@@ -90,21 +70,11 @@
             Si vous rencontrez des difficultés, n’hésitez pas à nous le transmettre par mail à <strong>medical@medicasure.com</strong>.
         </p>
         <p>
-          Je vous remercie d’avance de votre diligence. 
-        </p>
-        <p>
-          Sincères salutations 
+          Je vous remercie d’avance de votre diligence. <br/>
+          Sincères salutations
         </p>
       </div>
-
-      <div class="content-text">
-        <p>
-          <strong>Dr. Romarie VANDERBIST</strong><br />
-          Numéro d’ordre : 0000000000<br />
-          Téléphone : <br />
-          Fait le : <strong>9 mars 2023</strong>
-        </p>
-      </div>
+      @include('pdf.includes.signature_medecin')
     </div>
   </div>
 @endsection
