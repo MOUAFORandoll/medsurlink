@@ -150,9 +150,9 @@
             color: #32325d;
         }
 
-        tr:nth-child(even) {
+        /* tr:nth-child(even) {
             background-color: #dddddd;
-        }
+        } */
 
         ul, li{
             margin: 0;
