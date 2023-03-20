@@ -113,6 +113,9 @@ class Patient extends Model
         'restriction',
         'slug',
     ];
+
+    protected $appends = ['age'];
+
     public function sluggable()
     {
         return [
@@ -160,6 +163,10 @@ class Patient extends Model
 
     public function user(){
         return $this->belongsTo(User::class,'user_id','id');
+    }
+
+    public function getAgeAttribute(){
+        return  Carbon::parse($this->date_de_naissance)->age;
     }
 
     public function medecinReferent(){
