@@ -6,14 +6,14 @@
 @section('content')
   <div id="content" class="default-margin">
     @include('pdf.includes.identification_patient', ['patient' => $patient])
-    <div class="content mt-2">
+    <div class="content">
       <h1>Bon de prise en charge</h1>
       <div class="content-text">
           <p>
               Concerne <strong>{{ $patient->sexe == "M" ? "M." : "Mme" }} {{ $patient->user->name }}</strong>, patient{{ $patient->sexe == "M" ? "" : "e" }} né{{ $patient->sexe == "M" ? "" : "e" }} le <strong>{{ Carbon::parse($patient->date_de_naissance)->locale(config('app.locale'))->translatedFormat('jS F Y') }}</strong>, résidant à <strong>{{ $patient->user->ville }} – {{ $patient->user->pays }}</strong> 
           </p>
           <p>
-              Honorée Consœur, Honoré Confrère, bonjour <br /><br />
+              Honorée Consœur, Honoré Confrère, bonjour <br />
               Voudriez-vous prendre contact avec {{ $patient->sexe == "M" ? "le" : "la" }} patient{{ $patient->sexe == "M" ? "" : "e" }} sus mentionnée
                 @if (count($bon_prise_en_charge['teleconsultations']) > 0)
                     en vue d'une consultation de <strong>{{ $bon_prise_en_charge['teleconsultations'][0]['type']['libelle'] }}</strong> le <strong>{{ Carbon::parse($bon_prise_en_charge['rendez_vous'][0]['date'])->locale(config('app.locale'))->translatedFormat('jS F Y') }}</strong>
@@ -84,7 +84,7 @@
     </fieldset>
 
 
-      <div class="content-text">
+      <div class="content-text mt-2">
         <p>N’hésitez pas à archiver votre rapport de prise en charge dans le dossier medical du patient sur Medsurlink <a href="https://www.medsurlink.com" target="_blank">medsurlink.com</a>.</p>
         <p>Si vous rencontrez des difficultés, n’hésitez pas à nous le transmettre par mail à  <a href="mailto:medical@medicasure.com" target="_blank">medical@medicasure.com</a> .</p>
         <p>Je vous remercie d’avance de votre diligence.<br/>

@@ -1,5 +1,5 @@
 
-<div id="footer">
+<div id="footer mt-2">
     {{-- <p class="page">Page </p> --}}
     <h4 class="text-center p-0 m-0 white">Contact Medsurlink : </h4>
     <ul class="list-none">
@@ -10,7 +10,7 @@
             </span>
             <span>
                 <span class="title">Email : </span>
-                <span class="info">contact@medicasure.com</span>
+                <span class="info">contact@medsurlink.com</span>
             </span>
             <span>
                 <span class="title">Site web : </span>

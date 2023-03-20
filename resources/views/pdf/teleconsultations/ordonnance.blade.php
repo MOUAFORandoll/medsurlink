@@ -7,6 +7,7 @@
   <div id="content" class="default-margin">
         @include('pdf.includes.identification_patient', ['patient' => $patient])
         <div class="content mt-2">
+            <h1>Ordonnance</h1>
             @if($ordonnance['description'] != "")
                 <fieldset class="content-field mt-2">
                     <legend>Prescription</legend>

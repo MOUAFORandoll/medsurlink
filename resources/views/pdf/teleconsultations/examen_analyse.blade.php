@@ -7,10 +7,9 @@
   <div id="content" class="default-margin">
     @include('pdf.includes.identification_patient', ['patient' => $patient])
     <div class="content mt-2">
-
-
+        <h1>Bulletin d'examens d'analyses biomédicales</h1>
     @if(count($examen_analyse['etablissements']) > 0)
-        <fieldset class="content-field mt-2">
+        <fieldset class="content-field">
             <legend>Etablissement</legend>
             <p>{{ $examen_analyse['etablissements'][0]['name'] }}</p>
         </fieldset>

@@ -1,4 +1,4 @@
-<div class="content-text">
+<div class="content-text mt-2">
     <p>
       <strong>{{ $medecin->civilite ?? '' }}  {{ $medecin->user->name }}</strong><br />
       Numéro d’ordre : {{ $medecin->numero_ordre }}<br />
@@ -7,7 +7,7 @@
     </p>
     @isset(explode('storage', $medecin->user->signature)[1])
         <div>
-            <img style="width: 270px;"  src="{{ public_path('/storage/'.explode('storage', $medecin->user->signature)[1]) }}" />
+            <img style="width: 180px;"  src="{{ public_path('/storage/'.explode('storage', $medecin->user->signature)[1]) }}" />
         </div>
     @endisset
 </div>

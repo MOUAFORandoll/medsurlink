@@ -7,7 +7,7 @@
   <div id="content" class="default-margin">
     @include('pdf.includes.identification_patient', ['patient' => $patient])
     <div class="content mt-2">
-
+        <h1>Prescription imageries</h1>
 
     @if(count($prescription_imagerie['etablissements']) > 0)
         <fieldset class="content-field mt-2">

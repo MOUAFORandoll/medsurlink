@@ -46,12 +46,12 @@
             content: counter(page, upper-roman); 
         }
 
-        #footer li{
+        #footer li, td, p{
             font-size: 12px;
         }
 
         ol li{
-            font-size: 16px;
+            font-size: 12px;
             color: #32325d;
         }
 
@@ -71,7 +71,7 @@
 
         .info-user{
             background-color: #f2f2f2;
-            padding: 1rem 2rem;
+            padding: 1rem 1rem;
             margin-top: 1rem;
         }
 
@@ -84,7 +84,7 @@
         }
 
         .info-user ul{
-            padding-top: 1.5rem;
+            padding-top: 1rem;
         }
 
         .info-user .li-top{
@@ -93,12 +93,13 @@
 
         .info-user ul .title{
             color: #2dcecc;
-            font-size: 18px;
+            font-size: 12px;
         }
 
         .info-user ul .info{
             color: #32325d;
             font-weight: 600;
+            font-size: 12px;
             /*text-transform: uppercase;*/
         }
 
@@ -110,20 +111,19 @@
             margin-left: 13rem;
         }
 
-        .content{
-            margin-top: 1rem;
-        }
-
         .content h1{
             text-align: center;
             color: #2dcecc;
             text-transform: uppercase;
-            font-weight: 700
+            font-weight: 700;
+            font-size: 16px;
         }
 
         .content p{
             font-weight: normal;
             color: #32325d;
+            margin: 1 1 1 1;
+            padding: 1 1 1 1;
         }
 
         .content strong{
@@ -137,9 +137,10 @@
         .content-field legend{
             color: #2dcecc;
             text-transform: uppercase;
+            font-size: 12px;
         }
         .content-field ul{
-            padding: .5rem 0rem;
+            padding: 0rem;
             font-size: 1.2rem;
             font-weight: normal;
             line-height: 1.5;
@@ -156,8 +157,12 @@
         td, th {
             border: 1px solid #dddddd;
             text-align: left;
-            padding: 8px;
+            padding: 5px;
             color: #32325d;
+            font-size: 12px;
+        }
+        h1{
+            font-size: 16px;
         }
 
         /* tr:nth-child(even) {
@@ -169,6 +174,13 @@
             padding: 0;
         }
 
+        ol, li{
+            margin-top: 0px;
+            margin-bottom: 0px;
+            padding-bottom: 0px;
+            padding-top: 0px;
+        }
+
         .list-none{
             list-style: none;
         }
@@ -178,6 +190,9 @@
         }
         .mt-2{
             margin-top: 2rem;
+        }
+        .mb-2{
+            margin-bottom: 2rem;
         }
 
         .w-content{
