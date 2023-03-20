@@ -181,7 +181,7 @@ Route::get('bon-prises-en-charges/print/{bon_prise_en_charge_id}', function ($bo
             $query->where('id', $patient_id);
         })->orwhereHas('alerte', function ($query) use ($patient_id) {
             $query->where('patient_id', $patient_id);
-        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug')->first();
+        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug', 'dossier:patient_id,numero_dossier')->first();
 
     $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $bon_prise_en_charge['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
@@ -206,7 +206,7 @@ Route::get('examens-analyses/print/{examen_analyse_id}', function ($examen_analy
             $query->where('id', $patient_id);
         })->orwhereHas('alerte', function ($query) use ($patient_id) {
             $query->where('patient_id', $patient_id);
-        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug')->first();
+        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug', 'dossier:patient_id,numero_dossier')->first();
 
     $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $examen_analyse['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
@@ -232,7 +232,7 @@ Route::get('prescription-imageries/print/{prescription_imagerie_id}', function (
             $query->where('id', $patient_id);
         })->orwhereHas('alerte', function ($query) use ($patient_id) {
             $query->where('patient_id', $patient_id);
-        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug')->first();
+        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug', 'dossier:patient_id,numero_dossier')->first();
 
     $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $prescription_imagerie['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
@@ -260,7 +260,7 @@ Route::get('ordonnances/print/{bon_prise_en_charge_id}/{ordonnance_id}', functio
             $query->where('id', $patient_id);
         })->orwhereHas('alerte', function ($query) use ($patient_id) {
             $query->where('patient_id', $patient_id);
-        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug')->first();
+        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug', 'dossier:patient_id,numero_dossier')->first();
 
     $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $bon_prise_en_charge['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 

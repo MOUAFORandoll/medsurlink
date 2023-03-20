@@ -18,11 +18,11 @@
       </div>
       <fieldset class="content-field mt-2">
           <legend>MOTIFS PRINCIPAUX DE CONSULTATION INITIALE</legend>
-          <ul class="content-field-list list-none">
-              <li>1. Tuméfaction/gonflement loc. peau</li>
-              <li>2. Douleur abdominale</li>
-              <li>3. Prolapsus hémorrhoidaire</li>
-          </ul>
+          <ol>
+              <li> Tuméfaction/gonflement loc. peau</li>
+              <li> Douleur abdominale</li>
+              <li> Prolapsus hémorrhoidaire</li>
+          </ol>
       </fieldset>
       <fieldset class="content-field mt-2">
           <legend>Plaintes</legend>
