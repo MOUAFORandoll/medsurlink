@@ -28,7 +28,8 @@ trait RequestService
         $response = $client->request($method, $requestUrl,
             [
                 'form_params' => $formParams,
-                'headers' => $headers
+                'headers' => $headers,
+                'verify' => false
             ]
         );
 
