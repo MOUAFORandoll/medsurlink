@@ -41,16 +41,6 @@
       'SnappyImage' => 'Barryvdh\\Snappy\\Facades\\SnappyImage',
     ),
   ),
-<<<<<<< HEAD
-=======
-  'beyondcode/laravel-dump-server' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'BeyondCode\\DumpServer\\DumpServerServiceProvider',
-    ),
-  ),
->>>>>>> cbdd542d0d08ff595590556fd87d85d1ec1c9c6d
   'cviebrock/eloquent-sluggable' => 
   array (
     'providers' => 
