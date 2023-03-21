@@ -63,6 +63,7 @@ class BigBlueButtonService
             $createParams->setLogoutUrl($this->url_global."/teleconsultations");
             $response = $bbb->createMeeting($createParams);
             if($response->getReturnCode() == 'FAILED') {
+                \Log::alert("create ", [$response->getReturnCode()]);
                 return "";
             }else {
                 $joinMeetingParams = new JoinMeetingParameters($metting_id, $this->user->name, config('app.password.moderator'));
@@ -71,6 +72,7 @@ class BigBlueButtonService
                 return $url;
             }
         } catch (Exception $ex) {
+            \Log::alert("stroreMetting ", [$ex->getMessage()]);
             return "";
         }
     }
@@ -93,6 +95,7 @@ class BigBlueButtonService
 
         return $url;
         } catch (Exception $ex) {
+            \Log::alert("joinMetting ", [$ex->getMessage()]);
             return "";
         }
 
@@ -104,6 +107,7 @@ class BigBlueButtonService
             $response = $bbb->endMeeting($endMeetingParams);
         }
         catch(Exception $ex){
+            \Log::alert("endMeetingParameters ", [$ex->getMessage()]);
             return "";
         }
     }
@@ -133,6 +137,7 @@ class BigBlueButtonService
                             return $metting->url;
                         }
                     }catch (Exception $ex) {
+                        \Log::alert("getRecordings ", [$ex->getMessage()]);
                         return "";
                     }
                 }

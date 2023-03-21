@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\LigneDeTemps;
 use App\Traits\RequestService;
 use Illuminate\Http\Request;
 
@@ -71,6 +72,8 @@ class ExamenAnalyseService
         $examen_analyse = json_decode($this->request('GET', "{$this->path}/{$uuid}"));
         $examen_analyse->data->patient = $patient->getPatient($examen_analyse->data->patient_id, "dossier,affiliations,user");
         $examen_analyse->data->medecin = $patient->getMedecin($examen_analyse->data->medecin_id);
+        $ligne_temps =  LigneDeTemps::find($examen_analyse->data->ligne_temps_id);
+        $examen_analyse->data->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
         $examen_analyse->data->pdf =  route('examen_analyses.print', $examen_analyse->data->uuid);
 
         return json_encode($examen_analyse);
