@@ -62,6 +62,7 @@ class ExamenAnalyseController extends Controller
      */
     public function update(Request $request, $examenAnalyse)
     {
+        $request->request->add(['creator' => \Auth::guard('api')->user()->id]);
         return $this->successResponse($this->examenAnalyseService->updateExamenAnalyse($examenAnalyse, $request->all()));
     }
 
