@@ -414,7 +414,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::resource('souscripteur','Api\SouscripteurController')->except('show');
     Route::get('search/souscripteurs/{souscripteur_search}', 'Api\SouscripteurController@listingSouscripteur');
     Route::get('patients/souscripteurs', 'Api\SouscripteurController@listingSouscripteurPatients');
-    
     Route::get('search/patients/{patient_search}', 'Api\PatientController@listingPatients');
     Route::post('patient','Api\PatientController@store')->name('patient.store');
     //Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
