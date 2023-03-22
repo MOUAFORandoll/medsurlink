@@ -57,6 +57,7 @@ class BonPriseEnChargeController extends Controller
      */
     public function update(Request $request, $bon_prise_en_charge)
     {
+        $request->request->add(['creator' => \Auth::guard('api')->user()->id]);
         return $this->successResponse($this->bonPriseEnChargeService->updateBonPriseEnCharge($bon_prise_en_charge, $request->all()));
     }
 
