@@ -137,4 +137,17 @@ class BonpriseEnChargeService
         return $this->request('DELETE', "{$this->path}/{$bon_prise_en_charge}");
     }
 
+
+    /**
+     * @param $patient_id
+     *
+     * @return string
+     */
+    public function fetchResultats($patient_id) : string
+    {
+        $resultats = [];
+        return json_encode($resultats);
+    }
+
+
 }
