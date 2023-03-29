@@ -15,6 +15,13 @@
 Route::post('v2/oauth/token', 'Api\AuthController@auth');
 
 /**
+ * Mise en place du refresh token
+ */
+Route::post('v2/oauth/refresh/token', 'Api\AuthController@refresh')->middleware('auth:api');
+
+Route::get('v2/user/me', 'Api\AuthController@me')->middleware('auth:api');
+
+/**
  * Signature
  */
 Route::post('v2/signature/user', 'Api\UserController@signature')->middleware('auth:api');
