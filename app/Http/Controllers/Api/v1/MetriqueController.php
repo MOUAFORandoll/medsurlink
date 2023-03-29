@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Metrique;
+use App\Models\Patient;
 use App\Models\RendezVous;
+use App\Models\Souscripteur;
 use Illuminate\Support\Carbon;
 
 class MetriqueController extends Controller
@@ -34,7 +36,9 @@ class MetriqueController extends Controller
             'consultation_examen_validation' => ConversionDesDelais($metrique->consultation_examen_validation),
             'activite_amas' => ConversionDesDelais($metrique->activite_amas),
             'date_recuperation' => $metrique->date_recuperation,
-            'taux_rendez_vous' => round($rendez_vous_effectues/$rendez_vous_all*100, 2)."%"
+            'taux_rendez_vous' => round($rendez_vous_effectues/$rendez_vous_all*100, 2)."%",
+            'all_patients' => $metrique->all_patients,
+            'all_souscripteurs' => $metrique->all_souscripteurs
         ]);
     }
 
@@ -308,5 +312,41 @@ class MetriqueController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function nbre_users($metrique = "all_patients"){
+        $data = collect();
+        $patient = Patient::orderBy("created_at")->first();
+        $date = Carbon::parse($patient->created_at);
+        $titre = $metrique == "all_patients" ? "patients" : "souscripteurs";
+
+        for ($j= $date->year; $j <= date('Y'); $j++) {
+            if($metrique == "all_patients"){
+                $result = Patient::whereYear('created_at', $j)->selectRaw('MONTH(created_at) as month, COUNT(*) as total')->groupBy('month')->orderBy('month')->get();
+
+            }else{
+                $result = Souscripteur::whereYear('created_at', $j)->selectRaw('MONTH(created_at) as month, COUNT(*) as total')->groupBy('month')->orderBy('month')->get();
+            }
+            // Remplir les mois sans patient
+            for ($i = 0; $i < 12; $i++) {
+                if(!isset($result[$i])) {
+                    $item = new \stdClass();
+                    $item->month = $i+1;
+                    $item->total = 0;
+                    $item->age = 0;
+                    $result->push($item);
+                }
+            }
+
+            $result = $result->map(function($item){ return $item->total;});
+            $annee = new \stdClass();
+            $annee->label = "Evolution des {$titre} en {$j}";
+            $annee->type = "line";
+            $annee->data = $result;
+            $annee->borderColor = '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+            $annee->borderWidth = 3;
+            $data->push($annee);
+        }
+        return["data" => $data, "debut" => $date->year, "fin" => date('Y')];
     }
 }

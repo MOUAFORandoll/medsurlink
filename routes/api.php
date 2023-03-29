@@ -391,6 +391,8 @@ Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|M
     Route::resource('type-operations', 'Api\v1\TypeOperationController');
     Route::resource('metriques', 'Api\v1\MetriqueController');
     Route::get('metriques/{date}/{metrique}', 'Api\v1\MetriqueController@courbe');
+    Route::get('metriques/nbre_users/{metrique}/annee', 'Api\v1\MetriqueController@nbre_users');
+    
     Route::get('/timeactivities', 'Api\PraticienController@timeActivities');
     // timeActivities
 
