@@ -47,6 +47,7 @@ class PrescriptionController extends Controller
      */
     public function store(Request $request)
     {
+        $request->request->add(['creator' => \Auth::guard('api')->user()->id]);
         return $this->successResponse($this->prescription->createPrescription($request->all()));
     }
 

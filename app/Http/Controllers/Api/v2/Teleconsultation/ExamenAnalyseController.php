@@ -39,6 +39,10 @@ class ExamenAnalyseController extends Controller
         return $this->successResponse($this->examenAnalyseService->fetchExamenAnalyse($examenAnalyse));
     }
 
+    public function getPatientBulletins($patient_id){
+        return $this->successResponse($this->examenAnalyseService->getPatientBulletins($patient_id));
+    }
+
     /**
      * @param \Illuminate\Http\Request $request
      *
@@ -46,6 +50,7 @@ class ExamenAnalyseController extends Controller
      */
     public function store(Request $request)
     {
+        $request->request->add(['creator' => \Auth::guard('api')->user()->id]);
         return $this->successResponse($this->examenAnalyseService->createExamenAnalyse($request->all()));
     }
 
@@ -57,6 +62,7 @@ class ExamenAnalyseController extends Controller
      */
     public function update(Request $request, $examenAnalyse)
     {
+        $request->request->add(['creator' => \Auth::guard('api')->user()->id]);
         return $this->successResponse($this->examenAnalyseService->updateExamenAnalyse($examenAnalyse, $request->all()));
     }
 

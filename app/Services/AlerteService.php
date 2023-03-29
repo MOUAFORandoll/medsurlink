@@ -21,8 +21,10 @@ class AlerteService
         $this->statut = new StatutService;
         $this->teleconsultation = new TeleconsultationService;
         $this->niveau_urgence = new NiveauUrgenceService;
-        $this->user_id = \Auth::guard('api')->user()->id;
-        $this->user = \Auth::guard('api')->user();
+        if(\Auth::guard('api')->user()){
+            $this->user_id = \Auth::guard('api')->user()->id;
+            $this->user = \Auth::guard('api')->user();
+        }
     }
     public function index(Request $request){
         $size = $request->size ? $request->size : 10;
@@ -33,7 +35,7 @@ class AlerteService
         }elseif($this->user->hasRole('Souscripteur')){
             $alertes = $alertes->where('creator_id', $this->user_id);
         }elseif($this->user->hasRole('Medecin controle')){
-            $alertes = $alertes->where('medecin_id', $this->user_id);
+            //$alertes = $alertes->where('medecin_id', $this->user_id);
         }elseif($this->user->hasRole('Assistante')){
 
         }

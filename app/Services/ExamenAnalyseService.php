@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\LigneDeTemps;
 use App\Traits\RequestService;
 use Illuminate\Http\Request;
 
@@ -51,6 +52,7 @@ class ExamenAnalyseService
         foreach($examen_analyses['data']['data'] as $item){
             $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
+            $item['medecin'] = $patient->getMedecin($item['medecin_id']);
             $items[] = $item;
         }
         $examen_analyses['data']['data'] = $items;
@@ -63,9 +65,32 @@ class ExamenAnalyseService
      *
      * @return string
      */
-    public function fetchExamenAnalyse($examen_analyse) : string
+    public function fetchExamenAnalyse($uuid) : string
     {
-        return $this->request('GET', "{$this->path}/{$examen_analyse}");
+        $patient = new PatientService;
+
+        $examen_analyse = json_decode($this->request('GET', "{$this->path}/{$uuid}"));
+        $examen_analyse->data->patient = $patient->getPatient($examen_analyse->data->patient_id, "dossier,affiliations,user");
+        $examen_analyse->data->medecin = $patient->getMedecin($examen_analyse->data->medecin_id);
+        $ligne_temps =  LigneDeTemps::find($examen_analyse->data->ligne_temps_id);
+        $examen_analyse->data->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
+        $examen_analyse->data->pdf =  route('examen_analyses.print', $examen_analyse->data->uuid);
+
+        return json_encode($examen_analyse);
+    }
+
+    public function getPatientBulletins($patient_id) : string{
+        $examen_analyses = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}/informations"));
+        $examen_imageries = $examen_analyses->data->examen_imageries;
+        $ordonnances = $examen_analyses->data->ordonnances;
+        $examen_analyses = $examen_analyses->data->examen_analyses;
+        $examen_analyse_items = [];
+        foreach($examen_analyses as $item){
+            $item->pdf = route('examen_analyses.print', $item->uuid);
+            $examen_analyse_items[] = $item;
+        }
+        return json_encode(["data" => ["examen_analyses" => $examen_analyse_items, "examen_imageries" => $examen_imageries, "ordonnances" => $ordonnances]]);
+        //return $this->request('GET', "{$this->path}/patient/{$patient_id}/informations");
     }
 
     /**

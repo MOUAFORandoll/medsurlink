@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\LigneDeTemps;
 use App\Traits\RequestService;
 use Illuminate\Http\Request;
 
@@ -51,6 +52,8 @@ class BonpriseEnChargeService
         foreach($bon_prise_en_charges['data']['data'] as $item){
             $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
+            $item['medecin'] = $patient->getMedecin($item['medecin_id']);
+            $item['pdf'] =  route('bon_prise_en_charges.print', $item['uuid']);
             $items[] = $item;
         }
         $bon_prise_en_charges['data']['data'] = $items;
@@ -63,9 +66,44 @@ class BonpriseEnChargeService
      *
      * @return string
      */
-    public function fetchBonPriseEnCharge($bon_prise_en_charge) : string
+    public function fetchBonPriseEnCharge($uuid) : string
     {
-        return $this->request('GET', "{$this->path}/{$bon_prise_en_charge}");
+
+        $patient = new PatientService;
+
+        $bon_prise_en_charge = json_decode($this->request('GET', "{$this->path}/{$uuid}"));
+        $bon_prise_en_charge->data->patient = $patient->getPatient($bon_prise_en_charge->data->patient_id, "dossier,affiliations,user");
+        $bon_prise_en_charge->data->medecin = $patient->getMedecin($bon_prise_en_charge->data->medecin_id);
+        $bon_prise_en_charge->data->pdf =  route('bon_prise_en_charges.print', $bon_prise_en_charge->data->uuid);
+        $ligne_temps =  LigneDeTemps::find($bon_prise_en_charge->data->ligne_temps_id);
+
+        $examen_analyse_items = [];
+        $ordonnances = [];
+        $examens_imageries = [];
+
+        foreach($bon_prise_en_charge->data->examens_analyses as $item){
+            $item->pdf = route('examen_analyses.print', $item->uuid);
+            $examen_analyse_items[] = $item;
+        }
+
+        foreach($bon_prise_en_charge->data->ordonnances as $item){
+            $item->pdf = route('ordonnances.print', ['bon_prise_en_charge_id' => $uuid, 'ordonnance_id' => $item->id]);
+            $ordonnances[] = $item;
+        }
+
+        foreach($bon_prise_en_charge->data->examens_imageries as $item){
+            $item->pdf = route('prescription_imageries.print', $item->uuid);
+            $examens_imageries[] = $item;
+        }
+
+        $bon_prise_en_charge->data->examens_analyses = $examen_analyse_items;
+        $bon_prise_en_charge->data->ordonnances = $ordonnances;
+        $bon_prise_en_charge->data->examens_imageries = $examens_imageries;
+
+
+        $bon_prise_en_charge->data->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
+
+        return json_encode($bon_prise_en_charge);
     }
 
     /**
@@ -98,5 +136,18 @@ class BonpriseEnChargeService
     {
         return $this->request('DELETE', "{$this->path}/{$bon_prise_en_charge}");
     }
+
+
+    /**
+     * @param $patient_id
+     *
+     * @return string
+     */
+    public function fetchResultats($patient_id) : string
+    {
+        $resultats = [];
+        return json_encode($resultats);
+    }
+
 
 }

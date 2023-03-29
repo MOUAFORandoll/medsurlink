@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\LigneDeTemps;
 use App\Traits\RequestService;
 use Illuminate\Http\Request;
 
@@ -51,6 +52,7 @@ class PrescriptionImagerieService
         foreach($prescription_imageries['data']['data'] as $item){
             $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
+            $item['medecin'] = $patient->getMedecin($item['medecin_id']);
             $items[] = $item;
         }
         $prescription_imageries['data']['data'] = $items;
@@ -63,9 +65,19 @@ class PrescriptionImagerieService
      *
      * @return string
      */
-    public function fetchPrescriptionImagerie($prescription_imagerie) : string
+    public function fetchPrescriptionImagerie($uuid) : string
     {
-        return $this->request('GET', "{$this->path}/{$prescription_imagerie}");
+
+        $patient = new PatientService;
+
+        $prescription_imagerie = json_decode($this->request('GET', "{$this->path}/{$uuid}"));
+        $prescription_imagerie->data->patient = $patient->getPatient($prescription_imagerie->data->patient_id, "dossier,affiliations,user");
+        $prescription_imagerie->data->medecin = $patient->getMedecin($prescription_imagerie->data->medecin_id);
+        $prescription_imagerie->data->ligne_de_temps = LigneDeTemps::find($prescription_imagerie->data->ligne_temps_id);
+        $prescription_imagerie->data->niveau_urgence = json_decode($this->niveau_urgence->fetchNiveauUrgence($prescription_imagerie->data->niveau_urgence_id), true)['data'];
+        $prescription_imagerie->data->pdf =  route('prescription_imageries.print', $prescription_imagerie->data->uuid);
+
+        return json_encode($prescription_imagerie);
     }
 
     /**

@@ -54,41 +54,51 @@ class BigBlueButtonService
     }
 
     public function stroreMetting($metting_id, $name){
-        $bbb = new BigBlueButton();
-        $createParams = new CreateMeetingParameters($metting_id, $name);
-        $createParams = $createParams->setModeratorPassword(config('app.password.moderator'))->setAttendeePassword(config('app.password.attendee'));
-        $createParams->setRecord(true);
-        $createParams->setAllowStartStopRecording(true);
-        $createParams->setLogoutUrl($this->url_global."/teleconsultations");
-
-
-        $response = $bbb->createMeeting($createParams);
-        if($response->getReturnCode() == 'FAILED') {
-            return 'Can\'t create room! please contact our administrator.';
-        }else {
-            $joinMeetingParams = new JoinMeetingParameters($metting_id, $this->user->name, config('app.password.moderator'));
-            $joinMeetingParams->setRedirect(true);
-            $url = $bbb->getJoinMeetingURL($joinMeetingParams);
-            return $url;
+        try {
+            $bbb = new BigBlueButton();
+            $createParams = new CreateMeetingParameters($metting_id, $name);
+            $createParams = $createParams->setModeratorPassword(config('app.password.moderator'))->setAttendeePassword(config('app.password.attendee'));
+            $createParams->setRecord(true);
+            $createParams->setAllowStartStopRecording(true);
+            $createParams->setLogoutUrl($this->url_global."/teleconsultations");
+            $response = $bbb->createMeeting($createParams);
+            if($response->getReturnCode() == 'FAILED') {
+                \Log::alert("create ", [$response->getReturnCode()]);
+                return "";
+            }else {
+                $joinMeetingParams = new JoinMeetingParameters($metting_id, $this->user->name, config('app.password.moderator'));
+                $joinMeetingParams->setRedirect(true);
+                $url = $bbb->getJoinMeetingURL($joinMeetingParams);
+                return $url;
+            }
+        } catch (Exception $ex) {
+            \Log::alert("stroreMetting ", [$ex->getMessage()]);
+            return "";
         }
     }
 
     public function joinMetting($user_id)
     {
-        $metting = Metting::where(['patient_id' => $user_id, 'medecin_id' => $this->user->id])->latest()->first();
-        $patient = User::find($user_id);
-        $bbb = new BigBlueButton();
-        $joinMeetingParams = new JoinMeetingParameters($metting->id, $patient->name, config('app.password.attendee'));
-        $joinMeetingParams->setRedirect(true);
+        try {
+            $metting = Metting::where(['patient_id' => $user_id, 'medecin_id' => $this->user->id])->latest()->first();
+            $patient = User::find($user_id);
+            $bbb = new BigBlueButton();
+            $joinMeetingParams = new JoinMeetingParameters($metting->id, $patient->name, config('app.password.attendee'));
+            $joinMeetingParams->setRedirect(true);
 
-        $shortener = app('url.shortener');
+            $shortener = app('url.shortener');
 
-        $url = $shortener->shorten($bbb->getJoinMeetingURL($joinMeetingParams));
-        if($patient->telephone){
-            sendSMS($patient->telephone, "Hello {$patient->name}, accedez a votre teleconsultation via le lien suivant:\n {$url}");
-        }
+            $url = $shortener->shorten($bbb->getJoinMeetingURL($joinMeetingParams));
+            if($patient->telephone){
+                sendSMS($patient->telephone, "Hello {$patient->name}, accedez a votre teleconsultation via le lien suivant:\n {$url}");
+            }
 
         return $url;
+        } catch (Exception $ex) {
+            \Log::alert("joinMetting ", [$ex->getMessage()]);
+            return "";
+        }
+
     }
 
     public function endMeetingParameters($bbb, $meetingID){
@@ -97,7 +107,8 @@ class BigBlueButtonService
             $response = $bbb->endMeeting($endMeetingParams);
         }
         catch(Exception $ex){
-
+            \Log::alert("endMeetingParameters ", [$ex->getMessage()]);
+            return "";
         }
     }
 
@@ -117,17 +128,22 @@ class BigBlueButtonService
                     $recordingParams = new GetRecordingsParameters();
                     $recordingParams->setMeetingId($metting->id);
                     $bbb = new BigBlueButton();
-                    $response = $bbb->getRecordings($recordingParams);
-                    if ($response->getReturnCode() == 'SUCCESS') {
-                        $metting->url = isset($response->getRawXml()->recordings->recording->playback) ? $response->getRawXml()->recordings->recording->playback->format->url : null;
-                        $metting->statut = 3;
-                        $metting->save();
-                        return $metting->url;
+                    try {
+                        $response = $bbb->getRecordings($recordingParams);
+                        if ($response->getReturnCode() == 'SUCCESS') {
+                            $metting->url = isset($response->getRawXml()->recordings->recording->playback) ? $response->getRawXml()->recordings->recording->playback->format->url : null;
+                            $metting->statut = 3;
+                            $metting->save();
+                            return $metting->url;
+                        }
+                    }catch (Exception $ex) {
+                        \Log::alert("getRecordings ", [$ex->getMessage()]);
+                        return "";
                     }
                 }
             }
         }
-        return null;
+        return "";
     }
 
 }

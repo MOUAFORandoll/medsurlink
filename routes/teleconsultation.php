@@ -15,6 +15,13 @@
 Route::post('v2/oauth/token', 'Api\AuthController@auth');
 
 /**
+ * Mise en place du refresh token
+ */
+Route::post('v2/oauth/refresh/token', 'Api\AuthController@refresh')->middleware('auth:api');
+
+Route::get('v2/user/me', 'Api\AuthController@me')->middleware('auth:api');
+
+/**
  * Signature
  */
 Route::post('v2/signature/user', 'Api\UserController@signature')->middleware('auth:api');
@@ -41,6 +48,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     Route::group(['prefix' => 'types'], function () {
         Route::get('/', 'TypeController@index');
         Route::get('/{type}', 'TypeController@show');
+        Route::get('/examens/{type}', 'TypeController@getExamens');
     });
 
     /**
@@ -252,6 +260,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::get('/{examen_analyse}', 'ExamenAnalyseController@show');
         Route::patch('/{examen_analyse}', 'ExamenAnalyseController@update');
         Route::delete('/{examen_analyse}', 'ExamenAnalyseController@destroy');
+        Route::get('patient/{patient_id}/informations', 'ExamenAnalyseController@getPatientBulletins');
     });
 
     /**
@@ -297,5 +306,21 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::patch('/{raison_prescription}', 'RaisonPrescriptionController@update');
         Route::delete('/{raison_prescription}', 'RaisonPrescriptionController@destroy');
     });
+
+        /**
+     * CRUD Examens Pertinents
+     */
+    Route::resource('examens_pertinents', 'ExamenPertinentPrecedentController');
+
+    /**
+     * CRUD Information supplementaires
+     */
+    Route::resource('informations_supplementaires', 'InformationSupplementaireController');
+
+
+    /**
+     * Récupération des resultats d'un patients précis
+     */
+    Route::get("/{patient_id}/resultats", "BonPriseEnChargeController@resultats");
 
 });

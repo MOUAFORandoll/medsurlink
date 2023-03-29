@@ -60,8 +60,6 @@ class TeleconsultationService
             $video = new BigBlueButtonService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $item['alerte'] = $alerte->getAlerte($item['id']);
-            $item['pdf'] =  route('teleconsultations.print', $item['uuid']);
-            $item['url'] = $video->getRecordings($item['patient_id'], $item['creator'], $item['created_at']);
             $items[] = $item;
         }
         $teleconsultations['data']['data'] = $items;
@@ -84,7 +82,7 @@ class TeleconsultationService
             $item['medecin'] = $patient->getMedecin($item['creator']);
             $item['alerte'] = $alerte->getAlerte($item['id']);
             $item['pdf'] =  route('teleconsultations.print', $item['uuid']);
-            $item['url'] = $video->getRecordings($item['patient_id'], $item['creator'], $item['created_at']);
+            //$item['url'] = $video->getRecordings($item['patient_id'], $item['creator'], $item['created_at']);
             $items[] = $item;
         }
         $teleconsultations['data']['data'] = $items;
@@ -97,9 +95,19 @@ class TeleconsultationService
      *
      * @return string
      */
-    public function fetchTeleconsultation($teleconsultation) : string
+    public function fetchTeleconsultation($uuid) : string
     {
-        return $this->request('GET', "{$this->path}/{$teleconsultation}");
+        $patient = new PatientService;
+        $alerte = new AlerteService;
+        $video = new BigBlueButtonService;
+
+        $teleconsultation = json_decode($this->request('GET', "{$this->path}/{$uuid}"));
+        $teleconsultation->data->patient = $patient->getPatient($teleconsultation->data->patient_id, "dossier,affiliations,user");
+        $teleconsultation->data->alerte = $alerte->getAlerte($teleconsultation->data->id);
+        $teleconsultation->data->pdf =  route('teleconsultations.print', $teleconsultation->data->uuid);
+        $teleconsultation->data->url = $video->getRecordings($teleconsultation->data->patient_id, $teleconsultation->data->creator, $teleconsultation->data->created_at);
+
+        return json_encode($teleconsultation);
     }
 
     public function fetchAlerte($medecin_id, $patient_id){

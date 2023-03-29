@@ -20,8 +20,10 @@ class PatientService
 
     public function __construct()
     {
-        $this->user_id = \Auth::guard('api')->user()->id;
-        $this->user = \Auth::guard('api')->user();
+        if(\Auth::guard('api')->user()){
+            $this->user_id = \Auth::guard('api')->user()->id;
+            $this->user = \Auth::guard('api')->user();
+        }
     }
 
     /**
@@ -96,7 +98,8 @@ class PatientService
     }
 
     public function getMedecin($medecin_id){
-        $medecin = MedecinControle::with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $medecin_id)->get(['specialite_id', 'user_id', 'civilite']);
+        $medecin = MedecinControle::with(['specialite:id,name','user:id,nom,prenom,email,telephone'])->where('user_id', $medecin_id)->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre']);
+
         return $medecin;
     }
 
