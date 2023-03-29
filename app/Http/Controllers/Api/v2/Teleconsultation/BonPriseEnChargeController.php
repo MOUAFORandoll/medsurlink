@@ -45,6 +45,7 @@ class BonPriseEnChargeController extends Controller
      */
     public function store(Request $request)
     {
+        $request->request->add(['creator' => \Auth::guard('api')->user()->id]);
         return $this->successResponse($this->bonPriseEnChargeService->createBonPriseEnCharge($request->all()));
     }
 
@@ -56,6 +57,7 @@ class BonPriseEnChargeController extends Controller
      */
     public function update(Request $request, $bon_prise_en_charge)
     {
+        $request->request->add(['creator' => \Auth::guard('api')->user()->id]);
         return $this->successResponse($this->bonPriseEnChargeService->updateBonPriseEnCharge($bon_prise_en_charge, $request->all()));
     }
 
@@ -67,5 +69,15 @@ class BonPriseEnChargeController extends Controller
     public function destroy($bon_prise_en_charge)
     {
         return $this->successResponse($this->bonPriseEnChargeService->deleteBonPriseEnCharge($bon_prise_en_charge));
+    }
+
+     /**
+     * @param $patient_id
+     *
+     * @return mixed
+     */
+    public function resultats($patient_id)
+    {
+        return $this->successResponse($this->bonPriseEnChargeService->fetchResultats($patient_id));
     }
 }

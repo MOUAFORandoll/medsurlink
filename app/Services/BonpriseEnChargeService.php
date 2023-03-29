@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\LigneDeTemps;
 use App\Traits\RequestService;
 use Illuminate\Http\Request;
 
@@ -74,6 +75,33 @@ class BonpriseEnChargeService
         $bon_prise_en_charge->data->patient = $patient->getPatient($bon_prise_en_charge->data->patient_id, "dossier,affiliations,user");
         $bon_prise_en_charge->data->medecin = $patient->getMedecin($bon_prise_en_charge->data->medecin_id);
         $bon_prise_en_charge->data->pdf =  route('bon_prise_en_charges.print', $bon_prise_en_charge->data->uuid);
+        $ligne_temps =  LigneDeTemps::find($bon_prise_en_charge->data->ligne_temps_id);
+
+        $examen_analyse_items = [];
+        $ordonnances = [];
+        $examens_imageries = [];
+
+        foreach($bon_prise_en_charge->data->examens_analyses as $item){
+            $item->pdf = route('examen_analyses.print', $item->uuid);
+            $examen_analyse_items[] = $item;
+        }
+
+        foreach($bon_prise_en_charge->data->ordonnances as $item){
+            $item->pdf = route('ordonnances.print', ['bon_prise_en_charge_id' => $uuid, 'ordonnance_id' => $item->id]);
+            $ordonnances[] = $item;
+        }
+
+        foreach($bon_prise_en_charge->data->examens_imageries as $item){
+            $item->pdf = route('prescription_imageries.print', $item->uuid);
+            $examens_imageries[] = $item;
+        }
+
+        $bon_prise_en_charge->data->examens_analyses = $examen_analyse_items;
+        $bon_prise_en_charge->data->ordonnances = $ordonnances;
+        $bon_prise_en_charge->data->examens_imageries = $examens_imageries;
+
+
+        $bon_prise_en_charge->data->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
 
         return json_encode($bon_prise_en_charge);
     }
@@ -108,5 +136,18 @@ class BonpriseEnChargeService
     {
         return $this->request('DELETE', "{$this->path}/{$bon_prise_en_charge}");
     }
+
+
+    /**
+     * @param $patient_id
+     *
+     * @return string
+     */
+    public function fetchResultats($patient_id) : string
+    {
+        $resultats = [];
+        return json_encode($resultats);
+    }
+
 
 }

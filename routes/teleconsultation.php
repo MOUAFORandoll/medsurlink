@@ -15,6 +15,13 @@
 Route::post('v2/oauth/token', 'Api\AuthController@auth');
 
 /**
+ * Mise en place du refresh token
+ */
+Route::post('v2/oauth/refresh/token', 'Api\AuthController@refresh')->middleware('auth:api');
+
+Route::get('v2/user/me', 'Api\AuthController@me')->middleware('auth:api');
+
+/**
  * Signature
  */
 Route::post('v2/signature/user', 'Api\UserController@signature')->middleware('auth:api');
@@ -303,23 +310,17 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         /**
      * CRUD Examens Pertinents
      */
-    Route::group(['prefix' => 'examens_pertinents'], function () {
-        Route::get('/', 'ExamenPertinentPrecedentController@index');
-        Route::post('/', 'ExamenPertinentPrecedentController@store');
-        Route::get('/{examen_pertinent}', 'ExamenPertinentPrecedentController@show');
-        Route::patch('/{examen_pertinent}', 'ExamenPertinentPrecedentController@update');
-        Route::delete('/{examen_pertinent}', 'ExamenPertinentPrecedentController@destroy');
-    });
+    Route::resource('examens_pertinents', 'ExamenPertinentPrecedentController');
 
     /**
      * CRUD Information supplementaires
      */
-    Route::group(['prefix' => 'informations_supplementaires'], function () {
-        Route::get('/', 'InformationSupplementaireController@index');
-        Route::post('/', 'InformationSupplementaireController@store');
-        Route::get('/{informations_supplementaire}', 'InformationSupplementaireController@show');
-        Route::patch('/{informations_supplementaire}', 'InformationSupplementaireController@update');
-        Route::delete('/{informations_supplementaire}', 'InformationSupplementaireController@destroy');
-    });
+    Route::resource('informations_supplementaires', 'InformationSupplementaireController');
+
+
+    /**
+     * Récupération des resultats d'un patients précis
+     */
+    Route::get("/{patient_id}/resultats", "BonPriseEnChargeController@resultats");
 
 });

@@ -22,6 +22,7 @@ header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Autho
 
 Route::post('oauth/token', 'Api\AuthController@auth');
 Route::post('oauth/redirect/token', 'Api\AuthController@authAfterRedirect');
+
 Route::post('password/emailVersion','Auth\ForgotPasswordController@sendReset_LinkEmail');
 Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
@@ -414,7 +415,6 @@ Route::group(['middleware' => ['auth:api','role:Admin|Gestionnaire|Praticien|Med
     Route::resource('souscripteur','Api\SouscripteurController')->except('show');
     Route::get('search/souscripteurs/{souscripteur_search}', 'Api\SouscripteurController@listingSouscripteur');
     Route::get('patients/souscripteurs', 'Api\SouscripteurController@listingSouscripteurPatients');
-    
     Route::get('search/patients/{patient_search}', 'Api\PatientController@listingPatients');
     Route::post('patient','Api\PatientController@store')->name('patient.store');
     //Route::post('medsurlink-contrat','Api\PatientController@medicasureStorePatient');
