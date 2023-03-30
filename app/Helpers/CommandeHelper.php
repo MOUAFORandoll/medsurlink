@@ -11,6 +11,7 @@ use App\Models\Metrique;
 use App\Models\PatientMedecinControle;
 use App\Models\ResultatImagerie;
 use App\Models\ResultatLabo;
+use App\Models\Souscripteur;
 use App\Notifications\SouscriptionAlert;
 use App\User;
 use Carbon\Carbon;
@@ -205,6 +206,8 @@ if(!function_exists('RecuperationMetrique')) {
          * calcul des temps moyen de prise en charge par opérations
          *
          */
+        $all_patients =  Patient::count();
+        $all_souscripteurs =  Souscripteur::count();
 
         $affiliation_et_affectation_medecin_referents = DelaiOperation::where('delai_operationable_type', PatientMedecinControle::class)->get();
         $affiliation_et_affectation_medecin_referents = DelaiDePriseEnChargeParOperations($affiliation_et_affectation_medecin_referents);
@@ -274,6 +277,8 @@ if(!function_exists('RecuperationMetrique')) {
             );
         }
         $metrique->date_recuperation = $date_recuperation;
+        $metrique->all_patients = $all_patients;
+        $metrique->all_souscripteurs = $all_souscripteurs;
         return $metrique;
     }
 }

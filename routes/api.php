@@ -22,6 +22,7 @@ header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Autho
 
 Route::post('oauth/token', 'Api\AuthController@auth');
 Route::post('oauth/redirect/token', 'Api\AuthController@authAfterRedirect');
+
 Route::post('password/emailVersion','Auth\ForgotPasswordController@sendReset_LinkEmail');
 Route::post('password/smsVersion','Api\PatientController@resetPassword');
 Route::post('password/reset','Api\UserController@reset');
@@ -390,6 +391,8 @@ Route::prefix('v1')->middleware(['auth:api','role:Admin|Gestionnaire|Praticien|M
     Route::resource('type-operations', 'Api\v1\TypeOperationController');
     Route::resource('metriques', 'Api\v1\MetriqueController');
     Route::get('metriques/{date}/{metrique}', 'Api\v1\MetriqueController@courbe');
+    Route::get('metriques/nbre_users/{metrique}/annee', 'Api\v1\MetriqueController@nbre_users');
+    
     Route::get('/timeactivities', 'Api\PraticienController@timeActivities');
     // timeActivities
 

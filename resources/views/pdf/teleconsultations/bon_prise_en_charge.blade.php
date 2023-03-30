@@ -67,7 +67,7 @@
             @forelse ($bon_prise_en_charge['examens_analyses'] as $item)
             <tr>
                 <td>Bulletin d'examen</td>
-                <td>AB #{{ $loop->iteration }}</td>
+                <td>AB #{{ $item['id'] }}</td>
                 <td><a href="{{ $item['pdf'] }}" target="_blank">Voir</a></td>
             </tr>
             @empty
@@ -75,7 +75,15 @@
             @forelse ($bon_prise_en_charge['ordonnances'] as $item)
             <tr>
                 <td>Ordonnance</td>
-                <td>Rx #{{ $loop->iteration }}</td>
+                <td>Rx #{{ $item['id'] }}</td>
+                <td><a href="{{ $item['pdf'] }}" target="_blank">Voir</a></td>
+            </tr>
+            @empty
+            @endforelse
+            @forelse ($bon_prise_en_charge['examens_imageries'] as $item)
+            <tr>
+                <td>Examen Imageries</td>
+                <td>IM #{{ $item['id'] }}</td>
                 <td><a href="{{ $item['pdf'] }}" target="_blank">Voir</a></td>
             </tr>
             @empty

@@ -70,4 +70,14 @@ class BonPriseEnChargeController extends Controller
     {
         return $this->successResponse($this->bonPriseEnChargeService->deleteBonPriseEnCharge($bon_prise_en_charge));
     }
+
+     /**
+     * @param $patient_id
+     *
+     * @return mixed
+     */
+    public function resultats($patient_id)
+    {
+        return $this->successResponse($this->bonPriseEnChargeService->fetchResultats($patient_id));
+    }
 }
