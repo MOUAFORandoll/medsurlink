@@ -4,29 +4,31 @@
 @extends('pdf.layouts.pdf')
 @section('title', "Prescription imageries de {$patient->user->name } du {$date} par {$medecin->civilite} {$medecin->user->name}")
 @section('content')
+    <div class="content mt-2">
+        <h1 class="mt-2">Prescription imageries</h1>
+    </div>
   <div id="content" class="default-margin">
     @include('pdf.includes.identification_patient', ['patient' => $patient])
     <div class="content mt-2">
-        <h1>Prescription imageries</h1>
 
     @if(count($prescription_imagerie['etablissements']) > 0)
         <fieldset class="content-field mt-2">
             <legend>Etablissement</legend>
-            <p>{{ $prescription_imagerie['etablissements'][0]['name'] }}</p>
+            <p>{!! $prescription_imagerie['etablissements'][0]['name'] !!}</p>
         </fieldset>
     @endif
 
     @if($prescription_imagerie['information_clinique'])
         <fieldset class="content-field mt-2">
             <legend>Informations cliniques pertinentes</legend>
-            <p>{{ $prescription_imagerie['information_clinique'] }}</p>
+            <p>{!! $prescription_imagerie['information_clinique'] !!}</p>
         </fieldset>
     @endif
 
     @if($prescription_imagerie['explication_demande_diagnostic'])
         <fieldset class="content-field mt-2">
             <legend>Explication de la demande de diagnostic</legend>
-            <p>{{ $prescription_imagerie['explication_demande_diagnostic'] }}</p>
+            <p>{!! $prescription_imagerie['explication_demande_diagnostic'] !!}</p>
         </fieldset>
     @endif
 
@@ -42,8 +44,6 @@
             </ol>
         </fieldset>
     @endif
-
-
 
     @if (count($prescription_imagerie['examen_complementaires'])>0)
         <fieldset class="content-field mt-2">
