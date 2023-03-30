@@ -190,6 +190,7 @@ Route::get('bon-prises-en-charges/print/{bon_prise_en_charge_id}', function ($bo
     $pdf = PDF::loadView('pdf.teleconsultations.bon_prise_en_charge', ['bon_prise_en_charge' => $bon_prise_en_charge, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
 
+
     return $pdf->stream("Bon de prise en charge de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
 
 })->name('bon_prise_en_charges.print');
