@@ -52,6 +52,7 @@ class TimeActivite extends Model
         'date',
         'start',
         'stop',
+        'temps_connecte',
         'slug',
     ];
 
