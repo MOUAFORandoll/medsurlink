@@ -214,15 +214,22 @@
         .white{
             color: #fff;
         }
-        .signature{
-            display: flex;
-            justify-content: space-between;
+
+        #pageCounter {
+            counter-reset: pageTotal;
         }
-        .pagenum:before {
-            content: counter(page);
+        #pageCounter span {
+        counter-increment: pageTotal;
         }
-        .pagecount:before {
-            content: counter(pages);
+        #pageNumbers {
+        counter-reset: currentPage;
+        }
+        #pageNumbers div:before {
+        counter-increment: currentPage;
+        content: counter(currentPage) " / ";
+        }
+        #pageNumbers div:after {
+        content: counter(pageTotal);
         }
 
     </style>
