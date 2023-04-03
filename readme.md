@@ -119,3 +119,9 @@ php artisan migrate --path=/database/migrations/2023_02_06_152044_add_url_to_met
 
 php artisan migrate --path=/database/migrations/2023_03_06_171820_add_diagnostic_complementary_to_consultation_medecine_generales_table.php
 
+
+php artisan migrate --path=/database/migrations/2023_03_27_172900_create_sessions_table.php
+
+php artisan migrate --path=/database/migrations/2023_03_27_173239_add_temps_connecte_to_time_activites_table.php
+
+php artisan migrate --path=/database/migrations/2023_03_28_101422_add_last_activity_to_users_table.php
