@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,400i,500,500i,600,700,800,900&display=swap" rel="stylesheet">
@@ -13,27 +12,27 @@
     <style>
 
         @page { 
-            margin: 140px 0px; 
+            margin: 70px 0px; 
             font-family: 'Montserrat', sans-serif;
         }
         #header { 
             position: fixed; 
             left: 0px; 
-            top: -140px; 
+            top: -70px; 
             right: 0px; 
-            height: 100px; 
+            height: 70px; 
             background-image: url("{{ public_path('images/pdf/header.png') }}");
             background-position: center;
             background-size: cover; 
             text-align: center;
-            padding-top: 2rem;
+            padding-top: 1rem;
             padding-left: 2rem; 
         }
 
         #footer { 
             position: fixed; 
             left: 0px; 
-            bottom: -140px; 
+            bottom: -70px; 
             right: 0px; 
             height: 70px;
             background-image: url("{{ public_path('images/pdf/footer.png') }}");
@@ -84,11 +83,11 @@
         }
 
         .info-user ul{
-            padding-top: 1rem;
+            padding-top: .3rem;
         }
 
         .info-user .li-top{
-            margin-bottom: 1rem;
+            margin-bottom: .3rem;
         }
 
         .info-user ul .title{
@@ -117,6 +116,7 @@
             text-transform: uppercase;
             font-weight: 700;
             font-size: 16px;
+            margin-bottom: .3rem;
         }
 
         .content p{
@@ -161,8 +161,8 @@
             color: #32325d;
             font-size: 12px;
         }
-        h1{
-            font-size: 16px;
+        h2{
+            font-size: 14px;
         }
 
         /* tr:nth-child(even) {
@@ -189,10 +189,10 @@
             padding: 0 2.5rem;
         }
         .mt-2{
-            margin-top: 2rem;
+            margin-top: 1.4rem;
         }
         .mb-2{
-            margin-bottom: 2rem;
+            margin-bottom: 1.4rem;
         }
 
         .w-content{
@@ -214,6 +214,24 @@
         .white{
             color: #fff;
         }
+
+        #pageCounter {
+            counter-reset: pageTotal;
+        }
+        #pageCounter span {
+        counter-increment: pageTotal;
+        }
+        #pageNumbers {
+        counter-reset: currentPage;
+        }
+        #pageNumbers div:before {
+        counter-increment: currentPage;
+        content: counter(currentPage) " / ";
+        }
+        #pageNumbers div:after {
+        content: counter(pageTotal);
+        }
+
     </style>
 </head>
 <body>
