@@ -5,9 +5,11 @@
 @section('title', "Ordonnance de {$patient->user->name } du {$date} par {$medecin->civilite} {$medecin->user->name}")
 @section('content')
   <div id="content" class="default-margin">
-        @include('pdf.includes.identification_patient', ['patient' => $patient])
-        <div class="content mt-2">
-            <h1>Ordonnance</h1>
+    <div class="content mt-2">
+        <h1 class="mt-2">Ordonnance</h1>
+    </div>
+        <div class="content">
+            @include('pdf.includes.identification_patient', ['patient' => $patient])
             @if($ordonnance['description'] != "")
                 <fieldset class="content-field mt-2">
                     <legend>Prescription</legend>

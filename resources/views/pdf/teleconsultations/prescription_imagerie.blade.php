@@ -4,10 +4,11 @@
 @extends('pdf.layouts.pdf')
 @section('title', "Prescription imageries de {$patient->user->name } du {$date} par {$medecin->civilite} {$medecin->user->name}")
 @section('content')
+
+  <div id="content" class="default-margin">
     <div class="content mt-2">
         <h1 class="mt-2">Prescription imageries</h1>
     </div>
-  <div id="content" class="default-margin">
     @include('pdf.includes.identification_patient', ['patient' => $patient])
     <div class="content mt-2">
 
@@ -19,14 +20,14 @@
     @endif
 
     @if($prescription_imagerie['information_clinique'])
-        <fieldset class="content-field mt-2">
+        <fieldset class="content-field mt-1">
             <legend>Informations cliniques pertinentes</legend>
             <p>{!! $prescription_imagerie['information_clinique'] !!}</p>
         </fieldset>
     @endif
 
     @if($prescription_imagerie['explication_demande_diagnostic'])
-        <fieldset class="content-field mt-2">
+        <fieldset class="content-field mt-1">
             <legend>Explication de la demande de diagnostic</legend>
             <p>{!! $prescription_imagerie['explication_demande_diagnostic'] !!}</p>
         </fieldset>
@@ -34,7 +35,7 @@
 
 
     @if(count($prescription_imagerie['information_supplementaires']) > 0)
-        <fieldset class="content-field mt-2">
+        <fieldset class="content-field mt-1">
             <legend>Informations supplémentaires pertinentes</legend>
             <ol>
                 @forelse ($prescription_imagerie['information_supplementaires'] as $information)
@@ -46,7 +47,7 @@
     @endif
 
     @if (count($prescription_imagerie['examen_complementaires'])>0)
-        <fieldset class="content-field mt-2">
+        <fieldset class="content-field mt-1">
             <legend>Examens à réaliser</legend>
 
             @if (count($prescription_imagerie['examen_complementaires'])>0)
@@ -78,7 +79,7 @@
     @endif
 
     @if(count($prescription_imagerie['examens_pertinents']) > 0)
-        <fieldset class="content-field mt-2">
+        <fieldset class="content-field mt-1">
             <legend>Examens pertinents précédents relatifs à la demande de diagnostic</legend>
             <ol>
                 @forelse ($prescription_imagerie['examens_pertinents'] as $examens_pertinent)

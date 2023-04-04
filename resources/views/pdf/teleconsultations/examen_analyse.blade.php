@@ -4,10 +4,10 @@
 @extends('pdf.layouts.pdf')
 @section('title', "Bulletin d'examens d'analyses biomédicales de {$patient->user->name } du {$date} par {$medecin->civilite} {$medecin->user->name}")
 @section('content')
+  <div id="content" class="default-margin">
     <div class="content mt-2">
         <h1 class="mt-2">Bulletin d'examens d'analyses biomédicales</h1>
     </div>
-  <div id="content" class="default-margin">
     @include('pdf.includes.identification_patient', ['patient' => $patient])
     <div class="content mt-2">
     @if(count($examen_analyse['etablissements']) > 0)
@@ -17,12 +17,12 @@
         </fieldset>
     @endif
 
-    <fieldset class="content-field mt-2">
+    <fieldset class="content-field mt-1">
         <legend>Renseignement clinique</legend>
         {!! $examen_analyse['renseignement_clinique'] !!}
     </fieldset>
 
-    <fieldset class="content-field mt-2">
+    <fieldset class="content-field mt-1">
         <legend>Examens à réaliser</legend>
 
         @if (count($examen_analyse['examen_complementaires'])>0)
