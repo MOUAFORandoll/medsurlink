@@ -36,7 +36,7 @@
                     @forelse ($examen_analyse['type_examens'] as $type_examen)
                         <tr>
                             <td rowspan="{{ count($type_examen['examen_complementaires']) }}">{{ $loop->iteration }}</td>
-                            <td rowspan="{{ count($type_examen['examen_complementaires']) }}">{{ $type_examen['libelle'] }}</td>
+                            <td rowspan="{{ count($type_examen['examen_complementaires']) }}">{{ $type_examen['description'] }}</td>
                             @forelse ($type_examen['examen_complementaires'] as $item)
                                 <td>{{ $item['fr_description'] }}</td></tr>
                                 @if(!$loop->last)
