@@ -19,6 +19,7 @@ use App\Models\PaymentOffre;
 use App\Models\RendezVous;
 use App\Services\BonpriseEnChargeService;
 use App\Services\ExamenAnalyseService;
+use App\Services\OrdonnanceService;
 use App\Services\PatientService;
 use App\Services\PrescriptionImagerieService;
 use BigBlueButton\BigBlueButton;
@@ -273,6 +274,34 @@ Route::get('ordonnances/print/{bon_prise_en_charge_id}/{ordonnance_id}', functio
     return $pdf->stream("Ordonnance de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
 
 })->name('ordonnances.print');
+
+Route::get('ordonnances/teleconsultations/{ordonnance_id}', function ($ordonnance_id) {
+    $ordonnance_id = explode('-', $ordonnance_id)[5];
+    $ordonnance = new OrdonnanceService;
+    $ordonnance = json_decode($ordonnance->fetchOrdonnance($ordonnance_id), true)['data'];
+    $teleconsultations = collect($ordonnance['teleconsultations'])->first();
+    $patient_id = $teleconsultations['patient_id'];
+    $medecin_id = $teleconsultations['creator'];
+
+    $patient = Patient::where('user_id', $patient_id)->orWhere('slug', $patient_id)
+        ->orwhereHas('dossier', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->orwhereHas('user', function ($query) use ($patient_id) {
+            $query->where('id', $patient_id);
+        })->orwhereHas('alerte', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug', 'dossier:patient_id,numero_dossier')->first();
+
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $medecin_id)->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+
+    $date = Carbon::parse($ordonnance['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
+
+    $pdf = PDF::loadView('pdf.teleconsultations.ordonnance', ['ordonnance' => $ordonnance, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
+    //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+
+    return $pdf->stream("Ordonnance de {$patient->user->name} du {$date} par {$medecin->civilite} {$medecin->user->name}" . ".pdf");
+
+})->name('ordonnances.teleconsultations.print');
 
 
 //route('prescription_imageries.print', $prescription_imagerie->data->uuid);

@@ -89,7 +89,21 @@ class ExamenAnalyseService
             $item->pdf = route('examen_analyses.print', $item->uuid);
             $examen_analyse_items[] = $item;
         }
-        return json_encode(["data" => ["examen_analyses" => $examen_analyse_items, "examen_imageries" => $examen_imageries, "ordonnances" => $ordonnances]]);
+
+        $examen_imagerie_items = [];
+        foreach($examen_imageries as $item){
+            $item->pdf = route('prescription_imageries.print', $item->uuid);
+            $examen_imagerie_items[] = $item;
+        }
+
+        $ordonnance_items = [];
+        foreach($ordonnances as $item){
+            $teleconsultation = $item->teleconsultations[0];
+            $item->pdf = route('ordonnances.teleconsultations.print',  $teleconsultation->uuid.'-'.$item->id);
+            $ordonnance_items[] = $item;
+        }
+
+        return json_encode(["data" => ["examen_analyses" => $examen_analyse_items, "examen_imageries" => $examen_imagerie_items, "ordonnances" => $ordonnance_items]]);
         //return $this->request('GET', "{$this->path}/patient/{$patient_id}/informations");
     }
 

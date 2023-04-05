@@ -79,8 +79,9 @@ class EtablissementExercice extends Model
         'slug',
         'logo',
         'adresse'
-
     ];
+
+    protected $appends = ['image'];
 
     /**
      * Return the sluggable configuration array for this model.
@@ -143,4 +144,9 @@ class EtablissementExercice extends Model
     public function rendezVous(){
         return $this->hasMany(RendezVous::class, 'etablissement_id');
     }
+
+    public function getImageAttribute(){
+        return asset($this->logo);
+    }
+    // https://www.back.medsurlink.com/public/storage/Etablissement/labo-populaire-1655457273/Logo/NHwHnkHbFnqJGLA5xlFfPt9pf11JT1Q3nCOZpDVX.png
 }
