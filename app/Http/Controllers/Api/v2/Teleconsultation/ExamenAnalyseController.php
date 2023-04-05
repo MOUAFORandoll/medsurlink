@@ -39,6 +39,17 @@ class ExamenAnalyseController extends Controller
         return $this->successResponse($this->examenAnalyseService->fetchExamenAnalyse($examenAnalyse));
     }
 
+    /**
+     * @param $patient_id
+     *
+     * @return mixed
+     */
+    public function getExamenAnalyses(Request $request, $patient_id)
+    {
+        return $this->successResponse($this->examenAnalyseService->getExamenAnalyses($request, $patient_id));
+    }
+
+
     public function getPatientBulletins($patient_id){
         return $this->successResponse($this->examenAnalyseService->getPatientBulletins($patient_id));
     }
