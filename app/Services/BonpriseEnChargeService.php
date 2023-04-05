@@ -106,6 +106,26 @@ class BonpriseEnChargeService
         return json_encode($bon_prise_en_charge);
     }
 
+    public function getBonPrisesEnCharges(Request $request, $patient_id) : string {
+
+        $patient = new PatientService;
+
+        $bon_prise_en_charges = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}"));
+
+        $items = [];
+        foreach($bon_prise_en_charges->data->data as $item){
+            $item->pdf = route('bon_prise_en_charges.print', $item->uuid);
+            $item->patient = $patient->getPatient($item->patient_id, "dossier,affiliations,user");
+            $item->medecin = $patient->getMedecin($item->medecin_id);
+            $ligne_temps =  LigneDeTemps::find($item->ligne_temps_id);
+            $item->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
+            $items[] = $item;
+        }
+        $bon_prise_en_charges->data->data = $items;
+
+        return json_encode($bon_prise_en_charges);
+    }
+
     /**
      * @param $data
      *

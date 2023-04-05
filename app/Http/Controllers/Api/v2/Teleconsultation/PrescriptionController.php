@@ -40,6 +40,8 @@ class PrescriptionController extends Controller
         return $this->successResponse($this->prescription->fetchPrescription($prescription));
     }
 
+
+
     /**
      * @param \Illuminate\Http\Request $request
      *
