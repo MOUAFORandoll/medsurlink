@@ -391,7 +391,7 @@ class UserController extends Controller
                 }
             }
         }
-
+        
         $user->password = Hash::make($password);
 
         $user->setRememberToken(Str::random(60));

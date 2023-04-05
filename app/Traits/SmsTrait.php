@@ -18,7 +18,7 @@ trait SmsTrait
     {
         sendSMS($telephone, $message, $sender);
     }
-
+    
     /**
      * Send a SMS to a User
      *

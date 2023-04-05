@@ -96,7 +96,7 @@ if (!function_exists('defineAsAuthor')){
  * @return \Illuminate\Http\JsonResponse
  */
 if (!function_exists('getStatus')){
-
+    
     function getStatus($user = null){
         if (is_null($user)){
             $user = \Illuminate\Support\Facades\Auth::user();

@@ -27,6 +27,7 @@
         "laravel/slack-notification-channel": "^2.3",
         "laravel/tinker": "^1.0",
         "maatwebsite/excel": "^3.1",
+        "php-http/guzzle6-adapter": "^2.0",
         "phpoffice/phpspreadsheet": "^1.14",
         "rinvex/countries": "^5.0",
         "spatie/laravel-permission": "^2.37",
@@ -44,7 +45,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "extra": {
         "laravel": {

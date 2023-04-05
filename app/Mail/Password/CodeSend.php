@@ -7,23 +7,23 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class PasswordGenerated extends Mailable
+class CodeSend extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user;
-    public $password;
+
+    public $code;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($user,$password)
+    public function __construct($code)
     {
-        $this->user = $user;
-        $this->password = $password;
+
+        $this->code = $code;
     }
-    
+
     /**
      * Build the message.
      *
@@ -32,7 +32,7 @@ class PasswordGenerated extends Mailable
     public function build()
     {
         return $this->from('no-reply@medsurlink.com')
-            ->subject(config('app.name').' Account Information')
-            ->markdown('emails.password.passwordGenerated');
+            ->subject(config('app.name') . ' Account reinitialisation code')
+            ->markdown('emails.password.codeSend');
     }
 }

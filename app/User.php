@@ -63,6 +63,7 @@ class User extends Authenticatable
         'isNotice',
         'slack',
         'decede',
+        'codeR',
     ];
 
     /**
