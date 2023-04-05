@@ -79,6 +79,7 @@ class BonpriseEnChargeService
 
         $examen_analyse_items = [];
         $ordonnances = [];
+        $examens_imageries = [];
 
         foreach($bon_prise_en_charge->data->examens_analyses as $item){
             $item->pdf = route('examen_analyses.print', $item->uuid);
@@ -90,8 +91,14 @@ class BonpriseEnChargeService
             $ordonnances[] = $item;
         }
 
+        foreach($bon_prise_en_charge->data->examens_imageries as $item){
+            $item->pdf = route('prescription_imageries.print', $item->uuid);
+            $examens_imageries[] = $item;
+        }
+
         $bon_prise_en_charge->data->examens_analyses = $examen_analyse_items;
         $bon_prise_en_charge->data->ordonnances = $ordonnances;
+        $bon_prise_en_charge->data->examens_imageries = $examens_imageries;
 
 
         $bon_prise_en_charge->data->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
@@ -129,5 +136,18 @@ class BonpriseEnChargeService
     {
         return $this->request('DELETE', "{$this->path}/{$bon_prise_en_charge}");
     }
+
+
+    /**
+     * @param $patient_id
+     *
+     * @return string
+     */
+    public function fetchResultats($patient_id) : string
+    {
+        $resultats = [];
+        return json_encode($resultats);
+    }
+
 
 }

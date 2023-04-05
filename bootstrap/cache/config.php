@@ -131,7 +131,7 @@
     'asset_url' => NULL,
     'frontend_url' => 'https://www.medsurlink.com/login',
     'momo_url' => 'https://proxy.momoapi.mtn.com',
-    'stripe_key' => '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',
+    'stripe_key' => 'sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5',
     'url_loccale' => 'http://localhost:8080',
     'url_stagging' => 'https://www.staging.medsurlink.com',
     'url_prod' => 'https://www.medsurlink.com',

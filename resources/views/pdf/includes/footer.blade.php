@@ -1,6 +1,6 @@
 
 <div id="footer mt-2">
-    {{-- <p class="page">Page </p> --}}
+    <p style="float: right; color: #fff; margin-right: 3rem;"><span class="pagenum"></span>/<span class="pagecount"></span></p>
     <h4 class="text-center p-0 m-0 white">Contact Medsurlink : </h4>
     <ul class="list-none">
         <li class="li-top text-center">
