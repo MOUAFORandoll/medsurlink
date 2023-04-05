@@ -39,6 +39,18 @@ class BonPriseEnChargeController extends Controller
     }
 
     /**
+     * recuperation de tout les bons de prises en charge d'un patient
+     * @param $patient_id
+     *
+     * @return mixed
+     */
+    public function getBonPrisesEnCharges(Request $request, $patient_id)
+    {
+        return $this->successResponse($this->bonPriseEnChargeService->getBonPrisesEnCharges($request, $patient_id));
+    }
+
+
+    /**
      * @param \Illuminate\Http\Request $request
      *
      * @return mixed
