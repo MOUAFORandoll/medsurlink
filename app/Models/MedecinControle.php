@@ -92,7 +92,7 @@ class MedecinControle extends Model
     protected $appends = ['name'];
 
     public function getNameAttribute(){
-        return $this->civilite.' '.ucfirst($this->user->prenom).' '.Str::upper($this->user->nom);
+        return $this->civilite . ' ' . ucfirst($this->user->prenom ?? '') . ' ' . Str::upper($this->user->nom ?? '');
     }
 
     public function specialite(){

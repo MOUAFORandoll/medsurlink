@@ -12,15 +12,15 @@
     <style>
 
         @page { 
-            margin: 70px 0px; 
+            margin: 60px 0px; 
             font-family: 'Montserrat', sans-serif;
         }
         #header { 
             position: fixed; 
             left: 0px; 
-            top: -70px; 
-            right: 0px; 
-            height: 70px; 
+            top: -60px; 
+            right: 1px; 
+            height: 60px; 
             background-image: url("{{ public_path('images/pdf/header.png') }}");
             background-position: center;
             background-size: cover; 
@@ -65,7 +65,7 @@
             max-width: 30%;
         }
         .img img{
-            max-width: 100%;
+            max-width: 70%;
         }
 
         .info-user{
@@ -214,15 +214,22 @@
         .white{
             color: #fff;
         }
-        .signature{
-            display: flex;
-            justify-content: space-between;
+
+        #pageCounter {
+            counter-reset: pageTotal;
         }
-        .pagenum:before {
-            content: counter(page);
+        #pageCounter span {
+        counter-increment: pageTotal;
         }
-        .pagecount:before {
-            content: counter(pages);
+        #pageNumbers {
+        counter-reset: currentPage;
+        }
+        #pageNumbers div:before {
+        counter-increment: currentPage;
+        content: counter(currentPage) " / ";
+        }
+        #pageNumbers div:after {
+        content: counter(pageTotal);
         }
 
     </style>
