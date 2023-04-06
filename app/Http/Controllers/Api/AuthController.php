@@ -196,7 +196,7 @@ class AuthController extends AccessTokenController
         }
         return $authUser;
     }
-
+    
     public function userDetails(Request $request){
 
         $user = $request->user();

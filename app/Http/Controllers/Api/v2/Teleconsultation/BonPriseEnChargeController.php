@@ -25,6 +25,9 @@ class BonPriseEnChargeController extends Controller
      */
     public function index(Request $request)
     {
+        $patient_search = $request->search;
+        $patients = seachPatient($patient_search);
+        $request->request->add(['patients' => $patients]);
         return $this->successResponse($this->bonPriseEnChargeService->fetchBonPriseEnCharges($request));
     }
 
@@ -37,6 +40,21 @@ class BonPriseEnChargeController extends Controller
     {
         return $this->successResponse($this->bonPriseEnChargeService->fetchBonPriseEnCharge($bon_prise_en_charge));
     }
+
+    /**
+     * recuperation de tout les bons de prises en charge d'un patient
+     * @param $patient_id
+     *
+     * @return mixed
+     */
+    public function getBonPrisesEnCharges(Request $request, $patient_id)
+    {
+        $patient_search = $request->search;
+        $patients = seachPatient($patient_search);
+        $request->request->add(['patients' => $patients]);
+        return $this->successResponse($this->bonPriseEnChargeService->getBonPrisesEnCharges($request, $patient_id));
+    }
+
 
     /**
      * @param \Illuminate\Http\Request $request

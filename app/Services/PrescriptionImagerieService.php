@@ -46,7 +46,7 @@ class PrescriptionImagerieService
      */
     public function fetchPrescriptionImageries(Request $request) : string
     {
-        $prescription_imageries = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
+        $prescription_imageries = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"), true);
 
         $items = [];
         foreach($prescription_imageries['data']['data'] as $item){
@@ -78,6 +78,27 @@ class PrescriptionImagerieService
         $prescription_imagerie->data->pdf =  route('prescription_imageries.print', $prescription_imagerie->data->uuid);
 
         return json_encode($prescription_imagerie);
+    }
+
+    public function getExamenImageries(Request $request, $patient_id) : string {
+
+        $patient = new PatientService;
+
+        $prescription_imageries = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"));
+
+        $items = [];
+        foreach($prescription_imageries->data->data as $item){
+            $item->pdf = route('prescription_imageries.print', $item->uuid);
+
+            $item->patient = $patient->getPatient($item->patient_id, "dossier,affiliations,user");
+            $item->medecin = $patient->getMedecin($item->medecin_id);
+            $ligne_temps =  LigneDeTemps::find($item->ligne_temps_id);
+            $item->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
+            $items[] = $item;
+        }
+        $prescription_imageries->data->data = $items;
+
+        return json_encode($prescription_imageries);
     }
 
     /**

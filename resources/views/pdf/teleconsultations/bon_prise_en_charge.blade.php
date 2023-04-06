@@ -26,7 +26,7 @@
 
 
             @if(count($bon_prise_en_charge['motifs']) > 0)
-                <fieldset class="content-field mt-2">
+                <fieldset class="content-field mt-1">
                     <legend>MOTIFS PRINCIPAUX DE CONSULTATION INITIALE</legend>
                     <ol>
                         @forelse ($bon_prise_en_charge['motifs'] as $motif)
@@ -38,7 +38,7 @@
             @endif
 
             @if($bon_prise_en_charge['ligne_temps'] !="")
-                <fieldset class="content-field mt-2">
+                <fieldset class="content-field mt-1">
                     <legend>MOTIFS PRINCIPAUX DE CONSULTATION INITIALE</legend>
                     <ol>
                         @if (count($bon_prise_en_charge['ligne_temps']['motifs']) > 0)
@@ -100,7 +100,7 @@
             </fieldset>
 
 
-            <div class="content-text mt-2">
+            <div class="content-text mt-1">
                 <p>N’hésitez pas à archiver votre rapport de prise en charge dans le dossier medical du patient sur Medsurlink <a href="https://www.medsurlink.com" target="_blank">medsurlink.com</a>.</p>
                 <p>Si vous rencontrez des difficultés, n’hésitez pas à nous le transmettre par mail à  <a href="mailto:medical@medicasure.com" target="_blank">medical@medicasure.com</a> .</p>
                 <p>Je vous remercie d’avance de votre diligence.<br/>

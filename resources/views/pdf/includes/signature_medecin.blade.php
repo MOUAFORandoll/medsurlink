@@ -4,7 +4,8 @@
             <p>
                 <strong>{{ $medecin->civilite ?? '' }}  {{ $medecin->user->name }}</strong><br />
                 Numéro d’ordre : {{ $medecin->numero_ordre }}<br />
-                Téléphone : {{ number_format($medecin->user->telephone, 0,","," ")  }}<br />
+               {{--  Téléphone : {{ number_format($medecin->user->telephone, 0,","," ")  }}<br /> --}}
+                <br>
                 Date de prescription : {{ $date }}
             </p>
         </td>

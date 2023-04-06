@@ -258,6 +258,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::get('/', 'ExamenAnalyseController@index');
         Route::post('/', 'ExamenAnalyseController@store');
         Route::get('/{examen_analyse}', 'ExamenAnalyseController@show');
+        Route::get('/patient/{patient_id}', 'ExamenAnalyseController@getExamenAnalyses');
         Route::patch('/{examen_analyse}', 'ExamenAnalyseController@update');
         Route::delete('/{examen_analyse}', 'ExamenAnalyseController@destroy');
         Route::get('patient/{patient_id}/informations', 'ExamenAnalyseController@getPatientBulletins');
@@ -270,6 +271,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::get('/', 'PrescriptionImagerieController@index');
         Route::post('/', 'PrescriptionImagerieController@store');
         Route::get('/{prescription_imagerie}', 'PrescriptionImagerieController@show');
+        Route::get('/patient/{patient_id}', 'PrescriptionImagerieController@getExamenImageries');
         Route::patch('/{prescription_imagerie}', 'PrescriptionImagerieController@update');
         Route::delete('/{prescription_imagerie}', 'PrescriptionImagerieController@destroy');
     });
@@ -281,6 +283,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::get('/', 'BonPriseEnChargeController@index');
         Route::post('/', 'BonPriseEnChargeController@store');
         Route::get('/{bon_prise_en_charge}', 'BonPriseEnChargeController@show');
+        Route::get('/patient/{patient_id}', 'BonPriseEnChargeController@getBonPrisesEnCharges');
         Route::patch('/{bon_prise_en_charge}', 'BonPriseEnChargeController@update');
         Route::delete('/{bon_prise_en_charge}', 'BonPriseEnChargeController@destroy');
     });
