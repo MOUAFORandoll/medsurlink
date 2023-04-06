@@ -20,7 +20,7 @@ class Alerte extends Model implements HasMedia
 
     protected $fillable = ['uuid', 'patient_id', 'medecin_id', 'niveau_urgence_id', 'teleconsultation_id', 'statut_id', 'creator_id', 'plainte'];
 
-    protected $appends = ['audio', 'audio1'];
+    protected $appends = ['audio', 'audio1', 'size'];
 
     protected $slackChannels= [
         'test' => 'https://hooks.slack.com/services/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',
@@ -87,6 +87,18 @@ class Alerte extends Model implements HasMedia
         }
         $this->makeHidden('media');
         return asset($link);
+    }
+
+    public function getSizeAttribute(){
+        $size = 0;
+        if($this->getMedia('audio')->count() > 0){
+            $size += $this->getMedia('audio')->sum('size');
+        }
+        if($this->getMedia('audio1')->count() > 0){
+            $size += $this->getMedia('audio1')->sum('size');
+        }
+        $this->makeHidden('media');
+        return $size;
     }
 
     public function getAudio1Attribute(){

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api\v2\Teleconsultation;
 
 use App\Http\Controllers\Controller;
+use App\Models\Patient;
 use App\Services\ExamenAnalyseService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ExamenAnalyseController extends Controller
 {
@@ -26,6 +28,10 @@ class ExamenAnalyseController extends Controller
      */
     public function index(Request $request)
     {
+        $patient_search = $request->search;
+        $patients = seachPatient($patient_search);
+        $request->request->add(['patients' => $patients]);
+
         return $this->successResponse($this->examenAnalyseService->fetchExamenAnalyses($request));
     }
 
@@ -38,6 +44,20 @@ class ExamenAnalyseController extends Controller
     {
         return $this->successResponse($this->examenAnalyseService->fetchExamenAnalyse($examenAnalyse));
     }
+
+    /**
+     * @param $patient_id
+     *
+     * @return mixed
+     */
+    public function getExamenAnalyses(Request $request, $patient_id)
+    {
+        $patient_search = $request->search;
+        $patients = seachPatient($patient_search);
+        $request->request->add(['patients' => $patients]);
+        return $this->successResponse($this->examenAnalyseService->getExamenAnalyses($request, $patient_id));
+    }
+
 
     public function getPatientBulletins($patient_id){
         return $this->successResponse($this->examenAnalyseService->getPatientBulletins($patient_id));

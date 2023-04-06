@@ -51,7 +51,7 @@ class TeleconsultationService
      */
     public function fetchTeleconsultations(Request $request) : string
     {
-        $teleconsultations = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
+        $teleconsultations = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"), true);
 
         $items = [];
         foreach($teleconsultations['data']['data'] as $item){
