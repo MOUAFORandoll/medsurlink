@@ -168,6 +168,8 @@ class User extends Authenticatable implements HasMedia
         'isNotice', // Permet de mentionner que le medecin est un medecin avis
         'slack',
         'decede',
+        'codeR',// Permet de reinitialiser le mot de passe sur le mobile
+
     ];
 
     /**
@@ -268,7 +270,7 @@ class User extends Authenticatable implements HasMedia
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
+    
     /**
      * Validate the password of the user for the Passport password grant.
      *

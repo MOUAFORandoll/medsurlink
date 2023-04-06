@@ -95,26 +95,31 @@ class MedecinControle extends Model
         return $this->civilite . ' ' . ucfirst($this->user->prenom ?? '') . ' ' . Str::upper($this->user->nom ?? '');
     }
 
-    public function specialite(){
-        return $this->belongsTo(Specialite::class,'specialite_id','id');
+    public function specialite()
+    {
+        return $this->belongsTo(Specialite::class, 'specialite_id', 'id');
     }
 
     public function auteurs()
     {
         return $this->morphMany(Auteur::class, 'auteurable');
     }
-    public function user(){
-        return $this->belongsTo(User::class,'user_id','id')->withTrashed();
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id')->withTrashed();
     }
 
-    public function etablissements(){
-        return $this->belongsToMany(EtablissementExercice::class,'etablissement_exercice_medecin','medecin_controle_id','etablissement_id');
+    public function etablissements()
+    {
+        return $this->belongsToMany(EtablissementExercice::class, 'etablissement_exercice_medecin', 'medecin_controle_id', 'etablissement_id');
     }
-    public function patients(){
+    public function patients()
+    {
         return $this->belongsToMany(Patient::class, 'patient_medecin_controles', 'medecin_control_id',  'patient_id');
     }
 
-    public function rendezVous(){
+    public function rendezVous()
+    {
         return $this->hasMany(RendezVous::class, 'praticien_id', 'user_id');
     }
 

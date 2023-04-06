@@ -30,7 +30,8 @@ use Illuminate\Support\Facades\DB;
 class DashboardController extends Controller
 {
 
-    public function dashboard(){
+    public function dashboard()
+    {
 
         $nbre_patients = Patient::has('user')->count();
         $nbre_souscripteurs = Souscripteur::has('user')->count();
@@ -52,7 +53,7 @@ class DashboardController extends Controller
 
         $nbre_souscripteurs_par_ville = DB::select("select users.ville, count('users.id') as nombres from model_has_roles INNER JOIN users ON model_has_roles.model_id = users.id WHERE users.deleted_at IS NULL AND model_has_roles.role_id = 3 GROUP BY users.ville ORDER BY COUNT('users.id') DESC");
         $nbre_souscripteurs_par_pays = DB::select("select users.pays, count('users.id') as nombres from model_has_roles INNER JOIN users ON model_has_roles.model_id = users.id WHERE users.deleted_at IS NULL AND model_has_roles.role_id = 3 GROUP BY users.ville ORDER BY COUNT('users.id') DESC");
-        
+
         $nbre_patient_par_ville =  DB::select("select users.ville, count('users.id') as nombres from model_has_roles INNER JOIN users ON model_has_roles.model_id = users.id WHERE users.deleted_at IS NULL AND model_has_roles.role_id = 2 GROUP BY users.ville ORDER BY COUNT('users.id') DESC");
         $nbre_patient_par_pays = DB::select("select users.pays, count('users.id') as nombres from model_has_roles INNER JOIN users ON model_has_roles.model_id = users.id WHERE users.deleted_at IS NULL AND model_has_roles.role_id = 2 GROUP BY users.ville ORDER BY COUNT('users.id') DESC");
         $nbre_affiliations_janvier_juin = Affiliation::where('status_paiement', 'PAYE')->whereDate('created_at', '>=', '2022-01-01')->whereDate('created_at', '<=', '2022-06-30')->count();
@@ -75,12 +76,12 @@ class DashboardController extends Controller
         $nbre_prescriptions = Prescription::count();
         $nbre_resultat_laboratoire = DB::table('resultat_labos')->whereNull('deleted_at')->count();
         $nbre_resultat_imageries = DB::table('resultat_imageries')->whereNull('deleted_at')->count();
-        $nbre_hospitalisations = DB::table('hospitalisations')->whereNull('deleted_at')->count(); 
+        $nbre_hospitalisations = DB::table('hospitalisations')->whereNull('deleted_at')->count();
         $fichier_medico_externes = File::count();
         $nbre_dossier_medicaux = DossierMedical::has('patient')->count();
-        $nbre_compte_rendu_operatoires = DB::table('compte_rendu_operatoires')->whereNull('deleted_at')->count(); 
-        $nbre_avis = DB::table('medecin_avis')->whereNull('deleted_at')->count();  
-        $nbre_medecin_avis = DB::table('medecin_avis')->whereNull('deleted_at')->whereNotNull('avis')->count(); 
+        $nbre_compte_rendu_operatoires = DB::table('compte_rendu_operatoires')->whereNull('deleted_at')->count();
+        $nbre_avis = DB::table('medecin_avis')->whereNull('deleted_at')->count();
+        $nbre_medecin_avis = DB::table('medecin_avis')->whereNull('deleted_at')->whereNotNull('avis')->count();
         /**
          * Nombre d'avis par medecin referents
          */
@@ -88,11 +89,11 @@ class DashboardController extends Controller
         $nbre_avis_par_medecins = $nbre_avis_par_medecins->sortByDesc('medecin_avis_count');
         $nbre_avis_par_medecins = $nbre_avis_par_medecins->values()->all();
 
-        $nbre_rendez_vous = DB::table('rendez_vous')->whereNull('deleted_at')->count(); 
+        $nbre_rendez_vous = DB::table('rendez_vous')->whereNull('deleted_at')->count();
 
         $nbre_rendez_vous_par_patients = User::select(['id'])->with('dossier')->has('rendezVous')->has('patient')->withCount('rendezVous')->get();
         $nbre_rendez_vous_par_praticiens = Praticien::select(['numero_ordre'])->has('rendezVous')->withCount('rendezVous')->get();
-        
+
         $nbre_rendez_vous_par_medecin_referents = MedecinControle::select(['numero_ordre'])->has('rendezVous')->withCount('rendezVous')->get();
 
         $nbre_patient_avec_medecin_referents = User::select(['nom', 'prenom', 'ville', 'telephone'])->has('patient.medecinReferent')->count();
@@ -111,12 +112,14 @@ class DashboardController extends Controller
 
 
         $nbre_rendez_vous_par_etablissement = EtablissementExercice::select(['name'])->has('rendezVous')->withCount('rendezVous')->get();
-        $nbre_patient_decedes = Patient::whereHas('user', function ($query) { $query->where('decede', 'oui'); })->count();
+        $nbre_patient_decedes = Patient::whereHas('user', function ($query) {
+            $query->where('decede', 'oui');
+        })->count();
 
         return response()->json([
-            'nbre_patients' => $nbre_patients, 
-            'nbre_souscripteurs' => $nbre_souscripteurs, 
-            'nbre_praticiens' => $nbre_praticiens, 
+            'nbre_patients' => $nbre_patients,
+            'nbre_souscripteurs' => $nbre_souscripteurs,
+            'nbre_praticiens' => $nbre_praticiens,
             'nbre_medecin_controles' => $nbre_medecin_controles,
             'nbre_amas' => $nbre_amas,
             'nbre_gestionnaires' => $nbre_gestionnaires,
@@ -163,5 +166,4 @@ class DashboardController extends Controller
             'nbre_avis_par_medecins' => $nbre_avis_par_medecins
         ]);
     }
-
 }

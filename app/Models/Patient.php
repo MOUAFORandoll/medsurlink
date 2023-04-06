@@ -239,4 +239,8 @@ class Patient extends Model
         return $this->belongsTo(Alerte::class, 'user_id', 'patient_id');
     }
 
+    public function alertes(){
+        return $this->hasMany(Alerte::class, 'patient_id');
+    }
+
 }

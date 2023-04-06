@@ -46,11 +46,11 @@ class ExamenAnalyseService
      */
     public function fetchExamenAnalyses(Request $request) : string
     {
-        $examen_analyses = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
+        $examen_analyses = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"), true);
 
         $items = [];
+        $patient = new PatientService;
         foreach($examen_analyses['data']['data'] as $item){
-            $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $item['medecin'] = $patient->getMedecin($item['medecin_id']);
             $items[] = $item;
@@ -105,6 +105,27 @@ class ExamenAnalyseService
 
         return json_encode(["data" => ["examen_analyses" => $examen_analyse_items, "examen_imageries" => $examen_imagerie_items, "ordonnances" => $ordonnance_items]]);
         //return $this->request('GET', "{$this->path}/patient/{$patient_id}/informations");
+    }
+
+    public function getExamenAnalyses(Request $request, $patient_id) : string {
+
+        $patient = new PatientService;
+
+        $examen_analyses = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"));;
+
+        $items = [];
+        foreach($examen_analyses->data->data as $item){
+            $item->pdf = route('examen_analyses.print', $item->uuid);
+
+            $item->patient = $patient->getPatient($item->patient_id, "dossier,affiliations,user");
+            $item->medecin = $patient->getMedecin($item->medecin_id);
+            $ligne_temps =  LigneDeTemps::find($item->ligne_temps_id);
+            $item->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
+            $items[] = $item;
+        }
+        $examen_analyses->data->data = $items;
+
+        return json_encode($examen_analyses);
     }
 
     /**
