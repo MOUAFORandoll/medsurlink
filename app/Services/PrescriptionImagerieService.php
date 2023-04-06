@@ -46,7 +46,7 @@ class PrescriptionImagerieService
      */
     public function fetchPrescriptionImageries(Request $request) : string
     {
-        $prescription_imageries = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
+        $prescription_imageries = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"), true);
 
         $items = [];
         foreach($prescription_imageries['data']['data'] as $item){
@@ -84,7 +84,7 @@ class PrescriptionImagerieService
 
         $patient = new PatientService;
 
-        $prescription_imageries = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}"));
+        $prescription_imageries = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"));
 
         $items = [];
         foreach($prescription_imageries->data->data as $item){
