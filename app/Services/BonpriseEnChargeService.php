@@ -46,7 +46,7 @@ class BonpriseEnChargeService
      */
     public function fetchBonPriseEnCharges(Request $request) : string
     {
-        $bon_prise_en_charges = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
+        $bon_prise_en_charges = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"), true);
 
         $items = [];
         foreach($bon_prise_en_charges['data']['data'] as $item){
@@ -110,15 +110,15 @@ class BonpriseEnChargeService
 
         $patient = new PatientService;
 
-        $bon_prise_en_charges = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}"));
+        $bon_prise_en_charges = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"));
 
         $items = [];
         foreach($bon_prise_en_charges->data->data as $item){
             $item->pdf = route('bon_prise_en_charges.print', $item->uuid);
             $item->patient = $patient->getPatient($item->patient_id, "dossier,affiliations,user");
             $item->medecin = $patient->getMedecin($item->medecin_id);
-            $ligne_temps =  LigneDeTemps::find($item->ligne_temps_id);
-            $item->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
+            $ligne_temps = LigneDeTemps::find($item->ligne_temps_id);
+            $item->ligne_temps = !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
             $items[] = $item;
         }
         $bon_prise_en_charges->data->data = $items;
