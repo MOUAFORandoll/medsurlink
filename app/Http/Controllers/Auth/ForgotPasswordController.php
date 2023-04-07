@@ -186,13 +186,13 @@ class ForgotPasswordController extends Controller
             if ($user) {
                 // $users = User::whereEmail($email)->get();
                 $exist = $this->validateForPassportPasswordGrant($email, $password);
-                if ($exist) {
-                //ici on recuper le user a partir de l'email et du compte a reinitialiser
-                $user->password = Hash::make($password);
-                $user->updated_at = new DateTime();
-                $user->save();
-                $status =
-                    true;
+                if (!$exist) {
+                    //ici on recuper le user a partir de l'email et du compte a reinitialiser
+                    $user->password = Hash::make($password);
+                    $user->updated_at = new DateTime();
+                    $user->save();
+                    $status =
+                        true;
                 } else {
                     $status = false;
                 }
