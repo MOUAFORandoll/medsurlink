@@ -25,6 +25,9 @@ class PrescriptionImagerieController extends Controller
      */
     public function index(Request $request)
     {
+        $patient_search = $request->search;
+        $patients = seachPatient($patient_search);
+        $request->request->add(['patients' => $patients]);
         return $this->successResponse($this->prescriptionImagerieService->fetchPrescriptionImageries($request));
     }
 
@@ -38,7 +41,7 @@ class PrescriptionImagerieController extends Controller
         return $this->successResponse($this->prescriptionImagerieService->fetchPrescriptionImagerie($examenAnalyse));
     }
 
-       /**
+    /**
      * retourne les prescriptions imageries d'un patient
      * @param $patient_id
      *
@@ -46,6 +49,9 @@ class PrescriptionImagerieController extends Controller
      */
     public function getExamenImageries(Request $request, $patient_id)
     {
+        $patient_search = $request->search;
+        $patients = seachPatient($patient_search);
+        $request->request->add(['patients' => $patients]);
         return $this->successResponse($this->prescriptionImagerieService->getExamenImageries($request, $patient_id));
     }
 

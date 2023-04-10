@@ -35,21 +35,20 @@ class PrescriptionImagerieService
         $this->secret = config('services.teleconsultations.secret');
         $this->path = "/api/v1/prescription_imageries";
         $this->niveau_urgence = new NiveauUrgenceService;
-        if(\Auth::guard('api')->user()){
+        if (\Auth::guard('api')->user()) {
             $this->user_id = \Auth::guard('api')->user()->id;
         }
-
     }
 
     /**
      * @return string
      */
-    public function fetchPrescriptionImageries(Request $request) : string
+    public function fetchPrescriptionImageries(Request $request): string
     {
-        $prescription_imageries = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
+        $prescription_imageries = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"), true);
 
         $items = [];
-        foreach($prescription_imageries['data']['data'] as $item){
+        foreach ($prescription_imageries['data']['data'] as $item) {
             $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $item['medecin'] = $patient->getMedecin($item['medecin_id']);
@@ -65,7 +64,7 @@ class PrescriptionImagerieService
      *
      * @return string
      */
-    public function fetchPrescriptionImagerie($uuid) : string
+    public function fetchPrescriptionImagerie($uuid): string
     {
 
         $patient = new PatientService;
@@ -80,14 +79,15 @@ class PrescriptionImagerieService
         return json_encode($prescription_imagerie);
     }
 
-    public function getExamenImageries(Request $request, $patient_id) : string {
+    public function getExamenImageries(Request $request, $patient_id): string
+    {
 
         $patient = new PatientService;
 
-        $prescription_imageries = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}"));
+        $prescription_imageries = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"));
 
         $items = [];
-        foreach($prescription_imageries->data->data as $item){
+        foreach ($prescription_imageries->data->data as $item) {
             $item->pdf = route('prescription_imageries.print', $item->uuid);
 
             $item->patient = $patient->getPatient($item->patient_id, "dossier,affiliations,user");
@@ -106,7 +106,7 @@ class PrescriptionImagerieService
      *
      * @return string
      */
-    public function createPrescriptionImagerie($data) : string
+    public function createPrescriptionImagerie($data): string
     {
         return $this->request('POST', "{$this->path}", $data);
     }
@@ -117,7 +117,7 @@ class PrescriptionImagerieService
      *
      * @return string
      */
-    public function updatePrescriptionImagerie($prescription_imagerie, $data) : string
+    public function updatePrescriptionImagerie($prescription_imagerie, $data): string
     {
         return $this->request('PATCH', "{$this->path}/{$prescription_imagerie}", $data);
     }
@@ -127,9 +127,8 @@ class PrescriptionImagerieService
      *
      * @return string
      */
-    public function deletePrescriptionImagerie($prescription_imagerie) : string
+    public function deletePrescriptionImagerie($prescription_imagerie): string
     {
         return $this->request('DELETE', "{$this->path}/{$prescription_imagerie}");
     }
-
 }

@@ -35,22 +35,21 @@ class ExamenAnalyseService
         $this->secret = config('services.teleconsultations.secret');
         $this->path = "/api/v1/examen_analyses";
         $this->niveau_urgence = new NiveauUrgenceService;
-        if(\Auth::guard('api')->user()){
+        if (\Auth::guard('api')->user()) {
             $this->user_id = \Auth::guard('api')->user()->id;
         }
-
     }
 
     /**
      * @return string
      */
-    public function fetchExamenAnalyses(Request $request) : string
+    public function fetchExamenAnalyses(Request $request): string
     {
-        $examen_analyses = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
+        $examen_analyses = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"), true);
 
         $items = [];
         $patient = new PatientService;
-        foreach($examen_analyses['data']['data'] as $item){
+        foreach ($examen_analyses['data']['data'] as $item) {
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $item['medecin'] = $patient->getMedecin($item['medecin_id']);
             $items[] = $item;
@@ -65,7 +64,7 @@ class ExamenAnalyseService
      *
      * @return string
      */
-    public function fetchExamenAnalyse($uuid) : string
+    public function fetchExamenAnalyse($uuid): string
     {
         $patient = new PatientService;
 
@@ -79,27 +78,28 @@ class ExamenAnalyseService
         return json_encode($examen_analyse);
     }
 
-    public function getPatientBulletins($patient_id) : string{
+    public function getPatientBulletins($patient_id): string
+    {
         $examen_analyses = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}/informations"));
         $examen_imageries = $examen_analyses->data->examen_imageries;
         $ordonnances = $examen_analyses->data->ordonnances;
         $examen_analyses = $examen_analyses->data->examen_analyses;
         $examen_analyse_items = [];
-        foreach($examen_analyses as $item){
+        foreach ($examen_analyses as $item) {
             $item->pdf = route('examen_analyses.print', $item->uuid);
             $examen_analyse_items[] = $item;
         }
 
         $examen_imagerie_items = [];
-        foreach($examen_imageries as $item){
+        foreach ($examen_imageries as $item) {
             $item->pdf = route('prescription_imageries.print', $item->uuid);
             $examen_imagerie_items[] = $item;
         }
 
         $ordonnance_items = [];
-        foreach($ordonnances as $item){
+        foreach ($ordonnances as $item) {
             $teleconsultation = $item->teleconsultations[0];
-            $item->pdf = route('ordonnances.teleconsultations.print',  $teleconsultation->uuid.'-'.$item->id);
+            $item->pdf = route('ordonnances.teleconsultations.print',  $teleconsultation->uuid . '-' . $item->id);
             $ordonnance_items[] = $item;
         }
 
@@ -107,14 +107,15 @@ class ExamenAnalyseService
         //return $this->request('GET', "{$this->path}/patient/{$patient_id}/informations");
     }
 
-    public function getExamenAnalyses(Request $request, $patient_id) : string {
+    public function getExamenAnalyses(Request $request, $patient_id): string
+    {
 
         $patient = new PatientService;
 
-        $examen_analyses = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}"));;
+        $examen_analyses = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"));;
 
         $items = [];
-        foreach($examen_analyses->data->data as $item){
+        foreach ($examen_analyses->data->data as $item) {
             $item->pdf = route('examen_analyses.print', $item->uuid);
 
             $item->patient = $patient->getPatient($item->patient_id, "dossier,affiliations,user");
@@ -133,7 +134,7 @@ class ExamenAnalyseService
      *
      * @return string
      */
-    public function createExamenAnalyse($data) : string
+    public function createExamenAnalyse($data): string
     {
         return $this->request('POST', "{$this->path}", $data);
     }
@@ -144,7 +145,7 @@ class ExamenAnalyseService
      *
      * @return string
      */
-    public function updateExamenAnalyse($examen_analyse, $data) : string
+    public function updateExamenAnalyse($examen_analyse, $data): string
     {
         return $this->request('PATCH', "{$this->path}/{$examen_analyse}", $data);
     }
@@ -154,9 +155,8 @@ class ExamenAnalyseService
      *
      * @return string
      */
-    public function deleteExamenAnalyse($examen_analyse) : string
+    public function deleteExamenAnalyse($examen_analyse): string
     {
         return $this->request('DELETE', "{$this->path}/{$examen_analyse}");
     }
-
 }

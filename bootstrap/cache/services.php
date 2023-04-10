@@ -1,6 +1,6 @@
-<?php return array (
-  'providers' => 
-  array (
+<?php return array(
+  'providers' =>
+  array(
     0 => 'Illuminate\\Auth\\AuthServiceProvider',
     1 => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
     2 => 'Illuminate\\Bus\\BusServiceProvider',
@@ -47,16 +47,17 @@
     43 => 'Spatie\\Permission\\PermissionServiceProvider',
     44 => 'Barryvdh\\DomPDF\\ServiceProvider',
     45 => 'Barryvdh\\Snappy\\ServiceProvider',
-    46 => 'Barryvdh\\Debugbar\\ServiceProvider',
-    47 => 'Gbrock\\Table\\Providers\\TableServiceProvider',
-    48 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
-    49 => 'App\\Providers\\AppServiceProvider',
-    50 => 'App\\Providers\\AuthServiceProvider',
-    51 => 'App\\Providers\\EventServiceProvider',
-    52 => 'App\\Providers\\RouteServiceProvider',
+    46 => 'Gbrock\\Table\\Providers\\TableServiceProvider',
+    47 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
+    48 => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
+    49 => 'LaraCrafts\\UrlShortener\\UrlShortenerServiceProvider',
+    50 => 'App\\Providers\\AppServiceProvider',
+    51 => 'App\\Providers\\AuthServiceProvider',
+    52 => 'App\\Providers\\EventServiceProvider',
+    53 => 'App\\Providers\\RouteServiceProvider',
   ),
-  'eager' => 
-  array (
+  'eager' =>
+  array(
     0 => 'Illuminate\\Auth\\AuthServiceProvider',
     1 => 'Illuminate\\Cookie\\CookieServiceProvider',
     2 => 'Illuminate\\Database\\DatabaseServiceProvider',
@@ -88,16 +89,16 @@
     28 => 'Spatie\\Permission\\PermissionServiceProvider',
     29 => 'Barryvdh\\DomPDF\\ServiceProvider',
     30 => 'Barryvdh\\Snappy\\ServiceProvider',
-    31 => 'Barryvdh\\Debugbar\\ServiceProvider',
-    32 => 'Gbrock\\Table\\Providers\\TableServiceProvider',
-    33 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
+    31 => 'Gbrock\\Table\\Providers\\TableServiceProvider',
+    32 => 'Maatwebsite\\Excel\\ExcelServiceProvider',
+    33 => 'LaraCrafts\\UrlShortener\\UrlShortenerServiceProvider',
     34 => 'App\\Providers\\AppServiceProvider',
     35 => 'App\\Providers\\AuthServiceProvider',
     36 => 'App\\Providers\\EventServiceProvider',
     37 => 'App\\Providers\\RouteServiceProvider',
   ),
-  'deferred' => 
-  array (
+  'deferred' =>
+  array(
     'Illuminate\\Broadcasting\\BroadcastManager' => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
     'Illuminate\\Contracts\\Broadcasting\\Factory' => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
     'Illuminate\\Contracts\\Broadcasting\\Broadcaster' => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
@@ -207,52 +208,37 @@
     'command.tinker' => 'Laravel\\Tinker\\TinkerServiceProvider',
     'NunoMaduro\\Collision\\Contracts\\Provider' => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
   ),
-  'when' => 
-  array (
-    'Illuminate\\Broadcasting\\BroadcastServiceProvider' => 
-    array (
-    ),
-    'Illuminate\\Bus\\BusServiceProvider' => 
-    array (
-    ),
-    'Illuminate\\Cache\\CacheServiceProvider' => 
-    array (
-    ),
-    'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider' => 
-    array (
-    ),
-    'Illuminate\\Hashing\\HashServiceProvider' => 
-    array (
-    ),
-    'Illuminate\\Mail\\MailServiceProvider' => 
-    array (
-    ),
-    'Illuminate\\Pipeline\\PipelineServiceProvider' => 
-    array (
-    ),
-    'Illuminate\\Queue\\QueueServiceProvider' => 
-    array (
-    ),
-    'Illuminate\\Redis\\RedisServiceProvider' => 
-    array (
-    ),
-    'Illuminate\\Auth\\Passwords\\PasswordResetServiceProvider' => 
-    array (
-    ),
-    'Illuminate\\Translation\\TranslationServiceProvider' => 
-    array (
-    ),
-    'Illuminate\\Validation\\ValidationServiceProvider' => 
-    array (
-    ),
-    'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider' => 
-    array (
-    ),
-    'Laravel\\Tinker\\TinkerServiceProvider' => 
-    array (
-    ),
-    'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider' => 
-    array (
-    ),
+  'when' =>
+  array(
+    'Illuminate\\Broadcasting\\BroadcastServiceProvider' =>
+    array(),
+    'Illuminate\\Bus\\BusServiceProvider' =>
+    array(),
+    'Illuminate\\Cache\\CacheServiceProvider' =>
+    array(),
+    'Illuminate\\Foundation\\Providers\\ConsoleSupportServiceProvider' =>
+    array(),
+    'Illuminate\\Hashing\\HashServiceProvider' =>
+    array(),
+    'Illuminate\\Mail\\MailServiceProvider' =>
+    array(),
+    'Illuminate\\Pipeline\\PipelineServiceProvider' =>
+    array(),
+    'Illuminate\\Queue\\QueueServiceProvider' =>
+    array(),
+    'Illuminate\\Redis\\RedisServiceProvider' =>
+    array(),
+    'Illuminate\\Auth\\Passwords\\PasswordResetServiceProvider' =>
+    array(),
+    'Illuminate\\Translation\\TranslationServiceProvider' =>
+    array(),
+    'Illuminate\\Validation\\ValidationServiceProvider' =>
+    array(),
+    'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider' =>
+    array(),
+    'Laravel\\Tinker\\TinkerServiceProvider' =>
+    array(),
+    'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider' =>
+    array(),
   ),
 );
