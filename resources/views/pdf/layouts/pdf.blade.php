@@ -12,15 +12,15 @@
     <style>
 
         @page { 
-            margin: 60px 0px; 
+            margin: 65px 0px; 
             font-family: 'Montserrat', sans-serif;
         }
         #header { 
             position: fixed; 
             left: 0px; 
-            top: -60px; 
+            top: -65px; 
             right: 1px; 
-            height: 60px; 
+            height: 65px; 
             background-image: url("{{ public_path('images/pdf/header.png') }}");
             background-position: center;
             background-size: cover; 
