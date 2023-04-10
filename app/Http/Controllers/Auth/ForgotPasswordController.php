@@ -152,7 +152,7 @@ class ForgotPasswordController extends Controller
         $users = User::whereEmail($email)->get();
 
         foreach ($users as $user) {
-            if ($code == $user->codeR) {
+            if (strval($code) == strval($user->codeR)) {
                 $exist = true;
                 // if (
                 //     $exist == true
