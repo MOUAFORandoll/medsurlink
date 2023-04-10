@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\v2\Teleconsultation;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Teleconsultations\ShareBonPriseEnCharge;
 use App\Models\DossierMedical;
 use App\Services\BonpriseEnChargeService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class BonPriseEnChargeController extends Controller
 {
@@ -40,6 +42,25 @@ class BonPriseEnChargeController extends Controller
     public function show($bon_prise_en_charge)
     {
         return $this->successResponse($this->bonPriseEnChargeService->fetchBonPriseEnCharge($bon_prise_en_charge));
+    }
+
+
+    /**
+     * @param $bon_prise_en_charge
+     *
+     * @return mixed
+     */
+    public function emails(Request $request, $bon_prise_en_charge)
+    {
+        $emails = [];
+        foreach(explode(",", $request->email) as $email) {
+            $emails[] = trim($email);
+        }
+        $message = $request->message;
+        $subject = "Bon de prise en charge";
+        $route = route('bon_prise_en_charges.print', $bon_prise_en_charge);
+        Mail::to($emails)->send(new ShareBonPriseEnCharge($subject, $message, $route));
+        return $this->successResponse($subject);
     }
 
     /**
