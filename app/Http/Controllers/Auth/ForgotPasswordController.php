@@ -154,15 +154,17 @@ class ForgotPasswordController extends Controller
         foreach ($users as $user) {
             if ($code == $user->codeR) {
                 $exist = true;
+                // if (
+                //     $exist == true
+                // ) {
+                $listCompte =   $this->getCompteUser($email);
+                break;
+                // } else {
+                //     $listCompte = [];
+                // }
             }
         }
-        if (
-            $exist == true
-        ) {
-            $listCompte =   $this->getCompteUser($email);
-        } else {
-            $listCompte = [];
-        }
+
         return $listCompte;
     }
     /**
