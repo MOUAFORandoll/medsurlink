@@ -61,7 +61,7 @@ class ComptableController extends Controller
             $user =  User::create($request->except('user_id','sexe','etablissement_id')+['password'=> Hash::make( $password)]);
             $mail = new PasswordGenerated($user,$password);
             $when = now()->addMinutes(1);
-            Mail::to($user->email)->later($when, $mail);;
+            Mail::to($user->email)->later($when, $mail);
             $user_id = $user->id;
             $user->assignRole('Etablissement');
         }else{

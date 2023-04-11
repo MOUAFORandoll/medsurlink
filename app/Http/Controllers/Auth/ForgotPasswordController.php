@@ -93,8 +93,8 @@ class ForgotPasswordController extends Controller
             $password = $request->input()['password'];
             $compte = $request->input()['compte'];
             $reponseUpdate =    $this->updatePasswordUser($email, $password,            $compte);
-
-            return response()->json(['message' =>   $reponseUpdate ? 'OK' : 'Verifier le code et reessayez'],  $reponseUpdate ? 200 : 203);
+            // dd($reponseUpdate);
+            return response()->json(['message' =>   $reponseUpdate ? 'OK' : 'Verifier vos informations et reessayez'],  $reponseUpdate ? 200 : 203);
         } else {
             return response()->json(
                 [
@@ -174,7 +174,6 @@ class ForgotPasswordController extends Controller
      */
     public function updatePasswordUser($email, $password, $idCompte)
     {
-        $status = false;
         $validator = Validator::make(
             ['password' => $password],
             ['password' =>  'required|string|min:8']
@@ -182,28 +181,35 @@ class ForgotPasswordController extends Controller
 
         if ($validator->fails()) {
 
-            $status = false;
+            return
+                false;
         } else {
             $user = User::where('id', $idCompte)->first();
-            if ($user) {
+            if ($user != null) {
                 // $users = User::whereEmail($email)->get();
                 $exist = $this->validateForPassportPasswordGrant($email, $password);
                 if (!$exist) {
-                    //ici on recuper le user a partir de l'email et du compte a reinitialiser
+
+
                     $user->password = Hash::make($password);
                     $user->updated_at = new DateTime();
                     $user->save();
-                    $status =
+
+                    return
                         true;
                 } else {
-                    $status = false;
+
+
+                    return
+                        false;
                 }
             } else {
-                $status = false;
+
+
+                return
+                    false;
             }
         }
-        return
-            $status;
     }
 
     /**
@@ -214,15 +220,19 @@ class ForgotPasswordController extends Controller
      */
     public function validateForPassportPasswordGrant($email, $password)
     {
-        $users = User::where('email', $email)->get();
+        /** @var mixed  passwordExist de verification si le mot de passe est deja utilise ou pas */
         $passwordExist = false;
+        $users = User::where('email', $email)->get();
+
         foreach ($users as $user) {
+            // var_dump($user->id);
+            // var_dump(Hash::check($password, $user->password));
             if (Hash::check($password, $user->password)) {
-                $passwordExist = true;
-                break;
+                $passwordExist =   true;
             }
         }
-        return $passwordExist;
+
+        return   $passwordExist;
     }
 
     public  function getCompteUser($email)

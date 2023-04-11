@@ -47,11 +47,12 @@ class PatientService
 
         }
         if(!is_null($value)){
+            $value = strtolower($value);  
             $patients = $patients->with(['dossier:patient_id,id,numero_dossier', 'user:id,nom,prenom,email,telephone,slug','affiliations.package:id,description_fr'])
             ->whereHas('user', function($q) use ($value) {
-                    $q->where('nom', 'like', '%' .$value.'%')
-                    ->orwhere('prenom', 'like', '%' .$value.'%')
-                    ->orwhere('email', 'like', '%' .$value.'%')
+                    $q->where(DB::raw("lower(nom)"), 'like', '%' .$value.'%')
+                    ->orwhere(DB::raw("lower(prenom)"), 'like', '%' .$value.'%')
+                    ->orwhere(DB::raw("lower(email)"), 'like', '%' .$value.'%')
                     ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$value.'%')
                     ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$value.'%');
                 })

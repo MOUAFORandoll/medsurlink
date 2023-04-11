@@ -951,10 +951,11 @@ if(!function_exists('CreationPatientSouscripteur')){
 
 if(!function_exists('seachPatient')){
     function seachPatient($patient_search){
+        $patient_search = strtolower($patient_search);  
         return Patient::whereHas('user', function($query) use ($patient_search){
-            $query->where('nom', 'like',  '%'.$patient_search.'%')
-            ->orwhere('prenom', 'like',  '%'.$patient_search.'%')
-            ->orwhere('email', 'like',  '%'.$patient_search.'%')
+            $query->where(DB::raw("lower(nom)"), 'like',  '%'.$patient_search.'%')
+            ->orwhere(DB::raw("lower(prenom)"), 'like',  '%'.$patient_search.'%')
+            ->orwhere(DB::raw("lower(email)"), 'like',  '%'.$patient_search.'%')
             ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$patient_search.'%')
             ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$patient_search.'%');
         })->get('user_id')->map(function ($item) {
