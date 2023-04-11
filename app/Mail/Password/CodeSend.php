@@ -14,7 +14,7 @@ class CodeSend extends Mailable
 
     public $code;
     /**
-     * Create a new message instance.   
+     * Create a new message instance.
      *
      * @return void
      */
