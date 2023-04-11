@@ -282,6 +282,8 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     Route::group(['prefix' => 'bon_prises_en_charges'], function () {
         Route::get('/', 'BonPriseEnChargeController@index');
         Route::post('/', 'BonPriseEnChargeController@store');
+        Route::post('/emails/{bon_prise_en_charge}', 'BonPriseEnChargeController@emails');
+
         Route::get('/{bon_prise_en_charge}', 'BonPriseEnChargeController@show');
         Route::get('/patient/{patient_id}', 'BonPriseEnChargeController@getBonPrisesEnCharges');
         Route::patch('/{bon_prise_en_charge}', 'BonPriseEnChargeController@update');
