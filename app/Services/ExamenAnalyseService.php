@@ -111,7 +111,7 @@ class ExamenAnalyseService
 
         $patient = new PatientService;
 
-        $examen_analyses = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"));;
+        $examen_analyses = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"));
 
         $items = [];
         foreach($examen_analyses->data->data as $item){

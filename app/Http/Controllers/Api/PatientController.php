@@ -537,12 +537,15 @@ class PatientController extends Controller
     public function specialList($value)
     {
         $result=[];
+        $value = strtolower($value);
         $patients = Patient::with(['souscripteur','dossier', 'etablissements', 'user','affiliations','financeurs.financable', 'medecinReferent.medecinControles.user'])
                             ->restrictUser()
-                            ->whereHas('user', function($q) use ($value) {$q->where('nom', 'like', '%' .$value.'%')
-                                                                            ->orwhere('prenom', 'like', '%' .$value.'%')
-                                                                            ->orwhere('email', 'like', '%' .$value.'%')
-                                                                            ;})
+                            ->whereHas('user', function($q) use ($value) {
+                                $q->where(DB::raw("lower(nom)"), 'like', '%' .$value.'%')
+                                ->orwhere(DB::raw("lower(prenom)"), 'like', '%' .$value.'%')
+                                ->orwhere(DB::raw("lower(email)"), 'like', '%' .$value.'%')
+                                ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$value.'%')
+                                ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$value.'%');})
                             ->orwhereHas('dossier', function($q) use ($value) {$q->where('numero_dossier', 'like', '%' .$value.'%');})
                             ->orwhere('age', 'like', '%' .$value.'%')->get();
         return $patients;
