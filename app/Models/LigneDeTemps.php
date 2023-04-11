@@ -86,11 +86,9 @@ class LigneDeTemps extends Model
 
     public function getDescriptionAttribute()
     {
-        if ($this->created_at !== null) {
-            return "{$this->motif->description} ({$this->created_at->format('d-m-Y')})";
-        } else {
-            return "{$this->motif->description}";
-        }
+        return $this->created_at !== null && $this->motif !== null
+            ? "{$this->motif->description} ({$this->created_at->format('d-m-Y')})"
+            : ($this->motif !== null ? $this->motif->description : "");
     }
 
     // dossier médicaux lié à la ligne de temps
