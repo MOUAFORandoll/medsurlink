@@ -94,7 +94,7 @@ class ForgotPasswordController extends Controller
             $compte = $request->input()['compte'];
             $reponseUpdate =    $this->updatePasswordUser($email, $password,            $compte);
 
-            return response()->json(['message' =>   $reponseUpdate ? 'OK' : 'Verifier le code et reessayez'],  $reponseUpdate ? 200 : 203);
+            return response()->json(['message' =>   $reponseUpdate ? 'OK' : 'Verifier vos informations et reessayez'],  $reponseUpdate ? 200 : 203);
         } else {
             return response()->json(
                 [
@@ -152,17 +152,19 @@ class ForgotPasswordController extends Controller
         $users = User::whereEmail($email)->get();
 
         foreach ($users as $user) {
-            if ($code == $user->codeR) {
+            if (strval($code) == strval($user->codeR)) {
                 $exist = true;
+                // if (
+                //     $exist == true
+                // ) {
+                $listCompte =   $this->getCompteUser($email);
+                break;
+                // } else {
+                //     $listCompte = [];
+                // }
             }
         }
-        if (
-            $exist == true
-        ) {
-            $listCompte =   $this->getCompteUser($email);
-        } else {
-            $listCompte = [];
-        }
+
         return $listCompte;
     }
     /**
@@ -175,33 +177,37 @@ class ForgotPasswordController extends Controller
         $status = false;
         $validator = Validator::make(
             ['password' => $password],
-            ['password' =>  'required|string|size:8']
+            ['password' =>  'required|string|min:8']
         );
 
         if ($validator->fails()) {
 
             $status = false;
+            return
+                $status;
         } else {
             $user = User::where('id', $idCompte)->first();
             if ($user) {
                 // $users = User::whereEmail($email)->get();
-                $exist = $this->validateForPassportPasswordGrant($email, $password);
-                if ($exist) {
-                    //ici on recuper le user a partir de l'email et du compte a reinitialiser
-                    $user->password = Hash::make($password);
-                    $user->updated_at = new DateTime();
-                    $user->save();
-                    $status =
-                        true;
-                } else {
-                    $status = false;
-                }
+                // $exist = $this->validateForPassportPasswordGrant($email, $password);
+                // if (!$exist) {
+                //ici on recuper le user a partir de l'email et du compte a reinitialiser
+                $user->password = Hash::make($password);
+                $user->updated_at = new DateTime();
+                $user->save();
+                $status =
+                    true;
+                return
+                    $status;
+                // } else {
+                //     $status = false;
+                // }
             } else {
                 $status = false;
+                return
+                    $status;
             }
         }
-        return
-            $status;
     }
 
     /**
