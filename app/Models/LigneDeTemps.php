@@ -86,7 +86,7 @@ class LigneDeTemps extends Model
 
     public function getDescriptionAttribute()
     {
-        if ($this->created_at !== null) {
+        if ($this->created_at !== null && $this->motif) {
             return "{$this->motif->description} ({$this->created_at->format('d-m-Y')})";
         } else {
             return "{$this->motif->description} (null)";
