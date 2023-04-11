@@ -89,6 +89,11 @@ class LigneDeTemps extends Model
         return "{$this->motif->description} ({$this->created_at->format('d-m-Y')})";
     }
 
+    public function scopeNotDeleted($query)
+    {
+        return $query->whereNull('deleted_at');
+    }
+
     // dossier médicaux lié à la ligne de temps
     public function dossier()
     {
