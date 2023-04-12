@@ -50,6 +50,7 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
  * @property string|null $pays
  * @property string $telephone
  * @property string|null $email
+ * @property string|null $codeR
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string $slug
@@ -168,6 +169,8 @@ class User extends Authenticatable implements HasMedia
         'isNotice', // Permet de mentionner que le medecin est un medecin avis
         'slack',
         'decede',
+        'codeR', // Permet de reinitialiser le mot de passe sur le mobile
+
     ];
 
     /**
@@ -184,7 +187,7 @@ class User extends Authenticatable implements HasMedia
 
     protected $appends = ['signature', 'name'];
 
-    protected $slackChannels= [
+    protected $slackChannels = [
         'test' => 'https://hooks.slack.com/services/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',
         'test2' => 'https://hooks.slack.com/services/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',
         'affilie' => 'https://hooks.slack.com/services/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',
@@ -213,7 +216,8 @@ class User extends Authenticatable implements HasMedia
     //     }
     //     return $this->slack_url;
     // }
-    public function routeNotificationForSlack(){
+    public function routeNotificationForSlack()
+    {
         $env = strtolower(config('app.env'));
         if ($env == 'production')
             return $this->slackChannels["appel"];
@@ -221,16 +225,18 @@ class User extends Authenticatable implements HasMedia
             return $this->slackChannels["test"];
     }
 
-    public function getNameAttribute(){
-        return ucfirst($this->prenom).' '.Str::upper($this->nom);
+    public function getNameAttribute()
+    {
+        return ucfirst($this->prenom) . ' ' . Str::upper($this->nom);
     }
 
     /**
      * @param $name
      * @return $this
      */
-    public function setSlackChannel($name){
-        if(isset($this->slackChannels[$name])){
+    public function setSlackChannel($name)
+    {
+        if (isset($this->slackChannels[$name])) {
             $this->setSlackUrl($this->slackChannels[$name]);
         }
 
@@ -241,14 +247,16 @@ class User extends Authenticatable implements HasMedia
      * @param $url
      * @return $this
      */
-    public function setSlackUrl($url){
+    public function setSlackUrl($url)
+    {
         $this->slack_url = $url;
 
         return $this;
     }
 
-    public function getNomAndTimestampAttribute() {
-        return $this->nom . ' ' .Carbon::now()->timestamp;
+    public function getNomAndTimestampAttribute()
+    {
+        return $this->nom . ' ' . Carbon::now()->timestamp;
     }
 
     /**
@@ -279,8 +287,8 @@ class User extends Authenticatable implements HasMedia
     {
         $users = User::where('email', $this->email)->get();
         $passwordExist = false;
-        foreach ($users as $user){
-            if(Hash::check($password,$user->password)){
+        foreach ($users as $user) {
+            if (Hash::check($password, $user->password)) {
                 $passwordExist = true;
                 break;
             }
@@ -298,18 +306,17 @@ class User extends Authenticatable implements HasMedia
     {
         $password = Request::capture()['password'];
         //Verification de l'existence de l'adresse email
-        $validator = Validator::make(compact('username'),['username'=>['exists:users,email']]);
-        if($validator->fails()){
+        $validator = Validator::make(compact('username'), ['username' => ['exists:users,email']]);
+        if ($validator->fails()) {
 
             //Verification de l'existence du numero de dossier
-            if (strlen($username)<=9){
+            if (strlen($username) <= 9) {
                 $numero_dossier = $username;
-                $dossier = DB::table('dossier_medicals')->where('numero_dossier','=',$numero_dossier)->first();
+                $dossier = DB::table('dossier_medicals')->where('numero_dossier', '=', $numero_dossier)->first();
 
-                if (!is_null($dossier)){
+                if (!is_null($dossier)) {
                     $user = User::whereId($dossier->patient_id)->first();
                     return $user;
-
                 }
                 return [];
             }
@@ -318,8 +325,8 @@ class User extends Authenticatable implements HasMedia
         //Retourne tous l'utilisateur qui ont cette adresse email
         $users = User::where('email', $username)->get();
         $authUser = new User();
-        foreach ($users as $user){
-            if(Hash::check($password,$user->password)){
+        foreach ($users as $user) {
+            if (Hash::check($password, $user->password)) {
                 $authUser = $user;
                 break;
             }
@@ -328,29 +335,37 @@ class User extends Authenticatable implements HasMedia
     }
 
 
-    public function praticien(){
-        return $this->hasOne(Praticien::class,'user_id','id')->withTrashed();
+    public function praticien()
+    {
+        return $this->hasOne(Praticien::class, 'user_id', 'id')->withTrashed();
     }
-    public function association(){
-        return $this->hasOne(Association::class,'responsable','id');
+    public function association()
+    {
+        return $this->hasOne(Association::class, 'responsable', 'id');
     }
-    public function patient(){
-        return $this->hasOne(Patient::class,'user_id','id');
+    public function patient()
+    {
+        return $this->hasOne(Patient::class, 'user_id', 'id');
     }
-    public function gestionnaire(){
-        return $this->hasOne(Gestionnaire::class,'user_id','id')->withTrashed();
+    public function gestionnaire()
+    {
+        return $this->hasOne(Gestionnaire::class, 'user_id', 'id')->withTrashed();
     }
-    public function souscripteur(){
-        return $this->hasOne(Souscripteur::class,'user_id','id')->withTrashed();
+    public function souscripteur()
+    {
+        return $this->hasOne(Souscripteur::class, 'user_id', 'id')->withTrashed();
     }
-    public function medecinControle(){
-        return $this->hasOne(MedecinControle::class,'user_id','id')->withTrashed();
+    public function medecinControle()
+    {
+        return $this->hasOne(MedecinControle::class, 'user_id', 'id')->withTrashed();
     }
-    public function assistante(){
-        return $this->hasOne(Assistante::class,'user_id','id')->withTrashed();
+    public function assistante()
+    {
+        return $this->hasOne(Assistante::class, 'user_id', 'id')->withTrashed();
     }
-    public function pharmacien(){
-        return $this->hasOne(Pharmacien::class,'user_id','id');
+    public function pharmacien()
+    {
+        return $this->hasOne(Pharmacien::class, 'user_id', 'id');
     }
     public function messages()
     {
@@ -367,37 +382,43 @@ class User extends Authenticatable implements HasMedia
         $this->notify(new MailResetPasswordNotification($token));
     }
 
-    public function contributeurs(){
-        return $this->morphMany(Contributeurs::class,'contributable');
+    public function contributeurs()
+    {
+        return $this->morphMany(Contributeurs::class, 'contributable');
     }
 
-    public function questionSecrete(){
-        return $this->hasOne(ReponseSecrete::class,'user_id','id');
+    public function questionSecrete()
+    {
+        return $this->hasOne(ReponseSecrete::class, 'user_id', 'id');
     }
 
-    public function getSignatureAttribute(){
+    public function getSignatureAttribute()
+    {
         if ($this->getFirstMedia('signature')) {
             $arrayLinks = explode("public/", $this->getFirstMedia('signature')->getPath());
             $link = Storage::url($arrayLinks[count($arrayLinks) - 1]);
-          } else {
+        } else {
             return null;
-          }
-          $this->makeHidden('media');
-          return asset($link);
+        }
+        $this->makeHidden('media');
+        return asset($link);
     }
     public function rendezVous()
     {
-        return $this->hasMany(RendezVous::class, 'patient_id','id');
+        return $this->hasMany(RendezVous::class, 'patient_id', 'id');
     }
-    public function patients(){
+    public function patients()
+    {
         return $this->belongsToMany(Patient::class, 'patient_medecin_controles', 'patient_id', 'medecin_control_id');
     }
 
-    public function dossier(){
+    public function dossier()
+    {
         return $this->hasOne(DossierMedical::class, 'patient_id', 'id');
     }
 
-    public function medecinAvis(){
+    public function medecinAvis()
+    {
         return $this->hasMany(MedecinAvis::class, 'medecin_id');
     }
 }

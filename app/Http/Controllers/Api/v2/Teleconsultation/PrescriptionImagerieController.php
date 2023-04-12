@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v2\Teleconsultation;
 
 use App\Http\Controllers\Controller;
+use App\Models\DossierMedical;
 use App\Services\PrescriptionImagerieService;
 use Illuminate\Http\Request;
 
@@ -25,6 +26,9 @@ class PrescriptionImagerieController extends Controller
      */
     public function index(Request $request)
     {
+        $patient_search = $request->search;
+        $patients = seachPatient($patient_search);
+        $request->request->add(['patients' => $patients]);
         return $this->successResponse($this->prescriptionImagerieService->fetchPrescriptionImageries($request));
     }
 
@@ -36,6 +40,21 @@ class PrescriptionImagerieController extends Controller
     public function show($examenAnalyse)
     {
         return $this->successResponse($this->prescriptionImagerieService->fetchPrescriptionImagerie($examenAnalyse));
+    }
+
+       /**
+     * retourne les prescriptions imageries d'un patient
+     * @param $patient_id
+     *
+     * @return mixed
+     */
+    public function getExamenImageries(Request $request, $patient_id)
+    {
+        $dossier = DossierMedical::whereSlug($patient_id)->latest()->first();
+        if(!is_null($dossier)){
+            $patient_id = $dossier->patient_id;
+        }
+        return $this->successResponse($this->prescriptionImagerieService->getExamenImageries($request, $patient_id));
     }
 
     /**

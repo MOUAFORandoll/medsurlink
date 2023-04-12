@@ -371,7 +371,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'DB_MEDSURLINK',
+        'database' => 'online_medsurlink',
         'prefix' => '',
         'foreign_key_constraints' => true,
       ),
@@ -381,7 +381,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'DB_MEDSURLINK',
+        'database' => 'online_medsurlink',
         'username' => 'root',
         'password' => '',
         'unix_socket' => '',
@@ -409,7 +409,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'DB_MEDSURLINK',
+        'database' => 'online_medsurlink',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -424,7 +424,7 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'DB_MEDSURLINK',
+        'database' => 'online_medsurlink',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -834,8 +834,8 @@
   'mail' => 
   array (
     'driver' => 'smtp',
-    'host' => 'smtp.mailtrap.io',
-    'port' => '2525',
+    'host' => 'localhost',
+    'port' => '1025',
     'from' => 
     array (
       'address' => 'info@medicasure.com',

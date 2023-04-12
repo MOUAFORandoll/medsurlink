@@ -7,6 +7,7 @@ use App\Models\Patient;
 use App\Traits\RequestService;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PatientService
 {
@@ -38,10 +39,10 @@ class PatientService
         if($this->user->hasRole('Souscripteur')){
             $patients = $patients->where('souscripteur_id', $this->user_id);
         }elseif($this->user->hasRole('Medecin controle')){
-            $user_id = $this->user_id;
+           /*  $user_id = $this->user_id;
             $patients = $patients->whereHas('alerte', function ($query) use($user_id) {
                 $query->where('medecin_id', $user_id);
-            });
+            }); */
         }elseif($this->user->hasRole('Assistante')){
 
         }
@@ -50,7 +51,9 @@ class PatientService
             ->whereHas('user', function($q) use ($value) {
                     $q->where('nom', 'like', '%' .$value.'%')
                     ->orwhere('prenom', 'like', '%' .$value.'%')
-                    ->orwhere('email', 'like', '%' .$value.'%');
+                    ->orwhere('email', 'like', '%' .$value.'%')
+                    ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$value.'%')
+                    ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$value.'%');
                 })
                 ->orwhereHas('dossier', function($q) use ($value) {
                     $q->where('numero_dossier', 'like', '%' .$value.'%');

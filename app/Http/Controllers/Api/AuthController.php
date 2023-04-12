@@ -196,7 +196,7 @@ class AuthController extends AccessTokenController
         }
         return $authUser;
     }
-
+    
     public function userDetails(Request $request){
 
         $user = $request->user();
@@ -210,5 +210,23 @@ class AuthController extends AccessTokenController
 
 
         return response()->json(['user'=>$user]);
+    }
+
+    public function refresh(Request $request){
+        $user = auth()->user();
+        $access_token =  $user->createToken($request->client_secret);
+        return ['access_token' => $access_token->accessToken, 'refresh_token' => $request->refresh_token];
+    }
+
+    public function me(){
+        $user = auth()->user();
+        $permissions = $user->roles[0]->permissions->pluck('name');
+        $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name', 'permissions']);
+        $user = $user->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'adresse', 'quartier', 'deleted_at']);
+        $user->unread_notifications = $user->unreadNotifications()->latest()->get();
+        $user->unread_notifications = $user->unreadNotifications->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
+        $user->permissions = $permissions;
+
+        return $user;
     }
 }
