@@ -124,7 +124,7 @@
   ),
   'app' => 
   array (
-    'name' => 'Laravel',
+    'name' => 'Medsurlink',
     'env' => 'local',
     'debug' => true,
     'url' => 'http://localhost',
@@ -147,7 +147,11 @@
     'locale' => 'fr',
     'fallback_locale' => 'fr',
     'faker_locale' => 'en_US',
+<<<<<<< HEAD
     'key' => 'base64:0FvY2dkJZJ3bQSKopUJz7V4dTSRLuMBdqS4lXhAJbIw=',
+=======
+    'key' => 'base64:E26NBpavaocwuzD5sOgwZkiJye9ejG5+5/rGdxEL6po=',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
     'cipher' => 'AES-256-CBC',
     'providers' => 
     array (
@@ -269,7 +273,7 @@
   ),
   'broadcasting' => 
   array (
-    'default' => 'log',
+    'default' => 'redis',
     'connections' => 
     array (
       'pusher' => 
@@ -301,7 +305,7 @@
   ),
   'cache' => 
   array (
-    'default' => 'file',
+    'default' => 'redis',
     'stores' => 
     array (
       'apc' => 
@@ -321,7 +325,11 @@
       'file' => 
       array (
         'driver' => 'file',
+<<<<<<< HEAD
         'path' => 'D:\\medicalink-app\\storage\\framework/cache/data',
+=======
+        'path' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/framework/cache/data',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
       ),
       'memcached' => 
       array (
@@ -360,7 +368,7 @@
         'endpoint' => NULL,
       ),
     ),
-    'prefix' => 'laravel_cache',
+    'prefix' => 'medsurlink_cache',
   ),
   'database' => 
   array (
@@ -371,7 +379,7 @@
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'online_medsurlink',
+        'database' => 'DB_MEDSURLINK',
         'prefix' => '',
         'foreign_key_constraints' => true,
       ),
@@ -381,9 +389,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'online_medsurlink',
+        'database' => 'DB_MEDSURLINK',
         'username' => 'root',
-        'password' => '',
+        'password' => 'root',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
@@ -409,9 +417,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'online_medsurlink',
+        'database' => 'DB_MEDSURLINK',
         'username' => 'root',
-        'password' => '',
+        'password' => 'root',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -424,9 +432,9 @@
         'url' => NULL,
         'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'online_medsurlink',
+        'database' => 'DB_MEDSURLINK',
         'username' => 'root',
-        'password' => '',
+        'password' => 'root',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
@@ -439,13 +447,17 @@
       'options' => 
       array (
         'cluster' => 'predis',
-        'prefix' => 'Laravel_',
+        'prefix' => 'Medsurlink_',
       ),
       'default' => 
       array (
         'url' => NULL,
         'host' => '127.0.0.1',
+<<<<<<< HEAD
         'password' => NULL,
+=======
+        'password' => 'YE7OFGQXtoayXIhAm04MFMXWj7+xFrgd5coL0FR60Bx91ieT3dKOIt7HQeU/AOXX340zyr+2FRrUH7Q4',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
         'port' => '6379',
         'database' => 0,
       ),
@@ -453,14 +465,22 @@
       array (
         'url' => NULL,
         'host' => '127.0.0.1',
+<<<<<<< HEAD
         'password' => NULL,
+=======
+        'password' => 'YE7OFGQXtoayXIhAm04MFMXWj7+xFrgd5coL0FR60Bx91ieT3dKOIt7HQeU/AOXX340zyr+2FRrUH7Q4',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
         'port' => '6379',
         'database' => 1,
       ),
       'model_changes_history' => 
       array (
         'host' => '127.0.0.1',
+<<<<<<< HEAD
         'password' => NULL,
+=======
+        'password' => 'YE7OFGQXtoayXIhAm04MFMXWj7+xFrgd5coL0FR60Bx91ieT3dKOIt7HQeU/AOXX340zyr+2FRrUH7Q4',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
         'port' => '6379',
         'database' => 0,
       ),
@@ -482,7 +502,11 @@
     array (
       'enabled' => true,
       'driver' => 'file',
+<<<<<<< HEAD
       'path' => 'D:\\medicalink-app\\storage\\debugbar',
+=======
+      'path' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/debugbar',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
       'connection' => NULL,
       'provider' => '',
     ),
@@ -573,10 +597,17 @@
     'orientation' => 'portrait',
     'defines' => 
     array (
+<<<<<<< HEAD
       'font_dir' => 'D:\\medicalink-app\\storage\\fonts/',
       'font_cache' => 'D:\\medicalink-app\\storage\\fonts/',
       'temp_dir' => 'C:\\Users\\stagi\\AppData\\Local\\Temp',
       'chroot' => 'D:\\medicalink-app',
+=======
+      'font_dir' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/fonts/',
+      'font_cache' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/fonts/',
+      'temp_dir' => '/tmp',
+      'chroot' => '/home/medsur/Documents/projets/medsurlink/medicalink-app',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
       'enable_font_subsetting' => false,
       'pdf_backend' => 'CPDF',
       'default_media_type' => 'screen',
@@ -690,7 +721,11 @@
     ),
     'temporary_files' => 
     array (
+<<<<<<< HEAD
       'local_path' => 'D:\\medicalink-app\\storage\\framework/laravel-excel',
+=======
+      'local_path' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/framework/laravel-excel',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
       'remote_disk' => NULL,
       'remote_prefix' => NULL,
       'force_resync_remote' => NULL,
@@ -705,7 +740,11 @@
       'local' => 
       array (
         'driver' => 'local',
+<<<<<<< HEAD
         'root' => 'D:\\medicalink-app\\storage\\app',
+=======
+        'root' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/app',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
         'permissions' => 
         array (
           'file' => 
@@ -723,8 +762,13 @@
       'public' => 
       array (
         'driver' => 'local',
+<<<<<<< HEAD
         'root' => 'D:\\medicalink-app\\storage\\app/public',
         'url' => 'http://localhost/storage',
+=======
+        'root' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/app/public',
+        'url' => 'http://127.0.0.1:8001/api//storage',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
         'visibility' => 'public',
       ),
       's3' => 
@@ -739,7 +783,11 @@
       'model_changes_history' => 
       array (
         'driver' => 'local',
+<<<<<<< HEAD
         'root' => 'D:\\medicalink-app\\storage\\app/model_changes_history',
+=======
+        'root' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/app/model_changes_history',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
       ),
     ),
   ),
@@ -780,13 +828,21 @@
       'single' => 
       array (
         'driver' => 'single',
+<<<<<<< HEAD
         'path' => 'D:\\medicalink-app\\storage\\logs/laravel.log',
+=======
+        'path' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/logs/laravel.log',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
         'level' => 'debug',
       ),
       'daily' => 
       array (
         'driver' => 'daily',
+<<<<<<< HEAD
         'path' => 'D:\\medicalink-app\\storage\\logs/laravel.log',
+=======
+        'path' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/logs/laravel.log',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
         'level' => 'debug',
         'days' => 14,
       ),
@@ -834,23 +890,32 @@
   'mail' => 
   array (
     'driver' => 'smtp',
-    'host' => 'localhost',
-    'port' => '1025',
+    'host' => 'smtp.mailtrap.io',
+    'port' => '2525',
     'from' => 
     array (
       'address' => 'info@medicasure.com',
       'name' => 'Laravel',
     ),
     'encryption' => 'tls',
+<<<<<<< HEAD
     'username' => 'fc24357ba8a614',
     'password' => '4915f9ba15e213',
+=======
+    'username' => '82f0518b22d1a6',
+    'password' => '84b09b0ecd5139',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
     'sendmail' => '/usr/sbin/sendmail -bs',
     'markdown' => 
     array (
       'theme' => 'default',
       'paths' => 
       array (
+<<<<<<< HEAD
         0 => 'D:\\medicalink-app\\resources\\views/vendor/mail',
+=======
+        0 => '/home/medsur/Documents/projets/medsurlink/medicalink-app/resources/views/vendor/mail',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
       ),
     ),
     'log_channel' => NULL,
@@ -880,7 +945,11 @@
         'model_changes_history' => 
         array (
           'driver' => 'local',
+<<<<<<< HEAD
           'root' => 'D:\\medicalink-app\\storage\\app/model_changes_history',
+=======
+          'root' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/app/model_changes_history',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
         ),
       ),
       'redis' => 
@@ -891,7 +960,11 @@
         'model_changes_history' => 
         array (
           'host' => '127.0.0.1',
+<<<<<<< HEAD
           'password' => NULL,
+=======
+          'password' => 'YE7OFGQXtoayXIhAm04MFMXWj7+xFrgd5coL0FR60Bx91ieT3dKOIt7HQeU/AOXX340zyr+2FRrUH7Q4',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
           'port' => '6379',
           'database' => 0,
         ),
@@ -951,7 +1024,7 @@
   ),
   'queue' => 
   array (
-    'default' => 'sync',
+    'default' => 'redis',
     'connections' => 
     array (
       'sync' => 
@@ -1042,7 +1115,11 @@
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
+<<<<<<< HEAD
     'files' => 'D:\\medicalink-app\\storage\\framework/sessions',
+=======
+    'files' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/framework/sessions',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
@@ -1051,7 +1128,7 @@
       0 => 2,
       1 => 100,
     ),
-    'cookie' => 'laravel_session',
+    'cookie' => 'medsurlink_session',
     'path' => '/',
     'domain' => NULL,
     'secure' => false,
@@ -1117,9 +1194,15 @@
   array (
     'paths' => 
     array (
+<<<<<<< HEAD
       0 => 'D:\\medicalink-app\\resources\\views',
     ),
     'compiled' => 'D:\\medicalink-app\\storage\\framework\\views',
+=======
+      0 => '/home/medsur/Documents/projets/medsurlink/medicalink-app/resources/views',
+    ),
+    'compiled' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/framework/views',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
   ),
   'image' => 
   array (
@@ -1209,7 +1292,11 @@
     'include_helpers' => false,
     'helper_files' => 
     array (
+<<<<<<< HEAD
       0 => 'D:\\medicalink-app/vendor/laravel/framework/src/Illuminate/Support/helpers.php',
+=======
+      0 => '/home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Support/helpers.php',
+>>>>>>> 4c44da8ecb916e3f7ec4a453c9f8e2bde0fccfee
     ),
     'model_locations' => 
     array (
