@@ -394,4 +394,15 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::patch('/{unite_presentation}', 'UnitePresentationController@update');
         Route::delete('/{unite_presentation}', 'UnitePresentationController@destroy');
     });
+
+    /**
+     * CRUD Horaire De Prise
+     */
+    Route::group(['prefix' => 'horaire_de_prises'], function () {
+        Route::get('/', 'HoraireDePriseController@index');
+        Route::post('/', 'HoraireDePriseController@store');
+        Route::get('/{horaire_de_prise}', 'HoraireDePriseController@show');
+        Route::patch('/{horaire_de_prise}', 'HoraireDePriseController@update');
+        Route::delete('/{horaire_de_prise}', 'HoraireDePriseController@destroy');
+    });
 });
