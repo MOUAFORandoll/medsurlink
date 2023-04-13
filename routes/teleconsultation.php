@@ -383,4 +383,15 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::patch('/{voie_administration}', 'VoieAdministrationController@update');
         Route::delete('/{voie_administration}', 'VoieAdministrationController@destroy');
     });
+
+    /**
+     * CRUD Unite Presentation
+     */
+    Route::group(['prefix' => 'unite_presentations'], function () {
+        Route::get('/', 'UnitePresentationController@index');
+        Route::post('/', 'UnitePresentationController@store');
+        Route::get('/{unite_presentation}', 'UnitePresentationController@show');
+        Route::patch('/{unite_presentation}', 'UnitePresentationController@update');
+        Route::delete('/{unite_presentation}', 'UnitePresentationController@destroy');
+    });
 });
