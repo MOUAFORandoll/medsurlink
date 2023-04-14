@@ -56,12 +56,12 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
-    'frontend_url' =>env('FRONTEND_URL','www.medsurlink.com/login'),
+    'frontend_url' => env('FRONTEND_URL', 'www.medsurlink.com/login'),
     //'momo_url' => env('MOMO_URL', 'https://sandbox.momodeveloper.mtn.com'),
     'momo_url' => env('MOMO_URL', 'https://proxy.momoapi.mtn.com'),
 
-    'stripe_key' => 'sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5',
-    //'stripe_key' => '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',
+    // 'stripe_key' => 'sk_test_51HfRm5AB7Hl5NGXsFgNP6YeAnDn8W4ieGbRuREW0YU1IJRIXPvlNEDYANGCStZ3KP4aGV5mWewJQevVmdPlPh5RR00FDtdo9q5',
+    'stripe_key' => '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',
     'url_loccale' => "http://localhost:8080",
     'url_stagging' => "https://www.staging.medsurlink.com",
     'url_prod' => "https://www.medsurlink.com",
