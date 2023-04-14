@@ -52,7 +52,7 @@ class RendezVousService
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $item['medecin'] = $patient->getPraticien($item['praticien_id']);
             if(!is_null($item['etablissement_id'])){
-                $item['etablissement'] = json_decode($this->etablissement->fetchEtablissement($item['etablissement_id']));
+                $item['etablissement'] = json_decode($this->etablissement->fetchEtablissement($item['etablissement_id']), true)['data'];
             }
             $item['ligne_temps'] = !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
             $items[] = $item;
@@ -75,7 +75,7 @@ class RendezVousService
         $rendez_vous->data->patient = $patient->getPatient($rendez_vous->data->patient_id, "dossier,affiliations,user");
         $rendez_vous->data->medecin = $patient->getPraticien($rendez_vous->data->praticien_id);
         if(!is_null($rendez_vous->data->etablissement_id)){
-            $rendez_vous->etablissement = json_decode($this->etablissement->fetchEtablissement($rendez_vous->data->etablissement_id));
+            $rendez_vous->etablissement = json_decode($this->etablissement->fetchEtablissement($rendez_vous->data->etablissement_id), true)['data'];
         }
         $ligne_temps =  LigneDeTemps::find($rendez_vous->data->ligne_temps_id);
         $rendez_vous->data->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
