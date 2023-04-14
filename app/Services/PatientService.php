@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\MedecinControle;
 use App\Models\Patient;
+use App\Models\Praticien;
 use App\Traits\RequestService;
 use App\User;
 use Illuminate\Http\Request;
@@ -103,6 +104,12 @@ class PatientService
 
     public function getMedecin($medecin_id){
         $medecin = MedecinControle::with(['specialite:id,name','user:id,nom,prenom,email,telephone'])->where('user_id', $medecin_id)->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre']);
+
+        return $medecin;
+    }
+
+    public function getPraticien($medecin_id){
+        $medecin = Praticien::with(['specialite:id,name','user:id,nom,prenom,email,telephone'])->where('user_id', $medecin_id)->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre']);
 
         return $medecin;
     }

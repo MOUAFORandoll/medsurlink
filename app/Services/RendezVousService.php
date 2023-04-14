@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\LigneDeTemps;
 use App\Traits\RequestService;
 use Illuminate\Http\Request;
 
@@ -22,12 +23,16 @@ class RendezVousService
      * @var string
      */
     protected $path;
+    public $statut, $etablissement;
 
     public function __construct()
     {
         $this->baseUri = config('services.teleconsultations.base_uri');
         $this->secret = config('services.teleconsultations.secret');
         $this->path = "/api/v1/rendez_vous";
+
+        $this->statut = new StatutService;
+        $this->etablissement = new EtablissementService;
     }
 
     /**
@@ -35,7 +40,26 @@ class RendezVousService
      */
     public function fetchRendezVouss(Request $request) : string
     {
-        return $this->request('GET', "{$this->path}?search={$request->search}&page={$request->page}&page_size={$request->page_size}");
+
+        $rendez_vous = json_decode($this->request('GET', "{$this->path}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&statut_id={$request->statut_id}"), true);
+
+        $items = [];
+        $statuts = collect(json_decode($this->statut->fetchStatuts($request), true)['data']);
+        foreach($rendez_vous['data']['data'] as $item){
+            $patient = new PatientService;
+            $ligne_temps =  LigneDeTemps::find($item['ligne_temps_id']);
+            $item['statut'] = $statuts->where('id', $item['statut_id'])->first();
+            $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
+            $item['medecin'] = $patient->getPraticien($item['praticien_id']);
+            if(!is_null($item['etablissement_id'])){
+                $item['etablissement'] = json_decode($this->etablissement->fetchEtablissement($item['etablissement_id']));
+            }
+            $item['ligne_temps'] = !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
+            $items[] = $item;
+        }
+        $rendez_vous['data']['data'] = $items;
+
+        return json_encode($rendez_vous);
     }
 
     /**
@@ -45,7 +69,19 @@ class RendezVousService
      */
     public function fetchRendezVous($rendez_vous) : string
     {
-        return $this->request('GET', "{$this->path}/{$rendez_vous}");
+        $patient = new PatientService;
+
+        $rendez_vous = json_decode($this->request('GET', "{$this->path}/{$rendez_vous}"));
+        $rendez_vous->data->patient = $patient->getPatient($rendez_vous->data->patient_id, "dossier,affiliations,user");
+        $rendez_vous->data->medecin = $patient->getPraticien($rendez_vous->data->praticien_id);
+        if(!is_null($rendez_vous->data->etablissement_id)){
+            $rendez_vous->etablissement = json_decode($this->etablissement->fetchEtablissement($rendez_vous->data->etablissement_id));
+        }
+        $ligne_temps =  LigneDeTemps::find($rendez_vous->data->ligne_temps_id);
+        $rendez_vous->data->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
+
+        return json_encode($rendez_vous);
+
     }
 
     /**
