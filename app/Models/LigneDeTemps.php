@@ -91,6 +91,11 @@ class LigneDeTemps extends Model
             : ($this->motif !== null ? $this->motif->description : "");
     }
 
+    public function scopeNotDeleted($query)
+    {
+        return $query->whereNull('deleted_at');
+    }
+
     // dossier médicaux lié à la ligne de temps
     public function dossier()
     {

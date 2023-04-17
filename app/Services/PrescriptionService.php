@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Alerte;
 use App\Models\Allergie;
 use App\Models\Antecedent;
+use App\Models\LigneDeTemps;
 use App\Traits\RequestService;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,7 @@ class PrescriptionService
      */
     protected $secret;
 
-    public $allergie, $antecedent, $statut, $niveau_urgence, $user_id;
+    public $allergie, $antecedent, $statut, $niveau_urgence, $user_id, $etablissement;
 
     /**
      * @var string
@@ -40,6 +41,7 @@ class PrescriptionService
         $this->antecedent = new AntecedentService;
         $this->statut = new StatutService;
         $this->niveau_urgence = new NiveauUrgenceService;
+        $this->etablissement = new EtablissementService;
         if(\Auth::guard('api')->user()){
             $this->user_id = \Auth::guard('api')->user()->id;
         }
@@ -71,6 +73,16 @@ class PrescriptionService
      */
     public function fetchPrescription($prescription) : string
     {
+        $patient = new PatientService;
+
+        $prescription = json_decode($this->request('GET', "{$this->path}/{$prescription}"));
+        $prescription->data->patient = $patient->getPatient($prescription->data->patient_id, "dossier,affiliations,user");
+        $prescription->data->medecin = $patient->getMedecin($prescription->data->medecin_id);
+        $ligne_temps =  LigneDeTemps::find($prescription->data->ligne_temps_id);
+        $prescription->data->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
+
+        return json_encode($prescription);
+
         return $this->request('GET', "{$this->path}/{$prescription}");
     }
 

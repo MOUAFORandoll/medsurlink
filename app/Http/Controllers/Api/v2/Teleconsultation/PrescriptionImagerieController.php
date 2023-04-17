@@ -42,7 +42,7 @@ class PrescriptionImagerieController extends Controller
         return $this->successResponse($this->prescriptionImagerieService->fetchPrescriptionImagerie($examenAnalyse));
     }
 
-       /**
+    /**
      * retourne les prescriptions imageries d'un patient
      * @param $patient_id
      *

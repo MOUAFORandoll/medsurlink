@@ -20,7 +20,7 @@
                         @if (count($bon_prise_en_charge['teleconsultations']) > 0)
                             en vue d'une consultation de <strong>{{ $bon_prise_en_charge['teleconsultations'][0]['type']['libelle'] }}</strong> le <strong>{{ Carbon::parse($bon_prise_en_charge['rendez_vous'][0]['date'])->locale(config('app.locale'))->translatedFormat('jS F Y') }}</strong>
                         @endif
-                    Contact Patient{{ $patient->sexe == "M" ? "" : "e" }} : <strong>{{ number_format($patient->user->telephone, 0,","," ")  }}</strong>
+                    Contact Patient{{ $patient->sexe == "M" ? "" : "e" }} : <strong>{{ $patient->user->telephone  }}</strong>
                 </p>
             </div>
 
