@@ -21,7 +21,7 @@ class NotificationController extends Controller
 
         $items = [];
         foreach($user->unread_notifications->items() as $item){
-            $item = $item->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);;
+            $item = $item->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
             $items[] = $item;
         }
         $user->unread_notifications->data = $items;

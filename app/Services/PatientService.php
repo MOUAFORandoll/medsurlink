@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\MedecinControle;
 use App\Models\Patient;
+use App\Models\Praticien;
 use App\Traits\RequestService;
 use App\User;
 use Illuminate\Http\Request;
@@ -47,11 +48,12 @@ class PatientService
 
         }
         if(!is_null($value)){
+            $value = strtolower($value);  
             $patients = $patients->with(['dossier:patient_id,id,numero_dossier', 'user:id,nom,prenom,email,telephone,slug','affiliations.package:id,description_fr'])
             ->whereHas('user', function($q) use ($value) {
-                    $q->where('nom', 'like', '%' .$value.'%')
-                    ->orwhere('prenom', 'like', '%' .$value.'%')
-                    ->orwhere('email', 'like', '%' .$value.'%')
+                    $q->where(DB::raw("lower(nom)"), 'like', '%' .$value.'%')
+                    ->orwhere(DB::raw("lower(prenom)"), 'like', '%' .$value.'%')
+                    ->orwhere(DB::raw("lower(email)"), 'like', '%' .$value.'%')
                     ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$value.'%')
                     ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$value.'%');
                 })
@@ -102,6 +104,12 @@ class PatientService
 
     public function getMedecin($medecin_id){
         $medecin = MedecinControle::with(['specialite:id,name','user:id,nom,prenom,email,telephone'])->where('user_id', $medecin_id)->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre']);
+
+        return $medecin;
+    }
+
+    public function getPraticien($medecin_id){
+        $medecin = Praticien::with(['specialite:id,name','user:id,nom,prenom,email,telephone'])->where('user_id', $medecin_id)->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre']);
 
         return $medecin;
     }

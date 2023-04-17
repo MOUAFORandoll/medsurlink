@@ -61,7 +61,8 @@ class ExamenAnalyseController extends Controller
     }
 
 
-    public function getPatientBulletins($patient_id){
+    public function getPatientBulletins($patient_id)
+    {
         return $this->successResponse($this->examenAnalyseService->getPatientBulletins($patient_id));
     }
 

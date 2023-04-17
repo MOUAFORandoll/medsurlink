@@ -15,6 +15,7 @@ use App\Models\PaymentOffre;
 use App\Models\CommandePackage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AffiliationController extends Controller
 {
@@ -41,11 +42,13 @@ class AffiliationController extends Controller
         }
 
         if($request->search != ""){
-            $value = $request->search;
+            $value = strtolower($request->search);
             $affiliations = $affiliations->whereHas('patient.user', function($q) use ($value) {
-                $q->where('nom', 'like', '%' .$value.'%')
-                ->orwhere('prenom', 'like', '%' .$value.'%')
-                ->orwhere('email', 'like', '%' .$value.'%');
+                $q->where(DB::raw("lower(nom)"), 'like', '%' .$value.'%')
+                ->orwhere(DB::raw("lower(prenom)"), 'like', '%' .$value.'%')
+                ->orwhere(DB::raw("lower(email)"), 'like', '%' .$value.'%')
+                ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$value.'%')
+                ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$value.'%');
             });
         }
 
