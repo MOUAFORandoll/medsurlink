@@ -29,7 +29,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>#</th><th>Catégories</th><th>Examens</th>
+                        <th>N°</th><th>Catégories</th><th>Examens</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -23,6 +23,7 @@ use App\Services\ExamenAnalyseService;
 use App\Services\OrdonnanceService;
 use App\Services\PatientService;
 use App\Services\PrescriptionImagerieService;
+use App\Services\PrescriptionService;
 use BigBlueButton\BigBlueButton;
 use BigBlueButton\Parameters\GetRecordingsParameters;
 
@@ -308,7 +309,31 @@ Route::get('ordonnances/teleconsultations/{ordonnance_id}', function ($ordonnanc
 })->name('ordonnances.teleconsultations.print');
 
 
-//route('prescription_imageries.print', $prescription_imagerie->data->uuid);
+Route::get('prescriptions/print/{prescription_id}', function ($prescription_id) {
+    $prescription = new PrescriptionService;
+    $prescription = json_decode($prescription->fetchPrescription($prescription_id), true)['data'];
+    $patient_id = $prescription['patient_id'];
+
+    $patient = Patient::where('user_id', $patient_id)->orWhere('slug', $patient_id)
+        ->orwhereHas('dossier', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->orwhereHas('user', function ($query) use ($patient_id) {
+            $query->where('id', $patient_id);
+        })->orwhereHas('alerte', function ($query) use ($patient_id) {
+            $query->where('patient_id', $patient_id);
+        })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug', 'dossier:patient_id,numero_dossier')->first();
+
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $prescription['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+
+    $date = Carbon::parse($prescription['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
+    $date_pdf = Carbon::parse($prescription['created_at'])->locale(config('app.locale'))->format('Y-m-d');
+
+    $pdf = PDF::loadView('pdf.teleconsultations.prescriptions', ['prescription' => $prescription, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
+    //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
+
+    return $pdf->stream("{$date_pdf}_Prescription_{$patient->user->name}" . ".pdf");
+
+})->name('prescriptions.print');
 
 
 Route::get('visualiser-consultation-medecine/{slug}',function ($slug){
