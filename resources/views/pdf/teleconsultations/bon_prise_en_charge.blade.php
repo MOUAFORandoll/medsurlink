@@ -57,53 +57,54 @@
                 <legend>Plaintes</legend>
                 {!! $bon_prise_en_charge['plainte'] !!}
             </fieldset>
-
-            <fieldset class="content-field mt-1">
-                <legend>Bulletin d’examens / Ordonnances Disponibles</legend>
-                <table>
-                    <tr>
-                        <th>Catégories</th>
-                        <th>Examens</th>
-                        <th>Consulter</th>
-                    </tr>
-                    @forelse ($bon_prise_en_charge['examens_analyses'] as $item)
+            @if (count($bon_prise_en_charge['examens_analyses']) > 0)
+                <fieldset class="content-field mt-1">
+                    <legend>Bulletin d’examens / Ordonnances Disponibles</legend>
+                    <table>
                         <tr>
-                            @if($loop->iteration == 1)
-                                <td rowspan="{{ count($bon_prise_en_charge['examens_analyses']) }}">Bulletin d'examen</td>
-                            @endif
-                            <td>AB #{{ $item['id'] }}</td>
-                            <td><a href="{{ $item['pdf'] }}" target="_blank">Cliquer ici</a></td>
+                            <th>Catégories</th>
+                            <th>Examens</th>
+                            <th>Consulter</th>
                         </tr>
-                    @empty
-                    @endforelse
-                    @forelse ($bon_prise_en_charge['ordonnances'] as $item)
-                        <tr>
-                            @if($loop->iteration == 1)
-                                <td rowspan="{{ count($bon_prise_en_charge['ordonnances']) }}">Ordonnance</td>
-                            @endif
-                            <td>Rx #{{ $item['id'] }}</td>
-                            <td><a href="{{ $item['pdf'] }}" target="_blank">Cliquer ici</a></td>
-                        </tr>
-                    @empty
-                    @endforelse
-                    @forelse ($bon_prise_en_charge['examens_imageries'] as $item)
-                        <tr>
-                            @if($loop->iteration == 1)
-                                <td rowspan="{{ count($bon_prise_en_charge['examens_imageries']) }}">Examen Imageries</td>
-                            @endif
-                            <td>IM #{{ $item['id'] }}</td>
-                            <td><a href="{{ $item['pdf'] }}" target="_blank">Cliquer ici</a></td>
-                        </tr>
-                    @empty
-                    @endforelse
-                </table>
-            </fieldset>
+                        @forelse ($bon_prise_en_charge['examens_analyses'] as $item)
+                            <tr>
+                                @if($loop->iteration == 1)
+                                    <td rowspan="{{ count($bon_prise_en_charge['examens_analyses']) }}">Bulletin d'examen</td>
+                                @endif
+                                <td>AB #{{ $item['id'] }}</td>
+                                <td><a href="{{ $item['pdf'] }}" target="_blank">Cliquer ici</a></td>
+                            </tr>
+                        @empty
+                        @endforelse
+                        @forelse ($bon_prise_en_charge['ordonnances'] as $item)
+                            <tr>
+                                @if($loop->iteration == 1)
+                                    <td rowspan="{{ count($bon_prise_en_charge['ordonnances']) }}">Ordonnance</td>
+                                @endif
+                                <td>Rx #{{ $item['id'] }}</td>
+                                <td><a href="{{ $item['pdf'] }}" target="_blank">Cliquer ici</a></td>
+                            </tr>
+                        @empty
+                        @endforelse
+                        @forelse ($bon_prise_en_charge['examens_imageries'] as $item)
+                            <tr>
+                                @if($loop->iteration == 1)
+                                    <td rowspan="{{ count($bon_prise_en_charge['examens_imageries']) }}">Examen Imageries</td>
+                                @endif
+                                <td>IM #{{ $item['id'] }}</td>
+                                <td><a href="{{ $item['pdf'] }}" target="_blank">Cliquer ici</a></td>
+                            </tr>
+                        @empty
+                        @endforelse
+                    </table>
+                </fieldset>
+            @endif
 
 
             <div class="content-text mt-1">
                 <p>N’hésitez pas à archiver votre rapport de prise en charge dans le dossier medical du patient sur Medsurlink <a href="https://www.medsurlink.com" target="_blank">medsurlink.com</a>.</p>
                 <p>Si vous rencontrez des difficultés, n’hésitez pas à nous le transmettre par mail à  <a href="mailto:medical@medicasure.com" target="_blank">medical@medicasure.com</a> .</p>
-                <p>Je vous remercie d’avance de votre diligence.<br/>
+                <p><br/>Je vous remercie d’avance de votre diligence.<br/>
                     Sincères salutations</p>
             </div>
             @include('pdf.includes.signature_medecin', ['medecin' => $medecin])
