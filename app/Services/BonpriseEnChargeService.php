@@ -35,21 +35,20 @@ class BonpriseEnChargeService
         $this->secret = config('services.teleconsultations.secret');
         $this->path = "/api/v1/bon_prises_en_charges";
         $this->niveau_urgence = new NiveauUrgenceService;
-        if(\Auth::guard('api')->user()){
+        if (\Auth::guard('api')->user()) {
             $this->user_id = \Auth::guard('api')->user()->id;
         }
-
     }
 
     /**
      * @return string
      */
-    public function fetchBonPriseEnCharges(Request $request) : string
+    public function fetchBonPriseEnCharges(Request $request): string
     {
         $bon_prise_en_charges = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"), true);
 
         $items = [];
-        foreach($bon_prise_en_charges['data']['data'] as $item){
+        foreach ($bon_prise_en_charges['data']['data'] as $item) {
             $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $item['medecin'] = $patient->getMedecin($item['medecin_id']);
@@ -66,7 +65,7 @@ class BonpriseEnChargeService
      *
      * @return string
      */
-    public function fetchBonPriseEnCharge($uuid) : string
+    public function fetchBonPriseEnCharge($uuid): string
     {
 
         $patient = new PatientService;
@@ -81,17 +80,17 @@ class BonpriseEnChargeService
         $ordonnances = [];
         $examens_imageries = [];
 
-        foreach($bon_prise_en_charge->data->examens_analyses as $item){
+        foreach ($bon_prise_en_charge->data->examens_analyses as $item) {
             $item->pdf = route('examen_analyses.print', $item->uuid);
             $examen_analyse_items[] = $item;
         }
 
-        foreach($bon_prise_en_charge->data->ordonnances as $item){
+        foreach ($bon_prise_en_charge->data->ordonnances as $item) {
             $item->pdf = route('ordonnances.print', ['bon_prise_en_charge_id' => $uuid, 'ordonnance_id' => $item->id]);
             $ordonnances[] = $item;
         }
 
-        foreach($bon_prise_en_charge->data->examens_imageries as $item){
+        foreach ($bon_prise_en_charge->data->examens_imageries as $item) {
             $item->pdf = route('prescription_imageries.print', $item->uuid);
             $examens_imageries[] = $item;
         }
@@ -106,14 +105,15 @@ class BonpriseEnChargeService
         return json_encode($bon_prise_en_charge);
     }
 
-    public function getBonPrisesEnCharges(Request $request, $patient_id) : string {
+    public function getBonPrisesEnCharges(Request $request, $patient_id): string
+    {
 
         $patient = new PatientService;
 
         $bon_prise_en_charges = json_decode($this->request('GET', "{$this->path}/patient/{$patient_id}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"));
 
         $items = [];
-        foreach($bon_prise_en_charges->data->data as $item){
+        foreach ($bon_prise_en_charges->data->data as $item) {
             $item->pdf = route('bon_prise_en_charges.print', $item->uuid);
             $item->patient = $patient->getPatient($item->patient_id, "dossier,affiliations,user");
             $item->medecin = $patient->getMedecin($item->medecin_id);
@@ -131,7 +131,7 @@ class BonpriseEnChargeService
      *
      * @return string
      */
-    public function createBonPriseEnCharge($data) : string
+    public function createBonPriseEnCharge($data): string
     {
         return $this->request('POST', "{$this->path}", $data);
     }
@@ -142,7 +142,7 @@ class BonpriseEnChargeService
      *
      * @return string
      */
-    public function updateBonPriseEnCharge($bon_prise_en_charge, $data) : string
+    public function updateBonPriseEnCharge($bon_prise_en_charge, $data): string
     {
         return $this->request('PATCH', "{$this->path}/{$bon_prise_en_charge}", $data);
     }
@@ -152,7 +152,7 @@ class BonpriseEnChargeService
      *
      * @return string
      */
-    public function deleteBonPriseEnCharge($bon_prise_en_charge) : string
+    public function deleteBonPriseEnCharge($bon_prise_en_charge): string
     {
         return $this->request('DELETE', "{$this->path}/{$bon_prise_en_charge}");
     }
@@ -163,11 +163,9 @@ class BonpriseEnChargeService
      *
      * @return string
      */
-    public function fetchResultats($patient_id) : string
+    public function fetchResultats($patient_id): string
     {
         $resultats = [];
         return json_encode($resultats);
     }
-
-
 }

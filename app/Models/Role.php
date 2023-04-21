@@ -28,5 +28,11 @@ class Role extends Model
         "name",
         "guard_name",
     ];
-    
+
+    protected $guard_name = 'web';
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id')->withTrashed();
+    }
 }
