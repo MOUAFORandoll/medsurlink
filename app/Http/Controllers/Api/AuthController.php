@@ -208,7 +208,7 @@ class AuthController extends AccessTokenController
         $user['time_slug'] = $time->slug;
         $user['isEtablissement'] = isComptable();
 
-
+        
         return response()->json(['user'=>$user]);
     }
 

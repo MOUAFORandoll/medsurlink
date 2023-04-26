@@ -34,22 +34,22 @@ class PermissionTableSeeder extends Seeder
            'Supprimer consultations',
            'Transmettre consultation',
            'Consulter consultations transmises',
-           'Archiver consultations transmises',   
+           'Archiver consultations transmises',
         //Rapports
            'Imprimer rapports medicaux',
-        //profils souscripteur 
+        //profils souscripteur
            'Consulter profils souscripteur',
-         //profils praticien   
+         //profils praticien
            'Consulter profils praticien',
         //Resultats laboratoire
            'Consulter resultats laboratoire',
            'Créer résultats laboratoire',
            'Modifier resultats laboratoire',
            'Supprimer resultats laboratoire',
-           'Transmettre resultats laboratoire', 
-           'Consulter resultats laboratoire archives',  
-           'Imprimer resultats laboratoire',       
-           'Consulter resultats laboratoire transmises',  
+           'Transmettre resultats laboratoire',
+           'Consulter resultats laboratoire archives',
+           'Imprimer resultats laboratoire',
+           'Consulter resultats laboratoire transmises',
            'Archiver resultats laboratoire transmises',
         //Resultats imagerie
            'Consulter resultats imagerie',
@@ -58,14 +58,14 @@ class PermissionTableSeeder extends Seeder
            'Supprimer  resultats imagerie',
            'Transmettre résultats imagerie',
            'Imprimer résultats imagerie',
-           'Consulter resultats imagerie archives', 
+           'Consulter resultats imagerie archives',
            'Imprimer resultats imagerie',
            'Consulter resultats imagerie transmises',
            'Archiver resultats imagerie transmises',
         //Profils medecin controle
            'Consulter profils medecin controle',
-          
-        //Profils profils utilisateurs 
+
+        //Profils profils utilisateurs
            'Créer profils utilisateurs',
            'Consulter profils utilisateurs',
            'Modifier profils utilisateurs',
@@ -132,7 +132,7 @@ class PermissionTableSeeder extends Seeder
            'Créer souscripteur',
            'Modifier souscripteur',
            'Supprimer souscripteur',
-        //Partenaires   
+        //Partenaires
            'Créer partenaires',
            'Modifier partenaires',
            'Supprimer partenaires',

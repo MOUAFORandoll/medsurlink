@@ -78,6 +78,7 @@ class PrescriptionService
         $prescription = json_decode($this->request('GET', "{$this->path}/{$prescription}"));
         $prescription->data->patient = $patient->getPatient($prescription->data->patient_id, "dossier,affiliations,user");
         $prescription->data->medecin = $patient->getMedecin($prescription->data->medecin_id);
+        $prescription->data->pdf = route('prescriptions.print', $prescription->data->uuid);
         $ligne_temps =  LigneDeTemps::find($prescription->data->ligne_temps_id);
         $prescription->data->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
 
