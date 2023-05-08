@@ -17,4 +17,9 @@ class Permission extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id')->withTrashed();
     }
+
+    public function feature()
+    {
+        return $this->belongsTo('App\Feature');
+    }
 }

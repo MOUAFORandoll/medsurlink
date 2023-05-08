@@ -42,21 +42,20 @@ class PrescriptionService
         $this->statut = new StatutService;
         $this->niveau_urgence = new NiveauUrgenceService;
         $this->etablissement = new EtablissementService;
-        if(\Auth::guard('api')->user()){
+        if (\Auth::guard('api')->user()) {
             $this->user_id = \Auth::guard('api')->user()->id;
         }
-
     }
 
     /**
      * @return string
      */
-    public function fetchPrescriptions(Request $request) : string
+    public function fetchPrescriptions(Request $request): string
     {
         $prescriptions = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
 
         $items = [];
-        foreach($prescriptions['data']['data'] as $item){
+        foreach ($prescriptions['data']['data'] as $item) {
             $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $items[] = $item;
@@ -71,7 +70,7 @@ class PrescriptionService
      *
      * @return string
      */
-    public function fetchPrescription($prescription) : string
+    public function fetchPrescription($prescription): string
     {
         $patient = new PatientService;
 
@@ -92,7 +91,7 @@ class PrescriptionService
      *
      * @return string
      */
-    public function createPrescription($data) : string
+    public function createPrescription($data): string
     {
         return $this->request('POST', "{$this->path}", $data);
     }
@@ -103,7 +102,7 @@ class PrescriptionService
      *
      * @return string
      */
-    public function updatePrescription($prescription, $data) : string
+    public function updatePrescription($prescription, $data): string
     {
         return $this->request('PATCH', "{$this->path}/{$prescription}", $data);
     }
@@ -113,9 +112,8 @@ class PrescriptionService
      *
      * @return string
      */
-    public function deletePrescription($prescription) : string
+    public function deletePrescription($prescription): string
     {
         return $this->request('DELETE', "{$this->path}/{$prescription}");
     }
-
 }

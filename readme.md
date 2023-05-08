@@ -125,3 +125,8 @@ php artisan migrate --path=/database/migrations/2023_03_27_173239_add_temps_conn
 php artisan migrate --path=/database/migrations/2023_03_28_101422_add_last_activity_to_users_table.php
 
 php artisan migrate --path=/database/migrations/2023_04_05_160242_add_fields_to_users_table.php
+
+
+php artisan migrate --path=/database/migrations/2023_05_03_160904_create_features_table.php
+
+php artisan db:seed --class=FeaturesTableSeeder

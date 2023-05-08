@@ -101,8 +101,8 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::where('id', $id)->first();
-        $role->detete();
+        $role = Role::findById($id);
+        $role->delete();
         return response()->json(['delete' => "Utilisateur supprimé avec succes"]);
     }
 }
