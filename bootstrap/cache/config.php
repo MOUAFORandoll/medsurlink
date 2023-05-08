@@ -838,8 +838,8 @@
     'port' => '1025',
     'from' => 
     array (
-      'address' => 'noreply@medsurlink.com',
-      'name' => 'Medsurlink',
+      'address' => 'info@medicasure.com',
+      'name' => 'Laravel',
     ),
     'encryption' => NULL,
     'username' => NULL,
