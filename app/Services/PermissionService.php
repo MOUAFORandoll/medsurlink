@@ -24,7 +24,7 @@ class PermissionService
         Permission::create($permission);
         return $permission;
     }
-
+    
     public function show(Permission $permission){
 
     }

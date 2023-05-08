@@ -196,7 +196,7 @@ class AuthController extends AccessTokenController
         }
         return $authUser;
     }
-    
+
     public function userDetails(Request $request){
 
         $user = $request->user();
@@ -208,7 +208,7 @@ class AuthController extends AccessTokenController
         $user['time_slug'] = $time->slug;
         $user['isEtablissement'] = isComptable();
 
-
+        
         return response()->json(['user'=>$user]);
     }
 
@@ -226,7 +226,8 @@ class AuthController extends AccessTokenController
         $user->unread_notifications = $user->unreadNotifications()->latest()->get();
         $user->unread_notifications = $user->unreadNotifications->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
         $user->permissions = $permissions;
-
+        $time = TimeActivite::where('user_id',$user->id)->get()->last();
+        $user->time_slug = $time->slug;
         return $user;
     }
 }

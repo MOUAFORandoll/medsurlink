@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Permission;
 
-class RoleController extends Controller
+class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::with('permissions')->withCount('users')->get();
-        return response()->json(['roles' => $roles]);
+        $permissions = Permission::all();
+        return response()->json(['permissions' => $permissions]);
     }
 
     /**
@@ -27,6 +26,7 @@ class RoleController extends Controller
      */
     public function create()
     {
+        //
     }
 
     /**
@@ -37,21 +37,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $role = Role::create([
-            'name' => $request->get('name'),
-            'guard_name' => 'api'
-        ]);
-
-        //        $permission = Permission::create(['name'=>$request->get('permission'),]);
-        return response()->json(['role' => $role]);
-    }
-
-    function assignPermission(Request $request)
-    {
-        $roleId = $request->get('roleId');
-        $permissionIds = $request->get('permissionIds');
-        $role = Role::find($roleId);
-        $role->permissions()->sync($permissionIds);
+        //
     }
 
     /**
@@ -62,8 +48,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = Role::with('permissions')->where('id', $id)->first();
-        return response()->json(['role' => $role]);
+        //
     }
 
     /**
@@ -86,11 +71,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $role = Role::find($id)->update([
-            'name' => $request->get('name'),
-            'guard_name	' => "api"
-        ]);
-        return response()->json(['role' => $role]);
+        //
     }
 
     /**
@@ -101,8 +82,6 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $role = Role::findById($id);
-        $role->delete();
-        return response()->json(['delete' => "Utilisateur supprimé avec succes"]);
+        //
     }
 }

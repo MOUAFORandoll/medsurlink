@@ -241,17 +241,6 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     });
 
     /**
-    * CRUDS Prescription
-    */
-    Route::group(['prefix' => 'prescriptions'], function () {
-        Route::get('/', 'PrescriptionController@index');
-        Route::post('/', 'PrescriptionController@store');
-        Route::get('/{prescription}', 'PrescriptionController@show');
-        Route::patch('/{prescription}', 'PrescriptionController@update');
-        Route::delete('/{prescription}', 'PrescriptionController@destroy');
-    });
-
-    /**
      * CRUD Examen Analyse
      */
     Route::group(['prefix' => 'examen_analyses'], function () {
@@ -328,4 +317,92 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
      */
     Route::get("/{patient_id}/resultats", "BonPriseEnChargeController@resultats");
 
+
+    /**
+    * CRUDS Prescription
+    */
+    Route::group(['prefix' => 'prescriptions'], function () {
+        Route::get('/', 'PrescriptionController@index');
+        Route::post('/', 'PrescriptionController@store');
+        Route::get('/{prescription}', 'PrescriptionController@show');
+        Route::patch('/{prescription}', 'PrescriptionController@update');
+        Route::delete('/{prescription}', 'PrescriptionController@destroy');
+    });
+
+    /**
+     * CRUD Categorie Medicamenteuse
+     */
+    Route::group(['prefix' => 'categorie_medicamenteuses'], function () {
+        Route::get('/', 'CategorieMedicamenteuseController@index');
+        Route::post('/', 'CategorieMedicamenteuseController@store');
+        Route::get('/{categorie_medicamenteuse}', 'CategorieMedicamenteuseController@show');
+        Route::patch('/{categorie_medicamenteuse}', 'CategorieMedicamenteuseController@update');
+        Route::delete('/{categorie_medicamenteuse}', 'CategorieMedicamenteuseController@destroy');
+    });
+
+    /**
+     * CRUD Conditionnement
+     */
+    Route::group(['prefix' => 'conditionnements'], function () {
+        Route::get('/', 'ConditionnementController@index');
+        Route::post('/', 'ConditionnementController@store');
+        Route::get('/{conditionnement}', 'ConditionnementController@show');
+        Route::patch('/{conditionnement}', 'ConditionnementController@update');
+        Route::delete('/{conditionnement}', 'ConditionnementController@destroy');
+    });
+
+    /**
+     * CRUD Forme Medicamenteuse
+     */
+    Route::group(['prefix' => 'forme_medicamenteuses'], function () {
+        Route::get('/', 'FormeMedicamenteuseController@index');
+        Route::post('/', 'FormeMedicamenteuseController@store');
+        Route::get('/{forme_medicamenteuse}', 'FormeMedicamenteuseController@show');
+        Route::patch('/{forme_medicamenteuse}', 'FormeMedicamenteuseController@update');
+        Route::delete('/{forme_medicamenteuse}', 'FormeMedicamenteuseController@destroy');
+    });
+
+    /**
+     * CRUD Forme Medicamenteuse
+     */
+    Route::group(['prefix' => 'relation_alimentaires'], function () {
+        Route::get('/', 'RelationAlimentationController@index');
+        Route::post('/', 'RelationAlimentationController@store');
+        Route::get('/{relation_alimentaire}', 'RelationAlimentationController@show');
+        Route::patch('/{relation_alimentaire}', 'RelationAlimentationController@update');
+        Route::delete('/{relation_alimentaire}', 'RelationAlimentationController@destroy');
+    });
+
+    /**
+     * CRUD Voie Administration
+     */
+    Route::group(['prefix' => 'voie_administrations'], function () {
+        Route::get('/', 'VoieAdministrationController@index');
+        Route::post('/', 'VoieAdministrationController@store');
+        Route::get('/{voie_administration}', 'VoieAdministrationController@show');
+        Route::patch('/{voie_administration}', 'VoieAdministrationController@update');
+        Route::delete('/{voie_administration}', 'VoieAdministrationController@destroy');
+    });
+
+    /**
+     * CRUD Unite Presentation
+     */
+    Route::group(['prefix' => 'unite_presentations'], function () {
+        Route::get('/', 'UnitePresentationController@index');
+        Route::post('/', 'UnitePresentationController@store');
+        Route::get('/{unite_presentation}', 'UnitePresentationController@show');
+        Route::patch('/{unite_presentation}', 'UnitePresentationController@update');
+        Route::delete('/{unite_presentation}', 'UnitePresentationController@destroy');
+    });
+
+    /**
+     * CRUD Horaire De Prise
+     */
+    Route::group(['prefix' => 'horaire_de_prises'], function () {
+        Route::get('/', 'HoraireDePriseController@index');
+        Route::post('/', 'HoraireDePriseController@store');
+        Route::get('/{horaire_de_prise}', 'HoraireDePriseController@show');
+        Route::patch('/{horaire_de_prise}', 'HoraireDePriseController@update');
+        Route::delete('/{horaire_de_prise}', 'HoraireDePriseController@destroy');
+    });
 });

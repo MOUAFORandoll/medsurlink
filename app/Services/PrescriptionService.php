@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Alerte;
 use App\Models\Allergie;
 use App\Models\Antecedent;
+use App\Models\LigneDeTemps;
 use App\Traits\RequestService;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,7 @@ class PrescriptionService
      */
     protected $secret;
 
-    public $allergie, $antecedent, $statut, $niveau_urgence, $user_id;
+    public $allergie, $antecedent, $statut, $niveau_urgence, $user_id, $etablissement;
 
     /**
      * @var string
@@ -40,21 +41,21 @@ class PrescriptionService
         $this->antecedent = new AntecedentService;
         $this->statut = new StatutService;
         $this->niveau_urgence = new NiveauUrgenceService;
-        if(\Auth::guard('api')->user()){
+        $this->etablissement = new EtablissementService;
+        if (\Auth::guard('api')->user()) {
             $this->user_id = \Auth::guard('api')->user()->id;
         }
-
     }
 
     /**
      * @return string
      */
-    public function fetchPrescriptions(Request $request) : string
+    public function fetchPrescriptions(Request $request): string
     {
         $prescriptions = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
 
         $items = [];
-        foreach($prescriptions['data']['data'] as $item){
+        foreach ($prescriptions['data']['data'] as $item) {
             $patient = new PatientService;
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
             $items[] = $item;
@@ -69,8 +70,19 @@ class PrescriptionService
      *
      * @return string
      */
-    public function fetchPrescription($prescription) : string
+    public function fetchPrescription($prescription): string
     {
+        $patient = new PatientService;
+
+        $prescription = json_decode($this->request('GET', "{$this->path}/{$prescription}"));
+        $prescription->data->patient = $patient->getPatient($prescription->data->patient_id, "dossier,affiliations,user");
+        $prescription->data->medecin = $patient->getMedecin($prescription->data->medecin_id);
+        $prescription->data->pdf = route('prescriptions.print', $prescription->data->uuid);
+        $ligne_temps =  LigneDeTemps::find($prescription->data->ligne_temps_id);
+        $prescription->data->ligne_temps =  !is_null($ligne_temps) ? $ligne_temps->load('motif:id,description,created_at', 'motifs:id,description,created_at') : null;
+
+        return json_encode($prescription);
+
         return $this->request('GET', "{$this->path}/{$prescription}");
     }
 
@@ -79,7 +91,7 @@ class PrescriptionService
      *
      * @return string
      */
-    public function createPrescription($data) : string
+    public function createPrescription($data): string
     {
         return $this->request('POST', "{$this->path}", $data);
     }
@@ -90,7 +102,7 @@ class PrescriptionService
      *
      * @return string
      */
-    public function updatePrescription($prescription, $data) : string
+    public function updatePrescription($prescription, $data): string
     {
         return $this->request('PATCH', "{$this->path}/{$prescription}", $data);
     }
@@ -100,9 +112,8 @@ class PrescriptionService
      *
      * @return string
      */
-    public function deletePrescription($prescription) : string
+    public function deletePrescription($prescription): string
     {
         return $this->request('DELETE', "{$this->path}/{$prescription}");
     }
-
 }
