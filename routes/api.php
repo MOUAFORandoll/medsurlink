@@ -396,6 +396,7 @@ Route::group(['middleware' => ['auth:api', 'role:Admin']], function () {
     Route::resource('roles', 'Api\RoleController');
     Route::resource('permissions', 'Api\PermissionController');
     Route::post('assignPermission', 'Api\RoleController@assignPermission');
+    Route::resource('features', 'Api\FeatureController.php');
 });
 
 Route::group(['middleware' => ['auth:api', 'role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient|Pharmacien']], function () {
