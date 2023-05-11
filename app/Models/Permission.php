@@ -20,6 +20,6 @@ class Permission extends Model
 
     public function feature()
     {
-        return $this->belongsTo('App\Feature');
+        return $this->belongsTo('App\Models\Feature');
     }
 }
