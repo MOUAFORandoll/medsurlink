@@ -25,7 +25,7 @@
                                 @forelse ($prescription['medicaments'] as $medicament)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $medicament['nom_commerciale'] }}</td>
+                                        <td>{{ $medicament['denomination'] }}</td>
                                         <td>  {{ $medicament['pivot']['quantite_lors_une_prise'] }} comprimé {{ $medicament['pivot']['nombre_de_prise'] }} fois tout les {{ $medicament['pivot']['nombre_de_fois'] }} heures pendant {{ $medicament['pivot']['duree_traitement'] }} jours
                                             (
                                                 @forelse ($medicament['horaire_de_prises']  as $horaire_de_prise)
