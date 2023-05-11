@@ -55,6 +55,12 @@ class FeaturesTableSeeder extends Seeder
             ['id' => 40, 'nom_feature' => "RÔLES ET PERMISSIONS", 'guard_name' => "web"],
             ['id' => 41, 'nom_feature' => "PROFILS UTILISATEURS", 'guard_name' => "web"],
             ['id' => 42, 'nom_feature' => "EXAMENS COMPLEMENTAIRES", 'guard_name' => "web"],
+            ['id' => 43, 'nom_feature' => "LIGNE DE TEMPS", 'guard_name' => "web"],
+            ['id' => 44, 'nom_feature' => "CONSENTEMENT ECLAIRE", 'guard_name' => "web"],
+            ['id' => 45, 'nom_feature' => "RECOMMANDATIONS", 'guard_name' => "web"],
+            ['id' => 46, 'nom_feature' => "FORMATIONS", 'guard_name' => "web"],
+            ['id' => 47, 'nom_feature' => "AUTRES", 'guard_name' => "web"],
+            ['id' => 48, 'nom_feature' => "PAiEMENT", 'guard_name' => "web"],
         ];
         foreach ($features as $feature) {
             Feature::create($feature);
