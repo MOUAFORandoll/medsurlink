@@ -18,6 +18,7 @@ class CreateFeaturesTable extends Migration
             $table->string('nom_feature');
             $table->string('guard_name');
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::table('permissions', function (Blueprint $table) {
