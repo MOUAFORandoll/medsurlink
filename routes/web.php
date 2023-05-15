@@ -309,7 +309,7 @@ Route::get('ordonnances/teleconsultations/{ordonnance_id}', function ($ordonnanc
 })->name('ordonnances.teleconsultations.print');
 
 
-Route::get('prescriptions/print/{prescription_id}', function ($prescription_id) {
+Route::get('prescriptions/print/{prescription_id}/{format?}', function ($prescription_id, $format = "a4") {
     $prescription = new PrescriptionService;
     $prescription = json_decode($prescription->fetchPrescription($prescription_id), true)['data'];
     $patient_id = $prescription['patient_id'];
@@ -329,9 +329,10 @@ Route::get('prescriptions/print/{prescription_id}', function ($prescription_id) 
     $date_pdf = Carbon::parse($prescription['created_at'])->locale(config('app.locale'))->format('Y-m-d');
 
     $pdf = PDF::loadView('pdf.teleconsultations.prescriptions', ['prescription' => $prescription, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
+
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
 
-    return $pdf->stream("{$date_pdf}_Prescription_{$patient->user->name}" . ".pdf");
+    return $pdf->setPaper($format)->stream("{$date_pdf}_Prescription_{$patient->user->name}" . ".pdf");
 
 })->name('prescriptions.print');
 
