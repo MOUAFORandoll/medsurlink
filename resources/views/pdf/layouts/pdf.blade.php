@@ -118,6 +118,10 @@
             font-size: 16px;
             margin-bottom: .3rem;
         }
+        .legend-list {
+            color: #32325d;
+            margin-bottom: 15px;
+        }
 
         .content p{
             font-weight: normal;
