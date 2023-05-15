@@ -396,7 +396,7 @@ Route::group(['middleware' => ['auth:api', 'role:Admin']], function () {
     Route::resource('roles', 'Api\RoleController');
     Route::resource('permissions', 'Api\PermissionController');
     Route::get('permissions-group', 'Api\PermissionController@groupePermission');
-    Route::get('permissions-notnull', 'Api\PermissionController@permissionFeatureIsNotNull');
+    Route::get('permissions-notnull', 'Api\PermissionController@permissionFeatureIsNull');
     // permissionFeatureIsNotNull
     Route::post('assignPermission', 'Api\RoleController@assignPermission');
     Route::post('assignFeature', 'Api\PermissionController@assignFeature');

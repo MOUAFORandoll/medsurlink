@@ -25,7 +25,7 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function permissionFeatureIsNotNull()
+    public function permissionFeatureIsNull()
     {
         $permissions = Permission::with('feature')->whereNull('feature_id')->get();
         return response()->json(['permissions' => $permissions]);
