@@ -9,24 +9,26 @@
     </div>
     <div id="content" class="default-margin">
         @include('pdf.includes.identification_patient', ['patient' => $patient])
-        <div class="content">
+        <div class="content" style="margin-top: 5%">
             @if (count($prescription['medicaments'])>0)
-                <fieldset class="content-field mt-1">
-                    <legend>Liste des médicaments</legend>
+                {{-- <fieldset class="content-field mt-1"> --}}
+                    <legend class="legend-list"><b>Liste des médicaments</b></legend>
 
                     @if (count($prescription['medicaments'])>0)
                         <table>
                             <thead>
                                 <tr>
-                                    <th>N°</th><th>Médicaments</th><th>Posologies</th>
+                                    <th class="text-center">N°</th>
+                                    <th>Médicaments</th>
+                                    <th>Posologies</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($prescription['medicaments'] as $medicament)
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
+                                        <td class="text-center">{{ $loop->iteration }}</td>
                                         <td>{{ $medicament['denomination'] }}</td>
-                                        <td>  {{ $medicament['pivot']['quantite_lors_une_prise'] }} comprimé {{ $medicament['pivot']['nombre_de_prise'] }} fois tout les {{ $medicament['pivot']['nombre_de_fois'] }} heures pendant {{ $medicament['pivot']['duree_traitement'] }} jours
+                                        <td>  {{ $medicament['pivot']['quantite_lors_une_prise'] }} {{ $medicament['conditionnement']['libelle'] }}(s) {{ $medicament['pivot']['nombre_de_prise'] }} fois tout les {{ $medicament['pivot']['nombre_de_fois'] }} heure(s) pendant {{ $medicament['pivot']['duree_traitement'] }} jour(s)
                                             (
                                                 @forelse ($medicament['horaire_de_prises']  as $horaire_de_prise)
                                                     {{ $horaire_de_prise['libelle'] }}
@@ -35,8 +37,8 @@
                                                     @endif
                                                 @empty
                                                 @endforelse
-                                            ) renouvelable {{ $medicament['pivot']['nombre_renouvelement'] }} fois. <br>
-                                            Nombre d'unité d'achat : {{ $medicament['pivot']['nombre_unite_achat'] }}
+                                            ) renouvelable {{ $medicament['pivot']['nombre_renouvelement'] }} fois. <br><br>
+                                            <b>Nombre d'unité d'achat</b> : {{ $medicament['pivot']['nombre_unite_achat'] }} {{ $medicament['conditionnement']['libelle'] }}(s)
                                         </td>
                                     </tr>
                                 @empty
@@ -44,11 +46,11 @@
                             </tbody>
                         </table>
                     @endif
-                </fieldset>
+                {{-- </fieldset> --}}
             @endif
             <div class="content-text mt-1">
                 <br>
-                <p><b><i>NB: Recontacter le prescripteur rapidement en cas d'aggravation des symptômes</i></b></p>
+                <p><b><i>NB : Recontacter le prescripteur rapidement en cas d'aggravation des symptômes</i></b></p>
             </div>
             @include('pdf.includes.signature_medecin', ['medecin' => $medecin])
         </div>

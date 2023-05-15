@@ -49,10 +49,10 @@ header('Access-Control-Allow-Origin:  *');
 header('Access-Control-Allow-Methods:  POST, GET, OPTIONS, PUT, DELETE, PATCH');
 header('Access-Control-Allow-Headers:  Origin, Content-Type, X-Auth-Token, Authorization, X-Requested-With, x-xsrf-token');
 
-Route::get('/contrat-prepaye-store/{cim_id}/redirect','Api\AffiliationSouscripteurController@storeSouscripteurRedirect');
+Route::get('/contrat-prepaye-store/{cim_id}/redirect', 'Api\AffiliationSouscripteurController@storeSouscripteurRedirect');
 //Route::get('/contrat-prepaye-store/{cim_id}/redirect','Api\AffiliationSouscripteurController@storeSouscripteurRedirect')->middleware('auth.basic.once');
-Route::get('/redirect-mesurlink/redirect/{email}','Api\MedicasureController@storeSouscripteurRedirect');
-Route::resource('medicasure/souscripteur','Api\MedicasureController');
+Route::get('/redirect-mesurlink/redirect/{email}', 'Api\MedicasureController@storeSouscripteurRedirect');
+Route::resource('medicasure/souscripteur', 'Api\MedicasureController');
 
 Route::get('/', function () {
     $patients = Patient::with('alertes')->get();
@@ -65,34 +65,34 @@ Route::get('/join', function () {
 
 
 
-Route::get('/public/storage/DossierMedicale/{fileNumber}/{typeConsultation}/{consultation}/{image}/{resource?}', function ($fileNumber,$typeConsultation,$consultation,$image,$resource='') {
-    $path = public_path().'/storage/DossierMedicale/'.$fileNumber.'/'.$typeConsultation.'/'.$consultation.'/'.$image.($resource ? '/'.$resource :'');
+Route::get('/public/storage/DossierMedicale/{fileNumber}/{typeConsultation}/{consultation}/{image}/{resource?}', function ($fileNumber, $typeConsultation, $consultation, $image, $resource = '') {
+    $path = public_path() . '/storage/DossierMedicale/' . $fileNumber . '/' . $typeConsultation . '/' . $consultation . '/' . $image . ($resource ? '/' . $resource : '');
     return response()->file($path);
 });
 
-Route::get('/public/storage/{role}/{fileNumber}/{type}/{image}', function ($role,$fileNumber,$type,$image) {
-    $path = public_path().'/storage/'.$role.'/'.$fileNumber.'/'.$type.'/'.'/'.$image;
+Route::get('/public/storage/{role}/{fileNumber}/{type}/{image}', function ($role, $fileNumber, $type, $image) {
+    $path = public_path() . '/storage/' . $role . '/' . $fileNumber . '/' . $type . '/' . '/' . $image;
     return response()->file($path);
 });
 
 Route::get('/public/storage/pdf/{fileNumber}', function ($fileNumber) {
-    $path = public_path().'/storage/pdf/'.$fileNumber;
+    $path = public_path() . '/storage/pdf/' . $fileNumber;
     return response()->file($path);
 });
 
 Route::get('/contrat/{id}', function ($id) {
 
-    $cim= ContratIntermediationMedicale::find($id);
-    return view('contrat',compact('cim'));
+    $cim = ContratIntermediationMedicale::find($id);
+    return view('contrat', compact('cim'));
 });
 
 //Route::get('imprimer-dossier/{dossier}','Api\ImprimerController@dossier');
 
 Route::get('imprimer/contrat/{id}', function ($id) {
     $cim = ContratIntermediationMedicale::find($id);
-    $data = ['cim'=>$cim];
-    $pdf = PDF::loadView('contrat_version_imprimable',$data);
-    return $pdf->download("Contrat d'intermediation medicale - ".strtoupper($cim->nomPatient)." ".ucfirst($cim->prenomPatient)." - ".ucfirst($cim->typeSouscription).".pdf");
+    $data = ['cim' => $cim];
+    $pdf = PDF::loadView('contrat_version_imprimable', $data);
+    return $pdf->download("Contrat d'intermediation medicale - " . strtoupper($cim->nomPatient) . " " . ucfirst($cim->prenomPatient) . " - " . ucfirst($cim->typeSouscription) . ".pdf");
 });
 
 Route::get('/doc', function () {
@@ -103,14 +103,14 @@ Route::get('/doc', function () {
 /**
  * consentement éclairé du patient
  */
-Route::get('souscripteur/consentement_generate/{souscripteur_slug}/{patient_slug}', function($souscripteur_slug, $patient_slug){
+Route::get('souscripteur/consentement_generate/{souscripteur_slug}/{patient_slug}', function ($souscripteur_slug, $patient_slug) {
     $souscripteur = User::whereSlug($souscripteur_slug)->first();
     $patient = Patient::whereSlug($patient_slug)->first();
     $patient_consentement = $patient->consentement;
     $patient_restriction = $patient->restriction;
     $patient = $patient->user;
     $patient_souscripteurs = PatientSouscripteur::where(['financable_id' => $souscripteur->souscripteur->user_id, 'patient_id' => $patient->id])->latest()->get();
-    foreach($patient_souscripteurs as $patient_souscripteur){
+    foreach ($patient_souscripteurs as $patient_souscripteur) {
         $patient_souscripteur->update(['souscripteur_consentement' => 1, 'patient_consentement' => $patient_consentement, 'restriction' => $patient_restriction]);
     }
     $patient_souscripteur = $patient_souscripteurs->first();
@@ -131,13 +131,13 @@ Route::get('impression/facture-offre/{affiliation}', function ($affiliation) {
     $description = $affiliation->typeContrat->description_fr;
     $quantite =  $affiliation->commande->quantite;
     $prix_unitaire = $affiliation->typeContrat->montant;
-    $nom_souscripteur = mb_strtoupper($affiliation->souscripteur->user->nom).' '.$affiliation->souscripteur->user->prenom;
+    $nom_souscripteur = mb_strtoupper($affiliation->souscripteur->user->nom) . ' ' . $affiliation->souscripteur->user->prenom;
     $email_souscripteur = $affiliation->souscripteur->user->email;
     $rue =  $affiliation->souscripteur->user->quartier;
     $adresse =  $affiliation->souscripteur->user->adresse;
     $pays =  $affiliation->souscripteur->user->pays;
-    $ville = $affiliation->souscripteur->user->code_postal.' - '.$affiliation->souscripteur->user->ville;
-    $beneficiaire ="FOUKOUOP NDAM Rebecca";
+    $ville = $affiliation->souscripteur->user->code_postal . ' - ' . $affiliation->souscripteur->user->ville;
+    $beneficiaire = "FOUKOUOP NDAM Rebecca";
 
     $pdf = generationPdfFactureOffre($commande_id, $commande_date, $montant_total, $echeance, $description, $quantite, $prix_unitaire, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
     return $pdf['stream'];
@@ -168,7 +168,6 @@ Route::get('teleconsultations/print/{teleconsultation_id}', function ($teleconsu
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
 
     return $pdf->stream("{$date_pdf}_Téléconsultation_{$patient->user->name}" . ".pdf");
-
 })->name('teleconsultations.print');
 
 Route::get('bon-prises-en-charges/print/{bon_prise_en_charge_id}', function ($bon_prise_en_charge_id) {
@@ -185,7 +184,7 @@ Route::get('bon-prises-en-charges/print/{bon_prise_en_charge_id}', function ($bo
             $query->where('patient_id', $patient_id);
         })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug', 'dossier:patient_id,numero_dossier')->first();
 
-    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $bon_prise_en_charge['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name', 'user:id,nom,prenom,email'])->where('user_id', $bon_prise_en_charge['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
     $date = Carbon::parse($bon_prise_en_charge['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
     $date_pdf = Carbon::parse($bon_prise_en_charge['created_at'])->locale(config('app.locale'))->format('Y-m-d');
@@ -195,7 +194,6 @@ Route::get('bon-prises-en-charges/print/{bon_prise_en_charge_id}', function ($bo
 
 
     return $pdf->stream("{$date_pdf}_Bon-de-prise-en-charge_{$patient->user->name}" . ".pdf");
-
 })->name('bon_prise_en_charges.print');
 
 Route::get('examens-analyses/print/{examen_analyse_id}', function ($examen_analyse_id) {
@@ -212,7 +210,7 @@ Route::get('examens-analyses/print/{examen_analyse_id}', function ($examen_analy
             $query->where('patient_id', $patient_id);
         })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug', 'dossier:patient_id,numero_dossier')->first();
 
-    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $examen_analyse['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name', 'user:id,nom,prenom,email'])->where('user_id', $examen_analyse['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
     $date = Carbon::parse($examen_analyse['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
     $date_pdf = Carbon::parse($examen_analyse['created_at'])->locale(config('app.locale'))->format('Y-m-d');
@@ -221,7 +219,6 @@ Route::get('examens-analyses/print/{examen_analyse_id}', function ($examen_analy
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
 
     return $pdf->stream("{$date_pdf}_Biologie_{$patient->user->name}" . ".pdf");
-
 })->name('examen_analyses.print');
 
 
@@ -239,7 +236,7 @@ Route::get('prescription-imageries/print/{prescription_imagerie_id}', function (
             $query->where('patient_id', $patient_id);
         })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug', 'dossier:patient_id,numero_dossier')->first();
 
-    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $prescription_imagerie['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name', 'user:id,nom,prenom,email'])->where('user_id', $prescription_imagerie['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
     $date = Carbon::parse($prescription_imagerie['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
     $date_pdf = Carbon::parse($prescription_imagerie['created_at'])->locale(config('app.locale'))->format('Y-m-d');
@@ -248,7 +245,6 @@ Route::get('prescription-imageries/print/{prescription_imagerie_id}', function (
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
 
     return $pdf->stream("{$date_pdf}_Imagerie_{$patient->user->name}" . ".pdf");
-
 })->name('prescription_imageries.print');
 
 
@@ -268,7 +264,7 @@ Route::get('ordonnances/print/{bon_prise_en_charge_id}/{ordonnance_id}', functio
             $query->where('patient_id', $patient_id);
         })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug', 'dossier:patient_id,numero_dossier')->first();
 
-    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $bon_prise_en_charge['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name', 'user:id,nom,prenom,email'])->where('user_id', $bon_prise_en_charge['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
     $date = Carbon::parse($ordonnance['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
     $date_pdf = Carbon::parse($ordonnance['created_at'])->locale(config('app.locale'))->format('Y-m-d');
@@ -277,7 +273,6 @@ Route::get('ordonnances/print/{bon_prise_en_charge_id}/{ordonnance_id}', functio
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
 
     return $pdf->stream("{$date_pdf}_Ordonnance_{$patient->user->name}" . ".pdf");
-
 })->name('ordonnances.print');
 
 Route::get('ordonnances/teleconsultations/{ordonnance_id}', function ($ordonnance_id) {
@@ -297,7 +292,7 @@ Route::get('ordonnances/teleconsultations/{ordonnance_id}', function ($ordonnanc
             $query->where('patient_id', $patient_id);
         })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug', 'dossier:patient_id,numero_dossier')->first();
 
-    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $medecin_id)->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name', 'user:id,nom,prenom,email'])->where('user_id', $medecin_id)->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
     $date = Carbon::parse($ordonnance['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
     $date_pdf = Carbon::parse($ordonnance['created_at'])->locale(config('app.locale'))->format('Y-m-d');
@@ -305,7 +300,6 @@ Route::get('ordonnances/teleconsultations/{ordonnance_id}', function ($ordonnanc
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
 
     return $pdf->stream("{$date_pdf}_Ordonnance_{$patient->user->name}" . ".pdf");
-
 })->name('ordonnances.teleconsultations.print');
 
 
@@ -323,20 +317,20 @@ Route::get('prescriptions/print/{prescription_id}', function ($prescription_id) 
             $query->where('patient_id', $patient_id);
         })->with('user:id,nom,prenom,email,telephone,ville,pays,telephone,slug', 'dossier:patient_id,numero_dossier')->first();
 
-    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name','user:id,nom,prenom,email'])->where('user_id', $prescription['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
+    $medecin = MedecinControle::withTrashed()->with(['specialite:id,name', 'user:id,nom,prenom,email'])->where('user_id', $prescription['medecin_id'])->get(['specialite_id', 'user_id', 'civilite', 'numero_ordre'])->first();
 
     $date = Carbon::parse($prescription['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
     $date_pdf = Carbon::parse($prescription['created_at'])->locale(config('app.locale'))->format('Y-m-d');
 
     $pdf = PDF::loadView('pdf.teleconsultations.prescriptions', ['prescription' => $prescription, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
+    // $pdf->setPaper('A4', 'landscape');
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
 
     return $pdf->stream("{$date_pdf}_Prescription_{$patient->user->name}" . ".pdf");
-
 })->name('prescriptions.print');
 
 
-Route::get('visualiser-consultation-medecine/{slug}',function ($slug){
+Route::get('visualiser-consultation-medecine/{slug}', function ($slug) {
     $pdf = visualiser($slug);
     return $pdf;
 })->name('visualiser.consultation');
@@ -346,22 +340,22 @@ Route::get('visualiser-consultation-medecine/{slug}',function ($slug){
 Route::get('impression/prestation/{paiement_uuid}', function ($paiement_uuid) {
 
     $payment = Payment::where("uuid", $paiement_uuid)->first();
-    $payment = $payment->load('souscripteur.user','patients.user');
+    $payment = $payment->load('souscripteur.user', 'patients.user');
 
     $payment_id = $payment->id;
     $commande_date = $payment->date_payment;
     $montant_total = $payment->amount;
     $echeance =  "13/02/2022";
     $description = $payment->motif;
-    $mode_paiement = mb_strtoupper($payment->method) == 'OM' ? 'Orange Money' : 'Stripe' ;
+    $mode_paiement = mb_strtoupper($payment->method) == 'OM' ? 'Orange Money' : 'Stripe';
     $prix_unitaire = 2;
-    $nom_souscripteur = mb_strtoupper($payment->souscripteur->user->nom).' '.$payment->souscripteur->user->prenom;
+    $nom_souscripteur = mb_strtoupper($payment->souscripteur->user->nom) . ' ' . $payment->souscripteur->user->prenom;
     $email_souscripteur = $payment->souscripteur->user->email;
     $rue =  $payment->souscripteur->user->quartier;
     $adresse =  $payment->souscripteur->user->adresse;
     $pays =  $payment->souscripteur->user->pays;
-    $ville = $payment->souscripteur->user->code_postal.' - '.$payment->souscripteur->user->ville;
-    $beneficiaire = mb_strtoupper($payment->patients->user->nom).' '.$payment->patients->user->prenom;
+    $ville = $payment->souscripteur->user->code_postal . ' - ' . $payment->souscripteur->user->ville;
+    $beneficiaire = mb_strtoupper($payment->patients->user->nom) . ' ' . $payment->patients->user->prenom;
 
     $pdf = generationPdfPaiementPrestation($payment_id, $commande_date, $montant_total, $echeance, $description, $mode_paiement, $nom_souscripteur, $email_souscripteur, $rue, $adresse, $ville, $pays, $beneficiaire);
     return $pdf['stream'];
@@ -385,14 +379,12 @@ Route::get('bilans/{patient}', function ($patient) {
         $total_medecin_controle = $examen_validations->where('etat_validation_medecin', 1)->sum('prix');
         $total_medecin_assureur = $examen_validations->where('etat_validation_souscripteur', 1)->sum('prix');
         Carbon\Carbon::setLocale('fr');
-        $description = "Bilan Financier au ".Carbon\Carbon::now()->translatedFormat('l jS F Y');
+        $description = "Bilan Financier au " . Carbon\Carbon::now()->translatedFormat('l jS F Y');
         $pdf = PDF::loadView('pdf.soins.bilan_financier', ['examen_validations' => $examen_validations, 'total_prescription' => $total_prescription, 'total_medecin_controle' => $total_medecin_controle, 'total_medecin_assureur' => $total_medecin_assureur, 'description' => $description]);
-        return $pdf->stream($description.".pdf");
-    }catch (\Exception $exception){
+        return $pdf->stream($description . ".pdf");
+    } catch (\Exception $exception) {
         //$exception
     }
 })->name('patient.bilan');
 
 Auth::routes();
-
-
