@@ -8,37 +8,37 @@
     <link href='https://fonts.googleapis.com/css?family=Raleway:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900&display=swap' rel='stylesheet'>
 
 
-    <title>@yield('title')</title>
+    <title>@yield('title') </title>
     <style>
 
         @page { 
-            margin: 65px 0px; 
+            margin: {{ $format == 'a6' ? '35px 0px' : '65px 0px' }};
             font-family: 'Montserrat', sans-serif;
         }
         #header { 
             position: fixed; 
             left: 0px; 
-            top: -65px; 
+            top: {{ $format == 'a6' ? '-35px' : '-65px' }};
             right: 1px; 
-            height: 65px; 
+            height: {{ $format == 'a6' ? '35px' : '65px' }};
             background-image: url("{{ public_path('images/pdf/header.png') }}");
             background-position: center;
             background-size: cover; 
             text-align: center;
-            padding-top: 1rem;
-            padding-left: 2rem; 
+            padding-top: {{ $format == 'a6' ? '.5rem' : '1rem' }};
+            padding-left: {{ $format == 'a6' ? '1rem' : '2rem' }};
         }
 
         #footer { 
             position: fixed; 
             left: 0px; 
-            bottom: -70px; 
+            bottom: {{ $format == 'a6' ? '-70px' : '-70px' }};
             right: 0px; 
-            height: 70px;
+            height: {{ $format == 'a6' ? '70px' : '70px' }};;
             background-image: url("{{ public_path('images/pdf/footer.png') }}");
             background-position: center;
             background-size: cover;
-            padding-top: .25rem;
+            padding-top: {{ $format == 'a6' ? '.12rem' : '.25rem' }};
         }
 
         #footer .page:after { 
@@ -46,12 +46,12 @@
         }
 
         #footer li, td, p{
-            font-size: 12px;
+            font-size: {{ $format == 'a6' ? '10px' : '12px' }};
         }
 
         ol li{
-            font-size: 12px;
-            color: #32325d;
+            font-size: {{ $format == 'a6' ? '8px' : '12px' }};
+            color: "#32325d";
         }
 
         #footer ul .info{
@@ -62,16 +62,16 @@
             color: #2dcecc;
         }
         .img{
-            max-width: 30%;
+            max-width: 30%; 
         }
         .img img{
-            max-width: 70%;
+            max-width: 70%; 
         }
 
         .info-user{
             background-color: #f2f2f2;
-            padding: 1rem 1rem;
-            margin-top: 1rem;
+            padding: {{ $format == 'a6' ? '.3rem .3rem' : '1rem 1rem' }};
+            margin-top: {{ $format == 'a6' ? '.3rem' : '1rem' }};
         }
 
         .info-user h2{
@@ -83,51 +83,53 @@
         }
 
         .info-user ul{
-            padding-top: .3rem;
+            padding-top: {{ $format == 'a6' ? '.1rem' : '.3rem' }};
         }
 
         .info-user .li-top{
-            margin-bottom: .3rem;
+            margin-bottom: {{ $format == 'a6' ? '.1rem' : '.3rem' }};
         }
 
         .info-user ul .title{
             color: #2dcecc;
-            font-size: 12px;
+            font-size: {{ $format == 'a6' ? '8px' : '12px' }};
         }
 
         .info-user ul .info{
             color: #32325d;
-            font-weight: 600;
-            font-size: 12px;
+            font-weight: {{ $format == 'a6' ? '600' : '600' }};
+            font-size: {{ $format == 'a6' ? '8px' : '12px' }};
             /*text-transform: uppercase;*/
         }
 
-        /* li.li-top span:nth-child(2){
-            margin-right: 2rem;
-        } */
+        ul li span{
+            margin: 0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+        }
 
         li.li-bottom .span{
-            margin-left: 13rem;
+            margin-left: {{ $format == 'a6' ? '7rem' : '13rem' }};
         }
 
         .content h1{
             text-align: center;
             color: #2dcecc;
             text-transform: uppercase;
-            font-weight: 700;
-            font-size: 16px;
-            margin-bottom: .3rem;
+            font-weight: {{ $format == 'a6' ? '700' : '700' }};
+            font-size: {{ $format == 'a6' ? '12px' : '16px' }};
+            margin-bottom: {{ $format == 'a6' ? '.1rem' : '.3rem' }};
         }
         .legend-list {
             color: #32325d;
-            margin-bottom: 15px;
+            margin-bottom: {{ $format == 'a6' ? '8px' : '15px' }};
+            font-size: {{ $format == 'a6' ? '12px' : '16px' }};
         }
 
         .content p{
             font-weight: normal;
             color: #32325d;
-            margin: 1 1 1 1;
-            padding: 1 1 1 1;
+            margin: {{ $format == 'a6' ? '.5 .5 .5 .5' : '1 1 1 1' }};
+            padding: {{ $format == 'a6' ? '.5 .5 .5 .5' : '1 1 1 1' }};
         }
 
         .content strong{
@@ -136,18 +138,18 @@
 
         .content-field{
             border: 1.5px solid #dfdfdf;
-            /* border-radius: 8px; */
+            /* border-radius: 10px; */
         }
         .content-field legend{
             color: #2dcecc;
             text-transform: uppercase;
-            font-size: 12px;
+            font-size: {{ $format == 'a6' ? '10px' : '12px' }};
         }
         .content-field ul{
             padding: 0rem;
-            font-size: 1.2rem;
+            font-size: {{ $format == 'a6' ? '.6rem' : '1.2rem' }};
             font-weight: normal;
-            line-height: 1.5;
+            line-height: {{ $format == 'a6' ? '.7' : '1.5' }};
             color: #32325d;
         }
 
@@ -161,12 +163,12 @@
         td, th {
             border: 1px solid #dddddd;
             text-align: left;
-            padding: 5px;
+            padding: {{ $format == 'a6' ? '2px' : '5px' }};
             color: #32325d;
-            font-size: 12px;
+            font-size: {{ $format == 'a6' ? '10px' : '12px' }};
         }
         h2{
-            font-size: 14px;
+            font-size: {{ $format == 'a6' ? '10px' : '14px' }};
         }
 
         /* tr:nth-child(even) {
@@ -190,13 +192,13 @@
         }
 
         .default-margin{
-            padding: 0 2.5rem;
+            padding: {{ $format == 'a6' ? '0 1.5rem' : '0 2.5rem' }};
         }
         .mt-2{
-            margin-top: 1.4rem;
+            margin-top:  {{ $format == 'a6' ? '.8rem;' : '1.4rem;' }};
         }
         .mb-2{
-            margin-bottom: 1.4rem;
+            margin-bottom: {{ $format == 'a6' ? '.8rem;' : '1.4rem;' }};
         }
 
         .w-content{

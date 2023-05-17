@@ -322,7 +322,7 @@ Route::get('prescriptions/print/{prescription_id}/{format?}', function ($prescri
     $date = Carbon::parse($prescription['created_at'])->locale(config('app.locale'))->translatedFormat('jS F Y');
     $date_pdf = Carbon::parse($prescription['created_at'])->locale(config('app.locale'))->format('Y-m-d');
 
-    $pdf = PDF::loadView('pdf.teleconsultations.prescriptions', ['prescription' => $prescription, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date]);
+    $pdf = PDF::loadView('pdf.teleconsultations.prescriptions', ['prescription' => $prescription, 'patient' => $patient, 'medecin' => $medecin, 'date' => $date, 'format' => $format]);
 
     //return ['output' => $pdf->output(), 'stream' => $pdf->stream($description.".pdf")];
 

@@ -1,7 +1,7 @@
 @php
     use Carbon\Carbon;
 @endphp
-@extends('pdf.layouts.pdf')
+@extends('pdf.layouts.pdf', ['format' => 'a4'])
 @section('title', "Bulletin d'examens d'analyses biomédicales de {$patient->user->name } du {$date} par {$medecin->civilite} {$medecin->user->name}")
 @section('content')
   <div id="content" class="default-margin">

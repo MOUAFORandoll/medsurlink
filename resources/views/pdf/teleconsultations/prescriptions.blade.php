@@ -1,7 +1,7 @@
 @php
     use Carbon\Carbon;
 @endphp
-@extends('pdf.layouts.pdf')
+@extends('pdf.layouts.pdf', ['format' => $format])
 @section('title', "Prescription des médicaments de {$patient->user->name } du {$date} par {$medecin->civilite} {$medecin->user->name}")
 @section('content')
     <div class="content mt-2">
@@ -9,7 +9,7 @@
     </div>
     <div id="content" class="default-margin">
         @include('pdf.includes.identification_patient', ['patient' => $patient])
-        <div class="content" style="margin-top: 5%">
+        <div class="content" style="{{ $format == 'a6' ? '2%' : '5%' }};">
             @if (count($prescription['medicaments'])>0)
                 {{-- <fieldset class="content-field mt-1"> --}}
                     <legend class="legend-list"><b>Liste des médicaments</b></legend>
@@ -49,8 +49,8 @@
                 {{-- </fieldset> --}}
             @endif
             <div class="content-text mt-1">
-                <br>
-                <p><b><i>NB : Recontacter le prescripteur rapidement en cas d'aggravation des symptômes</i></b></p>
+                {!! $format == 'a6' ? '' : ' <br>' !!}
+                <p style="font-size: {{$format == 'a6' ? '9px' : '10px'}};"><b><i>NB : Recontacter le prescripteur rapidement en cas d'aggravation des symptômes</i></b></p>
             </div>
             @include('pdf.includes.signature_medecin', ['medecin' => $medecin])
         </div>
