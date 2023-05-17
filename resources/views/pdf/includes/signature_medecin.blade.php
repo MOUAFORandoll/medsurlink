@@ -10,7 +10,7 @@
         </td>
         <td style="text-align:right; border:none; color: #32325d;">
             @isset(explode('storage', $medecin->user->signature)[1])
-                <img style="{{ $format == 'a6' ? 'width: 150px' : 'width: 250px' }};"  src="{{ public_path('/storage/'.explode('storage', $medecin->user->signature)[1]) }}" />
+                <img style="{{ $format == 'a6' ? 'width: 100px' : 'width: 250px' }};"  src="{{ public_path('/storage/'.explode('storage', $medecin->user->signature)[1]) }}" />
             @endisset
         </td>
     </tr>
