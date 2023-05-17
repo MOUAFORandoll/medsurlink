@@ -1032,7 +1032,7 @@
     ),
     'teleconsultations' => 
     array (
-      'base_uri' => 'http://staging-back-teleconsultations.medsurlink.com',
+      'base_uri' => 'http://localhost:8002',
       'secret' => 'EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr',
     ),
   ),
