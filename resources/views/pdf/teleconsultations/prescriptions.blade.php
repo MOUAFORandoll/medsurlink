@@ -37,7 +37,7 @@
                                                     @endif
                                                 @empty
                                                 @endforelse
-                                            ) renouvelable {{ $medicament['pivot']['nombre_renouvelement'] }} fois. <br><br>
+                                            ) renouvelable {{ $medicament['pivot']['nombre_renouvelement'] }} fois. <br>
                                             <b>Nombre d'unité d'achat</b> : {{ $medicament['pivot']['nombre_unite_achat'] }} {{ $medicament['conditionnement']['libelle'] }}(s)
                                         </td>
                                     </tr>
