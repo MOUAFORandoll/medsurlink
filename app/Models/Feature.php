@@ -16,6 +16,6 @@ class Feature extends Model
 
     public function permissions()
     {
-        return $this->hasMany('App\Permission');
+        return $this->hasMany('App\Models\Permission');
     }
 }

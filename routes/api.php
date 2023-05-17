@@ -395,8 +395,11 @@ Route::prefix('v1')->middleware(['auth:api', 'role:Admin|Gestionnaire|Praticien|
 Route::group(['middleware' => ['auth:api', 'role:Admin']], function () {
     Route::resource('roles', 'Api\RoleController');
     Route::resource('permissions', 'Api\PermissionController');
+    Route::get('permissions-group', 'Api\PermissionController@groupePermission');
+    // groupePermission
     Route::post('assignPermission', 'Api\RoleController@assignPermission');
-    Route::resource('features', 'Api\FeatureController.php');
+    Route::post('assignFeature', 'Api\PermissionController@assignFeature');
+    Route::resource('features', 'Api\FeatureController');
 });
 
 Route::group(['middleware' => ['auth:api', 'role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient|Pharmacien']], function () {

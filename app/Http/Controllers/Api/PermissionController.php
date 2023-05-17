@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Feature;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Spatie\Permission\Models\Permission;
+use App\Models\Permission;
 
 class PermissionController extends Controller
 {
@@ -15,7 +16,19 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $permissions = Permission::all();
+        $permissions = Permission::with('feature')->get();
+        return response()->json(['permissions' => $permissions]);
+    }
+
+
+    /**
+     * Display a listing by group of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function groupePermission()
+    {
+        $permissions = Permission::with('feature')->get()->groupBy('feature_id');
         return response()->json(['permissions' => $permissions]);
     }
 
@@ -83,5 +96,20 @@ class PermissionController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function assignFeature(Request $request)
+    {
+        $permissionIds = $request->input('permission_id');
+        $featureId = $request->input('feature_id');
+
+        // Récupérer la feature à partir de son ID
+        $feature = Feature::findOrFail($featureId);
+
+        // Mettre à jour les permissions avec l'ID de la feature
+        $permissions = Permission::whereIn('id', $permissionIds)->update(['feature_id' => $featureId]);
+
+        // Retourner une réponse ou effectuer d'autres actions si nécessaire
+        return response()->json(['permissions' => $permissions]);
     }
 }

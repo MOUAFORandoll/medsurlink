@@ -15,8 +15,8 @@ class FeatureController extends Controller
      */
     public function index()
     {
-        $feature = Feature::all();
-        return response()->json(['feature' => $feature]);
+        $features = Feature::all();
+        return response()->json(['features' => $features]);
     }
 
     /**
