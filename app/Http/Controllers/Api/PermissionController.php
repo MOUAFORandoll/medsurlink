@@ -20,6 +20,17 @@ class PermissionController extends Controller
         return response()->json(['permissions' => $permissions]);
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function permissionFeatureIsNull()
+    {
+        $permissions = Permission::with('feature')->whereNull('feature_id')->get();
+        return response()->json(['permissions' => $permissions]);
+    }
+
 
     /**
      * Display a listing by group of the resource.
