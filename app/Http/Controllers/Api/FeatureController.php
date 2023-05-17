@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Feature;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Feature;
 
 class FeatureController extends Controller
 {
@@ -14,7 +15,8 @@ class FeatureController extends Controller
      */
     public function index()
     {
-        //
+        $feature = Feature::all();
+        return response()->json(['feature' => $feature]);
     }
 
     /**
