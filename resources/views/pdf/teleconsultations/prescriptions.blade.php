@@ -48,7 +48,7 @@
             @endif
             <div class="content-text mt-1">
                 {!! $format == 'a6' ? '' : ' <br>' !!}
-                <p style="font-size: {{$format == 'a6' ? '9px' : '10px'}};"><b><i>NB : Recontacter le prescripteur rapidement en cas d'aggravation des symptômes</i></b></p>
+                <p style="font-size: {{$format == 'a6' ? '9px' : '10px'}};"><b><i>NB : Merci de recontacter le prescripteur rapidement en cas d'aggravation des symptômes</i></b></p>
             </div>
             @include('pdf.includes.signature_medecin', ['medecin' => $medecin])
         </div>
