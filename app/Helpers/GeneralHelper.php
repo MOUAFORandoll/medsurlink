@@ -949,8 +949,8 @@ if(!function_exists('CreationPatientSouscripteur')){
     }
 }
 
-if(!function_exists('seachPatient')){
-    function seachPatient($patient_search){
+if(!function_exists('searchPatient')){
+    function searchPatient($patient_search){
         $patient_search = strtolower($patient_search);  
         return Patient::whereHas('user', function($query) use ($patient_search){
             $query->where(DB::raw("lower(nom)"), 'like',  '%'.$patient_search.'%')

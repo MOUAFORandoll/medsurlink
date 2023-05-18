@@ -52,7 +52,7 @@ class PrescriptionService
      */
     public function fetchPrescriptions(Request $request): string
     {
-        $prescriptions = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}"), true);
+        $prescriptions = json_decode($this->request('GET', "{$this->path}?user_id={$this->user_id}&search={$request->search}&page={$request->page}&page_size={$request->page_size}&patients={$request->patients}"), true);
 
         $items = [];
         foreach ($prescriptions['data']['data'] as $item) {
