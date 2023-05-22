@@ -90,7 +90,7 @@
         </fieldset>
     @endif
 
-      @include('pdf.includes.signature_medecin', ['medecin' => $medecin])
+      @include('pdf.includes.signature_medecin', ['medecin' => $medecin, 'format' => 'a4'])
     </div>
   </div>
 @endsection
