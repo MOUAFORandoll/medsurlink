@@ -207,17 +207,15 @@ class AuthController extends AccessTokenController
         ]);
         $user['time_slug'] = $time->slug;
         $user['isEtablissement'] = isComptable();
-
-
-        return response()->json(['user'=>$user]);
+    return response()->json(['user'=>$user]);
     }
 
     public function refresh(Request $request){
         $user = auth()->user();
         $access_token =  $user->createToken($request->client_secret);
-        return ['access_token' => $access_token->accessToken, 'refresh_token' => $request->refresh_token];
+        return ['access_token' => $access_token->accessToken, 'refresh_token' => $access_token->refreshToken];
     }
-    
+
     public function me(){
         $user = auth()->user();
         $permissions = $user->roles[0]->permissions->pluck('name');
