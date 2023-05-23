@@ -208,7 +208,7 @@ class AuthController extends AccessTokenController
         $user['time_slug'] = $time->slug;
         $user['isEtablissement'] = isComptable();
 
-        
+
         return response()->json(['user'=>$user]);
     }
 
@@ -217,7 +217,7 @@ class AuthController extends AccessTokenController
         $access_token =  $user->createToken($request->client_secret);
         return ['access_token' => $access_token->accessToken, 'refresh_token' => $request->refresh_token];
     }
-
+    
     public function me(){
         $user = auth()->user();
         $permissions = $user->roles[0]->permissions->pluck('name');
