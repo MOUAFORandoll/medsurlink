@@ -1,7 +1,7 @@
 @php
     use Carbon\Carbon;
 @endphp
-@extends('pdf.layouts.pdf')
+@extends('pdf.layouts.pdf', ['format' => 'a4'])
 @section('title', "Bon de prise en charge de {$patient->user->name } du {$date} par {$medecin->civilite} {$medecin->user->name}")
 @section('content')
     <div class="content mt-2">
@@ -107,7 +107,7 @@
                 <p><br/>Je vous remercie d’avance de votre diligence.<br/>
                     Sincères salutations</p>
             </div>
-            @include('pdf.includes.signature_medecin', ['medecin' => $medecin])
+            @include('pdf.includes.signature_medecin', ['medecin' => $medecin, 'format' => 'a4'])
         </div>
     </div>
 @endsection

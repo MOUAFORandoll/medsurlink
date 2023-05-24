@@ -1,7 +1,7 @@
 @php
     use Carbon\Carbon;
 @endphp
-@extends('pdf.layouts.pdf')
+@extends('pdf.layouts.pdf', ['format' => 'a4'])
 @section('title', "Prescription imageries de {$patient->user->name } du {$date} par {$medecin->civilite} {$medecin->user->name}")
 @section('content')
 
@@ -90,7 +90,7 @@
         </fieldset>
     @endif
 
-      @include('pdf.includes.signature_medecin', ['medecin' => $medecin])
+      @include('pdf.includes.signature_medecin', ['medecin' => $medecin, 'format' => 'a4'])
     </div>
   </div>
 @endsection
