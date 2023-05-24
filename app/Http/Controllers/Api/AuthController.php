@@ -77,53 +77,51 @@ class AuthController extends AccessTokenController
         // Then we just add the user to the response before returning it.
         $username = $request->getParsedBody()['username'];
         $password = $request->getParsedBody()['password'];
-        $user = $this->getUser($username,$password);
-        // $test=[];
-        // if($user==new User())
-        // return "true";
-        // return $user;
-        if(!($user==new User())){
-            // return "ici";
+        $user = $this->getUser($username, $password);
+        if (!($user == new User())) {
             Auth::login($user);
-            $permissions = $user->roles[0]->permissions->pluck('name');
+            $permissions = $user->roles->flatMap(function ($role) {
+                return $role->permissions;
+            })->merge($user->all_permissions)->unique('id');
+            // $permissionName = ($permissions->pluck('name'));
+            // $user->all_permissions = $user->all_permissions->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name']);
             $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name', 'permissions']);
-            $user = $user->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'adresse', 'quartier', 'deleted_at']);
+            $user = $user->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'adresse', 'quartier', 'deleted_at', 'all_permissions']);
             $user->unread_notifications = $user->unreadNotifications()->latest()->get();
             $user->unread_notifications = $user->unreadNotifications->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
-            $user->permissions = $permissions;
+            $user['permissions'] = $permissions->pluck('name');
+
             $tokenResponse = parent::issueToken($request);
             $token = $tokenResponse->getContent();
 
             // $tokenInfo will contain the usual Laravel Passort token response.
             $tokenInformation = json_decode($token, true);
             $tokenInfo = collect($tokenInformation);
-            if ($tokenInfo->has('error')){
+            if ($tokenInfo->has('error')) {
                 // return "ici";
-                return response()->json(['message'=>$tokenInfo->get('message')],401);
+                return response()->json(['message' => $tokenInfo->get('message')], 401);
             }
 
 
             $time = TimeActivite::create([
-                'date'=>Carbon::now()->format('Y-m-d'),
-                'start'=>Carbon::now()->format('H:i')
+                'date' => Carbon::now()->format('Y-m-d'),
+                'start' => Carbon::now()->format('H:i')
             ]);
             $user['time_slug'] = $time->slug;
             $user['isEtablissement'] = isComptable();
-            $tokenInfo->put('token_expires_at',Carbon::parse()->addSeconds($tokenInfo['expires_in']));
+            $tokenInfo->put('token_expires_at', Carbon::parse()->addSeconds($tokenInfo['expires_in']));
             // dd($tokenInfo);
             $tokenInfo->put('user', $user);
             $user_id = $user->id;
 
             $status = getStatus();
-            if($status == null){
-                return response()->json(['message'=>"Compte suspendu"],422);
+            if ($status == null) {
+                return response()->json(['message' => "Compte suspendu"], 422);
             }
-            defineAsAuthor($status->getOriginalContent()['auteurable_type'],$status->getOriginalContent()['auteurable_id'],'Connexion');
+            defineAsAuthor($status->getOriginalContent()['auteurable_type'], $status->getOriginalContent()['auteurable_id'], 'Connexion');
             return $tokenInfo;
-        }
-        else
-        return response()->json(['message'=>"The user credentials were incorrect."],401);
-
+        } else
+            return response()->json(['message' => "The user credentials were incorrect."], 401);
     }
     public function authAfterRedirect(ServerRequestInterface $request)
     {
@@ -138,34 +136,38 @@ class AuthController extends AccessTokenController
         $user->roles;
         Auth::login($user);
         $time = TimeActivite::create([
-            'date'=>Carbon::now()->format('Y-m-d'),
-            'start'=>Carbon::now()->format('H:i')
+            'date' => Carbon::now()->format('Y-m-d'),
+            'start' => Carbon::now()->format('H:i')
         ]);
         $user['time_slug'] = $time->slug;
         $user['isEtablissement'] = isComptable();
-        $permissions = $user->roles[0]->permissions->pluck('name');
+        $permissions = $user->roles->flatMap(function ($role) {
+            return $role->permissions;
+        })->merge($user->all_permissions)->unique('id');
+
         $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name', 'permissions']);
-        $user = $user->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'adresse', 'quartier', 'deleted_at']);
+        $user = $user->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'adresse', 'quartier', 'deleted_at', 'all_permissions']);
         $user->unread_notifications = $user->unreadNotifications()->latest()->get();
         $user->unread_notifications = $user->unreadNotifications->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
-        $user->permissions = $permissions;
+        $user['permissions'] = $permissions->pluck('name');
         $tokenInfo->put('token_expires_at', Carbon::parse()->addSeconds(3600));
         $tokenInfo->put('user', $user);
         $tokenInfo->put('access_token', $token);
         $status = getStatus();
-        defineAsAuthor($status->getOriginalContent()['auteurable_type'],$status->getOriginalContent()['auteurable_id'],'Connexion');
+        defineAsAuthor($status->getOriginalContent()['auteurable_type'], $status->getOriginalContent()['auteurable_id'], 'Connexion');
         return $tokenInfo;
     }
-    public function getUser($username,$password){
+    public function getUser($username, $password)
+    {
         //Verification de l'existence de l'adresse email
-        $validator = Validator::make(compact('username'),['username'=>['exists:users,email']]);
-        if($validator->fails()){
+        $validator = Validator::make(compact('username'), ['username' => ['exists:users,email']]);
+        if ($validator->fails()) {
 
             //Verification de l'existence du numero de dossier
-            if (strlen($username)<=9){
+            if (strlen($username) <= 9) {
                 $numero_dossier = $username;
-                $dossier = DB::table('dossier_medicals')->where('numero_dossier','=',$numero_dossier)->first();
-                if (!is_null($dossier)){
+                $dossier = DB::table('dossier_medicals')->where('numero_dossier', '=', $numero_dossier)->first();
+                if (!is_null($dossier)) {
                     $user = User::whereId($dossier->patient_id)->first();
                     $user['dossier'] = $dossier->slug;
 
@@ -182,12 +184,12 @@ class AuthController extends AccessTokenController
         // if($authUser==new User())
         // return "vide";
         // return $authUser;
-        foreach ($users as $user){
-            if(Hash::check($password,$user->password)){
+        foreach ($users as $user) {
+            if (Hash::check($password, $user->password)) {
 
                 $authUser = $user;
-                $dossier = DB::table('dossier_medicals')->where('patient_id','=',$authUser->id)->first();
-                if(!is_null($dossier)){
+                $dossier = DB::table('dossier_medicals')->where('patient_id', '=', $authUser->id)->first();
+                if (!is_null($dossier)) {
                     $user = User::whereId($dossier->patient_id)->first();
                     $authUser = $user;
                     $authUser['dossier'] = $dossier->slug;
@@ -197,28 +199,31 @@ class AuthController extends AccessTokenController
         return $authUser;
     }
 
-    public function userDetails(Request $request){
+    public function userDetails(Request $request)
+    {
 
         $user = $request->user();
         $user->roles;
         $time = TimeActivite::create([
-            'date'=>Carbon::now()->format('Y-m-d'),
-            'start'=>Carbon::now()->format('H:i')
+            'date' => Carbon::now()->format('Y-m-d'),
+            'start' => Carbon::now()->format('H:i')
         ]);
         $user['time_slug'] = $time->slug;
         $user['isEtablissement'] = isComptable();
 
-        
-        return response()->json(['user'=>$user]);
+
+        return response()->json(['user' => $user]);
     }
 
-    public function refresh(Request $request){
+    public function refresh(Request $request)
+    {
         $user = auth()->user();
         $access_token =  $user->createToken($request->client_secret);
         return ['access_token' => $access_token->accessToken, 'refresh_token' => $request->refresh_token];
     }
 
-    public function me(){
+    public function me()
+    {
         $user = auth()->user();
         $permissions = $user->roles[0]->permissions->pluck('name');
         $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name', 'permissions']);
@@ -226,7 +231,7 @@ class AuthController extends AccessTokenController
         $user->unread_notifications = $user->unreadNotifications()->latest()->get();
         $user->unread_notifications = $user->unreadNotifications->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
         $user->permissions = $permissions;
-        $time = TimeActivite::where('user_id',$user->id)->get()->last();
+        $time = TimeActivite::where('user_id', $user->id)->get()->last();
         $user->time_slug = $time->slug;
         return $user;
     }
