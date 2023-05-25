@@ -27,6 +27,12 @@ Route::get('v2/user/me', 'Api\AuthController@me')->middleware('auth:api');
 Route::post('v2/signature/user', 'Api\UserController@signature')->middleware('auth:api');
 Route::get('v2/timelines/{slug}/patient', 'Api\LigneDeTempsController@listingPatient')->middleware('auth:api');
 
+Route::resource('v2/users', 'Api\v2\Globale\Usercontroller');
+
+/**
+ * 
+ */
+
 Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.credentials'])->group(function () {
 
 

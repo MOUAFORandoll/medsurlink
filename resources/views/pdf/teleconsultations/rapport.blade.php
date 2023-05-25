@@ -1,7 +1,7 @@
 @php
     use Carbon\Carbon;
 @endphp
-@extends('pdf.layouts.pdf')
+@extends('pdf.layouts.pdf', ['format' => 'a4'])
 @section('title', "Rapport de téléconsultation de {$patient->user->name } du {$date} par {$medecin->civilite} {$medecin->user->name}")
 @section('content')
     <div class="content mt-2">
@@ -190,7 +190,7 @@
             <p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
 
 
-            @include('pdf.includes.signature_medecin', ['medecin' => $medecin])
+            @include('pdf.includes.signature_medecin', ['medecin' => $medecin, 'format' => 'a4'])
         </div>
     </div>
 @endsection
