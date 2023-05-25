@@ -130,3 +130,7 @@ php artisan migrate --path=/database/migrations/2023_04_05_160242_add_fields_to_
 php artisan migrate --path=/database/migrations/2023_05_03_160904_create_features_table.php
 
 php artisan db:seed --class=FeaturesTableSeeder
+
+## nouvel alerte
+
+php artisan migrate --path=/database/migrations/2023_05_25_111108_add_sexe_to_users_table.php
