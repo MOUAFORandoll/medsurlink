@@ -138,7 +138,7 @@ Route::group(['middleware' => ['auth:api', 'role:Admin|Praticien|Medecin control
     Route::post('activite-mission-add', 'Api\ActiviteController@createMissions');
 
     Route::get('/mission/list', 'Api\ActiviteController@getListMission');
-
+     
     // Route::resource('/activite-pec','Api\PecController');
     Route::post('/activite-pec', 'Api\PecController@store');
     Route::get('/activite-pec-list', 'Api\PecController@index');
