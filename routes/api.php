@@ -82,6 +82,9 @@ Route::middleware(['auth:api'])->group(function () {
 
 Route::group(['middleware' => ['auth:api', 'role:Admin']], function () {
     Route::resource('user', 'Api\UserController')->except(['create', 'edit']);
+    Route::get('users', 'Api\UserController@getUserWithPermissions');
+    Route::get('one-user/{slug}', 'Api\UserController@getOneUser');
+    // getOneUser
 });
 //        Définition des routes accéssible par le gestionnaire
 Route::group(['middleware' => ['auth:api', 'role:Admin|Gestionnaire|Assistante|Pharmacien|Souscripteur']], function () {
@@ -401,6 +404,9 @@ Route::group(['middleware' => ['auth:api', 'role:Admin']], function () {
     Route::post('assignPermission', 'Api\RoleController@assignPermission');
     Route::post('assignFeature', 'Api\PermissionController@assignFeature');
     Route::resource('features', 'Api\FeatureController');
+
+    Route::post('assignUserPermissions', 'Api\PermissionController@assignUserPermissions');
+    Route::post('revokeUserPermissions', 'Api\PermissionController@revokeUserPermissions');
 });
 
 Route::group(['middleware' => ['auth:api', 'role:Admin|Gestionnaire|Praticien|Medecin controle|Assistante|Souscripteur|Patient|Pharmacien']], function () {

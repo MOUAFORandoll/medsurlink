@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\User;
 use App\Models\Feature;
+use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Permission;
 
 class PermissionController extends Controller
 {
@@ -122,5 +123,35 @@ class PermissionController extends Controller
 
         // Retourner une réponse ou effectuer d'autres actions si nécessaire
         return response()->json(['permissions' => $permissions]);
+    }
+
+    public function assignUserPermissions(Request $request)
+    {
+        // Récupération de l'utilisateur
+        $userId = $request->input('userId');
+        $user = User::findOrFail($userId);
+
+        // Récupérer les permissions à attribuer depuis la requête
+        $permissionsToAssign = $request->input('permissionIds', []);
+
+        // Attribuer les nouvelles permissions à l'utilisateur
+        $user->all_permissions()->sync($permissionsToAssign);
+
+        return response()->json(['message' => 'Permissions attribuées avec succès.']);
+    }
+
+    public function revokeUserPermissions(Request $request)
+    {
+        // Récupération de l'utilisateur
+        $userId = $request->input('userId');
+        $user = User::findOrFail($userId);
+
+        // Récupérer les permissions à retirer depuis la requête
+        $permissionsToRevoke = $request->input('permissionIds', []);
+
+        // Retirer les permissions spécifiées de l'utilisateur
+        $user->revokePermissionTo($permissionsToRevoke);
+
+        return response()->json(['message' => 'Permissions retirées avec succès.']);
     }
 }
