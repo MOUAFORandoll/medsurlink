@@ -132,5 +132,5 @@ php artisan migrate --path=/database/migrations/2023_05_03_160904_create_feature
 php artisan db:seed --class=FeaturesTableSeeder
 
 ## nouvel alerte
-
+php artisan db:seed --class=RoleTableSeeder
 php artisan migrate --path=/database/migrations/2023_05_25_111108_add_sexe_to_users_table.php
