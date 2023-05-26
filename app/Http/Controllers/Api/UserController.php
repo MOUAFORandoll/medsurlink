@@ -46,6 +46,12 @@ class UserController extends Controller
         return response()->json(['users' => $users]);
     }
 
+    public function getPatientAndSouscripteur()
+    {
+        $users = User::with('souscripteur', 'patient')->get();
+        return response()->json(['users' => $users]);
+    }
+
     // public function getUserWithPermissions(Request $request)
     // {
     //     $size = $request->size ? $request->size : 10;
