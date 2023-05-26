@@ -136,3 +136,6 @@ php artisan migrate --path=/database/migrations/2023_05_18_122855_permission_use
 php artisan db:seed --class=RoleTableSeeder
 php artisan migrate --path=/database/migrations/2023_05_25_111108_add_sexe_to_users_table.php
 
+## table message
+php artisan migrate --path=/database/migrations/2023_05_26_112723_create_messages_table.php
+
