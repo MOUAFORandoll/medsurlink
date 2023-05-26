@@ -46,9 +46,25 @@ class UserController extends Controller
         return response()->json(['users' => $users]);
     }
 
-    public function getPatientAndSouscripteur()
+    public function getPatientAndSouscripteur(Request $request)
     {
-        $users = User::with('souscripteur', 'patient')->get();
+        $search = $request->search;
+        $size = $request->size ? $request->size : 20;
+
+        $requete = User::whereHas('roles', function ($query) {
+            $query->whereIn('name', ['patient', 'souscripteur']);
+        })->where(function ($query) use ($search) {
+            $query->whereHas('patient', function ($query) use ($search) {
+                $query->where('nom', 'like', "%$search%")
+                    ->orWhere('prenom', 'like', "%$search%");
+            })->orWhereHas('souscripteur', function ($query) use ($search) {
+                $query->where('nom', 'like', "%$search%")
+                    ->orWhere('prenom', 'like', "%$search%");
+            });
+        })->with(['souscripteur', 'patient']);
+
+        $users = $requete->paginate($size);
+
         return response()->json(['users' => $users]);
     }
 
