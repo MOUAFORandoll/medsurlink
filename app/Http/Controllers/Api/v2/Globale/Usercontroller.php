@@ -50,7 +50,7 @@ class Usercontroller extends Controller
         $this->validate($request, $this->validations());
         return $this->successResponse($this->userService->store($request));
     }
-
+    
     /**
      * @param \Illuminate\Http\Request $request
      * @param                          $user
