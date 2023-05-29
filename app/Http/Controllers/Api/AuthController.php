@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use Psr\Http\Message\ServerRequestInterface;
+use Laravel\Passport\PersonalAccessTokenResult;
 
 class AuthController extends AccessTokenController
 {
@@ -217,7 +218,7 @@ class AuthController extends AccessTokenController
     {
         $user = auth()->user();
         $access_token =  $user->createToken($request->client_secret);
-        return ['access_token' => $access_token->accessToken, 'refresh_token' => $access_token->refreshToken];
+        return ['access_token' => $access_token->accessToken, /* 'refresh_token' => $access_token->refreshToken */];
     }
 
     public function me()
