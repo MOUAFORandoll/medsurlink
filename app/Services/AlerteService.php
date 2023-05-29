@@ -157,7 +157,7 @@ class AlerteService
     }
 
 
-
+    
     public function update(Request $request, $alerte){
         $alerte = Alerte::findOrFail($alerte);
         $alerte->patient_id = $request->patient_id;
