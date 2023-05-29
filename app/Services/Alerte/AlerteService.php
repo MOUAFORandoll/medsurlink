@@ -35,7 +35,7 @@ class AlerteService
      */
     public function fetchAlertes(Request $request) : string
     {
-        return $this->request('GET', "{$this->path}?search={$request->search}&page={$request->page}&page_size={$request->page_size}");
+        return $this->request('GET', "{$this->path}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&user_id={$request->user_id}");
     }
 
     /**
