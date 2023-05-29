@@ -190,7 +190,7 @@
             <p><i>Dossier relu et validé par l'équipe Medicasure</i></p>
 
 
-            @include('pdf.includes.signature_medecin', ['medecin' => $medecin])
+            @include('pdf.includes.signature_medecin', ['medecin' => $medecin, 'format' => 'a4'])
         </div>
     </div>
 @endsection

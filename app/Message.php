@@ -16,13 +16,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Message extends Model
 {
-    protected $fillable = ['body','sender_id','receiver_id','type'];
+    protected $fillable = ['user_email','subject','creator_id','message_body'];
     protected $appends = ['selfMessage'];
 
     //
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'creator_id');
     }
     public function getSelfMessageAttribute()
     {

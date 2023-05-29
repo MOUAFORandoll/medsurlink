@@ -18,6 +18,7 @@ use App\Models\MedecinAvis;
 use App\Models\ReponseSecrete;
 use App\Models\MedecinControle;
 use App\Models\RendezVous;
+use App\Models\Permission;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\HasApiTokens;
 use App\Models\Traits\SlugRoutable;
@@ -208,6 +209,12 @@ class User extends Authenticatable implements HasMedia
                 'source' => 'NomAndTimestamp'
             ]
         ];
+    }
+
+
+    public function all_permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'permission_user');
     }
 
     // public function routeNotificationForSlack(){

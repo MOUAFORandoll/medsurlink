@@ -50,7 +50,7 @@
                 {!! $format == 'a6' ? '' : ' <br>' !!}
                 <p style="font-size: {{$format == 'a6' ? '9px' : '10px'}};"><b><i>NB : Merci de recontacter le prescripteur rapidement en cas d'aggravation des symptômes</i></b></p>
             </div>
-            @include('pdf.includes.signature_medecin', ['medecin' => $medecin])
+            @include('pdf.includes.signature_medecin', ['medecin' => $medecin, 'format' => 'a4'])
         </div>
     </div>
 @endsection
