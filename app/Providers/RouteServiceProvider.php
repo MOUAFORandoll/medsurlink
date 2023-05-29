@@ -40,6 +40,9 @@ class RouteServiceProvider extends ServiceProvider
         $this->mapWebRoutes();
 
         $this->mapTeleconsultationRoutes();
+
+        $this->mapAlerteRoutes();
+
         //
     }
 
@@ -85,5 +88,20 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware('api')
             ->namespace($this->namespace)
             ->group(base_path('routes/teleconsultation.php'));
+    }
+
+     /**
+     * Define the "alerte" routes for the application.
+     *
+     * These routes are typically stateless.
+     *
+     * @return void
+     */
+    protected function mapAlerteRoutes()
+    {
+        Route::prefix('api')
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/alerte.php'));
     }
 }

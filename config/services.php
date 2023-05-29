@@ -49,6 +49,12 @@ return [
         // 'base_uri' => env('TELECONSULTATIONS_SERVICE_BASE_URI', "http://staging-back-teleconsultations.medsurlink.com"),
         //'base_uri' => env('TELECONSULTATIONS_SERVICE_BASE_URI', "http://back-teleconsultations.medsurlink.com"),
         'secret' => env('TELECONSULTATIONS_SERVICE_SECRET', "EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr"),
+    ],
+    'alertes' => [
+        'base_uri' => env('ALERTES_SERVICE_BASE_URI', "http://localhost:8003"),
+        // 'base_uri' => env('ALERTES_SERVICE_BASE_URI', "http://staging-back-teleconsultations.medsurlink.com"),
+        //'base_uri' => env('ALERTES_SERVICE_BASE_URI', "http://back-teleconsultations.medsurlink.com"),
+        'secret' => env('ALERTES_SERVICE_SECRET', "EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr"),
     ]
 
 ];
