@@ -29,20 +29,16 @@ class MessageController extends Controller
 
     public function sendMail(Request $request)
     {
-        $userEmail = $request->input('email');
-        $subject = $request->input('subject');
-        $messageBody = $request->input('message');
+        $this->validate($request, [
+            "email" => "required|array",
+            "subject" => "required",
+            "message" => "required"
+        ]);
 
-        // Envoyer une copie du mail à l'adresse spécifiée
-        $ccEmail = 'contrat@medicasure.com';
-        Mail::to($ccEmail)->send(new MessageSend($userEmail, $ccEmail, $subject, $messageBody));
-        // {
-        // $message->to($userEmail)
-        //     ->cc($ccEmail)
-        //     ->subject($subject)
-        //     ->setBody($messageBody);
-        // });
-        // Mail::to('contrat@medicasure.com')->send(new NouvelAffiliation($patient->user->nom, $patient->user->prenom, $patient->user->telephone, $affiliation->motifs, $request->niveau_urgence, $request->contact_name, $request->contact_firstName, $request->contact_phone, $package->description_fr, $request->paye_par_affilie, $souscripteur, $affiliation, $request->urgence));
+        foreach ($request->email as $email) {
+            Mail::to($email)->cc('contrat@medicasure.com')->send(new MessageSend($email, $request->subject, $request->message));
+        }
+
         return response()->json(['message' => 'Mail envoyé avec succes']);
     }
 
