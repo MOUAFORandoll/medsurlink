@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
-use Psr\Http\Message\ServerRequestInterface;
-use Laravel\Passport\PersonalAccessTokenResult;
-
+use Psr\Http\Message\ServerRequestInterface; 
 class AuthController extends AccessTokenController
 {
     /**
