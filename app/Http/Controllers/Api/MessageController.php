@@ -39,6 +39,7 @@ class MessageController extends Controller
 
         foreach ($request->email as $email) {
             $when = now()->addMinutes(1);
+            //Mail::to($email)->cc('contrat@medicasure.com')->send(new MessageSend($email, $request->subject, $request->message));
             Mail::to($email)->cc('contrat@medicasure.com')->later($when, new MessageSend($email, $request->subject, $request->message));
         }
         return $this->successResponse($message);
