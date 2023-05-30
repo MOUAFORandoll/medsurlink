@@ -107,7 +107,7 @@
                 <p><br/>Je vous remercie d’avance de votre diligence.<br/>
                     Sincères salutations</p>
             </div>
-            @include('pdf.includes.signature_medecin', ['medecin' => $medecin])
+            @include('pdf.includes.signature_medecin', ['medecin' => $medecin, 'format' => 'a4'])
         </div>
     </div>
 @endsection

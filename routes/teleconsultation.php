@@ -27,6 +27,15 @@ Route::get('v2/user/me', 'Api\AuthController@me')->middleware('auth:api');
 Route::post('v2/signature/user', 'Api\UserController@signature')->middleware('auth:api');
 Route::get('v2/timelines/{slug}/patient', 'Api\LigneDeTempsController@listingPatient')->middleware('auth:api');
 
+Route::resource('v2/users', 'Api\v2\Globale\Usercontroller');
+Route::get('v2/patients-et-souscripteurs', 'Api\Usercontroller@getPatientAndSouscripteur')->middleware('auth:api');
+Route::post('v2/email-sms', 'Api\MessageController@sendMail')->middleware('auth:api');
+Route::get('v2/email-sms', 'Api\MessageController@index')->middleware('auth:api');
+
+/**
+ * 
+ */
+
 Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.credentials'])->group(function () {
 
 
@@ -75,9 +84,9 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     Route::group(['prefix' => 'mettings'], function () {
         Route::get('/create/{user_id}', 'BigBlueButtonController@createMetting');
         Route::get('/join/{user_id}', 'BigBlueButtonController@joinMetting');
-     });
+    });
 
-     /**
+    /**
      * CRUDS anamneses
      */
     Route::group(['prefix' => 'anamneses'], function () {
@@ -167,8 +176,8 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     });
 
     /**
-    * CRUDS rendez-vous
-    */
+     * CRUDS rendez-vous
+     */
     Route::group(['prefix' => 'rendez_vous'], function () {
         Route::get('/', 'RendezVousController@index');
         Route::post('/', 'RendezVousController@store');
@@ -178,19 +187,19 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     });
 
     /**
-    * CRUDS patients
-    */
+     * CRUDS patients
+     */
     Route::group(['prefix' => 'patients'], function () {
         Route::get('/', 'PatientController@index');
-       /*  Route::post('/', 'PatientController@store'); */
+        /*  Route::post('/', 'PatientController@store'); */
         Route::get('/{patient_id}', 'PatientController@show');
         /* Route::patch('/{rendez_vous}', 'PatientController@update');
         Route::delete('/{rendez_vous}', 'PatientController@destroy'); */
     });
 
-     /**
-    * CRUDS medecins
-    */
+    /**
+     * CRUDS medecins
+     */
     Route::group(['prefix' => 'medecins'], function () {
         Route::get('/', 'PatientController@getAllMedecinControles');
     });
@@ -206,8 +215,8 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     Route::patch('/alertes/{alerte}/assignMedecin', 'AlerteController@assignMedecin');
 
     /**
-    * CRUDS notifications
-    */
+     * CRUDS notifications
+     */
     Route::group(['prefix' => 'notifications'], function () {
         Route::get('/', 'NotificationController@index');
         Route::get('/read_all', 'NotificationController@readAll');
@@ -219,8 +228,8 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     });
 
     /**
-    * CRUDS diagnostics
-    */
+     * CRUDS diagnostics
+     */
     Route::group(['prefix' => 'diagnostics'], function () {
         Route::get('/', 'DiagnosticController@index');
         Route::post('/', 'DiagnosticController@store');
@@ -230,8 +239,8 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
     });
 
     /**
-    * CRUDS Ordonnance
-    */
+     * CRUDS Ordonnance
+     */
     Route::group(['prefix' => 'ordonnances'], function () {
         Route::get('/', 'OrdonnanceController@index');
         Route::post('/', 'OrdonnanceController@store');
@@ -301,7 +310,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::delete('/{raison_prescription}', 'RaisonPrescriptionController@destroy');
     });
 
-        /**
+    /**
      * CRUD Examens Pertinents
      */
     Route::resource('examens_pertinents', 'ExamenPertinentPrecedentController');
@@ -319,8 +328,8 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
 
 
     /**
-    * CRUDS Prescription
-    */
+     * CRUDS Prescription
+     */
     Route::group(['prefix' => 'prescriptions'], function () {
         Route::get('/', 'PrescriptionController@index');
         Route::post('/', 'PrescriptionController@store');
