@@ -1035,6 +1035,11 @@
       'base_uri' => 'http://staging-back-teleconsultations.medsurlink.com',
       'secret' => 'EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr',
     ),
+    'alertes' => 
+    array (
+      'base_uri' => 'http://staging-alertes.medsurlink.com',
+      'secret' => 'EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr',
+    ),
   ),
   'session' => 
   array (
