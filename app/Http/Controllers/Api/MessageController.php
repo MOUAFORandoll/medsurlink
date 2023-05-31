@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Events\MessageCreated;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class MessageController extends Controller
 {
@@ -35,7 +36,7 @@ class MessageController extends Controller
             "message" => "required"
         ]);
 
-        $message = Message::create(['creator_id' => auth()->user()->id, 'user_email' => json_encode($request->email),'subject'=> $request->subject, 'message_body' => $request->message]);
+        $message = Message::create(['uuid' => Str::uuid(), 'creator_id' => auth()->user()->id, 'user_email' => json_encode($request->email),'subject'=> $request->subject, 'message_body' => $request->message]);
 
         foreach ($request->email as $email) {
             $when = now()->addMinutes(1);
