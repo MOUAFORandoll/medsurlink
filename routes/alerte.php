@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 ## Api Specialite
 
-
 Route::prefix('v3')->namespace('Api\v2\Alerte')->middleware(['client.credentials'])->group(function () {
     Route::get('/specialities', 'SpecialiteController@index');
     Route::get('/alertes/info/{user_id}', 'AlerteController@historyInfoUserAlert');
