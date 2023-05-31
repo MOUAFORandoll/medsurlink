@@ -27,6 +27,10 @@ class MessageController extends Controller
             ->toOthers();
         return response()->json($message);
     }
+    public function show($uuid){
+        $message = Message::with('user')->where('uuid', $uuid)->first();
+        return $this->successResponse($message);
+    }
 
     public function sendMail(Request $request)
     {
