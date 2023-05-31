@@ -1035,6 +1035,11 @@
       'base_uri' => 'http://localhost:8002',
       'secret' => 'EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr',
     ),
+    'alertes' => 
+    array (
+      'base_uri' => 'http://localhost:8003',
+      'secret' => 'EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr',
+    ),
   ),
   'session' => 
   array (
