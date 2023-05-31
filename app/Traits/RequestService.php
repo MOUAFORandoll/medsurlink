@@ -22,6 +22,7 @@ trait RequestService
         ]);
 
         if (isset($this->secret)) {
+            \Log::alert("secret $this->secret");
             $headers['Authorization'] = $this->secret;
         }
 
