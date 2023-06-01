@@ -1,105 +1,105 @@
 <?php return array (
-  'apidoc' =>
+  'apidoc' => 
   array (
     'type' => 'static',
     'output_folder' => 'public/docs',
-    'laravel' =>
+    'laravel' => 
     array (
       'autoload' => false,
       'docs_url' => '/doc',
-      'middleware' =>
+      'middleware' => 
       array (
       ),
     ),
     'router' => 'laravel',
     'storage' => 'local',
     'base_url' => NULL,
-    'postman' =>
+    'postman' => 
     array (
       'enabled' => true,
       'name' => NULL,
       'description' => NULL,
       'auth' => NULL,
     ),
-    'routes' =>
+    'routes' => 
     array (
-      0 =>
+      0 => 
       array (
-        'match' =>
+        'match' => 
         array (
-          'domains' =>
+          'domains' => 
           array (
             0 => '*',
           ),
-          'prefixes' =>
+          'prefixes' => 
           array (
             0 => '*',
           ),
-          'versions' =>
+          'versions' => 
           array (
             0 => 'v1',
           ),
         ),
-        'include' =>
+        'include' => 
         array (
         ),
-        'exclude' =>
+        'exclude' => 
         array (
         ),
-        'apply' =>
+        'apply' => 
         array (
-          'headers' =>
+          'headers' => 
           array (
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
           ),
-          'response_calls' =>
+          'response_calls' => 
           array (
-            'methods' =>
+            'methods' => 
             array (
               0 => 'GET',
             ),
-            'config' =>
+            'config' => 
             array (
               'app.env' => 'documentation',
               'app.debug' => false,
             ),
-            'cookies' =>
+            'cookies' => 
             array (
             ),
-            'queryParams' =>
+            'queryParams' => 
             array (
             ),
-            'bodyParams' =>
+            'bodyParams' => 
             array (
             ),
           ),
         ),
       ),
     ),
-    'strategies' =>
+    'strategies' => 
     array (
-      'metadata' =>
+      'metadata' => 
       array (
         0 => 'Mpociot\\ApiDoc\\Extracting\\Strategies\\Metadata\\GetFromDocBlocks',
       ),
-      'urlParameters' =>
+      'urlParameters' => 
       array (
         0 => 'Mpociot\\ApiDoc\\Extracting\\Strategies\\UrlParameters\\GetFromUrlParamTag',
       ),
-      'queryParameters' =>
+      'queryParameters' => 
       array (
         0 => 'Mpociot\\ApiDoc\\Extracting\\Strategies\\QueryParameters\\GetFromQueryParamTag',
       ),
-      'headers' =>
+      'headers' => 
       array (
         0 => 'Mpociot\\ApiDoc\\Extracting\\Strategies\\RequestHeaders\\GetFromRouteRules',
       ),
-      'bodyParameters' =>
+      'bodyParameters' => 
       array (
         0 => 'Mpociot\\ApiDoc\\Extracting\\Strategies\\BodyParameters\\GetFromBodyParamTag',
       ),
-      'responses' =>
+      'responses' => 
       array (
         0 => 'Mpociot\\ApiDoc\\Extracting\\Strategies\\Responses\\UseTransformerTags',
         1 => 'Mpociot\\ApiDoc\\Extracting\\Strategies\\Responses\\UseResponseTag',
@@ -110,23 +110,23 @@
     ),
     'logo' => false,
     'default_group' => 'general',
-    'example_languages' =>
+    'example_languages' => 
     array (
       0 => 'bash',
       1 => 'javascript',
     ),
-    'fractal' =>
+    'fractal' => 
     array (
       'serializer' => NULL,
     ),
     'faker_seed' => NULL,
     'routeMatcher' => 'Mpociot\\ApiDoc\\Matching\\RouteMatcher',
   ),
-  'app' =>
+  'app' => 
   array (
     'name' => 'Medsurlink',
     'env' => 'local',
-    'debug' => 'vrai',
+    'debug' => true,
     'url' => 'http://127.0.0.1:8001/api/',
     'asset_url' => NULL,
     'frontend_url' => 'www.medsurlink.com/login',
@@ -138,7 +138,7 @@
     'teleconsultation_loccale' => 'http://localhost:8081',
     'teleconsultation_stagging' => 'https://staging-teleconsultations.medsurlink.com',
     'teleconsultation_prod' => 'https://teleconsultations.medsurlink.com',
-    'password' =>
+    'password' => 
     array (
       'moderator' => '9UqG@CQAE6dfB',
       'attendee' => '8UqG@CQAE9dfB',
@@ -147,9 +147,9 @@
     'locale' => 'fr',
     'fallback_locale' => 'fr',
     'faker_locale' => 'en_US',
-    'key' => 'base64:oI6UH2m9RYMWlsGEr3MyI5eaAkqMK4KNB20pIHiFFVc=',
+    'key' => 'base64:E26NBpavaocwuzD5sOgwZkiJye9ejG5+5/rGdxEL6po=',
     'cipher' => 'AES-256-CBC',
-    'providers' =>
+    'providers' => 
     array (
       0 => 'Illuminate\\Auth\\AuthServiceProvider',
       1 => 'Illuminate\\Broadcasting\\BroadcastServiceProvider',
@@ -185,7 +185,7 @@
       31 => 'App\\Providers\\EventServiceProvider',
       32 => 'App\\Providers\\RouteServiceProvider',
     ),
-    'aliases' =>
+    'aliases' => 
     array (
       'App' => 'Illuminate\\Support\\Facades\\App',
       'Arr' => 'Illuminate\\Support\\Arr',
@@ -228,38 +228,38 @@
       'Excel' => 'Maatwebsite\\Excel\\Facades\\Excel',
     ),
   ),
-  'auth' =>
+  'auth' => 
   array (
-    'defaults' =>
+    'defaults' => 
     array (
       'guard' => 'web',
       'passwords' => 'users',
     ),
-    'guards' =>
+    'guards' => 
     array (
-      'web' =>
+      'web' => 
       array (
         'driver' => 'session',
         'provider' => 'users',
       ),
-      'api' =>
+      'api' => 
       array (
         'driver' => 'passport',
         'provider' => 'users',
         'hash' => false,
       ),
     ),
-    'providers' =>
+    'providers' => 
     array (
-      'users' =>
+      'users' => 
       array (
         'driver' => 'eloquent',
         'model' => 'App\\User',
       ),
     ),
-    'passwords' =>
+    'passwords' => 
     array (
-      'users' =>
+      'users' => 
       array (
         'provider' => 'users',
         'table' => 'password_resets',
@@ -267,77 +267,77 @@
       ),
     ),
   ),
-  'broadcasting' =>
+  'broadcasting' => 
   array (
     'default' => 'redis',
-    'connections' =>
+    'connections' => 
     array (
-      'pusher' =>
+      'pusher' => 
       array (
         'driver' => 'pusher',
         'key' => '',
         'secret' => '',
         'app_id' => '',
-        'options' =>
+        'options' => 
         array (
           'cluster' => 'mt1',
           'encrypted' => true,
         ),
       ),
-      'redis' =>
+      'redis' => 
       array (
         'driver' => 'redis',
         'connection' => 'default',
       ),
-      'log' =>
+      'log' => 
       array (
         'driver' => 'log',
       ),
-      'null' =>
+      'null' => 
       array (
         'driver' => 'null',
       ),
     ),
   ),
-  'cache' =>
+  'cache' => 
   array (
     'default' => 'redis',
-    'stores' =>
+    'stores' => 
     array (
-      'apc' =>
+      'apc' => 
       array (
         'driver' => 'apc',
       ),
-      'array' =>
+      'array' => 
       array (
         'driver' => 'array',
       ),
-      'database' =>
+      'database' => 
       array (
         'driver' => 'database',
         'table' => 'cache',
         'connection' => NULL,
       ),
-      'file' =>
+      'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\Medsur\\medicalink-app\\storage\\framework/cache/data',
+        'path' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/framework/cache/data',
       ),
-      'memcached' =>
+      'memcached' => 
       array (
         'driver' => 'memcached',
         'persistent_id' => NULL,
-        'sasl' =>
+        'sasl' => 
         array (
           0 => NULL,
           1 => NULL,
         ),
-        'options' =>
+        'options' => 
         array (
         ),
-        'servers' =>
+        'servers' => 
         array (
-          0 =>
+          0 => 
           array (
             'host' => '127.0.0.1',
             'port' => 11211,
@@ -345,12 +345,12 @@
           ),
         ),
       ),
-      'redis' =>
+      'redis' => 
       array (
         'driver' => 'redis',
         'connection' => 'cache',
       ),
-      'dynamodb' =>
+      'dynamodb' => 
       array (
         'driver' => 'dynamodb',
         'key' => '',
@@ -362,35 +362,35 @@
     ),
     'prefix' => 'medsurlink_cache',
   ),
-  'database' =>
+  'database' => 
   array (
     'default' => 'mysql',
-    'connections' =>
+    'connections' => 
     array (
-      'sqlite' =>
+      'sqlite' => 
       array (
         'driver' => 'sqlite',
         'url' => NULL,
-        'database' => 'online_medsurlink',
+        'database' => 'DB_MEDSURLINK',
         'prefix' => '',
         'foreign_key_constraints' => true,
       ),
-      'mysql' =>
+      'mysql' => 
       array (
         'driver' => 'mysql',
         'url' => NULL,
-        'host' => 'localhost',
+        'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'online_medsurlink',
-        'username' => 'racine',
-        'password' => '',
+        'database' => 'DB_MEDSURLINK',
+        'username' => 'root',
+        'password' => 'root',
         'unix_socket' => '',
         'charset' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
         'prefix' => '',
         'prefix_indexes' => true,
         'strict' => true,
-        'modes' =>
+        'modes' => 
         array (
           0 => 'STRICT_TRANS_TABLES',
           1 => 'NO_ZERO_IN_DATE',
@@ -399,90 +399,90 @@
           4 => 'NO_ENGINE_SUBSTITUTION',
         ),
         'engine' => NULL,
-        'options' =>
+        'options' => 
         array (
         ),
       ),
-      'pgsql' =>
+      'pgsql' => 
       array (
         'driver' => 'pgsql',
         'url' => NULL,
-        'host' => 'localhost',
+        'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'online_medsurlink',
-        'username' => 'racine',
-        'password' => '',
+        'database' => 'DB_MEDSURLINK',
+        'username' => 'root',
+        'password' => 'root',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
         'schema' => 'public',
         'sslmode' => 'prefer',
       ),
-      'sqlsrv' =>
+      'sqlsrv' => 
       array (
         'driver' => 'sqlsrv',
         'url' => NULL,
-        'host' => 'localhost',
+        'host' => '127.0.0.1',
         'port' => '3306',
-        'database' => 'online_medsurlink',
-        'username' => 'racine',
-        'password' => '',
+        'database' => 'DB_MEDSURLINK',
+        'username' => 'root',
+        'password' => 'root',
         'charset' => 'utf8',
         'prefix' => '',
         'prefix_indexes' => true,
       ),
     ),
     'migrations' => 'migrations',
-    'redis' =>
+    'redis' => 
     array (
       'client' => 'predis',
-      'options' =>
+      'options' => 
       array (
         'cluster' => 'predis',
         'prefix' => 'Medsurlink_',
       ),
-      'default' =>
+      'default' => 
       array (
         'url' => NULL,
-        'host' => '51.91.111.43',
+        'host' => '127.0.0.1',
         'password' => 'YE7OFGQXtoayXIhAm04MFMXWj7+xFrgd5coL0FR60Bx91ieT3dKOIt7HQeU/AOXX340zyr+2FRrUH7Q4',
         'port' => '6379',
         'database' => 0,
       ),
-      'cache' =>
+      'cache' => 
       array (
         'url' => NULL,
-        'host' => '51.91.111.43',
+        'host' => '127.0.0.1',
         'password' => 'YE7OFGQXtoayXIhAm04MFMXWj7+xFrgd5coL0FR60Bx91ieT3dKOIt7HQeU/AOXX340zyr+2FRrUH7Q4',
         'port' => '6379',
         'database' => 1,
       ),
-      'model_changes_history' =>
+      'model_changes_history' => 
       array (
-        'host' => '51.91.111.43',
+        'host' => '127.0.0.1',
         'password' => 'YE7OFGQXtoayXIhAm04MFMXWj7+xFrgd5coL0FR60Bx91ieT3dKOIt7HQeU/AOXX340zyr+2FRrUH7Q4',
         'port' => '6379',
         'database' => 0,
       ),
     ),
   ),
-  'debug-server' =>
+  'debug-server' => 
   array (
     'host' => 'tcp://127.0.0.1:9912',
   ),
-  'debugbar' =>
+  'debugbar' => 
   array (
     'enabled' => NULL,
-    'except' =>
+    'except' => 
     array (
       0 => 'telescope*',
       1 => 'horizon*',
     ),
-    'storage' =>
+    'storage' => 
     array (
       'enabled' => true,
       'driver' => 'file',
-      'path' => 'C:\\Medsur\\medicalink-app\\storage\\debugbar',
+      'path' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/debugbar',
       'connection' => NULL,
       'provider' => '',
     ),
@@ -491,7 +491,7 @@
     'add_ajax_timing' => false,
     'error_handler' => false,
     'clockwork' => false,
-    'collectors' =>
+    'collectors' => 
     array (
       'phpinfo' => true,
       'messages' => true,
@@ -517,47 +517,47 @@
       'models' => true,
       'livewire' => true,
     ),
-    'options' =>
+    'options' => 
     array (
-      'auth' =>
+      'auth' => 
       array (
         'show_name' => true,
       ),
-      'db' =>
+      'db' => 
       array (
         'with_params' => true,
         'backtrace' => true,
-        'backtrace_exclude_paths' =>
+        'backtrace_exclude_paths' => 
         array (
         ),
         'timeline' => false,
-        'explain' =>
+        'explain' => 
         array (
           'enabled' => false,
-          'types' =>
+          'types' => 
           array (
             0 => 'SELECT',
           ),
         ),
         'hints' => false,
       ),
-      'mail' =>
+      'mail' => 
       array (
         'full_log' => false,
       ),
-      'views' =>
+      'views' => 
       array (
         'data' => false,
       ),
-      'route' =>
+      'route' => 
       array (
         'label' => true,
       ),
-      'logs' =>
+      'logs' => 
       array (
         'file' => NULL,
       ),
-      'cache' =>
+      'cache' => 
       array (
         'values' => true,
       ),
@@ -567,16 +567,16 @@
     'route_domain' => NULL,
     'theme' => 'auto',
   ),
-  'dompdf' =>
+  'dompdf' => 
   array (
     'show_warnings' => false,
     'orientation' => 'portrait',
-    'defines' =>
+    'defines' => 
     array (
-      'font_dir' => 'C:\\Medsur\\medicalink-app\\storage\\fonts/',
-      'font_cache' => 'C:\\Medsur\\medicalink-app\\storage\\fonts/',
-      'temp_dir' => 'C:\\PROGRA~1\\KMSpico\\temp',
-      'chroot' => 'C:\\Medsur\\medicalink-app',
+      'font_dir' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/fonts/',
+      'font_cache' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/fonts/',
+      'temp_dir' => '/tmp',
+      'chroot' => '/home/medsur/Documents/projets/medsurlink/medicalink-app',
       'enable_font_subsetting' => false,
       'pdf_backend' => 'CPDF',
       'default_media_type' => 'screen',
@@ -590,14 +590,14 @@
       'enable_html5_parser' => false,
     ),
   ),
-  'excel' =>
+  'excel' => 
   array (
-    'exports' =>
+    'exports' => 
     array (
       'chunk_size' => 1000,
       'pre_calculate_formulas' => false,
       'strict_null_comparison' => false,
-      'csv' =>
+      'csv' => 
       array (
         'delimiter' => ',',
         'enclosure' => '"',
@@ -607,7 +607,7 @@
         'include_separator_line' => false,
         'excel_compatibility' => false,
       ),
-      'properties' =>
+      'properties' => 
       array (
         'creator' => '',
         'lastModifiedBy' => '',
@@ -620,15 +620,15 @@
         'company' => '',
       ),
     ),
-    'imports' =>
+    'imports' => 
     array (
       'read_only' => true,
       'ignore_empty' => false,
-      'heading_row' =>
+      'heading_row' => 
       array (
         'formatter' => 'slug',
       ),
-      'csv' =>
+      'csv' => 
       array (
         'delimiter' => ',',
         'enclosure' => '"',
@@ -636,7 +636,7 @@
         'contiguous' => false,
         'input_encoding' => 'UTF-8',
       ),
-      'properties' =>
+      'properties' => 
       array (
         'creator' => '',
         'lastModifiedBy' => '',
@@ -649,7 +649,7 @@
         'company' => '',
       ),
     ),
-    'extension_detector' =>
+    'extension_detector' => 
     array (
       'xlsx' => 'Xlsx',
       'xlsm' => 'Xlsx',
@@ -668,66 +668,66 @@
       'tsv' => 'Csv',
       'pdf' => 'Dompdf',
     ),
-    'value_binder' =>
+    'value_binder' => 
     array (
       'default' => 'Maatwebsite\\Excel\\DefaultValueBinder',
     ),
-    'cache' =>
+    'cache' => 
     array (
       'driver' => 'memory',
-      'batch' =>
+      'batch' => 
       array (
         'memory_limit' => 60000,
       ),
-      'illuminate' =>
+      'illuminate' => 
       array (
         'store' => NULL,
       ),
     ),
-    'transactions' =>
+    'transactions' => 
     array (
       'handler' => 'db',
     ),
-    'temporary_files' =>
+    'temporary_files' => 
     array (
-      'local_path' => 'C:\\Medsur\\medicalink-app\\storage\\framework/laravel-excel',
+      'local_path' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/framework/laravel-excel',
       'remote_disk' => NULL,
       'remote_prefix' => NULL,
       'force_resync_remote' => NULL,
     ),
   ),
-  'filesystems' =>
+  'filesystems' => 
   array (
     'default' => 'local',
     'cloud' => 's3',
-    'disks' =>
+    'disks' => 
     array (
-      'local' =>
+      'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\Medsur\\medicalink-app\\storage\\app',
-        'permissions' =>
+        'root' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/app',
+        'permissions' => 
         array (
-          'file' =>
+          'file' => 
           array (
             'public' => 436,
             'private' => 384,
           ),
-          'dir' =>
+          'dir' => 
           array (
             'public' => 509,
             'private' => 448,
           ),
         ),
       ),
-      'public' =>
+      'public' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\Medsur\\medicalink-app\\storage\\app/public',
+        'root' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/app/public',
         'url' => 'http://127.0.0.1:8001/api//storage',
         'visibility' => 'public',
       ),
-      's3' =>
+      's3' => 
       array (
         'driver' => 's3',
         'key' => '',
@@ -736,61 +736,61 @@
         'bucket' => '',
         'url' => NULL,
       ),
-      'model_changes_history' =>
+      'model_changes_history' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\Medsur\\medicalink-app\\storage\\app/model_changes_history',
+        'root' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/app/model_changes_history',
       ),
     ),
   ),
-  'gbrock-tables' =>
+  'gbrock-tables' => 
   array (
     'key_field' => 'sort',
     'key_direction' => 'dir',
     'default_direction' => 'asc',
   ),
-  'hashing' =>
+  'hashing' => 
   array (
     'driver' => 'bcrypt',
-    'bcrypt' =>
+    'bcrypt' => 
     array (
       'rounds' => 10,
     ),
-    'argon' =>
+    'argon' => 
     array (
       'memory' => 1024,
       'threads' => 2,
       'time' => 2,
     ),
   ),
-  'logging' =>
+  'logging' => 
   array (
-    'default' => 'pile',
-    'channels' =>
+    'default' => 'stack',
+    'channels' => 
     array (
-      'stack' =>
+      'stack' => 
       array (
         'driver' => 'stack',
-        'channels' =>
+        'channels' => 
         array (
           0 => 'daily',
         ),
         'ignore_exceptions' => false,
       ),
-      'single' =>
+      'single' => 
       array (
         'driver' => 'single',
-        'path' => 'C:\\Medsur\\medicalink-app\\storage\\logs/laravel.log',
+        'path' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/logs/laravel.log',
         'level' => 'debug',
       ),
-      'daily' =>
+      'daily' => 
       array (
         'driver' => 'daily',
-        'path' => 'C:\\Medsur\\medicalink-app\\storage\\logs/laravel.log',
+        'path' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/logs/laravel.log',
         'level' => 'debug',
         'days' => 14,
       ),
-      'slack' =>
+      'slack' => 
       array (
         'driver' => 'slack',
         'url' => NULL,
@@ -798,99 +798,99 @@
         'emoji' => ':boom:',
         'level' => 'critical',
       ),
-      'papertrail' =>
+      'papertrail' => 
       array (
         'driver' => 'monolog',
         'level' => 'debug',
         'handler' => 'Monolog\\Handler\\SyslogUdpHandler',
-        'handler_with' =>
+        'handler_with' => 
         array (
           'host' => NULL,
           'port' => NULL,
         ),
       ),
-      'stderr' =>
+      'stderr' => 
       array (
         'driver' => 'monolog',
         'handler' => 'Monolog\\Handler\\StreamHandler',
         'formatter' => NULL,
-        'with' =>
+        'with' => 
         array (
           'stream' => 'php://stderr',
         ),
       ),
-      'syslog' =>
+      'syslog' => 
       array (
         'driver' => 'syslog',
         'level' => 'debug',
       ),
-      'errorlog' =>
+      'errorlog' => 
       array (
         'driver' => 'errorlog',
         'level' => 'debug',
       ),
     ),
   ),
-  'mail' =>
+  'mail' => 
   array (
     'driver' => 'smtp',
-    'host' => 'sandbox.smtp.mailtrap.io',
+    'host' => 'smtp.mailtrap.io',
     'port' => '2525',
-    'from' =>
+    'from' => 
     array (
       'address' => 'noreply@medsurlink.com',
       'name' => 'Medsurlink',
     ),
     'encryption' => 'tls',
-    'username' => '3b9a0426c6aa63',
-    'password' => '2b8a97fe9198e5',
+    'username' => '82f0518b22d1a6',
+    'password' => '84b09b0ecd5139',
     'sendmail' => '/usr/sbin/sendmail -bs',
-    'markdown' =>
+    'markdown' => 
     array (
       'theme' => 'default',
-      'paths' =>
+      'paths' => 
       array (
-        0 => 'C:\\Medsur\\medicalink-app\\resources\\views/vendor/mail',
+        0 => '/home/medsur/Documents/projets/medsurlink/medicalink-app/resources/views/vendor/mail',
       ),
     ),
     'log_channel' => NULL,
   ),
-  'model_changes_history' =>
+  'model_changes_history' => 
   array (
     'record_changes_history' => true,
     'use_only_for_debug' => true,
     'record_stack_trace' => true,
-    'ignored_actions' =>
+    'ignored_actions' => 
     array (
     ),
     'storage' => 'database',
-    'stores' =>
+    'stores' => 
     array (
-      'database' =>
+      'database' => 
       array (
         'driver' => 'database',
         'table' => 'model_changes_history',
         'connection' => NULL,
       ),
-      'file' =>
+      'file' => 
       array (
         'driver' => 'file',
         'disk' => 'model_changes_history',
         'file_name' => 'changes_history.txt',
-        'model_changes_history' =>
+        'model_changes_history' => 
         array (
           'driver' => 'local',
-          'root' => 'C:\\Medsur\\medicalink-app\\storage\\app/model_changes_history',
+          'root' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/app/model_changes_history',
         ),
       ),
-      'redis' =>
+      'redis' => 
       array (
         'driver' => 'redis',
         'key' => 'model_changes_history',
         'connection' => 'model_changes_history',
-        'model_changes_history' =>
+        'model_changes_history' => 
         array (
-          'host' => '51.91.111.43',
+          'host' => '127.0.0.1',
           'password' => 'YE7OFGQXtoayXIhAm04MFMXWj7+xFrgd5coL0FR60Bx91ieT3dKOIt7HQeU/AOXX340zyr+2FRrUH7Q4',
           'port' => '6379',
           'database' => 0,
@@ -898,19 +898,19 @@
       ),
     ),
   ),
-  'passport' =>
+  'passport' => 
   array (
     'private_key' => NULL,
     'public_key' => NULL,
   ),
-  'permission' =>
+  'permission' => 
   array (
-    'models' =>
+    'models' => 
     array (
       'permission' => 'Spatie\\Permission\\Models\\Permission',
       'role' => 'Spatie\\Permission\\Models\\Role',
     ),
-    'table_names' =>
+    'table_names' => 
     array (
       'roles' => 'roles',
       'permissions' => 'permissions',
@@ -918,14 +918,14 @@
       'model_has_roles' => 'model_has_roles',
       'role_has_permissions' => 'role_has_permissions',
     ),
-    'column_names' =>
+    'column_names' => 
     array (
       'model_morph_key' => 'model_id',
     ),
     'display_permission_in_exception' => false,
-    'cache' =>
+    'cache' => 
     array (
-      'expiration_time' =>
+      'expiration_time' => 
       DateInterval::__set_state(array(
          'y' => 0,
          'm' => 0,
@@ -949,23 +949,23 @@
       'store' => 'default',
     ),
   ),
-  'queue' =>
+  'queue' => 
   array (
     'default' => 'redis',
-    'connections' =>
+    'connections' => 
     array (
-      'sync' =>
+      'sync' => 
       array (
         'driver' => 'sync',
       ),
-      'database' =>
+      'database' => 
       array (
         'driver' => 'database',
         'table' => 'jobs',
         'queue' => 'default',
         'retry_after' => 90,
       ),
-      'beanstalkd' =>
+      'beanstalkd' => 
       array (
         'driver' => 'beanstalkd',
         'host' => 'localhost',
@@ -973,7 +973,7 @@
         'retry_after' => 90,
         'block_for' => 0,
       ),
-      'sqs' =>
+      'sqs' => 
       array (
         'driver' => 'sqs',
         'key' => '',
@@ -982,7 +982,7 @@
         'queue' => 'your-queue-name',
         'region' => 'us-east-1',
       ),
-      'redis' =>
+      'redis' => 
       array (
         'driver' => 'redis',
         'connection' => 'default',
@@ -991,67 +991,67 @@
         'block_for' => NULL,
       ),
     ),
-    'failed' =>
+    'failed' => 
     array (
       'database' => 'mysql',
       'table' => 'failed_jobs',
     ),
   ),
-  'services' =>
+  'services' => 
   array (
-    'mailgun' =>
+    'mailgun' => 
     array (
       'domain' => NULL,
       'secret' => NULL,
       'endpoint' => 'api.mailgun.net',
     ),
-    'postmark' =>
+    'postmark' => 
     array (
       'token' => NULL,
     ),
-    'ses' =>
+    'ses' => 
     array (
       'key' => '',
       'secret' => '',
       'region' => 'us-east-1',
     ),
-    'sparkpost' =>
+    'sparkpost' => 
     array (
       'secret' => NULL,
     ),
-    'stripe' =>
+    'stripe' => 
     array (
       'model' => 'App\\User',
       'key' => NULL,
       'secret' => NULL,
-      'webhook' =>
+      'webhook' => 
       array (
         'secret' => NULL,
         'tolerance' => 300,
       ),
     ),
-    'teleconsultations' =>
+    'teleconsultations' => 
     array (
       'base_uri' => 'http://localhost:8002',
       'secret' => 'EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr',
     ),
-    'alertes' =>
+    'alertes' => 
     array (
       'base_uri' => 'http://localhost:8003',
       'secret' => 'EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr',
     ),
   ),
-  'session' =>
+  'session' => 
   array (
     'driver' => 'file',
     'lifetime' => '120',
     'expire_on_close' => false,
     'encrypt' => false,
-    'files' => 'C:\\Medsur\\medicalink-app\\storage\\framework/sessions',
+    'files' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'store' => NULL,
-    'lottery' =>
+    'lottery' => 
     array (
       0 => 2,
       1 => 100,
@@ -1063,7 +1063,7 @@
     'http_only' => true,
     'same_site' => NULL,
   ),
-  'sluggable' =>
+  'sluggable' => 
   array (
     'source' => NULL,
     'maxLength' => NULL,
@@ -1076,78 +1076,78 @@
     'reserved' => NULL,
     'onUpdate' => false,
   ),
-  'snappy' =>
+  'snappy' => 
   array (
-    'pdf' =>
+    'pdf' => 
     array (
       'enabled' => true,
       'binary' => '"C:\\Program Files (x86)\\wkhtmltopdf\\bin\\wkhtmltopdf"',
       'timeout' => false,
-      'options' =>
+      'options' => 
       array (
       ),
-      'env' =>
+      'env' => 
       array (
       ),
     ),
-    'image' =>
+    'image' => 
     array (
       'enabled' => true,
       'binary' => '/usr/local/bin/wkhtmltoimage',
       'timeout' => false,
-      'options' =>
+      'options' => 
       array (
       ),
-      'env' =>
+      'env' => 
       array (
       ),
     ),
   ),
-  'tinker' =>
+  'tinker' => 
   array (
-    'commands' =>
+    'commands' => 
     array (
     ),
-    'dont_alias' =>
+    'dont_alias' => 
     array (
       0 => 'App\\Nova',
     ),
   ),
-  'trustedproxy' =>
+  'trustedproxy' => 
   array (
     'proxies' => NULL,
     'headers' => 30,
   ),
-  'view' =>
+  'view' => 
   array (
-    'paths' =>
+    'paths' => 
     array (
-      0 => 'C:\\Medsur\\medicalink-app\\resources\\views',
+      0 => '/home/medsur/Documents/projets/medsurlink/medicalink-app/resources/views',
     ),
-    'compiled' => 'C:\\Medsur\\medicalink-app\\storage\\framework\\views',
+    'compiled' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/framework/views',
   ),
-  'image' =>
+  'image' => 
   array (
     'driver' => 'gd',
   ),
-  'medialibrary' =>
+  'medialibrary' => 
   array (
     'disk_name' => 'public',
     'max_file_size' => 10485760,
     'queue_name' => '',
     'media_model' => 'Spatie\\MediaLibrary\\Models\\Media',
-    's3' =>
+    's3' => 
     array (
       'domain' => 'https://.s3.amazonaws.com',
     ),
-    'remote' =>
+    'remote' => 
     array (
-      'extra_headers' =>
+      'extra_headers' => 
       array (
         'CacheControl' => 'max-age=604800',
       ),
     ),
-    'responsive_images' =>
+    'responsive_images' => 
     array (
       'width_calculator' => 'Spatie\\MediaLibrary\\ResponsiveImages\\WidthCalculator\\FileSizeOptimizedWidthCalculator',
       'use_tiny_placeholders' => true,
@@ -1156,34 +1156,34 @@
     'url_generator' => NULL,
     'version_urls' => false,
     'path_generator' => NULL,
-    'image_optimizers' =>
+    'image_optimizers' => 
     array (
-      'Spatie\\ImageOptimizer\\Optimizers\\Jpegoptim' =>
+      'Spatie\\ImageOptimizer\\Optimizers\\Jpegoptim' => 
       array (
         0 => '--strip-all',
         1 => '--all-progressive',
       ),
-      'Spatie\\ImageOptimizer\\Optimizers\\Pngquant' =>
+      'Spatie\\ImageOptimizer\\Optimizers\\Pngquant' => 
       array (
         0 => '--force',
       ),
-      'Spatie\\ImageOptimizer\\Optimizers\\Optipng' =>
+      'Spatie\\ImageOptimizer\\Optimizers\\Optipng' => 
       array (
         0 => '-i0',
         1 => '-o2',
         2 => '-quiet',
       ),
-      'Spatie\\ImageOptimizer\\Optimizers\\Svgo' =>
+      'Spatie\\ImageOptimizer\\Optimizers\\Svgo' => 
       array (
         0 => '--disable=cleanupIDs',
       ),
-      'Spatie\\ImageOptimizer\\Optimizers\\Gifsicle' =>
+      'Spatie\\ImageOptimizer\\Optimizers\\Gifsicle' => 
       array (
         0 => '-b',
         1 => '-O3',
       ),
     ),
-    'image_generators' =>
+    'image_generators' => 
     array (
       0 => 'Spatie\\MediaLibrary\\ImageGenerators\\FileTypes\\Image',
       1 => 'Spatie\\MediaLibrary\\ImageGenerators\\FileTypes\\Webp',
@@ -1195,13 +1195,13 @@
     'ffmpeg_path' => '/usr/bin/ffmpeg',
     'ffprobe_path' => '/usr/bin/ffprobe',
     'temporary_directory_path' => NULL,
-    'jobs' =>
+    'jobs' => 
     array (
       'perform_conversions' => 'Spatie\\MediaLibrary\\Jobs\\PerformConversions',
       'generate_responsive_images' => 'Spatie\\MediaLibrary\\Jobs\\GenerateResponsiveImages',
     ),
   ),
-  'ide-helper' =>
+  'ide-helper' => 
   array (
     'filename' => '_ide_helper',
     'format' => 'php',
@@ -1212,91 +1212,91 @@
     'write_model_relation_count_properties' => true,
     'write_eloquent_model_mixins' => false,
     'include_helpers' => false,
-    'helper_files' =>
+    'helper_files' => 
     array (
-      0 => 'C:\\Medsur\\medicalink-app/vendor/laravel/framework/src/Illuminate/Support/helpers.php',
+      0 => '/home/medsur/Documents/projets/medsurlink/medicalink-app/vendor/laravel/framework/src/Illuminate/Support/helpers.php',
     ),
-    'model_locations' =>
+    'model_locations' => 
     array (
       0 => 'app',
     ),
-    'ignored_models' =>
+    'ignored_models' => 
     array (
     ),
-    'extra' =>
+    'extra' => 
     array (
-      'Eloquent' =>
+      'Eloquent' => 
       array (
         0 => 'Illuminate\\Database\\Eloquent\\Builder',
         1 => 'Illuminate\\Database\\Query\\Builder',
       ),
-      'Session' =>
+      'Session' => 
       array (
         0 => 'Illuminate\\Session\\Store',
       ),
     ),
-    'magic' =>
+    'magic' => 
     array (
     ),
-    'interfaces' =>
+    'interfaces' => 
     array (
     ),
-    'custom_db_types' =>
+    'custom_db_types' => 
     array (
     ),
     'model_camel_case_properties' => false,
-    'type_overrides' =>
+    'type_overrides' => 
     array (
       'integer' => 'int',
       'boolean' => 'bool',
     ),
     'include_class_docblocks' => false,
   ),
-  'url-shortener' =>
+  'url-shortener' => 
   array (
     'default' => 'tiny_url',
-    'shorteners' =>
+    'shorteners' => 
     array (
-      'bit_ly' =>
+      'bit_ly' => 
       array (
         'driver' => 'bit_ly',
         'domain' => 'bit.ly',
         'token' => NULL,
       ),
-      'firebase' =>
+      'firebase' => 
       array (
         'driver' => 'firebase',
         'prefix' => NULL,
         'token' => NULL,
         'suffix' => 'UNGUESSABLE',
       ),
-      'is_gd' =>
+      'is_gd' => 
       array (
         'driver' => 'is_gd',
         'base_uri' => 'https://is.gd',
         'statistics' => false,
       ),
-      'ouo_io' =>
+      'ouo_io' => 
       array (
         'driver' => 'ouo_io',
         'token' => NULL,
       ),
-      'polr' =>
+      'polr' => 
       array (
         'driver' => 'polr',
         'prefix' => NULL,
         'token' => NULL,
       ),
-      'shorte_st' =>
+      'shorte_st' => 
       array (
         'driver' => 'shorte_st',
         'token' => NULL,
       ),
-      'tiny_url' =>
+      'tiny_url' => 
       array (
         'driver' => 'tiny_url',
       ),
-      'v_gd' =>
+      'v_gd' => 
       array (
         'driver' => 'is_gd',
         'base_uri' => 'https://v.gd',
