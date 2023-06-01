@@ -14,7 +14,7 @@ class MessageController extends Controller
 {
     public function index(Request $request)
     {
-        $size =  $request->page ?? 10;
+        $size =  $request->page_size ?? 10;
         $messages = Message::with(['user'])->latest()->paginate($size);
         return $this->successResponse($messages);
     }
@@ -26,6 +26,10 @@ class MessageController extends Controller
         broadcast(new MessageCreated($message))
             ->toOthers();
         return response()->json($message);
+    }
+    public function show($uuid){
+        $message = Message::with('user')->where('uuid', $uuid)->first();
+        return $this->successResponse($message);
     }
 
     public function sendMail(Request $request)

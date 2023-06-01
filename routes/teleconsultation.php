@@ -31,6 +31,8 @@ Route::resource('v2/users', 'Api\v2\Globale\Usercontroller');
 Route::get('v2/patients-et-souscripteurs', 'Api\Usercontroller@getPatientAndSouscripteur')->middleware('auth:api');
 Route::post('v2/email-sms', 'Api\MessageController@sendMail')->middleware('auth:api');
 Route::get('v2/email-sms', 'Api\MessageController@index')->middleware('auth:api');
+Route::get('v2/email-sms/{uuid}', 'Api\MessageController@show')->middleware('auth:api');
+
 
 /**
  * 
