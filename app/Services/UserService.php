@@ -32,7 +32,7 @@ class UserService
             'ville' => $request->ville,
             'password' => Hash::make($request->password)
         ]);
-
+        
         $user->assignRole('Patient-Alerte');
 
         return $user;

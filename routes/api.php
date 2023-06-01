@@ -41,7 +41,7 @@ Route::resource('user-show', 'Api\UserController');
 //Route::resource('partenaire','Api\PartenaireController');
 
 Route::get('impression/facture-offre/{commande_id}', function ($commande_id) {
-
+    
     return response()->json(['link' => route('facture.offre', $commande_id)]);
 });
 // Route::get('visualiser-consultation-medecine/{slug}', function ($slug) {
