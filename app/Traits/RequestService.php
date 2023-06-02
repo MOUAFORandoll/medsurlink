@@ -24,8 +24,6 @@ trait RequestService
         if (isset($this->secret)) {
             $headers['Authorization'] = $this->secret;
         }
-        \Log::alert("headers");
-        \Log::alert($headers);
 
         $response = $client->request($method, $requestUrl,
             [
