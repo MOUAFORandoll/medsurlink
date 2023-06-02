@@ -59,7 +59,6 @@ class AlerteController extends Controller
         return $this->successResponse($this->alerteService->subScribeAlerte($alerte, $request->all()));
     }
 
-    
 
     /**
      * @param \Illuminate\Http\Request $request
