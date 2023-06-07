@@ -19,6 +19,7 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -48,24 +49,29 @@ class UserController extends Controller
 
     public function getPatientAndSouscripteur(Request $request)
     {
-        $search = $request->search;
+        $search = strtolower($request->search);
         $size = $request->size ? $request->size : 20;
 
-        $requete = User::whereHas('roles', function ($query) {
+        $users = User::whereHas('roles', function ($query) {
             $query->whereIn('name', ['patient', 'souscripteur']);
         })->where(function ($query) use ($search) {
             $query->whereHas('patient', function ($query) use ($search) {
-                $query->where('nom', 'like', "%$search%")
-                    ->orWhere('prenom', 'like', "%$search%");
+                $query->where(DB::raw("lower(nom)"), 'like',  '%'.$search.'%')
+                ->orwhere(DB::raw("lower(prenom)"), 'like',  '%'.$search.'%')
+                ->orwhere(DB::raw("lower(email)"), 'like',  '%'.$search.'%')
+                ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$search.'%')
+                ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$search.'%');
             })->orWhereHas('souscripteur', function ($query) use ($search) {
-                $query->where('nom', 'like', "%$search%")
-                    ->orWhere('prenom', 'like', "%$search%");
+                $query->where(DB::raw("lower(nom)"), 'like',  '%'.$search.'%')
+                ->orwhere(DB::raw("lower(prenom)"), 'like',  '%'.$search.'%')
+                ->orwhere(DB::raw("lower(email)"), 'like',  '%'.$search.'%')
+                ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$search.'%')
+                ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$search.'%');
             });
-        })->with(['souscripteur', 'patient']);
+        })->paginate($size);
 
-        $users = $requete->paginate($size);
 
-        return response()->json(['users' => $users]);
+        return response()->json($users);
     }
 
     // public function getUserWithPermissions(Request $request)

@@ -374,10 +374,6 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasOne(Pharmacien::class, 'user_id', 'id');
     }
-    public function messages()
-    {
-        return $this->hasMany(Message::class);
-    }
     /**
      * Send the password reset notification.
      *
@@ -427,5 +423,10 @@ class User extends Authenticatable implements HasMedia
     public function medecinAvis()
     {
         return $this->hasMany(MedecinAvis::class, 'medecin_id');
+    }
+
+    public function messages()
+    {
+        return $this->morphToMany(Message::class, 'messageable');
     }
 }
