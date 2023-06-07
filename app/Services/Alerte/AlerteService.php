@@ -76,7 +76,7 @@ class AlerteService
      */
     public function createAlerte($data): string
     {
-        return $this->request('POST', "{$this->path}/add", $data);
+        return $this->request('POST', "/api/v1/create/alertes", $data);
     }
 
     /**
