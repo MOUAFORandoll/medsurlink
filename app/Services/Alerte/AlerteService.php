@@ -76,7 +76,6 @@ class AlerteService
      */
     public function createAlerte($data): string
     {
-        //{$this->path}
         return $this->request('POST', "{$this->path}", $data);
     }
 
