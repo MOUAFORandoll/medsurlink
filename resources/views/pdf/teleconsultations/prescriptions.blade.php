@@ -27,7 +27,7 @@
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td>{{ $medicament['denomination'] }}</td>
-                                    <td>  {{ $medicament['pivot']['quantite_lors_une_prise'] }} {{ $medicament['conditionnement']['libelle'] }}(s) {{ $medicament['pivot']['nombre_de_prise'] }} fois tout les {{ $medicament['pivot']['nombre_de_fois'] }} heure(s) pendant {{ $medicament['pivot']['duree_traitement'] }} jour(s)
+                                    <td>  {{ $medicament['pivot']['quantite_lors_une_prise'] }} {{ $medicament['unite_presentation']['libelle'] }}(s) {{ $medicament['pivot']['nombre_de_prise'] }} fois tout les {{ $medicament['pivot']['nombre_de_fois'] }} heure(s) pendant {{ $medicament['pivot']['duree_traitement'] }} jour(s)
                                         (
                                             @forelse ($medicament['horaire_de_prises']  as $horaire_de_prise)
                                                 {{ $horaire_de_prise['libelle'] }}
@@ -36,7 +36,10 @@
                                                 @endif
                                             @empty
                                             @endforelse
-                                        ) renouvelable {{ $medicament['pivot']['nombre_renouvelement'] }} fois. <br>
+                                        )
+                                        @if($medicament['pivot']['nombre_renouvelement'] > 1)
+                                            renouvelable {{ $medicament['pivot']['nombre_renouvelement'] }} fois. <br>
+                                        @endif
                                         <b>Unité d'achat</b> : {{ $medicament['pivot']['nombre_unite_achat'] }} {{ $medicament['conditionnement']['libelle'] }}(s)
                                     </td>
                                 </tr>
