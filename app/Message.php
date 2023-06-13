@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Message extends Model
 {
-    protected $fillable = ['uuid', 'user_email','subject','creator_id','message_body'];
+    protected $fillable = ['uuid', 'subject','creator_id','message_body'];
     protected $appends = ['selfMessage'];
 
     //

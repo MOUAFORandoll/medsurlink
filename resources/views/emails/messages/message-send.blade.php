@@ -87,7 +87,7 @@
                         <tbody>
                           <tr>
                             <td style="width:10%;">
-                              <img alt="image description" height="auto" src=" {{ asset('/images/logo.png') }}" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:30%;font-size:14px;" width="50">
+                              <img alt="image description" height="auto" src=" {{ public_path('/images/logo.png') }}" style="border:0;display:block;outline:none;text-decoration:none;height:auto;width:30%;font-size:14px;" width="50">
                             </td>
                           </tr>
                         </tbody>
@@ -119,6 +119,7 @@
                   <tr>
                     <td align="left" style="font-size:0px;padding:10px 25px;word-break:break-word;">
                       <div style="font-family:Helvetica, Arial, sans-serif;font-size:18px;font-weight:400;line-height:24px;text-align:left;color:#434245;">
+                        <p style="margin: 0;"> Hello, {{ $user->name }} </p>
                         <p style="margin: 0;"> {!! $messageBody !!} </p>
                       </div>
                     </td>
