@@ -33,7 +33,7 @@ class AlerteService
     /**
      * @return string
      */
-    public function fetchAlertes(Request $request) : string
+    public function fetchAlertes(Request $request): string
     {
         return $this->request('GET', "{$this->path}?search={$request->search}&page={$request->page}&page_size={$request->page_size}&user_id={$request->user_id}");
     }
@@ -43,7 +43,7 @@ class AlerteService
      *
      * @return string
      */
-    public function fetchAlerte($alerte) : string
+    public function fetchAlerte($alerte): string
     {
         return $this->request('GET', "{$this->path}/{$alerte}");
     }
@@ -53,7 +53,7 @@ class AlerteService
      *
      * @return string
      */
-    public function historyInfoUserAlert($user_id) : string
+    public function historyInfoUserAlert($user_id): string
     {
         return $this->request('GET', "{$this->path}/info/{$user_id}");
     }
@@ -64,7 +64,7 @@ class AlerteService
      *
      * @return string
      */
-    public function subScribeAlerte($alerte, $data) : string
+    public function subScribeAlerte($alerte, $data): string
     {
         return $this->request('PATCH', "{$this->path}/{$alerte}/subscribe", $data);
     }
@@ -74,7 +74,7 @@ class AlerteService
      *
      * @return string
      */
-    public function createAlerte($data) : string
+    public function createAlerte($data): string
     {
         return $this->request('POST', "{$this->path}", $data);
     }
@@ -85,7 +85,7 @@ class AlerteService
      *
      * @return string
      */
-    public function updateAlerte($alerte, $data) : string
+    public function updateAlerte($alerte, $data): string
     {
         return $this->request('PATCH', "{$this->path}/{$alerte}", $data);
     }
@@ -95,7 +95,7 @@ class AlerteService
      *
      * @return string
      */
-    public function deleteAlerte($alerte) : string
+    public function deleteAlerte($alerte): string
     {
         return $this->request('DELETE', "{$this->path}/{$alerte}");
     }

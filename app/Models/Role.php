@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Message;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -34,5 +35,10 @@ class Role extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id')->withTrashed();
+    }
+
+    public function messages()
+    {
+        return $this->morphToMany(Message::class, 'messageable');
     }
 }

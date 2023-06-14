@@ -29,6 +29,8 @@ Route::post('password/smsVersion', 'Api\PatientController@resetPassword');
 Route::post('password/reset', 'Api\UserController@reset');
 Route::get('question', 'Api\QuestionController@index');
 Route::resource('user-show', 'Api\UserController');
+Route::resource("v2/groupes", 'Api\v2\Globale\GroupeUtilisateurController')->middleware('auth:api');
+Route::get("v2/roles/groupes", 'Api\v2\Globale\RoleController@groupesRoles')->middleware('auth:api');
 
 // Pour faire rapidement les tests sur suivi en back avec postman
 //Route::resource('avis','Api\AvisController');

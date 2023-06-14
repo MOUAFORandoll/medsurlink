@@ -139,3 +139,7 @@ php artisan migrate --path=/database/migrations/2023_05_25_111108_add_sexe_to_us
 ## table message
 php artisan migrate --path=/database/migrations/2023_05_26_112723_create_messages_table.php
 
+## groupes et roles
+php artisan migrate --path=/database/migrations/2023_06_05_092723_create_groupe_utilisateurs_table.php
+
+php artisan db:seed --class=GroupeUtilisateurSeeder

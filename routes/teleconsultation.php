@@ -28,14 +28,14 @@ Route::post('v2/signature/user', 'Api\UserController@signature')->middleware('au
 Route::get('v2/timelines/{slug}/patient', 'Api\LigneDeTempsController@listingPatient')->middleware('auth:api');
 
 Route::resource('v2/users', 'Api\v2\Globale\Usercontroller');
-Route::get('v2/patients-et-souscripteurs', 'Api\Usercontroller@getPatientAndSouscripteur')->middleware('auth:api');
+Route::get('v2/patients-et-souscripteurs', 'Api\UserController@getPatientAndSouscripteur')->middleware('auth:api');
 Route::post('v2/email-sms', 'Api\MessageController@sendMail')->middleware('auth:api');
 Route::get('v2/email-sms', 'Api\MessageController@index')->middleware('auth:api');
 Route::get('v2/email-sms/{uuid}', 'Api\MessageController@show')->middleware('auth:api');
 
 
 /**
- * 
+ *
  */
 
 Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.credentials'])->group(function () {
@@ -215,7 +215,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
 
     Route::resource('alertes', 'AlerteController');
     Route::patch('/alertes/{alerte}/assignMedecin', 'AlerteController@assignMedecin');
-
+    
     /**
      * CRUDS notifications
      */

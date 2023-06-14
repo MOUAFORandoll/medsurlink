@@ -11,16 +11,16 @@ class MessageSend extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $userEmail, $subject, $messageBody;
+    public $user, $subject, $messageBody;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($userEmail, $subject, $messageBody)
+    public function __construct($user, $subject, $messageBody)
     {
-        $this->userEmail = $userEmail;
+        $this->user = $user;
         $this->subject = $subject;
         $this->messageBody = $messageBody;
     }
