@@ -12,6 +12,6 @@ Salutations cordiales.
 {{--Signature Medsurlink--}}
 
 <div class="div-logo-mail">
-<img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
+<img class="logo-footer" src="https://www.back.medsurlink.com/images/logo.png" alt="Logo-Medicasure">
 </div>
 @endcomponent

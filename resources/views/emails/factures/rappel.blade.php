@@ -25,6 +25,6 @@ ___Rue du Castel 18, 7801 Ath Belgique___<br>
 ___Face Lycée de Ndogpassi Douala Cameroun___<br>
 ___https://www.medicasure.com___<br>
     <div class="div-logo-mail">
-        <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
+        <img class="logo-footer" src="https://www.back.medsurlink.com/images/logo.png" alt="Logo-Medicasure">
     </div>
 @endcomponent

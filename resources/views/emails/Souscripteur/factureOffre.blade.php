@@ -7,7 +7,7 @@ Merci de faire confiance à {{ config('app.name') }} pour les soins de santé de
 L'équipe Medicasure
 </br>
 <div class="div-logo-mail">
-    <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
+    <img class="logo-footer" src="https://www.back.medsurlink.com/images/logo.png" alt="Logo-Medicasure">
 </div>
 @endcomponent
 
