@@ -45,8 +45,8 @@ class RendezVousService
 
         $items = [];
         $statuts = collect(json_decode($this->statut->fetchStatuts($request), true)['data']);
+        $patient = new PatientService;
         foreach($rendez_vous['data']['data'] as $item){
-            $patient = new PatientService;
             $ligne_temps =  LigneDeTemps::find($item['ligne_temps_id']);
             $item['statut'] = $statuts->where('id', $item['statut_id'])->first();
             $item['patient'] = $patient->getPatient($item['patient_id'], "dossier,affiliations,user");
@@ -82,6 +82,22 @@ class RendezVousService
 
         return json_encode($rendez_vous);
 
+    }
+
+    public function fetchTomorrowRendezVous()
+    {
+
+        $rendez_vous = collect(json_decode($this->request('GET', "{$this->path}/jours/demain"), true)['data']);
+        $rdv_demain = collect();
+        $patient = new PatientService;
+        $etablissement = new EtablissementService;
+        foreach($rendez_vous as $rdv){
+            $rdv['patient'] = $patient->getPatient($rdv['patient_id'], "user");
+            $rdv['medecin'] = $patient->getMedecin($rdv['creator'], "user");
+            $rdv['etablissement'] = json_decode($etablissement->fetchEtablissement($rdv['etablissement_id']), true)['data'];
+            $rdv_demain->push($rdv);
+        }
+        return $rdv_demain;
     }
 
     /**

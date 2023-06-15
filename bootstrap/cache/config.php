@@ -834,7 +834,7 @@
   'mail' => 
   array (
     'driver' => 'smtp',
-    'host' => 'smtp.mailtrap.io',
+    'host' => 'sandbox.smtp.mailtrap.io',
     'port' => '2525',
     'from' => 
     array (
@@ -842,8 +842,8 @@
       'name' => 'Medsurlink',
     ),
     'encryption' => 'tls',
-    'username' => '82f0518b22d1a6',
-    'password' => '84b09b0ecd5139',
+    'username' => 'a9160bd2a146d4',
+    'password' => '8669b80abad15c',
     'sendmail' => '/usr/sbin/sendmail -bs',
     'markdown' => 
     array (
