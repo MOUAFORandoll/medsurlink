@@ -1,9 +1,10 @@
-@component('mail::message')
-{{$souscripteur->sexe=='M' ? 'Cher M.' : 'Chere Mme'}} {{strtoupper($souscripteur->user->nom).'  '.ucfirst($souscripteur->user->prenom)}} ,
 
-Medicasure a planifié un Rendez-vous pour Votre proche {{strtoupper($rdv->patient->nom).'  '.ucfirst($rdv->patient->prenom)}} a un Rendez-vous planifié pour: 
-</br> {{$rdv->motifs}} ce 
-{{\Carbon\Carbon::parse($rdv->date)->format('d/m/Y')}} à {{\Carbon\Carbon::parse($rdv->date)->format('H').'h'.\Carbon\Carbon::parse($rdv->date)->format('i')}} à {{$rdv->etablissement->name}}.
+@component('mail::message')
+{{$sexe == 'M' ? 'Cher M.' : 'Chere Mme'}} {{ $name_souscripteur }} ,
+
+Medicasure a planifié un rendez-vous pour Votre proche {{ $name_patient }} pour:
+</br> {{ $motif }} ce 
+{{\Carbon\Carbon::parse($date)->format('d/m/Y')}} à {{\Carbon\Carbon::parse($date)->format('H').'h'.\Carbon\Carbon::parse($date)->format('i')}} à {{ $etablissement }}.
 
 Si vous avez des questions ou des préoccupations, N'hésitez pas à  nous le faire savoir en reponse à ce mail
 

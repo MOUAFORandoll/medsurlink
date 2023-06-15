@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Message;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,7 +19,7 @@ class GroupeUtilisateur extends Model
      * @return array
      */
 
-    protected $fillable = ["nom", "description"];
+    protected $fillable = ["uuid", "nom", "description"];
 
     public function messages()
     {

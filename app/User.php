@@ -14,6 +14,7 @@ use App\Models\Souscripteur;
 use Illuminate\Http\Request;
 use App\Models\Contributeurs;
 use App\Models\DossierMedical;
+use App\Models\GroupeUtilisateur;
 use App\Models\MedecinAvis;
 use App\Models\ReponseSecrete;
 use App\Models\MedecinControle;
@@ -429,4 +430,11 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->morphToMany(Message::class, 'messageable');
     }
+
+    public function groupe_utilisateurs()
+    {
+        return $this->belongsToMany(GroupeUtilisateur::class);
+    }
+
+
 }

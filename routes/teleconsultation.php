@@ -182,6 +182,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
      */
     Route::group(['prefix' => 'rendez_vous'], function () {
         Route::get('/', 'RendezVousController@index');
+        Route::get('/jours/demain', 'RendezVousController@demain');
         Route::post('/', 'RendezVousController@store');
         Route::get('/{rendez_vous}', 'RendezVousController@show');
         Route::patch('/{rendez_vous}', 'RendezVousController@update');
