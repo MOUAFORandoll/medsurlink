@@ -4,12 +4,11 @@ namespace App\Http\Controllers\Api\v2\Globale;
 
 use Illuminate\Http\Request;
 use App\Services\RoleService;
-use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use Spatie\Permission\Models\Permission;
+use App\Models\Role;
 
 
-class PermissionController extends Controller
+class RoleController extends Controller
 {
     private $roleService;
 
@@ -78,5 +77,9 @@ class PermissionController extends Controller
             return $this->successResponse($this->roleService->givePermission($role, $permission));
         }
     }
-      
+
+    public function groupesRoles(){
+        $roles = Role::where('name', 'Patient')->orWhere('name', 'Souscripteur')->get(['id', 'name']);
+        return $this->successResponse($roles);
+    }
 }

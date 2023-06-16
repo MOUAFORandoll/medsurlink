@@ -92,7 +92,7 @@ class PatientService
             $patient = $patient->with('dossier:patient_id,id,numero_dossier');
         }
         if(str_contains($associations, "user")){
-            $patient = $patient->with('user:id,nom,prenom,email,telephone,slug');
+            $patient = $patient->with('user:id,nom,prenom,email,telephone,decede,slug');
         }
         if(str_contains($associations, "affiliations")){
             $patient = $patient->with('affiliations.package:id,description_fr');

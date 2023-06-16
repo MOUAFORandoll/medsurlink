@@ -127,7 +127,11 @@
     'name' => 'Laravel',
     'env' => 'local',
     'debug' => true,
+<<<<<<< HEAD
     'url' => 'http://localhost',
+=======
+    'url' => 'http://127.0.0.1:8001',
+>>>>>>> d5e6d871cdf5d73409f4a01c94de8d1d596a3e06
     'asset_url' => NULL,
     'frontend_url' => 'www.medsurlink.com/login',
     'momo_url' => 'https://proxy.momoapi.mtn.com',
@@ -723,8 +727,13 @@
       'public' => 
       array (
         'driver' => 'local',
+<<<<<<< HEAD
         'root' => 'C:\\Medsur\\medicalink-app\\storage\\app/public',
         'url' => 'http://localhost/storage',
+=======
+        'root' => '/home/medsur/Documents/projets/medsurlink/medicalink-app/storage/app/public',
+        'url' => 'http://127.0.0.1:8001/storage',
+>>>>>>> d5e6d871cdf5d73409f4a01c94de8d1d596a3e06
         'visibility' => 'public',
       ),
       's3' => 
@@ -834,7 +843,7 @@
   'mail' => 
   array (
     'driver' => 'smtp',
-    'host' => 'smtp.mailtrap.io',
+    'host' => 'sandbox.smtp.mailtrap.io',
     'port' => '2525',
     'from' => 
     array (
@@ -842,8 +851,13 @@
       'name' => 'Laravel',
     ),
     'encryption' => 'tls',
+<<<<<<< HEAD
     'username' => 'fc24357ba8a614',
     'password' => '4915f9ba15e213',
+=======
+    'username' => 'a9160bd2a146d4',
+    'password' => '8669b80abad15c',
+>>>>>>> d5e6d871cdf5d73409f4a01c94de8d1d596a3e06
     'sendmail' => '/usr/sbin/sendmail -bs',
     'markdown' => 
     array (
@@ -1032,12 +1046,12 @@
     ),
     'teleconsultations' => 
     array (
-      'base_uri' => 'http://localhost:8002',
+      'base_uri' => 'http://staging-back-teleconsultations.medsurlink.com',
       'secret' => 'EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr',
     ),
     'alertes' => 
     array (
-      'base_uri' => 'http://localhost:8003',
+      'base_uri' => 'http://staging-alertes.medsurlink.com',
       'secret' => 'EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr',
     ),
   ),

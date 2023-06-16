@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\Api\v2\Globale;
 
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
-use App\Services\PermissionService;
 use App\Http\Controllers\Controller;
 use App\Models\GroupeUtilisateur;
-use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Str;
 
 class GroupeUtilisateurController extends Controller
 {
@@ -17,8 +15,13 @@ class GroupeUtilisateurController extends Controller
      */
     public function index(Request $request)
     {
+        $list = $request->list ?? "";
         $size = $request->size ?? 25;
-        $groupe_utilisateurs = GroupeUtilisateur::latest()->paginate($size);
+        if($list == "all"){
+            $groupe_utilisateurs = GroupeUtilisateur::orderBy('nom', 'asc')->get(['id', 'nom']);
+        }else{
+            $groupe_utilisateurs = GroupeUtilisateur::withCount('users')->latest()->paginate($size);
+        }
         return $this->successResponse($groupe_utilisateurs);
     }
 
@@ -29,8 +32,8 @@ class GroupeUtilisateurController extends Controller
      */
     public function show($groupe_utilisateur)
     {
-        $groupe_utilisateur = GroupeUtilisateur::find($groupe_utilisateur);
-        return $this->successResponse($groupe_utilisateur);
+        $groupe_utilisateur = GroupeUtilisateur::where('id', $groupe_utilisateur)->orWhere("uuid", $groupe_utilisateur)->first();
+        return $this->successResponse($groupe_utilisateur->load('users'));
     }
 
     /**
@@ -42,7 +45,7 @@ class GroupeUtilisateurController extends Controller
     {
         $this->validate($request, $this->validations());
 
-        $groupe_utilisateur = GroupeUtilisateur::create(['nom' => $request->nom, 'description' => $request->description]);
+        $groupe_utilisateur = GroupeUtilisateur::create(['uuid' => Str::uuid(), 'nom' => $request->nom, 'description' => $request->description]);
 
         $groupe_utilisateur->users()->sync($request->users);
 

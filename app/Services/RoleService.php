@@ -15,8 +15,8 @@ class RoleService
 
     public function __construct()
     {
-        $this->user_id = \Auth::guard('api')->user()->id;
-        $this->user = \Auth::guard('api')->user();
+        /* $this->user_id = \Auth::guard('api')->user()->id;
+        $this->user = \Auth::guard('api')->user(); */
     }
 
     public function index()

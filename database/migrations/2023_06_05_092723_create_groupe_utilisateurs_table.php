@@ -15,6 +15,7 @@ class CreateGroupeUtilisateursTable extends Migration
     {
         Schema::create('groupe_utilisateurs', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->uuid('uuid')->nullable();
             $table->string('nom');
             $table->text('description')->nullable();
             $table->timestamps();

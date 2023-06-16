@@ -10,6 +10,7 @@ use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Validation\UnauthorizedException;
 use Netpok\Database\Support\RestrictSoftDeletes;
 
@@ -114,7 +115,12 @@ class Patient extends Model
         'slug',
     ];
 
-    protected $appends = ['age'];
+    protected $appends = ['age', 'name'];
+
+    public function getNameAttribute()
+    {
+        return ucfirst($this->user->prenom ?? '') . ' ' . Str::upper($this->user->nom ?? '');
+    }
 
     public function sluggable()
     {
