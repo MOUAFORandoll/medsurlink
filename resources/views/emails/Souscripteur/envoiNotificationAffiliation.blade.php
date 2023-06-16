@@ -47,6 +47,6 @@ Numero de téléphone de la personne à contacter :<b>{{ $contact_phone }}</b>
 
 {{ config('app.name') }}
 <div class="div-logo-mail">
-    <img class="logo-footer" src="{{asset('/images/logo.png')}}" alt="Logo-Medicasure">
+    <img class="logo-footer" src="https://www.back.medsurlink.com/images/logo.png" alt="Logo-Medicasure">
 </div>
 @endcomponent

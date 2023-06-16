@@ -40,6 +40,14 @@ class RendezVousController extends Controller
     }
 
     /**
+     * @return mixed
+     */
+    public function demain()
+    {
+        return $this->successResponse($this->rendezVous->fetchTomorrowRendezVous());
+    }
+
+    /**
      * @param \Illuminate\Http\Request $request
      *
      * @return mixed

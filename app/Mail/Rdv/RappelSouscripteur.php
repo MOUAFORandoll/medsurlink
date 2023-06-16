@@ -10,18 +10,22 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class RappelSouscripteur extends Mailable
 {
     use Queueable, SerializesModels;
-    public $rdv;
-    public $souscripteur;
+
+    public $sexe, $name_souscripteur, $name_patient, $motif, $date, $etablissement;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($rdv,$souscripteur)
+    public function __construct($sexe, $name_souscripteur, $name_patient, $motif, $date, $etablissement)
     {
-        $this->rdv = $rdv;
-        $this->souscripteur = $souscripteur;
+        $this->sexe = $sexe;
+        $this->name_souscripteur = $name_souscripteur;
+        $this->name_patient = $name_patient;
+        $this->motif = $motif;
+        $this->date = $date;
+        $this->etablissement = $etablissement;
     }
 
     /**
@@ -31,7 +35,7 @@ class RappelSouscripteur extends Mailable
      */
     public function build()
     {
-        return $this->subject('Rendez-vous médical '.strtoupper($this->rdv->patient->nom).'  '.ucfirst($this->rdv->patient->prenom) )
+        return $this->subject('Rendez-vous médical '.$this->name_patient)
             ->from(config('mail.from.address'))
             ->bcc('medsurlink@medicasure.com')
             ->markdown('emails.Rdv.RappelSouscripteur');

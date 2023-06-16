@@ -60,4 +60,20 @@ trait SmsTrait
         }
     }
 
+    /**
+     * Rappeler des rendez vous à des patients
+     *
+     * @param $user
+     * @param null $sender
+     */
+    function RappelRdvViaSMSTo($patient_name, $patient_phone, $medecin_name, $medecin_phone, $date, $heure, $sender = "MEDSURLINK") {
+        try {
+            sendSMS($patient_phone, trans('sms.rappelerRendezVous',['nom' => $patient_name, 'date' => $date, 'heure' => $heure, 'praticien' => $medecin_name], 'fr'), $sender);
+            sendSMS($medecin_phone, trans('sms.rappelerRendezVousPraticien',['nom' => $patient_name, 'date' => $date, 'heure' => $heure, 'praticien' => $medecin_name], 'fr'), $sender);
+
+         }catch (\Exception $exception){
+            //$exception
+        }
+    }
+
 }

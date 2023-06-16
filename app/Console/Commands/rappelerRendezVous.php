@@ -7,7 +7,9 @@ use App\Mail\Rdv\RappelSouscripteur;
 use App\Models\Auteur;
 use App\Models\RendezVous;
 use App\Notifications\SouscriptionAlert;
+use App\Services\RendezVousService;
 use App\Traits\SmsTrait;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
@@ -47,6 +49,53 @@ class rappelerRendezVous extends Command
      */
     public function handle()
     {
+        /**
+         * recupération des rendez vous du module de téléconsultation
+         */
+        $tomorrow_rendez_vous = new RendezVousService();
+
+        $tomorrow_rdv = $tomorrow_rendez_vous->fetchTomorrowRendezVous();
+
+        foreach($tomorrow_rdv as $_rdv){
+            if($_rdv['patient']['user']['decede'] == 'non'){
+                $patient = $_rdv['patient']['name'];
+                $date_heure = Carbon::parse($_rdv['date'])->format('d-M-Y à H:i');
+                $praticien = !is_null($_rdv['creator']) ? $_rdv['medecin'][0]['name'] : "";
+                $etablissement = !is_null($_rdv['etablissement_id']) ? $_rdv['etablissement']['name']: null;
+                $motif = strip_tags($_rdv['motifs']);
+                $slack_notification = "*$patient* a rendez-vous demain le *$date_heure* avec le médecin *$praticien* dans l'établissement *$etablissement*\nMotif: $motif\n\n";
+
+                $env = strtolower(config('app.env'));
+                $url_global = "";
+                if ($env == 'local')
+                    $url_global = config('app.url_loccale');
+                else if ($env == 'staging')
+                    $url_global = config('app.url_stagging');
+                else
+                    $url_global = config('app.url_prod');
+                $url_global = $url_global."/appointments";
+
+                $slack_notification = $slack_notification. "<$url_global|Voir plus de détails>";
+                $_rdvs = RendezVous::first();
+                $_rdvs->getSlackChannel()->notify(new SouscriptionAlert($slack_notification,null));
+                $patient_phone = $_rdv['patient']['user']['telephone'];
+                $medecin_phone = $_rdv['medecin'][0]['user']['telephone'];
+                $date = Carbon::parse($_rdv['date'])->format('d/m/Y');
+                $heure = Carbon::parse($_rdv['date'])->format('H').'h'.Carbon::parse($_rdv['date'])->format('i');
+
+                $this->RappelRdvViaSMSTo($patient, $patient_phone, $praticien, $medecin_phone, $date, $heure);
+
+                /**  */
+                if($_rdv['patient']['souscripteur_id'] !=""){
+                    $user = User::find($_rdv['patient']['souscripteur_id']);
+                    $mail = new RappelSouscripteur($_rdv['patient']['sexe'], $user->name, $patient, $motif, $_rdv['date'], $etablissement);
+                    $when = now()->addMinutes(1);
+                    Mail::to($user->email)->later($when, $mail);
+                }
+            }
+        }
+
+
         /**
          * Marqué les rendez-vous non honoré comme manqués
          */
@@ -123,18 +172,32 @@ class rappelerRendezVous extends Command
             if($rdv->patient->decede == 'non') {
                 $souscripteur = $rdv->patient->patient->souscripteur;
                 if (!is_null($souscripteur)) {
-                    $mail = new RappelSouscripteur($rdv, $souscripteur);
+
+                    $sexe = $souscripteur->sexe;
+                    $name_souscripteur = $souscripteur->user->name;
+                    $name_patient = $rdv->patient->name;
+                    $date = $rdv->date;
+                    $motif = $rdv->motifs;
+                    $etablissement = $rdv->etablissement->name;
+
+                    $mail = new RappelSouscripteur($sexe, $name_souscripteur, $name_patient, $motif, $date, $etablissement);
                     $when = now()->addMinutes(1);
                     Mail::to($souscripteur->user->email)->later($when, $mail);
-                    Log::info('envoi de mail de rappel au souscripteur' . $souscripteur->user->email);
+                    //Log::info('envoi de mail de rappel au souscripteur' . $souscripteur->user->email);
                 }
                 $financeurs = $rdv->patient->patient->financeurs;
                 foreach ($financeurs as $financeur) {
                     if($financeur->financable->user){
-                        $mail = new RappelSouscripteur($rdv, $financeur->financable);
+                        $sexe = $souscripteur->sexe;
+                        $name_souscripteur = $financeur->financable->user->name;
+                        $name_patient = $rdv->patient->name;
+                        $date = $rdv->date;
+                        $motif = $rdv->motifs;
+                        $etablissement = $rdv->etablissement->name;
+                        $mail = new RappelSouscripteur($sexe, $name_souscripteur, $name_patient, $motif, $date, $etablissement);
                         $when = now()->addMinutes(1);
                         Mail::to($financeur->financable->user->email)->later($when, $mail);
-                        Log::info('envoi de mail de rappel au souscripteur' . $financeur->financable->user->email);
+                        //Log::info('envoi de mail de rappel au souscripteur' . $financeur->financable->user->email);
                     }
                 }
             }
