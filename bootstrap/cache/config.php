@@ -269,7 +269,7 @@
   ),
   'broadcasting' => 
   array (
-    'default' => 'redis',
+    'default' => 'log',
     'connections' => 
     array (
       'pusher' => 
@@ -301,7 +301,7 @@
   ),
   'cache' => 
   array (
-    'default' => 'redis',
+    'default' => 'file',
     'stores' => 
     array (
       'apc' => 
@@ -444,23 +444,23 @@
       'default' => 
       array (
         'url' => NULL,
-        'host' => '51.91.111.43',
-        'password' => 'YE7OFGQXtoayXIhAm04MFMXWj7+xFrgd5coL0FR60Bx91ieT3dKOIt7HQeU/AOXX340zyr+2FRrUH7Q4',
+        'host' => '127.0.0.1',
+        'password' => NULL,
         'port' => '6379',
         'database' => 0,
       ),
       'cache' => 
       array (
         'url' => NULL,
-        'host' => '51.91.111.43',
-        'password' => 'YE7OFGQXtoayXIhAm04MFMXWj7+xFrgd5coL0FR60Bx91ieT3dKOIt7HQeU/AOXX340zyr+2FRrUH7Q4',
+        'host' => '127.0.0.1',
+        'password' => NULL,
         'port' => '6379',
         'database' => 1,
       ),
       'model_changes_history' => 
       array (
-        'host' => '51.91.111.43',
-        'password' => 'YE7OFGQXtoayXIhAm04MFMXWj7+xFrgd5coL0FR60Bx91ieT3dKOIt7HQeU/AOXX340zyr+2FRrUH7Q4',
+        'host' => '127.0.0.1',
+        'password' => NULL,
         'port' => '6379',
         'database' => 0,
       ),
@@ -890,8 +890,8 @@
         'connection' => 'model_changes_history',
         'model_changes_history' => 
         array (
-          'host' => '51.91.111.43',
-          'password' => 'YE7OFGQXtoayXIhAm04MFMXWj7+xFrgd5coL0FR60Bx91ieT3dKOIt7HQeU/AOXX340zyr+2FRrUH7Q4',
+          'host' => '127.0.0.1',
+          'password' => NULL,
           'port' => '6379',
           'database' => 0,
         ),
@@ -951,7 +951,7 @@
   ),
   'queue' => 
   array (
-    'default' => 'redis',
+    'default' => 'sync',
     'connections' => 
     array (
       'sync' => 
@@ -1032,12 +1032,12 @@
     ),
     'teleconsultations' => 
     array (
-      'base_uri' => 'http://staging-back-teleconsultations.medsurlink.com',
+      'base_uri' => 'http://localhost:8002',
       'secret' => 'EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr',
     ),
     'alertes' => 
     array (
-      'base_uri' => 'http://staging-alertes.medsurlink.com',
+      'base_uri' => 'http://localhost:8003',
       'secret' => 'EgDwYss1HthxUbAjbRViO0QaNF82gsJIyCiKXiZr',
     ),
   ),
