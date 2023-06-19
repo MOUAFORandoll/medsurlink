@@ -121,7 +121,6 @@ class ResultatLaboController extends Controller
                         ]
                     );
                 }
-                
 
                 return response()->json([
                     'resultat' => $resultat
