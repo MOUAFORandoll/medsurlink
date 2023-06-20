@@ -53,6 +53,7 @@ class Package extends Model
         "description_fr",
         "description_en",
         'montant',
+        "fake_price",
         'items'
     ];
     public  function  offres(){
