@@ -76,16 +76,19 @@ class AntecedentController extends Controller
         $affiliation = Affiliation::where("patient_id", $dossier->patient_id)->latest()->first();
         $ligne_temps = LigneDeTemps::where('dossier_medical_id', $dossier->id)->latest()->first();
         $user = User::find($dossier->patient_id);
-        $activite = ActiviteAmaPatient::create([
-            'activite_ama_id' => 1,
-            'date_cloture' => $request->date,
-            'affiliation_id' => $affiliation ? $affiliation->id : null,
-            'commentaire' => "Ajout d'un antécédent pour le patient {$user->name}",
-            'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
-            'patient_id' => $dossier->patient_id,
-            'etablissement_id' => 4,
-            'statut' => $request->statut,
-        ]);
+        foreach($request->activity_id as $activity){
+            $activite = ActiviteAmaPatient::create([
+                'activite_ama_id' => $activity['id'],
+                'date_cloture' => $request->date,
+                'affiliation_id' => $affiliation ? $affiliation->id : null,
+                'commentaire' => "Ajout d'un antécédent pour le patient {$user->name}",
+                'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
+                'patient_id' => $dossier->patient_id,
+                'etablissement_id' => $request->etablissement_id,
+                'statut' => $request->statut,
+            ]);
+        }
+
 
         $this->updateDossierId($dossier->id);
         $dossier->updateDossier();
