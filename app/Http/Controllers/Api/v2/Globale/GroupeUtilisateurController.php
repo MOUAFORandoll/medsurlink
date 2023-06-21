@@ -17,9 +17,9 @@ class GroupeUtilisateurController extends Controller
     {
         $list = $request->list ?? "";
         $size = $request->size ?? 25;
-        if($list == "all"){
+        if ($list == "all") {
             $groupe_utilisateurs = GroupeUtilisateur::orderBy('nom', 'asc')->get(['id', 'nom']);
-        }else{
+        } else {
             $groupe_utilisateurs = GroupeUtilisateur::withCount('users')->latest()->paginate($size);
         }
         return $this->successResponse($groupe_utilisateurs);
@@ -60,11 +60,24 @@ class GroupeUtilisateurController extends Controller
      */
     public function update(Request $request, $groupe_utilisateur)
     {
-        $this->validate($request, $this->validations(true));
+        $this->validate($request, $this->validations());
+
+        // Récupérer le groupe utilisateur existant
+        $groupe_utilisateur = GroupeUtilisateur::where('id', $groupe_utilisateur)->orWhere("uuid", $groupe_utilisateur)->first();
+
+        // Mettre à jour les champs du groupe utilisateur
+        $groupe_utilisateur->nom = $request->nom;
+        $groupe_utilisateur->description = $request->description;
+        $groupe_utilisateur->save();
+
+        // Mettre à jour les relations avec les utilisateurs
+        $groupe_utilisateur->users()->sync($request->users);
+
         return $this->successResponse($groupe_utilisateur);
     }
 
-    public function assignRole(Request $request, $groupe_utilisateur){
+    public function assignRole(Request $request, $groupe_utilisateur)
+    {
         return $this->successResponse($groupe_utilisateur);
     }
 
@@ -75,10 +88,14 @@ class GroupeUtilisateurController extends Controller
      */
     public function destroy($groupe_utilisateur)
     {
+        // $this->validate($request, $this->validations());
+        $groupe_utilisateur = GroupeUtilisateur::where('id', $groupe_utilisateur)->orWhere("uuid", $groupe_utilisateur)->first();
+        $groupe_utilisateur->delete();
         return $this->successResponse($groupe_utilisateur);
     }
 
-    public function validations($is_update = false){
+    public function validations($is_update = false)
+    {
         $rules = [
             'nom' => 'required',
             'description' => 'required',
