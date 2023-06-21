@@ -73,7 +73,11 @@ class ForgotPasswordController extends Controller
             $email = $request->input()['email'];
             $reponse =    $this->sendMailCode($email);
 
-            return response()->json(['message' =>   $reponse ? 'Un code vous a ete envoye par mail' : 'Verifier votre adresse mail et reessayez'],  $reponse ? 200 : 203);
+            return response()->json([
+
+                'message_fr' =>   $reponse ? 'Un code vous a été envoyé par mail' : 'Vérifier votre adresse mail et reéssayez',
+                'message_en' =>   $reponse ? 'A code has been sent to you by email' : 'Verify your email address and re-enter'
+            ],  $reponse ? 200 : 203);
         } else if ($state == 2) {
 
             $email = $request->input()['email'];
@@ -82,7 +86,8 @@ class ForgotPasswordController extends Controller
 
             return response()->json(
                 [
-                    'message' =>  !empty($reponseVerif) ? 'Code correct' : 'Code incorrect',
+                    'message_fr' =>  !empty($reponseVerif) ? 'Code correct' : 'Code incorrect',
+                    'message_en' =>  !empty($reponseVerif) ? 'Correct code' : 'Incorrect code',
                     'data' => $reponseVerif
                 ],
                 !empty($reponseVerif)  ? 200 : 203
@@ -94,11 +99,18 @@ class ForgotPasswordController extends Controller
             $compte = $request->input()['compte'];
             $reponseUpdate =    $this->updatePasswordUser($email, $password,            $compte);
             // dd($reponseUpdate);
-            return response()->json(['message' =>   $reponseUpdate ? 'OK' : 'Verifier vos informations et reessayez'],  $reponseUpdate ? 200 : 203);
+            return response()->json([
+                'message_fr' =>   $reponseUpdate ? 'OK' : 'Vérifiez vos informations et reessayez',
+
+                'message_en' =>   $reponseUpdate ? 'OK' : 'Check your information and try again'
+
+
+            ],  $reponseUpdate ? 200 : 203);
         } else {
             return response()->json(
                 [
-                    'message' => 'Une erreur est survenue',
+                    'message_fr' => 'Une erreur est survenue',
+                    'message_en' => 'An error has occurred',
                 ],
                 203
             );
@@ -130,8 +142,11 @@ class ForgotPasswordController extends Controller
                     Mail::to($email)->send($mail);
                     return true;
                 } catch (\Swift_TransportException $transportException) {
-                    $message = "L'operation à reussi mais le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
-                    return response()->json(["message" => $message]);
+                    $message_fr = "L'opération à echoue, le mail n'a pas été envoyé. Vérifier votre connexion internet ou contacter l'administrateur";
+                    $message_en = "The operation failed, the email was not sent. Check your internet connection or contact the administrator";
+                    return response()->json(
+                        ["message_fr" => $message_fr, "message_en" => $message_en]
+                    );
                 }
             } else {
                 return false;
