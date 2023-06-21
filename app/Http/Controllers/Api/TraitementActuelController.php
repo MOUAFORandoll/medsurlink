@@ -10,6 +10,10 @@ use App\Models\TraitementActuel;
 use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ActiviteAmaPatient;
+use App\Models\Affiliation;
+use App\Models\LigneDeTemps;
+use App\User;
 
 class TraitementActuelController extends Controller
 {
@@ -70,6 +74,23 @@ class TraitementActuelController extends Controller
                 $query->orderBy('created_at', 'desc');
             }
         ])->whereId($request->get('dossier_medical_id'))->first();
+
+
+        $affiliation = Affiliation::where("patient_id", $dossier->patient_id)->latest()->first();
+        $ligne_temps = LigneDeTemps::where('dossier_medical_id', $dossier->id)->latest()->first();
+        $user = User::find($dossier->patient_id);
+        $activite = ActiviteAmaPatient::create([
+            'activite_ama_id' => 1,
+            'date_cloture' => date('Y-m-d'),
+            'affiliation_id' => $affiliation ? $affiliation->id : null,
+            'commentaire' => "Ajout du traitement actuel pour le patient {$user->name}",
+            'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
+            'patient_id' => $dossier->patient_id,
+            'etablissement_id' => 4,
+            'statut' => $request->statut,
+        ]);
+
+
         foreach ($dossier->traitements as $traitement){
             $traitement->updateTraitementActuel();
         }

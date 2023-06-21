@@ -10,6 +10,10 @@ use App\Traits\DossierTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ActiviteAmaPatient;
+use App\Models\Affiliation;
+use App\Models\LigneDeTemps;
+use App\User;
 use Illuminate\Support\Facades\Validator;
 
 class DossierAllergieController extends Controller
@@ -63,6 +67,21 @@ class DossierAllergieController extends Controller
         $allergiesACreer = $request->get('allergiesACreer');
 
         $dossier = DossierMedical::find($request->get('dossier'));
+
+        $affiliation = Affiliation::where("patient_id", $dossier->patient_id)->latest()->first();
+        $ligne_temps = LigneDeTemps::where('dossier_medical_id', $dossier->id)->latest()->first();
+        $user = User::find($dossier->patient_id);
+        $activite = ActiviteAmaPatient::create([
+            'activite_ama_id' => 1,
+            'date_cloture' => date('Y-m-d'),
+            'affiliation_id' => $affiliation ? $affiliation->id : null,
+            'commentaire' => "Ajout d'une allergie pour le patient {$user->name}",
+            'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
+            'patient_id' => $dossier->patient_id,
+            'etablissement_id' => 4,
+            'statut' => $request->statut,
+        ]);
+
 
 //        if (!is_null($allergiesACreer) or !empty($allergiesACreer)){
 //            foreach ( $allergiesACreer as $allergy)

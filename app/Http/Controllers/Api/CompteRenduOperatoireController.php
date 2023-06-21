@@ -5,9 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\CompteRenduOperatoireRequest;
+use App\Models\ActiviteAmaPatient;
+use App\Models\Affiliation;
 use App\Models\CompteRenduOperatoire;
+use App\Models\DossierMedical;
+use App\Models\LigneDeTemps;
 use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
+use App\User;
 use Carbon\Carbon;
 
 class CompteRenduOperatoireController extends Controller
@@ -39,6 +44,22 @@ class CompteRenduOperatoireController extends Controller
     public function store(CompteRenduOperatoireRequest $request)
     {
         $compteRendu = CompteRenduOperatoire::create($request->all());
+
+        $dossier = DossierMedical::find($request->dossier_medical_id);
+
+        $affiliation = Affiliation::where("patient_id", $dossier->patient_id)->latest()->first();
+        $ligne_temps = LigneDeTemps::where('dossier_medical_id', $dossier->id)->latest()->first();
+        $user = User::find($dossier->patient_id);
+        $activite = ActiviteAmaPatient::create([
+            'activite_ama_id' => 1,
+            'date_cloture' => $request->date_intervention,
+            'affiliation_id' => $affiliation ? $affiliation->id : null,
+            'commentaire' => "Ajout du compte rendu opératoire du patient {$user->name}",
+            'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
+            'patient_id' => $dossier->patient_id,
+            'etablissement_id' => 4,
+            'statut' => $request->statut,
+        ]);
 
         return response()->json(['compteRendu'=>$compteRendu]);
     }

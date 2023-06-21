@@ -5,12 +5,16 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\PersonnalErrors;
 use App\Http\Requests\ResultatRequest;
+use App\Models\ActiviteAmaPatient;
+use App\Models\Affiliation;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\DelaiOperation;
 use App\Models\DossierMedical;
+use App\Models\LigneDeTemps;
 use App\Models\ResultatImagerie;
 use App\Traits\DossierTrait;
 use App\Traits\SmsTrait;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -58,6 +62,21 @@ class ResultatImagerieController extends Controller
         $consultation_medecine_generale = ConsultationMedecineGenerale::latest()->where('dossier_medical_id', $request->dossier_medical_id)->first();
         $dossier = DossierMedical::find($request->dossier_medical_id);
         $delai_operation = DelaiOperation::latest()->where('patient_id', $dossier->patient_id)->first();
+
+        $affiliation = Affiliation::where("patient_id", $dossier->patient_id)->latest()->first();
+        $ligne_temps = LigneDeTemps::where('dossier_medical_id', $dossier->id)->latest()->first();
+        $user = User::find($dossier->patient_id);
+        $activite = ActiviteAmaPatient::create([
+            'activite_ama_id' => 1,
+            'date_cloture' => $request->date,
+            'affiliation_id' => $affiliation ? $affiliation->id : null,
+            'commentaire' => "Ajout du résultat imagerie du patient {$user->name}",
+            'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
+            'patient_id' => $dossier->patient_id,
+            'etablissement_id' => 4,
+            'statut' => $request->statut,
+        ]);
+
         if($request->hasFile('file')) {
             if ($request->file('file')->isValid()) {
                 $resultat = ResultatImagerie::create($request->validated());

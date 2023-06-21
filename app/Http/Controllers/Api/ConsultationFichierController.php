@@ -11,8 +11,12 @@ use App\Traits\SmsTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ActiviteAmaPatient;
+use App\Models\Affiliation;
 use App\Models\ConsultationMedecineGenerale;
 use App\Models\DelaiOperation;
+use App\Models\LigneDeTemps;
+use App\User;
 use Illuminate\Support\ConfigurationUrlParser;
 
 class ConsultationFichierController extends Controller
@@ -84,6 +88,21 @@ class ConsultationFichierController extends Controller
             $this->uploadFile($request, $consultation);
         }
 
+        $affiliation = Affiliation::where("patient_id", $dossier->patient_id)->latest()->first();
+        $ligne_temps = LigneDeTemps::where('dossier_medical_id', $dossier->id)->latest()->first();
+        $user = User::find($dossier->patient_id);
+        $activite = ActiviteAmaPatient::create([
+            'activite_ama_id' => 1,
+            'date_cloture' => $request->date_consultation,
+            'affiliation_id' => $affiliation ? $affiliation->id : null,
+            'commentaire' => "Ajout d'un fichier externe pour le patient {$user->name}",
+            'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
+            'patient_id' => $dossier->patient_id,
+            'etablissement_id' => 4,
+            'statut' => $request->statut,
+        ]);
+
+
         $consultation = ConsultationFichier::with(['dossier','etablissement','files','praticien'])->whereSlug($consultation->slug)->first();
         $this->updateDossierId($consultation->dossier->id);
 
@@ -94,8 +113,8 @@ class ConsultationFichierController extends Controller
                 "patient_id" => $dossier->patient_id,
                 "delai_operationable_id" => $consultation->id,
                 "delai_operationable_type" => ConsultationFichier::class,
-                "date_heure_prevue" => $consultation_medecine_generale->created_at,
-                "date_heure_effectif" => $consultation->created_at,
+                "date_heure_prevue" => $consultation_medecine_generale ? $consultation_medecine_generale->created_at : Carbon::now(),
+                "date_heure_effectif" => $consultation ? $consultation->created_at : Carbon::now(),
                 "observation" => "RAS"
             ]
         );

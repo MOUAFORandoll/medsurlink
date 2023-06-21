@@ -16,6 +16,7 @@ use App\Models\ConsultationMedecineGenerale;
 use App\Models\DelaiOperation;
 use App\Models\DossierMedical;
 use App\Models\LigneDeTemps;
+use App\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -66,18 +67,17 @@ class ResultatLaboController extends Controller
         $ama_activity = ActiviteAmaPatient::where("patient_id", $dossier->patient_id)->latest()->first();
         $affiliation = Affiliation::where("patient_id", $dossier->patient_id)->latest()->first();
         $ligne_temps = LigneDeTemps::where('dossier_medical_id', $dossier->id)->latest()->first();
-
-
-       /*  $activite = ActiviteAmaPatient::create([
-            'activite_ama_id' => $item,
+        $user = User::find($dossier->patient_id);
+        $activite = ActiviteAmaPatient::create([
+            'activite_ama_id' => 1,
             'date_cloture' => $request->date,
-            'affiliation_id' => $affiliation ? $affiliation->id : '',
-            'commentaire' => $request->description,
-            'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : '',
+            'affiliation_id' => $affiliation ? $affiliation->id : null,
+            'commentaire' => "Ajout des résultats de laboratoire du patient {$user->name}",
+            'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
             'patient_id' => $dossier->patient_id,
-            'etablissement_id' => $request->etablissement_id,
+            'etablissement_id' => 4,
             'statut' => $request->statut,
-        ]); */
+        ]);
 
         if($request->hasFile('file')) {
             if ($request->file('file')->isValid()) {
