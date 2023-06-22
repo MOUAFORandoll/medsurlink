@@ -32,7 +32,7 @@ class RegisterCodeSend extends Mailable
     public function build()
     {
         return $this->from('no-reply@medsurlink.com')
-            ->subject(config('app.name') . 'Create Account code')
+            ->subject( 'Create Account code')
             ->markdown('emails.users.codeRegister');
     }
 }
