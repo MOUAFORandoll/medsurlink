@@ -9,6 +9,7 @@ use App\Models\DelaiOperation;
 use App\Models\MedecinAvis;
 use App\Models\Metrique;
 use App\Models\PatientMedecinControle;
+use App\Models\Praticien;
 use App\Models\ResultatImagerie;
 use App\Models\ResultatLabo;
 use App\Models\Souscripteur;
@@ -206,8 +207,9 @@ if(!function_exists('RecuperationMetrique')) {
          * calcul des temps moyen de prise en charge par opérations
          *
          */
-        $all_patients =  Patient::count();
-        $all_souscripteurs =  Souscripteur::count();
+        $all_patients = Patient::count();
+        $all_souscripteurs = Souscripteur::count();
+        $all_praticiens = Praticien::count();
 
         $affiliation_et_affectation_medecin_referents = DelaiOperation::where('delai_operationable_type', PatientMedecinControle::class)->get();
         $affiliation_et_affectation_medecin_referents = DelaiDePriseEnChargeParOperations($affiliation_et_affectation_medecin_referents);
@@ -279,6 +281,7 @@ if(!function_exists('RecuperationMetrique')) {
         $metrique->date_recuperation = $date_recuperation;
         $metrique->all_patients = $all_patients;
         $metrique->all_souscripteurs = $all_souscripteurs;
+        $metrique->all_praticiens = $all_praticiens;
         return $metrique;
     }
 }
