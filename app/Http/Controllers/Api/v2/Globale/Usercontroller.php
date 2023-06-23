@@ -52,10 +52,11 @@ class Usercontroller extends Controller
         );
 
         if ($validator->fails()) {
-            $message = "Veuillez renseigner une adresse mail correcte";
+            $message_fr = "Veuillez renseigner une adresse mail correcte";
+            $message_en = "Please enter a correct email address";
 
             return response()->json(
-                ["message" => $message],
+                ["message_en" => $message_en, "message_fr" => $message_fr],
                 203
             );
         } else {
@@ -65,13 +66,14 @@ class Usercontroller extends Controller
 
             try {
                 $mail = new RegisterCodeSend($code);
-
+                
                 Mail::to($email)->send($mail);
-                return response()->json(["message" => 'Le code vous a ete envoye avec succes', "code" => $code]);
+                return response()->json(["message_fr" => 'Le code vous a été envoyé avec succes', "message_en" => 'The code has been successfully sent to you', "code" => $code]);
             } catch (\Swift_TransportException $transportException) {
-                $message = "L'operation à echoue, le mail n'a pas ete envoye. Verifier votre connexion internet ou contacter l'administrateur";
+                $message_fr = "L'opération à echoue, le mail n'a pas été envoyé. Vérifier votre connexion internet ou contacter l'administrateur";
+                $message_en = "The operation failed, the email was not sent. Check your internet connection or contact the administrator";
                 return response()->json(
-                    ["message" => $message],
+                    ["message_fr" => $message_fr, "message_en" => $message_en],
                     203
                 );
             }
