@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Metrique;
 use App\Models\Patient;
+use App\Models\Praticien;
 use App\Models\RendezVous;
 use App\Models\Souscripteur;
 use Illuminate\Support\Carbon;
@@ -24,7 +25,7 @@ class MetriqueController extends Controller
 
         $metrique = RecuperationMetrique();
         return response()->json([
-            "temps_moyen" => ConversionDesDelais($metrique->temps_moyen), 
+            "temps_moyen" => ConversionDesDelais($metrique->temps_moyen),
             'nbre_patients' => $metrique->nbre_patients, 
             'affiliation_et_affectation_medecin_referents' => ConversionDesDelais($metrique->affiliation_et_affectation_medecin_referents),
             'consultation_medecine_generale' => ConversionDesDelais($metrique->consultation_medecine_generale),
@@ -38,7 +39,8 @@ class MetriqueController extends Controller
             'date_recuperation' => $metrique->date_recuperation,
             'taux_rendez_vous' => round($rendez_vous_effectues/$rendez_vous_all*100, 2)."%",
             'all_patients' => $metrique->all_patients,
-            'all_souscripteurs' => $metrique->all_souscripteurs
+            'all_souscripteurs' => $metrique->all_souscripteurs,
+            'all_praticiens' => $metrique->all_praticiens
         ]);
     }
 
@@ -316,16 +318,19 @@ class MetriqueController extends Controller
 
     public function nbre_users($metrique = "all_patients"){
         $data = collect();
+        $cumules = collect();
         $patient = Patient::orderBy("created_at")->first();
         $date = Carbon::parse($patient->created_at);
-        $titre = $metrique == "all_patients" ? "patients" : "souscripteurs";
-
+        $titre = $metrique == "all_patients" ? "patients" : ($metrique == "all_souscripteurs" ? "souscripteurs" : "praticiens");
+        $effectifCumule = 0;
         for ($j= $date->year; $j <= date('Y'); $j++) {
             if($metrique == "all_patients"){
                 $result = Patient::whereYear('created_at', $j)->selectRaw('MONTH(created_at) as month, COUNT(*) as total')->groupBy('month')->orderBy('month')->get();
 
-            }else{
+            }elseif($metrique == "all_souscripteurs"){
                 $result = Souscripteur::whereYear('created_at', $j)->selectRaw('MONTH(created_at) as month, COUNT(*) as total')->groupBy('month')->orderBy('month')->get();
+            }else{
+                $result = Praticien::whereYear('created_at', $j)->selectRaw('MONTH(created_at) as month, COUNT(*) as total')->groupBy('month')->orderBy('month')->get();
             }
             // Remplir les mois sans patient
             for ($i = 0; $i < 12; $i++) {
@@ -338,6 +343,23 @@ class MetriqueController extends Controller
                 }
             }
 
+            foreach($result as $res){
+                $effectifCumule += $res->total;
+                $res->cumules = $effectifCumule;
+            }
+
+            /**
+             * Calcul des effectifs cumulés
+             */
+            $result_cumules = $result->map(function($item){ return $item->cumules;});
+            $annee_cumules = new \stdClass();
+            $annee_cumules->label = "Evolution cumulés des {$titre} en {$j}";
+            $annee_cumules->type = "line";
+            $annee_cumules->data = $result_cumules;
+            $annee_cumules->borderColor = '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
+            $annee_cumules->borderWidth = 3;
+            $cumules->push($annee_cumules);
+
             $result = $result->map(function($item){ return $item->total;});
             $annee = new \stdClass();
             $annee->label = "Evolution des {$titre} en {$j}";
@@ -346,7 +368,8 @@ class MetriqueController extends Controller
             $annee->borderColor = '#' . str_pad(dechex(mt_rand(0, 0xFFFFFF)), 6, '0', STR_PAD_LEFT);
             $annee->borderWidth = 3;
             $data->push($annee);
+
         }
-        return["data" => $data, "debut" => $date->year, "fin" => date('Y')];
+        return["data" => $data, "debut" => $date->year, "fin" => date('Y'), 'cumules' => $cumules];
     }
 }
