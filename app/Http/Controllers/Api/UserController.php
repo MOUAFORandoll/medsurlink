@@ -56,17 +56,17 @@ class UserController extends Controller
             $query->whereIn('name', ['patient', 'souscripteur']);
         })->where(function ($query) use ($search) {
             $query->whereHas('patient', function ($query) use ($search) {
-                $query->where(DB::raw("lower(nom)"), 'like',  '%'.$search.'%')
-                ->orwhere(DB::raw("lower(prenom)"), 'like',  '%'.$search.'%')
-                ->orwhere(DB::raw("lower(email)"), 'like',  '%'.$search.'%')
-                ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$search.'%')
-                ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$search.'%');
+                $query->where(DB::raw("lower(nom)"), 'like',  '%' . $search . '%')
+                    ->orwhere(DB::raw("lower(prenom)"), 'like',  '%' . $search . '%')
+                    ->orwhere(DB::raw("lower(email)"), 'like',  '%' . $search . '%')
+                    ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%' . $search . '%')
+                    ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%' . $search . '%');
             })->orWhereHas('souscripteur', function ($query) use ($search) {
-                $query->where(DB::raw("lower(nom)"), 'like',  '%'.$search.'%')
-                ->orwhere(DB::raw("lower(prenom)"), 'like',  '%'.$search.'%')
-                ->orwhere(DB::raw("lower(email)"), 'like',  '%'.$search.'%')
-                ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%'.$search.'%')
-                ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%'.$search.'%');
+                $query->where(DB::raw("lower(nom)"), 'like',  '%' . $search . '%')
+                    ->orwhere(DB::raw("lower(prenom)"), 'like',  '%' . $search . '%')
+                    ->orwhere(DB::raw("lower(email)"), 'like',  '%' . $search . '%')
+                    ->orwhere(DB::raw('CONCAT_WS(" ", nom, prenom)'), 'like',  '%' . $search . '%')
+                    ->orwhere(DB::raw('CONCAT_WS(" ", prenom, nom)'), 'like',  '%' . $search . '%');
             });
         })->paginate($size);
 
@@ -633,5 +633,76 @@ class UserController extends Controller
     public function consentement($souscripteur_slug, $patient_slug)
     {
         return route('consentement.patient', ['souscripteur_slug' => $souscripteur_slug, 'patient_slug' => $patient_slug]);
+    }
+
+    public function calculerDureeMoyenneRoles()
+    {
+        $souscripteurRoleId = DB::table('roles')->where('name', 'Souscripteur')->value('id');
+        $praticienRoleId = DB::table('roles')->where('name', 'Praticien')->value('id');
+        $patientRoleId = DB::table('roles')->where('name', 'Patient')->value('id');
+
+        $souscripteurDureeTotale = DB::table('time_activites')
+            ->where('slug', '!=', 'deleted')
+            ->whereIn('user_id', function ($query) use ($souscripteurRoleId) {
+                $query->select('model_id')
+                    ->from('model_has_roles')
+                    ->where('role_id', $souscripteurRoleId);
+            })
+            ->sum(DB::raw('TIME_TO_SEC(TIMEDIFF(`stop`, `start`))'));
+
+        $praticienDureeTotale = DB::table('time_activites')
+            ->where('slug', '!=', 'deleted')
+            ->whereIn('user_id', function ($query) use ($praticienRoleId) {
+                $query->select('model_id')
+                    ->from('model_has_roles')
+                    ->where('role_id', $praticienRoleId);
+            })
+            ->sum(DB::raw('TIME_TO_SEC(TIMEDIFF(`stop`, `start`))'));
+
+        $patientDureeTotale = DB::table('time_activites')
+            ->where('slug', '!=', 'deleted')
+            ->whereIn('user_id', function ($query) use ($patientRoleId) {
+                $query->select('model_id')
+                    ->from('model_has_roles')
+                    ->where('role_id', $patientRoleId);
+            })
+            ->sum(DB::raw('TIME_TO_SEC(TIMEDIFF(`stop`, `start`))'));
+
+        $souscripteurNombreActivites = DB::table('time_activites')
+            ->where('slug', '!=', 'deleted')
+            ->whereIn('user_id', function ($query) use ($souscripteurRoleId) {
+                $query->select('model_id')
+                    ->from('model_has_roles')
+                    ->where('role_id', $souscripteurRoleId);
+            })
+            ->count();
+
+        $praticienNombreActivites = DB::table('time_activites')
+            ->where('slug', '!=', 'deleted')
+            ->whereIn('user_id', function ($query) use ($praticienRoleId) {
+                $query->select('model_id')
+                    ->from('model_has_roles')
+                    ->where('role_id', $praticienRoleId);
+            })
+            ->count();
+
+        $patientNombreActivites = DB::table('time_activites')
+            ->where('slug', '!=', 'deleted')
+            ->whereIn('user_id', function ($query) use ($patientRoleId) {
+                $query->select('model_id')
+                    ->from('model_has_roles')
+                    ->where('role_id', $patientRoleId);
+            })
+            ->count();
+
+        $souscripteurDureeMoyenne = ($souscripteurNombreActivites > 0) ? ($souscripteurDureeTotale / $souscripteurNombreActivites) : 0;
+        $praticienDureeMoyenne = ($praticienNombreActivites > 0) ? ($praticienDureeTotale / $praticienNombreActivites) : 0;
+        $patientDureeMoyenne = ($patientNombreActivites > 0) ? ($patientDureeTotale / $patientNombreActivites) : 0;
+
+        return [
+            'Souscripteur' => gmdate('H:i:s', $souscripteurDureeMoyenne),
+            'Praticien' => gmdate('H:i:s', $praticienDureeMoyenne),
+            'Patient' => gmdate('H:i:s', $patientDureeMoyenne),
+        ];
     }
 }

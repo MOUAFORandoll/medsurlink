@@ -43,7 +43,7 @@ Route::get("v2/roles/groupes", 'Api\v2\Globale\RoleController@groupesRoles')->mi
 //Route::resource('partenaire','Api\PartenaireController');
 
 Route::get('impression/facture-offre/{commande_id}', function ($commande_id) {
-    
+
     return response()->json(['link' => route('facture.offre', $commande_id)]);
 });
 // Route::get('visualiser-consultation-medecine/{slug}', function ($slug) {
@@ -392,6 +392,8 @@ Route::prefix('v1')->middleware(['auth:api', 'role:Admin|Gestionnaire|Praticien|
     Route::get('metriques/nbre_users/{metrique}/annee', 'Api\v1\MetriqueController@nbre_users');
 
     Route::get('/timeactivities', 'Api\PraticienController@timeActivities');
+
+    // calculerDureeMoyenneRoles
     // timeActivities
 
 
@@ -442,6 +444,7 @@ Route::group(['middleware' => ['auth:api', 'role:Admin|Gestionnaire|Praticien|Me
     Route::get('/timeactivities', 'Api\PraticienController@timeActivities');
 
     Route::get('/lastestaffiliation', 'Api\AffiliationController@getLastestAffiliation');
+    Route::get('/duree-moyenne', 'Api\UserController@calculerDureeMoyenneRoles');
 
     Route::resource('association', 'Api\AssociationController');
     Route::resource('facture-avis', 'Api\FactureAvisController');
