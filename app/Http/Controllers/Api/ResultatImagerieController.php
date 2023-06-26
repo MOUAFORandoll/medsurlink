@@ -66,16 +66,19 @@ class ResultatImagerieController extends Controller
         $affiliation = Affiliation::where("patient_id", $dossier->patient_id)->latest()->first();
         $ligne_temps = LigneDeTemps::where('dossier_medical_id', $dossier->id)->latest()->first();
         $user = User::find($dossier->patient_id);
-        $activite = ActiviteAmaPatient::create([
-            'activite_ama_id' => 1,
-            'date_cloture' => $request->date,
-            'affiliation_id' => $affiliation ? $affiliation->id : null,
-            'commentaire' => "Ajout du résultat imagerie du patient {$user->name}",
-            'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
-            'patient_id' => $dossier->patient_id,
-            'etablissement_id' => 4,
-            'statut' => $request->statut,
-        ]);
+
+        foreach(json_decode($request->activity_id) as $activity_id){
+            $activite = ActiviteAmaPatient::create([
+                'activite_ama_id' => $activity_id->id,
+                'date_cloture' => $request->date,
+                'affiliation_id' => $affiliation ? $affiliation->id : null,
+                'commentaire' => "Ajout des résultats imagerie du patient {$user->name}",
+                'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
+                'patient_id' => $dossier->patient_id,
+                'etablissement_id' => $request->etablissement_id,
+                'statut' => $request->statut,
+            ]);
+        }
 
         if($request->hasFile('file')) {
             if ($request->file('file')->isValid()) {

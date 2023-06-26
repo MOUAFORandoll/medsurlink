@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActiviteAmaPatient;
+use App\Models\ActivitesControle;
 use App\Models\Affiliation;
 use App\Models\LigneDeTemps;
 use App\User;
@@ -71,16 +72,34 @@ class DossierAllergieController extends Controller
         $affiliation = Affiliation::where("patient_id", $dossier->patient_id)->latest()->first();
         $ligne_temps = LigneDeTemps::where('dossier_medical_id', $dossier->id)->latest()->first();
         $user = User::find($dossier->patient_id);
-        $activite = ActiviteAmaPatient::create([
-            'activite_ama_id' => 1,
-            'date_cloture' => date('Y-m-d'),
-            'affiliation_id' => $affiliation ? $affiliation->id : null,
-            'commentaire' => "Ajout d'une allergie pour le patient {$user->name}",
-            'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
-            'patient_id' => $dossier->patient_id,
-            'etablissement_id' => 4,
-            'statut' => $request->statut,
-        ]);
+        foreach($request->activity_id as $activity_id){
+            if(auth()->user()->hasrole("Medecin controle")){
+                $activite = ActivitesControle::create([
+                    "activite_id" => $activity_id['id'],
+                    "patient_id" => $dossier->patient_id,
+                    'etablissement_id' => $request->etablissement_id,
+                    'affiliation_id' => $affiliation ? $affiliation->id : null,
+                    'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
+                    "creator" => auth()->user()->id,
+                    "commentaire" => "Ajout d'une allergie pour le patient {$user->name}",
+                    "statut" => $request->statut,
+                    "date_cloture" => $request->date_cloture
+                ]);
+
+            }else{
+                $activite = ActiviteAmaPatient::create([
+                    'activite_ama_id' => $activity_id['id'],
+                    'date_cloture' => date('Y-m-d'),
+                    'affiliation_id' => $affiliation ? $affiliation->id : null,
+                    'commentaire' => "Ajout d'une allergie pour le patient {$user->name}",
+                    'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
+                    'patient_id' => $dossier->patient_id,
+                    'etablissement_id' => $request->etablissement_id,
+                    'statut' => $request->statut,
+                ]);
+            }
+        }
+
 
 
 //        if (!is_null($allergiesACreer) or !empty($allergiesACreer)){

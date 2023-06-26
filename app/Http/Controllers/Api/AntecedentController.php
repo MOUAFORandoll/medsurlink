@@ -10,6 +10,7 @@ use App\Traits\DossierTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActiviteAmaPatient;
+use App\Models\ActivitesControle;
 use App\Models\Affiliation;
 use App\Models\LigneDeTemps;
 use App\User;
@@ -77,16 +78,31 @@ class AntecedentController extends Controller
         $ligne_temps = LigneDeTemps::where('dossier_medical_id', $dossier->id)->latest()->first();
         $user = User::find($dossier->patient_id);
         foreach($request->activity_id as $activity){
-            $activite = ActiviteAmaPatient::create([
-                'activite_ama_id' => $activity['id'],
-                'date_cloture' => $request->date,
-                'affiliation_id' => $affiliation ? $affiliation->id : null,
-                'commentaire' => "Ajout d'un antécédent pour le patient {$user->name}",
-                'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
-                'patient_id' => $dossier->patient_id,
-                'etablissement_id' => $request->etablissement_id,
-                'statut' => $request->statut,
-            ]);
+            if(auth()->user()->hasrole("Medecin controle")){
+                $activite = ActivitesControle::create([
+                    "activite_id" => $activity['id'],
+                    "patient_id" => $dossier->patient_id,
+                    'etablissement_id' => $request->etablissement_id,
+                    'affiliation_id' => $affiliation ? $affiliation->id : null,
+                    'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
+                    "creator" => auth()->user()->id,
+                    "commentaire" => "Ajout d'un antécédent pour le patient {$user->name}",
+                    "statut" => $request->statut,
+                    "date_cloture" => $request->date_cloture
+                ]);
+
+            }else{
+                $activite = ActiviteAmaPatient::create([
+                    'activite_ama_id' => $activity['id'],
+                    'date_cloture' => $request->date,
+                    'affiliation_id' => $affiliation ? $affiliation->id : null,
+                    'commentaire' => "Ajout d'un antécédent pour le patient {$user->name}",
+                    'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
+                    'patient_id' => $dossier->patient_id,
+                    'etablissement_id' => $request->etablissement_id,
+                    'statut' => $request->statut,
+                ]);
+            }
         }
 
 
