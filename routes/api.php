@@ -445,6 +445,7 @@ Route::group(['middleware' => ['auth:api', 'role:Admin|Gestionnaire|Praticien|Me
 
     Route::get('/lastestaffiliation', 'Api\AffiliationController@getLastestAffiliation');
     Route::get('/duree-moyenne', 'Api\UserController@calculerDureeMoyenneRoles');
+    Route::get('/duree-moyenne-all-roles', 'Api\UserController@calculerDureeMoyenneAllRoles');
 
     Route::resource('association', 'Api\AssociationController');
     Route::resource('facture-avis', 'Api\FactureAvisController');

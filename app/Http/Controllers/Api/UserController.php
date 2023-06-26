@@ -699,10 +699,82 @@ class UserController extends Controller
         $praticienDureeMoyenne = ($praticienNombreActivites > 0) ? ($praticienDureeTotale / $praticienNombreActivites) : 0;
         $patientDureeMoyenne = ($patientNombreActivites > 0) ? ($patientDureeTotale / $patientNombreActivites) : 0;
 
+
+        $souscripteurVariance = DB::table('time_activites')
+            ->where('slug', '!=', 'deleted')
+            ->whereIn('user_id', function ($query) use ($souscripteurRoleId) {
+                $query->select('model_id')
+                    ->from('model_has_roles')
+                    ->where('role_id', $souscripteurRoleId);
+            })
+            ->select(DB::raw('SUM(POW(TIME_TO_SEC(TIMEDIFF(`stop`, `start`)) - \'' . $souscripteurDureeMoyenne . '\', 2))'))
+            ->value([$souscripteurDureeMoyenne]);
+
+        $praticienVariance = DB::table('time_activites')
+            ->where('slug', '!=', 'deleted')
+            ->whereIn('user_id', function ($query) use ($praticienRoleId) {
+                $query->select('model_id')
+                    ->from('model_has_roles')
+                    ->where('role_id', $praticienRoleId);
+            })
+            ->select(DB::raw('SUM(POW(TIME_TO_SEC(TIMEDIFF(`stop`, `start`)) - \'' . $praticienDureeMoyenne . '\', 2))'))
+            ->value([$praticienDureeMoyenne]);
+
+        $patientVariance = DB::table('time_activites')
+            ->where('slug', '!=', 'deleted')
+            ->whereIn('user_id', function ($query) use ($patientRoleId) {
+                $query->select('model_id')
+                    ->from('model_has_roles')
+                    ->where('role_id', $patientRoleId);
+            })
+            ->select(DB::raw('SUM(POW(TIME_TO_SEC(TIMEDIFF(`stop`, `start`)) - \'' . $patientDureeMoyenne . '\', 2))'))
+            ->value([$patientDureeMoyenne]);
+
+
+        $souscripteurEcartType = ($souscripteurNombreActivites > 1) ? sqrt($souscripteurVariance / ($souscripteurNombreActivites - 1)) : 0;
+        $praticienEcartType = ($praticienNombreActivites > 1) ? sqrt($praticienVariance / ($praticienNombreActivites - 1)) : 0;
+        $patientEcartType = ($patientNombreActivites > 1) ? sqrt($patientVariance / ($patientNombreActivites - 1)) : 0;
+
+
         return [
-            'Souscripteur' => gmdate('H:i:s', $souscripteurDureeMoyenne),
-            'Praticien' => gmdate('H:i:s', $praticienDureeMoyenne),
-            'Patient' => gmdate('H:i:s', $patientDureeMoyenne),
+            'Souscripteur' => [
+                'DureeMoyenne' => gmdate('H:i:s', $souscripteurDureeMoyenne),
+                'EcartType' => gmdate('H:i:s', $souscripteurEcartType),
+            ],
+            'Praticien' => [
+                'DureeMoyenne' => gmdate('H:i:s', $praticienDureeMoyenne),
+                'EcartType' => gmdate('H:i:s', $praticienEcartType),
+            ],
+            'Patient' => [
+                'DureeMoyenne' => gmdate('H:i:s', $patientDureeMoyenne),
+                'EcartType' => gmdate('H:i:s', $patientEcartType),
+            ],
         ];
+    }
+
+    public function calculerDureeMoyenneAllRoles()
+    {
+        $roles = DB::table('roles')->get();
+
+        $dureeMoyenneRoles = [];
+
+        foreach ($roles as $role) {
+            $roleId = $role->id;
+
+            $dureeTotale = DB::table('time_activites')
+                ->where('slug', '!=', 'deleted')
+                ->whereIn('user_id', function ($query) use ($roleId) {
+                    $query->select('model_id')
+                        ->from('model_has_roles')
+                        ->where('role_id', $roleId);
+                })
+                ->select(DB::raw('YEAR(`date`) AS year, SEC_TO_TIME(SUM(TIME_TO_SEC(TIMEDIFF(`stop`, `start`)))) AS total_duration'))
+                ->groupBy('year')
+                ->get();
+
+            $dureeMoyenneRoles[$role->name] = $dureeTotale;
+        }
+
+        return $dureeMoyenneRoles;
     }
 }
