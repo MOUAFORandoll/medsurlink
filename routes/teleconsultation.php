@@ -338,6 +338,7 @@ Route::prefix('v2')->namespace('Api\v2\Teleconsultation')->middleware(['client.c
         Route::get('/', 'PrescriptionController@index');
         Route::post('/', 'PrescriptionController@store');
         Route::get('/{prescription}', 'PrescriptionController@show');
+        Route::get('/patient/{patient_id}', 'PrescriptionController@getEprescriptions');
         Route::patch('/{prescription}', 'PrescriptionController@update');
         Route::delete('/{prescription}', 'PrescriptionController@destroy');
     });

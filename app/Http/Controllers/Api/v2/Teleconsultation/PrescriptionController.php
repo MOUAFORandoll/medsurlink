@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v2\Teleconsultation;
 
 use App\Http\Controllers\Controller;
+use App\Models\DossierMedical;
 use App\Services\PatientService;
 use App\Services\PrescriptionService;
 use Illuminate\Http\Request;
@@ -41,6 +42,15 @@ class PrescriptionController extends Controller
     public function show($prescription)
     {
         return $this->successResponse($this->prescription->fetchPrescription($prescription));
+    }
+
+    public function getEprescriptions(Request $request, $patient_id)
+    {
+        $dossier = DossierMedical::whereSlug($patient_id)->latest()->first();
+        if(!is_null($dossier)){
+            $patient_id = $dossier->patient_id;
+        }
+        return $this->successResponse($this->prescription->getEprescriptions($request, $patient_id));
     }
 
 

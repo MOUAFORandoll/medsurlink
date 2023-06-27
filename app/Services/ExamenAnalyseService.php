@@ -2,8 +2,14 @@
 
 namespace App\Services;
 
+use App\Models\ActivitesControle;
+use App\Models\ActivitesMedecinReferent;
+use App\Models\Affiliation;
+use App\Models\DossierMedical;
 use App\Models\LigneDeTemps;
 use App\Traits\RequestService;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use function GuzzleHttp\json_decode;
@@ -136,7 +142,28 @@ class ExamenAnalyseService
      */
     public function createExamenAnalyse($data): string
     {
-        return $this->request('POST', "{$this->path}", $data);
+        //return $this->request('POST', "{$this->path}", $data);
+
+        $examen_analyse = json_decode($this->request('POST', "{$this->path}", $data), true);
+
+        if(isset($examen_analyse['data']['patient_id'])){
+            $affiliation =  LigneDeTemps::find($examen_analyse['data']['ligne_temps_id'])->affiliation;
+            $user = User::find($examen_analyse['data']['patient_id']);
+            $activity = ActivitesMedecinReferent::where('description_fr', "Etablissement d’un Bon de prise en charge / Ordonnance en externe pour un affilié")->first();
+            $activite = ActivitesControle::create([
+                "activite_id" => $activity->id,
+                "patient_id" => $examen_analyse['data']['patient_id'],
+                'etablissement_id' => $examen_analyse['data']['etablissements'][0]['id'],
+                'affiliation_id' => $affiliation ? $affiliation->id : null,
+                'ligne_temps_id' => $examen_analyse['data']['ligne_temps_id'],
+                "creator" => $this->user_id,
+                "commentaire" => "Ajout d'un bulletin d'analyse biologique pour le patient {$user->name}",
+                "statut" => 0,
+                "date_cloture" => Carbon::parse($examen_analyse['data']['date_heure'])->format('Y-m-d')
+            ]);
+        }
+
+        return json_encode($examen_analyse);
     }
 
     /**
