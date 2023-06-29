@@ -172,7 +172,7 @@ class TeleconsultationService
             $ligne_temps = LigneDeTemps::where('dossier_medical_id', $dossier->id)->latest()->first();
             $user = User::find($teleconsultation['data']['patient_id']);
             $activity = ActivitesMedecinReferent::where('description_fr', "Consultation générale préventive")->first();
-            $activite = ActivitesControle::create([
+            ActivitesControle::create([
                 "activite_id" => $activity->id,
                 "patient_id" => $teleconsultation['data']['patient_id'],
                 'etablissement_id' => $teleconsultation['data']['etablissements'][0]['id'],
@@ -183,6 +183,19 @@ class TeleconsultationService
                 "statut" => 0,
                 "date_cloture" => Carbon::parse($teleconsultation['data']['date_heure'])->format('Y-m-d')
             ]);
+            if(isset($teleconsultation['data']['rendez_vous'][0])){
+                ActivitesControle::create([
+                    "activite_id" => $activity->id,
+                    "patient_id" => $teleconsultation['data']['patient_id'],
+                    'etablissement_id' => $teleconsultation['data']['etablissements'][0]['id'],
+                    'affiliation_id' => $affiliation ? $affiliation->id : null,
+                    'ligne_temps_id' => $ligne_temps ? $ligne_temps->id : null,
+                    "creator" => $this->user_id,
+                    "commentaire" => "Ajout d'un rendez-vous pour le patient {$user->name}",
+                    "statut" => 0,
+                    "date_cloture" => Carbon::parse($teleconsultation['data']['rendez_vous'][0]['date'])->format('Y-m-d')
+                ]);
+            }
         }
 
         return json_encode($teleconsultation);

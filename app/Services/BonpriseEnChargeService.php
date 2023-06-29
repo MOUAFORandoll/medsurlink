@@ -160,7 +160,22 @@ class BonpriseEnChargeService
                 "statut" => 0,
                 "date_cloture" => Carbon::parse($bon_prise_en_charge['data']['created_at'])->format('Y-m-d')
             ]);
+            if(isset($bon_prise_en_charge['data']['rendez_vous'][0])){
+
+                ActivitesControle::create([
+                    "activite_id" => $activity->id,
+                    "patient_id" => $bon_prise_en_charge['data']['patient_id'],
+                    'etablissement_id' => $etablissement->id,
+                    'affiliation_id' => $affiliation ? $affiliation->id : null,
+                    'ligne_temps_id' => $bon_prise_en_charge['data']['ligne_temps_id'],
+                    "creator" => $this->user_id,
+                    "commentaire" => "Ajout d'un rendez-vous pour le patient {$user->name}",
+                    "statut" => 0,
+                    "date_cloture" => Carbon::parse($bon_prise_en_charge['data']['rendez_vous'][0]['date'])->format('Y-m-d')
+                ]);
+            }
         }
+        
 
         return json_encode($bon_prise_en_charge);
     }
