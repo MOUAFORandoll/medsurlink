@@ -2,8 +2,15 @@
 
 namespace App\Services;
 
+use App\Models\ActivitesControle;
+use App\Models\ActivitesMedecinReferent;
+use App\Models\Affiliation;
+use App\Models\DossierMedical;
+use App\Models\EtablissementExercice;
 use App\Models\LigneDeTemps;
 use App\Traits\RequestService;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use function GuzzleHttp\json_decode;
@@ -133,7 +140,44 @@ class BonpriseEnChargeService
      */
     public function createBonPriseEnCharge($data): string
     {
-        return $this->request('POST', "{$this->path}", $data);
+        //return $this->request('POST', "{$this->path}", $data);
+
+        $bon_prise_en_charge = json_decode($this->request('POST', "{$this->path}", $data), true);
+
+        if(isset($bon_prise_en_charge['data']['patient_id'])){
+            $affiliation =  LigneDeTemps::find($bon_prise_en_charge['data']['ligne_temps_id'])->affiliation;
+            $etablissement = EtablissementExercice::where('name', "RÉSEAU MEDICASURE")->first();
+            $user = User::find($bon_prise_en_charge['data']['patient_id']);
+            $activity = ActivitesMedecinReferent::where('description_fr', "Etablissement d’un Bon de prise en charge / Ordonnance en externe pour un affilié")->first();
+            $activite = ActivitesControle::create([
+                "activite_id" => $activity->id,
+                "patient_id" => $bon_prise_en_charge['data']['patient_id'],
+                'etablissement_id' => $etablissement->id,
+                'affiliation_id' => $affiliation ? $affiliation->id : null,
+                'ligne_temps_id' => $bon_prise_en_charge['data']['ligne_temps_id'],
+                "creator" => $this->user_id,
+                "commentaire" => "Ajout d'un bon de prise en charge pour le patient {$user->name}",
+                "statut" => 0,
+                "date_cloture" => Carbon::parse($bon_prise_en_charge['data']['created_at'])->format('Y-m-d')
+            ]);
+            if(isset($bon_prise_en_charge['data']['rendez_vous'][0])){
+
+                ActivitesControle::create([
+                    "activite_id" => $activity->id,
+                    "patient_id" => $bon_prise_en_charge['data']['patient_id'],
+                    'etablissement_id' => $etablissement->id,
+                    'affiliation_id' => $affiliation ? $affiliation->id : null,
+                    'ligne_temps_id' => $bon_prise_en_charge['data']['ligne_temps_id'],
+                    "creator" => $this->user_id,
+                    "commentaire" => "Ajout d'un rendez-vous pour le patient {$user->name}",
+                    "statut" => 0,
+                    "date_cloture" => Carbon::parse($bon_prise_en_charge['data']['rendez_vous'][0]['date'])->format('Y-m-d')
+                ]);
+            }
+        }
+        
+
+        return json_encode($bon_prise_en_charge);
     }
 
     /**

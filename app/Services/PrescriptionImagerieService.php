@@ -2,8 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\ActivitesControle;
+use App\Models\ActivitesMedecinReferent;
 use App\Models\LigneDeTemps;
 use App\Traits\RequestService;
+use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use function GuzzleHttp\json_decode;
@@ -108,7 +112,28 @@ class PrescriptionImagerieService
      */
     public function createPrescriptionImagerie($data): string
     {
-        return $this->request('POST', "{$this->path}", $data);
+        //return $this->request('POST', "{$this->path}", $data);
+
+        $prescription = json_decode($this->request('POST', "{$this->path}", $data), true);
+
+        if(isset($prescription['data']['patient_id'])){
+            $affiliation =  LigneDeTemps::find($prescription['data']['ligne_temps_id'])->affiliation;
+            $user = User::find($prescription['data']['patient_id']);
+            $activity = ActivitesMedecinReferent::where('description_fr', "Etablissement d’un Bon de prise en charge / Ordonnance en externe pour un affilié")->first();
+            $activite = ActivitesControle::create([
+                "activite_id" => $activity->id,
+                "patient_id" => $prescription['data']['patient_id'],
+                'etablissement_id' => $prescription['data']['etablissements'][0]['id'],
+                'affiliation_id' => $affiliation ? $affiliation->id : null,
+                'ligne_temps_id' => $prescription['data']['ligne_temps_id'],
+                "creator" => $this->user_id,
+                "commentaire" => "Ajout d'une prescription imagerie pour le patient {$user->name}",
+                "statut" => 0,
+                "date_cloture" => Carbon::parse($prescription['data']['date_heure'])->format('Y-m-d')
+            ]);
+        }
+
+        return json_encode($prescription);
     }
 
     /**
