@@ -266,6 +266,9 @@ class ForgotPasswordController extends Controller
             if (count($patient) > 0) {
                 $listCompte[] = ['titre' => 'patient', 'user_id' => $user->id];
             }
+            if ($user->        hasRole('Patient-Alerte')) {
+                $listCompte[] = ['titre' => 'Patient-Alerte', 'user_id' => $user->id];
+            } 
             $praticien =  Praticien::where('user_id', $user->id)->get();
             if (count($praticien) > 0) {
                 $listCompte[] = ['titre' => 'praticien', 'user_id' => $user->id];

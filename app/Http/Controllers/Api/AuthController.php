@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
-use Psr\Http\Message\ServerRequestInterface; 
+use Psr\Http\Message\ServerRequestInterface;
+
 class AuthController extends AccessTokenController
 {
     /**
@@ -82,7 +83,7 @@ class AuthController extends AccessTokenController
             $permissions = $user->roles->flatMap(function ($role) {
                 return $role->permissions;
             })->merge($user->all_permissions)->unique('id');
-            if(!$user->hasRole('Patient-Alerte')){
+            if (!$user->hasRole('Patient-Alerte')) {
                 $user->assignRole('Patient-Alerte');
             }
             // $permissionName = ($permissions->pluck('name'));
@@ -152,7 +153,8 @@ class AuthController extends AccessTokenController
         $user->unread_notifications = $user->unreadNotifications()->latest()->get();
         $user->unread_notifications = $user->unreadNotifications->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
         $user['permissions'] = $permissions->pluck('name');
-        $tokenInfo->put('token_expires_at', Carbon::parse()->addSeconds(3600));
+        // $tokenInfo->put('token_expires_at', Carbon::parse()->addSeconds(3600));
+        $tokenInfo->put('token_expires_at', Carbon::parse()->addSeconds(86400));
         $tokenInfo->put('user', $user);
         $tokenInfo->put('access_token', $token);
         $status = getStatus();
@@ -219,7 +221,7 @@ class AuthController extends AccessTokenController
     {
         $user = auth()->user();
         $access_token =  $user->createToken($request->client_secret);
-        return ['access_token' => $access_token->accessToken, /* 'refresh_token' => $access_token->refreshToken */];
+        return ['access_token' => $access_token->accessToken, 'token_expires_at' => Carbon::parse()->addSeconds(86400) /* 'refresh_token' => $access_token->refreshToken */];
     }
 
     public function me()
