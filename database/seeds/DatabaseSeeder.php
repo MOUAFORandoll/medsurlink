@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
             // ExamenClinicSeeder::class,
             // ExamenComplementaireSeeder::class,
             // OtherComplementaireSeeder::class,
+            // OffreItemSeeder::class,
+
             OffrePackageSeeder::class,
         ]);
     }

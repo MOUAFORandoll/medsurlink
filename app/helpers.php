@@ -151,6 +151,8 @@ if (!function_exists('getStatusUserRole')) {
             return response()->json(['auteurable_user' => $user->pharmacien]);
         } elseif ($roleName == "Patient-Alerte") {
             return response()->json(['auteurable_user' => $user]);
+        } elseif ($roleName == "Directeur") {
+            return response()->json(['auteurable_user' => $user]);
         }
     }
 }

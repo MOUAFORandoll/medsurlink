@@ -16,13 +16,15 @@ class UserService
     public function __construct()
     {
     }
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $size = $request->size ? $request->size : 10;
         $users = User::latest()->paginate($size);
         return $users;
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
 
         $user = User::create([
             'nom' => $request->nom,
@@ -32,32 +34,38 @@ class UserService
             'ville' => $request->ville,
             'password' => Hash::make($request->password)
         ]);
-        
-        $user->assignRole('Patient-Alerte');
+        //
+        if ($request->typeCompte == 0 || $request->typeCompte == null) {
+            $user->assignRole('Patient-Alerte');
+        }
+        if ($request->typeCompte == 1) {
+            $user->assignRole('Directeur');
+        }
+
+
 
         return $user;
     }
 
-    public function show($user){
+    public function show($user)
+    {
 
         $user = User::findOrFail($user);
         return $user;
-
     }
 
 
-    public function update(Request $request, $user){
+    public function update(Request $request, $user)
+    {
 
         return $user;
-
     }
 
-    public function destroy($user){
+    public function destroy($user)
+    {
 
         $user = User::findOrFail($user);
         $user->delete();
         return $user;
-
     }
-
 }

@@ -86,6 +86,7 @@ class AuthController extends AccessTokenController
             if (!$user->hasRole('Patient-Alerte')) {
                 $user->assignRole('Patient-Alerte');
             }
+         
             // $permissionName = ($permissions->pluck('name'));
             // $user->all_permissions = $user->all_permissions->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name']);
             $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name', 'permissions']);

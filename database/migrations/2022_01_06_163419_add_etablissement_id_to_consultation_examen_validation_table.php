@@ -14,7 +14,7 @@ class AddEtablissementIdToConsultationExamenValidationTable extends Migration
     public function up()
     {
         Schema::table('consultation_examen_validation', function (Blueprint $table) {
-            $table->unsignedBigInteger('etablissement_id');
+            $table->unsignedBigInteger('etablissement_id')->nullable();
             $table->foreign('etablissement_id')->references('id')->on('etablissement_exercices')->onDelete('RESTRICT')->onUpdate('RESTRICT');
         });
     }
