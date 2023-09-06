@@ -35,12 +35,12 @@ class UserService
             'password' => Hash::make($request->password)
         ]);
         //
-        // if ($request->typeCompte == 0 || $request->typeCompte == null) {
+        if ($request->typeCompte == 0 || $request->typeCompte == null) {
             $user->assignRole('Patient-Alerte');
-        // }
-        // if ($request->typeCompte == 1) {
-        //     $user->assignRole('Directeur');
-        // }
+        }
+        if ($request->typeCompte == 1) {
+            $user->assignRole('Directeur');
+        }
 
 
 

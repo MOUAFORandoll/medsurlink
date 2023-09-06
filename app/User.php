@@ -53,6 +53,7 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
  * @property string $telephone
  * @property string|null $email
  * @property string|null $codeR
+ * @property string|null $codeOTP
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string $slug
@@ -144,7 +145,7 @@ class User extends Authenticatable implements HasMedia
     use Sluggable;
     use SluggableScopeHelpers;
     use SlugRoutable;
-    use RestrictSoftDeletes;
+    use RestrictSoftDeletes, HasApiTokens;
 
 
     protected $guard_name = 'api';
@@ -172,6 +173,7 @@ class User extends Authenticatable implements HasMedia
         'slack',
         'decede',
         'codeR', // Permet de reinitialiser le mot de passe sur le mobile
+        'codeOTP' // permet la connection OTP
 
     ];
 
@@ -435,6 +437,4 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->belongsToMany(GroupeUtilisateur::class);
     }
-
-
 }

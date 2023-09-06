@@ -83,10 +83,10 @@ class AuthController extends AccessTokenController
             $permissions = $user->roles->flatMap(function ($role) {
                 return $role->permissions;
             })->merge($user->all_permissions)->unique('id');
-            if (!$user->hasRole('Patient-Alerte')) {
-                $user->assignRole('Patient-Alerte');
-            }
-         
+            // if (!$user->hasRole('Patient-Alerte')) {
+            //     $user->assignRole('Patient-Alerte');
+            // }
+
             // $permissionName = ($permissions->pluck('name'));
             // $user->all_permissions = $user->all_permissions->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name']);
             $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name', 'permissions']);
