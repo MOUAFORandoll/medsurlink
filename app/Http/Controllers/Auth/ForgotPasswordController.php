@@ -98,14 +98,18 @@ class ForgotPasswordController extends Controller
             $password = $request->input()['password'];
             $compte = $request->input()['compte'];
             $reponseUpdate =    $this->updatePasswordUser($email, $password,            $compte);
-            // dd($reponseUpdate);
+            $message_fr =   $reponseUpdate == 'ok' ? 'OK' : ($reponseUpdate == 'exist' ? 'Vous avez deja utilisé ce mot de passe' : 'Vérifiez vos informations et reessayez');
+
+            $message_en =
+                $reponseUpdate == 'ok' ? 'OK' : ($reponseUpdate == 'exist' ? 'You have already used this password' : 'Check your information and try again');
+
             return response()->json([
-                'message_fr' =>   $reponseUpdate ? 'OK' : 'Vérifiez vos informations et reessayez',
+                'message_fr' =>   $message_fr,
 
-                'message_en' =>   $reponseUpdate ? 'OK' : 'Check your information and try again'
+                'message_en' =>   $message_en
 
 
-            ],  $reponseUpdate ? 200 : 203);
+            ],  $reponseUpdate == 'ok' ? 200 : 203);
         } else {
             return response()->json(
                 [
@@ -200,6 +204,7 @@ class ForgotPasswordController extends Controller
                 false;
         } else {
             $user = User::where('id', $idCompte)->first();
+
             if ($user != null) {
                 // $users = User::whereEmail($email)->get();
                 $exist = $this->validateForPassportPasswordGrant($email, $password);
@@ -211,18 +216,18 @@ class ForgotPasswordController extends Controller
                     $user->save();
 
                     return
-                        true;
+                        'ok';
                 } else {
 
 
                     return
-                        false;
+                        'exist';
                 }
             } else {
 
 
                 return
-                    false;
+                    'no_user';
             }
         }
     }
@@ -258,29 +263,32 @@ class ForgotPasswordController extends Controller
         foreach ($users as $user) {
             $souscripteur =  Souscripteur::where('user_id', $user->id)->get();
 
-            if (count($souscripteur) > 0) {
-                $listCompte[] = ['titre' => 'souscripteur', 'user_id' => $user->id];
-            }
+            // if (count($souscripteur) > 0) {
+            //     $listCompte[] = ['titre' => 'souscripteur', 'user_id' => $user->id];
+            // }
 
-            $patient =  Patient::where('user_id', $user->id)->get();
-            if (count($patient) > 0) {
-                $listCompte[] = ['titre' => 'patient', 'user_id' => $user->id];
-            }
-            if ($user->        hasRole('Patient-Alerte')) {
+            // $patient =  Patient::where('user_id', $user->id)->get();
+            // if (count($patient) > 0) {
+            //     $listCompte[] = ['titre' => 'patient', 'user_id' => $user->id];
+            // }
+            if ($user->hasRole('Patient-Alerte')) {
                 $listCompte[] = ['titre' => 'Patient-Alerte', 'user_id' => $user->id];
-            } 
-            $praticien =  Praticien::where('user_id', $user->id)->get();
-            if (count($praticien) > 0) {
-                $listCompte[] = ['titre' => 'praticien', 'user_id' => $user->id];
             }
-            $medecincontrole =  MedecinControle::where('user_id', $user->id)->get();
-            if (count($medecincontrole) > 0) {
-                $listCompte[] = ['titre' => 'medecin controle', 'user_id' => $user->id];
+            if ($user->hasRole('Directeur')) {
+                $listCompte[] = ['titre' => 'Directeur', 'user_id' => $user->id];
             }
-            $assistante =  Assistante::where('user_id', $user->id)->get();
-            if (count($assistante) > 0) {
-                $listCompte[] = ['titre' => 'assistante', 'user_id' => $user->id];
-            }
+            // $praticien =  Praticien::where('user_id', $user->id)->get();
+            // if (count($praticien) > 0) {
+            //     $listCompte[] = ['titre' => 'praticien', 'user_id' => $user->id];
+            // }
+            // $medecincontrole =  MedecinControle::where('user_id', $user->id)->get();
+            // if (count($medecincontrole) > 0) {
+            //     $listCompte[] = ['titre' => 'medecin controle', 'user_id' => $user->id];
+            // }
+            // $assistante =  Assistante::where('user_id', $user->id)->get();
+            // if (count($assistante) > 0) {
+            //     $listCompte[] = ['titre' => 'assistante', 'user_id' => $user->id];
+            // }
             // $listCompte[]
             //     = $assistante;
         }
