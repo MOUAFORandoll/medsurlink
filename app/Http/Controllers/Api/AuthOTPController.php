@@ -93,7 +93,7 @@ class AuthOTPController extends AccessTokenController
             // Then we just add the user to the response before returning it.
             $email = $request->input()['email'];
             $type  = $request->input()['type'];
-            $code = strval(rand(00000, 99999));
+            $code = strval(rand(10000, 99999));
             $userAccount = null;
             $users = User::whereEmail($email)->get();
             if (count($users) == 0) {
@@ -138,7 +138,8 @@ class AuthOTPController extends AccessTokenController
                 $message_fr = "L'opération à echoue, le mail n'a pas été envoyé. Vérifier votre connexion internet ou contacter l'administrateur";
                 $message_en = "The operation failed, the email was not sent. Check your internet connection or contact the administrator";
                 return response()->json(
-                    ["message_fr" => $message_fr, "message_en" => $message_en]
+                    ["message_fr" => $message_fr, "message_en" => $message_en],
+                    203
                 );
             }
         }
@@ -171,7 +172,7 @@ class AuthOTPController extends AccessTokenController
             foreach ($users as $usera) {
                 if (strval($codeOTP) == strval($usera->codeOTP)) {
 
-                    $user = $usera; 
+                    $user = $usera;
                     break;
                 }
             }
