@@ -145,6 +145,17 @@ class AuthOTPController extends AccessTokenController
         }
     }
 
+    public function test()
+    {
+
+        $email =
+            'hari.randoll@gmail.com';
+
+        $mail = new OTPCodeSend('0000');
+        Mail::to($email)->send($mail);
+
+        return response()->json(['status' => 'ok']);
+    }
 
     public function verifyOTPCode(Request $request)
     {
@@ -246,10 +257,6 @@ class AuthOTPController extends AccessTokenController
             return $tokenInfo;
         }
     }
-
-
-
-    
 }
 
 /**

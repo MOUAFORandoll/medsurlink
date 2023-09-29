@@ -87,6 +87,16 @@ return [
     'username' => env('MAIL_USERNAME'),
 
     'password' => env('MAIL_PASSWORD'),
+    // 'mailers' => [
+    //     'smtp' => [
+    //         'transport' => 'smtp',
+    //         'host' => 'smtp.gmail.com',
+    //         'port' => 587,
+    //         'encryption' => 'tls',
+    //         'username' => 'your@gmail.com',
+    //         'password' => 'your_password',
+    //     ],
+    // ],
 
     /*
     |--------------------------------------------------------------------------
