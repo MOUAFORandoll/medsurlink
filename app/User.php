@@ -172,14 +172,9 @@ class User extends Authenticatable implements HasMedia
         'isNotice', // Permet de mentionner que le medecin est un medecin avis
         'slack',
         'decede',
-<<<<<<< HEAD
         'codeR', // Permet de reinitialiser le mot de passe sur le mobile
-        'codeOTP' // permet la connection OTP
-
-=======
-        'codeR',
->>>>>>> eb48087e8dd32f1f379943a95c2cad5c28bfeeb9
-    ];
+        'codeOTP' // permet la connection     
+];
 
     /**
      * The relations restricting model deletion
