@@ -1,0 +1,20 @@
+[2023-09-22 09:57:38] local.ERROR: A non-numeric value encountered {"exception":"[object] (ErrorException(code: 0): A non-numeric value encountered at C:\\Dev\\Medsur\\medicalink-app\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php:91)
+[stacktrace]
+#0 C:\\Dev\\Medsur\\medicalink-app\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(91): Illuminate\\Foundation\\Bootstrap\\HandleExceptions->handleError(2, 'A non-numeric v...', 'C:\\\\Dev\\\\Medsur\\\\m...', 91, Array)
+#1 C:\\Dev\\Medsur\\medicalink-app\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\ServeCommand.php(44): Illuminate\\Foundation\\Console\\ServeCommand->port()
+#2 [internal function]: Illuminate\\Foundation\\Console\\ServeCommand->handle()
+#3 C:\\Dev\\Medsur\\medicalink-app\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(32): call_user_func_array(Array, Array)
+#4 C:\\Dev\\Medsur\\medicalink-app\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(90): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#5 C:\\Dev\\Medsur\\medicalink-app\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(34): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#6 C:\\Dev\\Medsur\\medicalink-app\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(576): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#7 C:\\Dev\\Medsur\\medicalink-app\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(183): Illuminate\\Container\\Container->call(Array)
+#8 C:\\Dev\\Medsur\\medicalink-app\\vendor\\symfony\\console\\Command\\Command.php(255): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#9 C:\\Dev\\Medsur\\medicalink-app\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(170): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#10 C:\\Dev\\Medsur\\medicalink-app\\vendor\\symfony\\console\\Application.php(1021): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 C:\\Dev\\Medsur\\medicalink-app\\vendor\\symfony\\console\\Application.php(275): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Foundation\\Console\\ServeCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#12 C:\\Dev\\Medsur\\medicalink-app\\vendor\\symfony\\console\\Application.php(149): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#13 C:\\Dev\\Medsur\\medicalink-app\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(90): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#14 C:\\Dev\\Medsur\\medicalink-app\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(133): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#15 C:\\Dev\\Medsur\\medicalink-app\\artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#16 {main}
+"} 
