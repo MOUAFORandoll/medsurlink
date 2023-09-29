@@ -73,7 +73,7 @@ class Hospitalisation extends Model
     public  function  motifs(){
         return $this->belongsToMany(Motif::class,'hospitalisation_motif','hospitalisation_id','motif_id');
     }
-
+    
     public function etablissement(){
         return $this->belongsTo(EtablissementExercice::class,'etablissement_id','id');
     }
