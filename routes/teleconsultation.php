@@ -13,7 +13,8 @@
 */
 
 Route::post('v2/oauth/token', 'Api\AuthController@auth');
-Route::post('v2/oauth/otp', 'Api\AuthOTPController@authOTP');
+Route::post( 'v2/oauth/otp', 'Api\AuthOTPController@authOTP');
+Route::get('v2/oauth/test', 'Api\AuthOTPController@test');
 Route::post('v2/oauth/otp/token', 'Api\AuthOTPController@verifyOTPCode');
 
 /**

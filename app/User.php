@@ -173,9 +173,8 @@ class User extends Authenticatable implements HasMedia
         'slack',
         'decede',
         'codeR', // Permet de reinitialiser le mot de passe sur le mobile
-        'codeOTP' // permet la connection     
+      'codeOTP' // permet la connection     
 ];
-
     /**
      * The relations restricting model deletion
      */

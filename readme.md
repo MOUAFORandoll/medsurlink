@@ -126,20 +126,25 @@ php artisan migrate --path=/database/migrations/2023_03_28_101422_add_last_activ
 
 php artisan migrate --path=/database/migrations/2023_04_05_160242_add_fields_to_users_table.php
 
-
 php artisan migrate --path=/database/migrations/2023_05_03_160904_create_features_table.php
 
 php artisan db:seed --class=FeaturesTableSeeder
 
 php artisan migrate --path=/database/migrations/2023_05_18_122855_permission_user_table.php
+
 ## nouvel alerte
+
 php artisan db:seed --class=RoleTableSeeder
 php artisan migrate --path=/database/migrations/2023_05_25_111108_add_sexe_to_users_table.php
 
 ## table message
+
 php artisan migrate --path=/database/migrations/2023_05_26_112723_create_messages_table.php
 
 ## groupes et roles
+
 php artisan migrate --path=/database/migrations/2023_06_05_092723_create_groupe_utilisateurs_table.php
 
+// add fiel otpcode
+php artisan migrate --path=database/migrations/2023_09_06_160242_add_fields_otp_to_users_table.php
 php artisan db:seed --class=GroupeUtilisateurSeeder
