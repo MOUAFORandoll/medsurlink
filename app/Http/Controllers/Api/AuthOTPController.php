@@ -255,7 +255,7 @@ class AuthOTPController extends AccessTokenController
             $tokenInfo->put('token_type', "Bearer");
             $tokenInfo->put('expires_in', 172800);
             $tokenInfo->put('access_token', $token);
-            $tokenInfo->put('token_expires_at', Carbon::parse()->addSeconds(86400));
+            $tokenInfo->put('token_expires_at', Carbon::parse()->addSeconds(172800));
             $tokenInfo->put('user', $user);
             $status = getStatus();
             defineAsAuthor($status->getOriginalContent()['auteurable_type'], $status->getOriginalContent()['auteurable_id'], 'Connexion');
