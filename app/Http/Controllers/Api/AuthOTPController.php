@@ -207,17 +207,15 @@ class AuthOTPController extends AccessTokenController
                 return $role->permissions;
             })->merge($user->all_permissions)->unique('id');
 
-            $user->codeOTP =  null;
+
             $user->save();
             // $permissionName = ($permissions->pluck('name'));
             // $user->all_permissions = $user->all_permissions->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name']);
             $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name', 'permissions']);
             $user = $user->makeHidden(['created_at', 'updated_at', 'email_verified_at', 'adresse', 'quartier', 'deleted_at', 'all_permissions']);
-            $user->unread_notifications = $user->unreadNotifications()->latest()->get();
-            $user->unread_notifications = $user->unreadNotifications->makeHidden(['updated_at', 'pivot', 'guard_name', 'notifiable_type', 'read_at']);
             $user['permissions'] = $permissions->pluck('name');
 
-
+            // $user->codeOTP =  null;
             // $usere = Auth::user();
             // $token = $usere->createToken('MonRefreshToken');
             // // $tokenResponse = parent::issueToken($request);
@@ -258,7 +256,7 @@ class AuthOTPController extends AccessTokenController
             $tokenInfo->put('token_expires_at', Carbon::parse()->addSeconds(172800));
             $tokenInfo->put('user', $user);
             $status = getStatus();
-            defineAsAuthor($status->getOriginalContent()['auteurable_type'], $status->getOriginalContent()['auteurable_id'], 'Connexion');
+            // defineAsAuthor($status->getOriginalContent()['auteurable_type'], $status->getOriginalContent()['auteurable_id'], 'Connexion');
             return $tokenInfo;
         }
     }

@@ -96,7 +96,7 @@ use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
  * @property-read ReponseSecrete|null $questionSecrete
  * @property-read \Illuminate\Database\Eloquent\Collection|RendezVous[] $rendezVous
  * @property-read int|null $rendez_vous_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
+ * @property \Illuminate\Database\Eloquent\Collection|\Spatie\Permission\Models\Role[] $roles
  * @property-read int|null $roles_count
  * @property-read Souscripteur|null $souscripteur
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[] $tokens
@@ -173,8 +173,8 @@ class User extends Authenticatable implements HasMedia
         'slack',
         'decede',
         'codeR', // Permet de reinitialiser le mot de passe sur le mobile
-      'codeOTP' // permet la connection     
-];
+        'codeOTP' // permet la connection     
+    ];
     /**
      * The relations restricting model deletion
      */
