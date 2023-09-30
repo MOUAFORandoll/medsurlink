@@ -126,7 +126,7 @@ class AuthOTPController extends AccessTokenController
                 return response()->json([
 
                     'message_fr' =>  'Aucun compte trouve pour cette experience ' . $experience . ' Vérifier votre adresse mail et reéssayez',
-                    'message_en' =>  'No accounts found for this experience ' . $experience_en . 'Verify your email address and re-enter'
+                    'message_en' =>  'No accounts found for this experience ' . $experience_en . ' Verify your email address and re-enter'
                 ],  203);
             }
             try {

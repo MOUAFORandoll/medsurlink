@@ -53,19 +53,19 @@ class UserService
     public  function existCompte($email, $type)
     {
 
-        $exist = false;
         $users = User::whereEmail($email)->get();
+        $exist = count($users) > 0;
 
-        foreach ($users as $user) {
+        // foreach ($users as $user) {
 
-            if ($user->hasRole('Patient-Alerte') && $type == 0) {
-                $exist = true;
-            }
-            if ($user->hasRole('Directeur') && $type == 1) {
-                $exist = true;
-            }
-        }
-        return $exist;
+        //     if ($user->hasRole('Patient-Alerte') && $type == 0) {
+        //         $exist = true;
+        //     }
+        //     if ($user->hasRole('Directeur') && $type == 1) {
+        //         $exist = true;
+        //     }
+        // }
+        return  $exist;
     }
 
     public function show($user)
