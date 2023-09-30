@@ -51,8 +51,8 @@ class Usercontroller extends Controller
         if ($exitCompte) {
 
             return $this->successResponse([
-                'message_fr' =>  'Vous avez déjà un compte a cette adresse mail, choisissez-en une autre',
-                'message_en' =>    'You already have an account at this email address, choose another one',
+                'message_fr' =>  'Vous avez déjà un compte pour cette expérience',
+                'message_en' =>    'You already have an account for this experience',
             ], 203);
         }
 
@@ -97,7 +97,7 @@ class Usercontroller extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, $this->validations());
+        // $this->validate($request, $this->validations());
         return $this->successResponse($this->userService->store($request));
     }
 
