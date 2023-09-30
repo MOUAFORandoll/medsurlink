@@ -45,6 +45,16 @@ class Usercontroller extends Controller
     public function sendMailStore(Request $request)
     {
         $email = $request->input()['email'];
+        $typeCompte = $request->input()['typeCompte'];
+
+        $exitCompte = $this->userService->existCompte($email, $typeCompte);
+        if ($exitCompte) {
+
+            return $this->successResponse([
+                'message_fr' =>  'Vous avez déjà un compte pour cette expérience',
+                'message_en' =>    'You already have an account for this experience',
+            ], 203);
+        }
 
         $validator = Validator::make(
             ['email' => $email],
@@ -66,7 +76,7 @@ class Usercontroller extends Controller
 
             try {
                 $mail = new RegisterCodeSend($code);
-                
+
                 Mail::to($email)->send($mail);
                 return response()->json(["message_fr" => 'Le code vous a été envoyé avec succes', "message_en" => 'The code has been successfully sent to you', "code" => $code]);
             } catch (\Swift_TransportException $transportException) {

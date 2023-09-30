@@ -103,6 +103,11 @@ class AuthOTPController extends AccessTokenController
                     'message_en' =>   'Verify your email address and re-enter'
                 ],  203);
             }
+
+            $experience = $type
+                == 0 ? 'Alerte' : 'Etablissement';
+            $experience_en = $type == 0 ? 'Alert' : 'Estasblishments';
+
             foreach ($users as $user) {
                 if ($type == 0) {
                     if ($user->hasRole('Patient-Alerte')) {
@@ -120,8 +125,8 @@ class AuthOTPController extends AccessTokenController
             if ($userAccount == null) {
                 return response()->json([
 
-                    'message_fr' =>  'Vérifier votre adresse mail et reéssayez',
-                    'message_en' =>   'Verify your email address and re-enter'
+                    'message_fr' =>  'Aucun compte trouve pour cette experience ' . $experience . ' Vérifier votre adresse mail et reéssayez',
+                    'message_en' =>  'No accounts found for this experience ' . $experience_en . 'Verify your email address and re-enter'
                 ],  203);
             }
             try {

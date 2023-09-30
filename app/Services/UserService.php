@@ -26,9 +26,12 @@ class UserService
     public function store(Request $request)
     {
 
+
+
         $user = User::create([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
+            'telephone' => '0',
             'email' => $request->email,
             'sexe' => $request->sexe,
             'ville' => $request->ville,
@@ -44,7 +47,25 @@ class UserService
 
 
 
-        return $user;
+        return  $user;
+    }
+
+    public  function existCompte($email, $type)
+    {
+
+        $exist = false;
+        $users = User::whereEmail($email)->get();
+
+        foreach ($users as $user) {
+
+            if ($user->hasRole('Patient-Alerte') && $type == 0) {
+                $exist = true;
+            }
+            if ($user->hasRole('Directeur') && $type == 1) {
+                $exist = true;
+            }
+        }
+        return $exist;
     }
 
     public function show($user)
