@@ -72,7 +72,7 @@ class Usercontroller extends Controller
         } else {
 
             $code =
-                $code = strval(rand(1000, 9999));
+                $code = strval(rand(10000, 99999));
 
             try {
                 $mail = new RegisterCodeSend($code);
