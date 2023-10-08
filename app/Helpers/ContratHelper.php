@@ -2,17 +2,17 @@
 
 use GuzzleHttp\Client;
 
-if(!function_exists('genererContrat'))
-{
-    function genererContrat($contrat) {
+if (!function_exists('genererContrat')) {
+    function genererContrat($contrat)
+    {
         $client = new Client();
         $env = strtolower(config('app.env'));
         if ($env === 'local')
             $url = 'http://localhost:8000/api/v1.0.1/medsurlink-contrat';
         else if ($env === 'staging')
-            $url ='https://www.staging.medicasure.com/api/v1.0.1/medsurlink-contrat';
+            $url = 'https://www.staging.medicasure.com/api/v1.0.1/medsurlink-contrat';
         else
-            $url ='https://www.medicasure.com/api/v1.0.1/medsurlink-contrat';
+            $url = 'https://redirections-medicasure.medsurlink.com/api/v1.0.1/medsurlink-contrat';
 
         $res = $client->request('POST', $url, [
             'auth' => [
@@ -22,21 +22,21 @@ if(!function_exists('genererContrat'))
             'headers' => [
                 'Accept' => 'application/json',
             ],
-            'json'=>$contrat
+            'json' => $contrat
         ]);
     }
 }
-if(!function_exists('getContrat'))
-{
-    function getContrat($patient) {
+if (!function_exists('getContrat')) {
+    function getContrat($patient)
+    {
         $client = new Client();
         $env = strtolower(config('app.env'));
         if ($env === 'local')
             $url = 'http://localhost:8000/api/v1.0.0/get-contrat-by-name';
         else if ($env === 'staging')
-            $url ='https://www.staging.medicasure.com/api/v1.0.0/get-contrat-by-name';
+            $url = 'https://www.staging.medicasure.com/api/v1.0.0/get-contrat-by-name';
         else
-            $url ='https://www.medicasure.com/api/v1.0.0/get-contrat-by-name';
+            $url = 'https://redirections-medicasure.medsurlink.com/api/v1.0.0/get-contrat-by-name';
 
         $res = $client->request('POST', $url, [
             'auth' => [
@@ -46,24 +46,24 @@ if(!function_exists('getContrat'))
             'headers' => [
                 'Accept' => 'application/json',
             ],
-            'json'=> ["nom"=> $patient->nom, 'prenom' => $patient->prenom]
+            'json' => ["nom" => $patient->nom, 'prenom' => $patient->prenom]
         ]);
         $contrat = $res->getBody()->getContents();
         return json_decode($contrat);
     }
 }
 
-if(!function_exists('countContrats'))
-{
-    function countContrats() {
+if (!function_exists('countContrats')) {
+    function countContrats()
+    {
         $client = new Client();
         $env = strtolower(config('app.env'));
         if ($env === 'local')
             $url = 'http://localhost:8000/api/v1.0.0/count-contrats';
         else if ($env === 'staging')
-            $url ='https://www.staging.medicasure.com/api/v1.0.0/count-contrats';
+            $url = 'https://www.staging.medicasure.com/api/v1.0.0/count-contrats';
         else
-            $url ='https://www.medicasure.com/api/v1.0.0/count-contrats';
+            $url = 'https://redirections-medicasure.medsurlink.com/api/v1.0.0/count-contrats';
 
         $res = $client->request('POST', $url, [
             'auth' => [
@@ -78,6 +78,3 @@ if(!function_exists('countContrats'))
         return json_decode($countContrats);
     }
 }
-
-
-

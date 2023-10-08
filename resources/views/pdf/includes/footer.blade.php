@@ -1,4 +1,3 @@
-
 <div id="footer mt-2">
     <div id="pageCounter" style="float: right; color: #fff; margin-right: 2rem; font-size:0.5rem;">
         <span></span>
@@ -19,7 +18,7 @@
             </span>
             <span>
                 <span class="title" style="{{ $format == 'a6' ? 'font-size:0.43rem': '' }};">Site web :</span>
-                <span class="info" style="{{ $format == 'a6' ? 'font-size:0.43rem': '' }};">www.medicasure.com</span>
+                <span class="info" style="{{ $format == 'a6' ? 'font-size:0.43rem': '' }};">redirections-medicasure.medsurlink.com</span>
             </span>
         </li><br />
         <li class="text-left">
