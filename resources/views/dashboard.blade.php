@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:og="http://ogp.me/ns#">
+
 <head>
     <title>Dashboard | Medsurlink </title>
     <!-- Required meta tags -->
@@ -12,8 +13,8 @@
     <!--Favicon-->
     <meta property="og:title" content="Medicasure" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://www.medicasure.com" />
-    <meta property="og:image" content="https://www.medicasure.com/images/meta.jpg"/>
+    <meta property="og:url" content="https://redirections-medicasure.medsurlink.com" />
+    <meta property="og:image" content="https://redirections-medicasure.medsurlink.com/images/meta.jpg" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@Medicasure" />
@@ -32,7 +33,7 @@
     <link href="{{ config('app.url') . '/node_modules/nprogress/nprogress.css' }}" rel="stylesheet">
 
     <link rel="apple-touch-icon" sizes="180x180" href="{{asset('images/favicon/apple-icon-180x180.png')}}">
-    <link rel="icon" type="image/png" sizes="192x192"  href="{{asset('images/favicon/android-icon-192x192.png')}}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{asset('images/favicon/android-icon-192x192.png')}}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{asset('images/favicon/favicon-32x32.png')}}">
     <link rel="icon" type="image/png" sizes="96x96" href="{{asset('images/favicon/favicon-96x96.png')}}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{asset('images/favicon/favicon-16x16.png')}}">
@@ -42,8 +43,8 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <!--Dropdown-->
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-          <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133825330-1"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133825330-1"></script>
           <script>
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -59,16 +60,23 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
-    <script id="mcjs">!function(c,h,i,m,p){m=c.createElement(h),p=c.getElementsByTagName(h)[0],m.async=1,m.src=i,p.parentNode.insertBefore(m,p)}(document,"script","https://chimpstatic.com/mcjs-connected/js/users/2fa373d2641667e7886cc3e20/4edfddddaaad9ad6c76b6200f.js");</script>
+    <script id="mcjs">
+        ! function(c, h, i, m, p) {
+            m = c.createElement(h), p = c.getElementsByTagName(h)[0], m.async = 1, m.src = i, p.parentNode.insertBefore(m, p)
+        }(document, "script", "https://chimpstatic.com/mcjs-connected/js/users/2fa373d2641667e7886cc3e20/4edfddddaaad9ad6c76b6200f.js");
+    </script>
 
     <!-- Scripts -->
     <script>
-        window.Medicalink = {!! json_encode([
-            'csrfToken' => csrf_token(),
-        ]) !!};
+        window.Medicalink = {
+            !!json_encode([
+                'csrfToken' => csrf_token(),
+            ]) !!
+        };
     </script>
     <script src="https://use.fontawesome.com/9712be8772.js"></script>
 </head>
+
 <body>
     <div id="app">
         <router-view></router-view>
@@ -77,4 +85,5 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
+
 </html>
