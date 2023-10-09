@@ -21,7 +21,7 @@
 {{-- Footer --}}
 @slot('footer')
 @component('mail::footer')
-© {{ date('Y') }} <a class="lien-footer" href="redirections-medicasure.medsurlink.com">{{ config('app.name') }}</a> @lang('Tous droits réservés.')
+© {{ date('Y') }} <a class="lien-footer" href="medicasure.com">{{ config('app.name') }}</a> @lang('Tous droits réservés.')
 @endcomponent
 @endslot
 @endcomponent

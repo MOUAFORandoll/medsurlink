@@ -3,7 +3,7 @@
 
 Veuillez trouver votre état financier auprès de la comptabilité de Medicasure. Le montant que vous nous devez est de: ___{{$total}} FCFA___
 
-Si vous avez besoin d’éclaircissements ou si vous avez des questions, n'hésitez pas à prendre un rendez-vous avec un de nos collaborateurs via le lien https://redirections-medicasure.medsurlink.com/rendez-vous
+Si vous avez besoin d’éclaircissements ou si vous avez des questions, n'hésitez pas à prendre un rendez-vous avec un de nos collaborateurs via le lien https://medicasure.com/rendez-vous
 
 Vous pouvez consulter à tout moment les informations médicales via le lien https://www.medsurlink.com/login
 
@@ -22,7 +22,7 @@ ___INTERMÉDIATION MÉDICALE___
 
 ___Rue du Castel 18, 7801 Ath Belgique___<br>
 ___Face Lycée de Ndogpassi Douala Cameroun___<br>
-___https://redirections-medicasure.medsurlink.com___<br>
+___https://medicasure.com___<br>
 
 <div class="div-logo-mail">
     <img class="logo-footer" src="https://www.back.medsurlink.com/images/logo.png" alt="Logo-Medicasure">

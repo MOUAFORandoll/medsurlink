@@ -54,7 +54,7 @@ class MedicasureController extends Controller
                 else if ($env == 'staging')
                     $url = 'https://www.staging.medicasure.com/api/v1.0.1/souscripteur/email/' . $email;
                 else
-                    $url = 'https://redirections-medicasure.medsurlink.com/api/v1.0.1/souscripteur/email/' . $email;
+                    $url = 'https://medicasure.com/api/v1.0.1/souscripteur/email/' . $email;
 
                 $res = $client->request('GET', $url, [
                     'auth' => [

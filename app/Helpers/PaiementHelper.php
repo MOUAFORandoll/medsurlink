@@ -13,7 +13,7 @@ if (!function_exists('paiementMomo')) {
         else if ($env === 'staging')
             $url = 'https://www.staging.medicasure.com/api/v1.0.1/momo/paid';
         else
-            $url = 'https://redirections-medicasure.medsurlink.com/api/v1.0.1/momo/paid';
+            $url = 'https://medicasure.com/api/v1.0.1/momo/paid';
 
         $args = array(
             'identifiant' => $request->get('identifiant'),
@@ -46,7 +46,7 @@ if (!function_exists('paiementOM')) {
         else if ($env === 'staging')
             $url = 'https://www.staging.medicasure.com/api/v1.0.1/om/paid';
         else
-            $url = 'https://redirections-medicasure.medsurlink.com/api/v1.0.1/om/paid';
+            $url = 'https://medicasure.com/api/v1.0.1/om/paid';
 
 
         $args = array(

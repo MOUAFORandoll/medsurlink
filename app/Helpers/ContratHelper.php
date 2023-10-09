@@ -12,7 +12,7 @@ if (!function_exists('genererContrat')) {
         else if ($env === 'staging')
             $url = 'https://www.staging.medicasure.com/api/v1.0.1/medsurlink-contrat';
         else
-            $url = 'https://redirections-medicasure.medsurlink.com/api/v1.0.1/medsurlink-contrat';
+            $url = 'https://medicasure.com/api/v1.0.1/medsurlink-contrat';
 
         $res = $client->request('POST', $url, [
             'auth' => [
@@ -36,7 +36,7 @@ if (!function_exists('getContrat')) {
         else if ($env === 'staging')
             $url = 'https://www.staging.medicasure.com/api/v1.0.0/get-contrat-by-name';
         else
-            $url = 'https://redirections-medicasure.medsurlink.com/api/v1.0.0/get-contrat-by-name';
+            $url = 'https://medicasure.com/api/v1.0.0/get-contrat-by-name';
 
         $res = $client->request('POST', $url, [
             'auth' => [
@@ -63,7 +63,7 @@ if (!function_exists('countContrats')) {
         else if ($env === 'staging')
             $url = 'https://www.staging.medicasure.com/api/v1.0.0/count-contrats';
         else
-            $url = 'https://redirections-medicasure.medsurlink.com/api/v1.0.0/count-contrats';
+            $url = 'https://medicasure.com/api/v1.0.0/count-contrats';
 
         $res = $client->request('POST', $url, [
             'auth' => [
