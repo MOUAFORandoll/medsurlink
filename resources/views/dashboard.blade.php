@@ -13,8 +13,8 @@
     <!--Favicon-->
     <meta property="og:title" content="Medicasure" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://redirections-medicasure.medsurlink.com" />
-    <meta property="og:image" content="https://redirections-medicasure.medsurlink.com/images/meta.jpg" />
+    <meta property="og:url" content="https://medicasure.com" />
+    <meta property="og:image" content="https://medicasure.com/images/meta.jpg" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@Medicasure" />

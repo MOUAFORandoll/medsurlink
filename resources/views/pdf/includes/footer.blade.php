@@ -18,7 +18,7 @@
             </span>
             <span>
                 <span class="title" style="{{ $format == 'a6' ? 'font-size:0.43rem': '' }};">Site web :</span>
-                <span class="info" style="{{ $format == 'a6' ? 'font-size:0.43rem': '' }};">redirections-medicasure.medsurlink.com</span>
+                <span class="info" style="{{ $format == 'a6' ? 'font-size:0.43rem': '' }};">medicasure.com</span>
             </span>
         </li><br />
         <li class="text-left">

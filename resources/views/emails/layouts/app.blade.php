@@ -147,13 +147,13 @@
                     <li><a href="https://www.facebook.com/Medicasure/?locale=fr_FR"><i class="fa-brands fa-facebook-f"></i></a></li>
                 </ul>
                 <ul class="link">
-                    <li><a href="https://redirections-medicasure.medsurlink.com">Accueil</a></li>
+                    <li><a href="https://medicasure.com">Accueil</a></li>
                     <li>|</li>
-                    <li><a href="https://redirections-medicasure.medsurlink.com/particuliers/contact">Contact</a></li>
+                    <li><a href="https://medicasure.com/particuliers/contact">Contact</a></li>
                     <li>|</li>
-                    <li><a href="https://redirections-medicasure.medsurlink.com/alertes">Alertes</a></li>
+                    <li><a href="https://medicasure.com/alertes">Alertes</a></li>
                     <li>|</li>
-                    <li><a href="https://redirections-medicasure.medsurlink.com/particuliers/nos-offres">Produits</a></li>
+                    <li><a href="https://medicasure.com/particuliers/nos-offres">Produits</a></li>
                 </ul>
             </div>
             <div class="adresse">

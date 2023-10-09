@@ -250,7 +250,7 @@
 
         <div style="position:absolute;left:500px;top:0px" class="cls_003"><span class="cls_003">+32 491 64 64 14</span></div>
         <div style="position:absolute;left:500px;top:20px" class="cls_003"><span class="cls_003">contact@medicasure.com</span></div>
-        <div style="position:absolute;left:500px;top:40px" class="cls_003"><span class="cls_003">redirections-medicasure.medsurlink.com</span></div>
+        <div style="position:absolute;left:500px;top:40px" class="cls_003"><span class="cls_003">medicasure.com</span></div>
 
         <div style="position:absolute;left:20px;top:137.25px" class="cls_002"><span class="cls_002">RECU DE PAIEMENT</span></div>
         <div style="position:absolute;left:20px;top:157.50px" class="cls_002"><span class="cls_002">N° # {{ $commande_id }}</span></div>

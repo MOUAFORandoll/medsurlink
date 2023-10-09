@@ -135,7 +135,7 @@
     <p> <strong>Article 4</strong>.</p>
     <p>Le payement des frais susmentionnés vaut acceptation de l’offre.</p>
     <p><strong>Article 5.</strong></p>
-    <p> Le présent Contrat est régi par les conditions générales de Medicasure consultables sur le site internet redirections-medicasure.medsurlink.com</p>
+    <p> Le présent Contrat est régi par les conditions générales de Medicasure consultables sur le site internet medicasure.com</p>
 
     <p>Fait à {{$cim->lieuEtablissement}}, le {{\Carbon\Carbon::parse($cim->dateSignature)->format('d/m/Y H:i')}}, en deux exemplaires originaux pour les deux parties.</p>
     <p>Chaque partie reconnait avoir reçu au moins un exemplaire.</p>
