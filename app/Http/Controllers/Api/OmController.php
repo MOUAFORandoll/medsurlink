@@ -182,7 +182,7 @@ class OmController extends Controller
         $access_token = getOmToken();
         $mp_token = initierPaiement($access_token);
         $body = [
-            "notifUrl" => "https://redirections-medicasure.medsurlink.com/api/v1.0.0/om/" . $mp_token . "/notification",
+            "notifUrl" => "https://medicasure.com/api/v1.0.0/om/" . $mp_token . "/notification",
             "channelUserMsisdn" => "658392349",
             "amount" => $request->get('amount'),
             "subscriberMsisdn" => $request->get('subscriberMsisdn'),
