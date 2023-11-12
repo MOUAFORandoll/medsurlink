@@ -152,14 +152,17 @@ class AuthOTPController extends AccessTokenController
 
     public function test()
     {
-
+        $data = [];
         $email =
-            'hari.randoll@gmail.com';
+            'rogerdiffo@gmail.com';
+        $users = User::whereEmail($email)->get();
+        foreach ($users as $user) {
+            $user->roles = $user->roles->makeHidden(['created_at', 'updated_at', 'pivot', 'guard_name', 'permissions']);
+            $data[]
+                =  $user;
+        }
 
-        $mail = new OTPCodeSend('0000');
-        Mail::to($email)->send($mail);
-
-        return response()->json(['status' => 'ok']);
+        return response()->json(['users' => $data]);
     }
 
     public function verifyOTPCode(Request $request)
