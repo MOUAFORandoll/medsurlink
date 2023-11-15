@@ -54,14 +54,15 @@ Route::get('visualiser-consultation-medecine/{slug}', 'Api\ImprimerController@vi
 
 Route::resource('dictionnaire', 'Api\DictionnaireController')->only('show');
 Route::resource('contact_assurances', 'Api\ContactAssuranceController');
-Route::get('/liens', function () {
-    $liens = Dictionnaire::where("reference", "lien_parente")->get();
-    return response()->json(
-        [
-            'liens' => $liens
-        ]
-    );
-});
+// Route::get('/liens', function () {
+//     $liens = Dictionnaire::where("reference", "lien_parente")->get();
+//     return response()->json(
+//         [
+//             'liens' => $liens
+//         ]
+//     );
+// });
+Route::get('/liens', [LiensController::class, 'index']);
 Route::middleware(['auth:api'])->group(function () {
 
     Route::get('/countries', function () {

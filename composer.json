@@ -25,7 +25,7 @@
         "h4cc/wkhtmltopdf-i386": "0.12.x",
         "kobalazs/laravel-restrict-soft-deletes": "dev-master",
         "laracrafts/laravel-url-shortener": "^0.4.0",
-        "laravel/framework": "5.8.*",
+        "laravel/framework": "6.*",
         "laravel/passport": "^7.3",
         "laravel/slack-notification-channel": "^2.3",
         "laravel/tinker": "^1.0",
