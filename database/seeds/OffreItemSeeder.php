@@ -47,54 +47,54 @@ class OffreItemSeeder extends Seeder
             '1x Consultation pédiatre',
             'Nuits Hospitalisation Mère et Nouveau-né',
             '1er Vaccin Nouveau-né',
-           ' Traitements Autres pathologies découvertes'
+            ' Traitements Autres pathologies découvertes'
         ];
 
-        foreach ($urgence as $category){
-         $result = \App\Models\Dictionnaire::create([
-               'fr_description'=>$category,
-               'en_description'=>$category,
-               'reference'=>'CIM URGENCE',
-            ]);
-           $packages =  \App\Models\Package::where("offre_id",1)->get();
-            foreach ($packages as $package){
-                \App\Models\OffrePackageItem::create([
-                    'key'=>$result->id,
-                    'reference'=>$result->reference,
-                    'package_id'=>$package->id,
-                    'value'=>'-',
-                ]);
-            }
-        }
-        foreach ($prevention as $category){
-            $result =  \App\Models\Dictionnaire::create([
-               'fr_description'=>$category,
-               'en_description'=>$category,
-               'reference'=>'CIM PREVENTION',
-            ]);
-            $packages =  \App\Models\Package::where("offre_id",2)->get();
-            foreach ($packages as $package){
-                \App\Models\OffrePackageItem::create([
-                    'key'=>$result->id,
-                    'reference'=>$result->reference,
-                    'package_id'=>$package->id,
-                    'value'=>'-',
-                ]);
-            }
-        }
-        foreach ($grossesse as $category){
+        foreach ($urgence as $category) {
             $result = \App\Models\Dictionnaire::create([
-               'fr_description'=>$category,
-               'en_description'=>$category,
-               'reference'=>'GROSSESSE',
+                'fr_description' => $category,
+                'en_description' => $category,
+                'reference' => 'CIM URGENCE',
             ]);
-            $packages =  \App\Models\Package::where("offre_id",3)->get();
-            foreach ($packages as $package){
+            $packages =  \App\Models\Package::where("offre_id", 1)->get();
+            foreach ($packages as $package) {
                 \App\Models\OffrePackageItem::create([
-                    'key'=>$result->id,
-                    'reference'=>$result->reference,
-                    'package_id'=>$package->id,
-                    'value'=>'-',
+                    'key' => $result->id,
+                    'reference' => $result->reference,
+                    'package_id' => $package->id,
+                    'value' => '-',
+                ]);
+            }
+        }
+        foreach ($prevention as $category) {
+            $result =  \App\Models\Dictionnaire::create([
+                'fr_description' => $category,
+                'en_description' => $category,
+                'reference' => 'CIM PREVENTION',
+            ]);
+            $packages =  \App\Models\Package::where("offre_id", 2)->get();
+            foreach ($packages as $package) {
+                \App\Models\OffrePackageItem::create([
+                    'key' => $result->id,
+                    'reference' => $result->reference,
+                    'package_id' => $package->id,
+                    'value' => '-',
+                ]);
+            }
+        }
+        foreach ($grossesse as $category) {
+            $result = \App\Models\Dictionnaire::create([
+                'fr_description' => $category,
+                'en_description' => $category,
+                'reference' => 'GROSSESSE',
+            ]);
+            $packages =  \App\Models\Package::where("offre_id", 3)->get();
+            foreach ($packages as $package) {
+                \App\Models\OffrePackageItem::create([
+                    'key' => $result->id,
+                    'reference' => $result->reference,
+                    'package_id' => $package->id,
+                    'value' => '-',
                 ]);
             }
         }

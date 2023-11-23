@@ -19,10 +19,10 @@ class OffreController extends Controller
      */
     public function index()
     {
-        $offres = Offre::with(["packages","items","items.packages"])->latest()->get();
+        $offres = Offre::with(["packages", "items", "items.packages"])->where('status', true)->latest()->get();
 
         //dd($offres);
-        return response()->json(['offres'=>$offres]);
+        return response()->json(['offres' => $offres]);
     }
 
     /**
@@ -46,10 +46,9 @@ class OffreController extends Controller
 
         $motif = Offre::create($request->validated());
 
-        defineAsAuthor("Offre",$motif->id,'create');
+        defineAsAuthor("Offre", $motif->id, 'create');
 
-        return response()->json(['motif'=>$motif]);
-
+        return response()->json(['motif' => $motif]);
     }
 
     /**
@@ -61,12 +60,12 @@ class OffreController extends Controller
      */
     public function show($slug)
     {
-        $this->validatedSlug($slug,$this->table);
+        $this->validatedSlug($slug, $this->table);
 
         $motif = Offre::findBySlug($slug);
 
 
-        return response()->json(['motif'=>$motif]);
+        return response()->json(['motif' => $motif]);
     }
 
     /**
@@ -92,8 +91,7 @@ class OffreController extends Controller
     public function update(MotifRequest $request, $slug)
     {
 
-        $this->validatedSlug($slug,$this->table);
-
+        $this->validatedSlug($slug, $this->table);
     }
 
     /**
@@ -106,7 +104,6 @@ class OffreController extends Controller
      */
     public function destroy($slug)
     {
-        $this->validatedSlug($slug,$this->table);
-
+        $this->validatedSlug($slug, $this->table);
     }
 }
