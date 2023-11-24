@@ -34,7 +34,7 @@ class OffreUpdateSeeder extends Seeder
             'description_en' => "CIM Half-yearly",
             "offre_id" => 4,
             "montant" =>
-            5000,
+            250,
 
 
         ]);
@@ -45,7 +45,7 @@ class OffreUpdateSeeder extends Seeder
             'description_en' => "CIM Annual",
             "offre_id" => 4,
             "montant" =>
-            15000,
+            500,
 
 
         ]);
